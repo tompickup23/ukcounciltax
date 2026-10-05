@@ -1,7 +1,7 @@
 ---
 import { councilPages, councilPath } from "../lib/paths";
-interface Props { id?: string }
-const { id = "council-name" } = Astro.props;
+interface Props { id?: string; anchor?: string }
+const { id = "council-name", anchor = "council-tax" } = Astro.props;
 const rows = councilPages();
 ---
 <section class="card council-finder" data-council-finder>
@@ -11,7 +11,7 @@ const rows = councilPages();
   <p id={`${id}-status`} class="muted small" role="status" data-finder-status>Enter at least two letters. Search covers councils in England.</p>
   <ul id={`${id}-results`} class="finder-results" hidden>
     {rows.map(({council, tax}) => <li hidden data-name={`${tax.name} ${council.officialName}`}>
-      <a href={`${councilPath(council)}#council-tax`}>{tax.name}<span>{tax.class} · {tax.region}</span></a>
+      <a href={`${councilPath(council)}#${anchor}`}>{tax.name}<span>{tax.class} · {tax.region}</span></a>
     </li>)}
   </ul>
   <noscript><p>Name search needs JavaScript. <a href="/councils/">Browse all councils</a>.</p></noscript>

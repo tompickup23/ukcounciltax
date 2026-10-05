@@ -19,7 +19,8 @@
     "data:registry": "node scripts/sync-registry.mjs",
     "indexnow": "node scripts/indexnow.mjs",
     "data:devolved": "python3 scripts/import-devolved.py",
-    "data:local-bills": "python3 scripts/import-local-bills.py"
+    "data:local-bills": "python3 scripts/import-local-bills.py",
+    "data:national": "node scripts/import-national.mjs"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.0",

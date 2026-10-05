@@ -29,3 +29,5 @@ For a delegation problem before launch is complete, restore ns01.one.com and ns0
 ## Dependency review
 
 Wrangler is pinned to 4.147.0; available non-breaking audit fixes were applied. npm audit still reports Astro 6 and its image/development dependencies, with a major Astro 7 upgrade offered. This deployment is pre-rendered static HTML/assets, without an Astro runtime, image endpoint, middleware authorisation, user-provided templates or uploaded images. The affected dynamic-server paths are not deployed. Keep development servers local and review the framework major upgrade separately before adding server features. Do not describe the audit as clean.
+
+GitHub runner follow-up: both attempts of run 37369548132 failed before any checkout/test step because no hosted runner acquired the job. This is not a test failure. The workflow now pins Ubuntu 24.04 for a reproducible runner image rather than following the announced ubuntu-latest migration. This does not by itself prove that GitHub runner capacity is restored; manual publication still requires the same local and deployed-preview gates.

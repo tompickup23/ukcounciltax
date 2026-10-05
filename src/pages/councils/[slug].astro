@@ -1,5 +1,7 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
+import NationalPrecepts from '../../components/NationalPrecepts.astro';
+import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
 import MiniMap from "../../components/MiniMap.astro";
@@ -161,11 +163,16 @@ const structuredData = [
   </div>
   <CouncilActions slug={council.slug} />
   <PageContents items={[
+    {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
+    {id: 'parish-precepts', label: 'Parish charges'},
+    {id: 'long-history', label: 'Long-term history'},
     ...(englandArea ? [{id: 'compared', label: 'England and area averages'}] : []),
     ...(history.length > 1 ? [{id: 'history', label: 'Previous years'}] : []),
     ...(own ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
     ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
   ]} />
+
+  <NationalPrecepts gss={council.gss} name={name} />
 
   {englandArea && areaSource && (
     <section class="section" id="compared" aria-labelledby="compared-heading">
@@ -226,13 +233,13 @@ const structuredData = [
 
   <section class="section" id="all-band-history"><h2>Every band over time</h2><div class="table-wrap" tabindex="0" role="region" aria-label="All band history"><table class="data"><caption>{name} area charges, including average parish precepts</caption><thead><tr><th scope="col">Band</th>{YEARS.map(y=><th scope="col" class="num">{yearLabel(y)}</th>)}<th scope="col" class="num">Two-year change</th></tr></thead><tbody>{BANDS.map(b=>{const start=loadYear(YEARS[0]).authorities[council.gss]?.bands[b];return <tr><th scope="row">{b}</th>{YEARS.map(y=><td class="num">{pounds(loadYear(y).authorities[council.gss]?.bands[b])}</td>)}<td class="num">{start?pounds(tax.bands[b]-start):'Unavailable'}</td></tr>;})}</tbody></table></div><p class="source-line">Sources: {YEARS.map(y=><span><a href={loadYear(y).source.url}>MHCLG {yearLabel(y)}</a> · </span>)}Change calculated from the two published charges. Nominal amounts, before discounts.</p><p><a href={`/tools/future-cost/?council=${council.slug}&band=D`}>Explore what future annual changes could mean for {name}</a>.</p></section>
 
+  <LongTaxHistory gss={council.gss} name={name} />
+
   {own && ownSource && (
     <section class="section" id="who-sets-it" aria-labelledby="who-sets-heading">
       <h2 id="who-sets-heading">Who sets council tax in {name}?</h2>
       <p class="muted">
-        The Band D bill is made up of shares set by different bodies. MHCLG publishes each body's own
-        average Band D; the police, fire and parish shares are published by precepting body, not by
-        billing area, so they are not listed here.
+        The figures below show each council's own share and its published annual change. The national breakdown above also identifies police, fire and combined-authority charges for this billing area.
       </p>
       <div class="fact-grid">
         {typeof own.bandD === "number" && (

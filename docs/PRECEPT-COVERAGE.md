@@ -34,3 +34,7 @@ Statuses must distinguish published amount, included in another component, not a
 - England published council tax tables: https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax
 
 Nationwide local schedule coverage remains an outstanding data programme, not a completed feature.
+
+## National Band D layer, 5 October 2026
+
+The national import now covers all 296 English billing authorities using Table 10's Data_Billing and Precepting_Bodies sheets, plus 10,245 rows in the parish return (four ceased entries). Council pages show named major preceptors and two years of individual local Band D charges. This is separate from complete adopted all-band locality schedules and does not remove their validation requirements. See NATIONAL-DATA-REUSE.md for the exact fields, identifier rules and scalable postcode approach.

@@ -58,3 +58,13 @@ Both apex and www have Pages custom-domain attachments and prepared Cloudflare C
 See DEPLOYMENT.md for operation, token-scope limitations, dependency assessment and rollback. Local evidence and screenshots are in gitignored .ops/; no credentials are committed. UK Councils and the other ecosystem projects were not edited or deployed by this release.
 
 Production follow-up: all three specialist production-CSP smoke tests passed on ukcounciltax.pages.dev. A real public example postcode lookup through the deployed UI resolved to Burnley/Padiham and required locality confirmation, with no postcode placed in the site URL.
+
+## National data expansion, 5 October 2026
+
+Added a standalone national importer informed by existing AI DOGE collectors and using UK Councils' displayed-cell ODS reader. Three pinned MHCLG workbooks now supply 296 English Band D component breakdowns, 10,245 parish/local-body records (including four ceased entries), and 27,751 available observations across the area and two own-share historical series. Parish rows cover 214 billing authorities. Historical coverage varies; the earliest area year is 1993/94.
+
+All English council pages show named county/GLA, police, fire and combined-authority components, a filterable parish table with source-supplied two-year comparisons, and expandable long-term history. The precepts hub has council search, and postcode fallback links now lead to national components. Downloads include component, parish and history CSVs and a complete source-bearing JSON dataset. No new exact all-band schedules are claimed; complete Burnley locality modelling remains a separate layer.
+
+Source safeguards preserve ceased and negative parish entries, groups and charter-trustee overlaps, source notes, missing history and displayed precision. All 296 new area totals match the existing annual-band import exactly. Burnley's imported national Band D components and eight parish figures match its separately imported adopted local schedule. Source projects were not edited. See NATIONAL-DATA-REUSE.md for the scalable geography approach and remaining layers.
+
+Verification in progress: 92 unit tests passed and Astro check reported 105 files with no diagnostics. Final build, deployed browser/CSP and visual review results will be recorded before publication.

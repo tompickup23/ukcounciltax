@@ -1,0 +1,31 @@
+---
+import {national} from '../lib/national-data';
+interface Props {gss:string;name:string}
+const {gss,name}=Astro.props;
+const series=national.history[gss];
+const source=national.sources.history;
+const money=(v:number|null|undefined)=>v==null?'Unavailable':new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2}).format(v);
+const years=series?Object.keys(series.area.values):[];
+const available=years.filter(y=>series.area.values[y]!==null);
+const noteIds=[...new Set(Object.values(series??{}).flatMap(s=>s.notes.match(/\[(?:note \d+|r)\]/g)??[]))];
+const notes=national.historyNotes.filter(row=>noteIds.includes(row[0]));
+const first=available[0];
+const last=available.at(-1);
+const start=first?series.area.values[first]:null,end=last?series.area.values[last]:null;
+const change=start!==null&&end!==null&&start>0?(end/start-1)*100:null;
+---
+{series&&<section class="section" id="long-history" aria-labelledby="long-history-heading">
+  <h2 id="long-history-heading">Long-term Band D history</h2>
+  <p>The national live table holds {available.length} published area figures for {name}, from {first?.replace('-','/')} to {last?.replace('-','/')}. This series is generally rounded to whole pounds, so it can differ from the penny figures in the recent band tables.</p>
+  {change!==null&&<p class="lede">{money(start)} to {money(end)} <span class="small">({change>=0?'+':''}{change.toFixed(1)}% in cash terms)</span></p>}
+  <p class="caveat">Not adjusted for inflation. A change in services or council structure can affect comparisons. Missing years stay missing; we do not join predecessor councils ourselves. MHCLG carries forward predecessor-area history only where its published series does so, including some district-to-unitary changes with unchanged boundaries.</p>
+  <details><summary>View the full Band D history and separate council shares</summary>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Long-term Band D history"><table class="data">
+      <caption>{name}: published Band D history, displayed pounds</caption><thead><tr><th scope="col">Year</th><th scope="col" class="num">Whole-area average</th><th scope="col" class="num">Council excluding parishes</th><th scope="col" class="num">Council including average parishes</th></tr></thead>
+      <tbody>{years.map(y=><tr><th scope="row">{y.replace('-','/')}</th><td class="num">{money(series.area.values[y])}</td><td class="num">{money(series.ownExcludingParish.values[y])}</td><td class="num">{money(series.ownIncludingParish.values[y])}</td></tr>)}</tbody>
+    </table></div>
+    <p class="small">The council-share columns are alternative measures, not additions to the whole-area figure. The excluding-parishes series begins in 1996/97. A council's own share can change when responsibilities transfer even where its area remains the same.</p>
+  </details>
+  {notes.length>0&&<ul class="small">{notes.map(n=><li>{n[0]}: {n[1]}</li>)}</ul>}
+  <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Area_CT, exc_PP and inc_PP. <a href="/downloads/history.csv" download>Download the historical series</a>. Changes calculated from the displayed source values.</p>
+</section>}

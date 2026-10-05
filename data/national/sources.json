@@ -1,0 +1,38 @@
+{
+  "parishes": {
+    "publisher": "Ministry of Housing, Communities and Local Government",
+    "title": "Council Tax statistics for town and parish councils in England: 2026 to 2027",
+    "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax",
+    "fileUrl": "https://assets.publishing.service.gov.uk/media/69f3415cab602a88957eef37/2026-27_Local_precepting_authorities_in_England.ods",
+    "file": "parishes-2026-27.ods",
+    "sha256": "abd04daef51e2e6f469046cdcf8ecd92d6015bfe3e893231ae3e9ea21b278f51",
+    "retrieved": "2026-10-05",
+    "tables": ["Parish_Level_Data", "Notes", "Ceased_New_Renamed_Parishes"],
+    "precision": "Band D as displayed to pennies; precept in displayed whole pounds; tax base in Band D equivalents",
+    "licence": "Open Government Licence v3.0"
+  },
+  "components": {
+    "publisher": "Ministry of Housing, Communities and Local Government",
+    "title": "Council tax levels set by local authorities in England 2026 to 2027: Table 10",
+    "url": "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027",
+    "fileUrl": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods",
+    "file": "table-10-2026-27.ods",
+    "sha256": "b5b8345743fb722e48699243d1654a3e35b96c89a14c6eb26888035c3e38feb0",
+    "retrieved": "2026-10-05",
+    "tables": ["Data_Billing", "Precepting_Bodies", "Notes"],
+    "precision": "Published Band D area averages to pennies",
+    "licence": "Open Government Licence v3.0"
+  },
+  "history": {
+    "publisher": "Ministry of Housing, Communities and Local Government",
+    "title": "Band D Council Tax figures 1993 onwards, revised April 2026",
+    "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax",
+    "fileUrl": "https://assets.publishing.service.gov.uk/media/69e8ab2d9ca985145673b826/Band_D_2026-27.ods",
+    "file": "band-d-history-2026-27.ods",
+    "sha256": "140bcae84f4d8dbb7ffc58a4b0b7cc931a5610933b4038e7f07c13f65fdaa322",
+    "retrieved": "2026-10-05",
+    "tables": ["Area_CT", "exc_PP", "inc_PP", "Notes"],
+    "precision": "Displayed precision, generally whole pounds with occasional penny values; hidden spreadsheet precision is not used",
+    "licence": "Open Government Licence v3.0"
+  }
+}

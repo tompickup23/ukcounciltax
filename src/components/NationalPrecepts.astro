@@ -1,0 +1,62 @@
+---
+import {national,parishesFor,parishChange,type ParishYear} from '../lib/national-data';
+import {moneyPence} from '../lib/tax-view';
+interface Props {gss:string;name:string}
+const {gss,name}=Astro.props;
+const data=national.components[gss];
+const parishes=parishesFor(gss);
+const money=(n:number|null)=>n===null?'Unavailable':moneyPence(n);
+const parishMoney=(y:ParishYear)=>y.status==='not-existing'?'Did not exist':money(y.bandDPence);
+const labels={county:'County or GLA',police:'Police',fire:'Fire',combined:'Combined authority'};
+const notes=[...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
+const source=national.sources.components, parishSource=national.sources.parishes;
+---
+{data && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
+  <p class="eyebrow">Who receives your council tax</p>
+  <h2 id="precept-heading">Band D bill breakdown in {name}</h2>
+  <p>These are the published <strong>2026/27 area averages</strong>. Parish charges are averaged into the council line. They are already included in the total and must not be added again.</p>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="National Band D component table"><table class="data">
+    <caption>{name}: published Band D components, 2026/27</caption>
+    <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(data.ownWithParishPence)}</td></tr>
+      {data.parts.map(p=><tr><th scope="row">{labels[p.kind]}</th><td>{p.name??(p.bandDPence===0?'No separate precept reported':'Body unavailable')}</td><td class="num">{money(p.bandDPence)}</td></tr>)}
+    </tbody>
+    <tfoot><tr><th scope="row" colspan="2">Published area average, including all precepts</th><td class="num">{money(data.areaPence)}</td></tr></tfoot>
+  </table></div>
+  <p class="small muted">Adult social care is included in council charges. Police and fire may be funded within another line, including a combined-authority or GLA charge. A zero separate line does not mean the service is absent. The named bodies come from MHCLG's billing-area mapping for this year.</p>
+  {data.differencePence!==null&&data.differencePence!==0&&<p class="caveat">Published component rounding: the displayed lines sum to {Math.abs(data.differencePence)}p {data.differencePence>0?'more':'less'} than the published total. Both source figures are preserved.</p>}
+  <p>The council's own Band D, <strong>excluding local precepts</strong>, is {money(data.ownExcludingParishPence)}. This is a separate measure, not an additional charge.</p>
+  {data.specialExpensesPounds!==null&&data.specialExpensesPounds>0&&<p class="caveat">This council reports special expenses charged in part of its area. Its average council share cannot be treated as a uniform charge for every address. Use the council's local schedule for an exact bill.</p>}
+  {data.notes.length>0&&<ul class="small">{data.notes.map(n=><li>Source note: {n.text}</li>)}</ul>}
+  <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Data_Billing and Precepting_Bodies. Retrieved {source.retrieved}. <a href="/data/">Download data and checksums</a>.</p>
+</section>}
+<section class="section" id="parish-precepts" aria-labelledby="parish-heading" data-parish-table>
+  <h2 id="parish-heading">Parish and local precepts in {name}</h2>
+  {parishes.length ? <>
+    <p>{parishes.length.toLocaleString('en-GB')} records in the national parish return, including any ceased bodies. These are <strong>individual Band D local charges, not full bills</strong>. Other property bands are not inferred. Match the charging locality to your council bill.</p>
+    <div class="editorial-callout"><p>Do not add these amounts to the area average above: that already includes average local precepts. Grouped parishes and charter trustees can have overlapping charging areas. A postcode alone cannot establish every charge on a property.</p></div>
+    <label class="field parish-search" hidden>Filter parish or local body<input type="search" autocomplete="off" placeholder="Type a parish name" /></label>
+    <p class="small muted" data-parish-count role="status">All {parishes.length} records shown.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D charges"><table class="data">
+      <caption>{name}: local Band D precepts as reported in the 2026/27 return</caption>
+      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">2025/26</th><th scope="col" class="num">2026/27</th><th scope="col" class="num">Annual change</th></tr></thead>
+      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num">{parishMoney(p.years['2025-26'])}</td><td class="num">{parishMoney(p.years['2026-27'])}</td><td class="num">{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
+    </table></div>
+    {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
+    {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
+    <p class="small muted">Annual change is this year's reported charge minus the previous year's charge on the same source row. Missing and ceased entries remain distinct from published zero charges. A negative precept is retained where published.</p>
+  </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
+  <p class="source-line">Source: <a href={parishSource.fileUrl}>{parishSource.title}</a>, Parish_Level_Data and Notes. Retrieved {parishSource.retrieved}. <a href="/downloads/parishes.csv" download>Download the national parish data</a>, including precept income and tax bases.</p>
+</section>
+<script>
+for(const section of document.querySelectorAll<HTMLElement>('[data-parish-table]')) {
+ const control=section.querySelector<HTMLElement>('.parish-search');
+ if(!control)continue;
+ control.hidden=false;
+ const input=control.querySelector<HTMLInputElement>('input')!;
+ const rows=[...section.querySelectorAll<HTMLTableRowElement>('[data-parish-name]')];
+ input.addEventListener('input',()=>{const query=input.value.trim().toLowerCase();let count=0;for(const row of rows){row.hidden=!(row.dataset.parishName??'').includes(query);if(!row.hidden)count++;}section.querySelector('[data-parish-count]')!.textContent=`${count} of ${rows.length} records shown.`;});
+}
+</script>
+<style>.parish-kind{display:block;font-weight:400;font-size:.8rem;color:var(--text-muted)}.parish-search{max-width:28rem;margin-top:1.5rem}</style>

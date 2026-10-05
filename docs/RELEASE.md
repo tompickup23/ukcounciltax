@@ -28,19 +28,19 @@ London: approved GLA decision MD3472, Band D precept and police/non-police split
 
 ## Release checks
 
-86 unit tests passed across ten files. Astro check passed across 94 files with zero errors, warnings or hints. The initial production build passed the distribution check: 389 HTML pages, 388 indexed routes and 389 valid share-card references. Final build result is recorded below when complete.
+On 5 October 2026 the final build passed 86 unit tests across ten files, and Astro check across 94 files with no errors, warnings or hints. BUILD_OG=1 produced 389 HTML pages, 388 indexed routes and valid share-card references on all 389 pages. The internal link audit checked 25,119 destinations with no missing local files.
 
-Browser verification is pending: the CUA browser URL policy rejected the localhost preview action. No alternate browser route was used to bypass that block. New browser regressions are written for postcode confirmation, missing schedule handling, scenario validation, accessibility/mobile overflow and production CSP; they have not been claimed as passing.
+The immutable Cloudflare review deployment https://e1c06f02.ukcounciltax.pages.dev passed all 148 desktop/mobile browser tests and all 51 production-header tests. This includes source-preserving downloads and comparisons, no-JavaScript fallbacks, postcode locality confirmation, missing-precept handling, scenario validation, keyboard navigation, light/dark accessibility, 375px overflow and actual deployed CSP. Mobile homepage and dark council-page screenshots were visually inspected. The calculator heading and increase-selector label issues found in the first review build were fixed before this final passing run. Parallel suites now use independent artifact directories.
 
-No new production deployment, GitHub push or DNS change has been made in this improvement pass. one.com account/domain access remains for Tom to resolve. Do not treat the local preview as a launched custom domain.
+An earlier CUA localhost action was rejected by browser URL policy; no alternate route to that blocked local target was used. Release browser checks instead tested the independently authorised public Cloudflare deployment. The production site was also loaded successfully through CUA.
 
 ## Remaining coverage and launch gates
 
-- Run the browser and actual-CSP suites after the browser access block is resolved, plus visual light/dark/mobile QA. Fix before deployment.
 - Expand adopted local schedules and date-specific postcode/parish/precept geography joins. Nationwide parish, police, fire and mayoral breakdowns are not complete. Never replace unknown with zero or sum a bundled component twice.
 - Add Welsh A to I only from an appropriate published table; Northern Ireland needs its own domestic-rate model.
-- Establish source refresh CI and a reviewed shared-registry export. `data:registry` accepts an explicit source file; it does not open sibling repos implicitly.
-- Create the authorised GitHub/Cloudflare targets after release gates, then attach the custom domain once one.com DNS is accessible. Preserve existing DNS/mail and check DNSSEC before changing nameservers.
+- Establish a reviewed shared-registry export and any additional source-refresh checks. `data:registry` accepts an explicit source file; it does not open sibling repos implicitly.
+- Complete client-side custom-domain HTTPS checks after certificate/DNS propagation, and confirm the first GitHub Actions run. Registrar delegation is complete and the Cloudflare zone is active.
+- Configure a public corrections/contact address after Tom identifies the mailbox. No address has been invented or published from private account details.
 - UK Councils migration/cross-site edits require their own scoped change; none is made by this release.
 
 Public school-holiday homepage independently returned HTTP 200 on 5 October 2026. Its sitemap path could not be verified, so only the homepage is promoted; no unverified council-specific school-holiday routes were added.
@@ -49,10 +49,12 @@ The legacy registry entry point now forwards to the explicit-export importer as 
 
 Visual artifact check: the generated Burnley share card was inspected and its title, branding and source line are legible. This does not substitute for pending webpage visual QA.
 
-## Final generated-site result
+## Hosting release
 
-Final BUILD_OG=1 production build completed successfully. Distribution checks passed for 389 HTML pages, 388 sitemap/search routes and 389 share-card references. Internal link audit checked 25,119 local destinations with no missing files. The final unit suite passed 86 tests across ten files. Browser/mobile/actual-CSP verification remains pending for the policy reason above; these static checks do not replace it.
+Private source repository: https://github.com/tompickup23/ukcounciltax. Initial code commit: ce8d72e. Cloudflare Pages project: ukcounciltax. The fully verified build was published to production at deployment de3791fa-0e77-46d4-8be7-4276b2b9a396; https://ukcounciltax.pages.dev is working. The GitHub release workflow is configured with deployment secrets and was queued at the latest check; its cloud execution is not yet claimed as successful. Manual publication used the same committed, verified source and built tree.
 
-## Authorised hosting setup, 5 October 2026
+Both apex and www have Pages custom-domain attachments and prepared Cloudflare CNAMEs. Null MX was preserved. The parent DS lookup returned no record before delegation. one.com completed the change to lennox.ns.cloudflare.com and sreeni.ns.cloudflare.com. The UK registry and Cloudflare resolver show the new delegation, and the Cloudflare zone is active. Both custom domains have verified ownership. At the latest check, www certificate validation is active and apex validation is pending. Some resolver/browser caches still return the old one.com parking address. Normal HTTPS verification reported a certificate name mismatch; no certificate bypass was attempted. Do not call the custom domain client-verified until DNS and certificate propagation completes.
 
-Tom explicitly authorised GitHub, Cloudflare and one.com setup. The private GitHub repository and Cloudflare Pages project now exist. An immutable review build was published at https://75bc9f57.ukcounciltax.pages.dev. Testing that independent deployed target is now possible; the earlier local browser block was not bypassed. Initial deployed tests found a scenario heading-level issue and an overlong band-selector label; both were corrected. Test output directories are separate to avoid parallel-suite artifact collisions. A new final build and verification are in progress. Custom-domain records are prepared but registrar delegation is not yet changed.
+See DEPLOYMENT.md for operation, token-scope limitations, dependency assessment and rollback. Local evidence and screenshots are in gitignored .ops/; no credentials are committed. UK Councils and the other ecosystem projects were not edited or deployed by this release.
+
+Production follow-up: all three specialist production-CSP smoke tests passed on ukcounciltax.pages.dev. A real public example postcode lookup through the deployed UI resolved to Burnley/Padiham and required locality confirmation, with no postcode placed in the site URL.

@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+---
+<BaseLayout
+  title="Privacy"
+  description="What UK Council Tax does with a postcode typed into the site, and what it does not collect."
+  path="/privacy/"
+>
+  <Breadcrumbs items={[{ label: "Privacy" }]} />
+  <header class="page-head">
+    <p class="eyebrow">Privacy</p>
+    <h1>Privacy</h1>
+  </header>
+  <div class="prose">
+    <h2>A postcode you type in</h2>
+    <p>
+      When you use the postcode door, your browser sends the postcode to postcodes.io
+      (<code>https://api.postcodes.io</code>) to find the council for it. This site does not receive the
+      postcode, does not store it, and does not put it in any web address on this site.
+    </p>
+    <h2>Search, comparisons and downloads</h2>
+    <p>Council-name and site searches run in your browser. Search terms are not sent to a search provider or saved in a URL. The site search downloads a static index when you use it.</p>
+    <p>Comparison links contain council identifiers, a tax band and a financial year. Share links contain only these selections, never a postcode. Sharing uses your device's share menu or copies a link. CSV files are created in your browser from the published figures and include their sources.</p>
+    <h2>Hosting and calculators</h2>
+    <p>No analytics beacon is enabled. The hosting provider may process routine request information to serve and protect the site. Future-cost calculations run in your browser; share links contain the council, band, assumed percentage and number of years, never household financial details.</p>
+    <h2>What this site does not do</h2>
+    <p>This site sets no cookies and asks for no personal information. It has no accounts and no forms that send anything to it.</p>
+    <h2>A saved colour theme</h2>
+    <p>If you choose light or dark, the choice is saved in your own browser under the name ukcounciltax-theme and is never sent anywhere.</p>
+  </div>
+</BaseLayout>

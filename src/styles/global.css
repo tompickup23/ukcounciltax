@@ -1,0 +1,495 @@
+/* estate-tokens:start
+   Generated from briefings/uk-network-design-system/shared/tokens.css.tmpl in the
+   clawd repo. Do not hand edit: run shared/apply.py to regenerate.
+
+   The estate brand system, BRAND-SYSTEM-2026-08-23.md, is the source of truth for
+   every value above the accent block. Only the accent triple varies between the five
+   sites; everything else is byte identical on all of them.
+
+   Site: ukcounciltax
+   Applied: 2026-10-05 */
+
+/* Source Serif 4 for display, Source Sans 3 for UI. A designed superfamily, so display
+   and UI harmonise by construction, and both carry real tabular figures, which is what
+   stops a column of percentages jittering line to line. Self hosted: every site in this
+   estate runs a CSP with no font host, so a Google Fonts link would be blocked at the
+   browser. Display at 600 only, UI at 400 and 600. Nothing else is used or shipped. */
+@import "@fontsource/source-serif-4/latin-600.css";
+@import "@fontsource/source-serif-4/latin-ext-600.css";
+@import "@fontsource/source-sans-3/latin-400.css";
+@import "@fontsource/source-sans-3/latin-600.css";
+@import "@fontsource/source-sans-3/latin-ext-400.css";
+@import "@fontsource/source-sans-3/latin-ext-600.css";
+
+:root {
+  color-scheme: light dark;
+
+  /* === Shared neutrals. Identical on all five sites. === */
+  --bg: #ffffff;
+  --bg-subtle: #f5f6f7;
+  --bg-card: #ffffff;
+  --border: #dbdfe3;
+  --border-strong: #c2c8ce;
+  --text: #171b1f;        /* 17.31 on white, 16.00 on subtle */
+  --text-muted: #545c63;  /*  6.80 on white,  6.28 on subtle */
+  --text-faint: #616970;  /*  5.58 on white,  5.16 on subtle */
+
+  /* The dark ground. Social and Open Graph surfaces, plus the footer, which plays the
+     same role on the page: a closing band, not content. */
+  --ground: #0f1317;
+  --ground-ink: #f4f6f7;
+  --ground-muted: #98a3ac;
+
+  /* === The only per site block. === */
+  --accent: #23664f;        /* links, headings and rules on white */
+  --accent-bright: #94d7b5; /* the mark and the URL on the dark ground */
+  --accent-wash: #edf6f0;   /* stat tiles and card hovers */
+
+  /* === Semantic. Computed against white, subtle and the wash, never eyeballed. === */
+  --positive: #1f6f4f;
+  --warning: #8a5a10;
+  --critical: #b42318;
+
+  /* === Chart series. Four identity hues assigned in order and never cycled, then two
+     neutrals for residual buckets. Four is where all pairs separation stops passing
+     under deuteranopia, which is why there are four rather than six. === */
+  --series-1: #1a6ba8;
+  --series-2: #b45309;
+  --series-3: #6d28d9;
+  --series-4: #a51d5c;
+  --series-neutral: #6b7280;
+  --series-neutral-soft: #8b939c;
+
+  /* === Geometry and elevation. Shadow lifts a card off white; it is not depth
+     theatre. The dark build used 28px blurs at 42 per cent black, which on a light
+     ground reads as smudge. === */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
+  --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
+
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* === Compatibility aliases ===
+     The pre system stylesheet and templates reference the names below. They are mapped
+     here so the surface can flip in one commit rather than in 570 edits, and they are
+     removed as each template is rewritten. Nothing new may use them. */
+  --bg-soft: var(--bg-subtle);
+  --bg-deep: var(--bg-subtle);
+  --surface: var(--bg-card);
+  --surface-muted: var(--bg-subtle);
+  --ink: var(--text);
+  --ink-soft: var(--text-muted);
+  --muted: var(--text-muted);
+  --panel: var(--bg-card);          /* was a gradient; now a flat colour */
+  --panel-strong: var(--bg-subtle); /* was a gradient */
+  --panel-soft: var(--bg-subtle);
+  --accent-2: var(--positive);
+  --accent-3: var(--accent);
+  --accent-teal: var(--accent-bright);
+  --accent-teal-deep: var(--accent);
+  --accent-glow: color-mix(in srgb, var(--accent) 18%, transparent);
+  --coral: var(--critical);
+  --focus-ring: var(--accent);
+  --status-warn-bg: color-mix(in srgb, var(--warning) 8%, transparent);
+  --status-warn-border: color-mix(in srgb, var(--warning) 45%, transparent);
+  --status-warn-text: var(--warning);
+  --status-warn-tint: color-mix(in srgb, var(--warning) 14%, transparent);
+  --status-warn-dark: var(--warning);
+  --status-good-text: var(--positive);
+  --status-bad-text: var(--critical);
+  --tooltip-bg: #111827;
+  --tooltip-fg: #ffffff;
+
+  /* The dark build painted the page with three radial gradients and a 28px grid
+     overlay. Both were decoration for a near black ground and are retired rather than
+     recoloured: on white they read as dirt. */
+  --body-bg-image: var(--bg);
+  --grid-line: transparent;
+  --grid-vignette: transparent;
+  --header-backdrop: var(--bg);
+}
+
+/* === Dark. The same tokens, inverted, so no component needs a second rule. The accent
+   lifts to its bright value because the deep one does not clear 4.5:1 on the ground,
+   and the wash becomes a deep tint rather than a pale one. === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1317;
+    --bg-subtle: #171c21;
+    --bg-card: #141a1f;
+    --border: #2a3138;
+    --border-strong: #3d464e;
+    --text: #f4f6f7;
+    --text-muted: #b6c0c8;
+    --text-faint: #98a3ac;
+    --ground: #05080a;
+
+    --accent: #94d7b5;
+    --accent-bright: #94d7b5;
+    --accent-wash: #112d25;
+
+    --positive: #6fcf9a;
+    --warning: #f0b03e;
+    --critical: #f2857a;
+
+    --series-1: #6aa9de;
+    --series-2: #e0a35c;
+    --series-3: #b49cf0;
+    --series-4: #e888b0;
+    --series-neutral: #9aa2ab;
+    --series-neutral-soft: #7b838c;
+
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+
+    --tooltip-bg: #e6edf3;
+    --tooltip-fg: #0d1117;
+  }
+}
+/* estate-tokens:end */
+
+/* === Manual theme override. Outside the estate block because the template follows
+   the system preference only. public/theme-init.js reads the choice stored under
+   ukcounciltax-theme and sets data-theme on the html element before first paint.
+   A manual dark choice applies the dark values on any machine; a manual light
+   choice on a dark machine restores the light values the system block flipped. === */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1317;
+  --bg-subtle: #171c21;
+  --bg-card: #141a1f;
+  --border: #2a3138;
+  --border-strong: #3d464e;
+  --text: #f4f6f7;
+  --text-muted: #b6c0c8;
+  --text-faint: #98a3ac;
+  --ground: #05080a;
+
+  --accent: #94d7b5;
+  --accent-bright: #94d7b5;
+  --accent-wash: #112d25;
+
+  --positive: #6fcf9a;
+  --warning: #f0b03e;
+  --critical: #f2857a;
+
+  --series-1: #6aa9de;
+  --series-2: #e0a35c;
+  --series-3: #b49cf0;
+  --series-4: #e888b0;
+  --series-neutral: #9aa2ab;
+  --series-neutral-soft: #7b838c;
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+
+  --tooltip-bg: #e6edf3;
+  --tooltip-fg: #0d1117;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #ffffff;
+    --bg-subtle: #f5f6f7;
+    --bg-card: #ffffff;
+    --border: #dbdfe3;
+    --border-strong: #c2c8ce;
+    --text: #171b1f;
+    --text-muted: #545c63;
+    --text-faint: #616970;
+    --ground: #0f1317;
+    --accent: #23664f;
+    --accent-bright: #94d7b5;
+    --accent-wash: #edf6f0;
+    --positive: #1f6f4f;
+    --warning: #8a5a10;
+    --critical: #b42318;
+    --series-1: #1a6ba8;
+    --series-2: #b45309;
+    --series-3: #6d28d9;
+    --series-4: #a51d5c;
+    --series-neutral: #6b7280;
+    --series-neutral-soft: #8b939c;
+    --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
+    --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
+    --tooltip-bg: #111827;
+    --tooltip-fg: #ffffff;
+  }
+}
+
+/* === Base. === */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+img, svg { max-width: 100%; height: auto; }
+
+.wrap {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* === Layout primitives. === */
+.shell {
+  width: 100%;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+main.shell { padding-top: 1.25rem; padding-bottom: 2rem; }
+
+[id] { scroll-margin-top: 7rem; }
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 0.35rem;
+}
+
+.lede { font-size: 1.15rem; color: var(--text); max-width: 44rem; }
+.muted { color: var(--text-muted); }
+
+.page-head { margin-bottom: 1.5rem; }
+.page-head h1 { font-size: clamp(1.8rem, 5.5vw, 2.6rem); margin: 0 0 0.5rem; }
+
+.section { margin: 2.25rem 0; }
+.section > h2 { font-size: clamp(1.35rem, 4vw, 1.75rem); margin: 0 0 0.85rem; }
+
+/* A fact is one figure and the source line directly under it. Every figure on
+   the site sits inside one; scripts/check-dist.mjs holds the pages to it. */
+.fact { margin: 0 0 1.1rem; }
+.fact-figure {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 7vw, 2.6rem);
+  line-height: 1.1;
+  color: var(--text);
+}
+.fact-label { display: block; color: var(--text-muted); font-size: 0.95rem; }
+.fact-change { display: block; margin-top: 0.2rem; }
+.source-line {
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  line-height: 1.45;
+}
+.source-line a { color: var(--text-faint); }
+.caveat {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  border-left: 3px solid var(--border-strong);
+  padding-left: 0.6rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+  padding: 1rem 1.1rem;
+}
+
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 0.85rem;
+}
+
+/* Tables scroll inside their own box, never the page. */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+table.data caption {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+table.data th,
+table.data td {
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+table.data thead th {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-faint);
+  background: var(--bg-subtle);
+  white-space: nowrap;
+}
+table.data td.num,
+table.data th.num { text-align: right; white-space: nowrap; }
+table.data tbody tr:nth-child(even) { background: color-mix(in srgb, var(--bg-subtle) 55%, transparent); }
+
+.pill-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+.pill-nav a {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg-card);
+}
+.pill-nav a:hover { border-color: var(--accent); color: var(--accent); }
+.pill-nav a[aria-current="page"] {
+  background: var(--accent-wash);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.link-list {
+  columns: 16rem auto;
+  column-gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+.link-list li { break-inside: avoid; padding: 0.2rem 0; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  background: var(--bg-card);
+  padding: 0.5rem 0.75rem;
+  z-index: 100;
+}
+
+@media (max-width: 480px) {
+  table.data { font-size: 0.88rem; }
+  table.data th, table.data td { padding: 0.45rem 0.5rem; }
+}
+
+.prose { max-width: 44rem; }
+.prose h2 { font-size: 1.35rem; margin: 1.75rem 0 0.5rem; }
+.prose li { margin: 0.35rem 0; }
+.prose code { overflow-wrap: anywhere; }
+
+/* Task controls use the same tokens as the sourced figures. */
+[hidden] { display: none !important; }
+.field { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; font-weight: 600; }
+.field input, .field select {
+  width: 100%; min-width: 0; padding: 0.65rem; font: inherit; font-weight: 400;
+  background: var(--bg); color: var(--text); border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+}
+.small { font-size: 0.88rem; }
+.task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
+.action-links { display: flex; gap: 0.7rem 1.25rem; flex-wrap: wrap; margin: 1rem 0; }
+.button { display: inline-block; padding: 0.65rem 1rem; background: var(--accent); color: var(--bg); border: 1px solid var(--accent); border-radius: var(--radius-sm); font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+.button:hover { text-decoration: underline; }
+.button:disabled { cursor: default; opacity: 0.65; }
+.button.secondary { background: var(--bg-card); color: var(--accent); }
+.task-nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; }
+.task-nav a { display: block; text-decoration: none; }
+.task-nav a:hover { border-color: var(--accent); }
+.task-nav strong { display: block; font-size: 1.12rem; }
+.task-nav span { display: block; color: var(--text-muted); margin-top: 0.4rem; }
+.table-wrap { max-height: 34rem; }
+table.data { border-collapse: separate; border-spacing: 0; }
+table.data thead th { position: sticky; top: 0; z-index: 2; }
+table.data tbody th:first-child { position: sticky; left: 0; background: var(--bg-card); z-index: 1; min-width: 8rem; max-width: 13rem; }
+table.data thead th:first-child { left: 0; z-index: 3; }
+@media (max-width: 640px) {
+  .task-grid, .task-nav { grid-template-columns: 1fr; }
+}
+
+.view-actions input { width: 100%; max-width: 100%; box-sizing: border-box; }
+
+/* Print the selected band and visible table rows with their sources. */
+@page { margin: 12mm; }
+@media print {
+  :root, :root[data-theme] { color-scheme: light; --bg: white; --bg-subtle: white; --bg-card: white; --text: black; --text-muted: black; --text-faint: black; --accent: black; --border: gray; --border-strong: gray; --accent-wash: white; }
+  body { font-size: 10pt; background: white; color: black; }
+  .site-header-bar, .mobile-drawer, .site-footer, .site-search, .skip-link, .view-actions, .table-actions, .table-controls, [data-sort-note], [data-comparison-form], .band-tabs, .action-links, .page-contents { display: none !important; }
+  .shell { max-width: none; width: 100%; padding: 0; }
+  main { padding: 0; }
+  .card, .fact, figure { box-shadow: none; break-inside: avoid; }
+  .council-answer { display: block !important; }
+  .council-map { max-width: 16rem; }
+  .table-wrap { overflow: visible !important; max-height: none !important; border: 0; }
+  table.data { min-width: 0 !important; width: 100%; font-size: 9pt; }
+  table.data th, table.data td { position: static !important; white-space: normal; background: white !important; }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  a { color: black; text-decoration: underline; overflow-wrap: anywhere; }
+  .source-line a[href^="https:"]::after { content: " (" attr(href) ")"; font-size: 8pt; }
+  h1,h2,h3 { break-after: avoid; }
+  h1 { font-size: 24pt; }
+  h2 { font-size: 17pt; }
+  .page-head { margin-bottom: 1rem; }
+  .section { margin-top: 1rem; }
+}
+
+/* Specialist tax workspace */
+.home-hero{border-bottom:1px solid var(--border);padding-bottom:2rem!important}.home-hero h1{max-width:16ch}.home-hero .lede{max-width:50rem}.editorial-callout{border-left:4px solid var(--accent);padding:1.5rem 2rem;background:var(--accent-wash);max-width:58rem}.editorial-callout h2{max-width:32ch}.field select,.field input{font:inherit;padding:.65rem .75rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);color:var(--text);background:var(--bg);min-width:0}select{max-width:100%}.field{margin-bottom:1rem}.task-nav .card strong{font-family:var(--font-display);font-size:1.35rem}.page-head .lede{max-width:50rem}.data-card{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius-sm)}.badge{display:inline-block;padding:.2rem .55rem;border-radius:4px;background:var(--accent-wash);color:var(--accent);font-size:.8rem;font-weight:600}
+
+@media print{[data-local-postcode],[data-local-controls],[data-component-model],.scenario-controls,[data-reset],[data-share-scenario],[data-download-scenario]{display:none!important}.scenario-workspace{display:block!important}.scenario-output{break-inside:avoid}.scenario-table{margin-top:1rem}}

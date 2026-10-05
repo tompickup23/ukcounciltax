@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {localBills} from '../lib/local-bill-data';
+import {moneyPence} from '../lib/tax-view';
+import CouncilFinder from "../components/CouncilFinder.astro";
+import HistoryBars from "../components/HistoryBars.astro";
+import SourceLine from "../components/SourceLine.astro";
+import Fact from "../components/Fact.astro";
+import PostcodeDoor from "../components/PostcodeDoor.astro";
+import { BANDS, CURRENT_YEAR, PREVIOUS_YEAR, loadYear, percent, wholePounds, yearLabel } from "../lib/council-tax";
+import { REGIONS, bandPath, councilPages, regionPath } from "../lib/paths";
+import { councilTaxSource } from "../lib/sources";
+
+const data = loadYear(CURRENT_YEAR);
+const area = data.england.areaBandD;
+const year = yearLabel(CURRENT_YEAR);
+const previous = yearLabel(PREVIOUS_YEAR);
+const count = councilPages().length;
+const example=localBills[0];
+const total=example.localities.find(l=>l.id==='unparished')!.totalsPence.D;
+---
+<BaseLayout path="/" title={`Council tax ${year}: bands, bills and local precepts`}>
+  <section class="home-hero">
+    <div class="hero-copy"><p class="eyebrow">Independent data · Official sources · 2026/27</p>
+    <h1>Know your bill.<br/><em>See what changes.</em></h1>
+    <p class="lede">Council tax bands, annual increases and the bodies behind your bill. Explore the published figures and put future costs into perspective.</p>
+    <div class="action-links"><a class="button" href="#find-council">Find your council tax</a><a href="/precepts/">Explore local precepts →</a></div>
+    <p class="hero-coverage">296 English billing authorities · 32 Scottish councils · 22 Welsh Band D averages</p></div>
+    <aside class="bill-preview card" aria-label="Example published bill breakdown"><div class="bill-preview-heading"><span class="eyebrow">Anatomy of a bill</span><span class="small muted">Published example</span></div><h2>Burnley, unparished area</h2><p class="bill-amount">{moneyPence(total)}<span>Band D · 2026/27 · before discounts</span></p><div class="bill-stack" aria-hidden="true">{example.components.map((c,i)=><span class={`slice slice-${i}`} style={`width:${c.bandsPence.D/total*100}%`}></span>)}</div><dl class="bill-parts">{example.components.map((c,i)=><div><dt><span class={`dot slice-${i}`} aria-hidden="true"></span>{c.kind==='billing'?'Borough council':c.kind==='county'?'County council':c.kind==='police'?'Police':'Fire and rescue'}</dt><dd>{moneyPence(c.bandsPence.D)}</dd></div>)}</dl><p class="small muted">A parish or town precept can add to this total. Other places may include mayoral charges.</p><p class="source-line">Source: <a href={example.source.url}>Burnley published charge schedule</a>, retrieved 5 October 2026.</p><a class="bill-link" href="/precepts/">See the local breakdown and model each part →</a></aside>
+  </section>
+  <section class="find-section section" id="find-council"><div><p class="eyebrow">Start with your area</p><h2>Find your council tax</h2><p class="muted">Use a postcode or search by council name. Check your property's band with the official valuation service.</p></div><div class="task-grid"><PostcodeDoor id="postcode-home" /><CouncilFinder /></div><p><a href="/councils/">England</a> · <a href="/scotland/">Scotland</a> · <a href="/wales/">Wales</a> · <a href="/coverage/">Northern Ireland and coverage</a></p></section>
+  <nav class="task-nav section" aria-label="Council tax tools">
+    <a class="card" href="/precepts/"><span class="eyebrow">01 / Understand</span><strong>Who gets each part?</strong><span>Police, fire, county and parish charges. Start with the complete Burnley schedule.</span></a>
+    <a class="card" href="/increases/"><span class="eyebrow">02 / Track</span><strong>What changed this year?</strong><span>Explore whole-area increases for every English council and band.</span></a>
+    <a class="card" href="/tools/future-cost/"><span class="eyebrow">03 / Model</span><strong>What could it cost next?</strong><span>Change the assumptions and see annual and cumulative costs over time.</span></a>
+    <a class="card" href="/compare/"><span class="eyebrow">04 / Compare</span><strong>How do areas compare?</strong><span>Compare the same band, year and council type, with sources alongside.</span></a>
+  </nav>
+  {area && (
+    <section class="section" aria-labelledby="home-average">
+      <h2 id="home-average">How much is council tax in England in {year}?</h2>
+      <div class="fact-grid">
+        <div class="card">
+          <Fact
+            label={`Average area Band D, England, ${year}`}
+            figure={wholePounds(area.england.pounds)}
+            change={`up ${percent(area.england.changePct)} on ${previous}`}
+            source={councilTaxSource(CURRENT_YEAR, area.table)}
+          ><p class="caveat">Includes adult social care and average parish precepts.</p></Fact>
+        </div>
+      </div>
+      <p><a href="/council-tax/">Council tax for all {count} councils in England</a> · <a href="/council-tax/rises-2026-27/">How much each council raised its share</a></p>
+    </section>
+  )}
+
+  {data.england.history && <section class="section" aria-labelledby="home-history">
+    <h2 id="home-history">How the England average has changed</h2>
+    <div data-fact class="fact">
+      <HistoryBars rows={data.england.history.rows.filter(r => typeof r.pounds === 'number').map(r => ({label: yearLabel(r.year), value: r.pounds!}))} format={wholePounds} caption="Published average Band D in England by year" />
+      <SourceLine source={councilTaxSource(CURRENT_YEAR, data.england.history.table)} />
+      <p class="caveat">Cash figures, not adjusted for inflation. Includes adult social care and average parish precepts.</p>
+      <a href="/council-tax/#history-heading">Read the complete history table</a>
+    </div>
+  </section>}
+  <section class="editorial-callout section"><p class="eyebrow">More than a band lookup</p><h2>The bill you pay and the council share are different measures.</h2><p>Your bill can include county, district, police, fire, mayoral and parish charges. We keep the published area total separate from each council's own element, and show the source beside both.</p><a href="/precepts/">Understand the parts of your bill →</a></section>
+  <section class="section" aria-labelledby="home-bands">
+    <h2 id="home-bands">Council tax by band</h2>
+    <ul class="pill-nav">
+      {BANDS.map((band) => <li><a href={bandPath(band)}>Band {band}</a></li>)}
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="home-regions">
+    <h2 id="home-regions">Council tax by region</h2>
+    <ul class="pill-nav">
+      {REGIONS.map((region) => <li><a href={regionPath(region)}>{region}</a></li>)}
+    </ul>
+  </section>
+<section class="section"><h2>Council tax across the UK</h2><div class="task-nav"><a class="card" href="/scotland/"><strong>Scotland</strong><span>32 councils, bands A to H and three years of history.</span></a><a class="card" href="/wales/"><strong>Wales</strong><span>22 Band D averages and their components.</span></a><a class="card" href="/coverage/"><strong>UK coverage explained</strong><span>Understand the differences, including Northern Ireland domestic rates.</span></a></div></section>
+</BaseLayout>
+
+<style>
+.home-hero{display:grid;grid-template-columns:1.1fr 1fr;gap:3rem;align-items:center;padding:3rem 0 2rem}.hero-copy h1{font-size:clamp(2.6rem,5vw,4.3rem);line-height:1.06;letter-spacing:-.04em;margin:.8rem 0 1.3rem}.hero-copy h1 em{font-style:normal;color:var(--accent)}.hero-copy .lede{max-width:36rem;font-size:1.2rem}.hero-coverage{max-width:31rem;font-size:.85rem;color:var(--text-muted);margin-top:1.4rem}.bill-preview{background:var(--accent-wash);padding:1.5rem;border-top:4px solid var(--accent)}.bill-preview-heading{display:flex;gap:1rem;justify-content:space-between}.bill-preview h2{font-size:1.2rem;margin:.6rem 0}.bill-amount{font-size:2.5rem;line-height:1.1;font-weight:700;font-variant-numeric:tabular-nums;margin:.8rem 0 1.2rem}.bill-amount span{display:block;font-size:.85rem;font-weight:400;color:var(--text-muted);margin-top:.5rem}.bill-stack{display:flex;height:12px;gap:3px;border-radius:4px;overflow:hidden}.slice-0{background:var(--accent)}.slice-1{background:var(--text-muted)}.slice-2{background:var(--text)}.slice-3{background:var(--border-strong)}.bill-parts{margin:1rem 0}.bill-parts div{display:flex;justify-content:space-between;gap:1rem;margin:.4rem 0;font-size:.95rem}.bill-parts dt{display:flex;align-items:center;gap:.6rem}.bill-parts dd{font-weight:600;font-variant-numeric:tabular-nums;margin:0}.dot{width:.55rem;height:.55rem;border-radius:50%;flex-shrink:0}.bill-link{display:block;font-weight:600;border-top:1px solid var(--border);padding-top:.8rem;font-size:.9rem}.find-section{border-top:1px solid var(--border);padding-top:1.5rem}.find-section h2{margin:.3rem 0}.task-nav a{transition:transform .15s ease,border-color .15s ease}.task-nav a:hover{transform:translateY(-2px);border-color:var(--accent)}@media(max-width:820px){.home-hero{grid-template-columns:1fr;gap:1.5rem;padding-top:1.5rem}.hero-copy h1{font-size:clamp(2.7rem,9vw,3.8rem)}.bill-preview{padding:1.1rem}.bill-preview-heading{flex-wrap:wrap}.hero-coverage{max-width:none}}@media(prefers-reduced-motion:reduce){.task-nav a{transition:none}.task-nav a:hover{transform:none}}
+</style>

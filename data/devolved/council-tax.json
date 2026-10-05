@@ -1,0 +1,1792 @@
+{
+  "retrieved": "2026-10-05",
+  "licence": "Open Government Licence v3.0",
+  "editions": [
+    {
+      "nation": "Scotland",
+      "year": "2026-27",
+      "basis": "Council tax only; excludes water and sewerage",
+      "precision": "pence",
+      "table": "CT by Band, 2026-27",
+      "source": {
+        "title": "Council Tax by band 2026-27",
+        "url": "https://www.gov.scot/publications/council-tax-datasets/",
+        "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2026-27/council-tax-by-band-2026-27/govscot%3Adocument/CTAS%2B2026%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2026-27.xlsx",
+        "sha256": "fa3f5ed1b3261293bb4603d0a3f5dff5d76ca65c10583af754c7701f7443b1ad"
+      },
+      "records": [
+        {
+          "gss": "S12000033",
+          "slug": "aberdeen-city",
+          "name": "Aberdeen City",
+          "bandsPence": {
+            "A": 116503,
+            "B": 135920,
+            "C": 155337,
+            "D": 174754,
+            "E": 229607,
+            "F": 283975,
+            "G": 342227,
+            "H": 428147
+          }
+        },
+        {
+          "gss": "S12000034",
+          "slug": "aberdeenshire",
+          "name": "Aberdeenshire",
+          "bandsPence": {
+            "A": 112403,
+            "B": 131136,
+            "C": 149870,
+            "D": 168604,
+            "E": 221527,
+            "F": 273982,
+            "G": 330183,
+            "H": 413080
+          }
+        },
+        {
+          "gss": "S12000041",
+          "slug": "angus",
+          "name": "Angus",
+          "bandsPence": {
+            "A": 106577,
+            "B": 124339,
+            "C": 142102,
+            "D": 159865,
+            "E": 210045,
+            "F": 259781,
+            "G": 313069,
+            "H": 391669
+          }
+        },
+        {
+          "gss": "S12000035",
+          "slug": "argyll-and-bute",
+          "name": "Argyll and Bute",
+          "bandsPence": {
+            "A": 118889,
+            "B": 138703,
+            "C": 158518,
+            "D": 178333,
+            "E": 234310,
+            "F": 289791,
+            "G": 349235,
+            "H": 436916
+          }
+        },
+        {
+          "gss": "S12000036",
+          "slug": "city-of-edinburgh",
+          "name": "City of Edinburgh",
+          "bandsPence": {
+            "A": 108403,
+            "B": 126471,
+            "C": 144538,
+            "D": 162605,
+            "E": 213645,
+            "F": 264233,
+            "G": 318435,
+            "H": 398382
+          }
+        },
+        {
+          "gss": "S12000005",
+          "slug": "clackmannanshire",
+          "name": "Clackmannanshire",
+          "bandsPence": {
+            "A": 112245,
+            "B": 130952,
+            "C": 149660,
+            "D": 168367,
+            "E": 221216,
+            "F": 273596,
+            "G": 329719,
+            "H": 412499
+          }
+        },
+        {
+          "gss": "S12000006",
+          "slug": "dumfries-and-galloway",
+          "name": "Dumfries and Galloway",
+          "bandsPence": {
+            "A": 105243,
+            "B": 122784,
+            "C": 140324,
+            "D": 157865,
+            "E": 207417,
+            "F": 256531,
+            "G": 309152,
+            "H": 386769
+          }
+        },
+        {
+          "gss": "S12000042",
+          "slug": "dundee-city",
+          "name": "Dundee City",
+          "bandsPence": {
+            "A": 115313,
+            "B": 134531,
+            "C": 153750,
+            "D": 172969,
+            "E": 227262,
+            "F": 281075,
+            "G": 338731,
+            "H": 423774
+          }
+        },
+        {
+          "gss": "S12000008",
+          "slug": "east-ayrshire",
+          "name": "East Ayrshire",
+          "bandsPence": {
+            "A": 114485,
+            "B": 133566,
+            "C": 152647,
+            "D": 171728,
+            "E": 225632,
+            "F": 279058,
+            "G": 336301,
+            "H": 420734
+          }
+        },
+        {
+          "gss": "S12000045",
+          "slug": "east-dunbartonshire",
+          "name": "East Dunbartonshire",
+          "bandsPence": {
+            "A": 116778,
+            "B": 136241,
+            "C": 155704,
+            "D": 175167,
+            "E": 230150,
+            "F": 284646,
+            "G": 343035,
+            "H": 429159
+          }
+        },
+        {
+          "gss": "S12000010",
+          "slug": "east-lothian",
+          "name": "East Lothian",
+          "bandsPence": {
+            "A": 113175,
+            "B": 132037,
+            "C": 150900,
+            "D": 169762,
+            "E": 223048,
+            "F": 275863,
+            "G": 332451,
+            "H": 415917
+          }
+        },
+        {
+          "gss": "S12000011",
+          "slug": "east-renfrewshire",
+          "name": "East Renfrewshire",
+          "bandsPence": {
+            "A": 108010,
+            "B": 126012,
+            "C": 144013,
+            "D": 162015,
+            "E": 212870,
+            "F": 263274,
+            "G": 317279,
+            "H": 396937
+          }
+        },
+        {
+          "gss": "S12000014",
+          "slug": "falkirk",
+          "name": "Falkirk",
+          "bandsPence": {
+            "A": 114339,
+            "B": 133396,
+            "C": 152452,
+            "D": 171509,
+            "E": 225344,
+            "F": 278702,
+            "G": 335872,
+            "H": 420197
+          }
+        },
+        {
+          "gss": "S12000047",
+          "slug": "fife",
+          "name": "Fife",
+          "bandsPence": {
+            "A": 104913,
+            "B": 122399,
+            "C": 139884,
+            "D": 157370,
+            "E": 206767,
+            "F": 255726,
+            "G": 308183,
+            "H": 385557
+          }
+        },
+        {
+          "gss": "S12000049",
+          "slug": "glasgow-city",
+          "name": "Glasgow City",
+          "bandsPence": {
+            "A": 113733,
+            "B": 132689,
+            "C": 151644,
+            "D": 170600,
+            "E": 224149,
+            "F": 277225,
+            "G": 334092,
+            "H": 417970
+          }
+        },
+        {
+          "gss": "S12000017",
+          "slug": "highland",
+          "name": "Highland",
+          "bandsPence": {
+            "A": 108933,
+            "B": 127088,
+            "C": 145244,
+            "D": 163399,
+            "E": 214688,
+            "F": 265523,
+            "G": 319990,
+            "H": 400328
+          }
+        },
+        {
+          "gss": "S12000018",
+          "slug": "inverclyde",
+          "name": "Inverclyde",
+          "bandsPence": {
+            "A": 111590,
+            "B": 130188,
+            "C": 148787,
+            "D": 167385,
+            "E": 219925,
+            "F": 272001,
+            "G": 327796,
+            "H": 410093
+          }
+        },
+        {
+          "gss": "S12000019",
+          "slug": "midlothian",
+          "name": "Midlothian",
+          "bandsPence": {
+            "A": 121077,
+            "B": 141257,
+            "C": 161436,
+            "D": 181616,
+            "E": 238623,
+            "F": 295126,
+            "G": 355665,
+            "H": 444959
+          }
+        },
+        {
+          "gss": "S12000020",
+          "slug": "moray",
+          "name": "Moray",
+          "bandsPence": {
+            "A": 115409,
+            "B": 134644,
+            "C": 153879,
+            "D": 173114,
+            "E": 227453,
+            "F": 281310,
+            "G": 339015,
+            "H": 424129
+          }
+        },
+        {
+          "gss": "S12000013",
+          "slug": "na-h-eileanan-siar",
+          "name": "Na h-Eileanan Siar",
+          "bandsPence": {
+            "A": 100367,
+            "B": 117094,
+            "C": 133822,
+            "D": 150550,
+            "E": 197806,
+            "F": 244644,
+            "G": 294827,
+            "H": 368848
+          }
+        },
+        {
+          "gss": "S12000021",
+          "slug": "north-ayrshire",
+          "name": "North Ayrshire",
+          "bandsPence": {
+            "A": 112389,
+            "B": 131121,
+            "C": 149852,
+            "D": 168584,
+            "E": 221501,
+            "F": 273949,
+            "G": 330144,
+            "H": 413031
+          }
+        },
+        {
+          "gss": "S12000050",
+          "slug": "north-lanarkshire",
+          "name": "North Lanarkshire",
+          "bandsPence": {
+            "A": 103637,
+            "B": 120910,
+            "C": 138183,
+            "D": 155456,
+            "E": 204252,
+            "F": 252616,
+            "G": 304435,
+            "H": 380867
+          }
+        },
+        {
+          "gss": "S12000023",
+          "slug": "orkney-islands",
+          "name": "Orkney Islands",
+          "bandsPence": {
+            "A": 111271,
+            "B": 129817,
+            "C": 148362,
+            "D": 166907,
+            "E": 219297,
+            "F": 271224,
+            "G": 326860,
+            "H": 408922
+          }
+        },
+        {
+          "gss": "S12000048",
+          "slug": "perth-and-kinross",
+          "name": "Perth and Kinross",
+          "bandsPence": {
+            "A": 111589,
+            "B": 130188,
+            "C": 148786,
+            "D": 167384,
+            "E": 219924,
+            "F": 271999,
+            "G": 327794,
+            "H": 410091
+          }
+        },
+        {
+          "gss": "S12000038",
+          "slug": "renfrewshire",
+          "name": "Renfrewshire",
+          "bandsPence": {
+            "A": 112704,
+            "B": 131488,
+            "C": 150272,
+            "D": 169056,
+            "E": 222121,
+            "F": 274716,
+            "G": 331068,
+            "H": 414187
+          }
+        },
+        {
+          "gss": "S12000026",
+          "slug": "scottish-borders",
+          "name": "Scottish Borders",
+          "bandsPence": {
+            "A": 107901,
+            "B": 125885,
+            "C": 143868,
+            "D": 161852,
+            "E": 212656,
+            "F": 263010,
+            "G": 316960,
+            "H": 396537
+          }
+        },
+        {
+          "gss": "S12000027",
+          "slug": "shetland-islands",
+          "name": "Shetland Islands",
+          "bandsPence": {
+            "A": 99193,
+            "B": 115726,
+            "C": 132258,
+            "D": 148790,
+            "E": 195494,
+            "F": 241784,
+            "G": 291380,
+            "H": 364536
+          }
+        },
+        {
+          "gss": "S12000028",
+          "slug": "south-ayrshire",
+          "name": "South Ayrshire",
+          "bandsPence": {
+            "A": 112997,
+            "B": 131830,
+            "C": 150663,
+            "D": 169496,
+            "E": 222699,
+            "F": 275431,
+            "G": 331930,
+            "H": 415265
+          }
+        },
+        {
+          "gss": "S12000029",
+          "slug": "south-lanarkshire",
+          "name": "South Lanarkshire",
+          "bandsPence": {
+            "A": 97898,
+            "B": 114215,
+            "C": 130531,
+            "D": 146847,
+            "E": 192941,
+            "F": 238627,
+            "G": 287576,
+            "H": 359776
+          }
+        },
+        {
+          "gss": "S12000030",
+          "slug": "stirling",
+          "name": "Stirling",
+          "bandsPence": {
+            "A": 116858,
+            "B": 136334,
+            "C": 155811,
+            "D": 175287,
+            "E": 230308,
+            "F": 284841,
+            "G": 343270,
+            "H": 429453
+          }
+        },
+        {
+          "gss": "S12000039",
+          "slug": "west-dunbartonshire",
+          "name": "West Dunbartonshire",
+          "bandsPence": {
+            "A": 112102,
+            "B": 130786,
+            "C": 149469,
+            "D": 168153,
+            "E": 220934,
+            "F": 273249,
+            "G": 329300,
+            "H": 411975
+          }
+        },
+        {
+          "gss": "S12000040",
+          "slug": "west-lothian",
+          "name": "West Lothian",
+          "bandsPence": {
+            "A": 108506,
+            "B": 126590,
+            "C": 144675,
+            "D": 162759,
+            "E": 213847,
+            "F": 264483,
+            "G": 318736,
+            "H": 398760
+          }
+        }
+      ]
+    },
+    {
+      "nation": "Scotland",
+      "year": "2025-26",
+      "basis": "Council tax only; excludes water and sewerage",
+      "precision": "pence",
+      "table": "CT by Band, 2025-26",
+      "source": {
+        "title": "Council Tax by band 2025-26",
+        "url": "https://www.gov.scot/publications/council-tax-datasets/",
+        "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2025-26/council-tax-by-band-2025-26/govscot%3Adocument/CTAS%2B2025%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2025-26.xlsx",
+        "sha256": "6b21e7e41c63cd4dc77b32114635864a0471973aa968c30f271055efc912bc70"
+      },
+      "records": [
+        {
+          "gss": "S12000033",
+          "slug": "aberdeen-city",
+          "name": "Aberdeen City",
+          "bandsPence": {
+            "A": 109085,
+            "B": 127265,
+            "C": 145446,
+            "D": 163627,
+            "E": 214988,
+            "F": 265894,
+            "G": 320436,
+            "H": 400886
+          }
+        },
+        {
+          "gss": "S12000034",
+          "slug": "aberdeenshire",
+          "name": "Aberdeenshire",
+          "bandsPence": {
+            "A": 102184,
+            "B": 119215,
+            "C": 136245,
+            "D": 153276,
+            "E": 201388,
+            "F": 249074,
+            "G": 300165,
+            "H": 375526
+          }
+        },
+        {
+          "gss": "S12000041",
+          "slug": "angus",
+          "name": "Angus",
+          "bandsPence": {
+            "A": 97435,
+            "B": 113674,
+            "C": 129913,
+            "D": 146152,
+            "E": 192027,
+            "F": 237497,
+            "G": 286214,
+            "H": 358072
+          }
+        },
+        {
+          "gss": "S12000035",
+          "slug": "argyll-and-bute",
+          "name": "Argyll and Bute",
+          "bandsPence": {
+            "A": 108376,
+            "B": 126439,
+            "C": 144501,
+            "D": 162564,
+            "E": 213591,
+            "F": 264167,
+            "G": 318355,
+            "H": 398282
+          }
+        },
+        {
+          "gss": "S12000036",
+          "slug": "city-of-edinburgh",
+          "name": "City of Edinburgh",
+          "bandsPence": {
+            "A": 104234,
+            "B": 121606,
+            "C": 138979,
+            "D": 156351,
+            "E": 205428,
+            "F": 254070,
+            "G": 306187,
+            "H": 383060
+          }
+        },
+        {
+          "gss": "S12000005",
+          "slug": "clackmannanshire",
+          "name": "Clackmannanshire",
+          "bandsPence": {
+            "A": 106292,
+            "B": 124007,
+            "C": 141723,
+            "D": 159438,
+            "E": 209484,
+            "F": 259087,
+            "G": 312233,
+            "H": 390623
+          }
+        },
+        {
+          "gss": "S12000006",
+          "slug": "dumfries-and-galloway",
+          "name": "Dumfries and Galloway",
+          "bandsPence": {
+            "A": 96999,
+            "B": 113165,
+            "C": 129332,
+            "D": 145498,
+            "E": 191168,
+            "F": 236434,
+            "G": 284934,
+            "H": 356470
+          }
+        },
+        {
+          "gss": "S12000042",
+          "slug": "dundee-city",
+          "name": "Dundee City",
+          "bandsPence": {
+            "A": 107023,
+            "B": 124860,
+            "C": 142697,
+            "D": 160534,
+            "E": 210924,
+            "F": 260868,
+            "G": 314379,
+            "H": 393308
+          }
+        },
+        {
+          "gss": "S12000008",
+          "slug": "east-ayrshire",
+          "name": "East Ayrshire",
+          "bandsPence": {
+            "A": 107096,
+            "B": 124945,
+            "C": 142795,
+            "D": 160644,
+            "E": 211068,
+            "F": 261047,
+            "G": 314595,
+            "H": 393578
+          }
+        },
+        {
+          "gss": "S12000045",
+          "slug": "east-dunbartonshire",
+          "name": "East Dunbartonshire",
+          "bandsPence": {
+            "A": 106647,
+            "B": 124421,
+            "C": 142196,
+            "D": 159970,
+            "E": 210183,
+            "F": 259951,
+            "G": 313275,
+            "H": 391927
+          }
+        },
+        {
+          "gss": "S12000010",
+          "slug": "east-lothian",
+          "name": "East Lothian",
+          "bandsPence": {
+            "A": 105279,
+            "B": 122825,
+            "C": 140372,
+            "D": 157918,
+            "E": 207487,
+            "F": 256617,
+            "G": 309256,
+            "H": 386899
+          }
+        },
+        {
+          "gss": "S12000011",
+          "slug": "east-renfrewshire",
+          "name": "East Renfrewshire",
+          "bandsPence": {
+            "A": 101896,
+            "B": 118879,
+            "C": 135861,
+            "D": 152844,
+            "E": 200820,
+            "F": 248372,
+            "G": 299320,
+            "H": 374468
+          }
+        },
+        {
+          "gss": "S12000014",
+          "slug": "falkirk",
+          "name": "Falkirk",
+          "bandsPence": {
+            "A": 105118,
+            "B": 122638,
+            "C": 140157,
+            "D": 157677,
+            "E": 207170,
+            "F": 256225,
+            "G": 308784,
+            "H": 386309
+          }
+        },
+        {
+          "gss": "S12000047",
+          "slug": "fife",
+          "name": "Fife",
+          "bandsPence": {
+            "A": 99917,
+            "B": 116570,
+            "C": 133223,
+            "D": 149876,
+            "E": 196920,
+            "F": 243549,
+            "G": 293507,
+            "H": 367196
+          }
+        },
+        {
+          "gss": "S12000049",
+          "slug": "glasgow-city",
+          "name": "Glasgow City",
+          "bandsPence": {
+            "A": 107400,
+            "B": 125300,
+            "C": 143200,
+            "D": 161100,
+            "E": 211668,
+            "F": 261788,
+            "G": 315488,
+            "H": 394695
+          }
+        },
+        {
+          "gss": "S12000017",
+          "slug": "highland",
+          "name": "Highland",
+          "bandsPence": {
+            "A": 101806,
+            "B": 118774,
+            "C": 135741,
+            "D": 152709,
+            "E": 200643,
+            "F": 248152,
+            "G": 299055,
+            "H": 374137
+          }
+        },
+        {
+          "gss": "S12000018",
+          "slug": "inverclyde",
+          "name": "Inverclyde",
+          "bandsPence": {
+            "A": 103420,
+            "B": 120657,
+            "C": 137893,
+            "D": 155130,
+            "E": 203824,
+            "F": 252086,
+            "G": 303796,
+            "H": 380069
+          }
+        },
+        {
+          "gss": "S12000019",
+          "slug": "midlothian",
+          "name": "Midlothian",
+          "bandsPence": {
+            "A": 111080,
+            "B": 129593,
+            "C": 148107,
+            "D": 166620,
+            "E": 218920,
+            "F": 270758,
+            "G": 326298,
+            "H": 408219
+          }
+        },
+        {
+          "gss": "S12000020",
+          "slug": "moray",
+          "name": "Moray",
+          "bandsPence": {
+            "A": 104917,
+            "B": 122404,
+            "C": 139890,
+            "D": 157376,
+            "E": 206775,
+            "F": 255736,
+            "G": 308195,
+            "H": 385571
+          }
+        },
+        {
+          "gss": "S12000013",
+          "slug": "na-h-eileanan-siar",
+          "name": "Na h-Eileanan Siar",
+          "bandsPence": {
+            "A": 92504,
+            "B": 107921,
+            "C": 123339,
+            "D": 138756,
+            "E": 182310,
+            "F": 225479,
+            "G": 271731,
+            "H": 339952
+          }
+        },
+        {
+          "gss": "S12000021",
+          "slug": "north-ayrshire",
+          "name": "North Ayrshire",
+          "bandsPence": {
+            "A": 103585,
+            "B": 120849,
+            "C": 138113,
+            "D": 155377,
+            "E": 204148,
+            "F": 252488,
+            "G": 304280,
+            "H": 380674
+          }
+        },
+        {
+          "gss": "S12000050",
+          "slug": "north-lanarkshire",
+          "name": "North Lanarkshire",
+          "bandsPence": {
+            "A": 96857,
+            "B": 113000,
+            "C": 129143,
+            "D": 145286,
+            "E": 190890,
+            "F": 236090,
+            "G": 284518,
+            "H": 355951
+          }
+        },
+        {
+          "gss": "S12000023",
+          "slug": "orkney-islands",
+          "name": "Orkney Islands",
+          "bandsPence": {
+            "A": 104973,
+            "B": 122469,
+            "C": 139964,
+            "D": 157460,
+            "E": 206885,
+            "F": 255873,
+            "G": 308359,
+            "H": 385777
+          }
+        },
+        {
+          "gss": "S12000048",
+          "slug": "perth-and-kinross",
+          "name": "Perth and Kinross",
+          "bandsPence": {
+            "A": 102469,
+            "B": 119548,
+            "C": 136626,
+            "D": 153704,
+            "E": 201950,
+            "F": 249769,
+            "G": 301004,
+            "H": 376575
+          }
+        },
+        {
+          "gss": "S12000038",
+          "slug": "renfrewshire",
+          "name": "Renfrewshire",
+          "bandsPence": {
+            "A": 104841,
+            "B": 122314,
+            "C": 139788,
+            "D": 157261,
+            "E": 206623,
+            "F": 255549,
+            "G": 307969,
+            "H": 385289
+          }
+        },
+        {
+          "gss": "S12000026",
+          "slug": "scottish-borders",
+          "name": "Scottish Borders",
+          "bandsPence": {
+            "A": 99448,
+            "B": 116023,
+            "C": 132597,
+            "D": 149172,
+            "E": 195995,
+            "F": 242405,
+            "G": 292129,
+            "H": 365471
+          }
+        },
+        {
+          "gss": "S12000027",
+          "slug": "shetland-islands",
+          "name": "Shetland Islands",
+          "bandsPence": {
+            "A": 92445,
+            "B": 107852,
+            "C": 123260,
+            "D": 138667,
+            "E": 182193,
+            "F": 225334,
+            "G": 271556,
+            "H": 339734
+          }
+        },
+        {
+          "gss": "S12000028",
+          "slug": "south-ayrshire",
+          "name": "South Ayrshire",
+          "bandsPence": {
+            "A": 104627,
+            "B": 122065,
+            "C": 139503,
+            "D": 156941,
+            "E": 206203,
+            "F": 255029,
+            "G": 307343,
+            "H": 384505
+          }
+        },
+        {
+          "gss": "S12000029",
+          "slug": "south-lanarkshire",
+          "name": "South Lanarkshire",
+          "bandsPence": {
+            "A": 91923,
+            "B": 107244,
+            "C": 122564,
+            "D": 137885,
+            "E": 181166,
+            "F": 224063,
+            "G": 270025,
+            "H": 337818
+          }
+        },
+        {
+          "gss": "S12000030",
+          "slug": "stirling",
+          "name": "Stirling",
+          "bandsPence": {
+            "A": 107452,
+            "B": 125361,
+            "C": 143269,
+            "D": 161178,
+            "E": 211770,
+            "F": 261914,
+            "G": 315640,
+            "H": 394886
+          }
+        },
+        {
+          "gss": "S12000039",
+          "slug": "west-dunbartonshire",
+          "name": "West Dunbartonshire",
+          "bandsPence": {
+            "A": 103991,
+            "B": 121322,
+            "C": 138654,
+            "D": 155986,
+            "E": 204948,
+            "F": 253477,
+            "G": 305473,
+            "H": 382166
+          }
+        },
+        {
+          "gss": "S12000040",
+          "slug": "west-lothian",
+          "name": "West Lothian",
+          "bandsPence": {
+            "A": 101030,
+            "B": 117868,
+            "C": 134707,
+            "D": 151545,
+            "E": 199113,
+            "F": 246261,
+            "G": 296776,
+            "H": 371285
+          }
+        }
+      ]
+    },
+    {
+      "nation": "Scotland",
+      "year": "2024-25",
+      "basis": "Council tax only; excludes water and sewerage",
+      "precision": "pence",
+      "table": "CT by Band, 2024-25",
+      "source": {
+        "title": "Council Tax by band 2024-25",
+        "url": "https://www.gov.scot/publications/council-tax-datasets/",
+        "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2024-25/council-tax-by-band-2024-25/govscot%3Adocument/CTAS%2B2024%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2B2024%2B-%2B%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2024-25%2B-%2BArgyll%2Band%2BBute%2Bfrozen.xlsx",
+        "sha256": "de698b724a63f734adc95a355b6831851aac240e964d11f6fb062814475bb937"
+      },
+      "records": [
+        {
+          "gss": "S12000033",
+          "slug": "aberdeen-city",
+          "name": "Aberdeen City",
+          "bandsPence": {
+            "A": 99303,
+            "B": 115854,
+            "C": 132404,
+            "D": 148955,
+            "E": 195710,
+            "F": 242052,
+            "G": 291704,
+            "H": 364940
+          }
+        },
+        {
+          "gss": "S12000034",
+          "slug": "aberdeenshire",
+          "name": "Aberdeenshire",
+          "bandsPence": {
+            "A": 92895,
+            "B": 108377,
+            "C": 123860,
+            "D": 139342,
+            "E": 183080,
+            "F": 226431,
+            "G": 272878,
+            "H": 341388
+          }
+        },
+        {
+          "gss": "S12000041",
+          "slug": "angus",
+          "name": "Angus",
+          "bandsPence": {
+            "A": 87779,
+            "B": 102408,
+            "C": 117038,
+            "D": 131668,
+            "E": 172997,
+            "F": 213961,
+            "G": 257850,
+            "H": 322587
+          }
+        },
+        {
+          "gss": "S12000035",
+          "slug": "argyll-and-bute",
+          "name": "Argyll and Bute",
+          "bandsPence": {
+            "A": 98613,
+            "B": 115049,
+            "C": 131484,
+            "D": 147920,
+            "E": 194350,
+            "F": 240370,
+            "G": 289677,
+            "H": 362404
+          }
+        },
+        {
+          "gss": "S12000036",
+          "slug": "city-of-edinburgh",
+          "name": "City of Edinburgh",
+          "bandsPence": {
+            "A": 96513,
+            "B": 112598,
+            "C": 128684,
+            "D": 144769,
+            "E": 190210,
+            "F": 235250,
+            "G": 283506,
+            "H": 354684
+          }
+        },
+        {
+          "gss": "S12000005",
+          "slug": "clackmannanshire",
+          "name": "Clackmannanshire",
+          "bandsPence": {
+            "A": 94064,
+            "B": 109741,
+            "C": 125419,
+            "D": 141096,
+            "E": 185384,
+            "F": 229281,
+            "G": 276313,
+            "H": 345685
+          }
+        },
+        {
+          "gss": "S12000006",
+          "slug": "dumfries-and-galloway",
+          "name": "Dumfries and Galloway",
+          "bandsPence": {
+            "A": 88990,
+            "B": 103822,
+            "C": 118653,
+            "D": 133485,
+            "E": 175384,
+            "F": 216913,
+            "G": 261408,
+            "H": 327038
+          }
+        },
+        {
+          "gss": "S12000042",
+          "slug": "dundee-city",
+          "name": "Dundee City",
+          "bandsPence": {
+            "A": 99095,
+            "B": 115611,
+            "C": 132127,
+            "D": 148643,
+            "E": 195300,
+            "F": 241545,
+            "G": 291093,
+            "H": 364175
+          }
+        },
+        {
+          "gss": "S12000008",
+          "slug": "east-ayrshire",
+          "name": "East Ayrshire",
+          "bandsPence": {
+            "A": 99163,
+            "B": 115690,
+            "C": 132217,
+            "D": 148744,
+            "E": 195433,
+            "F": 241709,
+            "G": 291290,
+            "H": 364423
+          }
+        },
+        {
+          "gss": "S12000045",
+          "slug": "east-dunbartonshire",
+          "name": "East Dunbartonshire",
+          "bandsPence": {
+            "A": 94377,
+            "B": 110107,
+            "C": 125836,
+            "D": 141566,
+            "E": 186002,
+            "F": 230045,
+            "G": 277233,
+            "H": 346837
+          }
+        },
+        {
+          "gss": "S12000010",
+          "slug": "east-lothian",
+          "name": "East Lothian",
+          "bandsPence": {
+            "A": 95708,
+            "B": 111659,
+            "C": 127611,
+            "D": 143562,
+            "E": 188625,
+            "F": 233288,
+            "G": 281142,
+            "H": 351727
+          }
+        },
+        {
+          "gss": "S12000011",
+          "slug": "east-renfrewshire",
+          "name": "East Renfrewshire",
+          "bandsPence": {
+            "A": 94348,
+            "B": 110073,
+            "C": 125797,
+            "D": 141522,
+            "E": 185944,
+            "F": 229973,
+            "G": 277147,
+            "H": 346729
+          }
+        },
+        {
+          "gss": "S12000014",
+          "slug": "falkirk",
+          "name": "Falkirk",
+          "bandsPence": {
+            "A": 90921,
+            "B": 106075,
+            "C": 121228,
+            "D": 136382,
+            "E": 179191,
+            "F": 221621,
+            "G": 267081,
+            "H": 334136
+          }
+        },
+        {
+          "gss": "S12000047",
+          "slug": "fife",
+          "name": "Fife",
+          "bandsPence": {
+            "A": 92345,
+            "B": 107736,
+            "C": 123127,
+            "D": 138518,
+            "E": 181997,
+            "F": 225092,
+            "G": 271264,
+            "H": 339369
+          }
+        },
+        {
+          "gss": "S12000049",
+          "slug": "glasgow-city",
+          "name": "Glasgow City",
+          "bandsPence": {
+            "A": 99933,
+            "B": 116589,
+            "C": 133244,
+            "D": 149900,
+            "E": 196952,
+            "F": 243588,
+            "G": 293554,
+            "H": 367255
+          }
+        },
+        {
+          "gss": "S12000017",
+          "slug": "highland",
+          "name": "Highland",
+          "bandsPence": {
+            "A": 95146,
+            "B": 111004,
+            "C": 126861,
+            "D": 142719,
+            "E": 187517,
+            "F": 231918,
+            "G": 279491,
+            "H": 349662
+          }
+        },
+        {
+          "gss": "S12000018",
+          "slug": "inverclyde",
+          "name": "Inverclyde",
+          "bandsPence": {
+            "A": 103134,
+            "B": 120323,
+            "C": 137512,
+            "D": 154701,
+            "E": 203260,
+            "F": 251389,
+            "G": 302956,
+            "H": 379017
+          }
+        },
+        {
+          "gss": "S12000019",
+          "slug": "midlothian",
+          "name": "Midlothian",
+          "bandsPence": {
+            "A": 100982,
+            "B": 117812,
+            "C": 134643,
+            "D": 151473,
+            "E": 199019,
+            "F": 246144,
+            "G": 296635,
+            "H": 371109
+          }
+        },
+        {
+          "gss": "S12000020",
+          "slug": "moray",
+          "name": "Moray",
+          "bandsPence": {
+            "A": 95379,
+            "B": 111276,
+            "C": 127172,
+            "D": 143069,
+            "E": 187977,
+            "F": 232487,
+            "G": 280177,
+            "H": 350519
+          }
+        },
+        {
+          "gss": "S12000013",
+          "slug": "na-h-eileanan-siar",
+          "name": "Na h-Eileanan Siar",
+          "bandsPence": {
+            "A": 86050,
+            "B": 100392,
+            "C": 114733,
+            "D": 129075,
+            "E": 169590,
+            "F": 209747,
+            "G": 252772,
+            "H": 316234
+          }
+        },
+        {
+          "gss": "S12000021",
+          "slug": "north-ayrshire",
+          "name": "North Ayrshire",
+          "bandsPence": {
+            "A": 96808,
+            "B": 112943,
+            "C": 129077,
+            "D": 145212,
+            "E": 190792,
+            "F": 235969,
+            "G": 284373,
+            "H": 355769
+          }
+        },
+        {
+          "gss": "S12000050",
+          "slug": "north-lanarkshire",
+          "name": "North Lanarkshire",
+          "bandsPence": {
+            "A": 88052,
+            "B": 102727,
+            "C": 117403,
+            "D": 132078,
+            "E": 173536,
+            "F": 214627,
+            "G": 258653,
+            "H": 323591
+          }
+        },
+        {
+          "gss": "S12000023",
+          "slug": "orkney-islands",
+          "name": "Orkney Islands",
+          "bandsPence": {
+            "A": 91281,
+            "B": 106494,
+            "C": 121708,
+            "D": 136921,
+            "E": 179899,
+            "F": 222497,
+            "G": 268137,
+            "H": 335456
+          }
+        },
+        {
+          "gss": "S12000048",
+          "slug": "perth-and-kinross",
+          "name": "Perth and Kinross",
+          "bandsPence": {
+            "A": 93579,
+            "B": 109176,
+            "C": 124772,
+            "D": 140369,
+            "E": 184429,
+            "F": 228100,
+            "G": 274889,
+            "H": 343904
+          }
+        },
+        {
+          "gss": "S12000038",
+          "slug": "renfrewshire",
+          "name": "Renfrewshire",
+          "bandsPence": {
+            "A": 95745,
+            "B": 111702,
+            "C": 127660,
+            "D": 143617,
+            "E": 188697,
+            "F": 233378,
+            "G": 281250,
+            "H": 351862
+          }
+        },
+        {
+          "gss": "S12000026",
+          "slug": "scottish-borders",
+          "name": "Scottish Borders",
+          "bandsPence": {
+            "A": 90407,
+            "B": 105475,
+            "C": 120543,
+            "D": 135611,
+            "E": 178178,
+            "F": 220368,
+            "G": 265572,
+            "H": 332247
+          }
+        },
+        {
+          "gss": "S12000027",
+          "slug": "shetland-islands",
+          "name": "Shetland Islands",
+          "bandsPence": {
+            "A": 84041,
+            "B": 98047,
+            "C": 112054,
+            "D": 126061,
+            "E": 165630,
+            "F": 204849,
+            "G": 246869,
+            "H": 308849
+          }
+        },
+        {
+          "gss": "S12000028",
+          "slug": "south-ayrshire",
+          "name": "South Ayrshire",
+          "bandsPence": {
+            "A": 96877,
+            "B": 113024,
+            "C": 129170,
+            "D": 145316,
+            "E": 190929,
+            "F": 236139,
+            "G": 284577,
+            "H": 356024
+          }
+        },
+        {
+          "gss": "S12000029",
+          "slug": "south-lanarkshire",
+          "name": "South Lanarkshire",
+          "bandsPence": {
+            "A": 86721,
+            "B": 101174,
+            "C": 115628,
+            "D": 130081,
+            "E": 170912,
+            "F": 211382,
+            "G": 254742,
+            "H": 318698
+          }
+        },
+        {
+          "gss": "S12000030",
+          "slug": "stirling",
+          "name": "Stirling",
+          "bandsPence": {
+            "A": 98767,
+            "B": 115228,
+            "C": 131689,
+            "D": 148150,
+            "E": 194653,
+            "F": 240744,
+            "G": 290127,
+            "H": 362968
+          }
+        },
+        {
+          "gss": "S12000039",
+          "slug": "west-dunbartonshire",
+          "name": "West Dunbartonshire",
+          "bandsPence": {
+            "A": 93265,
+            "B": 108810,
+            "C": 124354,
+            "D": 139898,
+            "E": 183810,
+            "F": 227334,
+            "G": 273967,
+            "H": 342750
+          }
+        },
+        {
+          "gss": "S12000040",
+          "slug": "west-lothian",
+          "name": "West Lothian",
+          "bandsPence": {
+            "A": 92731,
+            "B": 108186,
+            "C": 123641,
+            "D": 139096,
+            "E": 182757,
+            "F": 226031,
+            "G": 272396,
+            "H": 340785
+          }
+        }
+      ]
+    },
+    {
+      "nation": "Wales",
+      "year": "2026-27",
+      "basis": "Average Band D including community and police elements",
+      "precision": "whole pounds",
+      "table": "Table 1",
+      "source": {
+        "title": "Council Tax levels: April 2026 to March 2027 , file type: XLSX, file size: 26 KB",
+        "url": "https://www.gov.wales/council-tax-levels-april-2026-march-2027",
+        "fileUrl": "https://www.gov.wales/sites/default/files/statistics-and-research/2026-03/council-tax-levels-april-2026-march-2027-153478.xlsx",
+        "sha256": "4c7513aef77b2d276c533e3289e730f324efade40adc9d2da9c2ad30d2a094a1"
+      },
+      "records": [
+        {
+          "gss": "W06000001",
+          "slug": "isle-of-anglesey",
+          "name": "Isle of Anglesey",
+          "bandsPence": {
+            "D": 226100
+          },
+          "componentsPounds": {
+            "county": 1793,
+            "community": 69,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000002",
+          "slug": "gwynedd",
+          "name": "Gwynedd",
+          "bandsPence": {
+            "D": 246900
+          },
+          "componentsPounds": {
+            "county": 2006,
+            "community": 64,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000003",
+          "slug": "conwy",
+          "name": "Conwy",
+          "bandsPence": {
+            "D": 247300
+          },
+          "componentsPounds": {
+            "county": 2011,
+            "community": 63,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000004",
+          "slug": "denbighshire",
+          "name": "Denbighshire",
+          "bandsPence": {
+            "D": 233900
+          },
+          "componentsPounds": {
+            "county": 1872,
+            "community": 68,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000005",
+          "slug": "flintshire",
+          "name": "Flintshire",
+          "bandsPence": {
+            "D": 237600
+          },
+          "componentsPounds": {
+            "county": 1915,
+            "community": 63,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000006",
+          "slug": "wrexham",
+          "name": "Wrexham",
+          "bandsPence": {
+            "D": 230900
+          },
+          "componentsPounds": {
+            "county": 1836,
+            "community": 75,
+            "police": 398
+          }
+        },
+        {
+          "gss": "W06000023",
+          "slug": "powys",
+          "name": "Powys",
+          "bandsPence": {
+            "D": 235200
+          },
+          "componentsPounds": {
+            "county": 1872,
+            "community": 92,
+            "police": 388
+          }
+        },
+        {
+          "gss": "W06000008",
+          "slug": "ceredigion",
+          "name": "Ceredigion",
+          "bandsPence": {
+            "D": 241900
+          },
+          "componentsPounds": {
+            "county": 1976,
+            "community": 56,
+            "police": 388
+          }
+        },
+        {
+          "gss": "W06000009",
+          "slug": "pembrokeshire",
+          "name": "Pembrokeshire",
+          "bandsPence": {
+            "D": 216600
+          },
+          "componentsPounds": {
+            "county": 1728,
+            "community": 51,
+            "police": 388
+          }
+        },
+        {
+          "gss": "W06000010",
+          "slug": "carmarthenshire",
+          "name": "Carmarthenshire",
+          "bandsPence": {
+            "D": 235100
+          },
+          "componentsPounds": {
+            "county": 1831,
+            "community": 133,
+            "police": 388
+          }
+        },
+        {
+          "gss": "W06000011",
+          "slug": "swansea",
+          "name": "Swansea",
+          "bandsPence": {
+            "D": 223800
+          },
+          "componentsPounds": {
+            "county": 1807,
+            "community": 26,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000012",
+          "slug": "neath-port-talbot",
+          "name": "Neath Port Talbot",
+          "bandsPence": {
+            "D": 254100
+          },
+          "componentsPounds": {
+            "county": 2073,
+            "community": 63,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000013",
+          "slug": "bridgend",
+          "name": "Bridgend",
+          "bandsPence": {
+            "D": 247800
+          },
+          "componentsPounds": {
+            "county": 2007,
+            "community": 66,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000014",
+          "slug": "vale-of-glamorgan",
+          "name": "Vale of Glamorgan",
+          "bandsPence": {
+            "D": 223200
+          },
+          "componentsPounds": {
+            "county": 1763,
+            "community": 64,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000015",
+          "slug": "cardiff",
+          "name": "Cardiff",
+          "bandsPence": {
+            "D": 201300
+          },
+          "componentsPounds": {
+            "county": 1604,
+            "community": 4,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000016",
+          "slug": "rhondda-cynon-taf",
+          "name": "Rhondda Cynon Taf",
+          "bandsPence": {
+            "D": 228900
+          },
+          "componentsPounds": {
+            "county": 1845,
+            "community": 39,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000024",
+          "slug": "merthyr-tydfil",
+          "name": "Merthyr Tydfil",
+          "bandsPence": {
+            "D": 259400
+          },
+          "componentsPounds": {
+            "county": 2186,
+            "community": 2,
+            "police": 405
+          }
+        },
+        {
+          "gss": "W06000018",
+          "slug": "caerphilly",
+          "name": "Caerphilly",
+          "bandsPence": {
+            "D": 208300
+          },
+          "componentsPounds": {
+            "county": 1658,
+            "community": 21,
+            "police": 404
+          }
+        },
+        {
+          "gss": "W06000019",
+          "slug": "blaenau-gwent",
+          "name": "Blaenau Gwent",
+          "bandsPence": {
+            "D": 253100
+          },
+          "componentsPounds": {
+            "county": 2091,
+            "community": 37,
+            "police": 404
+          }
+        },
+        {
+          "gss": "W06000020",
+          "slug": "torfaen",
+          "name": "Torfaen",
+          "bandsPence": {
+            "D": 215600
+          },
+          "componentsPounds": {
+            "county": 1692,
+            "community": 61,
+            "police": 404
+          }
+        },
+        {
+          "gss": "W06000021",
+          "slug": "monmouthshire",
+          "name": "Monmouthshire",
+          "bandsPence": {
+            "D": 241600
+          },
+          "componentsPounds": {
+            "county": 1926,
+            "community": 87,
+            "police": 404
+          }
+        },
+        {
+          "gss": "W06000022",
+          "slug": "newport",
+          "name": "Newport",
+          "bandsPence": {
+            "D": 208800
+          },
+          "componentsPounds": {
+            "county": 1676,
+            "community": 9,
+            "police": 404
+          }
+        }
+      ]
+    }
+  ]
+}

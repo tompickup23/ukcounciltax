@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { councilPages } from "../lib/paths";
+
+const count = councilPages().length;
+---
+<BaseLayout
+  title="About UK Council Tax"
+  description="What UK Council Tax publishes about local authorities, where every figure comes from, and the rules the site keeps."
+  path="/about/"
+>
+  <Breadcrumbs items={[{ label: "About" }]} />
+  <header class="page-head">
+    <p class="eyebrow">About</p>
+    <h1>About UK Council Tax</h1>
+  </header>
+  <div class="prose">
+    <p>UK Council Tax is an independent reference site. It is not a council or government service and does not issue bills, take payments or decide council tax bands.</p>
+    <p>UK Council Tax focuses on the amount charged, how it changes, and who receives each part. Coverage includes {count} English billing authorities, all 32 Scottish councils and Band D averages for 22 Welsh councils. <a href="/coverage/">Coverage differs by nation</a>.</p>
+    <p>Published data and illustrative scenarios are kept distinct. The local precept tool begins with Burnley's complete 2026/27 schedule. Wider council information belongs on <a href="https://ukcouncils.co.uk/">UK Councils</a>; contextual links connect to other public data projects.</p>
+    <h2>The rules the site keeps</h2>
+    <ul>
+      <li>Every observed charge comes from an official table. Calculations and illustrative scenarios state their assumptions and sources.</li>
+      <li>A figure the source does not hold is not shown. A missing figure means a missing section, never a zero or an estimate.</li>
+      <li>Councils are compared only where every council has the same complete official year, as in the MHCLG council tax tables, and only within the same class of council.</li>
+      <li>No person is named anywhere on the site.</li>
+      <li>The site states what a table says and the rule that applies. It says nothing about why a council did what it did.</li>
+    </ul>
+    <p>
+      How each figure is read and calculated is on the <a href="/methodology/">methodology</a> page, and every
+      table used is listed on the <a href="/sources/">sources</a> page.
+    </p>
+    <p>For site questions see <a href="/contact/">contact</a>. Substantive factual changes are recorded on the <a href="/corrections/">corrections</a> page.</p>
+  </div>
+</BaseLayout>

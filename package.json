@@ -1,0 +1,43 @@
+{
+  "name": "ukcounciltax",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist && node scripts/inject_csp_hashes.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:dist": "node scripts/check-dist.mjs",
+    "test:e2e": "playwright test",
+    "test:csp": "playwright test --config playwright.csp.config.ts",
+    "data:council-tax": "node scripts/fetch-council-tax.mjs",
+    "data:registry": "node scripts/sync-registry.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
+    "data:devolved": "python3 scripts/import-devolved.py",
+    "data:local-bills": "python3 scripts/import-local-bills.py"
+  },
+  "dependencies": {
+    "@fontsource/source-sans-3": "^5.3.0",
+    "@fontsource/source-serif-4": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^6.4.8",
+    "d3-geo": "^3.1.1",
+    "satori": "^0.26.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
+    "@types/d3-geo": "^3.1.1",
+    "@types/node": "^26.4.1",
+    "pagefind": "^1.5.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11",
+    "wrangler": "4.147.0"
+  }
+}

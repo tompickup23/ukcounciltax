@@ -1,0 +1,26 @@
+{
+  "scotland-0": {
+    "title": "Council Tax by band 2026-27",
+    "url": "https://www.gov.scot/publications/council-tax-datasets/",
+    "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2026-27/council-tax-by-band-2026-27/govscot%3Adocument/CTAS%2B2026%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2026-27.xlsx",
+    "sha256": "fa3f5ed1b3261293bb4603d0a3f5dff5d76ca65c10583af754c7701f7443b1ad"
+  },
+  "scotland-1": {
+    "title": "Council Tax by band 2025-26",
+    "url": "https://www.gov.scot/publications/council-tax-datasets/",
+    "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2025-26/council-tax-by-band-2025-26/govscot%3Adocument/CTAS%2B2025%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2025-26.xlsx",
+    "sha256": "6b21e7e41c63cd4dc77b32114635864a0471973aa968c30f271055efc912bc70"
+  },
+  "scotland-2": {
+    "title": "Council Tax by band 2024-25",
+    "url": "https://www.gov.scot/publications/council-tax-datasets/",
+    "fileUrl": "https://www.gov.scot/binaries/content/documents/govscot/publications/statistics/2019/04/council-tax-datasets/documents/average-council-tax-per-dwelling/council-tax-by-band-2024-25/council-tax-by-band-2024-25/govscot%3Adocument/CTAS%2B2024%2B-%2BCouncil%2BTax%2BAssumptions%2B-%2B2024%2B-%2B%2BCouncil%2BTax%2Bby%2BBand%2B-%2B2024-25%2B-%2BArgyll%2Band%2BBute%2Bfrozen.xlsx",
+    "sha256": "de698b724a63f734adc95a355b6831851aac240e964d11f6fb062814475bb937"
+  },
+  "wales-0": {
+    "title": "Council Tax levels: April 2026 to March 2027 , file type: XLSX, file size: 26 KB",
+    "url": "https://www.gov.wales/council-tax-levels-april-2026-march-2027",
+    "fileUrl": "https://www.gov.wales/sites/default/files/statistics-and-research/2026-03/council-tax-levels-april-2026-march-2027-153478.xlsx",
+    "sha256": "4c7513aef77b2d276c533e3289e730f324efade40adc9d2da9c2ad30d2a094a1"
+  }
+}

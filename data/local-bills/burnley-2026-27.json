@@ -1,0 +1,334 @@
+{
+  "gss": "E07000117",
+  "slug": "burnley",
+  "name": "Burnley",
+  "year": "2026-27",
+  "source": {
+    "publisher": "Burnley Borough Council",
+    "title": "Council Tax Charges 2026/27",
+    "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+    "landingUrl": "https://burnley.gov.uk/counciltax/counciltaxexplained/your-council-tax-for-2024-25/",
+    "retrieved": "2026-10-05",
+    "sha256": "b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9"
+  },
+  "components": [
+    {
+      "id": "billing",
+      "kind": "billing",
+      "name": "Burnley Borough Council",
+      "bandsPence": {
+        "A": 23429,
+        "B": 27334,
+        "C": 31239,
+        "D": 35144,
+        "E": 42954,
+        "F": 50764,
+        "G": 58573,
+        "H": 70288
+      },
+      "includes": [
+        "billing"
+      ]
+    },
+    {
+      "id": "county",
+      "kind": "county",
+      "name": "Lancashire County Council",
+      "bandsPence": {
+        "A": 120117,
+        "B": 140136,
+        "C": 160156,
+        "D": 180175,
+        "E": 220214,
+        "F": 260253,
+        "G": 300292,
+        "H": 360350
+      },
+      "includes": [
+        "county",
+        "adult-social-care"
+      ]
+    },
+    {
+      "id": "police",
+      "kind": "police",
+      "name": "Lancashire Police Authority",
+      "bandsPence": {
+        "A": 19493,
+        "B": 22742,
+        "C": 25991,
+        "D": 29240,
+        "E": 35738,
+        "F": 42236,
+        "G": 48733,
+        "H": 58480
+      },
+      "includes": [
+        "police"
+      ]
+    },
+    {
+      "id": "fire",
+      "kind": "fire",
+      "name": "Lancashire Combined Fire Authority",
+      "bandsPence": {
+        "A": 6315,
+        "B": 7368,
+        "C": 8420,
+        "D": 9473,
+        "E": 11578,
+        "F": 13683,
+        "G": 15788,
+        "H": 18946
+      },
+      "includes": [
+        "fire"
+      ]
+    }
+  ],
+  "otherCharges": [
+    {
+      "kind": "mayoral",
+      "status": "not-applicable",
+      "note": "No separate mayoral precept appears in the complete published charge schedule."
+    }
+  ],
+  "localities": [
+    {
+      "id": "unparished",
+      "name": "Other parts of Burnley (unparished)",
+      "parishNames": [
+        "Burnley, unparished area"
+      ],
+      "parishPence": null,
+      "totalsPence": {
+        "A": 169354,
+        "B": 197580,
+        "C": 225806,
+        "D": 254032,
+        "E": 310484,
+        "F": 366936,
+        "G": 423386,
+        "H": 508064
+      }
+    },
+    {
+      "id": "worsthorne-with-hurstwood",
+      "name": "Worsthorne with Hurstwood",
+      "parishNames": [
+        "Worsthorne with Hurstwood"
+      ],
+      "parishPence": {
+        "A": 1737,
+        "B": 2026,
+        "C": 2316,
+        "D": 2605,
+        "E": 3184,
+        "F": 3763,
+        "G": 4342,
+        "H": 5210
+      },
+      "totalsPence": {
+        "A": 171091,
+        "B": 199606,
+        "C": 228122,
+        "D": 256637,
+        "E": 313668,
+        "F": 370699,
+        "G": 427728,
+        "H": 513274
+      }
+    },
+    {
+      "id": "cliviger",
+      "name": "Cliviger",
+      "parishNames": [
+        "Cliviger"
+      ],
+      "parishPence": {
+        "A": 629,
+        "B": 733,
+        "C": 838,
+        "D": 943,
+        "E": 1153,
+        "F": 1362,
+        "G": 1572,
+        "H": 1886
+      },
+      "totalsPence": {
+        "A": 169983,
+        "B": 198313,
+        "C": 226644,
+        "D": 254975,
+        "E": 311637,
+        "F": 368298,
+        "G": 424958,
+        "H": 509950
+      }
+    },
+    {
+      "id": "padiham",
+      "name": "Padiham",
+      "parishNames": [
+        "Padiham"
+      ],
+      "parishPence": {
+        "A": 2937,
+        "B": 3427,
+        "C": 3916,
+        "D": 4406,
+        "E": 5385,
+        "F": 6364,
+        "G": 7343,
+        "H": 8812
+      },
+      "totalsPence": {
+        "A": 172291,
+        "B": 201007,
+        "C": 229722,
+        "D": 258438,
+        "E": 315869,
+        "F": 373300,
+        "G": 430729,
+        "H": 516876
+      }
+    },
+    {
+      "id": "habergham-eaves",
+      "name": "Habergham Eaves",
+      "parishNames": [
+        "Habergham Eaves"
+      ],
+      "parishPence": {
+        "A": 1101,
+        "B": 1285,
+        "C": 1468,
+        "D": 1652,
+        "E": 2019,
+        "F": 2386,
+        "G": 2753,
+        "H": 3304
+      },
+      "totalsPence": {
+        "A": 170455,
+        "B": 198865,
+        "C": 227274,
+        "D": 255684,
+        "E": 312503,
+        "F": 369322,
+        "G": 426139,
+        "H": 511368
+      }
+    },
+    {
+      "id": "briercliffe",
+      "name": "Briercliffe",
+      "parishNames": [
+        "Briercliffe"
+      ],
+      "parishPence": {
+        "A": 1332,
+        "B": 1554,
+        "C": 1776,
+        "D": 1998,
+        "E": 2442,
+        "F": 2886,
+        "G": 3330,
+        "H": 3996
+      },
+      "totalsPence": {
+        "A": 170686,
+        "B": 199134,
+        "C": 227582,
+        "D": 256030,
+        "E": 312926,
+        "F": 369822,
+        "G": 426716,
+        "H": 512060
+      }
+    },
+    {
+      "id": "hapton",
+      "name": "Hapton",
+      "parishNames": [
+        "Hapton"
+      ],
+      "parishPence": {
+        "A": 1854,
+        "B": 2163,
+        "C": 2472,
+        "D": 2781,
+        "E": 3399,
+        "F": 4017,
+        "G": 4635,
+        "H": 5562
+      },
+      "totalsPence": {
+        "A": 171208,
+        "B": 199743,
+        "C": 228278,
+        "D": 256813,
+        "E": 313883,
+        "F": 370953,
+        "G": 428021,
+        "H": 513626
+      }
+    },
+    {
+      "id": "ightenhill",
+      "name": "Ightenhill",
+      "parishNames": [
+        "Ightenhill"
+      ],
+      "parishPence": {
+        "A": 491,
+        "B": 572,
+        "C": 654,
+        "D": 736,
+        "E": 900,
+        "F": 1063,
+        "G": 1227,
+        "H": 1472
+      },
+      "totalsPence": {
+        "A": 169845,
+        "B": 198152,
+        "C": 226460,
+        "D": 254768,
+        "E": 311384,
+        "F": 367999,
+        "G": 424613,
+        "H": 509536
+      }
+    },
+    {
+      "id": "dunnockshaw",
+      "name": "Dunnockshaw",
+      "parishNames": [
+        "Dunnockshaw"
+      ],
+      "parishPence": {
+        "A": 2051,
+        "B": 2393,
+        "C": 2735,
+        "D": 3077,
+        "E": 3761,
+        "F": 4445,
+        "G": 5128,
+        "H": 6154
+      },
+      "totalsPence": {
+        "A": 171405,
+        "B": 199973,
+        "C": 228541,
+        "D": 257109,
+        "E": 314245,
+        "F": 371381,
+        "G": 428514,
+        "H": 514218
+      }
+    }
+  ],
+  "status": "complete-published-schedule",
+  "boundaryRule": "Postcode lookup suggests a locality; the visitor must confirm it. A postcode is not a property identifier."
+}

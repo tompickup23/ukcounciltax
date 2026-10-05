@@ -1,0 +1,301 @@
+---
+/** Published charges, histories, precept context and links for one billing authority. */
+import PreceptContext from '../../components/PreceptContext.astro';
+import CouncilActions from "../../components/CouncilActions.astro";
+import MiniMap from "../../components/MiniMap.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import BandSelector from "../../components/BandSelector.astro";
+import PageContents from "../../components/PageContents.astro";
+import HistoryBars from "../../components/HistoryBars.astro";
+import Fact from "../../components/Fact.astro";
+import SourceLine from "../../components/SourceLine.astro";
+import {
+  BANDS,
+  AREA_TYPE_LABEL,
+  CURRENT_YEAR,
+  PREVIOUS_YEAR,
+  YEARS,
+  areaTypeFor,
+  bandChange,
+  changePhrase,
+  loadYear,
+  percent,
+  pounds,
+  wholePounds,
+  yearLabel,
+  type Authority,
+} from "../../lib/council-tax";
+import { councilPages, councilPath, regionPath } from "../../lib/paths";
+import { contextLinks, sisterLinks, type Council } from "../../lib/registry";
+import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
+import { councilCardPath } from "../../lib/og";
+import { councilTaxSource, longDate } from "../../lib/sources";
+
+export function getStaticPaths() {
+  return councilPages().map(({ council, tax }) => ({
+    params: { slug: council.slug },
+    props: { council, tax },
+  }));
+}
+
+interface Props {
+  council: Council;
+  tax: Authority;
+}
+
+const { council, tax } = Astro.props;
+const current = loadYear(CURRENT_YEAR);
+const name = tax.name;
+const year = yearLabel(CURRENT_YEAR);
+const previous = yearLabel(PREVIOUS_YEAR);
+const bandD = tax.bands.D;
+const changeD = bandChange(council.gss, "D");
+const areaType = areaTypeFor(tax.classCode);
+const englandArea = current.england.areaBandD;
+const bandSource = councilTaxSource(CURRENT_YEAR, current.source.bandTable);
+const areaSource = englandArea ? councilTaxSource(CURRENT_YEAR, englandArea.table) : null;
+
+/** The class of authority as a sentence, with the county for a district. */
+const county = tax.classCode === "SD" && council.parentGss ? current.counties[council.parentGss] ?? null : null;
+const TYPE_LINE: Record<Authority["classCode"], string> = {
+  ILB: "An inner London borough",
+  OLB: "An outer London borough",
+  MD: "A metropolitan district",
+  UA: "A unitary authority",
+  SD: "A shire district",
+};
+const typeLine = county
+  ? `${TYPE_LINE[tax.classCode]} in ${county.name}. ${county.name} County Council also sets council tax here.`
+  : `${TYPE_LINE[tax.classCode]} in ${tax.region}.`;
+
+/** The own share tables: the council's, and the county's for a district. */
+const own = tax.own;
+const ownSource = own ? councilTaxSource(CURRENT_YEAR, own.table) : null;
+const countySource = county ? councilTaxSource(CURRENT_YEAR, county.table) : null;
+
+/** Band D as published in each year held, for the short history. */
+const history = YEARS.map((y) => {
+  const data = loadYear(y);
+  const row = data.authorities[council.gss];
+  return row ? { year: y, bandD: row.bands.D, table: data.source.bandTable } : null;
+}).filter((row): row is { year: (typeof YEARS)[number]; bandD: number; table: string } => row !== null);
+
+const historySource = {
+  ...councilTaxSource(CURRENT_YEAR, current.source.bandTable),
+  table: `${current.source.bandTable.replace("_", " ")} each year, linked in the table`,
+};
+const links = [...contextLinks(council),...sisterLinks(council)];
+const path = councilPath(council);
+const question = `How much is council tax in ${name} in ${year}?`;
+const answer = `Band D council tax in ${name} is ${pounds(bandD)} a year in ${year}`
+  + (changeD ? `, ${changePhrase(changeD)} on ${previous}` : "")
+  + `. The figure includes the share of every body that sets council tax there, with parish precepts as an average, from MHCLG ${bandSource.table}.`;
+
+const title = `${name} council tax bands ${year}`;
+const description = `Band D in ${name} is ${pounds(bandD)} a year in ${year}`
+  + (changeD ? `, ${changePhrase(changeD)} on ${previous}` : "")
+  + `. Every band from A to H, who sets each share and the England average, from MHCLG.`;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      },
+    ],
+  },
+];
+---
+<BaseLayout
+  title={title}
+  description={description}
+  path={path}
+  structuredData={structuredData}
+  about={{"@type": "GovernmentOrganization", name: council.officialName, identifier: council.gss, areaServed: {"@type": "AdministrativeArea", name, identifier: council.gss}}}
+  ogImage={councilCardPath(council.slug)}
+  ogImageAlt={`${name}: council tax bands A to H, ${year}`}
+>
+  <Breadcrumbs items={[{ label: "Councils", href: "/councils/" }, { label: name }]} />
+
+  <header class="page-head council-head">
+    <p class="eyebrow">Council</p>
+    <h1>{name}</h1>
+    <p class="muted">{typeLine}</p>
+  </header>
+
+  <div class="council-answer">
+  <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
+    <h2 id="council-tax-heading">{question}</h2>
+    <p class="muted">
+      Choose your band for the published yearly charge, before discounts.
+    </p>
+    <BandSelector ons={council.gss} authority={tax} />
+    <p class="small muted">Monthly equivalents divide the annual charge by ten and round to pennies. Actual bill instalments can differ.</p>
+    <p class="caveat">
+      Every band includes the share of every body that sets council tax here, such as the police and,
+      where they exist, the county council, the fire authority and parish councils, with parish precepts as
+      an average. A home in a parish with
+      its own precept pays a different amount, and discounts such as the single person discount are not
+      taken off.
+    </p>
+    {tax.notes.length > 0 && (
+      <ul class="notes">
+        {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
+      </ul>
+    )}
+  </section>
+
+  <MiniMap gss={council.gss} name={name} />
+  </div>
+  <div class="action-links" aria-label="Council tax next steps">
+    <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
+    <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>Model future costs</a>
+    <a href="/precepts/">Local bill and precept coverage</a>
+    <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
+    <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
+  </div>
+  <CouncilActions slug={council.slug} />
+  <PageContents items={[
+    ...(englandArea ? [{id: 'compared', label: 'England and area averages'}] : []),
+    ...(history.length > 1 ? [{id: 'history', label: 'Previous years'}] : []),
+    ...(own ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
+    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+  ]} />
+
+  {englandArea && areaSource && (
+    <section class="section" id="compared" aria-labelledby="compared-heading">
+      <h2 id="compared-heading">How does Band D in {name} compare?</h2>
+      <div class="fact-grid">
+        <div class="card">
+          <Fact
+            label={`England average area Band D, ${year}`}
+            figure={wholePounds(englandArea.england.pounds)}
+            change={`up ${percent(englandArea.england.changePct)} on ${previous}`}
+            source={areaSource}
+          />
+        </div>
+        <div class="card">
+          <Fact
+            label={`Average area Band D for ${AREA_TYPE_LABEL[areaType]}, ${year}`}
+            figure={wholePounds(englandArea.byAreaType[areaType].pounds)}
+            change={`up ${percent(englandArea.byAreaType[areaType].changePct)} on ${previous}`}
+            source={areaSource}
+          />
+        </div>
+      </div>
+      <p class="muted">
+        Both averages include parish and adult social care precepts, the same basis as the {name} figure.
+        <a href={regionPath(tax.region)}>Band D for every council in {tax.region}</a>.
+      </p>
+    </section>
+  )}
+
+  {history.length > 1 && (
+    <section class="section" id="history" aria-labelledby="history-heading">
+      <h2 id="history-heading">How has Band D in {name} changed?</h2>
+      <div class="fact" data-fact>
+        <HistoryBars rows={history.map(row => ({label: yearLabel(row.year), value: row.bandD}))} format={pounds} caption={`Published area Band D in ${name} by year`} />
+        <SourceLine source={historySource} />
+        <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts.</p>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Council tax history table">
+          <table class="data">
+            <caption>Area Band D in {name}, as published each year</caption>
+            <thead>
+              <tr><th scope="col">Year</th><th scope="col" class="num">Band D</th><th scope="col">Source</th></tr>
+            </thead>
+            <tbody>
+              {history.map((row) => (
+                <tr>
+                  <th scope="row">{yearLabel(row.year)}</th>
+                  <td class="num" data-figure>{pounds(row.bandD)}</td>
+                  <td><a href={loadYear(row.year).source.url}>MHCLG {row.table.replace("_", " ")}</a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <SourceLine source={historySource} />
+      </div>
+    </section>
+  )}
+
+  <section class="section" id="all-band-history"><h2>Every band over time</h2><div class="table-wrap" tabindex="0" role="region" aria-label="All band history"><table class="data"><caption>{name} area charges, including average parish precepts</caption><thead><tr><th scope="col">Band</th>{YEARS.map(y=><th scope="col" class="num">{yearLabel(y)}</th>)}<th scope="col" class="num">Two-year change</th></tr></thead><tbody>{BANDS.map(b=>{const start=loadYear(YEARS[0]).authorities[council.gss]?.bands[b];return <tr><th scope="row">{b}</th>{YEARS.map(y=><td class="num">{pounds(loadYear(y).authorities[council.gss]?.bands[b])}</td>)}<td class="num">{start?pounds(tax.bands[b]-start):'Unavailable'}</td></tr>;})}</tbody></table></div><p class="source-line">Sources: {YEARS.map(y=><span><a href={loadYear(y).source.url}>MHCLG {yearLabel(y)}</a> · </span>)}Change calculated from the two published charges. Nominal amounts, before discounts.</p><p><a href={`/tools/future-cost/?council=${council.slug}&band=D`}>Explore what future annual changes could mean for {name}</a>.</p></section>
+
+  {own && ownSource && (
+    <section class="section" id="who-sets-it" aria-labelledby="who-sets-heading">
+      <h2 id="who-sets-heading">Who sets council tax in {name}?</h2>
+      <p class="muted">
+        The Band D bill is made up of shares set by different bodies. MHCLG publishes each body's own
+        average Band D; the police, fire and parish shares are published by precepting body, not by
+        billing area, so they are not listed here.
+      </p>
+      <div class="fact-grid">
+        {typeof own.bandD === "number" && (
+          <div class="card">
+            <Fact
+              label={`${name} council's own Band D, ${year}`}
+              figure={pounds(own.bandD)}
+              change={typeof own.changePct === "number" ? `${own.changePct >= 0 ? "up" : "down"} ${percent(Math.abs(own.changePct), 2)} on ${previous}, as published` : null}
+              source={ownSource}
+            />
+          </div>
+        )}
+        {county && countySource && typeof county.bandD === "number" && (
+          <div class="card">
+            <Fact
+              label={`${county.name} County Council's Band D, ${year}`}
+              figure={pounds(county.bandD)}
+              change={typeof county.changePct === "number" ? `${county.changePct >= 0 ? "up" : "down"} ${percent(Math.abs(county.changePct), 2)} on ${previous}, as published` : null}
+              source={countySource}
+            />
+          </div>
+        )}
+      </div>
+      {own.notes.length > 0 && (
+        <ul class="notes">
+          {own.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
+        </ul>
+      )}
+      <p class="muted"><a href="/council-tax/rises-2026-27/">How much every council raised its own share this year</a>.</p>
+    </section>
+  )}
+
+  <PreceptContext region={tax.region} gss={council.gss} />
+
+  {council.reorganisation && (
+    <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">
+      <h2 id="reorganisation-heading">Is {name} council being reorganised?</h2>
+      <p>{council.reorganisation.note}</p>
+      <p class="source-line">
+        Source: <a href={council.reorganisation.sourceUrl}>{new URL(council.reorganisation.sourceUrl).hostname}</a>{longDate(council.reorganisation.sourceDate) ? `, ${longDate(council.reorganisation.sourceDate)}` : ""}, as recorded by UK Places.
+      </p>
+    </section>
+  )}
+
+
+
+  {links.length > 0 && (
+    <section class="section" id="more" aria-labelledby="more-heading">
+      <h2 id="more-heading">More on {name}</h2>
+      <ul class="sister-links">
+        {links.map((link) => (
+          <li><a href={link.url}>{name} on {link.name}</a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .council-answer { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  @media (min-width: 960px) { .council-answer { grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); } }
+  #council-tax { max-width: 48rem; margin-top: 1rem; }
+  .notes { font-size: 0.9rem; color: var(--text-muted); padding-left: 1.1rem; }
+  .sister-links { padding-left: 1.1rem; }
+  .sister-links li { margin: 0.25rem 0; }
+</style>

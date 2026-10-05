@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { CURRENT_YEAR, PREVIOUS_YEAR, loadYear, yearLabel } from "../lib/council-tax";
+import { tableName } from "../lib/sources";
+
+const data = loadYear(CURRENT_YEAR);
+const year = yearLabel(CURRENT_YEAR);
+const previous = yearLabel(PREVIOUS_YEAR);
+const ratios = data.source.bandTableNotes.find((n) => n.id === "ac")?.text ?? null;
+---
+<BaseLayout
+  title="Methodology: how UK Council Tax reads the council tax tables"
+  description="How UK Council Tax reads the MHCLG council tax tables, what each figure includes, and how changes and illustrative scenarios are calculated."
+  path="/methodology/"
+>
+  <Breadcrumbs items={[{ label: "Methodology" }]} />
+  <header class="page-head">
+    <p class="eyebrow">Methodology</p>
+    <h1>How the figures are read</h1>
+  </header>
+  <div class="prose">
+    <h2>Council tax by band</h2>
+    <p>
+      Each council's figures for bands A to H are {tableName(data.source.bandTable)} of the MHCLG release
+      for {year}, read as published. No band is worked out from another. The figure is the area charge for
+      a home with two adults: it includes the county council where there is one, the police and crime
+      commissioner, the fire authority where it sets a precept, and the average parish precept for the
+      council's area. A home in a parish with its own precept pays a different amount, which is why every
+      band figure carries that caveat.
+    </p>
+    {ratios && <p>MHCLG's note on the band table: {ratios}</p>}
+    <h2>Changes and budgeting equivalents</h2>
+    <p>
+      <strong>The change on {previous}</strong> is this year's published figure less last year's published
+      figure for the same council, from the two band tables, and as a percentage of last year's figure,
+      rounded to one decimal place on summary cards and two decimal places in the increase explorer. It is labelled as calculated wherever it appears. Where a council's
+      ONS code differs between the two tables, as Barnsley's and Sheffield's do between the 2024 to 2025
+      and 2025 to 2026 tables, no change is shown for that pair of years: ONS issues a new code when an
+      area's boundary changes, so the two figures may not be for the same area.
+    </p>
+    <p>
+      <strong>The monthly figure</strong> is the yearly charge divided by ten, because ten monthly instalments
+      is the usual way council tax is paid. The local bill tool also offers a separately labelled twelve-payment equivalent. Neither is an actual instalment schedule.
+    </p>
+    <h2>Local bills and precepts</h2><p>The <a href="/precepts/">local precept tool</a> reads adopted council schedules. Each band total must reconcile exactly to its published components in integer pence. County, police, fire, mayoral, parish and special-expense components can be represented separately or as a published bundle. A component included in a bundle cannot be counted again. Postcode geography suggests a locality; it does not establish a property's exact charge.</p>
+    <h2>Scotland and Wales</h2><p>Scottish band cells are read from the Scottish Government's published workbooks and rounded to their displayed penny precision. Water and sewerage are excluded. The Welsh extract reads Table 1 Band D averages and components, rounded to whole pounds as displayed. No missing band is inferred. <a href="/data/">The imported downloadable tables have recorded checksums</a>.</p>
+    <h2>Future-cost scenarios</h2><p>Model version 1.0 compounds the starting charge by the chosen annual percentage for each year, then rounds that year's amount to pennies. Cumulative cost sums those rounded annual amounts. Extra cost compares that sum with paying the unchanged baseline for the same number of years. The component tool compounds and rounds each component separately before summing. These are editable illustrations, not official forecasts or predictions of legal limits.</p>
+    <h2>What is not shown</h2>
+    <p>
+      MHCLG's tables include an adult social care element for councils with social care duties. The
+      technical notes do not define it, and it is not the whole adult social care precept, so the site does
+      not print it.
+    </p>
+    <h2>Comparisons</h2>
+    <p>
+      The national page orders councils by area Band D within each class of council, because MHCLG publishes
+      every council for the same complete year. Band and region pages list councils alphabetically. No
+      page says why a council's figure is higher or lower than another's.
+    </p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,26 @@
+{
+  "year": "2026-27",
+  "source": {
+    "publisher": "Greater London Authority",
+    "title": "MD3472: approved 2026/27 council tax and precepts",
+    "url": "https://www.london.gov.uk/md3472-approval-2026-27-council-tax-and-precepts-and-communication-council-taxpayers",
+    "published": "2026-02-26",
+    "retrieved": "2026-10-05",
+    "sha256": null,
+    "captureNote": "Verified against the official decision page through web retrieval; direct file download returned HTTP 403, so no original-file checksum is claimed.",
+    "sections": [
+      "Decision i(a)",
+      "2.2",
+      "2.3"
+    ]
+  },
+  "bands": {
+    "D": {
+      "boroughs": 51051,
+      "cityOfLondon": 17638,
+      "policeIncludedInBoroughs": 33413,
+      "nonPoliceIncluded": 17638
+    }
+  },
+  "basis": "Already included in the published area charge, not an addition. Fire services are within the GLA arrangements; no separate fire amount is inferred."
+}

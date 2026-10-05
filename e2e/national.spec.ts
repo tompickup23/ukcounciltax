@@ -26,3 +26,9 @@ test('national additions are accessible and do not overflow at the project viewp
 test('downloaded parish evidence retains source, status and negative values',async({request})=>{
  const response=await request.get('/downloads/parishes.csv');expect(response.ok()).toBe(true);const csv=await response.text();expect(csv).toContain('"not-existing"');expect(csv).toContain('"-2.64"');expect(csv).toContain('source_sha256');
 });
+
+test('a Scottish postcode does not claim English national precept coverage',async({page})=>{
+ await page.route('https://api.postcodes.io/**',r=>r.fulfill({contentType:'application/json',body:JSON.stringify({result:{admin_district:'City of Edinburgh',codes:{admin_district:'S12000036'}}})}));
+ await page.goto('/precepts/');await page.getByLabel('Your postcode',{exact:true}).fill('EH1 1YZ');await page.getByRole('button',{name:'Find charging area'}).click();
+ await expect(page.locator('[data-postcode-status]')).toContainText('currently covers England');await expect(page.locator('[data-postcode-status] a')).toHaveAttribute('href','/coverage/');await expect(page.locator('[data-bill-result]')).toBeHidden();
+});

@@ -89,3 +89,9 @@ Item 1a removes the six generated download routes and all table, comparison, cou
 The distribution gate rejects CSV or JSON files beneath dist/downloads and download controls or links in built HTML. Browser coverage checks the Sources catalogue, accessibility, mobile overflow, filtered figures and comparison state. Local validation passed: 92 unit tests; Astro check with no diagnostics; BUILD_OG=1 build; 389 pages and 388 sitemap routes; 25,714 internal links; 160 browser tests and 57 production-CSP tests. A supplementary sweep of all 390 built HTML/JSON files found no literal, entity or pseudo-dash violations outside verbatim body names. No new charges or locality coverage are added. Publication remains subject to the PR gate.
 
 The first browser attempt reused an unrelated preview on port 4321. Both Playwright configurations now use dedicated ports (44321 and 48788) and refuse existing servers, preventing that false target. The successful rerun used the same completed site build with external target overrides cleared.
+
+## Unknown-route checks, 6 October 2026
+
+Fresh HTTPS requests to the production site returned 404 for /council-tax/burnley/ and /this-page-does-not-exist/, with the site's not-found page. /councils/burnley/ returned 200. The earlier HTTP-200 assessment could not be reproduced. The repository history generates band and region pages beneath /council-tax/, never individual council pages; no legacy council redirect map is warranted.
+
+The distribution gate now requires the top-level noindex 404.html, rejects a directory-form 404 and wildcard 200 rewrites, and checks that known invalid routes are not generated. Additional actual-Pages routing tests cover unknown council paths, removed downloads and valid council/band/region routes. These safeguards follow https://developers.cloudflare.com/pages/configuration/serving-pages/. Full PR validation is pending.

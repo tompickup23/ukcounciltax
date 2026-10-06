@@ -89,7 +89,7 @@ export const NAV_GROUPS: NavGroup[] = [
       {href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares"},
       {href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps"},
       {href: "/coverage/", label: "UK coverage", desc: "What is included in each nation"},
-      {href: "/data/", label: "Data downloads", desc: "Source editions and reusable data"},
+      {href: "/data/", label: "Sources", desc: "Official publications and source editions"},
     ],
   },
   {

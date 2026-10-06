@@ -27,7 +27,7 @@ const source = loadYear(CURRENT_YEAR).source;
     <p class="caveat">Calculated by compounding your assumed rate on the published charge. Future decisions, parish differences, discounts and boundary changes are not predicted.</p>
     <div data-scenario-chart class="scenario-chart" aria-hidden="true"></div>
     <p data-error role="status"></p>
-    <div class="action-links"><button class="button secondary" type="button" data-share-scenario disabled>Copy scenario link</button><button class="button secondary" type="button" data-download-scenario disabled>Download scenario CSV</button></div>
+    <div class="action-links"><button class="button secondary" type="button" data-share-scenario disabled>Copy scenario link</button></div>
   </div>
   <div class="table-wrap scenario-table" tabindex="0" role="region" aria-label="Scenario annual costs">
     <table class="data"><caption>Illustrative annual costs and cumulative cost</caption><thead><tr><th>Financial year</th><th class="num">Annual charge</th><th class="num">Change from baseline</th><th class="num">Cumulative cost</th></tr></thead><tbody data-scenario-rows></tbody></table>
@@ -36,9 +36,8 @@ const source = loadYear(CURRENT_YEAR).source;
   <noscript><p>This scenario tool needs JavaScript. The published band charges and historical tables on council pages remain available without it.</p></noscript>
 </section>
 <script>
-  import {projectCharge, MODEL_VERSION} from '../lib/scenario';
+  import {projectCharge} from '../lib/scenario';
   import {moneyPence, type TaxRow, type TaxBand} from '../lib/tax-view';
-  import {csvCell} from '../lib/tax-export';
   for (const root of document.querySelectorAll<HTMLElement>('[data-scenario]')) {
     const data = JSON.parse(root.querySelector('[data-scenario-data]')!.textContent!) as {rows:TaxRow[];year:string;source:{url:string;published:string}};
     const form=root.querySelector('form')!;
@@ -46,7 +45,7 @@ const source = loadYear(CURRENT_YEAR).source;
     const params=new URLSearchParams(location.search);
     for(const name of ['council','band','rate','years']) if(params.has(name)) el(name).value=params.get(name)!;
     const error=root.querySelector<HTMLElement>('[data-error]')!;
-    let csv=''; let share='';
+    let share='';
     const calculate=()=>{
       try {
         const row=data.rows.find(r=>r.slug===el('council').value);
@@ -68,16 +67,13 @@ const source = loadYear(CURRENT_YEAR).source;
         for(const r of result){const tr=document.createElement('tr');const label=`${start+r.year}/${String(start+r.year+1).slice(-2)}`;[label,moneyPence(r.annualPence),moneyPence(r.increasePence),moneyPence(r.cumulativePence)].forEach((v,i)=>{const td=document.createElement(i===0?'th':'td');td.textContent=v;if(i===0)td.setAttribute('scope','row');else td.className='num';tr.append(td);});body.append(tr);}
         const query=new URLSearchParams({council:row.slug,band,rate:String(rate),years:String(years)});
         share=new URL(`/tools/future-cost/?${query}`,location.origin).href;
-        const header=['status','model_version','council','band','baseline_year','baseline_gbp','assumed_annual_change_pct','years_ahead','annual_gbp','cumulative_gbp','extra_vs_frozen_gbp','source','source_date'];
-        csv=[header,...result.map(r=>['Illustrative scenario',MODEL_VERSION,row.name,band,data.year,(baseline/100).toFixed(2),rate,r.year,(r.annualPence/100).toFixed(2),(r.cumulativePence/100).toFixed(2),(r.extraPence/100).toFixed(2),data.source.url,data.source.published])].map(r=>r.map(csvCell).join(',')).join('\r\n');
-        error.textContent='';root.querySelectorAll<HTMLButtonElement>('[data-share-scenario],[data-download-scenario]').forEach(b=>b.disabled=false);
-      } catch(e){error.textContent=(e as Error).message;root.querySelector('[data-scenario-title]')!.textContent='Check your scenario';root.querySelector('[data-baseline]')!.textContent='';root.querySelector('[data-final]')!.textContent='Check assumptions';root.querySelector('[data-extra]')!.textContent='n/a';root.querySelector('[data-scenario-rows]')!.replaceChildren();root.querySelector('[data-scenario-chart]')!.replaceChildren();root.querySelectorAll<HTMLButtonElement>('[data-share-scenario],[data-download-scenario]').forEach(b=>b.disabled=true);}
+        error.textContent='';root.querySelectorAll<HTMLButtonElement>('[data-share-scenario]').forEach(b=>b.disabled=false);
+      } catch(e){error.textContent=(e as Error).message;root.querySelector('[data-scenario-title]')!.textContent='Check your scenario';root.querySelector('[data-baseline]')!.textContent='';root.querySelector('[data-final]')!.textContent='Check assumptions';root.querySelector('[data-extra]')!.textContent='n/a';root.querySelector('[data-scenario-rows]')!.replaceChildren();root.querySelector('[data-scenario-chart]')!.replaceChildren();root.querySelectorAll<HTMLButtonElement>('[data-share-scenario]').forEach(b=>b.disabled=true);}
     };
     form.addEventListener('submit',e=>{e.preventDefault();calculate();});
     form.addEventListener('change',calculate);
     root.querySelector('[data-reset]')!.addEventListener('click',()=>{form.reset();calculate();});
     root.querySelector('[data-share-scenario]')!.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(share);error.textContent='Scenario link copied.';}catch{error.textContent=`Copy this scenario link: ${share}`;}});
-    root.querySelector('[data-download-scenario]')!.addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='council-tax-scenario.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
     calculate();
   }
 </script>

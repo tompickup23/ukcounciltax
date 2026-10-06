@@ -5,7 +5,7 @@ test('future scenario preserves assumptions and rejects invalid source choices',
  await expect(page.locator('[data-final]')).toHaveText('£2,549.42');
  await expect(page.locator('[data-extra]')).toHaveText('£0.00');
  await page.goto('/tools/future-cost/?council=missing&band=D&rate=5&years=5');
- await expect(page.locator('[data-download-scenario]')).toBeDisabled();
+ await expect(page.locator('[data-share-scenario]')).toBeDisabled();
  await expect(page.locator('[data-scenario-rows] tr')).toHaveCount(0);
 });
 test('local postcode suggestion requires confirmation and reconciles the parish bill',async({page})=>{

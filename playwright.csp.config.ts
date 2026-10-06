@@ -12,7 +12,7 @@ import { defineConfig, devices } from "@playwright/test";
  * Kept in its own config and its own directory so the main run cannot pick these
  * specs up and pass them against a server that sends no policy at all.
  */
-const PORT = process.env.CSP_PORT ?? "8788";
+const PORT = process.env.CSP_PORT ?? "48788";
 
 const externalURL = process.env.CSP_BASE_URL;
 
@@ -46,7 +46,7 @@ export default defineConfig({
     command: `npx --yes wrangler pages dev dist --port ${PORT} --ip 127.0.0.1`
       + " --compatibility-date=2026-01-01 --show-interactive-dev-session=false",
     url: `http://127.0.0.1:${PORT}/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 180_000,
   },
 });

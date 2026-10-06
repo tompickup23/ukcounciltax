@@ -95,3 +95,9 @@ The first browser attempt reused an unrelated preview on port 4321. Both Playwri
 Fresh HTTPS requests to the production site returned 404 for /council-tax/burnley/ and /this-page-does-not-exist/, with the site's not-found page. /councils/burnley/ returned 200. The earlier HTTP-200 assessment could not be reproduced. The repository history generates band and region pages beneath /council-tax/, never individual council pages; no legacy council redirect map is warranted.
 
 The distribution gate now requires the top-level noindex 404.html, rejects a directory-form 404 and wildcard 200 rewrites, and checks that known invalid routes are not generated. Additional actual-Pages routing tests cover unknown council paths, removed downloads and valid council/band/region routes. These safeguards follow https://developers.cloudflare.com/pages/configuration/serving-pages/. Full PR validation is pending.
+
+## Council search metadata, 6 October 2026
+
+All English, Scottish and Welsh council titles now include the council name, 2026/27 and the task, council tax bands and charges. The full name, task, year and required publisher suffix take priority where they exceed the 60-character target. Descriptions state the published Band D amount, the charge basis and the same-basis change where both editions exist. Wales explicitly states that its prior-year comparison is unavailable. The date describes a check of the pinned source extract, not a new upstream retrieval.
+
+Every council page carries a 2027/28 status stating that the next edition is not yet published in the sources held here. No usual publication month is claimed because two council-specific editions' publication dates have not been established; national MHCLG release dates are not council budget meeting dates. No projected charge is generated. Full PR validation is pending.

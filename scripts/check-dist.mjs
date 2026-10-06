@@ -66,6 +66,15 @@ for (const path of files(DIST)) {
     if (/\s-\s/.test(title)) failures.push(`hyphen separator in title on ${rel(path)}: ${title}`);
   }
 
+  if (/\/(?:councils|scotland|wales)\/[^/]+\/index\.html$/.test(rel(path))) {
+    if (!title?.includes('council tax bands and charges 2026/27')) failures.push(`council task/year absent from title on ${rel(path)}`);
+    const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
+    for (const phrase of ['Band D:', '2026/27', 'Source extract checked']) {
+      if (!description.includes(phrase)) failures.push(`${phrase} missing from council description on ${rel(path)}`);
+    }
+    if (!text.includes('data-next-edition') || !text.includes('2027/28 charges: not yet published')) failures.push(`next edition status missing on ${rel(path)}`);
+  }
+
   const { problems } = unsourcedFigures(text);
   for (const problem of new Set(problems)) failures.push(`${problem} on ${rel(path)}`);
 

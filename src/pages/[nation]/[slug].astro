@@ -1,4 +1,5 @@
 ---
+import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import {devolved,nationEditions,nationPath} from '../../lib/devolved';
@@ -10,10 +11,11 @@ const bands=Object.keys(row.bandsPence); const council=councilByGss(row.gss);con
 const format=(n:number)=>isScotland?moneyPence(n):new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(n/100);
 const past=editions.at(-2)?.records.find(r=>r.gss===row.gss);
 const change=past?row.bandsPence.D-past.bandsPence.D:null;
+const metadata=councilMetadata({name:row.name,currentPence:row.bandsPence.D,previousPence:past?.bandsPence.D??null,basis:isScotland?'council tax excluding water and sewerage':'area average including community and police precepts, in whole pounds',wholePounds:!isScotland,percentageDigits:2});
 ---
-<BaseLayout title={`${row.name} council tax 2026/27`} description={`Published ${isScotland?'bands A to H':'Band D average'} for ${row.name}, with official sources, charge basis and ${isScotland?'three years of history':'bill components'}.`} path={nationPath(nation,row.slug)}>
+<BaseLayout title={metadata.title} description={metadata.description} path={nationPath(nation,row.slug)}>
 <Breadcrumbs items={[{label:nation,href:nationPath(nation)},{label:row.name}]} />
-<header class="page-head"><p class="eyebrow">{nation} / 2026/27</p><h1>{row.name} council tax</h1><p class="lede">Band D: <strong>{format(row.bandsPence.D)}</strong> a year before discounts.</p>{change!==null && past && <p>Calculated change from 2025/26: {moneyPence(change)} ({(change/past.bandsPence.D*100).toFixed(2)}%).</p>}</header>
+<header class="page-head"><p class="eyebrow">{nation} / 2026/27</p><h1>{row.name} council tax</h1><p class="lede">Band D: <strong>{format(row.bandsPence.D)}</strong> a year before discounts.</p>{change!==null && past && <p>Calculated change from 2025/26: {moneyPence(change)} ({(change/past.bandsPence.D*100).toFixed(2)}%).</p>}<p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p></header>
 <div class="editorial-callout"><strong>{isScotland?'Water and sewerage are excluded':'Area average, rounded as published'}</strong><p>{current.basis}. {isScotland?'The amount collected on your council bill may include water and sewerage charges as well.':'Individual community precepts differ. Only Band D is included in this source extract. Wales also has bands A to C and E to I.'}</p></div>
 <section class="section" id="council-tax"><h2>{isScotland?'Every band, across three years':'Published Band D'}</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Published charges"><table class="data"><caption>{row.name}, {current.basis.toLowerCase()}</caption><thead><tr><th scope="col">Band</th>{editions.map(e=><th scope="col" class="num">{e.year.replace('-','/')}</th>)}</tr></thead><tbody>{bands.map(b=><tr><th scope="row">{b}</th>{editions.map(e=><td class="num">{format(e.records.find(r=>r.gss===row.gss)!.bandsPence[b])}</td>)}</tr>)}</tbody></table></div><p class="source-line">{editions.map(e=><span><a href={e.source.fileUrl}>{e.year.replace('-','/')} source workbook</a> · </span>)}{current.table}. Retrieved 5 October 2026. Cash figures, not adjusted for inflation.</p></section>
 {row.componentsPounds && <section class="section"><h2>What makes up the Band D average?</h2><div class="fact-grid">{Object.entries(row.componentsPounds).map(([label,value])=><div class="card"><h3>{label==='county'?'County council':label==='community'?'Community councils':'Police authority'}</h3><p class="lede">{format(Number(value)*100)}</p></div>)}</div><p class="source-line">Source: <a href={current.source.url}>{current.source.title}</a>, Table 1. Components are separately rounded to whole pounds and may not add to the rounded total.</p></section>}

@@ -6,7 +6,7 @@ import { defineConfig, devices } from "@playwright/test";
  * astro preview sends no security headers, so nothing here says anything about
  * the CSP; playwright.csp.config.ts is the run that does.
  */
-const PORT = process.env.E2E_PORT ?? "4321";
+const PORT = process.env.E2E_PORT ?? "44321";
 
 const externalURL = process.env.E2E_BASE_URL;
 
@@ -30,7 +30,7 @@ export default defineConfig({
   webServer: externalURL ? undefined : {
     command: `npx astro preview --host 127.0.0.1 --port ${PORT}`,
     url: `http://127.0.0.1:${PORT}/`,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 60_000,
   },
 });

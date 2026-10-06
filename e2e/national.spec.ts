@@ -23,8 +23,13 @@ test('national components and parish rows remain readable without JavaScript',as
 test('national additions are accessible and do not overflow at the project viewport',async({page})=>{
  await page.goto('/councils/burnley/');expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
-test('downloaded parish evidence retains source, status and negative values',async({request})=>{
- const response=await request.get('/downloads/parishes.csv');expect(response.ok()).toBe(true);const csv=await response.text();expect(csv).toContain('"not-existing"');expect(csv).toContain('"-2.64"');expect(csv).toContain('source_sha256');
+test('Sources links to official publications without serving datasets',async({page})=>{
+ await page.goto('/data/');
+ await expect(page.getByRole('heading',{name:'Sources',exact:true})).toBeVisible();
+ await expect(page.locator('a[href^="/downloads/"]')).toHaveCount(0);
+ await expect(page.locator('[data-source-publication]')).toHaveCount(13);
+ expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 
 test('a Scottish postcode does not claim English national precept coverage',async({page})=>{

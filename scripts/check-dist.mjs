@@ -51,6 +51,7 @@ let pages = 0;
 for (const path of files(DIST)) {
   if (!/\.(html|xml|txt|json|js|css|svg|webmanifest)$|_headers$|_redirects$/.test(path)) continue;
   const text = readFileSync(path, "utf-8");
+  if (path.endsWith(".html") && /href=["\']\/downloads\/|data-(?:export-view|table-export|download-scenario)/.test(text)) failures.push(`download control in ${rel(path)}`);
   if (DASH.test(text)) failures.push(`dash in ${rel(path)}`);
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
@@ -78,6 +79,11 @@ for (const path of files(DIST)) {
   if (!canonical || !canonical.startsWith(`${SITE_URL}/`)) {
     failures.push(`canonical not on ${SITE_URL} for ${rel(path)}: ${canonical ?? "none"}`);
   }
+}
+
+const downloads = join(DIST, 'downloads');
+if (existsSync(downloads)) for (const path of files(downloads)) {
+  if (/\.(csv|json)$/i.test(path)) failures.push(`bulk download in ${rel(path)}`);
 }
 
 const sitemap = readFileSync(join(DIST, "sitemap.xml"), "utf-8");

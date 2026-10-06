@@ -1,5 +1,4 @@
 import {test,expect} from '@playwright/test';
-import {readFile} from 'node:fs/promises';
 import AxeBuilder from '@axe-core/playwright';
 
 test.beforeEach(async ({page}) => {
@@ -62,28 +61,21 @@ test('comparison sharing copies validated state and cancellation stays distinct'
   await page.getByRole('button',{name:'Share this view'}).click();
   await expect(page.locator('[data-share-status]')).toHaveText('Sharing cancelled.');
 });
-test('CSV downloads reconcile to the selected council and filtered table', async ({page}) => {
+test('table and comparison views retain figures without CSV controls', async ({page}) => {
   await page.goto('/councils/burnley/#band-A');
-  const download = page.waitForEvent('download'); await page.getByRole('button',{name:'Download CSV',exact:true}).click();
-  const file = await download; const csv = await readFile((await file.path())!,'utf8');
-  expect(csv).toContain('"1699.61","169.96"'); expect(csv).toContain('"2026-27","A"'); expect(csv).toContain('Open Government Licence');
+  await expect(page.locator('[data-export-view]')).toHaveCount(0);
+  await expect(page.getByRole('button', {name:'Share this view'})).toBeEnabled();
   await page.goto('/council-tax/north-west/');
-  await page.locator('[data-table-filter]').fill('Burnley'); await page.locator('[data-table-band]').selectOption('H');
-  const filtered = page.waitForEvent('download'); await page.locator('[data-table-export]').click();
-  const filteredCsv = await readFile((await (await filtered).path())!,'utf8');
-  expect(filteredCsv.split('\r\n')).toHaveLength(3); expect(filteredCsv).toContain('"5098.84"'); expect(filteredCsv).not.toContain('"Pendle"');
-  await page.locator('[data-table-filter]').fill('zxqv'); await expect(page.locator('[data-table-export]')).toBeDisabled();
-});
-test('comparison CSV preserves older year and order after swapping', async ({page}) => {
+  await page.locator('[data-table-filter]').fill('Burnley');
+  await page.locator('[data-table-band]').selectOption('H');
+  await expect(page.locator('tbody tr:visible')).toHaveCount(1);
+  await expect(page.locator('tbody tr:visible')).toContainText('£5,098.84');
+  await expect(page.locator('[data-table-export]')).toHaveCount(0);
   await page.goto('/compare/?a=burnley&b=pendle&band=B&year=2024-25');
   await page.getByRole('button',{name:'Swap councils'}).click();
-  const download = page.waitForEvent('download'); await page.getByRole('button',{name:'Download CSV',exact:true}).click();
-  const csv = await readFile((await (await download).path())!,'utf8');
-  const records = csv.split('\r\n'); expect(records).toHaveLength(4);
-  expect(records[1]).toContain('"Pendle"'); expect(records[2]).toContain('"Burnley"');
-  expect(records[1]).toContain('"2024-25","B"');
-  const displayed = await page.locator('[data-result-side="a"] [data-result-annual]').textContent();
-  expect(records[1]).toContain(`"${displayed!.replace(/[£,]/g,'')}"`);
+  await expect(page.locator('[data-result-side="a"]')).toContainText('Pendle');
+  await expect(page.locator('[data-comparison-heading]')).toHaveText('Band B, 2024/25');
+  await expect(page.locator('[data-export-view]')).toHaveCount(0);
 });
 test('maps and print preserve the selected answer and source without interactive controls', async ({page}) => {
   await page.goto('/councils/burnley/#band-H');

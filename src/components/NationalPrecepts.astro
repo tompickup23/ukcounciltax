@@ -47,7 +47,7 @@ const source=national.sources.components, parishSource=national.sources.parishes
     {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
     <p class="small muted">Annual change is this year's reported charge minus the previous year's charge on the same source row. Missing and ceased entries remain distinct from published zero charges. A negative precept is retained where published.</p>
   </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
-  <p class="source-line">Source: <a href={parishSource.fileUrl}>{parishSource.title}</a>, Parish_Level_Data and Notes. Retrieved {parishSource.retrieved}. <a href="/downloads/parishes.csv" download>Download the national parish data</a>, including precept income and tax bases.</p>
+  <p class="source-line">Source: <a href={parishSource.fileUrl}>{parishSource.title}</a>, Parish_Level_Data and Notes. Retrieved {parishSource.retrieved}. The original workbook includes precept income and tax bases.</p>
 </section>
 <script>
 for(const section of document.querySelectorAll<HTMLElement>('[data-parish-table]')) {

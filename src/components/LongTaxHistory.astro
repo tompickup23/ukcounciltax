@@ -27,5 +27,5 @@ const change=start!==null&&end!==null&&start>0?(end/start-1)*100:null;
     <p class="small">The council-share columns are alternative measures, not additions to the whole-area figure. The excluding-parishes series begins in 1996/97. A council's own share can change when responsibilities transfer even where its area remains the same.</p>
   </details>
   {notes.length>0&&<ul class="small">{notes.map(n=><li>{n[0]}: {n[1]}</li>)}</ul>}
-  <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Area_CT, exc_PP and inc_PP. <a href="/downloads/history.csv" download>Download the historical series</a>. Changes calculated from the displayed source values.</p>
+  <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Area_CT, exc_PP and inc_PP. Changes calculated from the displayed source values.</p>
 </section>}

@@ -1,9 +1,5 @@
 ---
-/**
- * Breadcrumbs, copied from UK Demographics, with the BreadcrumbList JSON-LD
- * emitted here once so every page that uses the component carries it.
- */
-import { absoluteUrl, jsonLd } from "../lib/site";
+/** Visible navigation; BaseLayout owns the one JSON-LD breadcrumb per page. */
 
 interface BreadcrumbItem {
   label: string;
@@ -15,17 +11,7 @@ interface Props {
 }
 
 const { items } = Astro.props;
-const trail = [{ label: "Home", href: "/" }, ...items];
-const structured = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: trail.map((item, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: item.label,
-    ...(item.href ? { item: absoluteUrl(item.href) } : {}),
-  })),
-};
+
 ---
 <nav class="breadcrumbs" aria-label="Breadcrumb">
   <ol>
@@ -38,7 +24,6 @@ const structured = {
     ))}
   </ol>
 </nav>
-<script type="application/ld+json" set:html={jsonLd(structured)} />
 
 <style>
   .breadcrumbs ol {

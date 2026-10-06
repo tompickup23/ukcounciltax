@@ -75,6 +75,25 @@ for (const path of files(DIST)) {
     if (!text.includes('data-next-edition') || !text.includes('2027/28 charges: not yet published')) failures.push(`next edition status missing on ${rel(path)}`);
   }
 
+  const schemaNodes = [];
+  for (const match of text.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
+    try { schemaNodes.push(JSON.parse(match[1])); }
+    catch { failures.push(`invalid JSON-LD on ${rel(path)}`); }
+  }
+  for (const type of ['WebPage', 'Organization', 'BreadcrumbList']) {
+    if (schemaNodes.filter(node => node['@type'] === type).length !== 1) failures.push(`expected one ${type} on ${rel(path)}`);
+  }
+  const schemaTypes = [];
+  const collectTypes = value => {
+    if (!value || typeof value !== 'object') return;
+    if (value['@type']) schemaTypes.push(...[value['@type']].flat());
+    for (const child of Object.values(value)) if (typeof child === 'object') collectTypes(child);
+  };
+  schemaNodes.forEach(collectTypes);
+  if (schemaTypes.some(type => ['FAQPage', 'Dataset', 'GovernmentService'].includes(type))) failures.push(`unsupported schema type on ${rel(path)}`);
+  const trail = schemaNodes.find(node => node['@type'] === 'BreadcrumbList')?.itemListElement;
+  if (!Array.isArray(trail) || !trail.length || trail.some((item, index) => item.position !== index + 1 || !item.name || !item.item?.startsWith(SITE_URL + '/'))) failures.push(`invalid breadcrumb trail on ${rel(path)}`);
+
   const { problems } = unsourcedFigures(text);
   for (const problem of new Set(problems)) failures.push(`${problem} on ${rel(path)}`);
 

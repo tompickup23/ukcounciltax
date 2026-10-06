@@ -81,6 +81,20 @@ for (const path of files(DIST)) {
   }
 }
 
+// A top-level 404 prevents Cloudflare Pages from treating this static site as an SPA.
+const notFound = join(DIST, '404.html');
+if (!existsSync(notFound)) failures.push('missing top-level 404.html');
+else if (!/<meta name="robots" content="[^"]*noindex/.test(readFileSync(notFound, 'utf8'))) failures.push('404.html must be noindex');
+if (existsSync(join(DIST, '404', 'index.html'))) failures.push('404 must be a top-level file, not a directory route');
+for (const missing of ['council-tax/burnley', 'this-page-does-not-exist']) {
+  if (existsSync(join(DIST, missing, 'index.html'))) failures.push(`unexpected static route: ${missing}`);
+}
+const redirects = join(DIST, '_redirects');
+if (existsSync(redirects)) for (const line of readFileSync(redirects, 'utf8').split('\n')) {
+  const [from, , status] = line.trim().split(/\s+/);
+  if (from?.includes('*') && status === '200') failures.push('wildcard 200 rewrite masks unknown routes');
+}
+
 const downloads = join(DIST, 'downloads');
 if (existsSync(downloads)) for (const path of files(downloads)) {
   if (/\.(csv|json)$/i.test(path)) failures.push(`bulk download in ${rel(path)}`);

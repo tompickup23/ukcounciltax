@@ -30,7 +30,9 @@ const NAME_SOURCES = [
 ];
 // Built from parts so this file does not carry the characters it looks for.
 const DASH_CHARS = `\\u${"2013"}\\u${"2014"}`;
-const OFFENCE = new RegExp(`[${DASH_CHARS}]| - |\\\\u201[34]`, "i");
+const SPACED_HYPHEN = [" ", "-", " "].join("");
+const EM_DASH = String.fromCharCode(0x2014);
+const OFFENCE = new RegExp(`[${DASH_CHARS}]|${SPACED_HYPHEN}|\\\\u201[34]`, "i");
 
 if (!existsSync(DIST)) {
   console.error("dist/ is not there. Run npm run build first.");
@@ -49,8 +51,8 @@ for (const file of NAME_SOURCES) collectNames(JSON.parse(readFileSync(file, "utf
 
 const decode = (text) =>
   text
-    .replace(/&(?:mdash|ndash);/gi, "—")
-    .replace(/&#(?:x201[34]|821[12]);/gi, "—")
+    .replace(/&(?:mdash|ndash);/gi, EM_DASH)
+    .replace(/&#(?:x201[34]|821[12]);/gi, EM_DASH)
     .replace(/&quot;|&#34;/g, '"')
     .replace(/&amp;/g, "&");
 

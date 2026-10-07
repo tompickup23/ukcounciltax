@@ -6,7 +6,7 @@ Specialist sourced council-tax site, Astro 6. Reuses the UK Councils public data
 
 Node 22.12 or newer. `npm ci`, then `npm run dev -- --host 127.0.0.1 --port 4347`.
 
-`npm test` checks data contracts, source completeness and calculation behaviour. `npm run check` validates Astro and TypeScript. Production build: set BUILD_OG=1 in the process environment and run `npm run build`, then `npm run test:dist`. Browser checks: `npm run test:e2e` and `npm run test:csp`. Their ports can be set with E2E_PORT and CSP_PORT to avoid other projects. E2E_BASE_URL and CSP_BASE_URL target an existing deployed review build without starting a local server.
+`npm test` checks data contracts, source completeness and calculation behaviour. `npm run check` validates Astro and TypeScript. Production build: set BUILD_OG=1 in the process environment and run `npm run build`, then `npm run test:dist` and `npm run test:text` (the house dash sweep). Browser checks: `npm run test:e2e` and `npm run test:csp`. Their ports can be set with E2E_PORT and CSP_PORT to avoid other projects. E2E_BASE_URL and CSP_BASE_URL target an existing deployed review build without starting a local server.
 
 ## Data
 

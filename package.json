@@ -13,6 +13,7 @@
     "check": "astro check",
     "test": "vitest run",
     "test:dist": "node scripts/check-dist.mjs",
+    "test:text": "node scripts/check-text.mjs",
     "test:e2e": "playwright test",
     "test:csp": "playwright test --config playwright.csp.config.ts",
     "data:council-tax": "node scripts/fetch-council-tax.mjs",

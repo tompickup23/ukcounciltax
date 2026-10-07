@@ -1,5 +1,6 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
+import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
@@ -94,10 +95,7 @@ const answer = `Band D council tax in ${name} is ${pounds(bandD)} a year in ${ye
   + (changeD ? `, ${changePhrase(changeD)} on ${previous}` : "")
   + `. The figure includes the share of every body that sets council tax there, with parish precepts as an average, from MHCLG ${bandSource.table}.`;
 
-const title = `${name} council tax bands ${year}`;
-const description = `Band D in ${name} is ${pounds(bandD)} a year in ${year}`
-  + (changeD ? `, ${changePhrase(changeD)} on ${previous}` : "")
-  + `. Every band from A to H, who sets each share and the England average, from MHCLG.`;
+const {title, description} = councilMetadata({name, currentPence: Math.round(bandD * 100), previousPence: changeD ? Math.round(changeD.from * 100) : null, basis: 'area average including average parish precepts'});
 
 const structuredData = [
   {
@@ -128,6 +126,7 @@ const structuredData = [
     <p class="eyebrow">Council</p>
     <h1>{name}</h1>
     <p class="muted">{typeLine}</p>
+    <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
   <div class="council-answer">

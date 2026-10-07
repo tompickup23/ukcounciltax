@@ -26,6 +26,7 @@ jobs:
         env:
           BUILD_OG: '1'
       - run: npm run test:dist
+      - run: npm run test:text
       - run: node scripts/audit-links.mjs
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -- --workers=2

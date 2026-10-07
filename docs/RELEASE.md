@@ -101,3 +101,14 @@ The distribution gate now requires the top-level noindex 404.html, rejects a dir
 All English, Scottish and Welsh council titles now include the council name, 2026/27 and the task, council tax bands and charges. The full name, task, year and required publisher suffix take priority where they exceed the 60-character target. Descriptions state the published Band D amount, the charge basis and the same-basis change where both editions exist. Wales explicitly states that its prior-year comparison is unavailable. The date describes a check of the pinned source extract, not a new upstream retrieval.
 
 Every council page carries a 2027/28 status stating that the next edition is not yet published in the sources held here. No usual publication month is claimed because two council-specific editions' publication dates have not been established; national MHCLG release dates are not council budget meeting dates. No projected charge is generated. Full PR validation is pending.
+
+## Structured data, 6 October 2026
+
+BaseLayout now emits exactly one BreadcrumbList on every HTML page, including the homepage and noindex 404 page. Visible breadcrumb navigation remains in its component without emitting a second schema block. The 296 English council FAQPage blocks and the England hub's Dataset block are removed. No GovernmentService is emitted.
+
+| Routes | Top-level JSON-LD types |
+| --- | --- |
+| / | WebPage, WebSite, Organization, BreadcrumbList |
+| All other HTML routes, including /data/, council pages, nation pages and 404.html | WebPage, Organization, BreadcrumbList |
+
+English council WebPage nodes retain the nested GovernmentOrganization about-record with the council's official name and GSS identifier; the publisher remains UK Council Tax. The distribution gate parses every JSON-LD block, checks required type cardinality and breadcrumb positions/URLs, and rejects FAQPage, Dataset and GovernmentService anywhere in the graph. Full PR validation is pending.

@@ -21,7 +21,6 @@ import {
   YEARS,
   areaTypeFor,
   bandChange,
-  changePhrase,
   loadYear,
   percent,
   pounds,
@@ -56,7 +55,6 @@ const bandD = tax.bands.D;
 const changeD = bandChange(council.gss, "D");
 const areaType = areaTypeFor(tax.classCode);
 const englandArea = current.england.areaBandD;
-const bandSource = councilTaxSource(CURRENT_YEAR, current.source.bandTable);
 const areaSource = englandArea ? councilTaxSource(CURRENT_YEAR, englandArea.table) : null;
 
 /** The class of authority as a sentence, with the county for a district. */
@@ -91,31 +89,14 @@ const historySource = {
 const links = [...contextLinks(council),...sisterLinks(council)];
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
-const answer = `Band D council tax in ${name} is ${pounds(bandD)} a year in ${year}`
-  + (changeD ? `, ${changePhrase(changeD)} on ${previous}` : "")
-  + `. The figure includes the share of every body that sets council tax there, with parish precepts as an average, from MHCLG ${bandSource.table}.`;
 
 const {title, description} = councilMetadata({name, currentPence: Math.round(bandD * 100), previousPence: changeD ? Math.round(changeD.from * 100) : null, basis: 'area average including average parish precepts'});
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: question,
-        acceptedAnswer: { "@type": "Answer", text: answer },
-      },
-    ],
-  },
-];
 ---
 <BaseLayout
   title={title}
   description={description}
   path={path}
-  structuredData={structuredData}
   about={{"@type": "GovernmentOrganization", name: council.officialName, identifier: council.gss, areaServed: {"@type": "AdministrativeArea", name, identifier: council.gss}}}
   ogImage={councilCardPath(council.slug)}
   ogImageAlt={`${name}: council tax bands A to H, ${year}`}

@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import {breadcrumbList} from "../lib/breadcrumbs";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import {
@@ -43,6 +44,7 @@ const {
 const fullTitle = pageTitle(title);
 const canonical = absoluteUrl(path);
 const nodes = [
+  breadcrumbList(path, title ?? SITE_NAME),
   {
     "@context": "https://schema.org",
     "@type": "WebPage",

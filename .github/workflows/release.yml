@@ -37,6 +37,15 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      # Tells IndexNow (Bing and partners) about the live sitemap. Runs only after
+      # a successful production publish and can never fail the release.
+      - name: Notify IndexNow
+        if: success() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        continue-on-error: true
+        timeout-minutes: 3
+        run: |
+          sleep 20
+          node scripts/indexnow.mjs || echo "::warning::IndexNow submission failed; the deploy is unaffected"
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

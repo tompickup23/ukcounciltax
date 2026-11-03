@@ -34,5 +34,21 @@
     "tables": ["Area_CT", "exc_PP", "inc_PP", "Notes"],
     "precision": "Displayed precision, generally whole pounds with occasional penny values; hidden spreadsheet precision is not used",
     "licence": "Open Government Licence v3.0"
+  },
+  "bandStock": {
+    "publisher": "HM Revenue & Customs",
+    "title": "Council Tax: stock of properties, 2026",
+    "edition": "2026 release, properties on the valuation lists at 31 March 2026, published 24 September 2026",
+    "published": "2026-09-24",
+    "snapshot": "2026-03-31",
+    "url": "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2026",
+    "fileUrl": "https://assets.publishing.service.gov.uk/media/6ab25147a9c3d267bcccecc1/CTSOP_1_1.zip",
+    "file": "ctsop-1-1-2026.zip",
+    "member": "CTSOP_1_1/CTSOP1_1_2026_03_31.csv",
+    "sha256": "a59b842ae151513aef295b5f9bfe61f99dbfe4fd1e3054010a2c6fb14c6628ae",
+    "retrieved": "2026-11-03",
+    "tables": ["CTSOP1.1: number of properties by Council Tax band, local authority and lower and middle super output area at 31 March 2026"],
+    "precision": "Counts rounded by the publisher to the nearest 10; [c] marks a count fewer than five; [z] marks Band I, which does not apply in England",
+    "licence": "Open Government Licence v3.0"
   }
 }

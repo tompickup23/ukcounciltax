@@ -1,0 +1,54 @@
+---
+/** Properties in each band for one English billing authority, beside England, from HMRC CTSOP1.1. */
+import SourceLine from './SourceLine.astro';
+import {STOCK_BANDS,bandStock,bandStockFor,bandStockSource,stockCount,stockShare} from '../lib/band-stock';
+interface Props {gss:string;name:string}
+const {gss,name}=Astro.props;
+const row=bandStockFor(gss);
+const england=bandStock.england;
+const source=bandStockSource();
+const suppressed=row?STOCK_BANDS.filter(b=>row.counts[b]===null):[];
+---
+{row && (
+  <section class="section" id="band-mix" aria-labelledby="band-mix-heading">
+    <h2 id="band-mix-heading">How many properties are in each band in {name}?</h2>
+    <p class="muted">
+      Domestic properties on the Council Tax valuation list in {name} at 31 March 2026, by band. This counts properties
+      on the list, not households paying the charges above, and it is not the tax base used to set them.
+    </p>
+    <div class="fact" data-fact>
+      {row.bandDAndBelowShare===null ? (
+        <p>
+          The share of properties in Band D or below in {name} cannot be given, because a count from Band A to D is not published.
+          Across England it is <strong data-figure>{stockShare(england.bandDAndBelowShare,null)}</strong>.
+        </p>
+      ) : (
+        <p>
+          <strong data-figure>{stockShare(row.bandDAndBelowShare,null)}</strong> of properties in {name} are in Band D or below,
+          against <strong data-figure>{stockShare(england.bandDAndBelowShare,null)}</strong> across England.
+        </p>
+      )}
+      <div class="table-wrap" tabindex="0" role="region" aria-label={`Properties by band in ${name}`}>
+        <table class="data">
+          <caption>Properties by Council Tax band, {name} and England, 31 March 2026</caption>
+          <thead>
+            <tr><th scope="col">Band</th><th scope="col" class="num">Properties in {name}</th><th scope="col" class="num">Share in {name}</th><th scope="col" class="num">Share in England</th></tr>
+          </thead>
+          <tbody>
+            {STOCK_BANDS.map(b=>(
+              <tr><th scope="row">{b}</th><td class="num" data-figure>{stockCount(row.counts[b])}</td><td class="num" data-figure>{stockShare(row.shares[b],row.counts[b])}</td><td class="num" data-figure>{stockShare(england.shares[b],england.counts[b])}</td></tr>
+            ))}
+            <tr><th scope="row">All properties</th><td class="num" data-figure>{stockCount(row.total)}</td><td class="num"></td><td class="num" data-figure>{stockCount(england.total)} in England</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="caveat">
+        HMRC rounds every count to the nearest 10, so the bands may not add exactly to the total.
+        {suppressed.length>0 && `HMRC marks the Band ${suppressed.join(', ')} count with [c], meaning fewer than five, and does not publish it; it is not zero. `}
+        Each share is the band's printed count divided by the printed total of all properties, to one decimal place.
+        The table also covers Wales, which has its own bands including Band I, so the England comparison leaves Wales out; Scotland and Northern Ireland are not in it.
+      </p>
+      <SourceLine source={source} />
+    </div>
+  </section>
+)}

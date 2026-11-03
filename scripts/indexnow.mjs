@@ -6,10 +6,11 @@
  *
  * The key is public by design: IndexNow proves ownership by fetching
  * https://ukcounciltax.co.uk/<key>.txt and checking it holds the key, so the
- * file lives in public/. Run after a deploy that adds or changes pages.
+ * file lives in public/. This key belongs to ukcounciltax.co.uk only; UK Councils
+ * has its own. release.yml runs this after each production deploy.
  */
 const SITE = "https://ukcounciltax.co.uk";
-const KEY = "17787fde6c2884af115e79feb459b7d4";
+const KEY = "30d5e65e0e5ac084aa1622dd379aefe0";
 
 const sitemap = await (await fetch(`${SITE}/sitemap.xml`)).text();
 const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);

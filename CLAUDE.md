@@ -2,8 +2,15 @@
 
 Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https://ukcounciltax.co.uk. Reused from UK Councils at 779dec32274f39d9d84bb311c49e8476d3b1e2a9. Read docs/BUILD-BRIEF.md and docs/RELEASE.md when present.
 
+## Session continuation
+
+For continuation after the 6 October 2026 chat, read `docs/HANDOFF-2026-10-06.md` first (newest handover). The earlier `docs/HANDOFF-2026-10-05.md` remains for the release day record. They record the completed release, source reuse, remaining work and safeguards.
+
 ## Authority
-Tom authorised creation and publication using GitHub and Cloudflare on 5 October 2026. Preserve UK Councils and other sites unless a specific integration is within his request. Never copy secrets, private financial data or private investigations. UK Food Hygiene remains publicly unlinked. Only verified live ecosystem destinations belong in links.
+Tom authorised creation and publication using GitHub and Cloudflare on 5 October 2026. Preserve UK Councils and other sites unless a specific integration is within his request. Never copy secrets, private financial data or private investigations. UK Food Hygiene is public tier B in the UK State network since 6 October 2026 (repository private; site linked). Only verified live ecosystem destinations belong in links.
+
+## Open decision (3 November 2026)
+Contradiction for Tom to resolve (not resolved here): the 6 October 2026 exemplar prompt says remove the Cloudflare Insights host from the CSP while analytics is off; register task T04 says add the beacon.
 
 ## Data
 Published charges must come from official tables with publisher, year, basis, table and file hash. Never derive missing bands or carry figures forward. Label Scotland water exclusions, Wales Band I and Northern Ireland domestic rates separately. Unknown is not zero. Compare only compatible systems, classes, years and charge bases. Distinguish own-council share from full area averages and locality bills.

@@ -14,7 +14,10 @@ const noteMap = rows => Object.fromEntries(rows.filter(r=>/^\[(note |r\])/.test(
 const resolveNotes = (text,notes) => [...new Set((text??'').match(/\[(?:note [a-z]+|r)\]/g)??[])].map(id=>({id,text:notes[id]??fail(`Unknown note ${id}`)}));
 const workbooks={};
 mkdirSync('data/raw',{recursive:true});
-for(const [key,source] of Object.entries(sources)) {
+// The band stock file is a zipped CSV with its own importer, import-band-stock.mjs.
+const ODS_KEYS=['parishes','components','history'];
+for(const key of ODS_KEYS) {
+ const source=sources[key];
  const path=`data/raw/${source.file}`;
  if(!existsSync(path)){const response=await fetch(source.fileUrl);if(!response.ok)fail(`${key}: HTTP ${response.status}`);writeFileSync(path,Buffer.from(await response.arrayBuffer()));}
  const hash=createHash('sha256').update(readFileSync(path)).digest('hex');
@@ -63,6 +66,6 @@ for(const [name,measure] of [['Area_CT','area'],['exc_PP','ownExcludingParish'],
  }
 }
 if(Object.keys(history).length!==296||Object.values(history).some(r=>!r.area||!r.ownExcludingParish||!r.ownIncludingParish))fail('Incomplete historical series');
-const output={schemaVersion:1,year:'2026-27',sources,parishNotes:pn,parishChanges:sheet(workbooks.parishes,'Ceased_New_Renamed_Parishes').rows,historyNotes:sheet(workbooks.history,'Notes').rows,components,parishes,history};
+const output={schemaVersion:1,year:'2026-27',sources:Object.fromEntries(ODS_KEYS.map(key=>[key,sources[key]])),parishNotes:pn,parishChanges:sheet(workbooks.parishes,'Ceased_New_Renamed_Parishes').rows,historyNotes:sheet(workbooks.history,'Notes').rows,components,parishes,history};
 writeFileSync('data/national/england.json',JSON.stringify(output)+'\n');
 console.log(`Imported ${Object.keys(components).length} component breakdowns, ${parishes.length} parish records (${parishes.filter(p=>p.years['2026-27'].status==='not-existing').length} ceased), ${Object.keys(history).length} historical series.`);

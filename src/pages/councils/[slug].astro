@@ -4,6 +4,7 @@ import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
+import BandMix from '../../components/BandMix.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
 import MiniMap from "../../components/MiniMap.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -142,6 +143,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
   </div>
   <CouncilActions slug={council.slug} />
+  <BandMix gss={council.gss} name={name} />
   <PageContents items={[
     {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
     {id: 'parish-precepts', label: 'Parish charges'},

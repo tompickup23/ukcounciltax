@@ -21,7 +21,7 @@ function cards(): Record<HubCard, OgCard> {
       }
     : {};
   return {
-    home: { eyebrow: "Bands, precepts, increases and modelling", heading: "Know your bill. See what changes.", source: "Every figure from an official table, with its date" },
+    home: { eyebrow: "Bands, precepts, increases and modelling", heading: "Council tax 2026/27", source: "Every figure from an official table, with its date" },
     councils: { eyebrow: "Councils", heading: "Every council in England", source: `MHCLG council tax tables, ${longDate(data.source.published)}` },
     "council-tax": { eyebrow: `Council tax ${year}`, heading: "Council tax in England", ...englandFigure, source },
     rises: { eyebrow: `Council tax ${year}`, heading: "How much has council tax gone up?", ...englandFigure, source },

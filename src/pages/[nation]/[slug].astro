@@ -11,7 +11,7 @@ const bands=Object.keys(row.bandsPence); const council=councilByGss(row.gss);con
 const format=(n:number)=>isScotland?moneyPence(n):new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(n/100);
 const past=editions.at(-2)?.records.find(r=>r.gss===row.gss);
 const change=past?row.bandsPence.D-past.bandsPence.D:null;
-const metadata=councilMetadata({name:row.name,currentPence:row.bandsPence.D,previousPence:past?.bandsPence.D??null,basis:isScotland?'council tax excluding water and sewerage':'area average including community and police precepts, in whole pounds',wholePounds:!isScotland,percentageDigits:2});
+const metadata=councilMetadata({name:row.name,currentPence:row.bandsPence.D,previousPence:past?.bandsPence.D??null,basis:isScotland?'council tax excluding water and sewerage':'area average including community and police precepts, in whole pounds',wholePounds:!isScotland,percentageDigits:2,nation:isScotland?'Scotland':'Wales'});
 ---
 <BaseLayout title={metadata.title} description={metadata.description} path={nationPath(nation,row.slug)}>
 <Breadcrumbs items={[{label:nation,href:nationPath(nation)},{label:row.name}]} />

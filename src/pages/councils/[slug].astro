@@ -91,7 +91,7 @@ const links = [...contextLinks(council),...sisterLinks(council)];
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
 
-const {title, description} = councilMetadata({name, currentPence: Math.round(bandD * 100), previousPence: changeD ? Math.round(changeD.from * 100) : null, basis: 'area average including average parish precepts'});
+const {title, description} = councilMetadata({name, currentPence: Math.round(bandD * 100), previousPence: changeD ? Math.round(changeD.from * 100) : null, basis: 'area average including average parish precepts', nation: 'England'});
 
 ---
 <BaseLayout
@@ -106,7 +106,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 
   <header class="page-head council-head">
     <p class="eyebrow">Council</p>
-    <h1>{name}</h1>
+    <h1>{title}</h1>
     <p class="muted">{typeLine}</p>
     <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
@@ -137,8 +137,9 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   </div>
   <div class="action-links" aria-label="Council tax next steps">
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
-    <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>Model future costs</a>
-    <a href="/precepts/">Local bill and precept coverage</a>
+    <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
+    <a href="/precepts/">What makes up my bill</a>
+    <a href="/increases/">Council tax increases 2026/27 by council</a>
     <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
     <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
   </div>

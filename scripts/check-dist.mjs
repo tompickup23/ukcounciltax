@@ -67,12 +67,27 @@ for (const path of files(DIST)) {
   }
 
   if (/\/(?:councils|scotland|wales)\/[^/]+\/index\.html$/.test(rel(path))) {
-    if (!title?.includes('council tax bands and charges 2026/27')) failures.push(`council task/year absent from title on ${rel(path)}`);
-    const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
-    for (const phrase of ['Band D:', '2026/27', 'Source extract checked']) {
-      if (!description.includes(phrase)) failures.push(`${phrase} missing from council description on ${rel(path)}`);
+    const pagePath = rel(path);
+    if (pagePath.includes('/scotland/')) {
+      if (!title?.includes('council tax only, water and sewerage excluded')) failures.push(`Scottish basis absent from title on ${pagePath}`);
+    } else if (pagePath.includes('/wales/')) {
+      if (!title?.includes('council tax Band D 2026/27, Wales')) failures.push(`Welsh Band D nation title absent on ${pagePath}`);
+    } else if (!title?.includes('council tax bands and charges 2026/27')) {
+      failures.push(`council task/year absent from title on ${pagePath}`);
     }
-    if (!text.includes('data-next-edition') || !text.includes('2027/28 charges: not yet published')) failures.push(`next edition status missing on ${rel(path)}`);
+    const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
+    if (!description.startsWith('Band D is ')) failures.push(`council description must lead with the figure sentence on ${pagePath}`);
+    for (const phrase of ['2026/27']) {
+      if (!description.includes(phrase)) failures.push(`${phrase} missing from council description on ${pagePath}`);
+    }
+    if (description.includes('Source extract checked')) failures.push(`internal check date still in council description on ${pagePath}`);
+    if (description.length > 160) failures.push(`council description over 160 characters on ${pagePath} (${description.length})`);
+    if (!text.includes('data-next-edition') || !text.includes('2027/28 charges: not yet published')) failures.push(`next edition status missing on ${pagePath}`);
+  }
+
+  if (path.endsWith('.html')) {
+    const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
+    if (description.length > 160) failures.push(`description over 160 characters on ${rel(path)} (${description.length})`);
   }
 
   const schemaNodes = [];

@@ -3,9 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import ScenarioCalculator from '../../components/ScenarioCalculator.astro';
 ---
-<BaseLayout title="Council tax future cost calculator" description="Model the cost of repeated council tax increases using published charges and your own assumptions. View annual and cumulative costs and export a scenario." path="/tools/future-cost/">
+<BaseLayout title="What could council tax cost" description="Illustrative scenarios for future council tax costs from a published charge, your annual change assumption, and a labelled model version." path="/tools/future-cost/">
   <Breadcrumbs items={[{label:'Tools',href:'/tools/'},{label:'Future cost'}]} />
-  <header class="page-head"><p class="eyebrow">Plan with the numbers</p><h1>What could your council tax cost?</h1><p class="lede">Start with a published charge. Choose an annual change. See what compounding means for the years ahead.</p></header>
+  <header class="page-head"><p class="eyebrow">Plan with the numbers</p><h1>What could council tax cost</h1><p class="lede">Start with a published charge. Choose an annual change. See what compounding means for the years ahead.</p></header>
   <ScenarioCalculator />
   <section class="prose section"><h2>How this calculation works</h2><p>Each future annual amount is the starting charge multiplied by (1 + your percentage change / 100) raised to the number of years ahead. Annual outputs round to pennies; cumulative cost sums those rounded annual amounts.</p><p>The extra cost compares the projected years with paying the starting amount in every future year. It does not include the baseline year's bill. Negative assumptions illustrate reductions. No inflation, discounts, future legal limits or policy decisions are assumed.</p><p>Model version 1.0. <a href="/methodology/">Data and calculation methods</a> · <a href="/compare/">Compare published charges instead</a>.</p></section>
 </BaseLayout>

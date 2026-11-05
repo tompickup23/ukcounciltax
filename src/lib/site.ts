@@ -10,7 +10,7 @@ export const SITE_URL = "https://ukcounciltax.co.uk";
 export const SITE_TAGLINE = "Your bill. Its history. Your next decision.";
 
 /** Publish a contact address only after receipt has been confirmed. */
-export const CONTACT_EMAIL: string | null = null;
+export const CONTACT_EMAIL: string | null = "info@ukcouncils.co.uk";
 export const OFFICIAL_BAND_CHECK = "https://www.gov.uk/council-tax-bands";
 export const OFFICIAL_COUNCIL_LOOKUP = "https://www.gov.uk/find-local-council";
 

@@ -16,6 +16,38 @@ export const PREVIOUS_YEAR = "2025-26";
 export const YEARS = ["2024-25", "2025-26", "2026-27"] as const;
 export type Year = (typeof YEARS)[number];
 
+/**
+ * The financial year after a year label: "2026-27" to "2027-28". Every year
+ * label the site prints is CURRENT_YEAR, PREVIOUS_YEAR, a member of YEARS or
+ * a year read from a data file; templates never type one.
+ */
+export function followingYear(year: string): string {
+  const start = Number(year.slice(0, 4)) + 1;
+  return `${start}-${String((start + 1) % 100).padStart(2, "0")}`;
+}
+
+/** The financial year before a year label: "2026-27" to "2025-26". */
+export function precedingYear(year: string): string {
+  const start = Number(year.slice(0, 4)) - 1;
+  return `${start}-${String((start + 1) % 100).padStart(2, "0")}`;
+}
+
+/** The first calendar year of a financial year label: "2027-28" to 2027. */
+export function startYear(year: string): number {
+  return Number(year.slice(0, 4));
+}
+
+/** The year whose charges are not yet set: the one after CURRENT_YEAR. */
+export const NEXT_YEAR = followingYear(CURRENT_YEAR);
+
+/** The page that says what is known about NEXT_YEAR before its figures exist. */
+export const NEXT_YEAR_PATH = `/council-tax-${NEXT_YEAR}/`;
+
+/** A year's section on /increases/, by its anchor. */
+export function increasesYearPath(year: string): string {
+  return `/increases/#${year}`;
+}
+
 export interface Note {
   id: string;
   text: string;

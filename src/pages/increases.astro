@@ -1,22 +1,144 @@
 ---
+/**
+ * Council tax increases, one section per published year in YEARS, newest
+ * first, plus a short section for the year after CURRENT_YEAR that links to
+ * its own page. The current year's section holds the whole-area table and
+ * what /council-tax/rises-2026-27/ used to carry; that address now
+ * redirects to the section's anchor (public/_redirects). Own-share changes
+ * are MHCLG's published figures, largest first within each class of
+ * authority; the referendum limit is quoted from MHCLG's own definition and
+ * stated as the rule; no sentence says why any council set what it set.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Fact from '../components/Fact.astro';
+import SourceLine from '../components/SourceLine.astro';
 import {taxRows} from '../lib/tax-view-data';
-import {loadYear,CURRENT_YEAR} from '../lib/council-tax';
+import {
+  CURRENT_YEAR,
+  NEXT_YEAR,
+  NEXT_YEAR_PATH,
+  YEARS,
+  loadYear,
+  percent,
+  pounds,
+  precedingYear,
+  wholePounds,
+  yearLabel,
+  type OwnFigures,
+  type Year,
+} from '../lib/council-tax';
+import {RELEASES, releaseSentence} from '../lib/next-year';
+import {councilPages, councilPath} from '../lib/paths';
+import {councilTaxSource, longDate} from '../lib/sources';
+import {hubCardPath} from '../lib/og';
 import {jsonLd} from '../lib/site';
+
 const rows=taxRows();const current=loadYear(CURRENT_YEAR);
 const data=rows.map(r=>({...r,own:current.authorities[r.gss].own}));
+const label=yearLabel(CURRENT_YEAR);
+const first=yearLabel(YEARS[0]);
+const next=yearLabel(NEXT_YEAR);
+const earlierYears=YEARS.filter(y=>y!==CURRENT_YEAR).slice().reverse();
+const comparedFrom=earlierYears[0];
+const pageByGss=new Map(councilPages().map(p=>[p.council.gss,councilPath(p.council)]));
+
+interface Row {name:string;href:string|null;own:OwnFigures}
+const sortRows=(list:Row[])=>list
+  .filter(r=>typeof r.own.changePct==='number')
+  .sort((a,b)=>(b.own.changePct as number)-(a.own.changePct as number)||a.name.localeCompare(b.name));
+
+/** One year's own-share content, built from that year's MHCLG file alone. */
+function yearSection(year:Year){
+  const file=loadYear(year);
+  const authorities=Object.entries(file.authorities).filter(([,a])=>a.own);
+  const rowsFor=(district:boolean)=>sortRows(authorities
+    .filter(([,a])=>(a.classCode==='SD')===district)
+    .map(([gss,a])=>({name:a.name,href:pageByGss.get(gss)??null,own:a.own as OwnFigures})));
+  const tables=file.source.ownTables;
+  return {
+    year,
+    label:yearLabel(year),
+    previous:yearLabel(precedingYear(year)),
+    published:file.source.published,
+    area:file.england.areaBandD,
+    classes:file.england.byClass,
+    principles:file.source.referendumPrinciples,
+    groups:[
+      {id:'unitary',label:'London boroughs, metropolitan districts and unitary authorities',question:'How much did London boroughs, metropolitan districts and unitary authorities raise their share',table:tables.unitary,rows:rowsFor(false),pounds:false},
+      {id:'county',label:'Shire county councils',question:'How much did county councils raise their share',table:tables.county,rows:sortRows(Object.values(file.counties).map(own=>({name:`${own.name} County Council`,href:null,own}))),pounds:false},
+      {id:'district',label:'Shire district councils',question:'How much did district councils raise their share',table:tables.district,rows:rowsFor(true),pounds:true},
+    ],
+  };
+}
+const sections=YEARS.slice().reverse().map(yearSection);
 ---
-<BaseLayout title="Council tax increases 2026/27 by council" description="Whole-area council tax increases for 2026/27 by English council and band, kept separate from each council's own share." path="/increases/">
-<header class="page-head"><p class="eyebrow">Follow the change</p><h1>Council tax increases 2026/27 by council</h1><p class="lede">The change in your whole bill can differ from the percentage announced by one council.</p></header>
+<BaseLayout title={`Council tax increases in England by council, ${first} to ${label}`} description={`Council tax increases in England by council, ${first} to ${label}: whole-area changes by band, each council's own share, and when ${next} figures publish.`} path="/increases/" ogImage={hubCardPath("rises")}>
+<header class="page-head"><p class="eyebrow">Follow the change</p><h1>Council tax increases in England by council, {first} to {label}</h1><p class="lede">The change in your whole bill can differ from the percentage announced by one council.</p></header>
+<nav class="card" aria-label="Years on this page"><p><strong>Jump to a year:</strong> <a href={`#${NEXT_YEAR}`}>{next}, not yet set</a>{sections.map(s=><> · <a href={`#${s.year}`}>{s.label}</a></>)}</p></nav>
+
+<section class="section" id={NEXT_YEAR} aria-labelledby={`${NEXT_YEAR}-heading`}>
+<h2 id={`${NEXT_YEAR}-heading`}>Council tax {next}: not yet set</h2>
+<p>No official {next} council tax statistics have been published yet, so this page holds no {next} figure. The official statistics for each nation are due as follows.</p>
+<ul>{RELEASES.map(r=><li><strong>{r.nation}:</strong> {releaseSentence(r)}{r.page && <> Source: <a href={r.page.url}>{r.publisher}, {r.page.title}</a>, accessed {longDate(r.page.accessed)}.</>}</li>)}</ul>
+<p><a href={NEXT_YEAR_PATH}>Council tax {next}: what is known before the figures are set</a></p>
+</section>
+
+{sections.map(s=>(
+<section class="section" id={s.year} aria-labelledby={`${s.year}-heading`}>
+<h2 id={`${s.year}-heading`}>{s.year===CURRENT_YEAR?`How much has council tax gone up in ${s.label}?`:`How much did council tax go up in ${s.label}?`}</h2>
+
+{s.year===CURRENT_YEAR && (<>
 <div class="editorial-callout"><strong>Two measures, kept separate</strong><p>Whole-area changes are calculated from published band charges, including average parish precepts. The own-share percentage is MHCLG's published change for the billing council alone. It is not the percentage change in your complete bill.</p></div>
-<section data-increases class="section"><div class="card task-grid"><label class="field">Find a council<input type="search" data-filter placeholder="Council name" /></label><label class="field"><span id="increase-band-label">Band</span><select data-band aria-labelledby="increase-band-label">{'ABCDEFGH'.split('').map(b=><option selected={b==='D'}>{b}</option>)}</select></label><label class="field"><span id="increase-period-label">Compare years</span><select data-period aria-labelledby="increase-period-label"><option value="2025-26">2025/26 to 2026/27</option><option value="2024-25">2024/25 to 2026/27</option></select></label><label class="field"><span id="increase-type-label">Council type</span><select data-class aria-labelledby="increase-type-label"><option value="all">All types, alphabetical</option>{[...new Map(rows.map(r=>[r.classCode,r.classLabel])).entries()].map(([c,l])=><option value={c}>{l}</option>)}</select></label></div><p data-count role="status">296 councils, listed alphabetically.</p>
-<div class="table-wrap" tabindex="0" role="region" aria-label="Council tax annual changes"><table class="data"><caption>Whole-area charges and calculated changes; own-share change is always 2025/26 to 2026/27</caption><thead><tr><th scope="col">Council</th><th scope="col" class="num">Earlier charge</th><th scope="col" class="num">2026/27</th><th scope="col" class="num">Cash change</th><th scope="col" class="num">Whole-area change</th><th scope="col" class="num">Own-share change</th></tr></thead><tbody>{data.map(r=>{const a=r.years['2025-26'].D!;const b=r.years[CURRENT_YEAR].D!;return <tr data-row={r.slug}><th scope="row"><a href={`/councils/${r.slug}/`}>{r.name}</a></th><td class="num">£{(a/100).toFixed(2)}</td><td class="num">£{(b/100).toFixed(2)}</td><td class="num">£{((b-a)/100).toFixed(2)}</td><td class="num">{((b-a)/a*100).toFixed(2)}%</td><td class="num">{r.own?.changePct===null||r.own?.changePct===undefined?'Not published':r.own.changePct.toFixed(2)+'%'}</td></tr>;})}</tbody></table></div>
-<p class="source-line">Source: <a href="/data/">MHCLG source editions 2024/25, 2025/26 and 2026/27</a>. Calculated percentage = (later charge − earlier charge) ÷ earlier charge × 100. Figures are nominal, before discounts. Missing figures are not carried forward.</p><noscript><p>The table shows Band D, 2025/26 to 2026/27. Enable JavaScript to filter or change bands.</p></noscript><script type="application/json" data-increase-data set:html={jsonLd(data)} /></section>
+<div data-increases data-current={CURRENT_YEAR} class="section"><div class="card task-grid"><label class="field">Find a council<input type="search" data-filter placeholder="Council name" /></label><label class="field"><span id="increase-band-label">Band</span><select data-band aria-labelledby="increase-band-label">{'ABCDEFGH'.split('').map(b=><option selected={b==='D'}>{b}</option>)}</select></label><label class="field"><span id="increase-period-label">Compare years</span><select data-period aria-labelledby="increase-period-label">{earlierYears.map(y=><option value={y}>{yearLabel(y)} to {label}</option>)}</select></label><label class="field"><span id="increase-type-label">Council type</span><select data-class aria-labelledby="increase-type-label"><option value="all">All types, alphabetical</option>{[...new Map(rows.map(r=>[r.classCode,r.classLabel])).entries()].map(([c,l])=><option value={c}>{l}</option>)}</select></label></div><p data-count role="status">296 councils, listed alphabetically.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Council tax annual changes"><table class="data"><caption>Whole-area charges and calculated changes; own-share change is always {yearLabel(comparedFrom)} to {label}</caption><thead><tr><th scope="col">Council</th><th scope="col" class="num">Earlier charge</th><th scope="col" class="num">{label}</th><th scope="col" class="num">Cash change</th><th scope="col" class="num">Whole-area change</th><th scope="col" class="num">Own-share change</th></tr></thead><tbody>{data.map(r=>{const a=r.years[comparedFrom].D!;const b=r.years[CURRENT_YEAR].D!;return <tr data-row={r.slug}><th scope="row"><a href={`/councils/${r.slug}/`}>{r.name}</a></th><td class="num">£{(a/100).toFixed(2)}</td><td class="num">£{(b/100).toFixed(2)}</td><td class="num">£{((b-a)/100).toFixed(2)}</td><td class="num">{((b-a)/a*100).toFixed(2)}%</td><td class="num">{r.own?.changePct===null||r.own?.changePct===undefined?'Not published':r.own.changePct.toFixed(2)+'%'}</td></tr>;})}</tbody></table></div>
+<p class="source-line">Source: <a href="/data/">MHCLG source editions {YEARS.map(yearLabel).slice(0,-1).join(', ')} and {label}</a>. Calculated percentage = (later charge − earlier charge) ÷ earlier charge × 100. Figures are nominal, before discounts. Missing figures are not carried forward.</p><noscript><p>The table shows Band D, {yearLabel(comparedFrom)} to {label}. Enable JavaScript to filter or change bands.</p></noscript><script type="application/json" data-increase-data set:html={jsonLd(data)} /></div>
+</>)}
+
+{s.area && (
+<div class="section" aria-labelledby={`${s.year}-england-heading`}>
+<h3 id={`${s.year}-england-heading`}>How much did council tax go up in England in {s.label}?</h3>
+<div class="fact-grid"><div class="card"><Fact label={`Average area Band D, England, ${s.label}`} figure={`up ${percent(s.area.england.changePct)}`} change={`${wholePounds(s.area.england.pounds)} a year`} source={councilTaxSource(s.year, s.area.table)} /></div></div>
+{s.classes && (
+<div class="fact" data-fact>
+<div class="table-wrap" tabindex="0" role="region" aria-label={`Average Band D by class of authority, ${s.label}`}><table class="data"><caption>Average Band D by class of authority, {s.label}, excluding parish precepts</caption><thead><tr><th scope="col">Class</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {s.previous}</th></tr></thead><tbody>{s.classes.rows.map(row=><tr><th scope="row">{row.class}</th><td class="num" data-figure>{wholePounds(row.bandD)}</td><td class="num">{percent(row.changePct)}</td></tr>)}</tbody></table></div>
+<SourceLine source={councilTaxSource(s.year, s.classes.table)} />
+</div>
+)}
+</div>
+)}
+
+<div class="section" aria-labelledby={`${s.year}-limit-heading`}>
+<h3 id={`${s.year}-limit-heading`}>How much could a council raise council tax without a referendum in {s.label}?</h3>
+<p>A council that sets an increase in its own share above the limit for the year must hold a local referendum. The principles for {s.label}, as MHCLG's technical notes set them out, are quoted below. Rows for councils with a different limit carry MHCLG's note saying so.</p>
+{s.principles && (
+<blockquote class="card"><p>{s.principles.text}</p><SourceLine source={{publisher:'MHCLG',title:s.principles.title,url:s.principles.url,table:`section ${s.principles.section}`,date:s.published}} /></blockquote>
+)}
+</div>
+
+{s.groups.map(group=>(
+<div class="section" id={`${s.year}-${group.id}`} aria-labelledby={`${s.year}-${group.id}-heading`}>
+<h3 id={`${s.year}-${group.id}-heading`}>{group.question} in {s.label}?</h3>
+<p class="muted">Largest first. The council's own Band D excludes parish precepts and the other bodies' shares.</p>
+<div class="fact" data-fact>
+<div class="table-wrap" tabindex="0" role="region" aria-label={`${group.label}, own Band D ${s.label}`}><table class="data"><caption>{group.label}, own Band D {s.label}, change on {s.previous}, largest first</caption><thead><tr><th scope="col">Council</th><th scope="col" class="num">Own Band D</th><th scope="col" class="num">Change</th>{group.pounds && <th scope="col" class="num">In pounds</th>}<th scope="col">Note</th></tr></thead><tbody>{group.rows.map(row=><tr><th scope="row">{row.href?<a href={row.href}>{row.name}</a>:row.name}</th><td class="num">{pounds(row.own.bandD)}</td><td class="num" data-figure>{percent(row.own.changePct, 2)}</td>{group.pounds && <td class="num">{pounds(row.own.changePounds)}</td>}<td class="note-cell">{row.own.notes.map(n=>n.text).join(' ')}</td></tr>)}</tbody></table></div>
+<SourceLine source={councilTaxSource(s.year, group.table)} />
+</div>
+</div>
+))}
+</section>
+))}
 </BaseLayout>
+
+<style>
+  .note-cell { font-size: 0.82rem; color: var(--text-muted); min-width: 14rem; }
+  blockquote.card { margin: 1rem 0 0; }
+</style>
+
 <script>
 import {moneyPence,type TaxRow,type TaxBand} from '../lib/tax-view';
-const root=document.querySelector('[data-increases]')!;
+const root=document.querySelector<HTMLElement>('[data-increases]')!;
+const currentYear=root.dataset.current!;
 const data=JSON.parse(root.querySelector('[data-increase-data]')!.textContent!) as TaxRow[];
 const search=root.querySelector<HTMLInputElement>('[data-filter]')!,band=root.querySelector<HTMLSelectElement>('[data-band]')!,period=root.querySelector<HTMLSelectElement>('[data-period]')!,type=root.querySelector<HTMLSelectElement>('[data-class]')!;
-const update=()=>{let count=0;for(const r of data){const tr=root.querySelector<HTMLTableRowElement>(`[data-row="${r.slug}"]`)!;tr.hidden=!r.name.toLowerCase().includes(search.value.trim().toLowerCase())||(type.value!=='all'&&r.classCode!==type.value);if(tr.hidden)continue;count++;const a=r.years[period.value]?.[band.value as TaxBand],b=r.years['2026-27']?.[band.value as TaxBand];const vals=a&&b?[moneyPence(a),moneyPence(b),moneyPence(b-a),((b-a)/a*100).toFixed(2)+'%']:['Unavailable','Unavailable','Unavailable','Unavailable'];vals.forEach((v,i)=>tr.cells[i+1].textContent=v);}root.querySelector('[data-count]')!.textContent=`${count} councils shown. Band ${band.value}, ${period.value.replace('-','/')} to 2026/27.`;};[search,band,period,type].forEach(e=>e.addEventListener('input',update));
+const update=()=>{let count=0;for(const r of data){const tr=root.querySelector<HTMLTableRowElement>(`[data-row="${r.slug}"]`)!;tr.hidden=!r.name.toLowerCase().includes(search.value.trim().toLowerCase())||(type.value!=='all'&&r.classCode!==type.value);if(tr.hidden)continue;count++;const a=r.years[period.value]?.[band.value as TaxBand],b=r.years[currentYear]?.[band.value as TaxBand];const vals=a&&b?[moneyPence(a),moneyPence(b),moneyPence(b-a),((b-a)/a*100).toFixed(2)+'%']:['Unavailable','Unavailable','Unavailable','Unavailable'];vals.forEach((v,i)=>tr.cells[i+1].textContent=v);}root.querySelector('[data-count]')!.textContent=`${count} councils shown. Band ${band.value}, ${period.value.replace('-','/')} to ${currentYear.replace('-','/')}.`;};[search,band,period,type].forEach(e=>e.addEventListener('input',update));
 </script>

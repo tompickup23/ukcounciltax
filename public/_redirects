@@ -1,0 +1,4 @@
+# Static redirects for Cloudflare Pages. A moved page keeps its address.
+# The 2026/27 rises page became the 2026/27 section of /increases/.
+/council-tax/rises-2026-27/ /increases/#2026-27 301
+/council-tax/rises-2026-27 /increases/#2026-27 301

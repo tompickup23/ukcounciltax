@@ -1,0 +1,75 @@
+---
+/**
+ * Where each 100 pounds of a published local bill goes, and the weekly
+ * figure per band. Both are calculations of the published schedule, shown
+ * with the calculation beside them and the source line directly under each.
+ */
+import type {LocalBill} from '../lib/local-bill';
+import {shareSplit, weeklyByBand, shareSentence, formatShare, ROUNDING_NOTE, WEEKLY_NOTE} from '../lib/bill-split';
+import {moneyPence} from '../lib/tax-view';
+import {yearLabel} from '../lib/council-tax';
+import {longDate} from '../lib/sources';
+
+interface Props {bill: LocalBill; localityId: string; heading?: 'h2' | 'h3'; compact?: boolean; idPrefix?: string}
+const {bill, localityId, heading = 'h2', compact = false, idPrefix = 'split'} = Astro.props;
+const Heading = heading;
+const band = 'D';
+const year = yearLabel(bill.year);
+const locality = bill.localities.find((l) => l.id === localityId)!;
+const split = shareSplit(bill, localityId, band);
+const weekly = weeklyByBand(bill, localityId);
+const retrieved = longDate(bill.source.retrieved);
+const parishCaveat = locality.parishPence
+  ? `This locality total includes the ${locality.name} parish precept. Other parts of ${bill.name} pay a different parish precept or none.`
+  : `This is the unparished area. A parish or town council precept adds to the Band D total where one applies.`;
+---
+<div class:list={['bill-split', {compact}]}>
+  <section aria-labelledby={`${idPrefix}-shares`}>
+    <Heading id={`${idPrefix}-shares`}>Out of every 100 pounds, Band D, {locality.name}, {year}</Heading>
+    <p class="calc-label">Calculation of the published figures: each body's published Band D charge divided by the published Band D total of {moneyPence(split.total)}, times 100.</p>
+    <ul class="shares">
+      {split.rows.map((row, i) => (
+        <li>
+          <span class="share-head"><span class={`dot dot-${i % 6}`} aria-hidden="true"></span><strong>{row.label}</strong><span class="share-figure">{formatShare(row.share)}</span></span>
+          <span class="share-calc">{shareSentence(row, split.total, moneyPence)}</span>
+        </li>
+      ))}
+    </ul>
+    <p class="small muted">{ROUNDING_NOTE}</p>
+    <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}.</p>
+    <p class="caveat">{parishCaveat}</p>
+  </section>
+  <section aria-labelledby={`${idPrefix}-weekly`}>
+    <Heading id={`${idPrefix}-weekly`}>Weekly figure by band, {locality.name}, {year}</Heading>
+    <p class="calc-label">{WEEKLY_NOTE}</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label={`Table of published annual charges and the annual charge divided by 52, ${locality.name}`}>
+      <table class="data weekly">
+        <caption>Published annual charge and the annual charge divided by 52, before discounts and premiums</caption>
+        <thead><tr><th scope="col">Band</th><th scope="col" class="num">Published annual</th><th scope="col" class="num">Divided by 52</th></tr></thead>
+        <tbody>{weekly.map((w) => <tr><th scope="row">{w.band}</th><td class="num">{moneyPence(w.annualPence)}</td><td class="num">{moneyPence(w.weeklyPence)}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}. Weekly column calculated from it.</p>
+    <p class="caveat">{parishCaveat}</p>
+  </section>
+</div>
+
+<style>
+.bill-split{display:grid;gap:1.5rem}
+.bill-split section{min-width:0}
+.calc-label{font-size:.9rem;color:var(--text-muted)}
+.shares{list-style:none;padding:0;margin:.8rem 0;display:grid;gap:.7rem}
+.shares li{display:grid;gap:.2rem}
+.share-head{display:flex;align-items:center;gap:.6rem}
+.share-figure{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums}
+.share-calc{font-size:.85rem;color:var(--text-muted);overflow-wrap:anywhere}
+.dot{width:.55rem;height:.55rem;border-radius:50%;flex-shrink:0}
+.dot-0{background:var(--accent)}.dot-1{background:var(--text-muted)}.dot-2{background:var(--text)}.dot-3{background:var(--border-strong)}.dot-4{background:var(--accent)}.dot-5{background:var(--text-muted)}
+.weekly{width:100%}
+.compact{gap:1rem}
+.compact :is(h2,h3){font-size:1rem;margin:.4rem 0}
+.compact table.weekly{font-size:.85rem}
+.compact table.weekly :is(th,td){padding:.4rem .45rem}
+.compact table.weekly thead th{white-space:normal}
+.compact .calc-label,.compact .caveat,.compact .source-line{font-size:.8rem}
+</style>

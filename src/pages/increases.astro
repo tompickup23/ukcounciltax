@@ -97,7 +97,7 @@ const sections=YEARS.slice().reverse().map(yearSection);
 {s.area && (
 <div class="section" aria-labelledby={`${s.year}-england-heading`}>
 <h3 id={`${s.year}-england-heading`}>How much did council tax go up in England in {s.label}?</h3>
-<div class="fact-grid"><div class="card"><Fact label={`Average area Band D, England, ${s.label}`} figure={`up ${percent(s.area.england.changePct)}`} change={`${wholePounds(s.area.england.pounds)} a year`} source={councilTaxSource(s.year, s.area.table)} /></div></div>
+<div class="fact-grid"><div class="card"><Fact label={`Average area Band D, England, ${s.label}`} figure={`up ${percent(s.area.england.changePct)}`} change={`${wholePounds(s.area.england.pounds)} a year`} source={councilTaxSource(s.year, s.area.table)} /><p class="caveat">Includes adult social care and average parish precepts.</p></div></div>
 {s.classes && (
 <div class="fact" data-fact>
 <div class="table-wrap" tabindex="0" role="region" aria-label={`Average Band D by class of authority, ${s.label}`}><table class="data"><caption>Average Band D by class of authority, {s.label}, excluding parish precepts</caption><thead><tr><th scope="col">Class</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {s.previous}</th></tr></thead><tbody>{s.classes.rows.map(row=><tr><th scope="row">{row.class}</th><td class="num" data-figure>{wholePounds(row.bandD)}</td><td class="num">{percent(row.changePct)}</td></tr>)}</tbody></table></div>

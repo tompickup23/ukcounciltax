@@ -24,7 +24,7 @@ export const collectionFor=(gss:string):CollectionRecord|null=>{
 export const collectionYear=()=>yearLabel(collection.source.year);
 /** The last day of that financial year, from the same source year: "31 March 2026". */
 export const collectionYearEnd=()=>`31 March 20${collection.source.year.slice(5)}`;
-/** The year before, as printed in the line 20 header: "2024/25". */
+/** The year before the pinned source year, labelled through yearLabel, as printed in the line 20 header. */
 export const collectionPriorYear=()=>{const start=Number(collection.source.year.slice(0,4));return yearLabel(`${start-1}-${String(start).slice(2)}`);};
 export const collectionSource=():SourceRef=>({
  publisher:'MHCLG',

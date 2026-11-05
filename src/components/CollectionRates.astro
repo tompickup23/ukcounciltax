@@ -18,6 +18,7 @@ const lines=row?[
   {line:'24',label:`Total arrears outstanding at ${end}`,key:'totalArrears'},
 ] as const:[];
 const notes=row?shownNotes(row):[];
+const englandNotes=row?shownNotes(england):[];
 ---
 {row && (
   <section class="section" id="collection" aria-labelledby="collection-heading">
@@ -55,9 +56,10 @@ const notes=row?shownNotes(row):[];
         at {end}; councils can still collect them in later years, so they are not amounts lost. The England column is the
         total for all {Object.keys(collection.councils).length} billing authorities in England. A figure the table does not hold is shown as not published, never as zero.
       </p>
-      {notes.length>0 && (
+      {(notes.length>0 || englandNotes.length>0) && (
         <ul class="notes">
           {notes.map(n=><li>MHCLG note: {n.text}</li>)}
+          {englandNotes.map(n=><li>MHCLG note for England: {n.text}</li>)}
         </ul>
       )}
       <SourceLine source={source} />

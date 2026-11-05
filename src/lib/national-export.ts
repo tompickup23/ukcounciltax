@@ -1,7 +1,7 @@
 import {national} from './national-data';
-import {loadYear} from './council-tax';
+import {CURRENT_YEAR,loadYear} from './council-tax';
 import {csvCell} from './tax-export';
-const name=(gss:string)=>loadYear('2026-27').authorities[gss].name;
+const name=(gss:string)=>loadYear(CURRENT_YEAR).authorities[gss].name;
 const csv=(rows:(string|number|null)[][])=>'\uFEFF'+rows.map(row=>row.map(v=>csvCell(v??'')).join(',')).join('\r\n')+'\r\n';
 const gbp=(p:number|null)=>p===null?null:p/100;
 export function parishCsv(){const source=national.sources.parishes;return csv([

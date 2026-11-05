@@ -13,6 +13,7 @@
 import { councilPages, councilPath } from "../lib/paths";
 import {devolved,nationPath} from '../lib/devolved';
 import { loadRegistry } from "../lib/registry";
+import { CURRENT_YEAR } from "../lib/council-tax";
 
 interface Props {
   id?: string;
@@ -21,7 +22,7 @@ interface Props {
 
 const { id = "postcode", heading = "Find your council by postcode" } = Astro.props;
 const withPage = new Map(councilPages().map(({ council, tax }) => [council.gss, { href: councilPath(council), name: tax.name }]));
-for (const edition of devolved.editions.filter(e=>e.year==='2026-27')) for (const row of edition.records) withPage.set(row.gss,{href:nationPath(edition.nation,row.slug),name:row.name});
+for (const edition of devolved.editions.filter(e=>e.year===CURRENT_YEAR)) for (const row of edition.records) withPage.set(row.gss,{href:nationPath(edition.nation,row.slug),name:row.name});
 const index = Object.fromEntries(
   Object.values(loadRegistry().councils).map((c) => [
     c.gss,

@@ -1,0 +1,64 @@
+---
+/**
+ * The year after CURRENT_YEAR, before any council has set it. The file name
+ * carries NEXT_YEAR because the route does; tests/years.test.ts fails when
+ * CURRENT_YEAR moves on and this file has not been renamed with it. The page
+ * holds dates and rules from official pages only: no projected, typical or
+ * estimated charge for any council or band, and no pound sign anywhere.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {CURRENT_YEAR, NEXT_YEAR, NEXT_YEAR_PATH, increasesYearPath, yearLabel} from '../lib/council-tax';
+import {RELEASES, SETTING_DEADLINE, releaseSentence, settingDeadline} from '../lib/next-year';
+import {longDate} from '../lib/sources';
+
+const next=yearLabel(NEXT_YEAR);
+const label=yearLabel(CURRENT_YEAR);
+const accessed=(date:string)=>longDate(date);
+const release=(nation:string)=>RELEASES.find(r=>r.nation===nation)!;
+const england=release('England'), scotland=release('Scotland'), wales=release('Wales');
+---
+<BaseLayout title={`Council tax ${next} in England, Scotland and Wales: not yet set`} description={`Council tax for ${next} is not yet set in England, Scotland or Wales. The statutory deadline in England and when each nation's official figures are due.`} path={NEXT_YEAR_PATH}>
+<header class="page-head"><p class="eyebrow">Council tax, the year ahead</p><h1>Council tax {next}: not yet set</h1><p class="lede">No council in England, Scotland or Wales has a published {next} charge on this site yet. This page says when the official figures are due and what will appear when they are published.</p></header>
+
+<div class="editorial-callout"><strong>No figures before publication</strong><p>This site shows no projected, typical or estimated {next} charge for any council or band. Charges for {label} remain on each council's page until the official {next} tables are published and checked.</p></div>
+
+<section class="section" id="england" aria-labelledby="england-heading">
+<h2 id="england-heading">England</h2>
+<p>Each billing authority sets its council tax for the year. Under the Local Government Finance Act 1992, council tax for {next} {settingDeadline(NEXT_YEAR)}.</p>
+<blockquote class="card"><p>{SETTING_DEADLINE.text}</p><p class="source-line">Source: <a href={SETTING_DEADLINE.url}>{SETTING_DEADLINE.title}</a>, {SETTING_DEADLINE.section}, legislation.gov.uk, accessed {accessed(SETTING_DEADLINE.accessed)}.</p></blockquote>
+<p>{releaseSentence(england)} {england.detail}</p>
+{england.page && <p class="source-line">Source: <a href={england.page.url}>{england.publisher}, {england.page.title}</a>, accessed {accessed(england.page.accessed)}.</p>}
+</section>
+
+<section class="section" id="scotland" aria-labelledby="scotland-heading">
+<h2 id="scotland-heading">Scotland</h2>
+{scotland.page ? (<>
+<p>The Scottish Government lists the publication <strong>{scotland.publication}</strong>. {releaseSentence(scotland)} {scotland.detail}</p>
+<p class="source-line">Source: <a href={scotland.page.url}>{scotland.publisher}, {scotland.page.title}</a>{scotland.file && <>, file {scotland.file.title}, SHA-256 <code>{scotland.file.sha256}</code></>}, accessed {accessed(scotland.page.accessed)}.</p>
+</>) : <p>{releaseSentence(scotland)}</p>}
+</section>
+
+<section class="section" id="wales" aria-labelledby="wales-heading">
+<h2 id="wales-heading">Wales</h2>
+{wales.page ? (<>
+<p>{releaseSentence(wales)} {wales.detail}</p>
+<p class="source-line">Source: <a href={wales.page.url}>{wales.publisher}, {wales.page.title}</a>, accessed {accessed(wales.page.accessed)}.</p>
+</>) : <p>{releaseSentence(wales)}</p>}
+</section>
+
+<section class="section" aria-labelledby="lands-heading">
+<h2 id="lands-heading">What this site will show when the {next} figures are published</h2>
+<ul>
+<li>England: the published Band A to H charges for each billing authority, the average area Band D, each council's own share and its published change, and the referendum principles for {next}, each with its MHCLG table, publication date and file checksum.</li>
+<li>Scotland: the published Band A to H council tax for each council, council tax only, with water and sewerage charges excluded and labelled separately.</li>
+<li>Wales: the published Band D averages, rounded as the Welsh Government publishes them, with Band I and the other bands added only when a source table holds them.</li>
+<li>Changes from {label}: calculated only between two published tables on the same basis, with the calculation shown beside each figure.</li>
+<li>Northern Ireland: domestic rates remain a separate system and are not compared with council tax.</li>
+</ul>
+<p>Until then, see <a href={increasesYearPath(CURRENT_YEAR)}>council tax increases in {label}</a> or <a href="/councils/">find your council</a>.</p>
+</section>
+</BaseLayout>
+
+<style>
+  code { overflow-wrap: anywhere; word-break: break-all; }
+</style>

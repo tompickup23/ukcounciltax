@@ -1,6 +1,7 @@
 ---
 import {national,parishesFor,parishChange,type ParishYear} from '../lib/national-data';
 import {moneyPence} from '../lib/tax-view';
+import {precedingYear,yearLabel} from '../lib/council-tax';
 interface Props {gss:string;name:string}
 const {gss,name}=Astro.props;
 const data=national.components[gss];
@@ -10,13 +11,14 @@ const parishMoney=(y:ParishYear)=>y.status==='not-existing'?'Did not exist':mone
 const labels={county:'County or GLA',police:'Police',fire:'Fire',combined:'Combined authority'};
 const notes=[...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
 const source=national.sources.components, parishSource=national.sources.parishes;
+const year=national.year, earlier=precedingYear(national.year);
 ---
 {data && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
   <p class="eyebrow">Who receives your council tax</p>
   <h2 id="precept-heading">Band D bill breakdown in {name}</h2>
-  <p>These are the published <strong>2026/27 area averages</strong>. Parish charges are averaged into the council line. They are already included in the total and must not be added again.</p>
+  <p>These are the published <strong>{yearLabel(year)} area averages</strong>. Parish charges are averaged into the council line. They are already included in the total and must not be added again.</p>
   <div class="table-wrap" tabindex="0" role="region" aria-label="National Band D component table"><table class="data">
-    <caption>{name}: published Band D components, 2026/27</caption>
+    <caption>{name}: published Band D components, {yearLabel(year)}</caption>
     <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
     <tbody>
       <tr><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(data.ownWithParishPence)}</td></tr>
@@ -39,9 +41,9 @@ const source=national.sources.components, parishSource=national.sources.parishes
     <label class="field parish-search" hidden>Filter parish or local body<input type="search" autocomplete="off" placeholder="Type a parish name" /></label>
     <p class="small muted" data-parish-count role="status">All {parishes.length} records shown.</p>
     <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D charges"><table class="data">
-      <caption>{name}: local Band D precepts as reported in the 2026/27 return</caption>
-      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">2025/26</th><th scope="col" class="num">2026/27</th><th scope="col" class="num">Annual change</th></tr></thead>
-      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num">{parishMoney(p.years['2025-26'])}</td><td class="num">{parishMoney(p.years['2026-27'])}</td><td class="num">{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
+      <caption>{name}: local Band D precepts as reported in the {yearLabel(year)} return</caption>
+      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Annual change</th></tr></thead>
+      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num">{parishMoney(p.years[earlier])}</td><td class="num">{parishMoney(p.years[year])}</td><td class="num">{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
     </table></div>
     {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
     {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}

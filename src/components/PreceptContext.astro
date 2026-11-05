@@ -2,9 +2,10 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {moneyPence} from '../lib/tax-view';
+import {CURRENT_YEAR,yearLabel} from '../lib/council-tax';
 interface Props {region:string;gss:string}
 const {region,gss}=Astro.props;
-const gla=JSON.parse(readFileSync(join(process.cwd(),'data/precepts/gla-2026-27.json'),'utf8'));
+const gla=JSON.parse(readFileSync(join(process.cwd(),`data/precepts/gla-${CURRENT_YEAR}.json`),'utf8'));
 const city=gss==='E09000001';
 ---
-{region==='London' && <section class="section"><h2>The mayoral precept in this bill</h2><div class="editorial-callout"><p>For 2026/27, the Greater London Authority's published Band D precept here is <strong>{moneyPence(city?gla.bands.D.cityOfLondon:gla.bands.D.boroughs)}</strong>. It is already included in the area charge above; do not add it again.</p>{city?<p>The City of London is outside the Metropolitan Police District. The GLA police element does not apply here.</p>:<p>This includes {moneyPence(gla.bands.D.policeIncludedInBoroughs)} for the police element and {moneyPence(gla.bands.D.nonPoliceIncluded)} for non-police services. Fire services sit within the GLA arrangements, so an extra standalone fire precept must not be added to this total.</p>}<p class="source-line">Source: <a href={gla.source.url}>{gla.source.publisher}, {gla.source.title}</a>, approved 26 February 2026. This breakdown is Band D only.</p></div></section>}
+{region==='London' && <section class="section"><h2>The mayoral precept in this bill</h2><div class="editorial-callout"><p>For {yearLabel(gla.year)}, the Greater London Authority's published Band D precept here is <strong>{moneyPence(city?gla.bands.D.cityOfLondon:gla.bands.D.boroughs)}</strong>. It is already included in the area charge above; do not add it again.</p>{city?<p>The City of London is outside the Metropolitan Police District. The GLA police element does not apply here.</p>:<p>This includes {moneyPence(gla.bands.D.policeIncludedInBoroughs)} for the police element and {moneyPence(gla.bands.D.nonPoliceIncluded)} for non-police services. Fire services sit within the GLA arrangements, so an extra standalone fire precept must not be added to this total.</p>}<p class="source-line">Source: <a href={gla.source.url}>{gla.source.publisher}, {gla.source.title}</a>, approved 26 February 2026. This breakdown is Band D only.</p></div></section>}

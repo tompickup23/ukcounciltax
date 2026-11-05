@@ -138,6 +138,19 @@ if (existsSync(redirects)) for (const line of readFileSync(redirects, 'utf8').sp
   if (from?.includes('*') && status === '200') failures.push('wildcard 200 rewrite masks unknown routes');
 }
 
+// The 2026/27 rises page moved into /increases/; its address stays a 301.
+const moved = existsSync(redirects) ? readFileSync(redirects, 'utf8') : '';
+if (!/^\/council-tax\/rises-2026-27\/ \/increases\/#2026-27 301$/m.test(moved)) failures.push('rises-2026-27 redirect missing from _redirects');
+if (existsSync(join(DIST, 'council-tax', 'rises-2026-27', 'index.html'))) failures.push('rises-2026-27 page would shadow its redirect');
+
+// The next year's page holds no charge before one is published: no pound sign.
+const nextYearPages = readdirSync(DIST).filter((name) => /^council-tax-\d{4}-\d{2}$/.test(name));
+if (nextYearPages.length !== 1) failures.push(`expected one next-year page, found ${nextYearPages.length}`);
+for (const name of nextYearPages) {
+  const html = readFileSync(join(DIST, name, 'index.html'), 'utf8');
+  if (/£|&pound;|&#163;|&#xa3;/i.test(html)) failures.push(`pound sign on /${name}/`);
+}
+
 const downloads = join(DIST, 'downloads');
 if (existsSync(downloads)) for (const path of files(downloads)) {
   if (/\.(csv|json)$/i.test(path)) failures.push(`bulk download in ${rel(path)}`);

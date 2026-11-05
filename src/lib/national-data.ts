@@ -1,5 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
+import {precedingYear} from './council-tax';
 export interface NationalSource {publisher:string;title:string;url:string;fileUrl:string;sha256:string;retrieved:string;tables:string[];precision:string;licence:string}
 export interface SourceNote {id:string;text:string}
 export interface ParishYear {bandDPence:number|null;preceptPounds:number|null;taxBase:number|null;status:'published'|'not-existing'|'unavailable'}
@@ -13,6 +14,6 @@ for(const parish of national.parishes){const rows=parishIndex.get(parish.gss)??[
 export const parishesFor=(gss:string)=>parishIndex.get(gss)??[];
 /** Source supplies this comparison on the same row; no historical name join. */
 export function parishChange(parish:Parish):number|null {
- const a=parish.years['2025-26'], b=parish.years['2026-27'];
+ const a=parish.years[precedingYear(national.year)], b=parish.years[national.year];
  return a.status==='published'&&b.status==='published'&&a.bandDPence!==null&&b.bandDPence!==null?b.bandDPence-a.bandDPence:null;
 }

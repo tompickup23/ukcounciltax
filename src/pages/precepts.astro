@@ -6,16 +6,19 @@ import LocalBillTool from '../components/LocalBillTool.astro';
 import {localBills} from '../lib/local-bill-data';
 import {moneyPence} from '../lib/tax-view';
 import BillSplit from '../components/BillSplit.astro';
-import {CURRENT_YEAR,PREVIOUS_YEAR,yearLabel} from '../lib/council-tax';
+import {CURRENT_YEAR,yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
 const bill=localBills[0];
 const year=yearLabel(CURRENT_YEAR);
 const billYear=yearLabel(bill.year);
 const retrieved=longDate(bill.source.retrieved);
+const parishYears=[...new Set(national.parishes.flatMap(p=>Object.keys(p.years)))].sort();
+const parishFirst=yearLabel(parishYears[0]);
+const parishLast=yearLabel(parishYears[parishYears.length-1]);
 ---
 <BaseLayout title={`What makes up my council tax bill, England ${year}`} description="Find the council, county, police, fire and parish parts of a published council tax bill, then model how each part could change." path="/precepts/">
 <header class="page-head"><p class="eyebrow">Follow every part of the bill</p><h1>What makes up my council tax bill</h1><p class="lede">One bill can fund several public bodies. See who charges what, then model how each part could change.</p></header>
-<section class="section"><h2>National Band D precepts</h2><p>All 296 English billing authorities now have a published breakdown naming the county or GLA, police, fire and combined-authority bodies. The parish return adds {national.parishes.length.toLocaleString('en-GB')} local-body records, including four ceased entries, with reported {yearLabel(PREVIOUS_YEAR)} and {yearLabel(national.year)} figures.</p><p>Search for your council to see its components, individual local precepts and long-term Band D history. National components are area averages; exact property bills still need a verified local schedule.</p><CouncilFinder id="precept-council" anchor="precept-breakdown" /><p><a href="/councils/">Browse all English councils</a> · <a href="/data/">Download national precept data</a></p></section>
+<section class="section"><h2>National Band D precepts</h2><p>All 296 English billing authorities now have a published breakdown naming the county or GLA, police, fire and combined-authority bodies. The parish return adds {national.parishes.length.toLocaleString('en-GB')} local-body records, including four ceased entries, with reported <span data-parish-year>{parishFirst}</span> and <span data-parish-year>{parishLast}</span> figures.</p><p>Search for your council to see its components, individual local precepts and long-term Band D history. National components are area averages; exact property bills still need a verified local schedule.</p><CouncilFinder id="precept-council" anchor="precept-breakdown" /><p><a href="/councils/">Browse all English councils</a> · <a href="/data/">Download national precept data</a></p></section>
 <h2>Exact local bills and component modelling</h2>
 <div class="editorial-callout"><strong>Complete all-band local schedule: {bill.name}, {billYear}</strong><p>All eight parishes and the unparished area, bands A to H. Elsewhere, the postcode tool directs you to available area figures and clearly marks missing local detail. National postcode-level precept coverage is not yet complete.</p></div>
 <LocalBillTool />

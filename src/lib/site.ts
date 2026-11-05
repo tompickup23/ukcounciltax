@@ -60,6 +60,8 @@ export const STATIC_PATHS = [
   "/help/",
   "/coverage/",
   "/precepts/",
+  "/findings/",
+  "/changes/",
 ] as const;
 
 export type NavItem = { href: string; label: string; desc: string };

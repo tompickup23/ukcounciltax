@@ -5,13 +5,13 @@ import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
 import BandMix from '../../components/BandMix.astro';
+import CollectionRates from '../../components/CollectionRates.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
 import MiniMap from "../../components/MiniMap.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import BandSelector from "../../components/BandSelector.astro";
 import PageContents from "../../components/PageContents.astro";
-import HistoryBars from "../../components/HistoryBars.astro";
 import Fact from "../../components/Fact.astro";
 import SourceLine from "../../components/SourceLine.astro";
 import {
@@ -22,6 +22,7 @@ import {
   YEARS,
   areaTypeFor,
   bandChange,
+  increasesYearPath,
   loadYear,
   percent,
   pounds,
@@ -139,12 +140,13 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
     <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
     <a href="/precepts/">What makes up my bill</a>
-    <a href="/increases/">Council tax increases 2026/27 by council</a>
+    <a href="/increases/">Council tax increases {yearLabel(CURRENT_YEAR)} by council</a>
     <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
     <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
   </div>
   <CouncilActions slug={council.slug} />
   <BandMix gss={council.gss} name={name} />
+  <CollectionRates gss={council.gss} name={name} />
   <PageContents items={[
     {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
     {id: 'parish-precepts', label: 'Parish charges'},
@@ -189,7 +191,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <section class="section" id="history" aria-labelledby="history-heading">
       <h2 id="history-heading">How has Band D in {name} changed?</h2>
       <div class="fact" data-fact>
-        <HistoryBars rows={history.map(row => ({label: yearLabel(row.year), value: row.bandD}))} format={pounds} caption={`Published area Band D in ${name} by year`} />
+        <LongTaxHistory gss={council.gss} name={name} view="chart" />
         <SourceLine source={historySource} />
         <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts.</p>
         <div class="table-wrap" tabindex="0" role="region" aria-label="Council tax history table">
@@ -251,7 +253,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
           {own.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
         </ul>
       )}
-      <p class="muted"><a href="/council-tax/rises-2026-27/">How much every council raised its own share this year</a>.</p>
+      <p class="muted"><a href={increasesYearPath(CURRENT_YEAR)}>How much every council raised its own share this year</a>.</p>
     </section>
   )}
 

@@ -2,6 +2,8 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { councilPages } from "../lib/paths";
+import { yearLabel } from "../lib/council-tax";
+import { localBills } from "../lib/local-bill-data";
 
 const count = councilPages().length;
 ---
@@ -18,7 +20,7 @@ const count = councilPages().length;
   <div class="prose">
     <p>UK Council Tax is an independent reference site. It is not a council or government service and does not issue bills, take payments or decide council tax bands.</p>
     <p>UK Council Tax focuses on the amount charged, how it changes, and who receives each part. Coverage includes {count} English billing authorities, all 32 Scottish councils and Band D averages for 22 Welsh councils. <a href="/coverage/">Coverage differs by nation</a>.</p>
-    <p>Published data and illustrative scenarios are kept distinct. The local precept tool begins with Burnley's complete 2026/27 schedule. Wider council information belongs on <a href="https://ukcouncils.co.uk/">UK Councils</a>; contextual links connect to other public data projects.</p>
+    <p>Published data and illustrative scenarios are kept distinct. The local precept tool begins with Burnley's complete {yearLabel(localBills[0].year)} schedule. Wider council information belongs on <a href="https://ukcouncils.co.uk/">UK Councils</a>; contextual links connect to other public data projects.</p>
     <h2>The rules the site keeps</h2>
     <ul>
       <li>Every observed charge comes from an official table. Calculations and illustrative scenarios state their assumptions and sources.</li>

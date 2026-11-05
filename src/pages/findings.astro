@@ -1,0 +1,134 @@
+---
+/**
+ * Findings: dated data notes. Each is a count or a distribution recomputed
+ * from data the site already holds on every build, with its source line under
+ * it. No motive, no rank across classes. tests/releases.test.ts recomputes
+ * every count from the data files.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { loadYear, yearLabel, type Year } from "../lib/council-tax";
+import { national } from "../lib/national-data";
+import { FINDINGS_DATED, historyFinding, longDate, parishFinding } from "../lib/releases";
+import { tableName } from "../lib/sources";
+
+const n = (value: number) => value.toLocaleString("en-GB");
+const parish = parishFinding();
+const history = historyFinding();
+const ps = national.sources.parishes;
+const hs = national.sources.history;
+const prev = yearLabel(parish.previousYear);
+const cur = yearLabel(parish.currentYear);
+const first = yearLabel(history.firstYear);
+const latest = yearLabel(history.latestYear);
+const written = longDate(FINDINGS_DATED);
+const unchanged = parish.unchangedNonZero + parish.zeroBoth;
+
+const parishNoteText = (pattern: RegExp) => Object.entries(national.parishNotes).filter(([, text]) => pattern.test(text));
+const reportedNote = parishNoteText(/as reported by local authorities/i);
+const revisedNote = parishNoteText(/revised/i);
+const negativeNote = parishNoteText(/negative/i);
+
+const basisSource = history.basisCheck ? loadYear(history.basisCheck.year as Year).source : null;
+const basisNote = basisSource?.bandTableNotes.find((note) => /parish precepts/i.test(note.text)) ?? null;
+---
+<BaseLayout
+  title="Findings"
+  description={`Dated data notes from the official tables: parish and town precepts ${prev} to ${cur}, and whole area Band D since ${first}. Counts with their sources.`}
+  path="/findings/"
+>
+  <Breadcrumbs items={[{ label: "Findings" }]} />
+  <header class="page-head">
+    <p class="eyebrow">Findings</p>
+    <h1>Findings from the official tables</h1>
+    <p class="lede">Dated notes that count what the published tables hold. Each count is recomputed from the data behind this site on every build, and each names the table, its dates and the pages that hold the figures.</p>
+  </header>
+
+  <section class="section" id="parish-precepts" aria-labelledby="parish-heading">
+    <h2 id="parish-heading">Parish and town precepts, {prev} to {cur}</h2>
+    <p class="small muted">Data note written {written}.</p>
+    <p><strong>What it counts.</strong> Rows of MHCLG's table of local precepting authorities in England (parish and town councils, parish meetings, grouped parishes, charter trustees and the Temples) that report a Band D precept for both {prev} and {cur} on the same row. The two figures on each row are compared as the table reports them; no names are joined across years.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D precept changes">
+      <table class="data">
+        <caption>Rows by change in reported Band D precept, {prev} to {cur}</caption>
+        <thead><tr><th scope="col">Outcome</th><th scope="col" class="num">Rows</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Band D precept rose</th><td class="num">{n(parish.rose)}</td></tr>
+          <tr><th scope="row">Band D precept fell</th><td class="num">{n(parish.fell)}</td></tr>
+          <tr><th scope="row">No change, same precept in both years</th><td class="num">{n(parish.unchangedNonZero)}</td></tr>
+          <tr><th scope="row">No change, no Band D precept (zero) in either year</th><td class="num">{n(parish.zeroBoth)}</td></tr>
+          <tr><th scope="row">Rows compared</th><td class="num">{n(parish.compared)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-line">Counts of rows, calculated by comparing the two Band D figures reported on each row: rose {n(parish.rose)}, fell {n(parish.fell)}, no change {n(unchanged)}, total {n(parish.compared)}. Source: <a href={ps.url}>MHCLG, {ps.title}</a>, tables {ps.tables.join(", ")}. Publication date not recorded in the source manifest; accessed {longDate(ps.retrieved)}.</p>
+    <p class="caveat">A parish Band D precept is only the parish part of a bill, and it differs from one parish to the next. Whole area Band D figures elsewhere on this site include an average of these parish precepts, so a property in a particular parish pays a different amount.</p>
+    <h3>Rows set aside, as the table's notes require</h3>
+    <ul>
+      <li>{n(parish.newRows)} rows exist only in {cur} and {n(parish.ceasedRows)} only in {prev}; {n(parish.newOrCeasedWithStructuralNote)} of them carry a note recording a formation, removal or split.</li>
+      <li>{n(parish.negative)} {parish.negative === 1 ? "row carries" : "rows carry"} the note that its precept is negative, so the change is not read as a rise or a fall.</li>
+      {parish.structural > 0 && <li>{n(parish.structural)} rows on both years carry a note recording a formation, removal or split.</li>}
+      {parish.unavailable > 0 && <li>{n(parish.unavailable)} rows have no reported Band D figure for one of the years. Unknown is not zero.</li>}
+      <li>{n(parish.revisedCompared)} compared rows carry the note that earlier figures were revised; the revised figures are the ones compared.</li>
+    </ul>
+    {parish.renamedListed > 0 && <p>The table's list of renamed parishes for {cur} has {n(parish.renamedListed)} entries; {parish.renamedCompared === parish.renamedListed ? <>all of them are</> : <>{n(parish.renamedCompared)} of them are</>} among the rows compared above, under their new names{parish.renamedGrouped > 0 ? <>, and {n(parish.renamedGrouped)} of the new names record a grouping with other parishes</> : null}. Counted from <a href={ps.url}>MHCLG, {ps.title}</a>, table Ceased_New_Renamed_Parishes.</p>}
+    <details>
+      <summary>The table's notes used here</summary>
+      <ul class="small">
+        {[...reportedNote, ...revisedNote, ...negativeNote].map(([id, text]) => <li>{id}: {text}</li>)}
+        {parish.structuralNotes.map((note) => <li>{note.id}: {note.text}</li>)}
+      </ul>
+    </details>
+    <p>The figures are on each council's page in its parish table, and on <a href="/precepts/">Your bill and precepts</a>. <a href="/councils/">Find a council</a>.</p>
+  </section>
+
+  <section class="section" id="band-d-history" aria-labelledby="history-heading">
+    <h2 id="history-heading">Band D since {first}</h2>
+    <p class="small muted">Data note written {written}.</p>
+    <p><strong>What it counts.</strong> The whole area average Band D figure (MHCLG's Area_CT series) for each of the {n(history.councils)} current billing authorities in England, year by year from {first} to {latest}, in cash terms as displayed. A year is compared only where the table holds a figure for both years.</p>
+    <p><strong>Basis.</strong> {history.basisCheck && basisSource
+      ? <>This series includes average parish precepts: its {yearLabel(history.basisCheck.year)} figures match {tableName(basisSource.bandTable)} of the {yearLabel(history.basisCheck.year)} levels release{basisNote ? <>, whose note says "{basisNote.text}"</> : null}, for {n(history.basisCheck.matched)} of {n(history.basisCheck.compared)} councils at the displayed precision.</>
+      : <>The parish basis of this series could not be checked against a band table held for {latest}.</>}
+      {" "}The England row of the table is not held in this site's extract, so this note gives no England figure.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Band D history coverage">
+      <table class="data">
+        <caption>Councils with a published whole area Band D figure</caption>
+        <thead><tr><th scope="col">Measure</th><th scope="col" class="num">Councils</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Figure published for {first}</th><td class="num">{n(history.withFirst)}</td></tr>
+          <tr><th scope="row">Figure published for {latest}</th><td class="num">{n(history.withLatest)}</td></tr>
+          <tr><th scope="row">Published for both years</th><td class="num">{n(history.withBoth)}</td></tr>
+          <tr><th scope="row">Of those, higher in {latest} than in {first}</th><td class="num">{n(history.higherLatestThanFirst)}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-line">Counts of councils, calculated from the displayed Area_CT figures. Source: <a href={hs.url}>MHCLG, {hs.title}</a>, tables Area_CT and Notes. Publication date not recorded in the source manifest; accessed {longDate(hs.retrieved)}.</p>
+    <p class="caveat">Whole area Band D includes the average parish precept for the council's area; a property in a parish pays a different amount. Cash figures, not adjusted for inflation, generally in whole pounds.</p>
+
+    <p>Across all year pairs, {n(history.totals.compared)} council years were compared: the figure rose in {n(history.totals.rose)}, fell in {n(history.totals.fell)} and did not change in {n(history.totals.unchanged)}. {n(history.totals.excluded)} {history.totals.excluded === 1 ? "pair was" : "pairs were"} set aside because a note says the two years are not directly comparable.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Year on year changes in whole area Band D">
+      <table class="data">
+        <caption>Councils by year on year change in whole area Band D</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col" class="num">Compared</th><th scope="col" class="num">Rose</th><th scope="col" class="num">Fell</th><th scope="col" class="num">No change</th><th scope="col" class="num">Set aside</th></tr></thead>
+        <tbody>
+          {history.rows.map((row) => (
+            <tr><th scope="row">{yearLabel(row.from)} to {yearLabel(row.to)}</th><td class="num">{n(row.compared)}</td><td class="num">{n(row.rose)}</td><td class="num">{n(row.fell)}</td><td class="num">{n(row.unchanged)}</td><td class="num">{n(row.excluded)}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="source-line">Counts of councils, calculated by comparing each council's displayed figures for consecutive years. Source: <a href={hs.url}>MHCLG, {hs.title}</a>, tables Area_CT and Notes. Publication date not recorded in the source manifest; accessed {longDate(hs.retrieved)}.</p>
+    <p class="caveat">Whole area Band D includes the average parish precept for the council's area; a property in a parish pays a different amount. Council areas and responsibilities change over time; MHCLG carries predecessor history only where its series does, and this site joins none itself.</p>
+    {history.exclusions.length > 0 && (
+      <details>
+        <summary>The table's notes used here</summary>
+        <ul class="small">
+          {history.exclusions.map((e) => <li>{e.note}: {e.text} ({e.councils} {e.councils === 1 ? "council" : "councils"}, {yearLabel(e.pair[0])} to {yearLabel(e.pair[1])} set aside)</li>)}
+        </ul>
+      </details>
+    )}
+    <p>Each council's full series is on its page under long term Band D history. <a href="/councils/">Find a council</a>. Recent annual changes for every council are on <a href="/increases/">Annual increases</a>.</p>
+  </section>
+
+  <p class="small">Every data update and every findings note is listed on <a href="/changes/">What changed</a> and in the <a href="/rss.xml">feed</a>.</p>
+</BaseLayout>

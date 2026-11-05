@@ -1,3 +1,5 @@
+import { CURRENT_YEAR, NEXT_YEAR, NEXT_YEAR_PATH, increasesYearPath, yearLabel } from "./council-tax";
+
 export const SITE_NAME = "UK Council Tax";
 
 /**
@@ -10,7 +12,7 @@ export const SITE_URL = "https://ukcounciltax.co.uk";
 export const SITE_TAGLINE = "Your bill. Its history. Your next decision.";
 
 /** Publish a contact address only after receipt has been confirmed. */
-export const CONTACT_EMAIL: string | null = null;
+export const CONTACT_EMAIL: string | null = "info@ukcouncils.co.uk";
 export const OFFICIAL_BAND_CHECK = "https://www.gov.uk/council-tax-bands";
 export const OFFICIAL_COUNCIL_LOOKUP = "https://www.gov.uk/find-local-council";
 
@@ -43,7 +45,7 @@ export const STATIC_PATHS = [
   "/your-area/",
   "/councils/",
   "/council-tax/",
-  "/council-tax/rises-2026-27/",
+  NEXT_YEAR_PATH,
   "/about/",
   "/methodology/",
   "/sources/",
@@ -58,6 +60,8 @@ export const STATIC_PATHS = [
   "/help/",
   "/coverage/",
   "/precepts/",
+  "/findings/",
+  "/changes/",
 ] as const;
 
 export type NavItem = { href: string; label: string; desc: string };
@@ -78,7 +82,8 @@ export const NAV_GROUPS: NavGroup[] = [
       { href: "/council-tax/", label: "Council tax in England", desc: "The England average and every council" },
       { href: "/compare/", label: "Compare councils", desc: "Compare the same band and year within a council type" },
       { href: "/council-tax/band-d/", label: "Band D", desc: "Band D for every council, by region" },
-      { href: "/council-tax/rises-2026-27/", label: "Rises 2026/27", desc: "How much each council raised its own share" },
+      { href: increasesYearPath(CURRENT_YEAR), label: `Rises ${yearLabel(CURRENT_YEAR)}`, desc: "How much each council raised its own share" },
+      { href: NEXT_YEAR_PATH, label: `Council tax ${yearLabel(NEXT_YEAR)}`, desc: "Not yet set: when each nation's figures publish" },
     ],
   },
   {

@@ -1,0 +1,112 @@
+---
+/**
+ * Band D over time as one line, drawn as static inline SVG from the published
+ * series the page already holds. No script and no chart library, so nothing
+ * for the CSP to allow. One hue from the accent token, so light and dark both
+ * follow the theme. A year the table leaves empty breaks the line and draws no
+ * point. Every point carries a native <title> as the hover layer; the first
+ * and last published values are labelled directly. The figures are also given
+ * as a table, inside a details element unless the page already prints one.
+ * A source line passed as `source`, or given in the slot, sits directly under
+ * the chart, followed by the caveat.
+ */
+import SourceLine from "./SourceLine.astro";
+import { lineGeometry, type SeriesPoint } from "./band-d-line";
+import { yearLabel } from "../lib/council-tax";
+import type { SourceRef } from "../lib/sources";
+
+interface Props {
+  /** Unique on the page; prefixes the title and description ids. */
+  id: string;
+  series: SeriesPoint[];
+  format: (value: number) => string;
+  /** What the screen reader title of the chart says. */
+  title: string;
+  /** The basis the series carries, for example with or without parish precepts. */
+  basis: string;
+  /** Printed directly under the chart when given. */
+  source?: SourceRef;
+  /** The parish precept caveat, printed under the source line when given. */
+  caveat?: string;
+  /** Show the figures as a details table under the chart. */
+  table?: boolean;
+}
+
+const { id, series, format, title, basis, source, caveat, table = true } = Astro.props;
+const g = lineGeometry(series);
+const first = g.points[0];
+const last = g.points.at(-1);
+const range = first && last ? `${yearLabel(first.year)} to ${yearLabel(last.year)}` : "";
+const missingText = g.missing.map(yearLabel).join(", ");
+const description = [
+  `Line chart. ${basis}.`,
+  first && last ? `${format(first.value)} in ${yearLabel(first.year)} and ${format(last.value)} in ${yearLabel(last.year)}, ${g.points.length} published years.` : "",
+  g.missing.length ? `No published figure for ${missingText}; the line is broken there.` : "",
+].filter(Boolean).join(" ");
+const titleId = `${id}-title`;
+const descId = `${id}-desc`;
+---
+{g.points.length > 0 && (
+  <figure class="band-d-line" data-band-d-line>
+    <svg viewBox={`0 0 ${g.width} ${g.height}`} role="img" aria-labelledby={`${titleId} ${descId}`}>
+      <title id={titleId}>{title}</title>
+      <desc id={descId}>{description}</desc>
+      {g.yTicks.map((t) => (
+        <g class="grid">
+          <line x1={g.plot.left} x2={g.plot.right} y1={t.y} y2={t.y} class={t.value === 0 ? "axis" : "rule"}></line>
+          <text x={g.plot.left-6} y={t.y + 5} text-anchor="end" class="tick">{format(t.value)}</text>
+        </g>
+      ))}
+      {g.xTicks.map((t) => (
+        <text x={t.x} y={g.height-8} text-anchor="middle" class="tick">{yearLabel(t.year)}</text>
+      ))}
+      {g.segments.map((d) => <path d={d} class="line"></path>)}
+      {g.points.map((p) => (
+        <circle cx={p.x} cy={p.y} r="2.6" class="point" data-year={p.year} data-value={p.value}>
+          <title>{`${yearLabel(p.year)}: ${format(p.value)}`}</title>
+        </circle>
+      ))}
+      {first && <text x={first.x} y={first.y-9} text-anchor="start" class="value">{format(first.value)}</text>}
+      {last && last !== first && <text x={last.x} y={last.y-9} text-anchor="end" class="value">{format(last.value)}</text>}
+    </svg>
+    <figcaption class="small">{basis}, {range}.{g.missing.length > 0 && ` No published figure for ${missingText}, so the line is broken there.`}</figcaption>
+  </figure>
+)}
+{g.points.length > 0 && source && <SourceLine source={source} />}
+{g.points.length > 0 && <slot />}
+{g.points.length > 0 && caveat && <p class="caveat">{caveat}</p>}
+{g.points.length > 0 && table && (
+  <details class="band-d-line-table">
+    <summary>View the figures in this chart as a table</summary>
+    <div class="table-wrap" tabindex="0" role="region" aria-label={title}>
+      <table class="data">
+        <caption>{title}</caption>
+        <thead><tr><th scope="col">Year</th><th scope="col" class="num">Band D</th></tr></thead>
+        <tbody>
+          {series.map((p) => (
+            <tr><th scope="row">{yearLabel(p.year)}</th><td class="num">{typeof p.value === "number" ? format(p.value) : "Unavailable"}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+)}
+
+<style>
+  .band-d-line { margin: 0 0 0.5rem; max-width: 38rem; }
+  .band-d-line svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .band-d-line .line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+  .band-d-line .point { fill: var(--accent); }
+  .band-d-line .point:hover { fill: var(--accent-bright); }
+  .band-d-line .rule { stroke: var(--border); stroke-width: 1; }
+  .band-d-line .axis { stroke: var(--border-strong); stroke-width: 1; }
+  .band-d-line .tick { fill: var(--text-muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .band-d-line .value { fill: var(--text); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .band-d-line figcaption { color: var(--text-muted); margin-top: 0.35rem; }
+  .band-d-line-table { margin: 0.5rem 0 0.75rem; }
+  /* The SVG scales down on a phone, so the labels grow in viewBox units to stay legible at 375px. */
+  @media (max-width: 30rem) {
+    .band-d-line .tick { font-size: 17px; }
+    .band-d-line .value { font-size: 18px; }
+  }
+</style>

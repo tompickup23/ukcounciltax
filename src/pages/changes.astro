@@ -1,0 +1,40 @@
+---
+/**
+ * What changed: one entry per data update and per findings note, the same
+ * items the feed carries, newest first.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { DATE_WORD, longDate, releaseItems } from "../lib/releases";
+
+const items = releaseItems();
+---
+<BaseLayout
+  title="What changed"
+  description="Every data update on UK Council Tax and every findings note, newest first, each with its source edition date and a link to the page that holds the figures."
+  path="/changes/"
+>
+  <Breadcrumbs items={[{ label: "What changed" }]} />
+  <header class="page-head">
+    <p class="eyebrow">Updates</p>
+    <h1>What changed</h1>
+    <p class="lede">Each data update the site holds, dated by the dataset's own edition: its publication date where the source manifest records one, otherwise the date it was accessed or generated. The same list is in the <a href="/rss.xml">feed</a>.</p>
+  </header>
+  <ol class="changes">
+    {items.map((item) => (
+      <li class="card">
+        <p class="small muted"><time datetime={item.date}>{DATE_WORD[item.dateKind]} {longDate(item.date)}</time></p>
+        <h2><a href={item.path}>{item.title}</a></h2>
+        <p>{item.description}</p>
+        {item.sourceUrl && <p class="source-line"><a href={item.sourceUrl}>Official source page</a></p>}
+      </li>
+    ))}
+  </ol>
+  <p class="small">Findings notes are on <a href="/findings/">Findings</a>. Every table is listed on <a href="/sources/">Sources</a>.</p>
+</BaseLayout>
+
+<style>
+  .changes { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
+  .changes h2 { font-size: 1.15rem; margin: 0.2rem 0 0.4rem; overflow-wrap: anywhere; }
+  .changes p { margin: 0.2rem 0; overflow-wrap: anywhere; }
+</style>

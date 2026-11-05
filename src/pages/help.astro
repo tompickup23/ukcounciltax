@@ -1,17 +1,66 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { OFFICIAL_BAND_CHECK } from '../lib/site';
+
+// Official guidance read for the band sections below. Each claim block cites
+// the page part it paraphrases. The access date is the day the pages were
+// fetched; re-read the pages and update it when this text is revised.
+const ACCESSED = '5 November 2026';
+const CHALLENGE = 'https://www.gov.uk/challenge-council-tax-band';
+const CHALLENGE_TITLE = 'Challenge your Council Tax band';
+const NO_LEGAL_RIGHT = `${CHALLENGE}/do-not-have-a-legal-right-to-make-a-challenge`;
+const HOW_TO = `${CHALLENGE}/how-to-challenge`;
+const AFTER = `${CHALLENGE}/after-you-make-challenge`;
+const ASSESSED = 'https://www.gov.uk/guidance/understand-how-council-tax-bands-are-assessed';
+const ASSESSED_TITLE = 'How domestic properties are assessed for Council Tax bands';
+const SCOTTISH_ASSESSORS = 'https://www.saa.gov.uk/assessors-links/';
 ---
 <BaseLayout title="Help understanding your council tax bill" description="Check your band, understand the parts of a bill and find official help with discounts, reductions and payments." path="/help/">
 <header class="page-head"><p class="eyebrow">Practical next steps</p><h1>Understand your bill</h1><p class="lede">Start with the property, then the household, then the payment schedule.</p></header>
 <div class="prose">
-<h2>1. Check the property band</h2><p>Your band is a valuation category, not the current market price of your home. Find the recorded band through <a href="https://www.gov.uk/council-tax-bands">GOV.UK for England and Wales</a> or <a href="https://www.saa.gov.uk/">the Scottish Assessors Association</a>. Follow the official challenge process if you think it is wrong.</p>
-<h2>2. Check what the quoted charge includes</h2><p>English figures on this site include the shares of the bodies charging council tax in an area, with parish precepts averaged. Scottish figures exclude water and sewerage. Welsh Band D figures include average community and police charges. Your exact bill can differ because of location, discounts or premiums. <a href="/coverage/">Read the coverage guide</a>.</p>
-<h2>3. Check discounts and reductions</h2><p>A household with only one counted adult may qualify for a 25% discount. Some people are disregarded when counting adults. Check the <a href="https://www.gov.uk/council-tax/who-has-to-pay">official eligibility guidance</a> and apply through your council.</p><p>Separate support may apply to low-income households, students or disabled residents. These are different schemes with different conditions; this site does not decide eligibility.</p>
+
+<section class="claim-block" aria-labelledby="what-council-tax-band-am-i">
+<h2 id="what-council-tax-band-am-i">What council tax band am I?</h2>
+<p>Your band is a valuation category, not the current market price of your home. For a home in England or Wales, look up the address or postcode with the <a href={OFFICIAL_BAND_CHECK}>official Check your Council Tax band service on GOV.UK</a>. For a home in Scotland, the same GOV.UK page points to the Scottish Assessors website; <a href={SCOTTISH_ASSESSORS}>find your local assessor</a>. This site does not hold or estimate the band of any individual property.</p>
+<p class="source-line">Source: GOV.UK, <a href={OFFICIAL_BAND_CHECK}>Check your Council Tax band</a>, introduction; GOV.UK, <a href={CHALLENGE}>{CHALLENGE_TITLE}, part 1 (Overview)</a>. Accessed {ACCESSED}.</p>
+</section>
+
+<h2 id="checking-and-challenging-a-band">Checking and challenging a band</h2>
+<p>The official guidance describes the evidence a band review uses. The two checks below follow it. This site does not estimate what a home is worth, does not compare your home with others and cannot say how a review would turn out.</p>
+
+<section class="claim-block" aria-labelledby="check-one-similar-homes">
+<h3 id="check-one-similar-homes">Check one: similar neighbouring homes</h3>
+<p>Use the official lookup to find the bands of homes like yours nearby. For a review where there has been no recent change to the property, the guidance asks for the addresses of up to five similar properties in a lower band. They should match your home in type (for example semi detached houses), size (such as bedrooms and total area), age, and style and design. In a town or city they should be in the same street or estate; in the countryside, the same village or area.</p>
+<p class="source-line">Source: GOV.UK, <a href={NO_LEGAL_RIGHT}>{CHALLENGE_TITLE}, part 3 (When you do not have a legal right to make a challenge)</a>, section "Evidence to support your challenge". Accessed {ACCESSED}.</p>
+</section>
+
+<section class="claim-block" aria-labelledby="check-two-valuation-date">
+<h3 id="check-two-valuation-date">Check two: the valuation date the band rests on</h3>
+<p>A band reflects what a property was worth on a fixed past date, not today. The guidance states that bands are based on how much a property was worth on 1 April 1991 in England and on 1 April 2003 in Wales. Sale prices can be used as evidence only if the sales took place between 1 April 1989 and 31 March 1993 for England, or between 1 April 2001 and 31 March 2005 for Wales. The guidance says the Valuation Office will not treat average house price figures from property websites as strong evidence.</p>
+<p class="source-line">Source: GOV.UK, <a href={CHALLENGE}>{CHALLENGE_TITLE}, part 1 (Overview)</a>; <a href={NO_LEGAL_RIGHT}>part 3</a>, section "Evidence from house prices". Accessed {ACCESSED}.</p>
+<p>For Scotland, the GOV.UK guidance sends challenges to the local assessor but does not state the valuation date. The Scottish Assessors Association pages could not be read when this page was prepared, so no Scottish date is given here. Ask your assessor.</p>
+<p class="source-line">Source: GOV.UK, <a href={CHALLENGE}>{CHALLENGE_TITLE}, part 1 (Overview)</a>. Accessed {ACCESSED}.</p>
+</section>
+
+<section class="claim-block" aria-labelledby="band-can-go-up">
+<h3 id="band-can-go-up">A band can go up as well as down</h3>
+<p>A change of band is not always downward. The Valuation Office guidance says a property that has grown in size since it was first assessed may move to a higher band when it is next sold, and that a band can be changed without a sale, for example when a self contained annexe is added. Any increase in council tax applies from the date the valuation list is altered. When a review ends, the guidance lists the possible results: the band is changed, the property is removed from or added to the list, or you are told why the band cannot be changed.</p>
+<p class="source-line">Source: GOV.UK, <a href={ASSESSED}>{ASSESSED_TITLE}</a>, sections "Council Tax band assessments" and "Making sure your property is in the right band"; GOV.UK, <a href={AFTER}>{CHALLENGE_TITLE}, part 5 (After you make a challenge)</a>. Accessed {ACCESSED}.</p>
+</section>
+
+<section class="claim-block" aria-labelledby="who-to-contact">
+<h3 id="who-to-contact">Who to contact</h3>
+<p>In England and Wales, challenges go to the Valuation Office, through the online service linked from the official band lookup, by email or by the official challenge form. In Scotland, challenges go to an assessor based in your local Valuation Joint Board or council; <a href={SCOTTISH_ASSESSORS}>find your assessor</a>. The guidance says you must keep paying council tax while a challenge is reviewed. Challenging a band with the Valuation Office is free.</p>
+<p class="source-line">Source: GOV.UK, <a href={CHALLENGE}>{CHALLENGE_TITLE}, part 1 (Overview)</a> and <a href={HOW_TO}>part 4 (How to challenge)</a>; GOV.UK, <a href={ASSESSED}>{ASSESSED_TITLE}</a>, section "Council Tax and business rates scams". Accessed {ACCESSED}.</p>
+</section>
+
+<h2>Check what the quoted charge includes</h2><p>English figures on this site include the shares of the bodies charging council tax in an area, with parish precepts averaged. Scottish figures exclude water and sewerage. Welsh Band D figures include average community and police charges. Your exact bill can differ because of location, discounts or premiums. <a href="/coverage/">Read the coverage guide</a>.</p>
+<h2>Check discounts and reductions</h2><p>A household with only one counted adult may qualify for a 25% discount. Some people are disregarded when counting adults. Check the <a href="https://www.gov.uk/council-tax/who-has-to-pay">official eligibility guidance</a> and apply through your council.</p><p>Separate support may apply to low-income households, students or disabled residents. These are different schemes with different conditions; this site does not decide eligibility.</p>
 <ul><li><a href="https://www.gov.uk/apply-council-tax-reduction">Council Tax Reduction: find your local scheme</a></li><li><a href="https://www.gov.uk/council-tax/discounts-for-full-time-students">Full-time student discounts and exemptions</a></li><li><a href="https://www.gov.uk/council-tax/discounts-for-disabled-people">Disabled band reduction and other disability-related help</a></li><li><a href="https://www.mygov.scot/council-tax">Council tax guidance in Scotland</a></li><li><a href="https://www.gov.wales/council-tax">Council tax guidance in Wales</a></li></ul>
-<h2>4. Check the payment schedule</h2><p>The annual charge and an instalment are different things. Our monthly equivalents are arithmetic illustrations, not a repayment schedule. Check the due dates on your bill and <a href="https://www.gov.uk/council-tax/paying-your-bill">official payment guidance</a>.</p>
-<h2>5. If paying is difficult</h2><p>Contact your billing council promptly to discuss support and payments. Use <a href="https://www.gov.uk/find-local-council">the official council finder</a>. Do not send personal bills or financial details to this site.</p>
+<h2>Check the payment schedule</h2><p>The annual charge and an instalment are different things. Our monthly equivalents are arithmetic illustrations, not a repayment schedule. Check the due dates on your bill and <a href="https://www.gov.uk/council-tax/paying-your-bill">official payment guidance</a>.</p>
+<h2>If paying is difficult</h2><p>Contact your billing council promptly to discuss support and payments. Use <a href="https://www.gov.uk/find-local-council">the official council finder</a>. Do not send personal bills or financial details to this site.</p>
 <h2>Sources and saved views</h2><p>Use the <a href="/data/">Sources catalogue</a> to open the original official publications. Compiled datasets and table CSV downloads are not provided. Council tables can be printed and supported views can be shared without a postcode.</p>
 <h2>Northern Ireland</h2><p>Northern Ireland uses domestic rates. Start with <a href="https://www.nidirect.gov.uk/articles/how-rate-bills-are-calculated">nidirect's rate-bill guide</a>.</p>
-<p class="source-line">Official guidance links reviewed 5 October 2026. Rules and local schemes can change; check the linked service before applying.</p>
+<p class="source-line">Other official guidance links reviewed 5 October 2026. Rules and local schemes can change; check the linked service before applying.</p>
 </div>
 </BaseLayout>

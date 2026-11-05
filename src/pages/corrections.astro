@@ -1,15 +1,21 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { CONTACT_EMAIL } from "../lib/site";
 ---
 <BaseLayout title="Corrections at UK Council Tax" description="How UK Council Tax records substantive corrections to sourced figures and statements." path="/corrections/">
   <Breadcrumbs items={[{ label: "Corrections" }]} />
   <header class="page-head"><p class="eyebrow">Our record</p><h1>Corrections</h1></header>
   <div class="prose">
     <p>No substantive factual corrections have been recorded in this log yet.</p>
+    <h2>How to report an error</h2>
+    {CONTACT_EMAIL ? (
+      <p data-contact-email>Email corrections to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Include the page address, the figure or statement concerned, and a link to the official source that shows the correct value. Do not send a council account number, your bill, or other personal financial information.</p>
+    ) : <p>A public contact mailbox is being verified. No contact form is available on this site yet.</p>}
+    <p>Each report is checked against the official source before anything on the site changes. A council's own bill or band is a matter for that council or the official valuation body, not for this site; <a href="/help/">help with your bill</a> lists the official routes.</p>
     <h2>What we record</h2>
     <p>When a published figure or statement needs correcting, the entry records the affected page, what it previously said, the correction, its official source and the date of the correction. Routine design changes and the addition of a new financial year are not factual corrections.</p>
     <p>Source revisions are distinguished from errors in our reading or calculation. A source publication date is not presented as the date this site last changed.</p>
-    <p>See <a href="/contact/">contact information and how to report an error</a>, or read the <a href="/methodology/">methodology</a>.</p>
+    <p>See <a href="/contact/">contact information</a>, or read the <a href="/methodology/">methodology</a>.</p>
   </div>
 </BaseLayout>

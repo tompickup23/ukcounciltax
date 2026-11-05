@@ -243,6 +243,52 @@ for (const asset of ["pagefind.js", "pagefind-worker.js"]) {
   if (!existsSync(join(DIST, "pagefind", asset))) failures.push(`missing search asset ${asset}`);
 }
 
+// security.txt (RFC 9116): a mailto Contact, an Expires in the future and at
+// most a year ahead, and a Canonical on this origin. Astro copies it from
+// public/.well-known; a build that drops the dot directory fails here.
+const securityTxt = join(DIST, ".well-known", "security.txt");
+if (!existsSync(securityTxt)) failures.push("missing /.well-known/security.txt");
+else {
+  const fields = new Map();
+  for (const line of readFileSync(securityTxt, "utf8").split("\n")) {
+    const match = /^([A-Za-z-]+):\s*(.+)$/.exec(line.trim());
+    if (match) fields.set(match[1].toLowerCase(), [...(fields.get(match[1].toLowerCase()) ?? []), match[2]]);
+  }
+  if (!(fields.get("contact") ?? []).some((value) => /^mailto:[^@\s]+@[^@\s]+$/.test(value))) failures.push("security.txt has no mailto Contact");
+  const expires = fields.get("expires") ?? [];
+  const when = Date.parse(expires[0] ?? "");
+  if (expires.length !== 1 || Number.isNaN(when)) failures.push("security.txt needs exactly one valid Expires");
+  else if (when <= Date.now()) failures.push(`security.txt expired on ${expires[0]}`);
+  else if (when - Date.now() > 366 * 24 * 60 * 60 * 1000) failures.push(`security.txt Expires is more than a year ahead: ${expires[0]}`);
+  if ((fields.get("canonical") ?? [])[0] !== `${SITE_URL}/.well-known/security.txt`) failures.push("security.txt Canonical is not on the site origin");
+}
+
+// llms.txt is plain text built from site data, with the site name as its heading.
+const llmsTxt = join(DIST, "llms.txt");
+if (!existsSync(llmsTxt)) failures.push("missing /llms.txt");
+else {
+  const text = readFileSync(llmsTxt, "utf8");
+  if (!text.startsWith(`# ${SITE_NAME}\n`)) failures.push("llms.txt does not start with the site name heading");
+  for (const heading of ["## Sources"]) if (!text.includes(`\n${heading}\n`)) failures.push(`llms.txt has no ${heading}`);
+}
+
+// The only host specific rules in dist/_headers are the pages.dev noindex
+// rules, and they add nothing but X-Robots-Tag. The CSP stays on the one
+// production line the hash step rewrites.
+{
+  const headerText = readFileSync(join(DIST, "_headers"), "utf-8");
+  const blocks = headerText.split(/\n\s*\n/).map((block) => block.trim()).filter(Boolean);
+  const hosted = blocks.filter((block) => block.startsWith("https://"));
+  const expected = ["https://ukcounciltax.pages.dev/*", "https://:version.ukcounciltax.pages.dev/*"];
+  const patterns = hosted.map((block) => block.split("\n")[0].trim());
+  if (JSON.stringify(patterns) !== JSON.stringify(expected)) failures.push(`unexpected host rules in dist/_headers: ${patterns.join(", ") || "none"}`);
+  for (const block of hosted) {
+    const lines = block.split("\n").slice(1).map((line) => line.trim());
+    if (lines.length !== 1 || lines[0] !== "X-Robots-Tag: noindex") failures.push(`host rule ${block.split("\n")[0]} must set only X-Robots-Tag: noindex`);
+  }
+  if ((headerText.match(/Content-Security-Policy:/g) ?? []).length !== 1) failures.push("dist/_headers must carry exactly one Content-Security-Policy line");
+}
+
 if (failures.length) {
   console.error(`dist check: ${failures.length} failures\n${failures.map((f) => `  ${f}`).join("\n")}`);
   process.exit(1);

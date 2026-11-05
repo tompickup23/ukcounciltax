@@ -11,7 +11,6 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import BandSelector from "../../components/BandSelector.astro";
 import PageContents from "../../components/PageContents.astro";
-import HistoryBars from "../../components/HistoryBars.astro";
 import Fact from "../../components/Fact.astro";
 import SourceLine from "../../components/SourceLine.astro";
 import {
@@ -190,7 +189,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <section class="section" id="history" aria-labelledby="history-heading">
       <h2 id="history-heading">How has Band D in {name} changed?</h2>
       <div class="fact" data-fact>
-        <HistoryBars rows={history.map(row => ({label: yearLabel(row.year), value: row.bandD}))} format={pounds} caption={`Published area Band D in ${name} by year`} />
+        <LongTaxHistory gss={council.gss} name={name} view="chart" />
         <SourceLine source={historySource} />
         <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts.</p>
         <div class="table-wrap" tabindex="0" role="region" aria-label="Council tax history table">

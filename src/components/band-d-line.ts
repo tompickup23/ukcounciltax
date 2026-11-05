@@ -6,7 +6,7 @@
  * does not join. No figure is estimated, carried forward or interpolated.
  */
 export interface SeriesPoint {
-  /** The year key as the data holds it, for example "1993-94". */
+  /** The year key exactly as the data file holds it; labels come from yearLabel. */
   year: string;
   /** The published figure, or null where the table holds none. */
   value: number | null;

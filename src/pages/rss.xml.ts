@@ -1,28 +1,27 @@
 import type { APIRoute } from "astro";
-import { YEARS, loadYear, yearLabel } from "../lib/council-tax";
+import { releaseItems } from "../lib/releases";
 import { DEFAULT_DESCRIPTION, SITE_NAME, absoluteUrl } from "../lib/site";
 
 /**
- * The feed. Today it carries one item per council tax year the site holds,
- * dated by MHCLG's publication.
+ * The feed. One item per data update the site holds, dated by the dataset's
+ * own edition date (its publication date where the source manifest records
+ * one, otherwise the date it was accessed or generated, as the item says),
+ * plus one item per findings note. /changes/ lists the same items.
  * Items name no person.
  */
 const escape = (text: string) =>
   text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export const GET: APIRoute = () => {
-  const items = [...YEARS]
-    .reverse()
-    .map((year) => {
-      const { source } = loadYear(year);
-      const date = source.published ? new Date(`${source.published}T09:30:00Z`).toUTCString() : null;
-      const link = absoluteUrl("/council-tax/");
+  const items = releaseItems()
+    .map((item) => {
+      const date = new Date(`${item.date}T09:30:00Z`).toUTCString();
       return `    <item>
-      <title>${escape(`Council tax ${yearLabel(year)} for every council in England`)}</title>
-      <link>${link}</link>
-      <guid isPermaLink="false">ukcounciltax-council-tax-${year}</guid>
-      ${date ? `<pubDate>${date}</pubDate>` : ""}
-      <description>${escape(`${source.title}, published by ${source.publisher}. Band A to H for every billing authority.`)}</description>
+      <title>${escape(item.title)}</title>
+      <link>${absoluteUrl(item.path)}</link>
+      <guid isPermaLink="false">${escape(item.id)}</guid>
+      <pubDate>${date}</pubDate>
+      <description>${escape(item.description)}</description>
     </item>`;
     })
     .join("\n");

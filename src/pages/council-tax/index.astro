@@ -4,7 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { hubCardPath } from "../../lib/og";
 import Fact from "../../components/Fact.astro";
-import HistoryBars from "../../components/HistoryBars.astro";
+import BandDLine from "../../components/BandDLine.astro";
 import SourceLine from "../../components/SourceLine.astro";
 import {
   BANDS,
@@ -74,10 +74,15 @@ const pages = councilPages();
     <section class="section" aria-labelledby="history-heading">
       <h2 id="history-heading">How has average council tax in England changed?</h2>
       <div class="fact" data-fact>
-        <HistoryBars
-          rows={history.rows.filter((r) => typeof r.pounds === "number").map((r) => ({ label: yearLabel(r.year), value: r.pounds as number }))}
+        <BandDLine
+          id="england-band-d-line"
+          series={history.rows.map((r) => ({ year: r.year, value: r.pounds }))}
           format={(v) => wholePounds(v)}
-          caption={`Average Band D council tax in England, ${yearLabel(history.rows[0].year)} to ${year}`}
+          title={`Average Band D council tax in England, ${yearLabel(history.rows[0].year)} to ${year}`}
+          basis="Average area Band D in England, including adult social care and average parish precepts"
+          source={councilTaxSource(CURRENT_YEAR, history.table)}
+          caveat="Includes adult social care and average parish precepts, so the Band D bill in any one parish or unparished area can differ from this average."
+          table={false}
         />
         <div class="table-wrap">
           <table class="data">

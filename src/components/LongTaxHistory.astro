@@ -1,7 +1,10 @@
 ---
 import {national} from '../lib/national-data';
-interface Props {gss:string;name:string}
-const {gss,name}=Astro.props;
+import BandDLine from './BandDLine.astro';
+import {longDate} from '../lib/sources';
+/** view="chart" draws only the Band D line from the area series, with its source line and parish caveat. */
+interface Props {gss:string;name:string;view?:'section'|'chart'}
+const {gss,name,view='section'}=Astro.props;
 const series=national.history[gss];
 const source=national.sources.history;
 const money=(v:number|null|undefined)=>v==null?'Unavailable':new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2}).format(v);
@@ -13,8 +16,11 @@ const first=available[0];
 const last=available.at(-1);
 const start=first?series.area.values[first]:null,end=last?series.area.values[last]:null;
 const change=start!==null&&end!==null&&start>0?(end/start-1)*100:null;
+const wholePounds=(v:number)=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(v);
+const retrieved=longDate(source.retrieved);
 ---
-{series&&<section class="section" id="long-history" aria-labelledby="long-history-heading">
+{series&&view==='chart'&&<BandDLine id={`band-d-line-${gss}`} series={years.map(y=>({year:y,value:series.area.values[y]}))} format={wholePounds} title={`Band D area council tax in ${name}, ${first?.replace('-','/')} to ${last?.replace('-','/')}`} basis="Band D area council tax, including average parish precepts, as published each year in whole pounds"><p class="source-line">Source: <a href={source.fileUrl}>{source.publisher}, {source.title}</a>, Area_CT{retrieved?`, file retrieved ${retrieved}`:''}.</p><p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts, so the Band D bill in any one parish or unparished part of {name} can differ from this figure.</p></BandDLine>}
+{series&&view==='section'&&<section class="section" id="long-history" aria-labelledby="long-history-heading">
   <h2 id="long-history-heading">Long-term Band D history</h2>
   <p>The national live table holds {available.length} published area figures for {name}, from {first?.replace('-','/')} to {last?.replace('-','/')}. This series is generally rounded to whole pounds, so it can differ from the penny figures in the recent band tables.</p>
   {change!==null&&<p class="lede">{money(start)} to {money(end)} <span class="small">({change>=0?'+':''}{change.toFixed(1)}% in cash terms)</span></p>}

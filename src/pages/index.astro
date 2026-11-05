@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import {localBills} from '../lib/local-bill-data';
 import {moneyPence} from '../lib/tax-view';
 import CouncilFinder from "../components/CouncilFinder.astro";
-import HistoryBars from "../components/HistoryBars.astro";
+import BandDLine from "../components/BandDLine.astro";
 import SourceLine from "../components/SourceLine.astro";
 import Fact from "../components/Fact.astro";
 import PostcodeDoor from "../components/PostcodeDoor.astro";
@@ -55,7 +55,7 @@ const total=example.localities.find(l=>l.id==='unparished')!.totalsPence.D;
   {data.england.history && <section class="section" aria-labelledby="home-history">
     <h2 id="home-history">How the England average has changed</h2>
     <div data-fact class="fact">
-      <HistoryBars rows={data.england.history.rows.filter(r => typeof r.pounds === 'number').map(r => ({label: yearLabel(r.year), value: r.pounds!}))} format={wholePounds} caption="Published average Band D in England by year" />
+      <BandDLine id="home-band-d-line" series={data.england.history.rows.map(r => ({year: r.year, value: r.pounds}))} format={(v) => wholePounds(v)} title={`Average area Band D in England, ${yearLabel(data.england.history.rows[0].year)} to ${year}`} basis="Average area Band D in England, including adult social care and average parish precepts" table={false} />
       <SourceLine source={councilTaxSource(CURRENT_YEAR, data.england.history.table)} />
       <p class="caveat">Cash figures, not adjusted for inflation. Includes adult social care and average parish precepts.</p>
       <a href="/council-tax/#history-heading">Read the complete history table</a>

@@ -83,6 +83,30 @@ export interface ParishFinding {
   /** New or ceased rows that carry a note on a formation, removal or split. */
   newOrCeasedWithStructuralNote: number;
   structuralNotes: { id: string; text: string }[];
+  /** Entries in the table's list of renamed parishes, read from the Ceased_New_Renamed_Parishes sheet. */
+  renamedListed: number;
+  /** Of those, entries whose new name is a compared row of the same billing authority. */
+  renamedCompared: number;
+  /** Of those, entries whose new name records a grouping with other parishes. */
+  renamedGrouped: number;
+}
+
+interface RenamedEntry { gss: string; newName: string }
+
+/** The renamed parishes list in the parish table's changes sheet, read by its title and header row. */
+export function renamedParishes(rows: string[][] = national.parishChanges): RenamedEntry[] {
+  const start = rows.findIndex((row) => row.length === 1 && /^Renamed parishes/i.test(row[0] ?? ""));
+  if (start < 0) return [];
+  const header = rows[start + 1] ?? [];
+  const gssAt = header.findIndex((cell) => /^ONS code$/i.test(cell));
+  const nameAt = header.findIndex((cell) => /^New name$/i.test(cell));
+  if (gssAt < 0 || nameAt < 0) return [];
+  const entries: RenamedEntry[] = [];
+  for (const row of rows.slice(start + 2)) {
+    if (row.length <= 1) break;
+    entries.push({ gss: row[gssAt], newName: row[nameAt] });
+  }
+  return entries;
 }
 
 export function parishFinding(): ParishFinding {
@@ -105,7 +129,11 @@ export function parishFinding(): ParishFinding {
     negative: 0,
     newOrCeasedWithStructuralNote: 0,
     structuralNotes: [],
+    renamedListed: 0,
+    renamedCompared: 0,
+    renamedGrouped: 0,
   };
+  const comparedKeys = new Set<string>();
   const structuralIds = new Map<string, string>();
   for (const parish of parishes) {
     const a = parish.years[previousYear];
@@ -137,17 +165,22 @@ export function parishFinding(): ParishFinding {
       continue;
     }
     result.compared += 1;
+    comparedKeys.add(`${parish.gss}|${parish.name}`);
     if (kinds.has("revised")) result.revisedCompared += 1;
     if (b.bandDPence > a.bandDPence) result.rose += 1;
     else if (b.bandDPence < a.bandDPence) result.fell += 1;
     else if (b.bandDPence === 0) result.zeroBoth += 1;
     else result.unchangedNonZero += 1;
   }
+  const renamed = renamedParishes();
+  result.renamedListed = renamed.length;
+  result.renamedCompared = renamed.filter((entry) => comparedKeys.has(`${entry.gss}|${entry.newName}`)).length;
+  result.renamedGrouped = renamed.filter((entry) => /grouped with/i.test(entry.newName)).length;
   result.structuralNotes = [...structuralIds].map(([id, text]) => ({ id, text })).sort((x, y) => x.id.localeCompare(y.id));
   return result;
 }
 
-// Band D since 1993/94
+// Band D since the first year of the history table
 
 export interface HistoryYearRow {
   from: string;
@@ -325,10 +358,15 @@ export function findingsItems(): ReleaseItem[] {
   ];
 }
 
-export function datasetItems(): ReleaseItem[] {
+/** Years whose levels data file is held; a year listed before its file exists is skipped, not thrown on. */
+export function heldYears(years: readonly string[] = YEARS): Year[] {
+  return years.filter((year) => existsSync(councilTaxPath(year as Year))) as Year[];
+}
+
+export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
   const items: ReleaseItem[] = [];
 
-  for (const year of [...YEARS].reverse()) {
+  for (const year of [...heldYears(years)].reverse()) {
     const { source } = loadYear(year);
     // No recorded publication date: the item is left out rather than dated by guess.
     if (!source.published) continue;
@@ -370,7 +408,7 @@ export function datasetItems(): ReleaseItem[] {
   items.push({
     id: "ukcounciltax-national-history",
     dataset: "history",
-    title: "Band D history for every council in England since 1993/94",
+    title: `Band D history for every council in England since ${yearLabel(sortedYears(Object.values(national.history)[0].area.values)[0])}`,
     date: s.history.retrieved,
     dateKind: "accessed",
     description: `MHCLG, ${s.history.title}, tables Area_CT, exc_PP and inc_PP. Accessed ${longDate(s.history.retrieved)}; the publication date is not recorded in the source manifest.`,
@@ -434,7 +472,8 @@ export function releaseItems(): ReleaseItem[] {
 export function expectedDatasets(): string[] {
   const devolved = readJson<DevolvedFile>("data/devolved/council-tax.json");
   return [
-    ...YEARS.map((year) => `levels-${year}`),
+    // Only years whose data file is held and whose source records a publication date get an item.
+    ...heldYears().filter((year) => loadYear(year).source.published).map((year) => `levels-${year}`),
     "components",
     "parishes",
     "history",

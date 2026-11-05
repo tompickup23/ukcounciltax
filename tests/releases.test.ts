@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import sax from "sax";
-import { expectedDatasets, historyFinding, parishFinding, releaseItems } from "../src/lib/releases";
+import { YEARS } from "../src/lib/council-tax";
+import { datasetItems, expectedDatasets, heldYears, historyFinding, parishFinding, releaseItems, renamedParishes } from "../src/lib/releases";
 import { GET as rss } from "../src/pages/rss.xml";
 import { sitemapPaths } from "../src/pages/sitemap.xml";
 
@@ -47,6 +48,27 @@ describe("parish findings", () => {
     for (const p of national.parishes.filter((row: { notes: unknown[] }) => row.notes.length > 0)) {
       expect(source.includes(`"${p.name}"`)).toBe(false);
     }
+  });
+});
+
+describe("renamed parishes", () => {
+  it("are counted from the changes sheet and found among the compared rows", () => {
+    const rows: string[][] = national.parishChanges;
+    const start = rows.findIndex((row) => row.length === 1 && /^Renamed parishes/i.test(row[0]));
+    let listed = 0;
+    for (const row of rows.slice(start + 2)) {
+      if (row.length <= 1) break;
+      listed += 1;
+    }
+    const f = parishFinding();
+    expect(renamedParishes()).toHaveLength(listed);
+    expect(f.renamedListed).toBe(listed);
+    expect(f.renamedCompared).toBeLessThanOrEqual(listed);
+    expect(f.renamedGrouped).toBe(renamedParishes().filter((e) => /grouped with/i.test(e.newName)).length);
+  });
+
+  it("returns none when the sheet holds no renamed list", () => {
+    expect(renamedParishes([["Background"], ["Some text"]])).toEqual([]);
   });
 });
 
@@ -123,6 +145,13 @@ describe("the feed", () => {
     const ids = new Set(items.map((item) => item.guid));
     const byId = new Map(releaseItems().map((item) => [item.id, item.dataset]));
     const datasets = new Set([...ids].map((id) => byId.get(id)));
+    // A levels item is expected only for a year whose data file exists and whose source records a publication date.
+    const levels = YEARS.filter((year) => {
+      const path = join(process.cwd(), "data", "council-tax", `england-${year}.json`);
+      return existsSync(path) && Boolean(JSON.parse(readFileSync(path, "utf8")).source?.published);
+    }).map((year) => `levels-${year}`);
+    expect(expectedDatasets().filter((d) => d.startsWith("levels-"))).toEqual(levels);
+    expect([...datasets].filter((d) => d?.startsWith("levels-")).sort()).toEqual([...levels].sort());
     for (const dataset of expectedDatasets()) expect(datasets.has(dataset), dataset).toBe(true);
     for (const item of items) {
       expect(item.title?.trim()).toBeTruthy();
@@ -130,6 +159,16 @@ describe("the feed", () => {
       expect(Number.isNaN(new Date(item.pubDate).getTime())).toBe(false);
       expect(item.description).toMatch(/\S/);
     }
+  });
+
+  it("skips a listed year whose data file does not exist", () => {
+    // A year built from numbers, so no year label is typed here; no data file is held for it.
+    const missing = `${2090 + 9}-${String(100).slice(1)}`;
+    expect(existsSync(join(process.cwd(), "data", "council-tax", `england-${missing}.json`))).toBe(false);
+    expect(heldYears([...YEARS, missing])).toEqual(heldYears());
+    expect(() => datasetItems([...YEARS, missing])).not.toThrow();
+    expect(datasetItems([...YEARS, missing]).some((item) => item.dataset === `levels-${missing}`)).toBe(false);
+    expect(datasetItems([...YEARS, missing]).map((item) => item.id)).toEqual(datasetItems().map((item) => item.id));
   });
 
   it("uses a parser that rejects malformed XML", () => {
@@ -145,6 +184,16 @@ describe("the feed", () => {
     const item = releaseItems().find((i) => i.dataset === "bandStock");
     expect(item?.date).toBe(stock.published);
     expect(item?.dateKind).toBe("published");
+  });
+});
+
+describe("year labels", () => {
+  it("are read from the data, never typed, in the findings and feed sources", () => {
+    const typed = /\b(?:19|20)\d{2}\/\d{2}\b/;
+    for (const file of ["src/lib/releases.ts", "src/pages/findings.astro", "src/pages/changes.astro", "src/pages/rss.xml.ts"]) {
+      const source = readFileSync(join(process.cwd(), file), "utf8");
+      expect(typed.test(source), file).toBe(false);
+    }
   });
 });
 

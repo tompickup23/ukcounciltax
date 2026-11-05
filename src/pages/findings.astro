@@ -71,6 +71,7 @@ const basisNote = basisSource?.bandTableNotes.find((note) => /parish precepts/i.
       {parish.unavailable > 0 && <li>{n(parish.unavailable)} rows have no reported Band D figure for one of the years. Unknown is not zero.</li>}
       <li>{n(parish.revisedCompared)} compared rows carry the note that earlier figures were revised; the revised figures are the ones compared.</li>
     </ul>
+    {parish.renamedListed > 0 && <p>The table's list of renamed parishes for {cur} has {n(parish.renamedListed)} entries; {parish.renamedCompared === parish.renamedListed ? <>all of them are</> : <>{n(parish.renamedCompared)} of them are</>} among the rows compared above, under their new names{parish.renamedGrouped > 0 ? <>, and {n(parish.renamedGrouped)} of the new names record a grouping with other parishes</> : null}. Counted from <a href={ps.url}>MHCLG, {ps.title}</a>, table Ceased_New_Renamed_Parishes.</p>}
     <details>
       <summary>The table's notes used here</summary>
       <ul class="small">

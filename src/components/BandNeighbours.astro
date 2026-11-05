@@ -1,0 +1,107 @@
+---
+/**
+ * A council's published charge for a band, with the published charge one band
+ * lower and one band higher beside it, for the same council and year, read
+ * from the same published row. Band A has no lower column and Band H no
+ * higher column. A neighbour the row does not hold prints n/a, never a figure
+ * worked out from the band proportions.
+ *
+ * England reads MHCLG Table 9 for the current year. Scotland reads the
+ * Scottish Government table for the same year from data/devolved, and only
+ * renders when that edition holds every band; the Welsh table held here gives
+ * an average Band D only, so Wales has no lines.
+ */
+import SourceLine from "./SourceLine.astro";
+import { CURRENT_YEAR, loadYear, pounds, yearLabel, type Band } from "../lib/council-tax";
+import { councilPages, councilPath, slugify } from "../lib/paths";
+import { councilTaxSource, longDate } from "../lib/sources";
+import { devolved, nationPath } from "../lib/devolved";
+import { fullBandEdition, neighbourBands, neighbourLines, positionLabel } from "../lib/band-neighbours";
+
+interface Props {
+  band: Band;
+  /** An English region, for England; omit with nation "Scotland". */
+  region?: string;
+  nation?: "England" | "Scotland";
+}
+
+const { band, region, nation = "England" } = Astro.props;
+const year = yearLabel(CURRENT_YEAR);
+const { lower, higher } = neighbourBands(band);
+
+type Row = { id: string; name: string; href: string; figures: Partial<Record<string, number>> };
+let rows: Row[] = [];
+let scottish: (typeof devolved.editions)[number] | undefined;
+
+if (nation === "England") {
+  rows = councilPages()
+    .filter((page) => page.tax.region === region)
+    .map((page) => ({ id: page.council.gss, name: page.tax.name, href: councilPath(page.council), figures: page.tax.bands }));
+} else {
+  scottish = fullBandEdition("Scotland", CURRENT_YEAR);
+  rows = (scottish?.records ?? []).map((record) => ({
+    id: record.gss,
+    name: record.name,
+    href: nationPath("Scotland", record.slug),
+    // Pence to pounds is a change of unit, not a calculation of a new figure.
+    figures: Object.fromEntries(Object.entries(record.bandsPence).map(([b, pence]) => [b, pence / 100])),
+  }));
+}
+
+const englandSource = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.bandTable);
+const place = nation === "England" ? region : "Scotland";
+const id = `neighbours-${slugify(place ?? nation)}`;
+---
+{rows.length > 0 && (
+  <div class="fact neighbours" data-fact data-band-neighbours data-nation={nation} data-band={band}>
+    <div class="table-wrap" tabindex="0" role="region" aria-label={`Band ${band} with the bands either side, ${place}`}>
+      <table class="data" id={id}>
+        <caption>Band {band} beside the published charge one band lower and one band higher, {place}, {year}</caption>
+        <thead>
+          <tr>
+            <th scope="col">Council</th>
+            {lower && <th scope="col" class="num">{positionLabel("lower", lower)}</th>}
+            <th scope="col" class="num">Band {band}</th>
+            {higher && <th scope="col" class="num">{positionLabel("higher", higher)}</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => {
+            const lines = neighbourLines(row.figures, band);
+            const low = lines.find((line) => line.position === "lower");
+            const high = lines.find((line) => line.position === "higher");
+            return (
+              <tr data-neighbour-ons={row.id}>
+                <th scope="row"><a href={row.href}>{row.name}</a></th>
+                {lower && <td class="num" data-figure data-neighbour="lower" data-neighbour-band={lower}>{pounds(low?.value)}</td>}
+                <td class="num" data-figure data-neighbour="self" data-neighbour-band={band}>{pounds(row.figures[band])}</td>
+                {higher && <td class="num" data-figure data-neighbour="higher" data-neighbour-band={higher}>{pounds(high?.value)}</td>}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+    {nation === "England" ? (
+      <>
+        <SourceLine source={englandSource} />
+        <p class="caveat">
+          Each figure is the published area charge for that band, with parish precepts as an average. A home in a
+          parish with its own precept pays a different amount. No figure here is worked out from the band proportions.
+        </p>
+      </>
+    ) : (
+      scottish && (
+        <>
+          <p class="source-line">
+            Source: <a href={scottish.source.fileUrl}>Scottish Government, {scottish.source.title}</a>, {scottish.table}, retrieved {longDate(devolved.retrieved)}.
+          </p>
+          <p class="caveat">
+            {scottish.basis}. Scottish figures are not comparable with the English area charges above. No figure here is
+            worked out from the band proportions.
+          </p>
+        </>
+      )
+    )}
+  </div>
+)}

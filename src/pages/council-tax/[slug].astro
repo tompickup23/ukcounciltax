@@ -10,6 +10,8 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { hubCardPath } from "../../lib/og";
 import SourceLine from "../../components/SourceLine.astro";
+import BandNeighbours from "../../components/BandNeighbours.astro";
+import { BAND_PROPORTIONS, LAST_REVIEWED, fullBandEdition, neighbourBands, proportionText } from "../../lib/band-neighbours";
 import {
   BANDS,
   CURRENT_YEAR,
@@ -30,7 +32,7 @@ import {
   slugify,
   type Region,
 } from "../../lib/paths";
-import { councilTaxSource } from "../../lib/sources";
+import { councilTaxSource, longDate } from "../../lib/sources";
 
 type PageProps = { kind: "band"; band: Band } | { kind: "region"; region: Region };
 
@@ -48,6 +50,13 @@ const previous = yearLabel(PREVIOUS_YEAR);
 const pages = councilPages();
 const bandSource = councilTaxSource(CURRENT_YEAR, data.source.bandTable);
 const inRegion = (region: string) => pages.filter((p) => p.tax.region === region);
+
+const sides = props.kind === "band" ? neighbourBands(props.band) : null;
+const neighbourSummary =
+  props.kind === "band" && sides
+    ? `Band ${props.band} beside ${[sides.lower, sides.higher].filter(Boolean).map((b) => `Band ${b}`).join(" and ")}`
+    : "";
+const scotland = props.kind === "band" ? fullBandEdition("Scotland", CURRENT_YEAR) : undefined;
 
 let title: string;
 let description: string;
@@ -101,12 +110,47 @@ if (props.kind === "band") {
           {REGIONS.map((region) => <li><a href={`#${slugify(region)}`}>{region}</a></li>)}
         </ul>
       </nav>
+      <p class="band-help">
+        Not sure which band your home is in? See <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a> on the help page.
+      </p>
       {REGIONS.map((region) => (
         <section class="section" id={slugify(region)} aria-labelledby={`${slugify(region)}-heading`}>
           <h2 id={`${slugify(region)}-heading`}>How much is Band {props.band} in {region}?</h2>
           <TaxTable id={`table-${slugify(region)}`} region={region} band={props.band} caption={region} />
+          <details class="neighbour-details">
+            <summary>{neighbourSummary} in {region}</summary>
+            <BandNeighbours band={props.band} region={region} />
+          </details>
         </section>
       ))}
+      {scotland && (
+        <section class="section" id="scotland" aria-labelledby="scotland-heading">
+          <h2 id="scotland-heading">Band {props.band} in Scotland, {year}</h2>
+          <p>
+            Scottish councils publish their own charges, on a different basis ({scotland.basis.toLowerCase()}), so these
+            figures sit apart from the English tables. The Welsh table this site holds gives an average Band D only, so Welsh councils have no lines here.
+          </p>
+          <BandNeighbours band={props.band} nation="Scotland" />
+        </section>
+      )}
+      <section class="section" id="band-proportions" aria-labelledby="band-proportions-heading">
+        <h2 id="band-proportions-heading">How bands relate to Band D</h2>
+        <p>
+          Section {BAND_PROPORTIONS.subsection} of the Local Government Finance Act 1992 says that, within the same billing
+          authority area, the amounts for bands A to H are in the proportion 6, 7, 8, 9, 11, 13, 15 and 18. As a share of
+          Band D, that is {BANDS.map((band) => `${band} ${proportionText(band)}`).join(", ")}.
+        </p>
+        <p>
+          This is an explanation only. Every figure on this page is the published charge for its band, read from the
+          published table, and none is worked out from these proportions. The section extends to {BAND_PROPORTIONS.extent};
+          Wales adds a ninth band, Band I, under section 5(1A). Any Scottish figures above are the Scottish Government's
+          published charges and are not read against this section.
+        </p>
+        <p class="source-line">
+          Source: <a href={BAND_PROPORTIONS.url}>{BAND_PROPORTIONS.publisher}, {BAND_PROPORTIONS.title}</a>, accessed {longDate(BAND_PROPORTIONS.accessed)}.
+        </p>
+        <p class="small muted" data-last-reviewed>Last reviewed {longDate(LAST_REVIEWED)}.</p>
+      </section>
     </>
   )}
 

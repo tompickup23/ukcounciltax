@@ -1,0 +1,37 @@
+---
+import {gameData} from '../lib/budget-game-data';
+import {jsonLd} from '../lib/site';
+interface Props {gss: string; slug: string}
+const data = gameData(Astro.props.gss, Astro.props.slug);
+---
+{data && <section id="budget-game" class="section budget-game" data-budget-game aria-labelledby="game-heading">
+  <p class="eyebrow">Explore the published budget | {data.year}</p>
+  <h2 id="game-heading">Budget game</h2>
+  <p>Guess the service split, the Band D bill split, funding order and reserve change. Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
+  <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
+  <div data-game-stage></div>
+  <noscript><p>The game needs JavaScript. All published budget tables and their sources are available below.</p></noscript>
+  <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
+</section>}
+<script>
+  import '../scripts/budget-game';
+</script>
+<style is:global>
+  .budget-game{padding:clamp(1rem,3vw,2rem);border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  .budget-game [hidden]{display:none!important}
+  .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
+  .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}
+  .game-row{padding:1rem;border:1px solid var(--border);border-radius:8px;min-width:0}
+  .game-row label,.game-row strong{display:block;margin-bottom:.5rem}
+  .game-stepper{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  .game-stepper input{width:5rem;min-height:44px;text-align:center}
+  .game-stepper button{min-width:44px;min-height:44px}
+  .game-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
+  .budget-game .source-line,.game-share{overflow-wrap:anywhere}
+  .game-result{background:var(--accent-wash);padding:1rem;border-radius:8px;margin-block:1rem}
+  .game-result li{margin-block:.75rem}
+  .budget-game fieldset{min-width:0;margin-block:1rem;border:1px solid var(--border);padding:1rem}
+  .budget-game select{max-width:100%;width:100%;min-height:44px}
+  .budget-game legend{font-weight:600}
+  .game-status{font-weight:600}
+</style>

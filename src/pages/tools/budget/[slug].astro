@@ -4,6 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import BandSelector from '../../../components/BandSelector.astro';
 import BudgetTables from '../../../components/BudgetTables.astro';
 import BudgetBill from '../../../components/BudgetBill.astro';
+import BudgetGame from '../../../components/BudgetGame.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import PageContents from '../../../components/PageContents.astro';
 import {councilPages, type CouncilPage} from '../../../lib/paths';
@@ -21,7 +22,8 @@ const description = `Published ${budgetYear} service spending, funding, reserves
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets', href: '/tools/budget/'}, {label: tax.name}]} />
   <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>{tax.name} budget</h1><p class="lede">The published budget, with service spending and council tax kept as separate measures.</p></header>
   {available ? <>
-    <PageContents items={[{id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
+    <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
+    <BudgetGame gss={council.gss} slug={council.slug} />
     <BudgetTables council={data.council} id="council-budget" />
     {data.county && <BudgetTables council={data.county} id="county-budget" county />}
   </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}

@@ -88,7 +88,7 @@ export function buildBudget(root=process.cwd()) {
     if(status==='available')for(const group of groups) {
       if(!group.subLines.length)continue;
       const difference=group.subLines.reduce((sum,id)=>sum+values[id],0)-values[group.id];
-      if(Math.abs(difference)>2)notes.push({gss,service:group.id,difference,unit:'GBP thousand',recordType:'calculation',source:'raPart1',method:'Sum of printed service sub-lines less printed total; retained without adjustment. Phase 0 records rounding differences.'});
+      if(difference!==0)notes.push({gss,service:group.id,difference,unit:'GBP thousand',recordType:'calculation',source:'raPart1',method:'Sum of printed service sub-lines less printed total; retained without adjustment. Every sub-line must sum exactly to its service total.'});
     }
   }
   return {schemaVersion:1,year:'2026-27',unit:'GBP thousand',recordType:'observation',sources:Object.fromEntries(sourceKeys.map(key=>[key,sources[key]])),fields,groups,councils,sourceNotes:Object.fromEntries(sourceKeys.map(key=>[key,books[key].notes])),notes,labelPolicy:'Source wording retained with dash punctuation expanded to words or a colon to meet house style. Asset IDs and line numbers locate the printed labels.'};
@@ -108,6 +108,9 @@ export function validateBudget(data) {
     const v=c.values;
     if(Object.values(v).some(value=>value===null))fail(`${gss}: unexpected unknown required cell`);
     if(Math.abs(SERVICE_IDS.reduce((sum,id)=>sum+v[id],0)-v.servicetot)>2)fail(`${gss}: service totals do not reconcile`);
+    for(const group of data.groups) {
+      if(group.subLines.length&&group.subLines.reduce((sum,id)=>sum+v[id],0)!==v[group.id])fail(`${gss} ${group.id}: sub-lines do not reconcile exactly`);
+    }
     if(v.revenuetot+FINANCING_IDS.reduce((sum,id)=>sum+v[id],0)!==v.ctrtot)fail(`${gss}: financing identity does not reconcile`);
     if(components[gss]) {
       const t=components[gss];
@@ -125,7 +128,7 @@ export function validateBudget(data) {
   const anchorIds=['servicetot','revenuetot','ctrtot','edutot','eduspc','asctot','csctot','transtot','grantindsg','resoth_strt','resoth_end','resunall_strt','resunall_end'];
   const anchors={E07000117:[17246,25831,8832,0,0,2,0,-343,0,19978,17829,1379,1379],E08000025:[2700482,2970775,560016,1117292,268053,573142,410088,161402,884812,574278,531445,156722,157323],E09000033:[552973,525414,83475,147311,7946,113839,55445,-63028,116704,255423,235416,59671,49831],E10000017:[2759432,2826392,717078,1409030,221200,683126,325214,57581,1174566,245022,229961,66250,66250]};
   for(const [gss,expected] of Object.entries(anchors))anchorIds.forEach((id,i)=>{if(data.councils[gss].values[id]!==expected[i])fail(`${gss} ${id}: anchor differs`);});
-  if(data.notes.length!==2)fail('sub-line discrepancies differ from phase 0');
+  if(data.notes.length!==0)fail('sub-line mismatches must be zero');
 }
 
 export async function importBudget() {

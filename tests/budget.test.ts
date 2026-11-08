@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {readFileSync,existsSync} from 'node:fs';
+import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {buildBudget,validateBudget,SERVICE_IDS,FINANCING_IDS,MISSING,parseWorkbook,readCell} from '../scripts/import-ra-budget.mjs';
@@ -19,7 +19,7 @@ interface BudgetData {
  groups:{id:string;subLines:string[]}[];
  notes:{gss:string;service:string;difference:number}[];
 }
-// Phase 1 is deliberately held before writing budget.json. Fetch originals with the importer first.
+// Read the pinned workbooks independently of the committed snapshot.
 const data=buildBudget() as BudgetData;
 const entries=Object.entries(data.councils);
 const available=entries.filter(([,c])=>c.status==='available');
@@ -107,12 +107,15 @@ describe('MHCLG RA 2026/27 phase 0 source contract',()=>{
   try {row[index]='#REF!';expect(readCell(book,'E07000117','resoth_strt')).toBeNull();}
   finally {row[index]=original;}
  });
- it('reproduces the two sub-line discrepancies required by binding source notes section 4',()=>{
-  // Unresolved source review gate. Do not turn this into a passing test by revising the expected audit.
-  expect(data.notes.map(n=>n.service).sort()).toEqual(['asctot','envtot']);
- });
- it('does not write a budget snapshot while the source review gate fails',()=>{
-  expect(()=>validateBudget(data)).toThrow('sub-line discrepancies differ from phase 0');
-  expect(existsSync('data/national/budget.json')).toBe(false);
+ it('reconciles every service group exactly and rejects any sub-line mismatch',()=>{
+  expect(data.notes).toEqual([]);
+  expect(()=>validateBudget(data)).not.toThrow();
+  for(const [,c] of available)for(const group of data.groups){
+   if(!group.subLines.length)continue;
+   expect(group.subLines.reduce((sum,id)=>sum+value(c,id),0),`${c.name} ${group.id}`).toBe(value(c,group.id));
+  }
+  const changed=structuredClone(data);
+  changed.councils.E07000117.values[data.groups[0].subLines[0]]!+=1;
+  expect(()=>validateBudget(changed)).toThrow('sub-lines do not reconcile exactly');
  });
 });

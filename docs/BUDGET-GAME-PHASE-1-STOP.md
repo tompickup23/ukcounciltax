@@ -1,5 +1,7 @@
 # Budget game I001 | phase 1 source review stop
 
+Resolved 8 November 2026: commit `c771cbc` corrects the phase 0 audit and adds test g. Every service group sums exactly for all 308 councils with data. The importer and tests now require zero sub-line mismatches; the validated snapshot may be written. The following records the original stop.
+
 8 November 2026. Work remains on `feat/budget-game-i001` in the authorised worktree. Nothing has been pushed or published. The binding phase 0 notes have not been changed.
 
 ## Reason for stopping

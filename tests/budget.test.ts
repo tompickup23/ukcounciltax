@@ -2,7 +2,7 @@ import {describe,it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {buildBudget,validateBudget,SERVICE_IDS,FINANCING_IDS,MISSING,parseWorkbook,readCell} from '../scripts/import-ra-budget.mjs';
+import {buildBudget,validateBudget,SERVICE_IDS,FINANCING_IDS,MISSING,parseWorkbook,readCell,labelText} from '../scripts/import-ra-budget.mjs';
 import {readOds} from '../scripts/lib/ods.mjs';
 import fixture from './fixtures/budget-ct-reconciliation.json';
 
@@ -117,5 +117,14 @@ describe('MHCLG RA 2026/27 phase 0 source contract',()=>{
   const changed=structuredClone(data);
   changed.councils.E07000117.values[data.groups[0].subLines[0]]!+=1;
   expect(()=>validateBudget(changed)).toThrow('sub-lines do not reconcile exactly');
+ });
+});
+
+describe('printed labels in house style',()=>{
+ const dash=String.fromCharCode(8211);
+ it('turns a dash between numbers into a range and any other dash into a colon',()=>{
+  expect(labelText(`Physical support - adults (18${dash}64)`)).toBe('Physical support: adults (18 to 64)');
+  expect(labelText(`Children 5${dash}19 public health programmes`)).toBe('Children 5 to 19 public health programmes');
+  expect(labelText(`Traffic management and road safety: traffic management ${dash} bus lane enforcement`)).toBe('Traffic management and road safety: traffic management: bus lane enforcement');
  });
 });

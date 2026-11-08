@@ -12,7 +12,9 @@ const sourceKeys = ['raPart1','raPart2','raGrants'];
 const fail = message => { throw new Error(`RA budget: ${message}`); };
 const json = path => JSON.parse(readFileSync(resolve(process.cwd(),path),'utf8'));
 // Only punctuation changes to meet house style. The source file, asset ID and line retain the exact locator.
-export const labelText = text => text.replace(new RegExp(`[${String.fromCharCode(8211,8212)}]`,'g'),' to ').replaceAll([' ','-',' '].join(''),': ').replace(/\s+/g,' ').trim();
+// A dash between two numbers is a range ("18 to 64"); any other dash separates words and becomes a colon.
+const DASH = `[${String.fromCharCode(8211,8212)}]`;
+export const labelText = text => text.replace(new RegExp(`(\\d)\\s*${DASH}\\s*(\\d)`,'g'),'$1 to $2').replace(new RegExp(`\\s*${DASH}\\s*`,'g'),': ').replaceAll([' ','-',' '].join(''),': ').replace(/\s+/g,' ').trim();
 
 export function parseWorkbook(path, sheetName, sourceKey) {
   const sheets = readOds(path);

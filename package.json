@@ -21,7 +21,7 @@
     "indexnow": "node scripts/indexnow.mjs",
     "data:devolved": "python3 scripts/import-devolved.py",
     "data:local-bills": "python3 scripts/import-local-bills.py",
-    "data:national": "node scripts/import-national.mjs && node scripts/import-band-stock.mjs && node scripts/import-collection-rates.mjs"
+    "data:national": "node scripts/import-national.mjs && node scripts/import-band-stock.mjs && node scripts/import-collection-rates.mjs && node scripts/import-ra-budget.mjs"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.1",

@@ -7,7 +7,7 @@
  *   * an em or en dash anywhere in dist (the vendored Pagefind bundle is
  *     excluded: its mark.js licence line carries one and the licence requires it)
  *   * a sitemap URL with no built page behind it, or on another host
- *   * a page whose canonical tag is not on the site's own origin
+ *   * a missing, duplicate or incorrect canonical against the reviewed map
  *   * dist/_headers missing a hash for an inline script the tree carries
  *   * a figure (data-figure) that is not inside a fact with a source line
  *   * a band page or the national table that does not list every authority
@@ -24,6 +24,9 @@ import { unsourcedFigures } from "./lib/figures.mjs";
 const DIST = resolve(process.cwd(), "dist");
 const SITE_NAME = "UK Council Tax";
 const SITE_URL = "https://ukcounciltax.co.uk";
+const canonicalMap = JSON.parse(readFileSync(join(process.cwd(), "data", "canonical-map.json"), "utf8"));
+const seenMapped = new Set();
+const seenUnique = new Set();
 // The Web Analytics site token, the same value as CF_BEACON_TOKEN in src/lib/site.ts.
 const BEACON_TOKEN = "";
 // Built from parts so this file does not carry the entity names it looks for.
@@ -118,11 +121,31 @@ for (const path of files(DIST)) {
   if (beacons.length !== (BEACON_TOKEN ? 1 : 0)) failures.push(`${beacons.length} analytics beacons on ${rel(path)}`);
   else if (BEACON_TOKEN && !beacons[0][0].includes(BEACON_TOKEN)) failures.push(`beacon on ${rel(path)} carries another token`);
 
-  const canonical = /<link rel="canonical" href="([^"]+)"/.exec(text)?.[1];
-  if (!canonical || !canonical.startsWith(`${SITE_URL}/`)) {
-    failures.push(`canonical not on ${SITE_URL} for ${rel(path)}: ${canonical ?? "none"}`);
+  const pagePath = rel(path) === "/404.html" ? "/404/" : rel(path).replace(/index\.html$/, "");
+  const ownUrl = new URL(pagePath, SITE_URL).href;
+  const expectedCanonical = canonicalMap.mappings[ownUrl] ?? ownUrl;
+  const canonicals = [...text.matchAll(/<link\b[^>]*>/gi)]
+    .map(match => match[0])
+    .filter(tag => /\brel\s*=\s*["']canonical["']/i.test(tag));
+  if (canonicals.length !== 1) failures.push(`expected one canonical on ${rel(path)}, found ${canonicals.length}`);
+  const canonical = /\bhref\s*=\s*["']([^"']+)["']/i.exec(canonicals[0] ?? "")?.[1];
+  if (canonical !== expectedCanonical) {
+    failures.push(`incorrect canonical on ${rel(path)}: expected ${expectedCanonical}, found ${canonical ?? "none"}`);
   }
+  if (canonicalMap.mappings[ownUrl]) seenMapped.add(ownUrl);
+  if (canonicalMap.selfCanonicalUrls.includes(ownUrl)) seenUnique.add(ownUrl);
 }
+
+// Main retired this route; the existing redirect and absent page checks below remain mandatory.
+const retiredCanonicalUrl = `${SITE_URL}/council-tax/rises-2026-27/`;
+for (const url of Object.keys(canonicalMap.mappings)) {
+  if (url === retiredCanonicalUrl) continue;
+  if (!seenMapped.has(url)) failures.push(`mapped page was not built: ${url}`);
+}
+for (const url of canonicalMap.selfCanonicalUrls) {
+  if (!seenUnique.has(url)) failures.push(`unique page was not built: ${url}`);
+}
+console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 
 // A top-level 404 prevents Cloudflare Pages from treating this static site as an SPA.
 const notFound = join(DIST, '404.html');

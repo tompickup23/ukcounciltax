@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { canonicalUrl } from "../lib/canonical";
 import {breadcrumbList} from "../lib/breadcrumbs";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
@@ -42,7 +43,7 @@ const {
   ogImageAlt = `${SITE_NAME}: your council, from the official record`,
 } = Astro.props;
 const fullTitle = pageTitle(title);
-const canonical = absoluteUrl(path);
+const pageUrl = absoluteUrl(path);
 const nodes = [
   breadcrumbList(path, title ?? SITE_NAME),
   {
@@ -50,7 +51,7 @@ const nodes = [
     "@type": "WebPage",
     name: fullTitle,
     description,
-    url: canonical,
+    url: pageUrl,
     inLanguage: "en-GB",
     publisher: { "@id": `${SITE_URL}/#publisher` },
     ...(about ? { about } : {}),
@@ -88,14 +89,14 @@ const nodes = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <link rel="canonical" href={canonicalUrl(path)} />
     <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:locale" content="en_GB" />
     <meta property="og:image" content={absoluteUrl(ogImage)} />
     <meta property="og:image:type" content="image/png" />

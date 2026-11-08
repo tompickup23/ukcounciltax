@@ -41,7 +41,7 @@ test('comparison restores its source values, swaps and restores history', async 
   await expect(page.locator('[data-result-side="a"] h3')).toHaveText('Pendle');
   await page.goBack();
   await expect(page.locator('[data-result-difference]')).toHaveText(original!);
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://ukcounciltax.co.uk/compare/');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://ukcouncils.co.uk/compare/');
 });
 
 test('pickers restrict the second council and support filtered selection', async ({page}) => {

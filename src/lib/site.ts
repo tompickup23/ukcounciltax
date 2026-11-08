@@ -3,9 +3,9 @@ import { CURRENT_YEAR, NEXT_YEAR, NEXT_YEAR_PATH, increasesYearPath, yearLabel }
 export const SITE_NAME = "UK Council Tax";
 
 /**
- * The canonical origin. Every canonical tag, every Open Graph URL, every entry
- * in the sitemap and the sitemap line in robots.txt is built from this one
- * value through `absoluteUrl`, so a domain move is one edit here.
+ * The site origin for absolute URLs, Open Graph, the sitemap and robots.txt.
+ * Canonical links use the reviewed map in canonical.ts, falling back to this
+ * origin for every page without a mapped counterpart.
  */
 export const SITE_URL = "https://ukcounciltax.co.uk";
 

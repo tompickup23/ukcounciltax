@@ -105,6 +105,16 @@ CLOSE WITH a short report: the PR number and URL, the pages built, the reconcili
 3. `docs/HANDOFF-2026-11-08-BUDGET-GAME.md` may be committed with phase 5's docs, or deleted. The `.ops/` evidence stays uncommitted.
 4. **Bill round: Band D only** (Tom, in chat, 8 November 2026, "Yes, Band D only"). Table 10 publishes each body's part for Band D only, and other bands' parts must not be derived. Phase 3 round b uses the Band D parts alone, and the page's existing whole-bill band selector stays as it is.
 5. **Phase 2 review done** (Claude Code, 8 November 2026): the pages read correctly. One label fix is committed as `1ec12bf`: the label normaliser now turns only a dash between numbers into "to"; any other dash becomes a colon (RA line 252 had read "traffic management to bus lane enforcement"). Resume at phase 3.
+6. **Phase 4 moves to a follow-up PR (C1b)** (Claude Code, 8 November 2026, to get the game live sooner). This PR ships phases 3 and 5 only. Do not build the "your version" scenario here; the PR says it follows separately.
+7. **Stop policy for the rest of this build.** Stop only for the primary-source and security failures in "STOP AND REPORT". A disagreement with a reference that is not a source (AI DOGE, an earlier edition) is recorded in the PR, not a stop. A design question the brief does not answer gets the most conservative choice consistent with the source notes (show less, never derive), recorded under "Decisions taken" in the PR body. Carry on; do not pause mid-build to ask.
+8. **No new sources.** Do not cite a document the source notes do not name. If a sentence needs one, leave the sentence out and list it in the PR for review.
+9. **Self-review before the PR**, as the Claude review will check:
+   - every printed label matches the workbook apart from house-style punctuation, with "to" only between numbers;
+   - no figure appears without its source line;
+   - every no-return page and every note 4 page renders as specified;
+   - no party, councillor or officer is named anywhere;
+   - the game works by keyboard alone at 375px;
+   - dash and motive-word sweeps are clean.
 
 ## After Codex finishes
 

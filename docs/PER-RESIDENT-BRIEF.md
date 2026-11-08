@@ -2,7 +2,12 @@
 
 Written 8 November 2026 in Claude Code. Read `docs/PER-RESIDENT-SOURCE-NOTES.md` first; it is binding and wins over this brief.
 
-**Start only after the budget game PR (C1, branch `feat/budget-game-i001`) has merged into main.** This worktree was cut from main before that merge. Your first step is to rebase onto `origin/main` and confirm that `data/national/budget.json`, `src/lib/budget.ts` and `src/pages/tools/budget/[slug].astro` exist. If they do not, stop and report.
+**Stacked start (Claude Code, 8 November 2026, to run beside C1).** The budget data and pages already exist on C1's local branch `feat/budget-game-i001`, while C1 is still building its game there. Your first step is to rebase this branch onto the local `feat/budget-game-i001` (`git rebase feat/budget-game-i001`), then confirm that `data/national/budget.json`, `src/lib/budget.ts` and `src/pages/tools/budget/[slug].astro` exist. If they do not, stop and report.
+
+- Never commit to, push, rebase or otherwise change `feat/budget-game-i001` or its worktree `~/wt/uct-budget-game`. Read it only through your own rebase.
+- Keep your per-resident block self-contained (its own component and lib file), and change C1's `[slug].astro` by adding one include only, so later rebases stay small.
+- **Do not push and do not open a PR while C1 is unmerged.** Build, test and commit locally, one commit per phase. At the end, report "ready to rebase onto main". The PR is opened in a short follow-up after C1 merges: rebase onto `origin/main` (with `--onto` if C1 was squash merged), rerun every check, push, open the PR against `main`. This avoids repeating ukcouncils PR 26, which was merged into a stale stacked branch.
+- If you finish before C1's game rounds land, that is expected. Your checks run against C1's branch as it stood at your rebase.
 
 ## Phases
 
@@ -32,9 +37,9 @@ On `/tools/budget/<slug>/`, beside the adult and children's social care rows:
 
 On a district page, the county's block sits under the county heading. Barnsley and Sheffield get the boundary sentence from the notes, section 2, and no figures. Plain HTML, no new client script. No ranking, average or comparison. Add a methodology paragraph, a sources entry and a release entry in `docs/RELEASE.md`. Copy the source notes' facts; do not paraphrase figures.
 
-### Phase 4: checks and PR
+### Phase 4: checks (and the PR, in the follow-up after C1 merges)
 
-Run, all green, and paste the summaries into the PR: `npm test`, `npm run check`, `npm run build`, `npm run test:dist`, `npm run test:text`, `npm run test:e2e`, `npm run test:csp`, then `BUILD_OG=1 npm run build`. Then push `feat/per-resident-i124` and open one PR, "Social care spend per resident by age (I124)". In the body: each phase, the counts, screenshots of Birmingham, Burnley (showing the county block) and the City of London at 375px and desktop, and what you did not do. End with: "Built with Codex from a brief prepared in Claude Code." Do not merge or deploy.
+Run, all green, and keep the summaries for the PR: `npm test`, `npm run check`, `npm run build`, `npm run test:dist`, `npm run test:text`, `npm run test:e2e`, `npm run test:csp`, then `BUILD_OG=1 npm run build`. In the follow-up after C1 merges, push `feat/per-resident-i124` and open one PR, "Social care spend per resident by age (I124)". In the body: each phase, the counts, screenshots of Birmingham, Burnley (showing the county block) and the City of London at 375px and desktop, and what you did not do. End with: "Built with Codex from a brief prepared in Claude Code." Do not merge or deploy.
 
 ## Stop and report, rather than work around it, if
 

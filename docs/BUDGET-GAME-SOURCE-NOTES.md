@@ -73,7 +73,7 @@ The service sub-lines exist for drill-down (each total is preceded by its sub-li
 ## 4. Checks run on the data (all 308 councils with data)
 
 - **Service totals sum to line 799:** exact for every council, no mismatch beyond £2k.
-- **Sub-lines sum to their totals:** two mismatches beyond £2k (one environmental total, one adult social care total), both rounding at the thousands. Report them; do not adjust them.
+- **Sub-lines sum to their totals:** exact for every service group of every one of the 308 councils with data. *Corrected 8 November 2026 after the Codex phase 1 stop (`docs/BUDGET-GAME-PHASE-1-STOP.md`).* The first version of these notes reported two mismatches beyond £2k (one environmental total, one adult social care total). Rerunning the phase 0 check with the section 3 row filter applied finds none. The two came from rows outside the filter (England, class totals and other bodies), which that first pass had not excluded. Codex's two independent parses (`readOds()` and a direct `content.xml` read, 3,080 service-group sums) agree. The importer should now fail on any sub-line mismatch.
 - **Financing identity:** line 900 plus the twelve financing lines equals line 990 for every council, exactly. Financing lines are printed as negatives and line 990 as a positive.
 - **Table 10 reconciliation:** line 990 × 1,000 against `ownWithParishPence / 100 × taxBase` from `data/national/england.json` for the 287 billing authorities with data. 271 agree within 0.05 per cent and 275 within 0.5 per cent. Excluding parish precepts gives a far worse fit (80 within 0.05 per cent), which confirms that line 990 includes parish precepts.
 

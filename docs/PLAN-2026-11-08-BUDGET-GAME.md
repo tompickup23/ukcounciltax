@@ -55,7 +55,7 @@ PHASE 1: THE DATA (commit "Import RA 2026/27 budget data")
    d. counts: 317 councils kept, 308 with data, and the nine named councils with status "no return";
    e. the anchor values in the notes, section 4, asserted exactly for Burnley, Birmingham, Westminster and Lancashire;
    f. every district resolves to exactly one county and every county to at least one district.
-   The two sub-line mismatches the notes mention are reported in the data file's notes, not asserted away.
+   g. every service group's sub-lines sum exactly to its printed total for every council (corrected 8 November 2026: phase 0 first reported two mismatches in error).
 6. A one-off cross-check, not shipped code: run the parser on the RA 2024/25 individual authority file (find it in the same GOV.UK collection and record its URL and hash in the PR) and compare five councils with ~/aidoge-site/data/budgets/<id>.json service_split for 2024/25. Choose councils whose AI DOGE 2024/25 source is the RA return, not a budget book. Report the differences and their causes in the PR body. Copy no values.
 7. If a check fails for a reason the documents do not explain, stop after this phase, commit the importer and tests with the data write skipped, and report. A half-finished data refresh is never published.
 

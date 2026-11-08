@@ -75,7 +75,7 @@ PHASE 2: STATIC PAGES (commit "Budget pages for each council")
 PHASE 3: THE GAME (commit "Budget game rounds")
 1. Rounds, in order, each skippable, each ending with the observed answer and its source:
    a. Guess the split: the player shares 100p across the council's positive service headings, using steppers and number inputs (keyboard and screen reader friendly, not drag only). The reveal compares their pence with the actual shares of the sum of positive service totals, and says that is the base. Score: 100 minus half the sum of absolute differences, rounded. Net income headings are listed beneath, not guessed. Two-tier areas run a second screen for the county.
-   b. Your bill: the player picks a band and guesses each body's share of it. The reveal comes from Table 10.
+   b. Your bill, Band D only (Tom, 8 November 2026): the player guesses each body's share of the 2026/27 Band D area average. The reveal comes from the Table 10 Band D parts. The round has no band picker, and no other band's components are computed or shown.
    c. Where the money comes from: the player orders the funding sources by size. The reveal shows the printed figures.
    d. Reserves: the player says whether the council plans to draw on its non-ringfenced reserves in 2026/27 or add to them, and picks a size band. The reveal shows the printed start and end figures and the caveat. No ratio, and no comment on whether the level is high or low.
    e. A summary card with the scores and the three answers the player was furthest from. A share link carrying only the slug and the scores, never a band or postcode, and a copy button. No social network scripts.
@@ -103,6 +103,8 @@ CLOSE WITH a short report: the PR number and URL, the pages built, the reconcili
 1. **The 2024/25 cross-check stop is resolved: continue.** AI DOGE's `nottinghamshire_cc.json` lists nine service lines summing to £1,229,478,000 against its own stated total of £1,245,472,000. It leaves out RA line 490 (housing, minus £37,000) and line 599 (planning, £16,031,000), as Codex found. The fault is in AI DOGE's extractor, not here: across AI DOGE's budget files, 66 of the 317 with a split and a total have lines that do not sum to that total, mostly because fire, police or planning lines are missing (for example Surrey, Hertfordshire and the City of London). Our importer matches the official RA lines exactly. Put the five-council comparison and this explanation in the PR body. Do not change AI DOGE.
 2. **Wrangler.** Running `npm run test:csp`, which starts `wrangler pages dev` locally to serve `dist/` with the real headers, is required and allowed. The ban covers any Wrangler command that deploys or changes Cloudflare: `pages deploy`, `publish`, secrets, KV, D1 or R2 writes, and project or domain changes.
 3. `docs/HANDOFF-2026-11-08-BUDGET-GAME.md` may be committed with phase 5's docs, or deleted. The `.ops/` evidence stays uncommitted.
+4. **Bill round: Band D only** (Tom, in chat, 8 November 2026, "Yes, Band D only"). Table 10 publishes each body's part for Band D only, and other bands' parts must not be derived. Phase 3 round b uses the Band D parts alone, and the page's existing whole-bill band selector stays as it is.
+5. **Phase 2 review done** (Claude Code, 8 November 2026): the pages read correctly. One label fix is committed as `1ec12bf`: the label normaliser now turns only a dash between numbers into "to"; any other dash becomes a colon (RA line 252 had read "traffic management to bus lane enforcement"). Resume at phase 3.
 
 ## After Codex finishes
 

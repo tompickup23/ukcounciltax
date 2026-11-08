@@ -137,3 +137,9 @@ Burnley's other values: culture 5,287; environment 5,681; central 4,809; housing
 - Which cells in Part 2 carry the error type, and what they display through `readOds()`. Add a test that they come through as null or as their displayed marker, never as zero.
 - The release's revision policy wording, beyond the change history read above.
 - Any per-council page wording. That is phase 2 of the plan.
+
+## 7. Phase 2 presentation review, 8 November 2026
+
+The grouped funding view must retain direction as well as magnitude. In the pinned RA Part 1 sheet, reserve appropriations can represent additions, and other financing items can also deduct from funding. For example, Runnymede's retained business rates line 970 is positive 880 in printed GBP thousands; its funding contribution is therefore minus GBP 880,000 when the financing identity is rearranged. This is covered by note 8, not an importer discrepancy. The table shows positive magnitudes with add/deduct labels and makes the signed printed lines available alongside. An absolute-value sum would not reconcile. Every available council's grouped funding view is tested against line 900.
+
+Table 10 supplies Band D components, not all-band components. The existing annual band table supplies whole-bill charges by band. Phase 2 uses each on its own basis and derives no missing component charge. Tom asked to stop after phase 2 to review phase 3's band-selection requirement; a Band D-only bill round is a proposal, not an accepted decision. See `BUDGET-GAME-PHASE-2-REVIEW.md`.

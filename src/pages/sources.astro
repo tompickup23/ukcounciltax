@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import SourceLine from '../components/SourceLine.astro';
+import {budgetYear, budgetSource} from '../lib/budget';
 import { YEARS, loadYear, yearLabel } from "../lib/council-tax";
 import { loadRegistry } from "../lib/registry";
 import { longDate } from "../lib/sources";
@@ -20,6 +22,11 @@ const registry = loadRegistry();
     <h1>Where the figures come from</h1>
   </header>
   <div class="prose">
+    <h2>Council budgets, England</h2>
+    <p>The <a href="/tools/budget/">budget pages</a> read the pinned RA Part 1 service and financing lines, RA Part 2 reserve balances and SG Dedicated Schools Grant line. These are the {budgetYear} individual authority budget files, published 11 June 2026 and retrieved 8 November 2026, under the Open Government Licence v3.0. <a href="/data/">The Sources catalogue</a> links the original files; checksums are retained in the project's source manifest.</p>
+    <SourceLine source={budgetSource('raPart1')} />
+    <SourceLine source={budgetSource('raPart2')} />
+    <SourceLine source={budgetSource('raGrants')} />
     <h2>Council tax, England</h2>
     <ul>
       {years.map(({ year, source }) => (

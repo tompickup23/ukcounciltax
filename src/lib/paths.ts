@@ -68,5 +68,6 @@ export function programmaticPaths(): string[] {
     ...BANDS.map(bandPath),
     ...REGIONS.map(regionPath),
     ...councilPages().map(({ council }) => councilPath(council)),
+    ...councilPages().map(({ council }) => `/tools/budget/${council.slug}/`),
   ];
 }

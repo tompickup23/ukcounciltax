@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import SourceLine from '../components/SourceLine.astro';
+import {budgetYear, budgetSource} from '../lib/budget';
 import { CURRENT_YEAR, PREVIOUS_YEAR, loadYear, yearLabel } from "../lib/council-tax";
 import { tableName } from "../lib/sources";
 
@@ -20,6 +22,12 @@ const ratios = data.source.bandTableNotes.find((n) => n.id === "ac")?.text ?? nu
     <h1>How the figures are read</h1>
   </header>
   <div class="prose">
+    <h2>Council budgets</h2>
+    <p>The <a href="/tools/budget/">budget pages</a> use MHCLG's {budgetYear} RA budget return. Service amounts are observed net current expenditure, net of sales, fees, charges and transfers, excluding NHS-funded spending. Printed integers in thousands of pounds are converted to pounds for display. No other year's figures fill missing returns.</p>
+    <p>MHCLG service headings and their sub-lines are retained. Zero service headings are omitted and negative totals are labelled net income. Education is not reduced by the Dedicated Schools Grant. Special schools and alternative provision is not a total for SEND spending.</p>
+    <p>The funding view is a calculation: reverse the signs of the financing lines, group reserves and other items, and add the council tax requirement to reach revenue expenditure. Positive magnitudes carry an add or deduct label. The original signed lines are also shown. The non-ringfenced reserve total is other earmarked plus unallocated reserves; MHCLG cautions that usable revenue reserves cannot be identified in this release.</p>
+    <p>Service and financing totals are reconciled against the printed RA totals. Council tax requirement is checked against Table 10's own Band D including average parish precepts multiplied by its tax base. Reviewed source discrepancies remain unchanged, and MHCLG note 4 is quoted beside affected figures. Band D bill components are separate observations from Table 10; no resident's bill is apportioned across services.</p>
+    <SourceLine source={budgetSource()} />
     <h2>Council tax by band</h2>
     <p>
       Each council's figures for bands A to H are {tableName(data.source.bandTable)} of the MHCLG release

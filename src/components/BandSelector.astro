@@ -27,9 +27,10 @@ interface Props {
   ons: string;
   authority: Authority;
   idPrefix?: string;
+  showChange?: boolean;
 }
 
-const { ons, authority, idPrefix = "band" } = Astro.props;
+const { ons, authority, idPrefix = "band", showChange = true } = Astro.props;
 const bandTable = loadYear(CURRENT_YEAR).source.bandTable;
 const source = councilTaxSource(CURRENT_YEAR, bandTable);
 const changeRef = changeSource(PREVIOUS_YEAR, CURRENT_YEAR);
@@ -57,7 +58,7 @@ const previous = yearLabel(PREVIOUS_YEAR);
   <div class="band-panels">
     {BANDS.map((band) => {
       const annual = authority.bands[band];
-      const change = bandChange(ons, band);
+      const change = showChange ? bandChange(ons, band) : null;
       return (
         <div class="band-panel card" data-band-panel={band}>
           <Fact

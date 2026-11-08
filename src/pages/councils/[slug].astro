@@ -6,6 +6,7 @@ import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
 import BandMix from '../../components/BandMix.astro';
 import CollectionRates from '../../components/CollectionRates.astro';
+import BudgetSummary from '../../components/BudgetSummary.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
 import MiniMap from "../../components/MiniMap.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -147,6 +148,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <CouncilActions slug={council.slug} />
   <BandMix gss={council.gss} name={name} />
   <CollectionRates gss={council.gss} name={name} />
+  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
   <PageContents items={[
     {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
     {id: 'parish-precepts', label: 'Parish charges'},

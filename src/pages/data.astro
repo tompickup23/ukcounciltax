@@ -4,7 +4,9 @@ import {YEARS, loadYear, yearLabel} from '../lib/council-tax';
 import {national} from '../lib/national-data';
 import {devolved} from '../lib/devolved';
 import {localBills} from '../lib/local-bill-data';
+import {budget, budgetYear} from '../lib/budget';
 const publications = [
+  ...Object.values(budget.sources).map(source => ({publisher:source.publisher, title:source.title, edition:`${budgetYear}; published 11 June 2026`, table:source.tables.join(', '), retrieved:source.retrieved, licence:source.licence, url:source.fileUrl})),
   ...YEARS.flatMap(year => {
     const {source} = loadYear(year);
     return source.files.map(file => ({publisher:source.publisher, title:file.title, edition:yearLabel(year), table:year === '2024-25' ? file.title.split(':')[0] : 'Tables 1 to 9', retrieved:'Not recorded separately from import date', licence:source.licence, url:file.url}));

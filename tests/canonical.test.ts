@@ -51,7 +51,7 @@ describe("the reviewed canonical map", () => {
   it("covers every current route and keeps any unmapped route self canonical", () => {
     const builtUrls = [...STATIC_PATHS, ...programmaticPaths()].map(absoluteUrl);
     const retiredUrl = absoluteUrl("/council-tax/rises-2026-27/");
-    const addedUrls = ["/council-tax-2027-28/", "/findings/", "/changes/"].map(absoluteUrl);
+    const addedUrls = ["/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/'))].map(absoluteUrl);
     expect(sourceUrls.filter(url => !builtUrls.includes(url))).toEqual([retiredUrl]);
     expect(builtUrls.filter(url => !sourceUrls.includes(url)).sort()).toEqual(addedUrls.sort());
     expect(builtUrls.filter(url => data.mappings[url])).toHaveLength(324);

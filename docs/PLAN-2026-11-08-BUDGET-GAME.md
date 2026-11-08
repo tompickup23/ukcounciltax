@@ -98,6 +98,12 @@ STOP AND REPORT, rather than work around it, if: a pinned file's hash does not m
 CLOSE WITH a short report: the PR number and URL, the pages built, the reconciliation results, whether phase 4 shipped, and anything left for Tom to decide.
 ```
 
+## Review decisions, 8 November 2026 (Claude Code, after the second stop)
+
+1. **The 2024/25 cross-check stop is resolved: continue.** AI DOGE's `nottinghamshire_cc.json` lists nine service lines summing to £1,229,478,000 against its own stated total of £1,245,472,000. It leaves out RA line 490 (housing, minus £37,000) and line 599 (planning, £16,031,000), as Codex found. The fault is in AI DOGE's extractor, not here: across AI DOGE's budget files, 66 of the 317 with a split and a total have lines that do not sum to that total, mostly because fire, police or planning lines are missing (for example Surrey, Hertfordshire and the City of London). Our importer matches the official RA lines exactly. Put the five-council comparison and this explanation in the PR body. Do not change AI DOGE.
+2. **Wrangler.** Running `npm run test:csp`, which starts `wrangler pages dev` locally to serve `dist/` with the real headers, is required and allowed. The ban covers any Wrangler command that deploys or changes Cloudflare: `pages deploy`, `publish`, secrets, KV, D1 or R2 writes, and project or domain changes.
+3. `docs/HANDOFF-2026-11-08-BUDGET-GAME.md` may be committed with phase 5's docs, or deleted. The `.ops/` evidence stays uncommitted.
+
 ## After Codex finishes
 
 - In the PR, check the reconciliation section first. A wrong sheet or unit would show up in the Table 10 test.

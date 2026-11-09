@@ -26,9 +26,11 @@
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.1",
     "@fontsource/source-serif-4": "^5.3.1",
+    "@observablehq/plot": "0.6.17",
     "@resvg/resvg-js": "^2.6.2",
     "astro": "^7.4.5",
     "d3-geo": "^3.1.1",
+    "jsdom": "29.1.1",
     "satori": "^0.63.2"
   },
   "devDependencies": {

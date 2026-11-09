@@ -22,9 +22,14 @@ import { sitemapPaths } from "../src/pages/sitemap.xml";
 const ROOT = resolve(import.meta.dirname, "..");
 const rel = (path: string) => path.replace(`${ROOT}/`, "");
 
+const VENDOR = join(ROOT, "src", "vendor");
+
 function walk(dir: string, pattern: RegExp, out: string[] = []): string[] {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
+    // The vendored Estate Kit is not this site's source: tests/vendor.test.ts pins it
+    // byte for byte to its tag, and its own repository runs these house checks.
+    if (entry.isDirectory() && path === VENDOR) continue;
     if (entry.isDirectory()) walk(path, pattern, out);
     else if (pattern.test(entry.name)) out.push(path);
   }

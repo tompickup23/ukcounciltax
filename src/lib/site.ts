@@ -45,6 +45,7 @@ export const STATIC_PATHS = [
   "/your-area/",
   "/councils/",
   "/council-tax/",
+  "/council-tax/ranked/",
   NEXT_YEAR_PATH,
   "/about/",
   "/methodology/",

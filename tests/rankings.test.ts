@@ -1,3 +1,6 @@
+import {rankingPage} from '../src/lib/ranking-page';
+import {REGIONS, regionSlug, bandSlug} from '../src/lib/paths';
+import {BANDS} from '../src/lib/council-tax';
 import {describe, expect, it} from 'vitest';
 import {CURRENT_YEAR, loadYear, type YearFile} from '../src/lib/council-tax';
 import {classFor, competitionRank, COUNTY_CLASS, isComplete, ordinal, positionCell, positionWords, RANK_CLASSES, rankClass, rankCounties} from '../src/lib/rankings';
@@ -42,6 +45,8 @@ describe('same class published Band D positions', () => {
     (fixture.authorities.E07000117.bands as Record<string,number|null>).D=null;
     expect(isComplete(fixture,RANK_CLASSES[0])).toBe(false);
     expect(rankClass(fixture,RANK_CLASSES[0])).toBeNull();
+    expect(rankingPage(fixture,RANK_CLASSES[0]).rows).toBeNull();
+    expect(rankingPage(fixture,RANK_CLASSES[0]).description).toContain("does not rank them");
     const missing=structuredClone(year); delete missing.authorities.E07000117;
     expect(isComplete(missing,COUNTY_CLASS)).toBe(false);
     const county=structuredClone(year); county.counties.E10000003.bandD=null;
@@ -53,3 +58,5 @@ describe('same class published Band D positions', () => {
     expect(positionCell(21,true)).toBe('21='); expect(positionCell(130,false)).toBe('130');
   });
 });
+
+it('reserves the ranked directory outside band and region slugs', () => { expect([...REGIONS.map(regionSlug),...BANDS.map(bandSlug)]).not.toContain('ranked'); });

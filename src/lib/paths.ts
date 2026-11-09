@@ -1,3 +1,4 @@
+import { RANK_CLASSES, COUNTY_CLASS } from './rankings';
 import {devolvedPaths} from './devolved';
 import { BANDS, CURRENT_YEAR, loadYear, type Authority, type Band } from "./council-tax";
 import { loadRegistry, type Council } from "./registry";
@@ -65,9 +66,13 @@ export function councilPages(): CouncilPage[] {
 export function programmaticPaths(): string[] {
   return [
     ...devolvedPaths(),
+    ...rankingPaths(),
     ...BANDS.map(bandPath),
     ...REGIONS.map(regionPath),
     ...councilPages().map(({ council }) => councilPath(council)),
     ...councilPages().map(({ council }) => `/tools/budget/${council.slug}/`),
   ];
 }
+
+export const rankingPath = (slug: string) => `/council-tax/ranked/${slug}/`;
+export const rankingPaths = () => [...RANK_CLASSES, COUNTY_CLASS].map(cls => rankingPath(cls.slug));

@@ -83,3 +83,40 @@ test('every no-return page preserves its notice and every note 4 page preserves 
     }
   }
 });
+
+for (const [slug, code, heading, adult] of [
+  ['birmingham', 'E08000025', 'Birmingham: per resident', '£641'],
+  ['burnley', 'E10000017', 'Lancashire County Council: per resident', '£652'],
+  ['city-of-london', 'E09000001', 'City of London: per resident', null],
+] as const) {
+  test(`${slug} per resident figures retain sources and work without JavaScript`, async ({browser, baseURL}, testInfo) => {
+    const context = await browser.newContext({javaScriptEnabled: false, viewport: testInfo.project.use.viewport});
+    const page = await context.newPage();
+    await page.goto(`${baseURL}/tools/budget/${slug}/`);
+    const block = page.locator('[data-per-resident]');
+    await expect(block).toHaveAttribute('data-per-resident', code);
+    await expect(block.getByRole('heading', {name: heading, exact: true})).toBeVisible();
+    await expect(block.locator('[data-ratio]')).toHaveCount(4);
+    if (adult) await expect(block.locator('[data-ratio="adult"] .ratio-value')).toHaveText(adult);
+    await expect(block.getByText('The population estimate is for mid-2025; the budget is for 2026/27.', {exact: true})).toHaveCount(4);
+    await expect(block.locator('[data-unattributed]')).toContainText('They do not add up to the adult ratio.');
+    await expect(block).toContainText('Office for National Statistics');
+    await expect(block).toContainText('Ministry of Housing, Communities and Local Government');
+    await block.locator('[data-ratio="workingAge"] summary').click();
+    await expect(block.locator('[data-ratio="workingAge"] li')).toHaveCount(5);
+    if (slug === 'burnley') await expect(block).toContainText('No social care ratio is calculated for Burnley district.');
+    if (slug === 'city-of-london') await expect(block.locator('[data-small-population]')).toContainText('667 residents under 18 and 1,441 aged 65 and over');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await context.close();
+  });
+}
+
+test('per resident exclusions show reasons without figures', async ({page}) => {
+  for (const slug of ['barnsley', 'sheffield', 'coventry', 'cumberland', 'dudley', 'greenwich', 'south-gloucestershire']) {
+    await page.goto(`/tools/budget/${slug}/`);
+    const block = page.locator('[data-per-resident]');
+    await expect(block.locator('[data-ratio]')).toHaveCount(0);
+    await expect(block.locator('[data-per-resident-unavailable]')).toContainText(['barnsley', 'sheffield'].includes(slug) ? 'different boundary codes' : 'No 2026/27 return');
+    await expect(block).not.toContainText('£0');
+  }
+});

@@ -27,9 +27,9 @@ test('Sources links to official publications without serving datasets',async({pa
  await page.goto('/data/');
  await expect(page.getByRole('heading',{name:'Sources',exact:true})).toBeVisible();
  await expect(page.locator('a[href^="/downloads/"]')).toHaveCount(0);
- // Retained catalogue plus the three pinned RA budget workbooks.
- await expect(page.locator('[data-source-publication]')).toHaveCount(16);
- for (const file of ['RA_2026-27_data_Part_1.ods', 'RA_2026-27_data_Part_2.ods', 'SG_2026-27.ods']) await expect(page.locator(`[data-source-publication] a[href$="${file}"]`)).toHaveCount(1);
+ // Thirteen existing publications, three RA files and one ONS population workbook.
+ await expect(page.locator('[data-source-publication]')).toHaveCount(17);
+ for (const file of ['RA_2026-27_data_Part_1.ods', 'RA_2026-27_data_Part_2.ods', 'SG_2026-27.ods', 'mye25tablesuk.xlsx']) await expect(page.locator(`[data-source-publication] a[href$="${file}"]`)).toHaveCount(1);
  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

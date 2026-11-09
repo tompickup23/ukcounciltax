@@ -1,11 +1,13 @@
-import {describe, expect, it} from 'vitest';
+import {beforeAll, describe, expect, it} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {buildPopulation, verifyPopulationHash} from '../scripts/import-population.mjs';
+import {buildPopulation, ensurePopulationWorkbook, verifyPopulationHash} from '../scripts/import-population.mjs';
 import population from '../data/national/population.json';
 
 const areas = population.areas;
 describe('ONS mid-2025 population contract', () => {
+  // Raw workbooks are ignored by Git. Fetch only this pinned source when absent.
+  beforeAll(async () => { await ensurePopulationWorkbook(); }, 60000);
   it('verifies the pinned raw hash and reproduces the committed extract', async () => {
     const bytes = readFileSync(`data/raw/${population.source.file}`);
     expect(createHash('sha256').update(bytes).digest('hex')).toBe('8ae244e3341257ecccaee55f4973fe12f46afe6656ead6c1a9ed3f4f8585e40f');

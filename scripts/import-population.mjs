@@ -14,7 +14,7 @@ export async function buildPopulation() {
   const source = JSON.parse(readFileSync(resolve(process.cwd(), 'data/national/sources.json'), 'utf8')).population;
   const path = resolve(process.cwd(), 'data/raw', source.file);
   if (source.sha256 !== POPULATION_HASH) fail('source manifest hash differs');
-  verifyPopulationHash(readFileSync(path));
+  await ensurePopulationWorkbook();
   const rows = await readSheet(path, 'MYE2 - Persons');
   const headerIndex = rows.findIndex(row => row[0] === 'Code');
   if (headerIndex < 0) fail('missing Code header');
@@ -57,7 +57,7 @@ export function validatePopulation(areas) {
   });
   if (!areas.E08000016 || !areas.E08000019 || areas.E08000038 || areas.E08000039) fail('boundary codes differ');
 }
-export async function importPopulation() {
+export async function ensurePopulationWorkbook() {
   const source = JSON.parse(readFileSync(resolve(process.cwd(), 'data/national/sources.json'), 'utf8')).population;
   const path = resolve(process.cwd(), 'data/raw', source.file);
   mkdirSync(resolve(process.cwd(), 'data/raw'), {recursive: true});
@@ -68,6 +68,9 @@ export async function importPopulation() {
     verifyPopulationHash(bytes);
     writeFileSync(path, bytes);
   }
+  verifyPopulationHash(readFileSync(path));
+}
+export async function importPopulation() {
   const data = await buildPopulation();
   writeFileSync(resolve(process.cwd(), 'data/national/population.json'), JSON.stringify(data, null, 2) + '\n');
   console.log('ONS mid-2025: 333 English rows; pinned hash, geography counts, age sums and anchors passed.');

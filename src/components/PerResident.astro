@@ -1,6 +1,6 @@
 ---
 import SourceLine from './SourceLine.astro';
-import {budget, budgetMoney, budgetSource} from '../lib/budget';
+import {budget, budgetYear, budgetMoney, budgetSource} from '../lib/budget';
 import {perResident, population, YEAR_MISMATCH} from '../lib/per-resident';
 interface Props {gss: string}
 const {gss} = Astro.props;
@@ -25,7 +25,7 @@ const bandLabels = {age18plus: 'aged 18 and over', age18to64: 'aged 18 to 64', a
         <h3>{ratio.label}</h3>
         <p class="ratio-value">{money(ratio.value)}</p>
         <p class="small">Calculated from {money(ratio.numeratorPounds)} divided by {ratio.denominator.count.toLocaleString('en-GB')} residents {bandLabels[ratio.denominator.band]}. Shown to the nearest pound.</p>
-        <p class="small">MHCLG RA budget 2026/27, Part 1, lines {ratio.numeratorLines.map(line => line.line).join(', ')}; ONS population estimates, mid-2025, MYE2 Persons.</p>
+        <p class="small">MHCLG RA budget {budgetYear}, Part 1, lines {ratio.numeratorLines.map(line => line.line).join(', ')}; ONS population estimates, mid-2025, MYE2 Persons.</p>
         <p class="small">{YEAR_MISMATCH}</p>
         <details><summary>Lines used in this calculation</summary><ul>{ratio.numeratorLines.map(line => <li>Line {line.line}: {line.label}.</li>)}</ul></details>
       </article>)}

@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {budget, type BudgetCouncil} from './budget';
+import {budget, budgetYear, type BudgetCouncil} from './budget';
 
 export interface PopulationArea {
   code: string; name: string; geography: string;
@@ -14,9 +14,10 @@ export interface PopulationSource {
 export const population = JSON.parse(readFileSync(join(process.cwd(), 'data/national/population.json'), 'utf8')) as {
   source: PopulationSource; areas: Record<string, PopulationArea>;
 };
-export const YEAR_MISMATCH = 'The population estimate is for mid-2025; the budget is for 2026/27.';
+if (budget.sources.raPart1.sha256 !== '3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db' || population.source.sha256 !== '8ae244e3341257ecccaee55f4973fe12f46afe6656ead6c1a9ed3f4f8585e40f') throw new Error('Per resident source edition changed; stop for review');
+export const YEAR_MISMATCH = `The population estimate is for mid-2025; the budget is for ${budgetYear}.`;
 export const BOUNDARY_REASON = 'The population estimate and the budget return use different boundary codes, and the site does not join them.';
-export const NO_RETURN_REASON = 'No 2026/27 return was received in time for MHCLG’s publication on 11 June 2026.';
+export const NO_RETURN_REASON = `No ${budgetYear} return was received in time for MHCLG’s publication on 11 June 2026.`;
 export const DISTRICT_REASON = 'Per resident social care figures are shown only for social care authorities, defined by RA class SC, UA, MD or LB.';
 export const WORKING_AGE_IDS = ['ascphyadl', 'ascsnsadl', 'ascmmradl', 'asclrnadl', 'ascmntadl'];
 export const OLDER_PEOPLE_IDS = ['ascphyold', 'ascsnsold', 'ascmmrold', 'asclrnold', 'ascmntold'];

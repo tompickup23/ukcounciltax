@@ -2,6 +2,25 @@
 
 Written at the end of the 9 to 10 November Claude Code session, with Codex A2 on its gate, Codex B2 at item 5 of 10 and the Opus design prep in the estate kit. It follows `PLAN-2026-11-09-NEXT-SESSIONS.md` (sections 1 to 11) and `ASSESSMENT-2026-11-09-TAX-SITES.md`. Decisions waiting on Tom are in `DECISIONS-WAITING-2026-11-10.md`. State and resume notes are in `HANDOFF-2026-11-10-SESSION.md`.
 
+## 0. Update after the A2, B2 and kit reviews
+
+All three reviews passed. Each found something the build had missed and fixed it on the branch.
+
+| PR | Review | Fix commits | State |
+|---|---|---|---|
+| ukcounciltax 32 (A2) | Pass. The dist gate printed 688 pages, 318 mapped canonicals, 69 self canonicals and 296 profiles without asserting them; 22 screenshots had been force added under `output/playwright/` | `ff9c61a` asserts the four counts; `c1a4169` untracks the screenshots, including six main already tracked | Merge on green CI |
+| ukcouncils 35 (B2) | Pass, no blockers. The word count overshoot is source lines and B1's EFS section (Burnley prose about 490 words); `n/a` is that site's own null cell rule; four collection source lines where the brief asked for two | `d00fb80` drops the fourth | Merge on green CI |
+| estate-kit 3 (0.2.0) | One block: `squaresFor` trusted its caller | `60de785` refuses shares that are not percentages of one whole | Merge, then tag `v0.2.0` |
+
+What the reviews change downstream:
+
+- **A5.** `comm -23` will list 28 custom properties the kit file does not carry (`--accent-2` to `--surface-muted`, listed in the kit PR 3 review). They go in the site's own alias rule below `/* estate-tokens:end */`. The A5 stop condition applies only to any other name.
+- **Kit 0.3.0** gains three items: an optional published total on a money waffle, refused to the penny as `billAnatomy` does; `squaresFor` and `WAFFLE_PAINTS` in an import free `./waffle-rule` subpath; a line in the kit handover naming UK Council Tax's alias block beside UK Demographics'.
+- **C3.** B2's word target is restated as prose words excluding source lines, tables and the sources list. C3's budget section stays under 250 such words and its PR reports Burnley's and Birmingham's prose totals before and after. Putting the per page sources list in a `details` element is a lane B follow up.
+- **Lane B docs tidy** (rides C3 or a docs commit): `docs/B2-IMPLEMENTATION.md` and `docs/B1-REVIEW-2026-11-09.md` cite `cd3535a` and `3fe64c1`, unreachable after the rebase (live `ce1408f` and `7c48221`); the B2 source notes mistitle SI 1328/2024, which is "The Barnsley and Sheffield (Boundary Change) Order 2024". No page prints the title.
+- **A2 follow ups**, for a later lane A item or Tom: the PR 32 body links screenshots on the branch, which now 404 (swap in `9ab8d36b1f85d0e0fd51d33948b1b804c62ac6fc`); static sitemap dates are original release dates, so pages A2 changed still say 5 October 2026, and a route level change record would fix that honestly; the share card `boxSizing` fix touched every English card (recorded in `docs/RELEASE.md`); possessives such as "Hastings's".
+- **Lesson.** Screenshots are local inspection output. PR bodies link them at a commit sha or attach them; they are not committed to `output/playwright/`.
+
 ## 1. Linking across the estate: where it stands and what to change
 
 Checked live on 10 November 2026 on Burnley's pages.
@@ -31,9 +50,9 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 
 **Lane A, ukcounciltax (Codex):** A3 profile and home (brief in `~/wt/uct-profile`, to be revised for the kit and the strip after A5) then A4 rankings and parishes (brief in `~/wt/uct-rankings`, after decision 5, Lewes) then C1b scenario mode (brief in `~/wt/uct-scenario`, after A6 so it is built on the redesigned game, not the stepper form) then L1 on this site.
 
-**Lane B, ukcouncils (Codex):** C3 the budget section (brief in `~/wt/ukc-budget`, after B2 merges) then L1 on this site then B3 seats by party (after decision 1, brief to write).
+**Lane B, ukcouncils (Codex):** C3 the budget section (brief in `~/wt/ukc-budget`, after B2 merges) then B4 the reorganisation panel (section 6, after decisions 4 and 8) then L1 on this site then B3 seats by party (after decision 1, brief to write).
 
-**Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); kit 0.3.0 (positionStrip, ChartActions, the gates, thumb, diverging zeroBar, grid only waffle) after kit 0.2.0 merges; A5 build after A2 merges, kit v0.2.0 is tagged and K1 is decided; A6 build after A5 merges and kit 0.3.0 is tagged; the A3 brief revision; the L2 to L4 brief template; the C3 review; the design check before every design PR.
+**Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); kit 0.3.0 (positionStrip, ChartActions, the gates, thumb, diverging zeroBar, grid only waffle) after kit 0.2.0 merges; A5 build after A2 merges, kit v0.2.0 is tagged and K1 is decided; A6 build after A5 merges and kit 0.3.0 is tagged; the A3 brief revision; the L2 to L4 brief template; the B4a reorganisation source notes and brief (any time, no site code); the C3 review; the design check before every design PR.
 
 **Lane D, other repos (Codex, one at a time):** L2 UK Demographics, L4 AI DOGE, L3 UK Elections after 16 November. Each is one short session from the shared template.
 
@@ -47,7 +66,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 4. A5 merges: Opus revises the A3 brief (kit charts, BenchmarkStrip as the position strip, ChartActions on every chart, DataDrawer for the long tables, the network strip), Codex lane A builds A3.
 5. A6 merges: the game is a game. Codex lane A then A4 (Lewes decided) and C1b.
 6. Decision 7 taken: Opus writes the L2 to L4 template; lane D runs L2, L4, then L3 after results week.
-7. C3 merges: lane B does L1 on UK Councils, then B3 if decision 1 allows.
+7. C3 merges: lane B builds B4, the reorganisation panel (decisions 4 and 8 taken, B4a brief committed), then L1 on UK Councils, then B3 if decision 1 allows. B4 should be live before the first 2027 vesting date and within any open representation window.
 8. Beacon and Search Console live: the first measured week before the 2027 bill season planning in section 10 of the assessment.
 
 ## 3. Outline prompts
@@ -88,12 +107,18 @@ In ~/wt/uct-profile, revise docs/A3-PROFILE-BRIEF.md for the kit: band bars A to
 
 ### Codex: A3, A4, C3, C1b
 
-Each is the existing pattern: "Work only in <worktree>, branch <branch>. Fetch and rebase onto origin/main. Read CLAUDE.md, then <source notes> (binding), then <brief>. Build the items in order, one commit per item, with the brief's assertions and stop conditions. Run the full gate; take the screenshots the brief names; push; open the PR the brief describes. Stop only on the brief's stop conditions; otherwise the most conservative choice and a line under Decisions taken." The worktrees and briefs: A3 `~/wt/uct-profile` `feat/profile-home-overhaul` `docs/A3-PROFILE-BRIEF.md`; A4 `~/wt/uct-rankings` `feat/rankings-parishes` `docs/A4-RANKINGS-PARISHES-BRIEF.md` with its source notes; C3 `~/wt/ukc-budget` `feat/council-budget-section` `docs/BUDGET-SECTION-BRIEF.md`; C1b `~/wt/uct-scenario` `feat/budget-game-scenario` `docs/C1B-SCENARIO-BRIEF.md`.
+Each is the existing pattern: "Work only in <worktree>, branch <branch>. Fetch and rebase onto origin/main. Read CLAUDE.md, then <source notes> (binding), then <brief>. Build the items in order, one commit per item, with the brief's assertions and stop conditions. Run the full gate; take the screenshots the brief names; push; open the PR the brief describes. Stop only on the brief's stop conditions; otherwise the most conservative choice and a line under Decisions taken." The worktrees and briefs: A3 `~/wt/uct-profile` `feat/profile-home-overhaul` `docs/A3-PROFILE-BRIEF.md`; A4 `~/wt/uct-rankings` `feat/rankings-parishes` `docs/A4-RANKINGS-PARISHES-BRIEF.md` with its source notes; C3 `~/wt/ukc-budget` `feat/council-budget-section` `docs/BUDGET-SECTION-BRIEF.md`; C1b `~/wt/uct-scenario` `feat/budget-game-scenario` `docs/C1B-SCENARIO-BRIEF.md`. B4 `~/wt/ukc-reorg` `feat/reorganisation-panel` `docs/REORGANISATION-PANEL-BRIEF.md` with its source notes, after C3 merges.
 
 ### Opus: the L2 to L4 template (after decision 7)
 
 ```text
 Write docs/SISTER-LINK-BRIEF-TEMPLATE.md in ~/ukcouncils/docs (the repo that holds the working pattern, B1 item 2: scripts/fetch-ukcounciltax-sitemap.mjs, data/links/ukcounciltax-councils.json, src/lib/council-tax-links.ts, tests, check-dist). The template takes: target repo and worktree, the page template to change, the join field (GSS code), both tax sitemaps, the line's wording ("Council tax bands and the <year> Band D for <name> on UK Council Tax; the council's profile on UK Councils"), the counts to assert (296 of N pages), the dist check and the text test. Then write the three instances as docs in each repo's worktree: ~/wt/ukd-links (ukdemographics, place pages), ~/wt/aidoge-links (aidoge, council pages, one line beside the existing UK Councils link), ~/wt/uke-links (ukelections, council seat pages only, not before 17 November). Dry run the GSS joins against each repo's registry and record the counts. Commit the briefs; do not build.
+```
+
+### Opus: B4a reorganisation panel source notes and brief (any time)
+
+```text
+Create ~/wt/ukc-reorg from ukcouncils origin/main, branch feat/reorganisation-panel. Read CLAUDE.md, ~/ukcounciltax/docs/PLAN-2026-11-10-REMAINING.md section 6, and the 9 November LGR plan in Reports (git -C ~/Documents/Reports show origin/docs/lgr-game-plan-2026-11-09:Tompickup_Games_work/log/2026-11-09_lgr_game_plan.md). Write docs/REORGANISATION-SOURCE-NOTES.md: every area in the current MHCLG reorganisation programme, each with the councils by GSS code, the proposals, any minded to decision, the representation window, any structural changes order and the vesting date, each line citing the MHCLG or legislation.gov.uk document by title, date, page or paragraph and URL, with the raw documents saved and hashed. Recheck the Surrey order and its effective wording (decision 3). State the 29 October 2026 withdrawal for Lancashire from the letter itself, and record the status of the county council's protective claim of October 2026; if it is live, Lancashire lines carry the dated documents only. Count the areas yourself: the LGR plan says 21; record what you find and why. Dry run the GSS join against data/registry. Then write docs/REORGANISATION-PANEL-BRIEF.md for Codex: data/reorganisation/ with source blocks, the panel component (dated status rail and the kit locator map, no costs, savings or model figures), the rewrite of tests/reorganisation-held.test.ts to allow only sourced panel text, the dist and text checks, counts to assert, captures and stop conditions. Commit both; do not build, push or open a PR.
 ```
 
 ### Codex: L2, L4, L3
@@ -107,4 +132,32 @@ Write docs/SISTER-LINK-BRIEF-TEMPLATE.md in ~/ukcouncils/docs (the repo that hol
 
 ## 5. Sizing
 
-Twelve to fourteen sessions over about three months: three Opus design sessions (A5, A6 and the kit), four Codex builds on the tax sites (A3, A4, C3, C1b), three short Codex sessions on other repos (L2, L4, L3), two Opus prep sessions (the A3 revision and the link template) and the reviews. Nothing in it depends on new data. Everything after A6 depends on the beacon being live if it is to be judged rather than assumed.
+Fourteen to sixteen sessions over about three months (two added for B4a and B4): three Opus design sessions (A5, A6 and the kit), four Codex builds on the tax sites (A3, A4, C3, C1b), three short Codex sessions on other repos (L2, L4, L3), two Opus prep sessions (the A3 revision and the link template) and the reviews. Nothing in it depends on new data. Everything after A6 depends on the beacon being live if it is to be judged rather than assumed.
+
+## 6. Local government reorganisation: the LGR interactive and UK Councils
+
+The LGR interactive build plan (Reports PR 626, `Tompickup_Games_work/log/2026-11-09_lgr_game_plan.md`, 9 November 2026) splits the work in two. Only the second part belongs to this programme.
+
+- **tompickup.co.uk `/lgr/`: the model interactive.** Reform and comms lane, under Tom's declared interest, on the v3.2 combination grid (seven forms, 108 combinations each), built on the estate kit as a draft PR on v3.1 data and swapped to v3.2 on deposit day (February or March 2027). Neither tax site links to it or reuses its figures: they are signed, neutral sites and the model is Tom's.
+- **UK Councils: a neutral reorganisation panel with no model figures.** On each affected council's page: proposals, the minded to decision, the representation window and the vesting date, from MHCLG. It needs nothing from v3.2.
+
+The two share the kit, so kit 0.3.0 serves both: the locator map, `billAnatomy` and the line chart are in the LGR page's design; the panel uses the locator map. One writer in the kit at a time.
+
+### Timing: a correction to the LGR plan
+
+The LGR plan places the panel "after the bill season split" (R316). That dependency does not hold. R316 is done (cross domain canonicals, PR 15); the panel sits on UK Councils, which already owns the council profile URLs, and touches no shared tax route. Waiting until April 2027 would also miss what the panel exists to report: the 1 April 2027 vesting date in the Surrey order (decision 3's draft, to be rechecked) and minded to representation windows of about three weeks. The panel belongs in lane B straight after C3, as **B4**, ahead of L1 and B3. Decision 8 asks Tom to confirm this.
+
+### What it replaces and needs
+
+- It replaces the held registry reorganisation field (PR 27 on UK Councils, `tests/reorganisation-held.test.ts`), whose text predates MHCLG's 29 October 2026 withdrawal letter. The hold test changes from "print nothing" to "print only panel text whose every line has an MHCLG or legislation.gov.uk source in `data/reorganisation/`". The seven quotes B2 withholds stay withheld unless the panel's review clears them.
+- It absorbs decision 3 (the Surrey line): the panel is the reviewed, sourced route for it.
+- It wants decision 4 (the registry name refresh) first, so the areas join by GSS code on current names.
+- Lancashire: the withdrawal is stated as a dated fact from the letter. Before any Lancashire line ships, the status of the county council's protective claim of October 2026 is checked (sub judice); while it is live, Lancashire pages carry the dated documents only, with no characterisation.
+- Visuals from the kit: the locator map with the area's councils marked, and a dated status rail (proposal, minded to, window, order, vesting). No costs, savings or model figures.
+- UK Council Tax: the A3 revision adds one line on affected councils' profiles linking the UK Councils panel where it exists. Harmonisation of Band D after vesting is for the 2027/28 and 2028/29 bill editions, from published tables only.
+
+| Id | Who | What | When |
+|---|---|---|---|
+| B4a | Opus | Source notes and brief in `~/wt/ukc-reorg` (prompt in section 3) | Any time; no site code |
+| B4 | Codex | Build from the brief | After C3 merges and decisions 4 and 8 |
+| A3 line | Opus, in the A3 revision | Link from affected UK Council Tax profiles to the panel | With the A3 revision |

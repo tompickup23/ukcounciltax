@@ -18,7 +18,7 @@ Saved before archiving the chat. Nothing in this note authorises a push, merge o
 
 ## Open PRs
 
-None on either tax repo at save time. Expect A2 (ukcounciltax) and B2 (ukcouncils) next; their reviews are the first Opus job (outline in the remaining plan, section 3).
+None on either tax repo at save time. Since then A2 (ukcounciltax PR 32), B2 (ukcouncils PR 35) and kit 0.2.0 (estate-kit PR 3) opened, were reviewed and had their review fixes applied; all three wait only on CI and Tom's merge. See the remaining plan, section 0.
 
 ## Worktrees and briefs (all local, none to be removed)
 
@@ -35,7 +35,7 @@ None on either tax repo at save time. Expect A2 (ukcounciltax) and B2 (ukcouncil
 
 ## Decisions waiting on Tom
 
-`DECISIONS-WAITING-2026-11-10.md`, items 1 to 7 (item 7, cross estate inbound links, added today). Recommendations were given in chat on 10 November: accept the Open Council Data table with attribution; hold the 46 cycle years; hold Surrey; authorise the registry name refresh; rank Lewes with the note; supply the beacon token and Search Console; allow contextual inbound links from network sites.
+`DECISIONS-WAITING-2026-11-10.md`, items 1 to 8 (item 7, cross estate inbound links; item 8, the reorganisation panel timing). Recommendations were given in chat on 10 November: accept the Open Council Data table with attribution; hold the 46 cycle years; hold Surrey; authorise the registry name refresh; rank Lewes with the note; supply the beacon token and Search Console; allow contextual inbound links from network sites.
 
 ## Lessons recorded this session
 

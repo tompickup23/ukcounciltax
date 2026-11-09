@@ -108,6 +108,14 @@ for (const path of files(DIST)) {
     }
   }
 
+  const devolvedPage = /^\/(scotland|wales)\/([^/]+)\/index\.html$/.exec(rel(path));
+  if (devolvedPage) {
+    const image = /<meta property="og:image" content="([^"]+)"/.exec(text)?.[1];
+    const expectedPath = `/og/${devolvedPage[1]}/${devolvedPage[2]}.png`;
+    if (!image || new URL(image).pathname !== expectedPath) failures.push(`devolved page lacks its own share card: ${rel(path)}`);
+    if (existsSync(join(DIST, 'og')) && !existsSync(join(DIST, expectedPath))) failures.push(`missing devolved card: ${expectedPath}`);
+  }
+
   const schemaNodes = [];
   for (const match of text.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
     try { schemaNodes.push(JSON.parse(match[1])); }
@@ -245,6 +253,8 @@ if (existsSync(bandFile)) {
 // When the build rendered cards (BUILD_OG=1), every og:image must resolve to
 // a card in the tree. An iteration build renders none and skips this.
 if (existsSync(join(DIST, "og"))) {
+  const devolvedCards = ['scotland', 'wales'].flatMap(nation => existsSync(join(DIST, 'og', nation)) ? [...files(join(DIST, 'og', nation))].filter(path => path.endsWith('.png')) : []);
+  if (devolvedCards.length !== 54) failures.push(`expected 54 devolved cards, found ${devolvedCards.length}`);
   let cards = 0;
   for (const path of files(DIST)) {
     if (!path.endsWith(".html")) continue;

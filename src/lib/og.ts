@@ -57,6 +57,7 @@ function layout(card: OgCard) {
     {
       width: "1200px",
       height: "630px",
+      boxSizing: "border-box",
       flexDirection: "column",
       justifyContent: "space-between",
       padding: "56px 64px 44px",

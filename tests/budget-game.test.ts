@@ -144,3 +144,23 @@ it('prints Table 10 once in the drawn bill source without changing its source re
   expect(chart.caption).toContain('Data Billing and Precepting Bodies');
   expect(JSON.stringify(bill.source)).toBe(before);
 });
+
+
+it('keeps verbatim body names in chart labels and marks their HTML twin cells', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const {esc}=await import('../src/vendor/estate-kit/dist/src/charts/canvas.js');
+  let checked=0;
+  for(const {council,tax} of councilPages()) {
+    const bill=gameData(council.gss,council.slug,tax.name)?.rounds.find(round=>round.kind==='bill');
+    if(!bill)continue;
+    const names=bill.items.filter(item=>item.label.includes([' ','-',' '].join('')));
+    if(!names.length)continue;
+    const out=gameChart(bill,`labels-${council.slug}`).out;
+    for(const item of names) {
+      expect(out.table).toContain(`<th scope="row" data-dash-ok="">${esc(item.label)}</th>`);
+      expect(out.svg).toContain(esc(item.label));
+      checked++;
+    }
+  }
+  expect(checked).toBeGreaterThan(0);
+});

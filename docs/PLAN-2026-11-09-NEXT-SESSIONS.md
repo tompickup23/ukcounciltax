@@ -182,3 +182,57 @@ In rough order of visitor value, each a future Opus prep then Codex build unless
 6. **Levels day 2027/28 staged in advance (C6):** rankings per class, precept day, the year switch behind a flag, so release morning is data only.
 7. **One data repository with signed releases (D1, D2):** both sites pin by hash, one schema per dataset, a dataset landing page with a citation line. Three sessions before 20 March 2027.
 8. **Measurement:** the beacon and Search Console on UK Council Tax, without which none of the above can be judged. Tom's token, one line of code.
+
+## 11. Design programme for the site and the game, 10 November 2026
+
+Written after a live look at the homepage, the Burnley profile and the Burnley budget game at 1440 wide in dark mode, with the stylesheet and the game script open beside them. Light mode and phone captures were not taken in this pass; the design check skill takes both and should run before and after each item below. Tom's verdict, which the estate design audit of 4 November 2026 scored at 5.8 out of 10 and called weak, stands: the site reads as a form, and the game reads as a questionnaire.
+
+### 11.1 What is wrong, in the order a visitor meets it
+
+1. **The homepage opens on an empty half screen.** `.home-hero` is a two column grid with `align-items: center`. The bill anatomy card on the right is far taller than the copy on the left, so the H1, lede and the two buttons are centred against it and sit below the fold. On first paint the left half of a 1440 by 900 window is blank and the postcode door is two screens down. One declaration (`align-items: start`) and moving the postcode form into the hero copy fix the first impression.
+2. **The bill anatomy card, the best component on the network, is a list.** Four coloured dots, three of them greys, and a 12px stack bar. The estate kit's `billAnatomy` draws the same figure as a real stacked bar with labels, the source line inside the drawing and a table twin. The card should be that drawing.
+3. **The profile is dense tables on a dark ground with no picture.** Eight band radios hide seven figures; the Band D figure is right but nothing is drawn beside it; the mini map shows a boundary and says nothing. The audit's signature visuals for this site (band bars A to H with the chosen band marked, a position strip within class, the stacked 100 pound bar) are all server SVG the kit can now draw, and the data for each is already on the page.
+4. **The game page does not lead with the game.** It opens with a page head, an "on this page" chip row and a grey box with one button. The game itself is a vertical stack of eight cards, each a label and a minus, zero, plus stepper in pence, with a running total as a line of text. Nothing moves, nothing is drawn, and the published answer arrives as a bulleted list. Scores are sentences. The summary is a list and a copy link. Everything a player would want to screenshot is text.
+5. **The skeleton is UK Councils in green.** Header, theme select in the phone header, card grid, footer and tables are the same files as the sister site, which the audit's finding 1 and decision DD2 already cover: one skeleton, but a signature visual and a hero each site owns.
+6. **Measurement is off.** None of this can be judged without the beacon (decision 6 in `DECISIONS-WAITING-2026-11-10.md`).
+
+### 11.2 What to build
+
+The direction is already decided at estate level: DD2 (one skeleton, a signature visual and hero per site), DD4 (the server rendered SVG kit in `tompickup23/estate-kit`, now at 0.1.0 with `zeroBar`, `line`, `waffle`, `statTile`, `billAnatomy`, `hemicycle` and `locatorMap`, each with the source line inside the drawing and a table twin) and DD1 (a distinct pictogram per site; a house with a bill for this one, R560 by 20 November). The kit's tokens hold six site accents and this site is not yet one of them, so the first commit is in the kit, not here.
+
+**A5, the face: homepage and skeleton.** Hero with `align-items: start`, the postcode door and the name search inside the hero copy, the bill anatomy card drawn by the kit's `billAnatomy` at card width, the four task cards under it with one small kit drawing each (band bars, a line, a stacked bar, two ticks on a strip) instead of a numbered label. Theme select out of the phone header and into the footer. Kit tokens adopted through `scripts/apply-brand.py`, so the site's colours are the kit's and the palette test can bind them. Share cards regenerated from the kit's card package so the figure, the domain and the source travel with every link.
+
+**A6, the game as a game.** Keep the data, the scoring, the sources, the no return notices and the static tables; change what the player sees:
+
+- The page leads with the game: H1 "Could you set Burnley's budget?", one line of what the player will do, the start button, and under it a greyed kit waffle of the published split as a teaser that becomes the answer. The published tables keep their place below with the "on this page" row.
+- Split rounds on a waffle, not steppers. One hundred squares are the 100 pence. Each service is a row with a compact plus and minus and a draggable range input (the stepper stays as the keyboard path); every pence moves a square, coloured by service from the kit's series palette with a pattern fallback so colour never carries identity alone. "Allocated 62p of 100p" sits on the grid, and the check button is disabled until the hundred is placed, with the reason stated.
+- The reveal is two waffles side by side, yours and the published one, and under them one diverging bar per service showing the gap in pence, drawn by the kit's `zeroBar`. The score is a number in display type with the published figures and the source line beneath, as now.
+- The funding round keeps the ordering interaction but reveals as a ranked bar of the published amounts, the player's order marked beside it.
+- The reserves round is two choices on one card: a direction toggle and a size band, revealed against the published change as a single bar with the start and end balances.
+- A step rail across the top, five stops, filled as rounds complete, borrowed from the Lancashire budget game (audit section 4, "the step rail is good").
+- The summary is a score card: five rounds, a score each, the total, drawn as one kit `statTile` group that is also rendered server side as the score link's share image, so a copied link unfurls as a card with the council name, the score and the site. Scores stay in the fragment as now; nothing is stored.
+- No JavaScript: the teaser waffle, the published tables and the notice render as today; the game controls remain hidden until the script runs.
+- Phone first: the waffle is 10 by 10 at 32px squares inside 375px with the service rows below it; no horizontal scroll; the check button sticks to the bottom of the viewport during a split round.
+
+**A3 inherits the face.** The profile overhaul brief in `~/wt/uct-profile` was written before this section. Before A3 builds, its brief gains: the band bars, the position strip and the stacked bill bar from the kit in place of the radio band panel and the two stat cards, and the mini map replaced by the kit's `locatorMap` once it knows this site's boundaries. A3 therefore runs after A5, not before.
+
+### 11.3 Who does what, and when
+
+Design work is for Claude Code (Opus) with the design check skill in the loop, not for Codex: taste, before and after captures and the judgement calls do not survive a brief. Codex takes the mechanical parts afterwards: kit version bumps, the share card regeneration across 390 pages, the A3 adoption.
+
+| Step | Lane | Starts when | Done when |
+|---|---|---|---|
+| Kit: add this site's accent triple, a `scoreCard` tile variant and a 10 by 10 waffle size; cut 0.2.0 | Opus, in `tompickup23/estate-kit` | Now, no conflict with any open lane | Demo renders both themes for this site; palette test passes |
+| A5 design brief with before captures, mockups as static HTML under `docs/design/`, and the game interaction spec | Opus, new worktree `~/wt/uct-face`, branch `feat/face-and-game` | Now, documents only, so no conflict with A1 and A2 | Brief committed; Tom has seen the mockups |
+| A5 build | Opus, same worktree | After the A2 PR opens, rebased onto it | Design check passes at 390 and 1440, light and dark; LCP and CLS within the gate; `npm run test:csp` passes |
+| A6 build | Opus, same worktree, second PR | After A5 merges | The game plays end to end on a phone with no horizontal scroll; the score link unfurls as a card; all 287 pages build; no figure changes |
+| A3 brief revision, then A3 build | Opus revises, Codex builds | After A6 merges | As the A3 brief, with kit drawings |
+| Beacon and Search Console | Tom (decision 6), then one commit | Any time | Design changes become measurable |
+
+Two things this section does not change: the canonical direction (the game pages are self canonical and get the design spend first; the 325 mapped pages carry the same skeleton, so the face travels with them whichever way the split goes after the 2027 bill season), and the figure rules (every drawing takes its figures by key with the source line inside it, and nothing in the game is estimated).
+
+### 11.4 Paste prompt: Opus, the face and the game (prep)
+
+```text
+Repo ukcounciltax, design prep only, no site code changes yet. Read CLAUDE.md, docs/PLAN-2026-11-09-NEXT-SESSIONS.md section 11, the estate design audit at ~/Documents/Reports/Website_Audits/Design_Audit_2026-11-04.md (sections 1, 3, 5 and 8 and decisions DD1, DD2, DD4) and the estate kit README in tompickup23/estate-kit. Two Codex sessions are writing in ~/wt/uct-per-resident and ~/wt/uct-quick-wins; do not touch those or the main checkout's src. Part 1, in the kit: add the UK Council Tax accent triple to tokens/tokens.json using scripts/brand-colours.json from this repo, a scoreCard variant of statTile, and a 10 by 10 waffle size; render the demo in both themes; run the kit's tests; open a PR titled "UK Council Tax accent, score card tile and small waffle (0.2.0)". Part 2, here: create worktree ~/wt/uct-face on branch feat/face-and-game from origin/main; run the design check skill against the live homepage, /councils/burnley/ and /tools/budget/burnley/ and keep the contact sheets as the before set; write docs/A5-FACE-BRIEF.md and docs/A6-GAME-BRIEF.md following section 11.2, each with the files to change, the kit components used, the no JavaScript state, the phone layout at 375px, the CSP and check-dist assertions and the before and after capture list; build static mockups of the new homepage hero and of one split round with its reveal as HTML under docs/design/, using the site's tokens and the kit's SVG output, and screenshot them at 390 and 1440 in both themes. Commit the briefs and mockups with named paths. British English, no em dash, en dash or spaced hyphen anywhere, no individual named, no figure invented: mockups use Burnley's published figures with their source lines. Do not merge, deploy or change any published page. Finish with a one paragraph report and the screenshot paths.
+```

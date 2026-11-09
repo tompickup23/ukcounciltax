@@ -50,7 +50,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 
 **Lane A, ukcounciltax (Codex):** A3 profile and home (brief in `~/wt/uct-profile`, to be revised for the kit and the strip after A5) then A4 rankings and parishes (brief in `~/wt/uct-rankings`, after decision 5, Lewes) then C1b scenario mode (brief in `~/wt/uct-scenario`, after A6 so it is built on the redesigned game, not the stepper form) then L1 on this site.
 
-**Lane B, ukcouncils (Codex):** C3 the budget section (brief in `~/wt/ukc-budget`, after B2 merges) then B4 the reorganisation panel (section 6, after decisions 4 and 8) then L1 on this site then B3 seats by party (after decision 1, brief to write).
+**Lane B, ukcouncils (Codex):** C3 the budget section (brief in `~/wt/ukc-budget`, after B2 merges) then B4 the reorganisation panel (section 6; decision 8 taken, needs decision 4) then L1 on this site then B3 seats by party (after decision 1, brief to write).
 
 **Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); kit 0.3.0 (positionStrip, ChartActions, the gates, thumb, diverging zeroBar, grid only waffle) after kit 0.2.0 merges; A5 build after A2 merges, kit v0.2.0 is tagged and K1 is decided; A6 build after A5 merges and kit 0.3.0 is tagged; the A3 brief revision; the L2 to L4 brief template; the B4a reorganisation source notes and brief (any time, no site code); the C3 review; the design check before every design PR.
 
@@ -66,7 +66,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 4. A5 merges: Opus revises the A3 brief (kit charts, BenchmarkStrip as the position strip, ChartActions on every chart, DataDrawer for the long tables, the network strip), Codex lane A builds A3.
 5. A6 merges: the game is a game. Codex lane A then A4 (Lewes decided) and C1b.
 6. Decision 7 taken: Opus writes the L2 to L4 template; lane D runs L2, L4, then L3 after results week.
-7. C3 merges: lane B builds B4, the reorganisation panel (decisions 4 and 8 taken, B4a brief committed), then L1 on UK Councils, then B3 if decision 1 allows. B4 should be live before the first 2027 vesting date and within any open representation window.
+7. C3 merges: lane B builds B4, the reorganisation panel (decision 4 taken, B4a brief committed; decision 8 taken 9 November), then L1 on UK Councils, then B3 if decision 1 allows. B4 should be live before the first 2027 vesting date and within any open representation window.
 8. Beacon and Search Console live: the first measured week before the 2027 bill season planning in section 10 of the assessment.
 
 ## 3. Outline prompts
@@ -145,7 +145,7 @@ The two share the kit, so kit 0.3.0 serves both: the locator map, `billAnatomy` 
 
 ### Timing: a correction to the LGR plan
 
-The LGR plan places the panel "after the bill season split" (R316). That dependency does not hold. R316 is done (cross domain canonicals, PR 15); the panel sits on UK Councils, which already owns the council profile URLs, and touches no shared tax route. Waiting until April 2027 would also miss what the panel exists to report: the 1 April 2027 vesting date in the Surrey order (decision 3's draft, to be rechecked) and minded to representation windows of about three weeks. The panel belongs in lane B straight after C3, as **B4**, ahead of L1 and B3. Decision 8 asks Tom to confirm this.
+The LGR plan places the panel "after the bill season split" (R316). That dependency does not hold. R316 is done (cross domain canonicals, PR 15); the panel sits on UK Councils, which already owns the council profile URLs, and touches no shared tax route. Waiting until April 2027 would also miss what the panel exists to report: the 1 April 2027 vesting date in the Surrey order (decision 3's draft, to be rechecked) and minded to representation windows of about three weeks. The panel belongs in lane B straight after C3, as **B4**, ahead of L1 and B3. Tom confirmed this on 9 November 2026 (decision 8: "Yes, after C3").
 
 ### What it replaces and needs
 
@@ -159,5 +159,5 @@ The LGR plan places the panel "after the bill season split" (R316). That depende
 | Id | Who | What | When |
 |---|---|---|---|
 | B4a | Opus | Source notes and brief in `~/wt/ukc-reorg` (prompt in section 3) | Any time; no site code |
-| B4 | Codex | Build from the brief | After C3 merges and decisions 4 and 8 |
+| B4 | Codex | Build from the brief | After C3 merges and decision 4 (decision 8 taken) |
 | A3 line | Opus, in the A3 revision | Link from affected UK Council Tax profiles to the panel | With the A3 revision |

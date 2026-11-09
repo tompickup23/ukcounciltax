@@ -1,23 +1,42 @@
 ---
 import {gameData} from '../lib/budget-game-data';
+import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import {jsonLd} from '../lib/site';
 interface Props {gss: string; slug: string; name: string}
+const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
+const {name} = Astro.props;
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game aria-labelledby="game-heading">
-  <p class="eyebrow">Explore the published budget | {data.year}</p>
-  <h2 id="game-heading">Budget game</h2>
-  <p>Guess the service split, the Band D bill split, funding order and reserve change. Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
-  <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
+  <div class="game-lead">
+    <div>
+      <p class="eyebrow">Explore the published budget | {data.year}</p>
+      <h1 id="game-heading">Could you set {name}'s budget?</h1>
+      <p class="lede">{data.rounds.length === 5 ? 'Five rounds: the council service split, the county service split, the Band D bill split, funding order and reserve change.' : 'Four rounds: the service split, the Band D bill split, funding order and reserve change.'}</p>
+      <noscript><p>The game needs JavaScript. {name}'s published budget, with the same figures, is in the tables below.</p></noscript>
+      <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
+      <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
+    </div>
+    <figure class="game-teaser">
+      <div aria-hidden="true" data-game-teaser set:html={teaser.svg} />
+      <figcaption>100 squares, one for each penny. Round one fills them with your guess, then with {name}'s published split.</figcaption>
+    </figure>
+  </div>
   <div data-game-stage></div>
-  <noscript><p>The game needs JavaScript. All published budget tables and their sources are available below.</p></noscript>
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
 <script>
   import '../scripts/budget-game';
 </script>
 <style is:global>
-  .budget-game{padding:clamp(1rem,3vw,2rem);border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  .budget-game{padding-block:var(--space-lg)}
+  .game-lead{display:grid;gap:var(--space-lg);align-items:start}
+  .game-teaser{margin:0;max-width:343px}
+  .game-teaser svg{display:block;width:100%;height:auto}
+  .game-teaser .ek-sq rect{fill:var(--border);stroke:none}
+  .game-teaser figcaption{margin-top:var(--space-sm);color:var(--text-secondary)}
+  @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
+
   .budget-game [hidden]{display:none!important}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
   .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}

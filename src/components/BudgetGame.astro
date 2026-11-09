@@ -60,6 +60,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   .game-rail .done .game-stop-number{background:var(--accent);color:var(--bg);border-color:var(--accent)}
   @media(max-width:599px){.game-stop-name{display:none}}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
+  .budget-game h3:focus:not(:focus-visible){outline:none}
   .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}
   .game-row{padding:1rem;border:1px solid var(--border);border-radius:8px;min-width:0}
   .game-row label,.game-row strong{display:block;margin-bottom:.5rem}

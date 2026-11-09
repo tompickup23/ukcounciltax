@@ -72,7 +72,7 @@ The kit's `scoreCard`: "Your score, Burnley budget game", the total of the round
 | Use | Kit component | Rendered |
 |---|---|---|
 | Teaser | `waffle` grid only (kit 0.3.0 option; the mockup crops the viewBox) | server |
-| Published split, published bill split | `waffle({ parts, size: "small" })` | server, hidden until the reveal; also inside the `DataDrawer` beside the tables, so the no script view has them |
+| Published split, published bill split | `waffle({ parts, size: "small" })`, passing the published `total` for the bill split once kit 0.3.0 has it (estate-kit PR 3 review), so a missing part refuses rather than renormalises | server, hidden until the reveal; also inside the `DataDrawer` beside the tables, so the no script view has them |
 | Player's grid during a round, player's waffle at the reveal | the same grid markup, coloured by the script | client |
 | Gap bars | diverging `zeroBar` (kit 0.3.0; `zeroBar` refuses negatives at 0.2.0, so the mockup draws these in `build-mockups.mjs`) | client |
 | Funding reveal, reserves reveal | `zeroBar` horizontal | server for the published bars; the player's positions are text |
@@ -145,6 +145,8 @@ Recommendation: (a). The plan's "nothing is stored" holds, and (b) can follow if
 |---|---|---|
 | G1 | The score share image: static per council card and a save or share PNG, or a Pages Function (section 6) | Static |
 | G2 | The H1 as a question on 287 pages, with the title unchanged | Yes; the title keeps the search phrase |
+
+**Decided 9 November 2026 (Tom, "Accept all"):** G1 static per council card plus a save or share PNG, no Pages Function; G2 yes.
 
 ## 11. Stop conditions
 

@@ -132,6 +132,8 @@ Add to `scripts/check-dist.mjs` (and unit tests where noted):
 | K4 | A3 as the DS3 build pilot ahead of UKD (section 7) | Yes for the build; UKD stays the measured pilot |
 | K5 | The accent. The audit's finding 1 puts this site's `#23664f` within three degrees of hue of UK Food Hygiene's `#1f5c4a`; the kit took the current values unchanged | A brand question for DS1 with the mark (R560), not for A5 |
 
+**Decided 9 November 2026 (Tom, "Accept all"):** K1 vendor at tag `v0.2.0` with a hash test; K2 no; K3 not in A5; K4 yes for the build, UK Demographics stays the measured pilot; K5 decided with the mark (R560), A5 carries the current accent.
+
 ## 10. Captures
 
 **Before** (taken 9 November 2026 against the live site, design check run `20261109T090136Z_tx8mdkb9`): `docs/design/before/contact_sheet.jpg` and `docs/design/before/report.md`; full set at `~/Documents/design_checks/20261109T090136Z_tx8mdkb9/` (Page 1 is `/`, Page 2 `/councils/burnley/`, Page 3 `/tools/budget/burnley/`). Result: FAIL, 9 checks across the three pages: phone header 84.7 px on all three; no 180 by 180 touch icon on all three; 14 facts without a visible caption on the Burnley profile and 7 on the game page; CLS 0.1325 on the profile at 1440 dark.
@@ -141,6 +143,6 @@ Add to `scripts/check-dist.mjs` (and unit tests where noted):
 ## 11. Stop conditions
 
 - The kit's `billAnatomy` refuses the Burnley parts (they no longer add to the total): stop, the data has changed.
-- `comm -23` shows a custom property lost in the token splice.
+- `comm -23` shows a custom property lost in the token splice. The 28 names the kit file does not carry (`--accent-2`, `--accent-3`, `--accent-glow`, `--accent-teal`, `--accent-teal-deep`, `--bg-deep`, `--bg-soft`, `--body-bg-image`, `--coral`, `--focus-ring`, `--grid-line`, `--grid-vignette`, `--header-backdrop`, `--ink`, `--ink-soft`, `--muted`, `--panel`, `--panel-soft`, `--panel-strong`, `--status-bad-text`, `--status-good-text`, `--status-warn-bg`, `--status-warn-border`, `--status-warn-dark`, `--status-warn-text`, `--status-warn-tint`, `--surface`, `--surface-muted`, from the estate-kit PR 3 review) are expected: they go in the site's own alias rule below `/* estate-tokens:end */`, and the check then passes. Any other missing name is a stop.
 - A2 has not opened, or its rebase changes `SiteHeader.astro` or `SiteFooter.astro` beyond the nav data.
 - Any published figure on any page changes in the build diff of `dist/` text other than the series colours.

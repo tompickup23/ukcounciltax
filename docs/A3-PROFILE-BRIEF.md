@@ -41,7 +41,7 @@ Order inside the section:
 7. MHCLG notes for the council's area figure (`tax.notes`), moved here from below the selector, unchanged in wording: one council has one, Lewes (note `ad`, "pending approval subject to a full council decision on 26 March 2026").
 8. Then an H3 "Change on {previous} by band" and one line "Choose a band to see its change on {previous}. The band you choose is also set in the compare link below." followed by the existing `BandSelector`. The selector stays for the compare and scenario links and the per band change.
 
-`BandSelector.astro` changes: each panel keeps its Band figure Fact and its change Fact; remove the "a month over ten instalments" line and the panel caveat "Area average including parish precepts. Your exact bill and any discounts can differ." (the table and the single caveat now carry both). Do not touch `compare.astro`, which has its own copy of that caveat.
+`BandSelector.astro` changes, behind a new prop: add `compact?: boolean` (default false). With `compact`, each panel keeps its Band figure Fact and its change Fact and drops the "a month over ten instalments" line and the panel caveat "Area average including parish precepts. Your exact bill and any discounts can differ." (on the profile the table and the single caveat now carry both). The profile passes `compact`. **Without `compact` nothing changes**: after PR 26, `src/pages/tools/budget/[slug].astro` also renders `BandSelector` (with `showChange={false}`), and its panels must keep the monthly line and the caveat, because that page has no A to H table and no other parish caveat. Assert both: a budget page (for example `/tools/budget/burnley/`) still contains "a month over ten instalments" eight times and the panel caveat eight times. Do not touch `compare.astro`, which has its own copy of that caveat.
 
 Remove the paragraph "Monthly equivalents divide the annual charge by ten and round to pennies. Actual bill instalments can differ." (superseded by the calc label).
 
@@ -74,7 +74,7 @@ Remove the paragraph "Monthly equivalents divide the annual charge by ten and ro
 - `/councils/burnley/` row D reads £2,549.42, £254.94, £212.45; row H reads £5,098.84, £509.88, £424.90.
 - In every profile the A to H table appears before the first `.band-selector` in document order.
 - `/councils/lewes/` contains the note text "pending approval subject to a full council decision on 26 March 2026" exactly once, inside `#council-tax`.
-- No profile contains "a month over ten instalments".
+- No profile contains "a month over ten instalments"; `/tools/budget/burnley/` still does (eight panels, `compact` not passed).
 
 ## Phase 2: one Band D history instead of four
 
@@ -167,7 +167,7 @@ Import (no build time read across repositories): add `scripts/import-council-lin
 }
 ```
 
-`links` holds only `councilTax` entries for GSS codes that start E, S or W and that UK Places kept: 299 entries. Nothing else from the file is copied (no bin links, no notes). Add `src/lib/council-links.ts` exporting `councilTaxLink(gss): string | null` and `councilLinksSource`. Do not add it to `/data/`: that page lists statistical publications built from `loadYear`, `national.sources`, `devolved` and `localBills`, and `e2e/national.spec.ts` expects exactly 13 rows. The link's source line on each page is its provenance; record the source in `docs/RELEASE.md` and on `/sources/` only if `/sources/` already lists non statistical link sources (check it; if it does not, leave it).
+`links` holds only `councilTax` entries for GSS codes that start E, S or W and that UK Places kept: 299 entries. Nothing else from the file is copied (no bin links, no notes). Add `src/lib/council-links.ts` exporting `councilTaxLink(gss): string | null` and `councilLinksSource`. Do not add it to `/data/`: that page lists statistical publications built from `loadYear`, `national.sources`, `devolved` and `localBills`, and `e2e/national.spec.ts` pins the row count (13 on `baf0f05`; 17 once A1, the per resident branch, merges). The link's source line on each page is its provenance; record the source in `docs/RELEASE.md` and on `/sources/` only if `/sources/` already lists non statistical link sources (check it; if it does not, leave it).
 
 Unit tests: 299 links; 254 of the 296 English GSS codes; Burnley `https://burnley.gov.uk/counciltax/paying-your-council-tax/`; Lancaster `https://www.lancaster.gov.uk/council-tax/pay-your-council-tax`; `councilTaxLink("E09000007")` (Camden) is null; every URL is https.
 

@@ -4,15 +4,15 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-For the current position, read `docs/ASSESSMENT-2026-11-09-TAX-SITES.md` (both sites, 9 November 2026) and `docs/PLAN-2026-11-09-NEXT-SESSIONS.md` (the Codex and Opus sequence) first. PR 15 (cross domain canonicals from this site to ukcouncils.co.uk, 325 URLs including the homepage and brand pages) merged and deployed on 8 November 2026; `docs/HANDOFF-2026-11-08-CANONICALS-REBASE.md` is its record. The budget game programme handover is `docs/HANDOFF-2026-11-09-BUDGET-GAME-PROGRAMME.md` (PR 27).
+For the current position, read `docs/HANDOFF-2026-11-10-SESSION.md` and `docs/PLAN-2026-11-10-REMAINING.md` (what remains, the cross estate linking programme and the outline prompts) first, then `docs/PLAN-2026-11-09-NEXT-SESSIONS.md` (sections 1 to 11, with the design programme in section 11) and `docs/ASSESSMENT-2026-11-09-TAX-SITES.md` (both sites, 9 November 2026). Decisions waiting on Tom are in `docs/DECISIONS-WAITING-2026-11-10.md`. PR 15 (cross domain canonicals from this site to ukcouncils.co.uk, 325 URLs including the homepage and brand pages) merged and deployed on 8 November 2026; `docs/HANDOFF-2026-11-08-CANONICALS-REBASE.md` is its record. The budget game programme handover is `docs/HANDOFF-2026-11-09-BUDGET-GAME-PROGRAMME.md` (PR 27).
 
 For continuation after the 6 October 2026 chat, read `docs/HANDOFF-2026-10-06.md` first (broader project handover). The earlier `docs/HANDOFF-2026-10-05.md` remains for the release day record. They record the completed release, source reuse, remaining work and safeguards.
 
 ## Authority
 Tom authorised creation and publication using GitHub and Cloudflare on 5 October 2026. Preserve UK Councils and other sites unless a specific integration is within his request. Never copy secrets, private financial data or private investigations. UK Food Hygiene is public tier B in the UK State network since 6 October 2026 (repository private; site linked). Only verified live ecosystem destinations belong in links.
 
-## Open decision (3 November 2026)
-Contradiction for Tom to resolve (not resolved here): the 6 October 2026 exemplar prompt says remove the Cloudflare Insights host from the CSP while analytics is off; register task T04 says add the beacon.
+## Resolved decision (9 November 2026)
+The 3 November contradiction on the Cloudflare Insights host is resolved for the beacon (decision 6 in `docs/DECISIONS-WAITING-2026-11-10.md`): keep the host in the CSP and add the site's own beacon token through the normal secret route. Decisions 1 to 8, K1 to K5, G1 and G2 were all taken on 9 November; see that note.
 
 ## Data
 Published charges must come from official tables with publisher, year, basis, table and file hash. Never derive missing bands or carry figures forward. Label Scotland water exclusions, Wales Band I and Northern Ireland domestic rates separately. Unknown is not zero. Compare only compatible systems, classes, years and charge bases. Distinguish own-council share from full area averages and locality bills.

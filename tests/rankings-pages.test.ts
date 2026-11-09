@@ -1,3 +1,5 @@
+import {councilPages} from '../src/lib/paths';
+import {classFor} from '../src/lib/rankings';
 import {existsSync, readFileSync} from 'node:fs';
 import {describe,expect,it} from 'vitest';
 import {rankingClasses} from '../src/lib/ranking-page';
@@ -30,5 +32,21 @@ describe.skipIf(!existsSync('dist/council-tax/ranked/index.html'))('built class 
       const noted=new Set([...html.matchAll(/id="note-([^-]+)-[^" ]+"/g)].map(match=>match[1]));
       expect(noted.size).toBe([6,6,2,0,2][index]);
     }
+  });
+});
+
+describe.skipIf(!existsSync('dist/council-tax/ranked/index.html'))('profile class positions', () => {
+  it('links every billing profile to its own class exactly once', () => {
+    for(const {council,tax} of councilPages()) {
+      const html=read(`/councils/${council.slug}/`);
+      expect([...html.matchAll(/data-class-position/g)]).toHaveLength(1);
+      expect(html).toContain(`/council-tax/ranked/${classFor(tax.classCode)!.slug}/`);
+    }
+  });
+  it('prints the profile anchors and the generic source note clause', () => {
+    expect(text(read('/councils/burnley/'))).toContain('130th of 164 for area Band D and 160th of 164');
+    const havant=text(read('/councils/havant/')); expect(havant).toContain('joint 21st of 164'); expect(havant).toContain('joint 116th of 164');
+    expect(text(read('/councils/windsor-and-maidenhead/')).match(/1st of 63/g)).toHaveLength(2);
+    expect(text(read('/councils/lewes/'))).toContain('MHCLG publishes a note on this figure');
   });
 });

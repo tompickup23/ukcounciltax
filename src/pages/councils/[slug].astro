@@ -1,6 +1,8 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
+import {classFor, rankClass, positionWords} from '../../lib/rankings';
+import {rankingPath} from '../../lib/paths';
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
@@ -51,6 +53,9 @@ interface Props {
 
 const { council, tax } = Astro.props;
 const current = loadYear(CURRENT_YEAR);
+const rankType = classFor(tax.classCode)!;
+const classRanks = rankClass(current, rankType);
+const position = classRanks?.find(row => row.gss === council.gss);
 const name = tax.name;
 const year = yearLabel(CURRENT_YEAR);
 const previous = yearLabel(PREVIOUS_YEAR);
@@ -185,6 +190,12 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
           />
         </div>
       </div>
+      {position && classRanks && <div class="fact" data-fact data-class-position>
+        <p>Within {rankType.label} in {year}: {name} is {positionWords(position.areaPosition, position.areaTied)} of {classRanks.length} for area Band D and {positionWords(position.ownPosition, position.ownTied)} of {classRanks.length} for the council's own Band D, counted from the lowest.</p>
+        <p><a href={rankingPath(rankType.slug)}>All {rankType.label} ranked by Band D</a>.</p>
+        {tax.notes.length > 0 && <p>MHCLG publishes a note on this figure; it is under the band table.</p>}
+        <SourceLine source={councilTaxSource(CURRENT_YEAR, `Table 9 and ${rankType.ownTable.replace('_', ' ')}`, 'Positions calculated from the published figures: equal figures share a position')} />
+      </div>}
       <p class="muted">
         Both averages include parish and adult social care precepts, the same basis as the {name} figure.
         <a href={regionPath(tax.region)}>Band D for every council in {tax.region}</a>.

@@ -96,7 +96,7 @@ test('metadata separates publisher from the council and retains dated sitemap en
   await expect(page.locator('a[href*="ukfoodhygiene"]')).toHaveCount(0);
   const sitemap = await (await request.get('/sitemap.xml')).text();
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)];
-  expect(entries).toHaveLength(687);
+  expect(entries).toHaveLength(908);
   for (const entry of entries) expect(entry[1]).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   expect(sitemap).toContain('/compare/</loc>');
   expect(sitemap).not.toContain('?a=');

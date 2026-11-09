@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { canonicalUrl } from "../src/lib/canonical";
-import { programmaticPaths } from "../src/lib/paths";
+import { programmaticPaths, rankingPaths, parishPages, parishPath } from "../src/lib/paths";
 import { absoluteUrl, STATIC_PATHS } from "../src/lib/site";
 
 const data = JSON.parse(readFileSync(join(process.cwd(), "data", "canonical-map.json"), "utf8"));
@@ -52,7 +52,14 @@ describe("the reviewed canonical map", () => {
   it("covers every current route and keeps any unmapped route self canonical", () => {
     const builtUrls = [...STATIC_PATHS, ...programmaticPaths()].map(absoluteUrl);
     const retiredUrl = absoluteUrl("/council-tax/rises-2026-27/");
-    const addedUrls = ["/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/'))].map(absoluteUrl);
+    const a4Paths = ["/council-tax/ranked/", ...rankingPaths(), "/precepts/parishes/", ...parishPages().map(parishPath)];
+    expect(a4Paths).toHaveLength(221);
+    expect(new Set(a4Paths).size).toBe(221);
+    for (const path of a4Paths) {
+      expect(canonicalUrl(path)).toBe(absoluteUrl(path));
+      expect(data.mappings[absoluteUrl(path)]).toBeUndefined();
+    }
+    const addedUrls = [...a4Paths,"/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/'))].map(absoluteUrl);
     expect(sourceUrls.filter(url => !builtUrls.includes(url))).toEqual([retiredUrl]);
     expect(builtUrls.filter(url => !sourceUrls.includes(url)).sort()).toEqual(addedUrls.sort());
     expect(builtUrls.filter(url => data.mappings[url])).toHaveLength(318);

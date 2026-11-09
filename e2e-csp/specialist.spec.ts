@@ -7,3 +7,15 @@ for(const path of ['/precepts/','/increases/','/tools/future-cost/'])test(`speci
  if(path==='/increases/'){await page.getByLabel('Find a council').fill('Burnley');await expect(page.locator('[data-increases] tbody tr:visible')).toHaveCount(1);}
  expect(violations).toEqual([]);
 });
+
+test('parish filtering works under the production policy',async({page})=>{
+ const violations:string[]=[];
+ await page.addInitScript(()=>document.addEventListener('securitypolicyviolation',e=>console.error(`CSP violation: ${e.violatedDirective}`)));
+ page.on('console',message=>{if(message.text().includes('CSP violation'))violations.push(message.text());});
+ const response=await page.goto('/precepts/parishes/burnley/');
+ expect(response?.headers()['content-security-policy']).toContain("script-src 'self'");
+ await page.getByLabel('Filter parish or local body').fill('Padiham');
+ await expect(page.locator('[data-parish-name]:visible')).toHaveCount(1);
+ await expect(page.locator('[data-parish-name]:visible')).toContainText('+£5.42');
+ expect(violations).toEqual([]);
+});

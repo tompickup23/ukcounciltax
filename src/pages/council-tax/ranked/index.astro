@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import SourceLine from '../../../components/SourceLine.astro';
+import {CURRENT_YEAR, loadYear, pounds, yearLabel} from '../../../lib/council-tax';
+import {rankingClasses, rankingPage, rankingRule} from '../../../lib/ranking-page';
+import {rankingPath} from '../../../lib/paths';
+import {councilTaxSource} from '../../../lib/sources';
+const year = yearLabel(CURRENT_YEAR);
+const title = `Council tax Band D ranked by type of council ${year}`;
+const classes = rankingClasses.map(cls => ({cls,...rankingPage(loadYear(CURRENT_YEAR),cls)}));
+---
+<BaseLayout title={title} description={`Every type of council in England in ${year}, with its count and lowest and highest published Band D. Councils are ranked only within their own type.`} path="/council-tax/ranked/">
+  <Breadcrumbs items={[{label:'Council tax',href:'/council-tax/'},{label:'Ranked'}]} />
+  <header class="page-head"><h1>{title}</h1><p class="lede">{rankingRule} Position 1 is the lowest published figure.</p></header>
+  <div class="fact" data-fact><div class="table-wrap" tabindex="0" role="region" aria-label="Council types ranked by Band D"><table class="data">
+    <caption>Published Band D by type of council, {year}</caption>
+    <thead><tr><th scope="col">Class</th><th scope="col">Councils</th><th scope="col">Lowest area Band D (counties: own)</th><th scope="col">Highest area Band D (counties: own)</th></tr></thead>
+    <tbody>{classes.map(({cls,rows,county}) => <tr><th scope="row"><a href={rankingPath(cls.slug)}>{cls.label}</a></th>{rows ? <><td data-figure>{rows.length}</td><td data-figure>{pounds(county ? rows[0].own : rows[0].area)} in {rows[0].name}</td><td data-figure>{pounds(county ? rows.at(-1)!.own : rows.at(-1)!.area)} in {rows.at(-1)!.name}</td></> : <td colspan="3">not ranked for {year}</td>}</tr>)}</tbody>
+  </table></div><SourceLine source={councilTaxSource(CURRENT_YEAR,'Tables 9, 8a, 8b and 8c')} /></div>
+</BaseLayout>

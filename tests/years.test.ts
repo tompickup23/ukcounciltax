@@ -15,7 +15,7 @@ import {
   yearWords,
 } from "../src/lib/council-tax";
 import { NEXT_EDITION_STATUS } from "../src/lib/council-metadata";
-import { RELEASES, SETTING_DEADLINE, releaseSentence, settingDeadline } from "../src/lib/next-year";
+import { RELEASES, SETTING_DEADLINE, releaseSentence, settingDeadline, statedReleaseDate } from "../src/lib/next-year";
 import { NAV_GROUPS, STATIC_PATHS } from "../src/lib/site";
 import { sitemapPaths } from "../src/pages/sitemap.xml";
 
@@ -162,4 +162,10 @@ describe("the next year page", () => {
       if (!release.page) expect(releaseSentence(release)).toContain("not yet announced");
     }
   });
+});
+
+
+it("expands abbreviated release months without changing their attribution", () => {
+  expect(statedReleaseDate("Mar-27", "Scottish Government")).toBe("March 2027 (stated by the Scottish Government as “Mar-27”)");
+  expect(statedReleaseDate("March 2027 (provisional)", "Scottish Government")).toBe("“March 2027 (provisional)”");
 });

@@ -141,6 +141,9 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
     <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
     <a href="/precepts/">What makes up my bill</a>
+    <a href={`/tools/budget/${council.slug}/`}>Explore {name}'s budget and play the budget game</a>
+    <a href="/help/">Help with your bill</a>
+    <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a>
     <a href="/increases/">Council tax increases {yearLabel(CURRENT_YEAR)} by council</a>
     <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
     <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>

@@ -75,6 +75,8 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/your-area/", label: "Your area", desc: "Find your council by postcode" },
       { href: "/councils/", label: "Every council", desc: "All 296 councils in England, by region" },
+      { href: "/scotland/", label: "Scotland", desc: "Published bands, with water charges kept separate" },
+      { href: "/wales/", label: "Wales", desc: "Published Band D averages and their components" },
     ],
   },
   {
@@ -90,13 +92,15 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Tools and help",
     items: [
+      {href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs"},
+      {href: "/changes/", label: "What changed", desc: "Read the record of data updates"},
       {href: "/precepts/", label: "Your bill and precepts", desc: "Postcode, parish and individual charging bodies"},
       {href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time"},
       {href: "/tools/budget/", label: "Council budgets", desc: "Service spending, funding and reserves"},
       {href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares"},
       {href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps"},
       {href: "/coverage/", label: "UK coverage", desc: "What is included in each nation"},
-      {href: "/data/", label: "Sources", desc: "Official publications and source editions"},
+      {href: "/data/", label: "Official publications", desc: "Official publications and source editions"},
     ],
   },
   {

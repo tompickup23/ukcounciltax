@@ -50,6 +50,7 @@ function* files(dir) {
 const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
+let profiles = 0;
 
 for (const path of files(DIST)) {
   if (!/\.(html|xml|txt|json|js|css|svg|webmanifest)$|_headers$|_redirects$/.test(path)) continue;
@@ -59,8 +60,16 @@ for (const path of files(DIST)) {
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
+  const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
 
   const title = /<title>([^<]*)<\/title>/.exec(text)?.[1];
+  const queryTitles = {
+    '/findings/index.html': 'Council tax findings: parish precepts and Band D since 1993/94',
+    '/changes/index.html': 'What changed: council tax data updates',
+    '/tools/future-cost/index.html': 'Council tax future cost calculator',
+  };
+  if (queryTitles[rel(path)] && title !== `${queryTitles[rel(path)]} | ${SITE_NAME}`) failures.push(`incorrect query title on ${rel(path)}`);
   if (!title) failures.push(`no title on ${rel(path)}`);
   else {
     if (title !== SITE_NAME && !title.endsWith(` | ${SITE_NAME}`)) {
@@ -91,6 +100,28 @@ for (const path of files(DIST)) {
   if (path.endsWith('.html')) {
     const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
     if (description.length > 160) failures.push(`description over 160 characters on ${rel(path)} (${description.length})`);
+  }
+
+  if (rel(path) === '/council-tax/index.html') {
+    const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
+    for (const href of ['/help/', '/increases/', '/precepts/', '/scotland/', '/wales/', '/council-tax-2027-28/']) {
+      if (!body.includes(`href="${href}"`)) failures.push(`England hub lacks body link ${href}`);
+    }
+  }
+  if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
+    profiles += 1;
+    const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
+    for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
+      if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
+    }
+  }
+
+  const devolvedPage = /^\/(scotland|wales)\/([^/]+)\/index\.html$/.exec(rel(path));
+  if (devolvedPage) {
+    const image = /<meta property="og:image" content="([^"]+)"/.exec(text)?.[1];
+    const expectedPath = `/og/${devolvedPage[1]}/${devolvedPage[2]}.png`;
+    if (!image || new URL(image).pathname !== expectedPath) failures.push(`devolved page lacks its own share card: ${rel(path)}`);
+    if (existsSync(join(DIST, 'og')) && !existsSync(join(DIST, expectedPath))) failures.push(`missing devolved card: ${expectedPath}`);
   }
 
   const schemaNodes = [];
@@ -145,6 +176,10 @@ for (const url of Object.keys(canonicalMap.mappings)) {
 for (const url of canonicalMap.selfCanonicalUrls) {
   if (!seenUnique.has(url)) failures.push(`unique page was not built: ${url}`);
 }
+if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals, found ${seenMapped.size}`);
+if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
+if (pages !== 688) failures.push(`expected 688 HTML pages, found ${pages}`);
+if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 
 // A top-level 404 prevents Cloudflare Pages from treating this static site as an SPA.
@@ -182,6 +217,13 @@ if (existsSync(downloads)) for (const path of files(downloads)) {
 const sitemap = readFileSync(join(DIST, "sitemap.xml"), "utf-8");
 const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
+const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
+const today = new Date().toISOString().slice(0, 10);
+if (sitemapEntries.length !== 687 || locs.length !== 687) failures.push(`expected all 687 sitemap entries, found ${sitemapEntries.length}`);
+for (const entry of sitemapEntries) {
+  const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
+  if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);
+}
 for (const loc of locs) {
   if (!loc.startsWith(`${SITE_URL}/`)) {
     failures.push(`sitemap URL on another host: ${loc}`);
@@ -230,6 +272,8 @@ if (existsSync(bandFile)) {
 // When the build rendered cards (BUILD_OG=1), every og:image must resolve to
 // a card in the tree. An iteration build renders none and skips this.
 if (existsSync(join(DIST, "og"))) {
+  const devolvedCards = ['scotland', 'wales'].flatMap(nation => existsSync(join(DIST, 'og', nation)) ? [...files(join(DIST, 'og', nation))].filter(path => path.endsWith('.png')) : []);
+  if (devolvedCards.length !== 54) failures.push(`expected 54 devolved cards, found ${devolvedCards.length}`);
   let cards = 0;
   for (const path of files(DIST)) {
     if (!path.endsWith(".html")) continue;

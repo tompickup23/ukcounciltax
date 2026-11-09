@@ -1,9 +1,17 @@
 ---
+import CouncilFinder from "../components/CouncilFinder.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 <BaseLayout title="Page not found" path="/404/" noindex>
   <section class="wrap" style="padding-top: 2.5rem;">
     <h1>Page not found</h1>
     <p>There is no page at this address. <a href="/">Go to the home page</a>.</p>
+    <CouncilFinder id="not-found-council" />
+    <ul>
+      <li><a href="/council-tax/">Council tax in England</a></li>
+      <li><a href="/help/">Help with your bill</a></li>
+      <li><a href="/scotland/">Council tax in Scotland</a></li>
+      <li><a href="/wales/">Council tax in Wales</a></li>
+    </ul>
   </section>
 </BaseLayout>

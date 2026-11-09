@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { SITE_NAME, SITE_URL, STATIC_PATHS, pageTitle } from "../src/lib/site";
+import { SITE_NAME, SITE_URL, STATIC_PATHS, NAV_GROUPS, pageTitle } from "../src/lib/site";
+
+import { programmaticPaths } from "../src/lib/paths";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
@@ -208,5 +210,15 @@ describe("house style", () => {
       }
     }
     expect(offenders).toEqual([]);
+  });
+});
+
+
+describe("navigation", () => {
+  it("uses known routes and unique item labels", () => {
+    const paths = new Set<string>([...STATIC_PATHS, ...programmaticPaths()]);
+    const items = NAV_GROUPS.flatMap(group => group.items);
+    expect(new Set(items.map(item => item.label)).size).toBe(items.length);
+    for (const item of items) expect(paths.has(item.href.split(/[?#]/)[0]), item.href).toBe(true);
   });
 });

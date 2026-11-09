@@ -9,6 +9,8 @@ import SourceLine from "../../components/SourceLine.astro";
 import {
   BANDS,
   CURRENT_YEAR,
+  NEXT_YEAR,
+  NEXT_YEAR_PATH,
   PREVIOUS_YEAR,
   loadYear,
   percent,
@@ -120,5 +122,16 @@ const pages = councilPages();
     <h2 id="table-heading">Compare published council tax charges</h2>
     <p class="muted">Choose a band, filter by council name, or select one council type to sort by charge. <a href="/compare/">Compare two councils side by side</a>.</p>
     <TaxTable id="england-charges" caption="England" />
+  </section>
+  <section class="section" aria-labelledby="also-heading">
+    <h2 id="also-heading">Also on this site</h2>
+    <ul>
+      <li><a href="/help/">Help with your bill</a></li>
+      <li><a href="/increases/">Council tax increases</a></li>
+      <li><a href="/precepts/">What makes up your bill</a></li>
+      <li><a href="/scotland/">Council tax in Scotland</a></li>
+      <li><a href="/wales/">Council tax in Wales</a></li>
+      <li><a href={NEXT_YEAR_PATH}>Council tax {yearLabel(NEXT_YEAR)}</a></li>
+    </ul>
   </section>
 </BaseLayout>

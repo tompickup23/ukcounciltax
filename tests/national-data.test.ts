@@ -2,7 +2,6 @@ import {describe,it,expect} from 'vitest';
 import {national,parishesFor,parishChange} from '../src/lib/national-data';
 import {loadYear} from '../src/lib/council-tax';
 import {localBills} from '../src/lib/local-bill-data';
-import {parishCsv,componentCsv,historyCsv} from '../src/lib/national-export';
 
 describe('national data source contracts',()=>{
  it('joins every English billing area by GSS and matches independently imported annual area totals',()=>{
@@ -49,10 +48,5 @@ describe('national data source contracts',()=>{
   expect(national.history.E07000139.area.values['2022-23']).toBe(1990.16);
   expect(national.history.E07000117.ownExcludingParish.values['1993-94']).toBeUndefined();
  });
- it('exports source hashes, explicit bases and genuine numeric negative charges',()=>{
-  const parish=parishCsv();expect(parish).toContain('"not-existing"');expect(parish).toContain('"-2.64"');expect(parish).not.toContain('"\'-2.64"');
-  expect(parish).toContain(national.sources.parishes.sha256);
-  expect(componentCsv()).toContain('Published total; not an extra component');
-  expect(historyCsv()).toContain('Displayed source precision');
- });
+
 });

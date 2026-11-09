@@ -34,8 +34,9 @@ const england=release('England'), scotland=release('Scotland'), wales=release('W
 <h2 id="scotland-heading">Scotland</h2>
 {scotland.page ? (<>
 <p>The Scottish Government lists the publication <strong>{scotland.publication}</strong>. {releaseSentence(scotland)} {scotland.detail}</p>
-<p class="source-line">Source: <a href={scotland.page.url}>{scotland.publisher}, {scotland.page.title}</a>{scotland.file && <>, file {scotland.file.title}, SHA-256 <code>{scotland.file.sha256}</code></>}, accessed {accessed(scotland.page.accessed)}.</p>
+<p class="source-line">Source: <a href={scotland.page.url}>{scotland.publisher}, {scotland.page.title}</a>, accessed {accessed(scotland.page.accessed)}.</p>
 </>) : <p>{releaseSentence(scotland)}</p>}
+{scotland.file && <details><summary>File provenance</summary><p>{scotland.file.title}. SHA-256 <code>{scotland.file.sha256}</code>.</p></details>}
 </section>
 
 <section class="section" id="wales" aria-labelledby="wales-heading">

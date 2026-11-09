@@ -10,10 +10,10 @@ const {out: original, keys, captionHtml} = gameChart(round, `budget-${slug}-${in
 const out = {...original};
 if (round.kind === 'funding' && location === 'reveal') {
   let count = 0;
-  out.svg = out.svg.replace(/<g class="ek-bar">([\s\S]*?)<\/g>/g, (_, body: string) => {
+  out.svg = out.svg.replace(/<g class="ek-bar"(?: transform="translate\(0 ([^)]+)\)")?>([\s\S]*?)<\/g>/g, (_, offset: string, body: string) => {
     const i = count++;
-    const y = Number(body.match(/<text[^>]* y="([^"]+)"/)?.[1] ?? 0);
-    return `<g class="ek-bar" transform="translate(0 ${i*28})">${body}<text data-player-position="${i}" x="4" y="${y+28}" font-size="19" style="fill:var(--text-muted);font-family:var(--font-sans)"></text></g>`;
+    const y = Number([...body.matchAll(/<text[^>]* y="([^"]+)"/g)].at(-1)?.[1] ?? 0);
+    return `<g class="ek-bar" transform="translate(0 ${Number(offset ?? 0)+i*28})">${body}<text data-player-position="${i}" x="4" y="${y+28}" font-size="19" style="fill:var(--text-muted);font-family:var(--font-sans)"></text></g>`;
   });
   const shift = count*28;
   out.svg = out.svg.replace(/(<line[^>]*data-ek-baseline[^>]*\/>)([\s\S]*)(<\/svg>)/, (_, line: string, tail: string, close: string) => {

@@ -109,3 +109,27 @@ it('uses the kit rule for whole pence and every published split without changing
     }
   }
 },30000);
+
+
+it('gives Birmingham funding bars at least half the drawing width with recorded short values', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const data=gameData('E08000025','birmingham','Birmingham')!;
+  const funding=data.rounds.find(round=>round.kind==='funding')!;
+  const chart=gameChart(funding,'birmingham-funding').out;
+  expect(chart.width).toBe(600);
+  const lengths=[...chart.svg.matchAll(/data-base="([^"]+)" data-end="([^"]+)"/g)].map(([,base,end])=>Math.abs(Number(end)-Number(base)));
+  expect(Math.max(...lengths)).toBeGreaterThanOrEqual(300);
+  expect(chart.svg).toContain('£1.3bn');
+  expect(chart.table).toContain('£1,334,018,000');
+  expect(chart.table).not.toContain('£1.3bn');
+  for(const theme of ['light','dark'] as const) {
+    const pngChart=gameChart(funding,'birmingham-funding',theme).out;
+    const background=pngChart.svg.match(/<rect x="0" y="0" width="600" height="([^"]+)"/);
+    expect(Number(background?.[1])).toBe(pngChart.height);
+  }
+  expect(chart.svg).not.toContain('(add)');
+  expect(chart.svg).not.toContain('(deduct)');
+  const reserves=gameChart(data.rounds.find(round=>round.kind==='reserves')!,'birmingham-reserves').out;
+  expect(reserves.svg).toContain('£731m');
+  expect(reserves.svg).toContain('£688.8m');
+});

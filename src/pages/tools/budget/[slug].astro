@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import BandSelector from '../../../components/BandSelector.astro';
 import BudgetTables from '../../../components/BudgetTables.astro';
+import PerResident from '../../../components/PerResident.astro';
 import BudgetBill from '../../../components/BudgetBill.astro';
 import BudgetGame from '../../../components/BudgetGame.astro';
 import SourceLine from '../../../components/SourceLine.astro';
@@ -30,6 +31,7 @@ const description = available
     <BudgetTables council={data.council} name={tax.name} id="council-budget" />
     {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
   </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}
+  <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />
   <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={tax} showChange={false} /></section>
   <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a> · <a href="/tools/budget/">Choose another council</a></p>

@@ -117,5 +117,23 @@
     ],
     "precision": "Displayed integer GBP thousands; missing markers remain null",
     "licence": "Open Government Licence v3.0"
+  },
+  "population": {
+    "publisher": "Office for National Statistics",
+    "title": "Population estimates for the UK, England, Wales, Scotland and Northern Ireland: mid-2025",
+    "release": "MYE25UK",
+    "edition": "mid-2025; published 1 October 2026",
+    "published": "2026-10-01",
+    "reference": "mid-2025",
+    "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland",
+    "fileUrl": "https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland/mid2025/mye25tablesuk.xlsx",
+    "file": "mye25tablesuk.xlsx",
+    "sha256": "8ae244e3341257ecccaee55f4973fe12f46afe6656ead6c1a9ed3f4f8585e40f",
+    "retrieved": "2026-11-08",
+    "tables": [
+      "MYE2 - Persons"
+    ],
+    "precision": "Whole residents; single years of age grouped without estimation",
+    "licence": "Open Government Licence v3.0"
   }
 }

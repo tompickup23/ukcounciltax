@@ -25,7 +25,7 @@ test.beforeEach(async ({ page }) => {
 
 const ROOT = resolve(import.meta.dirname, "..");
 
-const PAGES = [...STATIC_PATHS, "/councils/burnley/", "/council-tax/band-d/", "/tools/budget/burnley/", "/tools/budget/birmingham/", "/this-page-does-not-exist/"];
+const PAGES = [...STATIC_PATHS, "/councils/burnley/", "/council-tax/band-d/", "/tools/budget/burnley/", "/tools/budget/birmingham/", "/tools/budget/city-of-london/", "/this-page-does-not-exist/"];
 
 interface Violation {
   directive: string;

@@ -5,7 +5,9 @@ import {national} from '../lib/national-data';
 import {devolved} from '../lib/devolved';
 import {localBills} from '../lib/local-bill-data';
 import {budget, budgetYear} from '../lib/budget';
+import {population} from '../lib/per-resident';
 const publications = [
+  {publisher: population.source.publisher, title: population.source.title, edition: population.source.edition, table: 'MYE2 Persons', retrieved: population.source.retrieved, licence: population.source.licence, url: population.source.fileUrl},
   ...Object.values(budget.sources).map(source => ({publisher:source.publisher, title:source.title, edition:`${budgetYear}; published 11 June 2026`, table:source.tables.join(', '), retrieved:source.retrieved, licence:source.licence, url:source.fileUrl})),
   ...YEARS.flatMap(year => {
     const {source} = loadYear(year);

@@ -19,9 +19,9 @@ export function boundaryAreas(): Area[] {
   for (const area of areas) if (!(geoArea(area) > 0 && geoArea(area) < 1)) throw new Error(`Boundary winding or area invalid: ${area.properties.LAD26CD}`);
   return areas;
 }
-export function boundaryMap(gss: string) {
+export function neighbourAreas(gss: string) {
   const all = boundaryAreas(); const focal = all.find(area => area.properties.LAD26CD === gss);
-  if (!focal) return null;
+  if (!focal) return [];
   const [[x0,y0],[x1,y1]] = geoBounds(focal);
   const dx = (x1-x0)*0.2, dy = (y1-y0)*0.2;
   const neighbours = all.filter(area => {
@@ -29,6 +29,11 @@ export function boundaryMap(gss: string) {
     const [[a,b],[c,d]] = geoBounds(area);
     return c >= x0-dx && a <= x1+dx && d >= y0-dy && b <= y1+dy;
   });
+  return [focal, ...neighbours].map(area => ({...area, properties: {code: area.properties.LAD26CD, name: area.properties.LAD26NM}}));
+}
+export function boundaryMap(gss: string) {
+  const [focal, ...neighbours] = neighbourAreas(gss);
+  if (!focal) return null;
   const projection = geoMercator().fitExtent([[32,24],[268,156]], focal).clipExtent([[0,0],[300,180]]);
   const path = geoPath(projection).digits(1);
   return {focal: path(focal)!, context: neighbours.map(area => path(area) ?? '').join(' ')};

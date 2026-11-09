@@ -17,7 +17,7 @@ const scenario = scenarioData(data, Astro.props.gss, name);
     <div>
       <p class="eyebrow">Explore the published budget | {data.year}</p>
       <h1 id="game-heading">Could you set {name}'s budget?</h1>
-      <p class="lede">{data.rounds.length === 5 ? 'Five rounds: the council service split, the county service split, the Band D bill split, funding order and reserve change.' : 'Four rounds: the service split, the Band D bill split, funding order and reserve change.'}</p>
+      <p class="lede">{data.rounds.length === 5 ? `Five rounds of guessing: how ${name} splits each pound it spends on services, how the county council splits its own, who takes your Band D bill, where the money comes from, and what happens to reserves.` : `Four rounds of guessing: how ${name} splits each pound it spends on services, who takes your Band D bill, where the money comes from, and what happens to reserves.`}</p>
       <noscript><p>The game needs JavaScript. {name}'s published budget, with the same figures, is in the tables below.</p></noscript>
       <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
       <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>

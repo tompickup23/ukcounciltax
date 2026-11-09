@@ -98,6 +98,7 @@ const nodes = [
     <link rel="canonical" href={canonicalUrl(path)} />
     <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     {[serif600, sans400, sans600].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content="website" />

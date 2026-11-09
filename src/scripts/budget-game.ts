@@ -236,8 +236,40 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
       scores.push(score); distances.push(...details);
       stage.replaceChildren();
       heading(`${round.title}: published answer`);
-      stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100.`, 'game-status'), element('p', round.explanation));
+      stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100.`, 'game-score'), element('p', round.explanation));
+      if (round.kind === 'split') {
+        if (!skipped) stage.append(element('p', 'Your score: add up the gaps below, halve the total and take it from 100.'));
+        const pair = element('div', '', 'game-reveal-waffles');
+        if (!skipped) {
+          const player = element('div');player.append(element('h4', 'Your split'));
+          const grid = root.querySelector<HTMLTemplateElement>(`[data-game-grid="${index}"]`)!.content.firstElementChild!.cloneNode(true) as HTMLElement;
+          let at = 0;const nodes = grid.querySelectorAll('[data-ek-square]');
+          squaresFor(guesses.map(input => Number(input.value))).forEach((count, part) => {for(let n=0;n<count;n++)nodes[at++].setAttribute('class', `ek-sq sq-p${part}`);});
+          grid.querySelector('[data-ek-filled]')!.setAttribute('data-ek-filled', '100');
+          player.append(grid);pair.append(player);
+        }
+        pair.append(root.querySelector<HTMLTemplateElement>(`[data-game-published="${index}"]`)!.content.cloneNode(true));
+        stage.append(pair);
+        if (!skipped) {
+          const gaps = element('div', '', 'game-gaps');gaps.setAttribute('aria-label', 'Your pence less the published share');
+          const actual = shares(round.items, round.base!);
+          round.items.forEach((item,i) => {
+            const gap = Number(guesses[i].value)-actual[i];
+            const row = element('div', '', 'game-gap-row');
+            row.append(element('p', `${item.label}: ${Math.abs(gap)<0.05 ? '0.0p' : `${Math.abs(gap).toFixed(1)}p ${gap>0?'over':'under'}`}`));
+            const drawing = root.querySelector<HTMLTemplateElement>('[data-game-gap]')!.content.firstElementChild!.cloneNode(true) as HTMLElement;
+            const bar = drawing.querySelector('[data-game-gap-bar]')!;
+            const zero = Number(bar.getAttribute('data-game-zero'));
+            bar.setAttribute('transform', `translate(${zero} 0) scale(${-gap/100} 1) translate(${-zero} 0)`);
+            row.append(drawing);gaps.append(row);
+          });
+          stage.append(gaps,element('p', `Gap: your pence less the published share. The published share is each service's amount over the ${round.items.length} services' total, times 100.`, 'small'));
+        }
+        const counts=squaresFor(shares(round.items,round.base!));
+        counts.forEach((count,i)=>{if(count===0)answer.append(element('p', `${round.items[i].label}: under half a square. The published amount is retained in the table.`));});
+      }
       answer.append(answerList); sourceNotes(round, answer); stage.append(answer);
+      document.dispatchEvent(new Event('budget:reveal'));
       stage.append(button(index === data.rounds.length - 1 ? 'Show summary' : 'Next round', () => {index++; index === data.rounds.length ? summary() : showRound();}, false));
     }
   }

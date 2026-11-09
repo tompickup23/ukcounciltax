@@ -3,15 +3,20 @@ import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
 import {gzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
-// A5 BudgetGame bundle from 79fa7bd: 4034 gzip bytes, plus the A6 allowance.
-export const GAME_GZIP_CEILING=4034+6000;
+// A5 bundle: 4034 gzip bytes, plus 6000 for A6 and 4000 for the C1b scenario.
+export const GAME_GZIP_CEILING=4034+6000+4000;
 export function budgetGameProblems(html,slug,dist) {
   const doc=JSDOM.fragment(html);const title=doc.querySelector('title')?.textContent ?? '';const problems=[];
   const fail=(test,message)=>{if(!test)problems.push(`${slug}: ${message}`);};
   const roots=doc.querySelectorAll('[data-budget-game]');
   const notice=doc.querySelector('[data-no-budget-return]');
+  if(notice&&slug==='coventry'){
+    const before=JSON.parse(readFileSync(join(process.cwd(),'tests/fixtures/c1b-static-numbers.json'),'utf8'));
+    fail(JSON.stringify(staticGameNumbers(html))===JSON.stringify(before[slug]),'static page numbers changed during C1b');
+  }
   if(notice){
     fail(roots.length===0,'a no return page has a game');
+    fail(doc.querySelectorAll('[data-scenario-entry],[data-budget-scenario-data]').length===0,'a no return page has a scenario');
     const parts=title.match(/^(.*?) budget (\d{4}\/\d{2}): no return received \| UK Council Tax$/);
     fail(parts,'no return title changed');
     if(parts){
@@ -22,8 +27,17 @@ export function budgetGameProblems(html,slug,dist) {
   }
   fail(roots.length===1,'expected one game');
   if(roots.length!==1){return {problems,available:true};}
+  if(['burnley','birmingham','coventry'].includes(slug)){
+    const before=JSON.parse(readFileSync(join(process.cwd(),'tests/fixtures/c1b-static-numbers.json'),'utf8'));
+    fail(JSON.stringify(staticGameNumbers(html))===JSON.stringify(before[slug]),'static page numbers changed during C1b');
+  }
   const root=roots[0];const data=JSON.parse(root.querySelector('[data-budget-game-data]').textContent);
   const name=root.getAttribute('data-council-name');
+  const entries=root.querySelectorAll('[data-scenario-entry]');
+  fail(entries.length===1&&entries[0].hasAttribute('hidden'),'expected one hidden scenario entry');
+  const scenario=JSON.parse(root.querySelector('[data-budget-scenario-data]')?.textContent??'null');
+  fail(scenario?.model==='budget-scenario 1.0','scenario model missing');
+  fail(scenario?.screens.length===data.rounds.filter(r=>r.kind==='split'||r.kind==='bill').length,'scenario screens differ from published rounds');
   fail(doc.querySelector('h1')?.textContent===`Could you set ${name}'s budget?`,'question H1 changed');
   fail(title===`${name} budget game ${data.year} | UK Council Tax`,'title changed');
   fail(root.querySelectorAll('[data-game-teaser] [data-ek-square]').length===100,'lead grid is not 100 squares');
@@ -68,4 +82,11 @@ export function publishedText(html) {
   const doc=JSDOM.fragment(html);const title=doc.querySelector('title')?.textContent ?? '';
   const text=[...doc.querySelectorAll('.budget-tables, [data-no-budget-return], #your-bill, [data-budget-game-data], .band-selector, [data-per-resident]')].map(node=>node.textContent.replace(/\s+/g,' ').trim());
   return text;
+}
+
+// Include the complete static page, with executable and inert template content removed.
+export function staticGameNumbers(html) {
+  const doc=new JSDOM(html).window.document;
+  doc.querySelectorAll('script,style,template').forEach(node=>node.remove());
+  return doc.body.textContent.match(/\d[\d,.]*(?:%|p)?/g)??[];
 }

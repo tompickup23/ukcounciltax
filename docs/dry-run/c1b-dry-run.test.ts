@@ -1,6 +1,6 @@
 /**
  * C1b data dry run. Not part of the suite (docs/ is outside vitest's include). To rerun on
- * a checkout of main with data/raw present: copy this file into tests/, run
+ * a checkout of main with data/raw present: copy this file into tests/ with ../../src/ imports changed to ../src/, run
  * `npx vitest run tests/c1b-dry-run.test.ts`, then delete the copy. It writes
  * docs/C1B-DATA-DRY-RUN.json relative to the working directory.
  */
@@ -8,11 +8,11 @@ import { test, expect } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { execSync } from "node:child_process";
-import { budget, budgetFor, services } from "../src/lib/budget";
-import { gameData } from "../src/lib/budget-game-data";
-import { national } from "../src/lib/national-data";
-import { loadYear, CURRENT_YEAR } from "../src/lib/council-tax";
-import { loadRegistry } from "../src/lib/registry";
+import { budget, services } from "../../src/lib/budget";
+import { gameData } from "../../src/lib/budget-game-data";
+import { national } from "../../src/lib/national-data";
+import { loadYear, CURRENT_YEAR } from "../../src/lib/council-tax";
+import { loadRegistry } from "../../src/lib/registry";
 
 const sha = (p: string) => createHash("sha256").update(readFileSync(p)).digest("hex");
 /** The brief's model: floors, then the remaining pennies to the largest remainders, source order on ties. */
@@ -47,8 +47,8 @@ test("c1b dry run", () => {
     rounds[d.rounds.length] = (rounds[d.rounds.length] ?? 0) + 1;
     for (const r of d.rounds.filter((r) => r.kind === "split")) {
       maxSplitParts = Math.max(maxSplitParts, r.items.length);
-      if (r.items.length < 2 || r.base <= 0) problems.push(`${g} split`);
-      maxBasePence = Math.max(maxBasePence, r.base * 100_000);
+      if (r.items.length < 2 || r.base! <= 0) problems.push(`${g} split`);
+      maxBasePence = Math.max(maxBasePence, r.base! * 100_000);
     }
     const bill = d.rounds.find((r) => r.kind === "bill")!;
     billParts[bill.items.length] = (billParts[bill.items.length] ?? 0) + 1;

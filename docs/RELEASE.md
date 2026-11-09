@@ -246,3 +246,38 @@ The parish pages preserve all 10,245 source rows, including zero, negative and c
 A3 was not merged at the initial rebase onto A2. Profile changes are confined to the existing comparison and parish sections; a rebase onto A3 will be needed. A5's homepage, header, footer and global stylesheet are untouched. Validation and conservative decisions are recorded in the A4 review report. This change is prepared for review only, without merge or deployment.
 
 Final A4 validation on Node 22.23.4: 242 unit tests across 34 files passed with no skips; Astro checked 164 files without diagnostics. The final `BUILD_OG=1` build generated all 354 existing share cards, Pagefind and CSP hashes. Distribution checks passed 909 HTML pages and 908 sitemap URLs; the text sweep passed 916 files and the internal link audit checked 74,261 destinations with none missing. The full browser run passed 220 tests and timed out in four; all four passed serially with the same assertions and time limits. All 78 production header tests passed separately. The 20 requested screenshots and eight supplementary table views were refreshed and visually inspected, and remain local and uncommitted. The review report records the exact output sizes, source anchors, conservative decisions and resumption instructions.
+
+## Budget game scenario mode, 9 November 2026
+
+C1b is stacked on the budget game polish PR. Model `budget-scenario 1.0` uses integer pence and the largest fractional remainders, with source order resolving ties. Its input totals and published references come from the existing game round arrays. The observed scores, score links, published text fixture and the nine no return notices are unchanged. The five implementation commits cover the pure model and adapter, shared stage controls, results and summary, workbook cache, and verification evidence.
+
+The five assumptions remain visible above every screen's controls:
+
+1. This is your allocation, not the council's budget or an exact household bill.
+2. Services use only the positive service totals; net income headings stay outside the exercise.
+3. The service total is fixed. Moving shares does not model costs, outcomes, ring fenced grants or legal limits.
+4. The Band D area average is fixed and includes average parish precepts; only its division between the listed bodies changes.
+5. Service and Band D allocations are independent; no change in money raised is calculated.
+
+All 287 games have one hidden scenario entry in static HTML. There are 160 independent whole county screens covering 21 counties and 127 games with two scenario screens. The nine absent returns stay absent. The build retains 296 council budget routes and 297 budget sitemap entries including the index. Scenario state stays in memory only. It adds no request, storage, cookie, share payload or script permission. Observed and scenario amounts have separate labels and record types.
+
+The dry run matches every value in `C1B-DATA-DRY-RUN.json`. Positive service bases in GBP thousands are Burnley 18,015, Birmingham 2,703,694, Lancashire 2,759,432 and Westminster 618,398, with 5, 9, 9 and 9 positive headings. Burnley's observed net income headings remain minus 343 and minus 426; Birmingham's remains minus 3,212. Burnley's Table 10 base stays 254,942 pence, with positive components 36,054, 180,175, 29,240 and 9,473. The combined authority's printed zero is not an input. The explicit scenarios reproduce Burnley services at £10,809,000 and £7,206,000, its Band D split at £1,529.65 and £1,019.77, and the whole Lancashire county split at £1,379,716,000 twice. The one penny tie awards the penny to the first source item. Every invalid input and unsafe product is rejected. None of these scenario results is labelled observed.
+
+Source hashes are unchanged:
+
+| File | SHA256 |
+|---|---|
+| data/national/budget.json | 704c213738abbff846e9210a6fbb9eda058efb3d72beb5467fd7755cfeefdd0a |
+| data/national/england.json | 81e6926afd4f4e1c226a1333ee7e5c7be2aa4c2d6f6bbc4c87b52e80ebb36c0f |
+| tests/fixtures/budget-ct-reconciliation.json | 730a5ae7066eb22a2509974265779fa1d99ec7f83e5e46a7d07aab03ffac0e90 |
+| data/raw/RA_2026-27_data_Part_1.ods | 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db |
+| data/raw/RA_2026-27_data_Part_2.ods | 55c34505c69513fcba446f3484061d2bd115c4ce06bb5bafba7b36e330be4d65 |
+| data/raw/SG_2026-27.ods | 6150792dcea97ca58b912a5fbf9fdc99562ba782fb7d6f5c8885e6ca1a17e3b5 |
+
+The workflow caches only the three raw workbooks, keyed by runner OS and all three full hashes in manifest order, with no restore prefix. The importer still rehashes and reconciles on every hit and miss. Local isolated checks passed a cold download, a warm import with network blocked, rejection of a corrupted workbook at the pinned hash, and a restored warm import. The checkout's original workbooks remained untouched; its blocked network importer reproduced budget.json exactly. No production workflow was triggered.
+
+Conservative decisions: the merged A6 controls were extracted into one shared helper, preserving observed input behaviour while rejecting invalid scenario typing without clamping. The scenario rail keeps its visible number in the accessible name. An invalid score fragment is tested on a fresh load, as required by the existing parser. The supplied dry run test's relative imports were repaired so the binding receipt can type check from its documented location; its arithmetic and receipt were not changed. The user authorised the files required by C1b, including the cache workflow and release evidence. No stop condition was encountered.
+
+Final validation on Node 22.23.4: Astro checked 227 files without diagnostics; 273 unit tests across 38 files passed with no skips. The final `BUILD_OG=1` build produced 909 pages, all share cards, Pagefind and CSP hashes. Distribution checks passed 909 HTML pages and 908 sitemap URLs, including 2,618 valid chart PNG links. The original published text fixture and the separate complete static number fixture are identical for Burnley, Birmingham and Coventry. The text sweep passed 916 files and the internal link audit checked 79,492 destinations with none missing. The game bundle is 9,659 gzip bytes against the agreed 14,034 byte ceiling.
+
+The full browser suite passed 244 tests with one worker against the built local preview. The production header suite passed 89 tests with one worker, including both scenario widths and themes. The design check passed every rule for Burnley, Birmingham and Coventry at 390 and 1440 in light and dark, including the touch icon check. Report: `.ops/c1b/design/20261109T165614Z_mddwofox/report.md`. The 44 requested scenario capture states at 375 and 1440, plus full stage captures, remain local in `.ops/c1b/` and were visually inspected. The phone table keeps full amounts readable in separately labelled columns. Captures, logs and reports are not committed. No merge or deployment was performed.

@@ -5,14 +5,67 @@
  * 3:1 against their ground (WCAG 1.4.11), series pairs apart under the three colour vision
  * simulations, and no dash in any visible text. A failure throws, so an unreadable chart
  * cannot be built.
+ *
+ * Kit 0.3.0 adds the rest of that renderer's qa() (render.ts lines 503 to 573 at 733eb02):
+ * every drawn value must be in the chart's manifest character for character; no two text
+ * boxes may overlap, measured from the fonts' own advance widths; and no ranking or loaded
+ * word in a title or the alt text. Scale labels ("lowest", "highest") label a scale, not an
+ * area, so the alt text may name them.
  */
 import { contrast, seenDistance, VISIONS } from "./colour.js";
 /** The dash pattern of the map renderer: em dash, en dash, a spaced hyphen, the entities. */
 export const DASHES = /[\u2013\u2014]| - |&mdash;|&ndash;/; // dash-ok: the pattern itself
+/** No ranking language in a title or the alt text: areas are never ordered by a value. */
+export const RANKING_WORDS = /\b(highest|lowest|fastest|slowest|most|least|top|bottom|largest|smallest|biggest|ranked|ranking|rank|league)\b/i;
+/** Neutral verbs: a share "fell" or "rose", nothing more. */
+export const LOADED_WORDS = /\b(spread|spreading|replaced|replacement|influx|flood|swamp\w*|invasion|takeover|overrun|surge|plummet\w*|soar\w*)\b/i;
 /** OKLab distance two series must keep under every vision (ukdemographics tests/ethnic-palette.test.ts). */
 export const MIN_SERIES_DISTANCE = 0.09;
 export const MIN_MARK_CONTRAST = 3;
-export const emptyChecks = () => ({ texts: [], marks: [], series: [] });
+export const emptyChecks = () => ({ texts: [], marks: [], series: [], manifest: new Set(), scale: new Set() });
+const overlap = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+/** Ranking or loaded words in a string, with the given scale labels taken out first. */
+export function wordErrors(text, where, scale = []) {
+    let t = text;
+    for (const l of [...scale].sort((a, b) => b.length - a.length))
+        t = t.split(l).join(" ");
+    const errs = [];
+    if (RANKING_WORDS.test(t))
+        errs.push(`ranking word "${t.match(RANKING_WORDS)[0]}" in ${where}: "${text}"`);
+    if (LOADED_WORDS.test(t))
+        errs.push(`loaded word "${t.match(LOADED_WORDS)[0]}" in ${where}: "${text}"`);
+    return errs;
+}
+/**
+ * The checks that do not depend on the palette: values in the manifest, overlapping text,
+ * and the words of titles and alt text.
+ */
+export function layoutErrors(checks) {
+    const errs = [];
+    for (const t of checks.texts) {
+        if (t.role === "value" && !checks.manifest.has(t.content))
+            errs.push(`value "${t.content}" not in the manifest`);
+    }
+    const titles = new Map();
+    for (const t of checks.texts.filter((x) => x.role === "title")) {
+        const k = t.group ?? t.content;
+        titles.set(k, [...(titles.get(k) ?? []), t.content]);
+    }
+    for (const lines of titles.values())
+        errs.push(...wordErrors(lines.join(" "), "the title"));
+    if (checks.alt)
+        errs.push(...wordErrors(checks.alt, "the alt text", checks.scale));
+    const boxed = checks.texts.filter((t) => t.box && t.content.trim());
+    for (let i = 0; i < boxed.length; i++)
+        for (let j = i + 1; j < boxed.length; j++) {
+            const a = boxed[i], b = boxed[j];
+            if (a.group && a.group === b.group)
+                continue;
+            if (overlap(a.box, b.box))
+                errs.push(`text overlaps: "${a.content}" and "${b.content}"`);
+        }
+    return errs;
+}
 export const resolve = (c, pal) => {
     if (c.startsWith("#"))
         return c;
@@ -56,7 +109,7 @@ export function gateErrors(checks, pal, name) {
 }
 /** Runs the gates against every palette and throws with every failure listed. */
 export function assertGates(checks, palettes, what) {
-    const errs = palettes.flatMap((p) => gateErrors(checks, p.pal, p.name));
+    const errs = [...new Set([...layoutErrors(checks), ...palettes.flatMap((p) => gateErrors(checks, p.pal, p.name))])];
     if (errs.length)
         throw new Error(`QA failed for ${what}:\n  ${errs.join("\n  ")}`);
 }

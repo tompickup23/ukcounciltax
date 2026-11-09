@@ -18,8 +18,10 @@ export function fillSlots(text, set) {
  * Lays out header and footer and hands back the plot rectangle. For inline the plot
  * height is the chart's own need; for a card it is what the fixed canvas leaves.
  */
-export function frame(o, caption, plotNeed) {
+export function frame(o, caption, plotNeed, thumbForm) {
     const tpl = TEMPLATES[o.template ?? "inline"];
+    if (tpl.thumb && !thumbForm)
+        throw new Error("this chart has no thumb form: only ZeroBar, Waffle, BillAnatomy and PositionStrip draw the 160 by 64 thumb");
     const set = currentFigures(o.set);
     const site = o.site ?? "ukdemographics";
     const mode = tpl.card ? { kind: "hex", theme: "dark", site } : o.mode ?? { kind: "css" };
@@ -27,6 +29,18 @@ export function frame(o, caption, plotNeed) {
     if (tpl.card && !title)
         throw new Error("a card needs a title: the takeaway sentence");
     const canvas = new Canvas(mode, tpl.W, tpl.H || 1);
+    if (tpl.thumb) {
+        // Marks only: no title, no footer, the whole canvas less a hairline pad for the plot.
+        canvas.silent = true;
+        const plot = { x: tpl.pad, y: tpl.pad, w: tpl.W - tpl.pad * 2, h: tpl.H - tpl.pad * 2 };
+        const close = () => {
+            if (mode.kind === "hex") {
+                canvas.rect(0, 0, canvas.W, canvas.H, "bg");
+                canvas.parts.unshift(canvas.parts.pop());
+            }
+        };
+        return { canvas, tpl, plot, bg: "bg", set, title: undefined, close };
+    }
     const bg = "bg";
     const f = tpl.font;
     const innerW = tpl.W - tpl.pad * 2;
@@ -43,7 +57,7 @@ export function frame(o, caption, plotNeed) {
         y += markH + Math.round(f.brand * 0.9);
     }
     if (title) {
-        y = canvas.para(tpl.pad, y, title, innerW, { size: f.title, weight: 600, family: "display", fill: "text", bg, lineHeight: 1.2 });
+        y = canvas.para(tpl.pad, y, title, innerW, { size: f.title, weight: 600, family: "display", fill: "text", bg, lineHeight: 1.2, role: "title", group: "title" });
         y += tpl.card ? 20 : 16;
     }
     // Cards: the domain takes the left of the footer and the source wraps on the right of it.

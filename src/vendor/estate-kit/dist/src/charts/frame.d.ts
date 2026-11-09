@@ -54,7 +54,7 @@ export interface Framed {
  * Lays out header and footer and hands back the plot rectangle. For inline the plot
  * height is the chart's own need; for a card it is what the fixed canvas leaves.
  */
-export declare function frame(o: ChartOptions, caption: string, plotNeed: number): Framed;
+export declare function frame(o: ChartOptions, caption: string, plotNeed: number, thumbForm?: string): Framed;
 export declare const NICE_STEPS: number[];
 /** A round ceiling at or above max, so the top gridline is a readable number. */
 export declare function niceMax(max: number): number;

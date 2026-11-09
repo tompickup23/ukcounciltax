@@ -15,10 +15,16 @@
  * the brand build's postcard (build.mjs postcardTree) at 1080 wide: the lockup name at 36,
  * the footer at 30, and nothing that carries meaning under 30.
  *
+ * thumb (160x64) is the task card thumbnail of the A5 front door: marks only, no text at all,
+ * and aria-hidden, since the card's own words carry the meaning. Only charts with a
+ * marks only form draw it (ZeroBar, Waffle, BillAnatomy, PositionStrip); the rest throw.
+ * It is not in TEMPLATE_KEYS, which lists the templates every chart draws.
+ *
  * Next templates (not built yet): story 1080x1920, A4 print, and the 16x9 and 9x16 film
  * frames.
  */
-export type TemplateKey = "inline" | "og" | "portrait";
+export type TemplateKey = "inline" | "og" | "portrait" | "thumb";
+/** The templates every chart draws. The thumb is only for charts with a marks only form. */
 export declare const TEMPLATE_KEYS: TemplateKey[];
 /** The card templates, in the order a card set renders them. */
 export declare const CARD_KEYS: TemplateKey[];
@@ -30,6 +36,8 @@ export interface Template {
     pad: number;
     /** Draw the brand row and footer rule, on the ground. */
     card: boolean;
+    /** Marks only: no text, no title elements, aria-hidden. */
+    thumb?: boolean;
     /** Cards wider than tall put a chart's key beside the plot; the rest put it below. */
     keyBeside: boolean;
     /** The smallest size any text that carries meaning may take, checked on every card. */

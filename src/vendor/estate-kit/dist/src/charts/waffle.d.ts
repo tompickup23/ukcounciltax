@@ -1,4 +1,5 @@
 import { type ChartOptions, type ChartOutput } from "./frame.js";
+export { squaresFor, squareClass, WAFFLE_MAX_PARTS, WAFFLE_PAINTS, type Hatch, type Paint } from "./waffleRule.js";
 export type WaffleSize = "standard" | "small";
 export interface WaffleOptions extends ChartOptions {
     /** A value figure in percent, from 0 to 100. Give this or parts. */
@@ -11,27 +12,20 @@ export interface WaffleOptions extends ChartOptions {
     emptyLabel?: string;
     /** standard (the default) or small, the 10 by 10 phone size with the key below. */
     size?: WaffleSize;
+    /**
+     * Grid only: the hundred squares and nothing else, for a script to recolour (the A6
+     * player's grid, option 1). Every square is a group with data-ek-square="0" to "99" and
+     * one class, sq-p0 to sq-p11 or sq-empty, and carries both hatch strokes, hidden unless
+     * its part is hatched; kit.css maps the classes to the paints. Takes figure, parts, or
+     * neither for an empty grid. No text is drawn: the page puts the source beside it.
+     */
+    grid?: boolean;
+    /**
+     * The value figure key of the published total, for a split of money (a bill by body, a
+     * budget by service). The parts must add up to it to the penny or the chart refuses, as
+     * BillAnatomy does, so a missing part cannot renormalise into a confident split. Pass it
+     * whenever the document publishes a total.
+     */
+    total?: string;
 }
-type Hatch = "none" | "diagonal" | "cross";
-interface Paint {
-    fill: string;
-    hatch: Hatch;
-}
-/**
- * The order parts take their paint: the four series solid, then with one diagonal stroke,
- * then with a cross. The neutrals are not used: they sit under 0.09 from a series under
- * colour vision, so a fifth hue would break the series gate.
- */
-export declare const WAFFLE_PAINTS: Paint[];
-/**
- * Whole squares for each share, adding to exactly 100: floors first, then the largest
- * remainders, ties to the earlier part. The shares are percentages of one whole, so they
- * must be finite, not negative, and add to 100 within half a square (the same tolerance
- * Waffle allows percentage parts); anything else throws rather than returning a grid of
- * more or fewer than a hundred squares. Within that tolerance the result always adds to
- * exactly 100. A client drawing a part filled grid (a player's answers mid round)
- * normalises its values to shares first, or leaves the rest as empty squares itself.
- */
-export declare function squaresFor(shares: number[]): number[];
 export declare function waffle(o: WaffleOptions): ChartOutput;
-export {};

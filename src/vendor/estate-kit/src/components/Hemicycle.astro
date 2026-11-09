@@ -1,11 +1,11 @@
 ---
 /** A chamber, one dot per seat, from figure keys; see src/charts/hemicycle.ts. */
-import ChartFigure from "./ChartFigure.astro";
+import ChartFigure, { type Props as ChartFigureProps } from "./ChartFigure.astro";
 import { hemicycle, type HemicycleOptions } from "../../dist/src/index.js";
 
-type Props = HemicycleOptions & { tableOpen?: boolean; class?: string };
+type Props = HemicycleOptions & { tableOpen?: boolean; class?: string; id?: string; actions?: ChartFigureProps["actions"] };
 
-const { tableOpen, class: className, ...opts } = Astro.props;
+const { tableOpen, class: className, id, actions, ...opts } = Astro.props;
 const out = hemicycle(opts);
 ---
-<ChartFigure out={out} keys={[...opts.parties, opts.total, ...(opts.majority ? [opts.majority] : [])]} tableOpen={tableOpen} class={className} />
+<ChartFigure out={out} keys={[...opts.parties, opts.total, ...(opts.majority ? [opts.majority] : [])]} tableOpen={tableOpen} class={className} id={id} actions={actions} />

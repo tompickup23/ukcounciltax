@@ -1,0 +1,38 @@
+{
+  "kit": "0.2.0",
+  "score": 79,
+  "base": 18015000,
+  "shares": {
+    "Adult Social Care": 0.01,
+    "Housing Services (GFRA only)": 12.41,
+    "Cultural and Related Services": 29.35,
+    "Environmental and Regulatory Services": 31.53,
+    "Central Services": 26.69
+  },
+  "squares": {
+    "Adult Social Care": 0,
+    "Housing Services (GFRA only)": 12,
+    "Cultural and Related Services": 29,
+    "Environmental and Regulatory Services": 32,
+    "Central Services": 27
+  },
+  "guesses": {
+    "Adult Social Care": 0,
+    "Housing Services (GFRA only)": 30,
+    "Cultural and Related Services": 15,
+    "Environmental and Regulatory Services": 25,
+    "Central Services": 30
+  },
+  "gaps": {
+    "Adult Social Care": 0,
+    "Housing Services (GFRA only)": 17.6,
+    "Cultural and Related Services": -14.3,
+    "Environmental and Regulatory Services": -6.5,
+    "Central Services": 3.3
+  },
+  "captions": {
+    "bill": "Source: Burnley Borough Council, Council Tax Charges 2026/27, page 1, 2026/27.",
+    "published": "Source: Ministry of Housing, Communities and Local Government, Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data, RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690, 11 June 2026.",
+    "guess": "Fixture, not a published figure. Source: UK Council Tax design mockup, An example player guess for the split round, mockup input, 9 November 2026."
+  }
+}

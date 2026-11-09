@@ -1,0 +1,390 @@
+{
+  "$about": "Figures for the A5 and A6 design mockups, 9 November 2026. Every value is copied from the named published document; nothing is estimated. Burnley charges checked against the PDF on 9 November 2026 (hash matches data/local-bills/burnley-2026-27.json). RA values are those in data/national/budget.json, which the live game page also carries. The example guess figures are marked as fixtures: they stand for a player's input and are not published figures.",
+  "burnley.bandd.billing": {
+    "kind": "value",
+    "label": "Burnley Borough Council, Band D 2026/27",
+    "name": "Burnley Borough Council",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 351.44,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Band D column, row Burnley Borough Council. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9."
+  },
+  "burnley.bandd.county": {
+    "kind": "value",
+    "label": "Lancashire County Council, Band D 2026/27",
+    "name": "Lancashire County Council",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 1801.75,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Band D column, row Lancashire County Council. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9."
+  },
+  "burnley.bandd.police": {
+    "kind": "value",
+    "label": "Lancashire Police Authority, Band D 2026/27",
+    "name": "Lancashire Police Authority",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 292.4,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Band D column, row Lancashire Police Authority. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9."
+  },
+  "burnley.bandd.fire": {
+    "kind": "value",
+    "label": "Lancashire Combined Fire Authority, Band D 2026/27",
+    "name": "Lancashire Combined Fire Authority",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 94.73,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Band D column, row Lancashire Combined Fire Authority. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9."
+  },
+  "burnley.bandd.total": {
+    "kind": "value",
+    "label": "Band D total, other parts of the borough (unparished), 2026/27",
+    "name": "Band D total, unparished",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 2540.32,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Band D column, row Total, other parts of the borough. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9."
+  },
+  "burnley.bands.unparished": {
+    "kind": "series",
+    "axis": "category",
+    "label": "Council tax by band, other parts of Burnley (unparished), 2026/27",
+    "unit": "gbp",
+    "dp": 2,
+    "source": {
+      "publisher": "Burnley Borough Council",
+      "title": "Council Tax Charges 2026/27",
+      "page": "page 1",
+      "edition": "2026/27",
+      "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+      "accessed": "2026-11-09"
+    },
+    "note": "Row: Total, other parts of the borough. File sha256 b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9.",
+    "points": [
+      {
+        "label": "A",
+        "value": 1693.54
+      },
+      {
+        "label": "B",
+        "value": 1975.8
+      },
+      {
+        "label": "C",
+        "value": 2258.06
+      },
+      {
+        "label": "D",
+        "value": 2540.32
+      },
+      {
+        "label": "E",
+        "value": 3104.84
+      },
+      {
+        "label": "F",
+        "value": 3669.36
+      },
+      {
+        "label": "G",
+        "value": 4233.86
+      },
+      {
+        "label": "H",
+        "value": 5080.64
+      }
+    ]
+  },
+  "burnley.ra.asc": {
+    "kind": "value",
+    "label": "Adult Social Care, Burnley, net current expenditure 2026/27, RA line 360",
+    "name": "Adult Social Care",
+    "unit": "gbp",
+    "value": 2000,
+    "source": {
+      "publisher": "Ministry of Housing, Communities and Local Government",
+      "title": "Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data",
+      "table": "RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690",
+      "edition": "11 June 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "accessed": "2026-11-08"
+    },
+    "note": "RA line 360. Published in GBP thousands; shown in pounds. File RA_2026-27_data_Part_1.ods, sha256 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db."
+  },
+  "burnley.ra.hsg": {
+    "kind": "value",
+    "label": "Housing Services (General Fund Revenue Account [GFRA] only), Burnley, net current expenditure 2026/27, RA line 490",
+    "name": "Housing Services (GFRA only)",
+    "unit": "gbp",
+    "value": 2236000,
+    "source": {
+      "publisher": "Ministry of Housing, Communities and Local Government",
+      "title": "Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data",
+      "table": "RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690",
+      "edition": "11 June 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "accessed": "2026-11-08"
+    },
+    "note": "RA line 490. Published in GBP thousands; shown in pounds. File RA_2026-27_data_Part_1.ods, sha256 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db."
+  },
+  "burnley.ra.cult": {
+    "kind": "value",
+    "label": "Cultural and Related Services, Burnley, net current expenditure 2026/27, RA line 509",
+    "name": "Cultural and Related Services",
+    "unit": "gbp",
+    "value": 5287000,
+    "source": {
+      "publisher": "Ministry of Housing, Communities and Local Government",
+      "title": "Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data",
+      "table": "RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690",
+      "edition": "11 June 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "accessed": "2026-11-08"
+    },
+    "note": "RA line 509. Published in GBP thousands; shown in pounds. File RA_2026-27_data_Part_1.ods, sha256 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db."
+  },
+  "burnley.ra.env": {
+    "kind": "value",
+    "label": "Environmental and Regulatory Services, Burnley, net current expenditure 2026/27, RA line 590",
+    "name": "Environmental and Regulatory Services",
+    "unit": "gbp",
+    "value": 5681000,
+    "source": {
+      "publisher": "Ministry of Housing, Communities and Local Government",
+      "title": "Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data",
+      "table": "RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690",
+      "edition": "11 June 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "accessed": "2026-11-08"
+    },
+    "note": "RA line 590. Published in GBP thousands; shown in pounds. File RA_2026-27_data_Part_1.ods, sha256 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db."
+  },
+  "burnley.ra.cent": {
+    "kind": "value",
+    "label": "Central Services, Burnley, net current expenditure 2026/27, RA line 690",
+    "name": "Central Services",
+    "unit": "gbp",
+    "value": 4809000,
+    "source": {
+      "publisher": "Ministry of Housing, Communities and Local Government",
+      "title": "Local authority revenue expenditure and financing England: 2026 to 2027 budget individual local authority data",
+      "table": "RA_LA_Data_2026-27, Burnley, lines 360, 490, 509, 590 and 690",
+      "edition": "11 June 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "accessed": "2026-11-08"
+    },
+    "note": "RA line 690. Published in GBP thousands; shown in pounds. File RA_2026-27_data_Part_1.ods, sha256 3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db."
+  },
+  "mockup.guess.asc": {
+    "kind": "value",
+    "label": "Example guess, Adult Social Care, pence of 100p",
+    "name": "Adult Social Care",
+    "unit": "pence",
+    "value": 0,
+    "fixture": true,
+    "source": {
+      "publisher": "UK Council Tax design mockup",
+      "title": "An example player guess for the split round",
+      "table": "mockup input",
+      "edition": "9 November 2026"
+    }
+  },
+  "mockup.guess.hsg": {
+    "kind": "value",
+    "label": "Example guess, Housing Services (GFRA only), pence of 100p",
+    "name": "Housing Services (GFRA only)",
+    "unit": "pence",
+    "value": 30,
+    "fixture": true,
+    "source": {
+      "publisher": "UK Council Tax design mockup",
+      "title": "An example player guess for the split round",
+      "table": "mockup input",
+      "edition": "9 November 2026"
+    }
+  },
+  "mockup.guess.cult": {
+    "kind": "value",
+    "label": "Example guess, Cultural and Related Services, pence of 100p",
+    "name": "Cultural and Related Services",
+    "unit": "pence",
+    "value": 15,
+    "fixture": true,
+    "source": {
+      "publisher": "UK Council Tax design mockup",
+      "title": "An example player guess for the split round",
+      "table": "mockup input",
+      "edition": "9 November 2026"
+    }
+  },
+  "mockup.guess.env": {
+    "kind": "value",
+    "label": "Example guess, Environmental and Regulatory Services, pence of 100p",
+    "name": "Environmental and Regulatory Services",
+    "unit": "pence",
+    "value": 25,
+    "fixture": true,
+    "source": {
+      "publisher": "UK Council Tax design mockup",
+      "title": "An example player guess for the split round",
+      "table": "mockup input",
+      "edition": "9 November 2026"
+    }
+  },
+  "mockup.guess.cent": {
+    "kind": "value",
+    "label": "Example guess, Central Services, pence of 100p",
+    "name": "Central Services",
+    "unit": "pence",
+    "value": 30,
+    "fixture": true,
+    "source": {
+      "publisher": "UK Council Tax design mockup",
+      "title": "An example player guess for the split round",
+      "table": "mockup input",
+      "edition": "9 November 2026"
+    }
+  },
+  "england.area_bandd.history": {
+    "kind": "series",
+    "axis": "category",
+    "label": "Average area Band D in England, including adult social care and average parish precepts",
+    "unit": "gbp",
+    "source": {
+      "publisher": "MHCLG",
+      "title": "Council Tax levels set by local authorities in England 2026 to 2027",
+      "edition": "25 March 2026",
+      "url": "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027",
+      "table": "Table 3"
+    },
+    "points": [
+      {
+        "label": "2012/13",
+        "value": 1444
+      },
+      {
+        "label": "2013/14",
+        "value": 1456
+      },
+      {
+        "label": "2014/15",
+        "value": 1468
+      },
+      {
+        "label": "2015/16",
+        "value": 1484
+      },
+      {
+        "label": "2016/17",
+        "value": 1530
+      },
+      {
+        "label": "2017/18",
+        "value": 1591
+      },
+      {
+        "label": "2018/19",
+        "value": 1671
+      },
+      {
+        "label": "2019/20",
+        "value": 1750
+      },
+      {
+        "label": "2020/21",
+        "value": 1818
+      },
+      {
+        "label": "2021/22",
+        "value": 1898
+      },
+      {
+        "label": "2022/23",
+        "value": 1966
+      },
+      {
+        "label": "2023/24",
+        "value": 2065
+      },
+      {
+        "label": "2024/25",
+        "value": 2171
+      },
+      {
+        "label": "2025/26",
+        "value": 2280
+      },
+      {
+        "label": "2026/27",
+        "value": 2392
+      }
+    ]
+  },
+  "england.area_bandd.2026": {
+    "kind": "value",
+    "label": "Average area Band D, England, 2026/27",
+    "unit": "gbp",
+    "value": 2392,
+    "source": {
+      "publisher": "MHCLG",
+      "title": "Council Tax levels set by local authorities in England 2026 to 2027",
+      "edition": "25 March 2026",
+      "url": "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027",
+      "table": "Table 7"
+    }
+  },
+  "burnley.area_bandd.2026": {
+    "kind": "value",
+    "label": "Area Band D, Burnley, 2026/27, including average parish precepts",
+    "unit": "gbp",
+    "dp": 2,
+    "value": 2549.42,
+    "source": {
+      "publisher": "MHCLG",
+      "title": "Council tax levels set by local authorities in England 2026 to 2027: Table 10",
+      "table": "Table 10, Data Billing and Precepting Bodies",
+      "edition": "25 March 2026",
+      "url": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods"
+    }
+  }
+}

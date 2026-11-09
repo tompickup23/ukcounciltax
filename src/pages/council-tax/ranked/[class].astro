@@ -17,7 +17,7 @@ const london = cls.slug === 'london-boroughs';
 ---
 <BaseLayout title={data.title} description={data.description} path={rankingPath(cls.slug)}>
   <Breadcrumbs items={[{label:'Council tax',href:'/council-tax/'},{label:'Ranked',href:'/council-tax/ranked/'},{label:cls.label}]} />
-  <header class="page-head"><h1>{data.title}</h1><p class="lede">Every {cls.label} in England, by published Band D for {year}, lowest first. Position 1 is the lowest. {rankingRule}</p></header>
+  <header class="page-head"><h1>{data.title}</h1><p class="lede">All {cls.label} in England, by published Band D for {year}, lowest first. Position 1 is the lowest. {rankingRule}</p></header>
   <section class="section" aria-labelledby="basis-heading">
     <h2 id="basis-heading">What is ranked</h2>
     {data.county ? <p>A county council's precept is charged in every shire district in its county and is part of each district's area Band D. <a href={rankingPath('shire-districts')}>Shire districts ranked by area Band D</a>.</p> : <>

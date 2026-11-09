@@ -1,6 +1,6 @@
 import {existsSync,readFileSync} from 'node:fs';
 import {describe,expect,it} from 'vitest';
-import {CURRENT_YEAR, PREVIOUS_YEAR, yearLabel} from '../src/lib/council-tax';
+import {CURRENT_YEAR, PREVIOUS_YEAR, yearLabel, loadYear} from '../src/lib/council-tax';
 import {national,parishesFor,parishChange,type Parish} from '../src/lib/national-data';
 import {councilPages,parishPages,parishPath} from '../src/lib/paths';
 import {parishRange,parishSummary} from '../src/lib/parish-pages';
@@ -13,6 +13,8 @@ const rows=(html:string)=>[...(html.match(/<tbody[^>]*>([\s\S]*?)<\/tbody>/)?.[1
 
 it('matches all parish counts and the two binding sentences',()=>{
  expect(national.parishes).toHaveLength(10245); expect(parishPages()).toHaveLength(214);
+ const names=parishPages().map(c=>loadYear(CURRENT_YEAR).authorities[c.gss].name);
+ expect(names).toEqual([...names].sort((a,b)=>a.localeCompare(b,'en-GB')));
  expect(parishRange('Burnley',parishesFor('E07000117'))).toBe(burnley);
  expect(parishRange('Lancaster',parishesFor('E07000121'))).toBe(lancaster);
  expect(parishSummary(parishesFor('E07000137'))).toMatchObject({records:163,nonZero:104,zero:59,min:-264,max:35368});
@@ -43,6 +45,8 @@ describe.skipIf(!existsSync('dist/precepts/parishes/index.html'))('built parish 
    }
   }
   expect(total).toBe(10245);expect(rows(read('/precepts/parishes/'))).toHaveLength(214);
+  const names=rows(read('/precepts/parishes/')).map(row=>text(row.match(/<th[^>]*>([\s\S]*?)<\/th>/)![1]));
+  expect(names).toEqual([...names].sort((a,b)=>a.localeCompare(b,'en-GB')));
  });
  it('reproduces the published anchors, changes and non comparable rows',()=>{
   const b=read('/precepts/parishes/burnley/');expect(text(b)).toContain(burnley);expect(text(b)).toContain('£351.44');expect(text(b)).toContain('Table 8c');

@@ -192,7 +192,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       </div>
       {position && classRanks && <div class="fact" data-fact data-class-position>
         <p>Within {rankType.label} in {year}: {name} is {positionWords(position.areaPosition, position.areaTied)} of {classRanks.length} for area Band D and {positionWords(position.ownPosition, position.ownTied)} of {classRanks.length} for the council's own Band D, counted from the lowest.</p>
-        <p><a href={rankingPath(rankType.slug)}>Every {rankType.label} ranked by Band D</a>.</p>
+        <p><a href={rankingPath(rankType.slug)}>All {rankType.label} ranked by Band D</a>.</p>
         {tax.notes.length > 0 && <p>MHCLG publishes a note on this figure; it is under the band table.</p>}
         <SourceLine source={councilTaxSource(CURRENT_YEAR, `Table 9 and ${rankType.ownTable.replace('_', ' ')}`, 'Positions calculated from the published figures: equal figures share a position')} />
       </div>}

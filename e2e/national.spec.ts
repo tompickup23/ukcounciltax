@@ -5,7 +5,7 @@ test('national precept search leads to council components and a filterable paris
  await expect(page).toHaveURL(/\/councils\/burnley\/#precept-breakdown/);
  const breakdown=page.locator('#precept-breakdown');await expect(breakdown).toContainText('Lancashire PCC');await expect(breakdown).toContainText('£292.40');await expect(breakdown).toContainText('already included');
  await page.getByText('View the full Band D history and separate council shares',{exact:true}).click();await expect(page.locator('#long-history')).toContainText('1993/94');
- await page.locator('#parish-precepts a').click();await expect(page).toHaveURL(/\/precepts\/parishes\/burnley\//);
+ await page.locator('#parish-precepts a[href="/precepts/parishes/burnley/"]').click();await expect(page).toHaveURL(/\/precepts\/parishes\/burnley\//);
  await page.getByLabel('Filter parish or local body').fill('Padiham');
  await expect(page.locator('[data-parish-name]:visible')).toHaveCount(1);
  await expect(page.locator('[data-parish-name]:visible')).toContainText('£44.06');await expect(page.locator('[data-parish-name]:visible')).toContainText('+£5.42');

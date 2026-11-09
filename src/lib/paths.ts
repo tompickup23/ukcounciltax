@@ -82,9 +82,10 @@ export const rankingPaths = () => [...RANK_CLASSES, COUNTY_CLASS].map(cls => ran
 export const parishPath = (council: Council) => `/precepts/parishes/${council.slug}/`;
 export function parishPages(): Council[] {
   const registry = loadRegistry();
+  const authorities = loadYear(CURRENT_YEAR).authorities;
   return [...new Set(national.parishes.map(row => row.gss))].map(gss => {
     const council = registry.councils[gss];
     if (!council) throw new Error(`No council slug for parish area ${gss}`);
     return council;
-  }).sort((a,b) => a.name.localeCompare(b.name,'en-GB'));
+  }).sort((a,b) => authorities[a.gss].name.localeCompare(authorities[b.gss].name,'en-GB'));
 }

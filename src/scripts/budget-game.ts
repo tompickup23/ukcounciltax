@@ -288,8 +288,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
       scores.push(score); distances.push(...details);
       rail();
       stage.replaceChildren();
-      heading(`${round.title}: published answer`);
-      stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100.`, 'game-score'), element('p', round.explanation));
+      const subject = round.kind === 'split' ? `${round.title.replace('Guess the split: ', '')}'s split`
+        : round.kind === 'bill' ? `${root.dataset.councilName}'s Band D split`
+        : `${root.dataset.councilName}'s ${round.kind}`;
+      heading(`${subject}, published answer`);
+      stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100`, 'game-score'), element('p', round.explanation));
       if (round.kind === 'split' || round.kind === 'bill') {
         if (!skipped) stage.append(element('p', 'Your score: add up the gaps below, halve the total and take it from 100.'));
         const pair = element('div', '', 'game-reveal-waffles');
@@ -325,7 +328,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         const drawing = root.querySelector<HTMLTemplateElement>(`[data-game-published="${index}"]`)!.content.cloneNode(true) as DocumentFragment;
         const sorted = round.items.map((_, i) => i).sort((a,b)=>Math.abs(round.items[b].value)-Math.abs(round.items[a].value));
         const ordinal = (n: number) => `${n}${n%100>=11&&n%100<=13?'th':n%10===1?'st':n%10===2?'nd':n%10===3?'rd':'th'}`;
-        drawing.querySelectorAll('[data-player-position]').forEach((slot,i)=>{slot.textContent=skipped?'Round skipped':`You placed it ${ordinal(order.indexOf(sorted[i])+1)}`;});
+        drawing.querySelectorAll('[data-player-position]').forEach((slot,i)=>{
+          const value = round.items[sorted[i]].value;
+          const direction = value < 0 ? 'Deducts from funding' : value > 0 ? 'Adds to funding' : 'No contribution to funding';
+          slot.textContent = `${direction}; ${skipped ? 'round skipped' : `you placed it ${ordinal(order.indexOf(sorted[i])+1)}`}`;
+        });
         stage.append(drawing);
       }
       if (round.kind === 'reserves') stage.append(root.querySelector<HTMLTemplateElement>(`[data-game-published="${index}"]`)!.content.cloneNode(true));

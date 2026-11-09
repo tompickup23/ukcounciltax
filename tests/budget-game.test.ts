@@ -109,3 +109,58 @@ it('uses the kit rule for whole pence and every published split without changing
     }
   }
 },30000);
+
+
+it('gives Birmingham funding bars at least half the drawing width with recorded short values', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const data=gameData('E08000025','birmingham','Birmingham')!;
+  const funding=data.rounds.find(round=>round.kind==='funding')!;
+  const chart=gameChart(funding,'birmingham-funding').out;
+  expect(chart.width).toBe(600);
+  const lengths=[...chart.svg.matchAll(/data-base="([^"]+)" data-end="([^"]+)"/g)].map(([,base,end])=>Math.abs(Number(end)-Number(base)));
+  expect(Math.max(...lengths)).toBeGreaterThanOrEqual(300);
+  expect(chart.svg).toContain('£1.3bn');
+  expect(chart.table).toContain('£1,334,018,000');
+  expect(chart.table).not.toContain('£1.3bn');
+  for(const theme of ['light','dark'] as const) {
+    const pngChart=gameChart(funding,'birmingham-funding',theme).out;
+    const background=pngChart.svg.match(/<rect x="0" y="0" width="600" height="([^"]+)"/);
+    expect(Number(background?.[1])).toBe(pngChart.height);
+  }
+  expect(chart.svg).not.toContain('(add)');
+  expect(chart.svg).not.toContain('(deduct)');
+  const reserves=gameChart(data.rounds.find(round=>round.kind==='reserves')!,'birmingham-reserves').out;
+  expect(reserves.svg).toContain('£731m');
+  expect(reserves.svg).toContain('£688.8m');
+});
+
+
+it('prints Table 10 once in the drawn bill source without changing its source record', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const bill=gameData('E07000117','burnley','Burnley')!.rounds.find(round=>round.kind==='bill')!;
+  const before=JSON.stringify(bill.source);
+  const chart=gameChart(bill,'bill').out;
+  expect(chart.caption.match(/Table 10/g)).toHaveLength(1);
+  expect(chart.caption).toContain('Data Billing and Precepting Bodies');
+  expect(JSON.stringify(bill.source)).toBe(before);
+});
+
+
+it('keeps verbatim body names in chart labels and marks their HTML twin cells', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const {esc}=await import('../src/vendor/estate-kit/dist/src/charts/canvas.js');
+  let checked=0;
+  for(const {council,tax} of councilPages()) {
+    const bill=gameData(council.gss,council.slug,tax.name)?.rounds.find(round=>round.kind==='bill');
+    if(!bill)continue;
+    const names=bill.items.filter(item=>item.label.includes([' ','-',' '].join('')));
+    if(!names.length)continue;
+    const out=gameChart(bill,`labels-${council.slug}`).out;
+    for(const item of names) {
+      expect(out.table).toContain(`<th scope="row" data-dash-ok="">${esc(item.label)}</th>`);
+      expect(out.svg).toContain(esc(item.label));
+      checked++;
+    }
+  }
+  expect(checked).toBeGreaterThan(0);
+});

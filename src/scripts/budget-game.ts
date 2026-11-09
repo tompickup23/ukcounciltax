@@ -31,6 +31,14 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
   let index = 0;
   let scores: (number | null)[] = [];
   let distances: Distance[] = [];
+  function rail() {
+    const list=root.querySelector<HTMLOListElement>('[data-game-rail]')!;list.hidden=false;
+    [...list.children].forEach((node,i)=>{
+      node.removeAttribute('aria-current');node.classList.toggle('done',scores[i] !== undefined);
+      if(i === index && scores.length < data.rounds.length)node.setAttribute('aria-current','step');
+      node.querySelector('[data-step-status]')!.textContent=scores[i]===null?'skipped':'';
+    });
+  }
   function heading(text: string) {
     const h = element('h3', text);
     h.id = 'game-round-heading';
@@ -44,6 +52,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     for (const context of round.context ?? []) parent.append(element('p', context.text), sourceLine(context.source));
   }
   function summary(restored = false) {
+    rail();
     controls.hidden = true;
     stage.replaceChildren();
     heading(restored ? 'Shared game scores' : 'Your game summary');
@@ -81,6 +90,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     showRound();
   }
   function showRound() {
+    rail();
     const round = data.rounds[index];
     stage.replaceChildren();
     heading(round.title);
@@ -240,6 +250,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         }
       } catch (error) {status.textContent = (error as Error).message; return;}
       scores.push(score); distances.push(...details);
+      rail();
       stage.replaceChildren();
       heading(`${round.title}: published answer`);
       stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100.`, 'game-score'), element('p', round.explanation));

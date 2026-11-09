@@ -24,6 +24,9 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
       <figcaption>100 squares, one for each penny. Round one fills them with your guess, then with {name}'s published split.</figcaption>
     </figure>
   </div>
+  <ol class="game-rail" data-game-rail aria-label="Game progress" hidden>
+    {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
+  </ol>
   <div data-game-stage></div>
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg} /></template>)}
@@ -43,6 +46,12 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
 
   .budget-game [hidden]{display:none!important}
+  .game-rail{display:flex;list-style:none;padding:0;gap:.5rem;margin-block:var(--space-lg);justify-content:space-between}
+  .game-rail li{display:flex;flex-direction:column;gap:.25rem;align-items:center;flex:1;min-width:0;font-size:var(--text-sm)}
+  .game-stop-number{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:2px solid var(--border-strong);border-radius:50%;font-weight:600}
+  .game-rail [aria-current=step] .game-stop-number{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+  .game-rail .done .game-stop-number{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  @media(max-width:599px){.game-stop-name{display:none}}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
   .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}
   .game-row{padding:1rem;border:1px solid var(--border);border-radius:8px;min-width:0}

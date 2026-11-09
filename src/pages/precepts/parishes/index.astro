@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import SourceLine from '../../../components/SourceLine.astro';
+import {CURRENT_YEAR, loadYear, yearLabel} from '../../../lib/council-tax';
+import {national, parishesFor} from '../../../lib/national-data';
+import {parishPages, parishPath} from '../../../lib/paths';
+import {parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
+const pages = parishPages();
+const year = yearLabel(CURRENT_YEAR), tax = loadYear(CURRENT_YEAR);
+const title = `Parish precepts by council in England ${year}`;
+const description = `${national.parishes.length.toLocaleString('en-GB')} local precepting authority records across ${pages.length} English councils in ${year}, with published Band D precepts and changes on the previous year.`;
+---
+<BaseLayout title={title} description={description} path="/precepts/parishes/">
+  <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts'}]} />
+  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length - pages.length} councils have no local precepting authority in this return.</p><SourceLine source={parishSource} /></div></header>
+  <p>Choose a council to see its parish and local body records. A parish Band D precept applies only within its charging area and is not a full council tax bill. These records are listed by council name, without ranking parishes or billing areas.</p>
+  <div class="fact" data-fact><div class="table-wrap" tabindex="0" role="region" aria-label="Parish precepts by billing council"><table class="data">
+    <caption>Local precepting authority records by council, {year}</caption>
+    <thead><tr><th scope="col">Council</th><th scope="col">Region</th><th scope="col" class="num">Records</th><th scope="col" class="num">Records with a non zero {year} Band D</th><th scope="col" class="num">Lowest non zero Band D</th><th scope="col" class="num">Highest non zero Band D</th></tr></thead>
+    <tbody>{pages.map(council => {const summary = parishSummary(parishesFor(council.gss)); return <tr><th scope="row"><a href={parishPath(council)}>{tax.authorities[council.gss].name}</a></th><td>{council.region}</td><td class="num" data-figure>{summary.records}</td><td class="num" data-figure>{summary.nonZero}</td><td class="num" data-figure>{summary.min === null ? 'No non zero precept' : parishAmountWords(summary.min)}</td><td class="num" data-figure>{summary.max === null ? 'No non zero precept' : parishAmountWords(summary.max)}</td></tr>;})}</tbody>
+  </table></div><SourceLine source={parishSource} /></div>
+</BaseLayout>

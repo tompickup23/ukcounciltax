@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { YEARS, councilTaxPath, loadYear, yearLabel, type Year } from "./council-tax";
+import { CURRENT_YEAR, YEARS, councilTaxPath, loadYear, yearLabel, type Year } from "./council-tax";
 import { national, type Parish } from "./national-data";
 
 /**
@@ -508,6 +508,12 @@ export const STATIC_PAGE_DATES: Record<string, string> = {
 /** The held edition or recorded page release for each route, not a fresh retrieval claim. */
 export function sitemapLastmod(path: string): string {
   const nationalSources = readJson<Record<string, {retrieved: string}>>('data/national/sources.json');
+  if (path.startsWith('/precepts/parishes/')) return national.sources.parishes.retrieved;
+  if (path.startsWith('/council-tax/ranked/')) {
+    const date = loadYear(CURRENT_YEAR).source.updated;
+    if (!date) throw new Error(`No recorded ranking edition date for ${path}`);
+    return date;
+  }
   if (path.startsWith('/tools/budget/')) return nationalSources.raPart1.retrieved;
   if (path === '/precepts/') return nationalSources.components.retrieved;
   if (path === '/data/') return Object.values(nationalSources).map(source => source.retrieved).sort().at(-1)!;

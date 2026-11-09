@@ -1,3 +1,4 @@
+import { national } from './national-data';
 import { RANK_CLASSES, COUNTY_CLASS } from './rankings';
 import {devolvedPaths} from './devolved';
 import { BANDS, CURRENT_YEAR, loadYear, type Authority, type Band } from "./council-tax";
@@ -67,6 +68,7 @@ export function programmaticPaths(): string[] {
   return [
     ...devolvedPaths(),
     ...rankingPaths(),
+    ...parishPages().map(parishPath),
     ...BANDS.map(bandPath),
     ...REGIONS.map(regionPath),
     ...councilPages().map(({ council }) => councilPath(council)),
@@ -76,3 +78,13 @@ export function programmaticPaths(): string[] {
 
 export const rankingPath = (slug: string) => `/council-tax/ranked/${slug}/`;
 export const rankingPaths = () => [...RANK_CLASSES, COUNTY_CLASS].map(cls => rankingPath(cls.slug));
+
+export const parishPath = (council: Council) => `/precepts/parishes/${council.slug}/`;
+export function parishPages(): Council[] {
+  const registry = loadRegistry();
+  return [...new Set(national.parishes.map(row => row.gss))].map(gss => {
+    const council = registry.councils[gss];
+    if (!council) throw new Error(`No council slug for parish area ${gss}`);
+    return council;
+  }).sort((a,b) => a.name.localeCompare(b.name,'en-GB'));
+}

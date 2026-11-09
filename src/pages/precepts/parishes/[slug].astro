@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import Fact from '../../../components/Fact.astro';
+import SourceLine from '../../../components/SourceLine.astro';
+import {CURRENT_YEAR, PREVIOUS_YEAR, loadYear, pounds, yearLabel} from '../../../lib/council-tax';
+import {parishPages, parishPath, councilPath} from '../../../lib/paths';
+import {parishesFor, parishChange, type ParishYear} from '../../../lib/national-data';
+import {parishRange, parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
+import {moneyPence} from '../../../lib/tax-view';
+import {councilTaxSource} from '../../../lib/sources';
+export function getStaticPaths() { return parishPages().map(council => ({params:{slug:council.slug},props:{council}})); }
+const {council} = Astro.props;
+const gss = council.gss;
+const tax = loadYear(CURRENT_YEAR).authorities[gss];
+const name = tax.name, year = CURRENT_YEAR, earlier = PREVIOUS_YEAR;
+const parishes = [...parishesFor(gss)].sort((a,b) => a.name.localeCompare(b.name,'en-GB'));
+const summary = parishSummary(parishes);
+const title = `Parish precepts in ${name} ${yearLabel(year)}`;
+const description = `${summary.nonZero} local precepts in ${name} in ${yearLabel(year)}, Band D ${summary.min === summary.max ? `of ${parishAmountWords(summary.min!)}` : `from ${parishAmountWords(summary.min!)} to ${parishAmountWords(summary.max!)}`}, with each one's change on ${yearLabel(earlier)} and ${name} council's own share. MHCLG local precepting authorities data.`;
+const notes = [...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
+const money = (n:number|null) => n === null ? 'Unavailable' : moneyPence(n);
+const parishMoney = (y:ParishYear) => y.status === 'not-existing' ? 'Did not exist' : money(y.bandDPence);
+---
+<BaseLayout title={title} description={description} path={parishPath(council)}>
+  <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts',href:'/precepts/parishes/'},{label:name}]} />
+  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{parishRange(name,parishes)}</p><SourceLine source={parishSource} /></div></header>
+  <Fact label={`${name} council's own Band D, excluding parish precepts, ${yearLabel(year)}`} figure={pounds(tax.own!.bandD)} source={councilTaxSource(CURRENT_YEAR,tax.own!.table)} />
+  <p>In a parish, the parish's own Band D precept is charged in addition to this and to the county, police and fire charges. The area average Band D on the <a href={councilPath(council)}>{name} council page</a> already includes parish precepts as an average, so do not add a parish figure to it.</p>
+  <section class="section" data-parish-table aria-labelledby="parish-table-heading">
+    <h2 id="parish-table-heading">Every local Band D precept in {name}</h2>
+    <p>These are individual Band D local charges, not full bills. Other property bands are not inferred. Match the charging locality to your council bill. Grouped parishes and charter trustees can have overlapping charging areas. A postcode alone cannot establish every charge on a property.</p>
+    <label class="field parish-search" hidden>Filter parish or local body<input type="search" autocomplete="off" placeholder="Type a parish name" /></label>
+    <p class="small muted" data-parish-count role="status">All {parishes.length} records shown.</p>
+    <div class="fact" data-fact>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D charges"><table class="data">
+      <caption>{name}: local Band D precepts, {yearLabel(earlier)} and {yearLabel(year)}</caption>
+      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Change</th></tr></thead>
+      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num" data-figure>{parishMoney(p.years[earlier])}</td><td class="num" data-figure>{parishMoney(p.years[year])}</td><td class="num" data-figure>{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
+    </table></div>
+    <SourceLine source={parishSource} />
+    </div>
+    {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
+    {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
+    <p class="small muted">Change is the {yearLabel(year)} Band D minus the {yearLabel(earlier)} Band D on the same source row, our calculation. A row that did not exist in either year is not comparable. Missing and ceased entries stay distinct from published £0.00 precepts.</p>
+    <SourceLine source={parishSource} />
+  </section>
+  <p><a href={councilPath(council)}>{name} council tax</a> · <a href="/precepts/parishes/">Parish precepts by council</a> · <a href="/precepts/">Your bill and precepts</a></p>
+</BaseLayout>
+<script>
+for(const section of document.querySelectorAll<HTMLElement>('[data-parish-table]')) {
+ const control=section.querySelector<HTMLElement>('.parish-search');
+ if(!control)continue;
+ control.hidden=false;
+ const input=control.querySelector<HTMLInputElement>('input')!;
+ const rows=[...section.querySelectorAll<HTMLTableRowElement>('[data-parish-name]')];
+ input.addEventListener('input',()=>{const query=input.value.trim().toLowerCase();let count=0;for(const row of rows){row.hidden=!(row.dataset.parishName??'').includes(query);if(!row.hidden)count++;}section.querySelector('[data-parish-count]')!.textContent=`${count} of ${rows.length} records shown.`;});
+}
+</script>
+<style>.parish-kind{display:block;font-weight:400;font-size:.8rem;color:var(--text-muted)}.parish-search{max-width:28rem;margin-top:1.5rem}</style>

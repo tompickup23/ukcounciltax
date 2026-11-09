@@ -16,16 +16,19 @@ interface Props extends CouncilPage {}
 const {council, tax} = Astro.props;
 const data = budgetFor(council.gss);
 const available = data.council.status === 'available';
-const description = `Published ${budgetYear} service spending, funding, reserves and Band D bill components. Read the official figures and their limitations.`;
+const title = available ? `${tax.name} budget game ${budgetYear}` : `${tax.name} budget ${budgetYear}: no return received`;
+const description = available
+  ? `Published ${budgetYear} budget for ${tax.name}: service spending, funding, reserves and the Band D bill split, from the MHCLG RA return.`
+  : `No ${budgetYear} budget return for ${tax.name} was received in time for MHCLG's publication. The published Band D bill components are shown.`;
 ---
-<BaseLayout title={`${tax.name} budget game`} description={description} path={`/tools/budget/${council.slug}/`}>
+<BaseLayout title={title} description={description} path={`/tools/budget/${council.slug}/`}>
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets', href: '/tools/budget/'}, {label: tax.name}]} />
   <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>{tax.name} budget</h1><p class="lede">The published budget, with service spending and council tax kept as separate measures.</p></header>
   {available ? <>
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
-    <BudgetGame gss={council.gss} slug={council.slug} />
-    <BudgetTables council={data.council} id="council-budget" />
-    {data.county && <BudgetTables council={data.county} id="county-budget" county />}
+    <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
+    <BudgetTables council={data.council} name={tax.name} id="council-budget" />
+    {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
   </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}
   <BudgetBill gss={council.gss} name={tax.name} />
   <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={tax} showChange={false} /></section>

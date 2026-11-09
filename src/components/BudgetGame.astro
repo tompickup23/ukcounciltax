@@ -1,8 +1,8 @@
 ---
 import {gameData} from '../lib/budget-game-data';
 import {jsonLd} from '../lib/site';
-interface Props {gss: string; slug: string}
-const data = gameData(Astro.props.gss, Astro.props.slug);
+interface Props {gss: string; slug: string; name: string}
+const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game aria-labelledby="game-heading">
   <p class="eyebrow">Explore the published budget | {data.year}</p>

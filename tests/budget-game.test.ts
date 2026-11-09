@@ -39,8 +39,8 @@ describe('budget game calculations and sharing', () => {
   });
   it('builds games only from available councils, preserving every positive heading and component', () => {
     let games = 0, countyRounds = 0;
-    for (const {council} of councilPages()) {
-      const data = gameData(council.gss, council.slug);
+    for (const {council, tax} of councilPages()) {
+      const data = gameData(council.gss, council.slug, tax.name);
       const source = budgetFor(council.gss);
       if (source.council.status === 'no return') {expect(data).toBeNull(); continue;}
       games++;

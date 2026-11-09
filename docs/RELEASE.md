@@ -197,3 +197,13 @@ Validation on 9 November 2026: 214 unit tests passed across 27 files with no ski
 
 
 Hosted clean-checkout validation: the first PR run failed before the build because `data/raw/` is gitignored and the RA tests require the three pinned originals. The workflow now runs the existing RA importer before the tests, verifying all source hashes and reconciliations, then requires `git diff --exit-code -- data/national/budget.json`. This is source preparation, not a new edition or a skipped check. A clean archive with no raw files fetched the original workbooks successfully and reproduced the committed budget snapshot byte for byte. The unit suite then passed with only the existing distribution-dependent pre-build skips. The local final-build results above remain valid because this correction changes only CI preparation.
+
+## Budget game review fixes, 10 November 2026
+
+Claude Code's review of the open PR (verdict: merge after small fixes) found three presentation faults, fixed on `feat/budget-game-i001` before Tom's merge. No source value, calculation, score or test tolerance changed.
+
+- **Titles and descriptions.** Every budget page carried the title "[Council] budget game" and one identical description. Pages with a game are now titled "[Council] budget game 2026/27"; the nine pages without a return are titled "[Council] budget 2026/27: no return received". Descriptions name the council and the year and stay under 160 characters.
+- **Dedicated Schools Grant sentence.** The sentence "Most schools spending is paid for by the Dedicated Schools Grant" rendered whenever the education total was non zero. The Isles of Scilly prints education £756,000 and DSG £0 in the return, the only such case among 287 available returns, so the sentence was false there. It now renders only when the printed grant is above zero; otherwise the page states the printed grant figure without the claim. The companion sentence for a zero education total now distinguishes a zero grant from a printed grant.
+- **Display names.** Round titles, table captions, region labels and the bill round's council line used the RA return's own council name, which differs from the site's display name for 22 of 296 billing authorities (for example "Dorset UA", "Medway Towns" and 19 ampersand forms). They now use the display name the H1 uses, and each budget section states the name printed in the RA return where it differs.
+
+Validation on 10 November 2026 after the fixes: Astro check 148 files with no diagnostics; build with Pagefind and CSP hashes; 214 unit tests across 27 files with no skips; distribution and text checks passed. The hosted run on the pushed head is the record for the browser and actual header suites.

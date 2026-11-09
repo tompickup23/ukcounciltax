@@ -47,7 +47,8 @@ export function statTile(o) {
     let y = tpl.card ? fr.plot.y + Math.max(0, (fr.plot.h - blockH) / 2) : fr.plot.y;
     y = canvas.para(fr.plot.x, y, parts.label, fr.plot.w, { size: font.statLabel, weight: 600, fill: "text-muted", bg });
     y += 8;
-    canvas.text(fr.plot.x, y + stat * 0.86, parts.value, { size: stat, weight: 600, family: "display", fill: "text", bg, tabular: true });
+    canvas.allow(parts.value);
+    canvas.text(fr.plot.x, y + stat * 0.86, parts.value, { size: stat, weight: 600, family: "display", fill: "text", bg, tabular: true, role: "value" });
     y += stat + 6;
     if (parts.perspective)
         y = canvas.para(fr.plot.x, y, parts.perspective, fr.plot.w, { size: font.perspective, fill: "text", bg });
@@ -84,19 +85,24 @@ export function scoreCard(o) {
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const P = fr.plot;
-    const rowH = font.label * 2;
-    const rowsH = o.rows.length * rowH;
     const labelH = wrap(o.label, P.w, font.statLabel, "sans", 600).length * font.statLabel * 1.3;
+    // On a card the rows close up, down to 1.4 lines each, so the rounds and the smallest
+    // total still fit above the footer; the overlap gate fails the card if they do not.
+    const fixed = labelH + 8 + 6 + font.perspective * 1.3 + 16 + font.value * 1.6 + 8;
+    const rowH = tpl.card ? Math.max(font.label * 1.4, Math.min(font.label * 2, (P.h - fixed) / o.rows.length)) : font.label * 2;
+    const rowsH = o.rows.length * rowH;
     const restLine = skipped ? `${played.length} of ${o.rows.length} rounds played, ${skipped} skipped.` : `All ${o.rows.length} rounds played.`;
     const stat = tpl.card
         ? Math.max(font.value * 1.6, Math.min(font.stat * 0.75, P.h - labelH - rowsH - font.perspective * 1.6 - 40))
         : font.stat * 0.8;
+    // The total is the sum of the rounds played, computed here and printed as such.
     const totalText = String(total);
+    canvas.allow(totalText);
     const ofText = `of ${outOf}`;
     let y = P.y;
     y = canvas.para(P.x, y, o.label, P.w, { size: font.statLabel, weight: 600, fill: "text-muted", bg });
     y += 8;
-    canvas.text(P.x, y + stat * 0.86, totalText, { size: stat, weight: 600, family: "display", fill: "text", bg, tabular: true, cls: "ek-score-total" });
+    canvas.text(P.x, y + stat * 0.86, totalText, { size: stat, weight: 600, family: "display", fill: "text", bg, tabular: true, cls: "ek-score-total", role: "value" });
     canvas.text(P.x + textWidth(totalText, stat, "display", 600) + stat * 0.18, y + stat * 0.86, ofText, { size: Math.max(font.value, stat * 0.36), fill: "text-muted", bg, tabular: true });
     y += stat + 6;
     y = canvas.para(P.x, y, restLine, P.w, { size: font.perspective, fill: "text", bg });
@@ -122,7 +128,9 @@ export function scoreCard(o) {
         const end = x0 + (v / max) * trackW;
         if (v > 0)
             canvas.add(`<rect x="${n2(x0)}" y="${n2(cy - barH / 2)}" width="${n2(end - x0)}" height="${n2(barH)}" rx="${n2(barH / 2)}" ${canvas.paint({ fill: "accent" })} data-ek-score="" data-value="${v}" data-base="${n2(x0)}" data-end="${n2(end)}"/>`);
-        canvas.text(P.x + P.w, cy, String(v), { size: font.label, weight: 600, fill: "text", bg, baseline: "middle", anchor: "end", tabular: true });
+        const shown = set.show(r.figure);
+        canvas.allow(shown);
+        canvas.text(P.x + P.w, cy, shown, { size: font.label, weight: 600, fill: "text", bg, baseline: "middle", anchor: "end", tabular: true, role: "value" });
     });
     canvas.add(`</g>`);
     canvas.line(x0, y + 4, x0, y + rowsH - 4, "border-strong", 1.5, `data-ek-zero="${n2(x0)}"`);

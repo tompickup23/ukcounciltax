@@ -1,5 +1,5 @@
 // Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
-export const VERSION = "0.2.0";
+export const VERSION = "0.3.0";
 export const tokens = {
     "color": {
         "light": {

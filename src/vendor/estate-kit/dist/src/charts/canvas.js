@@ -9,6 +9,7 @@
  */
 import { palette, SITE_KEYS } from "../../generated/tokens.js";
 import { tokens } from "../../generated/tokens.js";
+import { METRICS } from "../../generated/metrics.js";
 import { assertGates, emptyChecks } from "../qa/gates.js";
 export const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 export const n2 = (v) => (Math.round(v * 100) / 100).toString();
@@ -16,14 +17,37 @@ const FAMILY_ATTR = {
     sans: tokens.font.sans.stack.replace(/"/g, "'"),
     display: tokens.font.display.stack.replace(/"/g, "'")
 };
-/** Average advance width per em, measured from the Source faces on mixed English text. */
-const ADVANCE = {
-    sans: { 400: 0.49, 600: 0.52 },
-    display: { 400: 0.53, 600: 0.56 }
-};
-/** An estimate of drawn width, used only to wrap and to keep labels apart. */
+/** The face a family and weight draw in. Display has one weight, 600. */
+export function faceFor(family, weight) {
+    if (family === "display")
+        return "display600";
+    return weight >= 600 ? "sans600" : "sans400";
+}
+const advanceTables = new Map();
+function advances(face) {
+    let t = advanceTables.get(face);
+    if (!t) {
+        t = new Map();
+        for (const [start, run] of METRICS[face].ranges)
+            run.forEach((a, i) => t.set(start + i, a));
+        advanceTables.set(face, t);
+    }
+    return t;
+}
+/**
+ * Drawn width in user units, measured from the TTF's own advance widths (cmap and hmtx,
+ * read into generated/metrics.ts by scripts/build-metrics.mjs). A character outside the
+ * table takes the width of the missing glyph, as resvg would draw it. Kerning is ignored,
+ * which only ever makes the measure a little wider than the drawing.
+ */
 export function textWidth(s, size, family = "sans", weight = 400) {
-    return s.length * size * (ADVANCE[family][weight] ?? 0.52);
+    const face = faceFor(family, weight);
+    const t = advances(face);
+    const m = METRICS[face];
+    let units = 0;
+    for (const ch of String(s))
+        units += t.get(ch.codePointAt(0)) ?? m.notdef;
+    return (units / m.unitsPerEm) * size;
 }
 /** Greedy word wrap to a width. */
 export function wrap(s, maxW, size, family = "sans", weight = 400) {
@@ -49,6 +73,9 @@ export class Canvas {
     mode;
     W;
     H;
+    /** A thumb draws marks only: text draws nothing, and finish() strips titles and hides the SVG. */
+    silent = false;
+    paras = 0;
     // Written out rather than as parameter properties, so Node can run the kit by type
     // stripping alone (node --experimental-strip-types).
     constructor(mode, W, H) {
@@ -82,9 +109,15 @@ export class Canvas {
         this.add(`<line x1="${n2(x1)}" y1="${n2(y1)}" x2="${n2(x2)}" y2="${n2(y2)}" ${this.paint({ stroke })} stroke-width="${n2(width)}"${extra ? " " + extra : ""}/>`);
     }
     text(x, y, content, o) {
+        if (this.silent)
+            return;
         const weight = o.weight ?? 400;
         const family = o.family ?? "sans";
-        this.checks.texts.push({ content, size: o.size, weight, fill: o.fill, bg: o.bg });
+        const anchor = o.anchor ?? "start";
+        const w = textWidth(content, o.size, family, weight);
+        const left = anchor === "middle" ? x - w / 2 : anchor === "end" ? x - w : x;
+        const top = o.baseline === "middle" ? y - o.size * 0.49 : o.baseline === "hanging" ? y : y - o.size * 0.78;
+        this.checks.texts.push({ content, size: o.size, weight, fill: o.fill, bg: o.bg, role: o.role, group: o.group, box: { x: left, y: top, w, h: o.size * 0.98 } });
         const attrs = [
             `x="${n2(x)}"`, `y="${n2(y)}"`,
             `font-family="${FAMILY_ATTR[family]}"`, `font-size="${n2(o.size)}"`, `font-weight="${weight}"`,
@@ -100,14 +133,32 @@ export class Canvas {
     para(x, y, content, maxW, o) {
         const lh = o.size * (o.lineHeight ?? 1.3);
         const lines = wrap(content, maxW, o.size, o.family, o.weight);
-        lines.forEach((l, i) => this.text(x, y + o.size + i * lh, l, o));
+        const group = o.group ?? `para${++this.paras}`;
+        lines.forEach((l, i) => this.text(x, y + o.size + i * lh, l, { ...o, group }));
         return y + o.size + (lines.length - 1) * lh + (lh - o.size);
     }
+    /**
+     * Registers display forms the chart took from its figures (or computed from them and
+     * says so), so every text drawn with role "value" can be checked against them.
+     */
+    allow(...shown) { for (const s of shown)
+        this.checks.manifest.add(s); }
+    /** Scale labels the alt text may use without tripping the ranking gate ("lowest", "highest"). */
+    scaleLabels(...labels) { for (const l of labels)
+        this.checks.scale.add(l); }
     mark(what, fill, against) { this.checks.marks.push({ what, fill, against }); }
     series(what, colours) { if (colours.length > 1)
         this.checks.series.push({ what, colours }); }
     /** Runs the gates and returns the finished SVG. */
     finish(what, label, extraAttrs = "") {
+        if (this.silent) {
+            assertGates(this.checks, gatePalettes(this.mode), what);
+            const body = this.parts.join("").replace(/<title>[^<]*<\/title>/g, "");
+            if (/<text[\s>]/.test(body))
+                throw new Error(`${what}: a thumb draws no text`);
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(this.H)}" width="${n2(this.W)}" height="${n2(this.H)}" aria-hidden="true" focusable="false" class="ek-chart ek-thumb"${extraAttrs ? " " + extraAttrs : ""}>${body}</svg>`;
+        }
+        this.checks.alt = label;
         assertGates(this.checks, gatePalettes(this.mode), what);
         const H = this.H;
         return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(H)}" width="${n2(this.W)}" height="${n2(H)}" role="img" aria-label="${esc(label)}" class="ek-chart"${extraAttrs ? " " + extraAttrs : ""}>${this.parts.join("")}</svg>`;

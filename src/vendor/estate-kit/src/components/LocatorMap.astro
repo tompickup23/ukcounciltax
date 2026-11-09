@@ -1,11 +1,11 @@
 ---
 /** A place and its neighbours shaded by a rate, from figure keys and the site's own boundaries; see src/charts/locatorMap.ts. */
-import ChartFigure from "./ChartFigure.astro";
+import ChartFigure, { type Props as ChartFigureProps } from "./ChartFigure.astro";
 import { locatorMap, type LocatorMapOptions } from "../../dist/src/index.js";
 
-type Props = LocatorMapOptions & { tableOpen?: boolean; class?: string };
+type Props = LocatorMapOptions & { tableOpen?: boolean; class?: string; id?: string; actions?: ChartFigureProps["actions"] };
 
-const { tableOpen, class: className, ...opts } = Astro.props;
+const { tableOpen, class: className, id, actions, ...opts } = Astro.props;
 const out = locatorMap(opts);
 ---
-<ChartFigure out={out} keys={Object.values(opts.values)} tableOpen={tableOpen} class={className} />
+<ChartFigure out={out} keys={Object.values(opts.values)} tableOpen={tableOpen} class={className} id={id} actions={actions} />

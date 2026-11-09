@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {readFileSync, existsSync} from 'node:fs';
 import {budget, budgetFor, budgetMoney, funding, nonRingfencedReserves, observation, services} from '../src/lib/budget';
 import {councilPages, programmaticPaths} from '../src/lib/paths';
 import {canonicalUrl} from '../src/lib/canonical';
@@ -52,4 +53,14 @@ describe('budget page source views', () => {
     expect(rows.every(row => row.recordType === 'calculation')).toBe(true);
     expect(lancashire.values.resdsgadj_strt).toBe(-97366);
   });
+});
+
+it.skipIf(!existsSync('dist/tools/budget/burnley/index.html'))('preserves the complete pre-A6 tables, notes, source lines and game data on the three comparison pages', async () => {
+  const {publishedText}=await import('../scripts/lib/budget-game.mjs');
+  const before=JSON.parse(readFileSync('tests/fixtures/a6-published-text.json','utf8'));
+  for(const slug of ['burnley','birmingham','coventry']) {
+    const file=`dist/tools/budget/${slug}/index.html`;
+    if(!existsSync(file))throw new Error('Build the site before the published text comparison');
+    expect(publishedText(readFileSync(file,'utf8')),slug).toEqual(before[slug]);
+  }
 });

@@ -1,3 +1,4 @@
+export {squaresFor} from '../vendor/estate-kit/dist/src/charts/waffleRule.js';
 /** Game rules only. Observed amounts are supplied by the server-side source adapter. */
 export interface GameItem {label: string; value: number; detail: string}
 export interface GameSource {publisher: string; title: string; url: string; table?: string; date?: string | null}

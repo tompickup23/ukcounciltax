@@ -161,7 +161,7 @@ export function locatorMap(o) {
         canvas.add(`<path d="${d}" fill="${fill}" stroke="${R.ground}" stroke-width="2" stroke-linejoin="round" data-ek-area="${esc(code)}"${f ? ` data-ek-class="${classOf(f.value)}"` : ' data-ek-na=""'}><title>${esc(`${a.properties.name}: ${f ? set.show(o.values[code]) : "no figure"}`)}</title></path>`);
     }
     const fd = path(focus) ?? "";
-    canvas.add(`<path d="${fd}" fill="none" stroke="${R.ground}" stroke-width="7" stroke-linejoin="round"/><path d="${fd}" fill="none" stroke="${R.ink}" stroke-width="3.5" stroke-linejoin="round" data-ek-focus=""/>`);
+    canvas.add(`<path d="${fd}" fill="none" stroke="${R.ground}" stroke-width="7" stroke-linejoin="round"/><path d="${fd}" fill="none" stroke="${R.ink}" stroke-width="3.5" stroke-linejoin="round" data-ek-focus="${esc(o.focus)}"/>`);
     canvas.add(`</g>`);
     // Plates, after UKD layout.ts: each centres on its area's pole of inaccessibility (the
     // point inside the area, and inside the panel, furthest from any edge). The place goes

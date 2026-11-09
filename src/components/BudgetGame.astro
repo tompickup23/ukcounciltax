@@ -1,35 +1,105 @@
 ---
+import {scoreTemplate} from '../lib/budget-game-score-template';
+import {gapRowSvg} from '../lib/budget-game-geometry';
+import BudgetPublishedChart from './BudgetPublishedChart.astro';
 import {gameData} from '../lib/budget-game-data';
+import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import {jsonLd} from '../lib/site';
 interface Props {gss: string; slug: string; name: string}
+const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
+const {name} = Astro.props;
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 ---
-{data && <section id="budget-game" class="section budget-game" data-budget-game aria-labelledby="game-heading">
-  <p class="eyebrow">Explore the published budget | {data.year}</p>
-  <h2 id="game-heading">Budget game</h2>
-  <p>Guess the service split, the Band D bill split, funding order and reserve change. Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
-  <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
+{data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
+  <div class="game-lead">
+    <div>
+      <p class="eyebrow">Explore the published budget | {data.year}</p>
+      <h1 id="game-heading">Could you set {name}'s budget?</h1>
+      <p class="lede">{data.rounds.length === 5 ? 'Five rounds: the council service split, the county service split, the Band D bill split, funding order and reserve change.' : 'Four rounds: the service split, the Band D bill split, funding order and reserve change.'}</p>
+      <noscript><p>The game needs JavaScript. {name}'s published budget, with the same figures, is in the tables below.</p></noscript>
+      <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
+      <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
+    </div>
+    <figure class="game-teaser">
+      <div aria-hidden="true" data-game-teaser set:html={teaser.svg} />
+      <figcaption>100 squares, one for each penny. Round one fills them with your guess, then with {name}'s published split.</figcaption>
+    </figure>
+  </div>
+  <ol class="game-rail" data-game-rail aria-label="Game progress" hidden>
+    {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
+  </ol>
   <div data-game-stage></div>
-  <noscript><p>The game needs JavaScript. All published budget tables and their sources are available below.</p></noscript>
+  <template data-game-score><Fragment set:html={scoreTemplate(data,name)} /></template>
+  <template data-game-gap><span set:html={gapRowSvg} /></template>
+  {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg.replace('A grid of 100 empty squares.', 'Your split. Each filled square is one penny.')} /></template>)}
+  {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
 <script>
   import '../scripts/budget-game';
 </script>
 <style is:global>
-  .budget-game{padding:clamp(1rem,3vw,2rem);border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  .budget-game{padding-block:var(--space-lg)}
+  .game-lead{display:grid;gap:var(--space-lg);align-items:start}
+  .game-teaser{margin:0;max-width:343px}
+  .game-teaser svg{display:block;width:100%;height:auto}
+  .game-teaser .ek-sq rect{fill:var(--border);stroke:none}
+  .game-teaser figcaption{margin-top:var(--space-sm);color:var(--text-secondary)}
+  @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
+
   .budget-game [hidden]{display:none!important}
+  .game-score-card{max-width:40rem;padding:var(--space-lg);background:var(--accent-wash);border-radius:var(--radius)}
+  .game-score-card .game-score{margin-block:.25rem}
+  .game-summary-rows{list-style:none;padding:0;display:grid;gap:var(--space-sm);max-width:40rem}
+  .game-score-track{display:block;height:.75rem;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;margin-top:.5rem}
+  .game-score-fill{display:block;height:100%;background:var(--accent)}
+  .game-rail{scroll-margin-top:6rem;display:flex;list-style:none;padding:0;gap:.5rem;margin-block:var(--space-lg);justify-content:space-between}
+  .game-rail li{display:flex;flex-direction:column;gap:.25rem;align-items:center;flex:1;min-width:0;font-size:var(--text-sm)}
+  .game-stop-number{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:2px solid var(--border-strong);border-radius:50%;font-weight:600}
+  .game-rail [aria-current=step] .game-stop-number{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}
+  .game-rail .done .game-stop-number{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  @media(max-width:599px){.game-stop-name{display:none}}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
   .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}
   .game-row{padding:1rem;border:1px solid var(--border);border-radius:8px;min-width:0}
   .game-row label,.game-row strong{display:block;margin-bottom:.5rem}
   .game-stepper{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-  .game-stepper input{width:5rem;min-height:44px;text-align:center}
+  .game-stepper input[type=number]{width:4.5rem;min-height:44px;text-align:center}
+  .game-stepper input[type=range]{flex:1;min-width:3rem;min-height:44px;width:100%;accent-color:var(--accent)}
+  .game-split{display:grid;gap:var(--space-md);align-items:start}
+  .game-grid-panel{min-width:0;max-width:343px}
+  .game-grid{width:100%;max-width:343px}
+  .game-grid svg{display:block;width:100%;height:auto}
+  .game-grid .sq-empty>rect{stroke:var(--border-strong)}
+  .game-placed,.game-score{font-family:var(--font-display);font-size:var(--text-2xl);font-weight:600}
+  .game-meter{width:100%;height:.4rem;accent-color:var(--accent)}
+  .game-swatch{display:inline-block;width:1.25rem;height:1.25rem;border:1px solid var(--border-strong);vertical-align:middle;margin-right:.5rem;background:var(--part-paint)}
+  .game-swatch.hatch-1{background-image:repeating-linear-gradient(135deg,transparent 0 5px,var(--bg) 5px 7px)}
+  .game-swatch.hatch-2{background-image:repeating-linear-gradient(135deg,transparent 0 5px,var(--bg) 5px 7px),repeating-linear-gradient(45deg,transparent 0 5px,var(--bg) 5px 7px)}
+  .game-check-bar{position:sticky;bottom:0;z-index:2;background:var(--bg);border-top:1px solid var(--border-strong);padding:.5rem;display:flex;gap:.5rem;align-items:center;justify-content:space-between}
+  .game-check-bar p{margin:0;font-weight:600}
+  .game-check-reason{font-size:var(--text-sm)}
+  @media(min-width:800px){.game-split{grid-template-columns:343px minmax(0,1fr)}.game-grid-panel{position:sticky;top:1rem}.game-check-bar{position:static;justify-content:flex-start;gap:1rem}}
+
   .game-stepper button{min-width:44px;min-height:44px}
   .game-actions{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1rem}
   .budget-game .source-line,.game-share{overflow-wrap:anywhere}
+  .game-reveal-waffles{display:grid;gap:var(--space-md);align-items:start;margin-block:var(--space-md)}
+  .game-reveal-waffles>*{min-width:0}
+  .game-reveal-waffles .ek-figure{max-width:343px}
+  .game-gap-row{margin-block:1rem}
+  .game-gap-row p{margin:0 0 .25rem;font-size:var(--text-sm)}
+  .game-gap-svg{display:block;width:100%;max-width:600px;height:auto}
+  .game-gap-track{height:1rem;position:relative;background:var(--bg-subtle)}
+  .game-gap-track:before{content:"";position:absolute;left:50%;height:100%;border-left:1px solid var(--border-strong)}
+  .game-gap-bar{position:absolute;height:100%;background:var(--accent)}
+  @media(min-width:800px){.game-reveal-waffles{grid-template-columns:1fr 1fr}}
   .game-result{background:var(--accent-wash);padding:1rem;border-radius:8px;margin-block:1rem}
   .game-result li{margin-block:.75rem}
+  .game-direction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-block:var(--space-sm)}
+  .game-direction label{display:flex;gap:.25rem;align-items:center;min-height:44px;padding:.5rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-weight:600;cursor:pointer}
+  .game-direction label:has(:checked){background:var(--accent-wash);border-color:var(--accent)}
+  .game-direction input{accent-color:var(--accent);flex-shrink:0}
   .budget-game fieldset{min-width:0;margin-block:1rem;border:1px solid var(--border);padding:1rem}
   .budget-game select{max-width:100%;width:100%;min-height:44px}
   .budget-game legend{font-weight:600}

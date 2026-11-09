@@ -1,5 +1,9 @@
 ---
-import {national,parishesFor,parishChange,type ParishYear} from '../lib/national-data';
+import {national,parishesFor} from '../lib/national-data';
+import {parishRange, parishSource as parishRef} from '../lib/parish-pages';
+import {parishPath} from '../lib/paths';
+import {councilByGss} from '../lib/registry';
+import SourceLine from './SourceLine.astro';
 import {moneyPence} from '../lib/tax-view';
 import {precedingYear,yearLabel} from '../lib/council-tax';
 interface Props {gss:string;name:string}
@@ -7,10 +11,8 @@ const {gss,name}=Astro.props;
 const data=national.components[gss];
 const parishes=parishesFor(gss);
 const money=(n:number|null)=>n===null?'Unavailable':moneyPence(n);
-const parishMoney=(y:ParishYear)=>y.status==='not-existing'?'Did not exist':money(y.bandDPence);
 const labels={county:'County or GLA',police:'Police',fire:'Fire',combined:'Combined authority'};
-const notes=[...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
-const source=national.sources.components, parishSource=national.sources.parishes;
+const source=national.sources.components;
 const year=national.year, earlier=precedingYear(national.year);
 ---
 {data && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
@@ -33,32 +35,13 @@ const year=national.year, earlier=precedingYear(national.year);
   {data.notes.length>0&&<ul class="small">{data.notes.map(n=><li>Source note: {n.text}</li>)}</ul>}
   <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Data_Billing and Precepting_Bodies. Retrieved {source.retrieved}. <a href="/data/">Download data and checksums</a>.</p>
 </section>}
-<section class="section" id="parish-precepts" aria-labelledby="parish-heading" data-parish-table>
+<section class="section" id="parish-precepts" aria-labelledby="parish-heading">
   <h2 id="parish-heading">Parish and local precepts in {name}</h2>
-  {parishes.length ? <>
-    <p>{parishes.length.toLocaleString('en-GB')} records in the national parish return, including any ceased bodies. These are <strong>individual Band D local charges, not full bills</strong>. Other property bands are not inferred. Match the charging locality to your council bill.</p>
-    <div class="editorial-callout"><p>Do not add these amounts to the area average above: that already includes average local precepts. Grouped parishes and charter trustees can have overlapping charging areas. A postcode alone cannot establish every charge on a property.</p></div>
-    <label class="field parish-search" hidden>Filter parish or local body<input type="search" autocomplete="off" placeholder="Type a parish name" /></label>
-    <p class="small muted" data-parish-count role="status">All {parishes.length} records shown.</p>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D charges"><table class="data">
-      <caption>{name}: local Band D precepts as reported in the {yearLabel(year)} return</caption>
-      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Annual change</th></tr></thead>
-      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num">{parishMoney(p.years[earlier])}</td><td class="num">{parishMoney(p.years[year])}</td><td class="num">{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
-    </table></div>
-    {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
-    {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
-    <p class="small muted">Annual change is this year's reported charge minus the previous year's charge on the same source row. Missing and ceased entries remain distinct from published zero charges. A negative precept is retained where published.</p>
-  </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
-  <p class="source-line">Source: <a href={parishSource.fileUrl}>{parishSource.title}</a>, Parish_Level_Data and Notes. Retrieved {parishSource.retrieved}. The original workbook includes precept income and tax bases.</p>
+  <div class="fact" data-fact>
+    {parishes.length ? <>
+      <p>{parishRange(name,parishes)}</p>
+      <p><a href={parishPath(councilByGss(gss)!)}>Every parish precept in {name}, with its change on {yearLabel(earlier)}</a></p>
+    </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
+    <SourceLine source={parishRef} />
+  </div>
 </section>
-<script>
-for(const section of document.querySelectorAll<HTMLElement>('[data-parish-table]')) {
- const control=section.querySelector<HTMLElement>('.parish-search');
- if(!control)continue;
- control.hidden=false;
- const input=control.querySelector<HTMLInputElement>('input')!;
- const rows=[...section.querySelectorAll<HTMLTableRowElement>('[data-parish-name]')];
- input.addEventListener('input',()=>{const query=input.value.trim().toLowerCase();let count=0;for(const row of rows){row.hidden=!(row.dataset.parishName??'').includes(query);if(!row.hidden)count++;}section.querySelector('[data-parish-count]')!.textContent=`${count} of ${rows.length} records shown.`;});
-}
-</script>
-<style>.parish-kind{display:block;font-weight:400;font-size:.8rem;color:var(--text-muted)}.parish-search{max-width:28rem;margin-top:1.5rem}</style>

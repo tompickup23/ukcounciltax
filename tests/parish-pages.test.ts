@@ -2,7 +2,7 @@ import {existsSync,readFileSync} from 'node:fs';
 import {describe,expect,it} from 'vitest';
 import {CURRENT_YEAR, PREVIOUS_YEAR, yearLabel} from '../src/lib/council-tax';
 import {national,parishesFor,parishChange,type Parish} from '../src/lib/national-data';
-import {parishPages,parishPath} from '../src/lib/paths';
+import {councilPages,parishPages,parishPath} from '../src/lib/paths';
 import {parishRange,parishSummary} from '../src/lib/parish-pages';
 const year=yearLabel(CURRENT_YEAR), previous=yearLabel(PREVIOUS_YEAR);
 const burnley=`The ${year} return lists 8 local precepting authorities in Burnley. 8 set a Band D precept, from £7.36 (Ightenhill) to £44.06 (Padiham).`;
@@ -53,5 +53,19 @@ describe.skipIf(!existsSync('dist/precepts/parishes/index.html'))('built parish 
   expect(text(read('/precepts/parishes/city-of-london/'))).toContain('2 set a Band D precept of £2,038.90 (Inner Temple and Middle Temple)');
   const bcp=read('/precepts/parishes/bournemouth-christchurch-and-poole/');expect(text(bcp)).toContain(`2 listed for ${previous} no longer exist in ${year}`);expect(rows(bcp).filter(row=>text(row).includes('Not comparable'))).toHaveLength(5);
   expect(text(read('/precepts/parishes/county-durham/'))).toContain('Durham Charter Trustees overlap some parish areas.');
+ });
+});
+
+describe.skipIf(!existsSync('dist/precepts/parishes/index.html'))('profile parish summaries',()=>{
+ it('moves every table and links exactly 214 parish areas, preserving 82 absence notices',()=>{
+  let linked=0,absent=0;
+  for(const {council} of councilPages()) {
+   const html=read(`/councils/${council.slug}/`);
+   expect(html).not.toContain('data-parish-name');
+   const section=html.match(/<section[^>]*id="parish-precepts"[^>]*>([\s\S]*?)<\/section>/)![1];
+   if(parishesFor(council.gss).length) {expect(section).toContain(`href="${parishPath(council)}"`);linked++;}
+   else {expect(section).toContain('No parish or local-body rows');absent++;}
+  }
+  expect(linked).toBe(214);expect(absent).toBe(82);
  });
 });

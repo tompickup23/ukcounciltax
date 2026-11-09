@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
@@ -37,6 +38,20 @@ describe("the vendored estate kit", () => {
       const actual = createHash("sha256").update(readFileSync(join(ROOT, file))).digest("hex");
       expect(actual, file).toBe(hash);
     }
+  });
+
+  // A local checkout holds ignored files, so the hash test above passes here even when
+  // git would never commit them; only a clean checkout (CI) would notice. Ask git directly.
+  it("lets git commit every recorded file: no ignore rule matches one", () => {
+    const paths = [...recorded.keys()].map((file) => relative(process.cwd(), join(ROOT, file)));
+    let ignored = "";
+    try {
+      ignored = execFileSync("git", ["check-ignore", "--no-index", "--stdin"], { input: paths.join("\n"), encoding: "utf8" });
+    } catch (error) {
+      // Exit status 1 means no path is ignored.
+      if ((error as { status?: number }).status !== 1) throw error;
+    }
+    expect(ignored.trim().split("\n").filter(Boolean)).toEqual([]);
   });
 
   it("carries this site's token file and the components the site renders", () => {

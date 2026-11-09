@@ -21,6 +21,8 @@ What the reviews change downstream:
 - **A2 follow ups**, for a later lane A item or Tom: the PR 32 body links screenshots on the branch, which now 404 (swap in `9ab8d36b1f85d0e0fd51d33948b1b804c62ac6fc`); static sitemap dates are original release dates, so pages A2 changed still say 5 October 2026, and a route level change record would fix that honestly; the share card `boxSizing` fix touched every English card (recorded in `docs/RELEASE.md`); possessives such as "Hastings's".
 - **Lesson.** Screenshots are local inspection output. PR bodies link them at a commit sha or attach them; they are not committed to `output/playwright/`.
 
+**Decisions taken 9 November 2026.** Tom accepted every recommendation in `DECISIONS-WAITING-2026-11-10.md` (decisions 1 to 8, K1 to K5, G1, G2). Effects on this plan: A4 is unblocked by decision 5 and runs after A2 merges; B3 can be briefed on decision 1's sourcing; A5 vendors the kit (K1); A6 uses a static score card (G1); L4 is dropped; B4 carries Surrey (decision 3) once the registry refresh (decision 4) is done; the beacon and Search Console (decision 6) are now an implementation item for Tom's token and a short lane A session.
+
 ## 1. Linking across the estate: where it stands and what to change
 
 Checked live on 10 November 2026 on Burnley's pages.
@@ -40,7 +42,7 @@ Checked live on 10 November 2026 on Burnley's pages.
 | L1 | ukcouncils, then ukcounciltax | The "across the network" strip on every council page: population (ONS mid-2025) to UK Demographics, next election year (where verified) to UK Elections, published spending (AI DOGE summary, as stored) to AI DOGE, bare lines for the rest; source line under each figure; replaces the bare list; the game page gets the same strip | B2 merged (UK Councils); A1 merged (UK Council Tax, done) |
 | L2 | ukdemographics | Inbound: fetch both tax sitemaps, `data/links/`, a "Council tax and the council" line on each place page whose GSS code is an English billing authority (Band D figure not copied; the line names the band and the year and links), footer unchanged | Decision 7 |
 | L3 | ukelections | The same line on council seat pages (`/seats/<slug>/` where the slug is a billing authority), not on ward pages; after results week | Decision 7; not before 17 November |
-| L4 | aidoge | One line beside the existing UK Councils link: the council's Band D on UK Council Tax | Decision 7 (and whether a standalone site cross links at all) |
+| L4 | aidoge | Dropped by decision 7 (9 November 2026): AI DOGE stays standalone | None |
 
 L2 to L4 share one brief template, written once by Opus and varied per repo: the sitemap fetch script, the saved JSON with `fetched` and `source`, the GSS join, the render only when present rule, the counts (296 English billing authorities on both tax sitemaps as of 10 November; 319 canonical map entries on UK Council Tax after A2, of which 69 are listed self canonical and 318 are built as canonicals to UK Councils), the unit test and the dist check, the text test. Expected sizes: UK Demographics 296 of 350 place pages gain a line; UK Elections 296 of 3,796 seat pages; AI DOGE 296.
 
@@ -54,7 +56,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 
 **Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); kit 0.3.0 (positionStrip, ChartActions, the gates, thumb, diverging zeroBar, grid only waffle) after kit 0.2.0 merges; A5 build after A2 merges, kit v0.2.0 is tagged and K1 is decided; A6 build after A5 merges and kit 0.3.0 is tagged; the A3 brief revision; the L2 to L4 brief template; the B4a reorganisation source notes and brief (any time, no site code); the C3 review; the design check before every design PR.
 
-**Lane D, other repos (Codex, one at a time):** L2 UK Demographics, L4 AI DOGE, L3 UK Elections after 16 November. Each is one short session from the shared template.
+**Lane D, other repos (Codex, one at a time):** L2 UK Demographics, then L3 UK Elections after 16 November (L4 dropped by decision 7). Each is one short session from the shared template.
 
 **Tom:** decisions 1 to 7; the beacon token and Search Console; the mark (estate DD1, R560); merges, which deploy.
 
@@ -65,7 +67,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 3. Design prep reports: Tom looks at the mockups; kit 0.2.0 merges.
 4. A5 merges: Opus revises the A3 brief (kit charts, BenchmarkStrip as the position strip, ChartActions on every chart, DataDrawer for the long tables, the network strip), Codex lane A builds A3.
 5. A6 merges: the game is a game. Codex lane A then A4 (Lewes decided) and C1b.
-6. Decision 7 taken: Opus writes the L2 to L4 template; lane D runs L2, L4, then L3 after results week.
+6. Decision 7 taken on 9 November (L2 and L3 yes, L4 no): Opus writes the L2 and L3 template; lane D runs L2, then L3 after results week.
 7. C3 merges: lane B builds B4, the reorganisation panel (decision 4 taken, B4a brief committed; decision 8 taken 9 November), then L1 on UK Councils, then B3 if decision 1 allows. B4 should be live before the first 2027 vesting date and within any open representation window.
 8. Beacon and Search Console live: the first measured week before the 2027 bill season planning in section 10 of the assessment.
 
@@ -112,7 +114,7 @@ Each is the existing pattern: "Work only in <worktree>, branch <branch>. Fetch a
 ### Opus: the L2 to L4 template (after decision 7)
 
 ```text
-Write docs/SISTER-LINK-BRIEF-TEMPLATE.md in ~/ukcouncils/docs (the repo that holds the working pattern, B1 item 2: scripts/fetch-ukcounciltax-sitemap.mjs, data/links/ukcounciltax-councils.json, src/lib/council-tax-links.ts, tests, check-dist). The template takes: target repo and worktree, the page template to change, the join field (GSS code), both tax sitemaps, the line's wording ("Council tax bands and the <year> Band D for <name> on UK Council Tax; the council's profile on UK Councils"), the counts to assert (296 of N pages), the dist check and the text test. Then write the three instances as docs in each repo's worktree: ~/wt/ukd-links (ukdemographics, place pages), ~/wt/aidoge-links (aidoge, council pages, one line beside the existing UK Councils link), ~/wt/uke-links (ukelections, council seat pages only, not before 17 November). Dry run the GSS joins against each repo's registry and record the counts. Commit the briefs; do not build.
+Write docs/SISTER-LINK-BRIEF-TEMPLATE.md in ~/ukcouncils/docs (the repo that holds the working pattern, B1 item 2: scripts/fetch-ukcounciltax-sitemap.mjs, data/links/ukcounciltax-councils.json, src/lib/council-tax-links.ts, tests, check-dist). The template takes: target repo and worktree, the page template to change, the join field (GSS code), both tax sitemaps, the line's wording ("Council tax bands and the <year> Band D for <name> on UK Council Tax; the council's profile on UK Councils"), the counts to assert (296 of N pages), the dist check and the text test. Then write the two instances as docs in each repo's worktree (L4 AI DOGE was dropped by decision 7): ~/wt/ukd-links (ukdemographics, place pages), ~/wt/uke-links (ukelections, council seat pages only, not before 17 November). Dry run the GSS joins against each repo's registry and record the counts. Commit the briefs; do not build.
 ```
 
 ### Opus: B4a reorganisation panel source notes and brief (any time)
@@ -121,7 +123,7 @@ Write docs/SISTER-LINK-BRIEF-TEMPLATE.md in ~/ukcouncils/docs (the repo that hol
 Create ~/wt/ukc-reorg from ukcouncils origin/main, branch feat/reorganisation-panel. Read CLAUDE.md, ~/ukcounciltax/docs/PLAN-2026-11-10-REMAINING.md section 6, and the 9 November LGR plan in Reports (git -C ~/Documents/Reports show origin/docs/lgr-game-plan-2026-11-09:Tompickup_Games_work/log/2026-11-09_lgr_game_plan.md). Write docs/REORGANISATION-SOURCE-NOTES.md: every area in the current MHCLG reorganisation programme, each with the councils by GSS code, the proposals, any minded to decision, the representation window, any structural changes order and the vesting date, each line citing the MHCLG or legislation.gov.uk document by title, date, page or paragraph and URL, with the raw documents saved and hashed. Recheck the Surrey order and its effective wording (decision 3). State the 29 October 2026 withdrawal for Lancashire from the letter itself, and record the status of the county council's protective claim of October 2026; if it is live, Lancashire lines carry the dated documents only. Count the areas yourself: the LGR plan says 21; record what you find and why. Dry run the GSS join against data/registry. Then write docs/REORGANISATION-PANEL-BRIEF.md for Codex: data/reorganisation/ with source blocks, the panel component (dated status rail and the kit locator map, no costs, savings or model figures), the rewrite of tests/reorganisation-held.test.ts to allow only sourced panel text, the dist and text checks, counts to assert, captures and stop conditions. Commit both; do not build, push or open a PR.
 ```
 
-### Codex: L2, L4, L3
+### Codex: L2, L3
 
 "Work only in <worktree>, branch <branch>. Read CLAUDE.md and the brief, which is binding. Fetch both sitemaps with the script the brief names, commit the saved files, add the line only where the URL exists, assert the counts in a unit test and the dist check, run the full gate, push, open the PR. Stop if either sitemap fetch fails or the count differs from the brief."
 

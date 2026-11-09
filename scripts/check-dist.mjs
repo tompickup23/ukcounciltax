@@ -20,6 +20,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
+import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
 const DIST = resolve(process.cwd(), "dist");
 const SITE_NAME = "UK Council Tax";
@@ -51,6 +52,8 @@ const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
 let profiles = 0;
+const chartPngLinks = [];
+let homeChecked = false;
 
 for (const path of files(DIST)) {
   if (!/\.(html|xml|txt|json|js|css|svg|webmanifest)$|_headers$|_redirects$/.test(path)) continue;
@@ -62,6 +65,18 @@ for (const path of files(DIST)) {
   pages += 1;
   const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
+
+  // The A5 face (docs/A5-FACE-BRIEF.md, section 8).
+  if (!rel(path).startsWith("/pagefind/") && /<footer\b/.test(text)) {
+    for (const problem of chromeProblems(text)) failures.push(`${problem} on ${rel(path)}`);
+    const charts = chartProblems(text);
+    for (const problem of charts.problems) failures.push(`${problem} on ${rel(path)}`);
+    chartPngLinks.push(...charts.pngs.map((png) => [png, rel(path)]));
+  }
+  if (rel(path) === "/index.html") {
+    homeChecked = true;
+    for (const problem of homeProblems(text)) failures.push(`homepage: ${problem}`);
+  }
 
   const title = /<title>([^<]*)<\/title>/.exec(text)?.[1];
   const queryTitles = {
@@ -339,6 +354,16 @@ else {
   if (!text.startsWith(`# ${SITE_NAME}\n`)) failures.push("llms.txt does not start with the site name heading");
   for (const heading of ["## Sources"]) if (!text.includes(`\n${heading}\n`)) failures.push(`llms.txt has no ${heading}`);
 }
+
+// The homepage was checked, and when the build rendered cards (BUILD_OG=1) every
+// chart PNG link resolves to a file. The CSP still allows the kit's inline style
+// attributes (A5 brief, section 5).
+if (!homeChecked) failures.push("homepage not found for the face checks");
+if (existsSync(join(DIST, "og"))) {
+  for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
+  console.log(`dist check: ${chartPngLinks.length} chart PNG links resolve`);
+}
+for (const problem of headerProblems(readFileSync(join(DIST, "_headers"), "utf-8"))) failures.push(problem);
 
 // The only host specific rules in dist/_headers are the pages.dev noindex
 // rules, and they add nothing but X-Robots-Tag. The CSP stays on the one

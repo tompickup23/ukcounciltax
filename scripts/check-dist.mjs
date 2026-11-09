@@ -93,6 +93,19 @@ for (const path of files(DIST)) {
     if (description.length > 160) failures.push(`description over 160 characters on ${rel(path)} (${description.length})`);
   }
 
+  if (rel(path) === '/council-tax/index.html') {
+    const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
+    for (const href of ['/help/', '/increases/', '/precepts/', '/scotland/', '/wales/', '/council-tax-2027-28/']) {
+      if (!body.includes(`href="${href}"`)) failures.push(`England hub lacks body link ${href}`);
+    }
+  }
+  if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
+    const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
+    for (const href of ['/help/', '/help/#what-council-tax-band-am-i']) {
+      if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
+    }
+  }
+
   const schemaNodes = [];
   for (const match of text.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
     try { schemaNodes.push(JSON.parse(match[1])); }

@@ -1,3 +1,6 @@
+import {splitControls} from '../lib/budget-game-controls';
+import {createScenario} from '../lib/budget-game-scenario-ui';
+import type {ScenarioData} from '../lib/budget-game-scenario-data';
 import {squaresFor, orderScore, readScores, reserveBand, reserveDirection, scoreLink, shares, SIZE_BANDS, splitScore, type GameData, type GameRound, type GameSource} from '../lib/budget-game';
 
 function element<K extends keyof HTMLElementTagNameMap>(tag: K, text = '', className = ''): HTMLElementTagNameMap[K] {
@@ -31,6 +34,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
   let index = 0;
   let scores: (number | null)[] = [];
   let distances: Distance[] = [];
+  let restoredSummary = false;
+  const scenarioPayload = JSON.parse(root.querySelector('[data-budget-scenario-data]')!.textContent!) as ScenarioData;
+  const scenario = createScenario(root, stage, scenarioPayload, () => summary(restoredSummary), start);
+  const scenarioEntry = root.querySelector<HTMLButtonElement>('[data-scenario-entry]')!;
+  scenarioEntry.addEventListener('click', () => scenario.start());
   function rail() {
     const list=root.querySelector<HTMLOListElement>('[data-game-rail]')!;list.hidden=false;
     [...list.children].forEach((node,i)=>{
@@ -53,6 +61,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     for (const context of round.context ?? []) parent.append(element('p', context.text), sourceLine(context.source));
   }
   function summary(restored = false) {
+    restoredSummary = restored;
+    delete stage.dataset.scenarioStage;
     rail();
     controls.hidden = true;
     stage.replaceChildren();
@@ -117,9 +127,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         status.textContent='Score image saved. Your answers stay in this browser.';
       } catch {status.textContent='The browser could not save the image. Your score link is still available below.';}
     }), button('Play again', start));
+    scenarioEntry.hidden = false;actions.append(scenarioEntry);
     stage.append(actions, link, status);
   }
   function start() {
+    scenario.clear();delete stage.dataset.scenarioStage;
     index = 0; scores = []; distances = [];
     controls.hidden = true;
     if (location.hash.startsWith('#scores=')) history.replaceState(null, '', `${location.pathname}${location.search}`);
@@ -136,8 +148,6 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const status = element('p', '', 'game-status');
     status.setAttribute('role', 'status');
     const guesses: HTMLInputElement[] = [];
-    let updateSplit = () => {};
-    let placed = 0;
     const submit = element('button', 'Reveal answer', 'button'); submit.type = 'submit';
     const checkTotal = element('p', '0p of 100p');
     const reason = element('p', '', 'game-check-reason');
@@ -145,51 +155,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     let directionValue = '';
     let size: HTMLSelectElement;
     if (round.kind === 'split' || round.kind === 'bill') {
-      const total = element('p', '0p of 100p', 'game-placed');
-      total.setAttribute('aria-live', 'polite');
-      const meter = element('progress', '0p of 100p', 'game-meter'); meter.max = 100; meter.value = 0; meter.setAttribute('aria-label', 'Pence placed');
-      const grid = (root.querySelector<HTMLTemplateElement>(`[data-game-grid="${index}"]`)!.content.firstElementChild!.cloneNode(true)) as HTMLElement;
-      grid.dataset.playerGrid = '';
-      const panel = element('div', '', 'game-grid-panel');panel.append(element('p', 'Placed', 'eyebrow'), total, meter, grid);
-      const split = element('div', '', 'game-split');split.append(panel, rows);
-      const ranges: HTMLInputElement[] = [];
-      updateSplit = () => {
-        placed = guesses.reduce((sum, input) => sum + Number(input.value || 0), 0);
-        total.textContent = checkTotal.textContent = `${placed}p of 100p`;
-        meter.value = placed;
-        submit.setAttribute('aria-disabled', String(placed !== 100));
-        reason.textContent = placed === 100 ? '100p placed. Check your split.' : `${placed}p of 100p placed. Place ${100 - placed}p more to check your split.`;
-        const counts = squaresFor([...guesses.map(input => Number(input.value || 0)), 100 - placed]);
-        let square = 0;
-        const nodes = grid.querySelectorAll('[data-ek-square]');
-        counts.forEach((count, part) => {for(let n = 0; n < count; n++) nodes[square++].setAttribute('class', `ek-sq ${part === guesses.length ? 'sq-empty' : `sq-p${part}`}`);});
-        grid.querySelector('[data-ek-filled]')!.setAttribute('data-ek-filled', String(placed));
-      };
-      round.items.forEach((item, i) => {
-        const row = element('li', '', 'game-row');
-        const input = element('input');
-        input.type = 'number'; input.min = '0'; input.max = '100'; input.step = '1'; input.value = '0'; input.required = true;
-        input.id = `game-${index}-${i}`;
-        const label = element('label', `${item.label} (pence)`); label.htmlFor = input.id;
-        const swatch = element('span', '', `game-swatch hatch-${Math.floor(i / 4)}`);swatch.style.setProperty('--part-paint', `var(--series-${i % 4 + 1})`);swatch.setAttribute('aria-hidden', 'true');label.prepend(swatch);
-        const range = element('input');range.type = 'range';range.min = '0';range.max = '100';range.step = '1';range.value = '0';range.setAttribute('aria-label', `${item.label} pence slider`);
-        const stepper = element('div', '', 'game-stepper');
-        const change = (value: number) => {
-          const remaining = 100 - guesses.reduce((sum, other) => sum + (other === input ? 0 : Number(other.value || 0)), 0);
-          const next = Math.max(0, Math.min(remaining, Math.trunc(Number.isFinite(value) ? value : 0)));
-          input.value = range.value = String(next);
-          status.textContent = value > remaining ? `Only ${remaining}p available for ${item.label}. Lower another service to place more here.` : '';
-          updateSplit();
-        };
-        const minus = button('−', () => change(Number(input.value) - 1));minus.setAttribute('aria-label', `Decrease ${item.label}`);
-        const plus = button('+', () => change(Number(input.value) + 1));plus.setAttribute('aria-label', `Increase ${item.label}`);
-        guesses.push(input);ranges.push(range);
-        input.addEventListener('input', () => change(Number(input.value)));
-        range.addEventListener('input', () => change(Number(range.value)));
-        stepper.append(minus, range, plus, input);row.append(label, stepper);rows.append(row);
-      });
-      form.append(split);
-      updateSplit();
+      const shared = splitControls({items:round.items,id:`game-${index}`,template:root.querySelector<HTMLTemplateElement>(`[data-game-grid="${index}"]`)!,submit,reason,checkTotal,status});
+      guesses.push(...shared.inputs);form.append(shared.split);
       stage.append(element('p', 'Scoring compares your whole-pence guesses with unrounded calculated shares. Displayed answers are rounded to two decimal places.', 'small'));
       // Negative service totals are never offered as guess inputs.
       if (round.kind === 'split' && round.notes.length) {

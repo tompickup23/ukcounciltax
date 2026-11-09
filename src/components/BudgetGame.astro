@@ -2,6 +2,7 @@
 import {scoreTemplate} from '../lib/budget-game-score-template';
 import {gapRowSvg} from '../lib/budget-game-geometry';
 import BudgetPublishedChart from './BudgetPublishedChart.astro';
+import {scenarioData} from '../lib/budget-game-scenario-data';
 import {gameData} from '../lib/budget-game-data';
 import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import {jsonLd} from '../lib/site';
@@ -9,6 +10,7 @@ interface Props {gss: string; slug: string; name: string}
 const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
 const {name} = Astro.props;
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
+const scenario = scenarioData(data, Astro.props.gss, name);
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
   <div class="game-lead">
@@ -33,6 +35,8 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg.replace('A grid of 100 empty squares.', 'Your split. Each filled square is one penny.')} /></template>)}
   {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
+  <button type="button" class="button secondary" data-scenario-entry hidden>Try your version</button>
+  <script type="application/json" data-budget-scenario-data set:html={jsonLd(scenario)} />
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
 <script>
@@ -61,6 +65,10 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   @media(max-width:599px){.game-stop-name{display:none}}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
   .budget-game h3:focus:not(:focus-visible){outline:none}
+  [data-scenario-stage] h2,[data-scenario-stage] h3{scroll-margin-top:6rem}
+  .budget-game [data-scenario-heading]:focus{outline:2px solid var(--accent);outline-offset:4px}
+  .budget-game [data-scenario-heading]:focus:not(:focus-visible){outline:none}
+  .game-scenario-stop{display:flex;flex-direction:column;align-items:center;gap:.25rem;background:none;border:0;color:inherit;padding:0;cursor:pointer;font:inherit}
   .game-rows{list-style:none;padding:0;display:grid;gap:.75rem}
   .game-row{padding:1rem;border:1px solid var(--border);border-radius:8px;min-width:0}
   .game-row label,.game-row strong{display:block;margin-bottom:.5rem}
@@ -95,6 +103,14 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   .game-gap-track:before{content:"";position:absolute;left:50%;height:100%;border-left:1px solid var(--border-strong)}
   .game-gap-bar{position:absolute;height:100%;background:var(--accent)}
   @media(min-width:800px){.game-reveal-waffles{grid-template-columns:1fr 1fr}}
+  .game-scenario-table{max-width:100%;overflow-x:auto;margin-block:var(--space-md)}
+  .game-scenario-table table{width:100%;table-layout:fixed}
+  .game-scenario-table th,.game-scenario-table td{padding:.4rem;white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .game-scenario-table th:first-child{width:28%;text-align:left}
+  .game-scenario-table thead th:nth-child(2){width:14%}
+  .game-scenario-table [data-record-type=observation]{background:var(--bg-subtle)}
+  .game-scenario-table [data-scenario-pence]{background:var(--accent-wash)}
+  @media(max-width:599px){.game-scenario-table table{font-size:.75rem}}
   .game-result{background:var(--accent-wash);padding:1rem;border-radius:8px;margin-block:1rem}
   .game-result li{margin-block:.75rem}
   .game-direction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-block:var(--space-sm)}

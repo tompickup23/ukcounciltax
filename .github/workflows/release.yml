@@ -20,6 +20,24 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Read the three pinned RA source hashes
+        id: ra-source-hashes
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
+          import {readFileSync} from 'node:fs';
+          const sources=JSON.parse(readFileSync('data/national/sources.json','utf8'));
+          const hashes=['raPart1','raPart2','raGrants'].map(key=>sources[key].sha256);
+          if(hashes.some(hash=>!/^[a-f0-9]{64}$/.test(hash)))throw new Error('Invalid pinned RA source hash');
+          console.log('hashes='+hashes.join('-'));
+          NODE
+      - name: Restore the pinned RA workbooks
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            data/raw/RA_2026-27_data_Part_1.ods
+            data/raw/RA_2026-27_data_Part_2.ods
+            data/raw/SG_2026-27.ods
+          key: ${{ runner.os }}-ra-${{ steps.ra-source-hashes.outputs.hashes }}
       - name: Prepare and verify the pinned RA workbooks
         run: |
           node scripts/import-ra-budget.mjs

@@ -1,0 +1,18 @@
+---
+import SourceLine from './SourceLine.astro';
+import {budgetYear, budgetFor, budgetMoney, budgetSource, services} from '../lib/budget';
+interface Props {gss: string; slug: string; name: string}
+const {gss, slug, name} = Astro.props;
+const {council, county} = budgetFor(gss);
+const largest = services(council).filter(row => row.value !== null && row.value > 0).sort((a, b) => (b.value as number) - (a.value as number)).slice(0, 3);
+---
+<section class="section" id="where-money-goes" aria-labelledby="budget-summary-heading">
+  <h2 id="budget-summary-heading">Where the money goes</h2>
+  {council.status === 'no return' ? <p>No {budgetYear} RA budget return for {name} was received in time for MHCLG's publication on 11 June 2026.</p> : <>
+    <p>The largest positive service headings in {name}'s {budgetYear} budget, ranked by net current expenditure. This is net of sales, fees, charges and transfers; NHS-funded spending is excluded. Negative totals are shown as net income on the budget page.</p>
+    <ul>{largest.map(row => <li data-record-type="observation">{row.label}: <strong>{budgetMoney(row.value)}</strong> (RA line {row.line}).</li>)}</ul>
+    {county && <p>{county.name} County Council's budget is shown separately on the same page.</p>}
+  </>}
+  <SourceLine source={budgetSource()} />
+  <p><a href={`/tools/budget/${slug}/`}>Read {name}'s budget and bill breakdown</a></p>
+</section>

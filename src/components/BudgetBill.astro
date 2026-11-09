@@ -1,0 +1,30 @@
+---
+import SourceLine from './SourceLine.astro';
+import {budgetYear, billSource} from '../lib/budget';
+import {national} from '../lib/national-data';
+import {moneyPence} from '../lib/tax-view';
+interface Props {gss: string; name: string}
+const {gss, name} = Astro.props;
+const bill = national.components[gss];
+const money = (value: number | null) => value === null ? 'Unavailable' : moneyPence(value);
+const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combined: 'Combined authority'};
+---
+<section class="section" id="your-bill" aria-labelledby="bill-heading">
+  <h2 id="bill-heading">Your bill</h2>
+  <p>Published Band D area averages for {budgetYear}. Parish charges are averaged into the council line and already included in the total. Do not add them again. An area average is not an exact bill for an address.</p>
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Published Band D bill split"><table class="data">
+    <caption>{name}: published Band D bill components, {budgetYear}</caption>
+    <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
+    <tbody>
+      <tr data-record-type="observation"><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(bill.ownWithParishPence)}</td></tr>
+      {bill.parts.map(part => <tr data-record-type="observation"><th scope="row">{labels[part.kind]}</th><td>{part.name ?? (part.bandDPence === 0 ? 'No separate precept reported' : 'Body unavailable')}</td><td class="num">{money(part.bandDPence)}</td></tr>)}
+    </tbody>
+    <tfoot><tr data-record-type="observation"><th scope="row" colspan="2">Published area average, including all precepts</th><td class="num">{money(bill.areaPence)}</td></tr></tfoot>
+  </table></div>
+  <SourceLine source={billSource} />
+  <p data-record-type="observation">The council's own Band D, excluding local precepts, is {money(bill.ownExcludingParishPence)}. This is a separate measure, not an additional charge.</p>
+  <p class="small muted">Adult social care is included in council charges. Police and fire may be funded within another line. A zero separate precept does not mean the service is absent.</p>
+  {bill.differencePence !== null && bill.differencePence !== 0 && <p class="caveat" data-record-type="calculation">Published component rounding: the displayed lines sum to {Math.abs(bill.differencePence)}p {bill.differencePence > 0 ? 'more' : 'less'} than the published total. Calculated by summing the printed components and subtracting the printed area average; both source figures are preserved.</p>}
+  {bill.specialExpensesPounds !== null && bill.specialExpensesPounds > 0 && <p class="caveat">This council reports special expenses charged in part of its area. Its average council share is not a uniform charge for every address. Check the council's local schedule for an exact bill.</p>}
+  {bill.notes.length > 0 && <ul class="small">{bill.notes.map(note => <li>MHCLG source note: {note.text}</li>)}</ul>}
+</section>

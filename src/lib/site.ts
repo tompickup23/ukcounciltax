@@ -55,6 +55,7 @@ export const STATIC_PATHS = [
   "/corrections/",
   "/tools/",
   "/tools/future-cost/",
+  "/tools/budget/",
   "/increases/",
   "/data/",
   "/help/",
@@ -91,6 +92,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {href: "/precepts/", label: "Your bill and precepts", desc: "Postcode, parish and individual charging bodies"},
       {href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time"},
+      {href: "/tools/budget/", label: "Council budgets", desc: "Service spending, funding and reserves"},
       {href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares"},
       {href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps"},
       {href: "/coverage/", label: "UK coverage", desc: "What is included in each nation"},

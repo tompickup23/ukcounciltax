@@ -20,6 +20,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Prepare and verify the pinned RA workbooks
+        run: |
+          node scripts/import-ra-budget.mjs
+          git diff --exit-code -- data/national/budget.json
       - run: npm test
       - run: npm run check
       - run: npm run build

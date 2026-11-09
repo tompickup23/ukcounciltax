@@ -31,6 +31,8 @@ test('static two-tier budget and band selector work without JavaScript', async (
     await expect(section.getByRole('table', {name: 'calculated funding view', exact: false})).toBeVisible();
     await expect(section.getByRole('table', {name: 'non-ringfenced reserve balances', exact: false})).toBeVisible();
     await expect(section.getByText('net current expenditure by service.', {exact: false}).first()).toBeVisible();
+    await section.getByText('Read the service sub-lines', {exact: true}).click();
+    for (const table of await section.locator('.service-detail table').all()) await expect(table).toBeVisible();
     await section.getByText('Read the financing lines as printed', {exact: true}).click();
     await expect(section.getByRole('table', {name: 'observed RA financing lines', exact: false})).toBeVisible();
   }
@@ -54,4 +56,30 @@ test('note 4 stays next to the council tax requirement', async ({page}) => {
   await page.goto('/tools/budget/barnet/');
   const row = page.getByRole('row').filter({has: page.getByRole('rowheader', {name: /^Council tax requirement/})});
   await expect(row).toContainText('No explanation for this discrepancy has been provided.');
+});
+
+test('every no-return page preserves its notice and every note 4 page preserves the warning', async ({page}) => {
+  const {councilPages} = await import('../src/lib/paths');
+  const {budgetFor, budget} = await import('../src/lib/budget');
+  for (const {council} of councilPages()) {
+    const source = budgetFor(council.gss).council;
+    if (source.status !== 'no return' && !source.notes.raPart1.includes('[note 4]')) continue;
+    await page.goto(`/tools/budget/${council.slug}/`);
+    if (source.status === 'no return') {
+      await expect(page.locator('[data-no-budget-return]')).toContainText('11 June 2026');
+      await expect(page.locator('[data-budget-game], .budget-tables')).toHaveCount(0);
+      await expect(page.getByRole('table')).toHaveCount(1);
+      await expect(page.locator('main')).not.toContainText('2025/26');
+    } else {
+      await expect(page.locator('#council-budget').getByRole('row').filter({has: page.getByRole('rowheader', {name: /^Council tax requirement/})})).toContainText(budget.sourceNotes.raPart1['[note 4]']);
+      const game = page.locator('[data-budget-game]');
+      await game.getByRole('button', {name: 'Start the game'}).click();
+      while (!(await game.getByRole('heading', {level: 3}).innerText()).startsWith('Where the money')) {
+        await game.getByRole('button', {name: 'Skip and reveal'}).click();
+        await game.getByRole('button', {name: 'Next round', exact: true}).click();
+      }
+      await game.getByRole('button', {name: 'Skip and reveal'}).click();
+      await expect(game.locator('li').filter({hasText: /^Council tax requirement:/})).toContainText(budget.sourceNotes.raPart1['[note 4]']);
+    }
+  }
 });

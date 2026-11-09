@@ -2,6 +2,10 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import BandSelector from '../../../components/BandSelector.astro';
+import DataDrawer from '../../../components/DataDrawer.astro';
+import BudgetPublishedChart from '../../../components/BudgetPublishedChart.astro';
+import {gameData} from '../../../lib/budget-game-data';
+import {services} from '../../../lib/budget';
 import BudgetTables from '../../../components/BudgetTables.astro';
 import PerResident from '../../../components/PerResident.astro';
 import BudgetBill from '../../../components/BudgetBill.astro';
@@ -17,6 +21,8 @@ interface Props extends CouncilPage {}
 const {council, tax} = Astro.props;
 const data = budgetFor(council.gss);
 const available = data.council.status === 'available';
+const game = available ? gameData(council.gss, council.slug, tax.name) : null;
+const tableCount = [data.council, ...(data.county ? [data.county] : [])].reduce((sum, body) => sum + 4 + services(body).filter(row => row.value !== 0 && row.subLines.length).length, 0);
 const title = available ? `${tax.name} budget game ${budgetYear}` : `${tax.name} budget ${budgetYear}: no return received`;
 const description = available
   ? `Published ${budgetYear} budget for ${tax.name}: service spending, funding, reserves and the Band D bill split, from the MHCLG RA return.`
@@ -28,8 +34,11 @@ const description = available
   {available ? <>
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
+    <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
+    {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}
     <BudgetTables council={data.council} name={tax.name} id="council-budget" />
     {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
+    </DataDrawer>
   </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}
   <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />

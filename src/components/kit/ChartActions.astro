@@ -22,6 +22,7 @@ interface Props {
   pngs?: {light: string; dark: string};
   /** The id of the data-fact wrapper that holds the kit figure. */
   target: string;
+  tableId?: string;
 }
 
 const { chart, target } = Astro.props;
@@ -34,7 +35,7 @@ const pngs = Astro.props.pngs ?? {light: chartPngPath(chart!, 'light'), dark: ch
     {CHART_THEMES.map((theme) => (
       <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>
     ))}
-    <li><a href={`#${target}`} data-chart-table>The figures as a table</a></li>
+    <li><a href={`#${Astro.props.tableId ?? target}`} data-chart-table>The figures as a table</a></li>
     <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
   </ul>
   <p class="chart-actions-status small muted" role="status" aria-live="polite" data-chart-status></p>

@@ -1,0 +1,31 @@
+---
+/** Adapted from UK Demographics' DataDrawer: keep the heading outside summary. */
+interface Props {id: string; title: string; tableCount: number; open?: boolean}
+const {id, title, tableCount, open = false} = Astro.props;
+---
+<section class="section data-drawer-section" aria-labelledby={`${id}-heading`}>
+  <h2 id={`${id}-heading`}>{title}</h2>
+  <details id={id} class="data-drawer" open={open}>
+    <summary>Show the published tables ({tableCount})</summary>
+    <div class="data-drawer-body"><slot /></div>
+  </details>
+</section>
+<script>
+  function openDrawersForHash() {
+    let id: string;
+    try {id = decodeURIComponent(location.hash.slice(1));} catch {return;}
+    const target = document.getElementById(id);
+    if (!target) return;
+    for (let parent: HTMLElement | null = target; parent; parent = parent.parentElement) {
+      if (parent instanceof HTMLDetailsElement) parent.open = true;
+    }
+    if (target.closest('.data-drawer')) target.scrollIntoView();
+  }
+  window.addEventListener('hashchange', openDrawersForHash);
+  openDrawersForHash();
+</script>
+<style>
+  summary{cursor:pointer;font-weight:600;min-height:44px;padding-block:var(--space-sm)}
+  .data-drawer{border-block:1px solid var(--border)}
+  .data-drawer-body{padding-block:var(--space-sm)}
+</style>

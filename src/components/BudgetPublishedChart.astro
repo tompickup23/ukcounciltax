@@ -26,5 +26,5 @@ if (round.kind === 'funding' && location === 'reveal') {
 ---
 <div id={id} data-fact data-published-round={index} data-round-kind={round.kind}>
   <ChartFigure out={out} keys={keys} id={`${id}-table`} />
-  <ChartActions target={id} captionHtml={captionHtml} pngs={{light: gameChartPng(slug,index,'light'), dark: gameChartPng(slug,index,'dark')}} />
+  <ChartActions target={id} tableId={`${id}-table`} captionHtml={captionHtml} pngs={{light: gameChartPng(slug,index,'light'), dark: gameChartPng(slug,index,'dark')}} />
 </div>

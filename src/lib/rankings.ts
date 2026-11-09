@@ -23,7 +23,7 @@ export function isComplete(year: YearFile, cls: RankingClass): boolean {
 
 /** One result per input, in input order; positions compare the stored precision. */
 export function competitionRank(values: readonly number[]) {
-  const sorted = [...values].sort((a, b) => a - b);
+  const sorted = [...values].sort((a, b) => a-b);
   const positions = new Map<number, {position: number; tied: boolean}>();
   sorted.forEach((value, index) => {
     if (!positions.has(value)) positions.set(value, {position: index + 1, tied: sorted[index + 1] === value});
@@ -34,7 +34,7 @@ export function competitionRank(values: readonly number[]) {
 export function rankClass(year: YearFile, cls: RankClass) {
   if (!isComplete(year, cls)) return null;
   const registry = loadRegistry();
-  const rows = members(year, cls).sort(([, a], [, b]) => a.bands.D - b.bands.D || a.name.localeCompare(b.name, 'en-GB'));
+  const rows = members(year, cls).sort(([, a], [, b]) => a.bands.D-b.bands.D || a.name.localeCompare(b.name, 'en-GB'));
   const areas = competitionRank(rows.map(([, a]) => a.bands.D));
   const own = competitionRank(rows.map(([, a]) => a.own!.bandD!));
   return rows.map(([gss, a], index) => ({gss, name: a.name, slug: registry.councils[gss].slug,
@@ -45,7 +45,7 @@ export function rankClass(year: YearFile, cls: RankClass) {
 
 export function rankCounties(year: YearFile) {
   if (!isComplete(year, COUNTY_CLASS)) return null;
-  const rows = Object.entries(year.counties).sort(([, a], [, b]) => a.bandD! - b.bandD! || a.name.localeCompare(b.name, 'en-GB'));
+  const rows = Object.entries(year.counties).sort(([, a], [, b]) => a.bandD!-b.bandD! || a.name.localeCompare(b.name, 'en-GB'));
   const positions = competitionRank(rows.map(([, a]) => a.bandD!));
   return rows.map(([gss, a], index) => ({gss, name: a.name, own: a.bandD!, ownPosition: positions[index].position, ownTied: positions[index].tied, ownNotes: a.notes}));
 }

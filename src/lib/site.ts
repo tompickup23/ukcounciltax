@@ -85,6 +85,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Council tax",
     items: [
       { href: "/council-tax/", label: "Council tax in England", desc: "The England average and every council" },
+      { href: "/council-tax/ranked/", label: "Band D ranked", desc: "Every council against councils of the same type" },
       { href: "/compare/", label: "Compare councils", desc: "Compare the same band and year within a council type" },
       { href: "/council-tax/band-d/", label: "Band D", desc: "Band D for every council, by region" },
       { href: increasesYearPath(CURRENT_YEAR), label: `Rises ${yearLabel(CURRENT_YEAR)}`, desc: "How much each council raised its own share" },
@@ -96,6 +97,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       {href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs"},
       {href: "/changes/", label: "What changed", desc: "Read the record of data updates"},
+      {href: "/precepts/parishes/", label: "Parish precepts", desc: "Every parish precept by council"},
       {href: "/precepts/", label: "Your bill and precepts", desc: "Postcode, parish and individual charging bodies"},
       {href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time"},
       {href: "/tools/budget/", label: "Council budgets", desc: "Service spending, funding and reserves"},

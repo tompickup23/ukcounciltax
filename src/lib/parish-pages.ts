@@ -9,13 +9,13 @@ export function parishSummary(rows: readonly Parish[]) {
   const published = rows.filter(row => row.years[CURRENT_YEAR].status === 'published' && row.years[CURRENT_YEAR].bandDPence !== null);
   const nonZero = published.filter(row => row.years[CURRENT_YEAR].bandDPence !== 0);
   const values = nonZero.map(row => row.years[CURRENT_YEAR].bandDPence!);
-  return {records: rows.length, nonZero: nonZero.length, zero: published.length - nonZero.length,
+  return {records: rows.length, nonZero: nonZero.length, zero: published.length-nonZero.length,
     ceased: rows.filter(row => row.years[CURRENT_YEAR].status !== 'published').length,
     min: values.length ? Math.min(...values) : null, max: values.length ? Math.max(...values) : null};
 }
 function joinedNames(rows: readonly Parish[], value: number): string {
   const names = rows.filter(row => row.years[CURRENT_YEAR].status === 'published' && row.years[CURRENT_YEAR].bandDPence === value).map(row => row.name).sort((a,b) => a.localeCompare(b,'en-GB'));
-  if (names.length > 3) return `${names[0]} and ${names.length - 1} others`;
+  if (names.length > 3) return `${names[0]} and ${names.length-1} others`;
   return names.length < 2 ? names[0] : `${names.slice(0,-1).join(', ')} and ${names.at(-1)}`;
 }
 export function parishRange(name: string, rows: readonly Parish[]): string {

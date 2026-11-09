@@ -13,7 +13,7 @@ const description = `${national.parishes.length.toLocaleString('en-GB')} local p
 ---
 <BaseLayout title={title} description={description} path="/precepts/parishes/">
   <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts'}]} />
-  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length - pages.length} councils have no local precepting authority in this return.</p><SourceLine source={parishSource} /></div></header>
+  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length-pages.length} councils have no local precepting authority in this return.</p><SourceLine source={parishSource} /></div></header>
   <p>Choose a council to see its parish and local body records. A parish Band D precept applies only within its charging area and is not a full council tax bill. These records are listed by council name, without ranking parishes or billing areas.</p>
   <div class="fact" data-fact><div class="table-wrap" tabindex="0" role="region" aria-label="Parish precepts by billing council"><table class="data">
     <caption>Local precepting authority records by council, {year}</caption>

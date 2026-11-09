@@ -178,7 +178,8 @@ for (const url of canonicalMap.selfCanonicalUrls) {
 }
 if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals, found ${seenMapped.size}`);
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
-if (pages !== 688) failures.push(`expected 688 HTML pages, found ${pages}`);
+// A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
+if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 
@@ -219,7 +220,7 @@ const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
 const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
 const today = new Date().toISOString().slice(0, 10);
-if (sitemapEntries.length !== 687 || locs.length !== 687) failures.push(`expected all 687 sitemap entries, found ${sitemapEntries.length}`);
+if (sitemapEntries.length !== 908 || locs.length !== 908) failures.push(`expected all 908 sitemap entries, found ${sitemapEntries.length}`);
 for (const entry of sitemapEntries) {
   const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
   if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);

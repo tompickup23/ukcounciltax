@@ -1,14 +1,3 @@
-/* estate-tokens:start
-   Generated from briefings/uk-network-design-system/shared/tokens.css.tmpl in the
-   clawd repo. Do not hand edit: run shared/apply.py to regenerate.
-
-   The estate brand system, BRAND-SYSTEM-2026-08-23.md, is the source of truth for
-   every value above the accent block. Only the accent triple varies between the five
-   sites; everything else is byte identical on all of them.
-
-   Site: ukcounciltax
-   Applied: 2026-10-05 */
-
 /* Source Serif 4 for display, Source Sans 3 for UI. A designed superfamily, so display
    and UI harmonise by construction, and both carry real tabular figures, which is what
    stops a column of percentages jittering line to line. Self hosted: every site in this
@@ -21,56 +10,132 @@
 @import "@fontsource/source-sans-3/latin-ext-400.css";
 @import "@fontsource/source-sans-3/latin-ext-600.css";
 
-:root {
-  color-scheme: light dark;
+/* estate-tokens:start
+   Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
+   Default site: ukcounciltax. Version 0.2.0. */
 
-  /* === Shared neutrals. Identical on all five sites. === */
+:root, [data-theme="light"] {
+  color-scheme: light dark;
   --bg: #ffffff;
   --bg-subtle: #f5f6f7;
   --bg-card: #ffffff;
   --border: #dbdfe3;
   --border-strong: #c2c8ce;
-  --text: #171b1f;        /* 17.31 on white, 16.00 on subtle */
-  --text-muted: #545c63;  /*  6.80 on white,  6.28 on subtle */
-  --text-faint: #616970;  /*  5.58 on white,  5.16 on subtle */
-
-  /* The dark ground. Social and Open Graph surfaces, plus the footer, which plays the
-     same role on the page: a closing band, not content. */
+  --text: #171b1f;
+  --text-muted: #545c63;
+  --text-faint: #616970;
   --ground: #0f1317;
   --ground-ink: #f4f6f7;
   --ground-muted: #98a3ac;
-
-  /* === The only per site block. === */
-  --accent: #23664f;        /* links, headings and rules on white */
-  --accent-bright: #94d7b5; /* the mark and the URL on the dark ground */
-  --accent-wash: #edf6f0;   /* stat tiles and card hovers */
-
-  /* === Semantic. Computed against white, subtle and the wash, never eyeballed. === */
+  --accent-ink: #ffffff;
   --positive: #1f6f4f;
   --warning: #8a5a10;
   --critical: #b42318;
-
-  /* === Chart series. Four identity hues assigned in order and never cycled, then two
-     neutrals for residual buckets. Four is where all pairs separation stops passing
-     under deuteranopia, which is why there are four rather than six. === */
-  --series-1: #1a6ba8;
-  --series-2: #b45309;
-  --series-3: #6d28d9;
-  --series-4: #a51d5c;
+  --series-1: #166ea5;
+  --series-2: #b6550f;
+  --series-3: #6e24da;
+  --series-4: #9d1c5c;
   --series-neutral: #6b7280;
   --series-neutral-soft: #8b939c;
-
-  /* === Geometry and elevation. Shadow lifts a card off white; it is not depth
-     theatre. The dark build used 28px blurs at 42 per cent black, which on a light
-     ground reads as smudge. === */
+  --tooltip-bg: #111827;
+  --tooltip-fg: #ffffff;
+  --accent: #23664f;
+  --accent-bright: #94d7b5;
+  --accent-wash: #edf6f0;
   --radius: 10px;
   --radius-sm: 6px;
   --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
   --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
-
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --text-xs: 0.78rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-md: 1.1875rem;
+  --text-lg: clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem);
+  --text-xl: clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem);
+  --text-2xl: clamp(2rem, 1.55rem + 2vw, 3rem);
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+}
 
+:root[data-theme="dark"], [data-theme="dark"] {
+  --bg: #0f1317;
+  --bg-subtle: #171c21;
+  --bg-card: #141a1f;
+  --border: #2a3138;
+  --border-strong: #3d464e;
+  --text: #f4f6f7;
+  --text-muted: #b6c0c8;
+  --text-faint: #98a3ac;
+  --ground: #05080a;
+  --ground-ink: #f4f6f7;
+  --ground-muted: #98a3ac;
+  --accent-ink: #0f1317;
+  --positive: #6fcf9a;
+  --warning: #f0b03e;
+  --critical: #f2857a;
+  --series-1: #5599cc;
+  --series-2: #cf7a48;
+  --series-3: #966bfe;
+  --series-4: #f83b9b;
+  --series-neutral: #9aa2ab;
+  --series-neutral-soft: #7b838c;
+  --tooltip-bg: #e6edf3;
+  --tooltip-fg: #0d1117;
+  --accent: #94d7b5;
+  --accent-bright: #94d7b5;
+  --accent-wash: #112d25;
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1317;
+    --bg-subtle: #171c21;
+    --bg-card: #141a1f;
+    --border: #2a3138;
+    --border-strong: #3d464e;
+    --text: #f4f6f7;
+    --text-muted: #b6c0c8;
+    --text-faint: #98a3ac;
+    --ground: #05080a;
+    --ground-ink: #f4f6f7;
+    --ground-muted: #98a3ac;
+    --accent-ink: #0f1317;
+    --positive: #6fcf9a;
+    --warning: #f0b03e;
+    --critical: #f2857a;
+    --series-1: #5599cc;
+    --series-2: #cf7a48;
+    --series-3: #966bfe;
+    --series-4: #f83b9b;
+    --series-neutral: #9aa2ab;
+    --series-neutral-soft: #7b838c;
+    --tooltip-bg: #e6edf3;
+    --tooltip-fg: #0d1117;
+    --accent: #94d7b5;
+    --accent-bright: #94d7b5;
+    --accent-wash: #112d25;
+    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
+  }
+}
+
+/* estate-tokens:end */
+
+/* === Site aliases. Outside the estate block, so scripts/apply-brand.py leaves them
+   alone. These 28 names are not in the kit's token file; every other custom property
+   comes from it. --tooltip-bg and --tooltip-fg moved into the kit block, which sets
+   both themes. === */
+:root {
   /* === Compatibility aliases ===
      The pre system stylesheet and templates reference the names below. They are mapped
      here so the surface can flip in one commit rather than in 570 edits, and they are
@@ -99,8 +164,6 @@
   --status-warn-dark: var(--warning);
   --status-good-text: var(--positive);
   --status-bad-text: var(--critical);
-  --tooltip-bg: #111827;
-  --tooltip-fg: #ffffff;
 
   /* The dark build painted the page with three radial gradients and a 28px grid
      overlay. Both were decoration for a near black ground and are retired rather than
@@ -111,114 +174,13 @@
   --header-backdrop: var(--bg);
 }
 
-/* === Dark. The same tokens, inverted, so no component needs a second rule. The accent
-   lifts to its bright value because the deep one does not clear 4.5:1 on the ground,
-   and the wash becomes a deep tint rather than a pale one. === */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0f1317;
-    --bg-subtle: #171c21;
-    --bg-card: #141a1f;
-    --border: #2a3138;
-    --border-strong: #3d464e;
-    --text: #f4f6f7;
-    --text-muted: #b6c0c8;
-    --text-faint: #98a3ac;
-    --ground: #05080a;
-
-    --accent: #94d7b5;
-    --accent-bright: #94d7b5;
-    --accent-wash: #112d25;
-
-    --positive: #6fcf9a;
-    --warning: #f0b03e;
-    --critical: #f2857a;
-
-    --series-1: #6aa9de;
-    --series-2: #e0a35c;
-    --series-3: #b49cf0;
-    --series-4: #e888b0;
-    --series-neutral: #9aa2ab;
-    --series-neutral-soft: #7b838c;
-
-    --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
-
-    --tooltip-bg: #e6edf3;
-    --tooltip-fg: #0d1117;
-  }
-}
-/* estate-tokens:end */
-
-/* === Manual theme override. Outside the estate block because the template follows
-   the system preference only. public/theme-init.js reads the choice stored under
-   ukcounciltax-theme and sets data-theme on the html element before first paint.
-   A manual dark choice applies the dark values on any machine; a manual light
-   choice on a dark machine restores the light values the system block flipped. === */
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --bg: #0f1317;
-  --bg-subtle: #171c21;
-  --bg-card: #141a1f;
-  --border: #2a3138;
-  --border-strong: #3d464e;
-  --text: #f4f6f7;
-  --text-muted: #b6c0c8;
-  --text-faint: #98a3ac;
-  --ground: #05080a;
-
-  --accent: #94d7b5;
-  --accent-bright: #94d7b5;
-  --accent-wash: #112d25;
-
-  --positive: #6fcf9a;
-  --warning: #f0b03e;
-  --critical: #f2857a;
-
-  --series-1: #6aa9de;
-  --series-2: #e0a35c;
-  --series-3: #b49cf0;
-  --series-4: #e888b0;
-  --series-neutral: #9aa2ab;
-  --series-neutral-soft: #7b838c;
-
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.32);
-
-  --tooltip-bg: #e6edf3;
-  --tooltip-fg: #0d1117;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root[data-theme="light"] {
-    color-scheme: light;
-    --bg: #ffffff;
-    --bg-subtle: #f5f6f7;
-    --bg-card: #ffffff;
-    --border: #dbdfe3;
-    --border-strong: #c2c8ce;
-    --text: #171b1f;
-    --text-muted: #545c63;
-    --text-faint: #616970;
-    --ground: #0f1317;
-    --accent: #23664f;
-    --accent-bright: #94d7b5;
-    --accent-wash: #edf6f0;
-    --positive: #1f6f4f;
-    --warning: #8a5a10;
-    --critical: #b42318;
-    --series-1: #1a6ba8;
-    --series-2: #b45309;
-    --series-3: #6d28d9;
-    --series-4: #a51d5c;
-    --series-neutral: #6b7280;
-    --series-neutral-soft: #8b939c;
-    --shadow-soft: 0 1px 2px rgba(23, 27, 31, 0.05);
-    --shadow: 0 1px 2px rgba(23, 27, 31, 0.06), 0 8px 24px rgba(23, 27, 31, 0.06);
-    --tooltip-bg: #111827;
-    --tooltip-fg: #ffffff;
-  }
-}
+/* === Manual theme choice. public/theme-init.js reads the choice stored under
+   ukcounciltax-theme and sets data-theme on the html element before first paint. The
+   kit block above already carries the values for both choices
+   (:root[data-theme="dark"] and :root:not([data-theme="light"]) under the system dark
+   query), so only the colour scheme for native controls is set here. === */
+:root[data-theme="dark"] { color-scheme: dark; }
+:root[data-theme="light"] { color-scheme: light; }
 
 /* === Base. === */
 *, *::before, *::after { box-sizing: border-box; }

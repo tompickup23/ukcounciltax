@@ -2,7 +2,8 @@
  * The few token values the share card needs, as literals. Satori renders
  * outside a browser and cannot read a custom property, so this is the one
  * file outside global.css allowed to hold a colour; tests/palette.test.ts
- * holds every value here equal to its token in global.css.
+ * holds every value here equal to its light token in the vendored Estate Kit
+ * file that scripts/apply-brand.py splices into global.css.
  */
 export const cardPalette = {
   ground: "#0f1317",
@@ -13,7 +14,7 @@ export const cardPalette = {
   accentWash: "#edf6f0",
 } as const;
 
-/** The global.css token each value mirrors. */
+/** The estate token each value mirrors. */
 export const cardPaletteTokens: Record<keyof typeof cardPalette, string> = {
   ground: "--ground",
   groundInk: "--ground-ink",

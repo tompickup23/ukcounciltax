@@ -133,3 +133,14 @@ it('gives Birmingham funding bars at least half the drawing width with recorded 
   expect(reserves.svg).toContain('£731m');
   expect(reserves.svg).toContain('£688.8m');
 });
+
+
+it('prints Table 10 once in the drawn bill source without changing its source record', async () => {
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  const bill=gameData('E07000117','burnley','Burnley')!.rounds.find(round=>round.kind==='bill')!;
+  const before=JSON.stringify(bill.source);
+  const chart=gameChart(bill,'bill').out;
+  expect(chart.caption.match(/Table 10/g)).toHaveLength(1);
+  expect(chart.caption).toContain('Data Billing and Precepting Bodies');
+  expect(JSON.stringify(bill.source)).toBe(before);
+});

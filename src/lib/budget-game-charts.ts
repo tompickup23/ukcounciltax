@@ -40,7 +40,12 @@ function labelsAboveBars(out: ChartOutput): ChartOutput {
   return {...out,height,svg:svg.replace(/viewBox="[^"]+"/,`viewBox="0 0 ${out.width} ${height}"`).replace(/height="[^"]+"/,`height="${height}"`).replace(/(<rect x="0" y="0" width="[^"]+" height=")[^"]+("[^>]*>)/,`$1${height}$2`)};
 }
 export function gameChart(round: GameRound, id: string, theme?: Theme) {
-  const source = {...round.source, edition: `${budgetYear}${round.source.date ? `. Published ${new Intl.DateTimeFormat('en-GB', {day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${round.source.date}T00:00:00Z`))}` : ''}`};
+  // The kit requires a table locator. Remove only a duplicated locator from the
+  // chart title, leaving the original source and every drawer caption unchanged.
+  const tableName = round.source.table?.split(',')[0].trim();
+  const title = tableName && round.source.title.endsWith(`: ${tableName}`)
+    ? round.source.title.slice(0, -(tableName.length+2)) : round.source.title;
+  const source = {...round.source, title, edition: `${budgetYear}${round.source.date ? `. Published ${new Intl.DateTimeFormat('en-GB', {day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${round.source.date}T00:00:00Z`))}` : ''}`};
   if (round.kind === 'funding' || round.kind === 'reserves') {
     const key = `${id}-amounts`;
     const items = round.kind === 'funding' ? [...round.items].sort((a,b) => Math.abs(b.value)-Math.abs(a.value)) : round.items;

@@ -1,4 +1,5 @@
 ---
+import {scoreTemplate} from '../lib/budget-game-score-template';
 import {gapRowSvg} from '../lib/budget-game-geometry';
 import BudgetPublishedChart from './BudgetPublishedChart.astro';
 import {gameData} from '../lib/budget-game-data';
@@ -9,7 +10,7 @@ const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
 const {name} = Astro.props;
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 ---
-{data && <section id="budget-game" class="section budget-game" data-budget-game aria-labelledby="game-heading">
+{data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
   <div class="game-lead">
     <div>
       <p class="eyebrow">Explore the published budget | {data.year}</p>
@@ -28,6 +29,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
     {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
   </ol>
   <div data-game-stage></div>
+  <template data-game-score><Fragment set:html={scoreTemplate(data,name)} /></template>
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg} /></template>)}
   {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
@@ -46,6 +48,11 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
 
   .budget-game [hidden]{display:none!important}
+  .game-score-card{max-width:40rem;padding:var(--space-lg);background:var(--accent-wash);border-radius:var(--radius)}
+  .game-score-card .game-score{margin-block:.25rem}
+  .game-summary-rows{list-style:none;padding:0;display:grid;gap:var(--space-sm);max-width:40rem}
+  .game-score-track{display:block;height:.75rem;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;margin-top:.5rem}
+  .game-score-fill{display:block;height:100%;background:var(--accent)}
   .game-rail{display:flex;list-style:none;padding:0;gap:.5rem;margin-block:var(--space-lg);justify-content:space-between}
   .game-rail li{display:flex;flex-direction:column;gap:.25rem;align-items:center;flex:1;min-width:0;font-size:var(--text-sm)}
   .game-stop-number{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:2px solid var(--border-strong);border-radius:50%;font-weight:600}

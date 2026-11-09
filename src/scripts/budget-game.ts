@@ -57,8 +57,17 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     stage.replaceChildren();
     heading(restored ? 'Shared game scores' : 'Your game summary');
     stage.append(element('p', restored ? 'These scores were supplied in the link and are not verified results. Guesses are not shared, so the furthest answers cannot be restored.' : 'Scores describe how close your answers were to the published figures. They do not judge a council’s choices.'));
-    const list = element('ul');
-    data.rounds.forEach((round, i) => list.append(element('li', `${round.title}: ${scores[i] === null ? 'skipped' : `${scores[i]} out of 100`}`)));
+    const total=scores.reduce<number>((sum,score)=>sum+(score??0),0);
+    const maximum=scores.filter(score=>score!==null).length*100;
+    const card=element('div','','game-score-card');card.dataset.gameScoreCard='';
+    card.append(element('p',`Your score, ${root.dataset.councilName} budget game`),element('p',`${total} out of ${maximum}`,'game-score'));
+    stage.append(card);
+    const list = element('ul','','game-summary-rows');
+    data.rounds.forEach((round, i) => {
+      const row=element('li', `${round.title}: ${scores[i] === null ? 'skipped' : `${scores[i]} out of 100`}`);
+      const track=element('span','','game-score-track');track.setAttribute('aria-hidden','true');
+      const fill=element('span','','game-score-fill');fill.style.width=`${scores[i]??0}%`;track.append(fill);row.append(track);list.append(row);
+    });
     stage.append(list, element('p', 'Game scoring: split rounds use 100 minus half the sum of absolute differences in pence, rounded to a whole score and bounded from 0 to 100. Funding uses the percentage of correctly ordered unequal pairs. Reserves awards 50 for the direction and 50 for the size band. Skipped rounds have no score.', 'small'));
     if (!restored) {
       stage.append(element('h4', 'Answers furthest from the published figures'));
@@ -80,6 +89,32 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     actions.append(button('Copy score link', async () => {
       try {await navigator.clipboard.writeText(link.href); status.textContent = 'Score link copied.';}
       catch {status.textContent = 'Copy the address from the score link below.'; link.focus();}
+    }), button('Save score as PNG', async () => {
+      try {
+        status.textContent='Preparing your score image.';
+        const svg=root.querySelector<HTMLTemplateElement>('[data-game-score]')!.content.firstElementChild!.cloneNode(true) as SVGSVGElement;
+        const scoreText=svg.querySelector('.ek-score-total')!;scoreText.textContent=String(total);
+        scoreText.nextElementSibling!.textContent=`of ${maximum}`;
+        scoreText.nextElementSibling!.nextElementSibling!.textContent=`${maximum/100} of ${scores.length} rounds played.`;
+        const plot=svg.querySelector('.ek-scores')!;plot.setAttribute('data-ek-total',String(total));plot.setAttribute('data-ek-out-of',String(maximum));
+        plot.querySelectorAll('[data-ek-score]').forEach((bar,i)=>{
+          bar.setAttribute('width',String(Number(bar.previousElementSibling!.getAttribute('width'))*(scores[i]??0)/100));
+          bar.setAttribute('data-value',String(scores[i]??0));bar.nextElementSibling!.textContent=scores[i]===null?'Skipped':String(scores[i]);
+        });
+        svg.setAttribute('aria-label',`Your score: ${total} out of ${maximum}`);
+        const styles=document.createElementNS('http://www.w3.org/2000/svg','style');
+        const fonts=[...document.querySelectorAll<HTMLLinkElement>('link[rel=preload][as=font]')].filter(link=>/latin-(?:400|600)-normal/.test(link.href));
+        styles.textContent=(await Promise.all(fonts.map(async link=>{
+          const bytes=new Uint8Array(await (await fetch(link.href)).arrayBuffer());let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+          const family=link.href.includes('source-serif-4')?'Source Serif 4':'Source Sans 3';
+          return `@font-face{font-family:'${family}';font-weight:${link.href.includes('-600-')?'600':'400'};src:url(data:font/woff2;base64,${btoa(binary)})}`;
+        }))).join('');svg.prepend(styles);
+        const img=new Image();img.src=`data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(svg))}`;await img.decode();
+        const canvas=document.createElement('canvas');canvas.width=1200;canvas.height=Math.round(Number(svg.getAttribute('height'))*2);
+        canvas.getContext('2d')!.drawImage(img,0,0,canvas.width,canvas.height);
+        const save=element('a','Save your score image');save.href=canvas.toDataURL('image/png');save.download=`${data.slug}-budget-game-score.png`;save.click();
+        status.textContent='Score image saved. Your answers stay in this browser.';
+      } catch {status.textContent='The browser could not save the image. Your score link is still available below.';}
     }), button('Play again', start));
     stage.append(actions, link, status);
   }

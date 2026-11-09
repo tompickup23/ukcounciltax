@@ -7,10 +7,15 @@ import { programmaticPaths } from "../src/lib/paths";
 
 const ROOT = resolve(import.meta.dirname, "..");
 
+const VENDOR = join(ROOT, "src", "vendor");
+
 function walk(dir: string, pattern: RegExp, out: string[] = []): string[] {
   if (!existsSync(dir)) return out;
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
+    // The vendored Estate Kit is not this site's source: tests/vendor.test.ts pins it
+    // byte for byte to its tag, and its own repository runs these house checks.
+    if (entry.isDirectory() && path === VENDOR) continue;
     if (entry.isDirectory()) walk(path, pattern, out);
     else if (pattern.test(entry.name)) out.push(path);
   }

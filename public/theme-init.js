@@ -11,6 +11,9 @@
  * through prefers-color-scheme, so nothing is written to the document then.
  */
 (function () {
+  /* Marks that script runs, so controls that need it (the footer theme select)
+     show only when they will work. */
+  document.documentElement.classList.add("js");
   try {
     var saved = localStorage.getItem("ukcounciltax-theme");
     if (saved === "dark" || saved === "light") {

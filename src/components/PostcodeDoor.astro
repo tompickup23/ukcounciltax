@@ -18,9 +18,13 @@ import { CURRENT_YEAR } from "../lib/council-tax";
 interface Props {
   id?: string;
   heading?: string;
+  /** The submit button's words. */
+  submitLabel?: string;
+  /** Drop the card frame, for a door that sits inside another block. */
+  bare?: boolean;
 }
 
-const { id = "postcode", heading = "Find your council by postcode" } = Astro.props;
+const { id = "postcode", heading = "Find your council by postcode", submitLabel = "Find", bare = false } = Astro.props;
 const withPage = new Map(councilPages().map(({ council, tax }) => [council.gss, { href: councilPath(council), name: tax.name }]));
 for (const edition of devolved.editions.filter(e=>e.year===CURRENT_YEAR)) for (const row of edition.records) withPage.set(row.gss,{href:nationPath(edition.nation,row.slug),name:row.name});
 const index = Object.fromEntries(
@@ -30,7 +34,7 @@ const index = Object.fromEntries(
   ]),
 );
 ---
-<form class="postcode-door card" data-postcode-door data-section="council-tax" novalidate>
+<form class:list={["postcode-door", { card: !bare }]} data-postcode-door data-section="council-tax" novalidate>
   <label for={id} class="door-label">{heading}</label>
   <div class="door-row">
     <input
@@ -46,11 +50,11 @@ const index = Object.fromEntries(
       required
       aria-describedby={`${id}-status ${id}-note`}
     />
-    <button type="submit" disabled>Find</button>
+    <button type="submit" disabled>{submitLabel}</button>
   </div>
   <p class="door-status" id={`${id}-status`} role="status" aria-live="polite" data-door-status></p>
   <p class="door-note" id={`${id}-note`}>
-    Your postcode is sent to postcodes.io to find the council for it, and is not stored.
+    Your postcode is sent to postcodes.io to find the council for it, and is not stored.{" "}
     <a href="/privacy/">Privacy</a>. Or <a href="/councils/">choose from the list</a>.
   </p>
   <noscript><p>Postcode lookup needs JavaScript. <a href="/councils/">Browse all councils</a>.</p></noscript>

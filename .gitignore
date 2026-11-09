@@ -27,3 +27,6 @@ data/raw/
 # Local browser inspection artifacts
 .playwright-cli/
 output/playwright/
+
+# The vendored estate kit ships its built dist; tests/vendor.test.ts hashes it (K1)
+!src/vendor/estate-kit/dist/

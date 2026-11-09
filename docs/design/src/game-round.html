@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup A6, split round and reveal | UK Council Tax</title>
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="mockup.css"></head>
+<body>
+<!--include:_header.html-->
+<main class="wrap">
+  <p class="state-label" style="margin-top:var(--space-md);font-size:var(--text-xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--warning)">State 1: page load. Without JavaScript the start button is absent and the rest is the same</p>
+  <section class="game-lead" aria-labelledby="game-h">
+    <p class="eyebrow">Budget game · Burnley · 2026/27</p>
+    <div class="lead-grid">
+      <div>
+        <h1 id="game-h">Could you set Burnley's budget?</h1>
+        <p class="lede">Five rounds: share 100p across Burnley's services, then Lancashire's, split the bill, order the funding and call the reserves. Each answer comes from the published budget.</p>
+        <button class="button" type="button">Start the game</button>
+        <ul class="contents" aria-label="On this page"><li><a href="#">Burnley budget tables</a></li><li><a href="#">Lancashire County Council budget</a></li><li><a href="#">Your bill</a></li></ul>
+      </div>
+      <figure class="teaser" aria-label="An empty grid of 100 squares, one for each penny of the split">
+        <!--svg:game-teaser.svg-->
+        <figcaption>100 squares, one for each penny. Round one fills them with your guess, then with Burnley's published split.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="state" aria-labelledby="r1-h">
+    <p class="state-label">State 2: round one in progress, 62p placed</p>
+    <ol class="rail" aria-label="Progress">
+      <li data-state="current" aria-current="step"><span class="n">1</span><span class="t">Split: Burnley</span></li>
+      <li><span class="n">2</span><span class="t">Split: Lancashire</span></li>
+      <li><span class="n">3</span><span class="t">Your bill</span></li>
+      <li><span class="n">4</span><span class="t">Funding</span></li>
+      <li><span class="n">5</span><span class="t">Reserves</span></li>
+    </ol>
+    <div class="round">
+      <h2 id="r1-h">Guess the split: Burnley</h2>
+      <p class="explain">Share 100p across Burnley's five services with positive spending. The answer is each service's net current expenditure over their total, from the published 2026/27 budget.</p>
+      <div class="play">
+        <div class="grid-col">
+          <div class="placed"><span>Placed</span><strong>62p of 100p</strong></div>
+          <div class="meter" aria-hidden="true"><span style="width:62%"></span></div>
+          <!--svg:game-progress.svg-->
+        </div>
+        <div>
+          <ul class="services">
+            <!--services-->
+          </ul>
+          <div class="round-actions sticky">
+            <button class="button" type="button" aria-disabled="true" aria-describedby="why">Check my split</button>
+            <p class="why" id="why" role="status"><strong>62p of 100p placed.</strong> Place 38p more to check your split.</p>
+          </div>
+          <div class="round-actions"><button class="button secondary" type="button">Skip this round</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="state" aria-labelledby="r1a-h">
+    <p class="state-label">State 3: round one revealed (example guess, completed to 100p)</p>
+    <ol class="rail" aria-label="Progress">
+      <li data-state="done"><span class="n">1</span><span class="t">Split: Burnley</span></li>
+      <li><span class="n">2</span><span class="t">Split: Lancashire</span></li>
+      <li><span class="n">3</span><span class="t">Your bill</span></li>
+      <li><span class="n">4</span><span class="t">Funding</span></li>
+      <li><span class="n">5</span><span class="t">Reserves</span></li>
+    </ol>
+    <div class="round">
+      <h2 id="r1a-h">Burnley: the published answer</h2>
+      <div class="score"><span class="big">{{score}}</span><span class="of">out of 100</span><p>Your score: add up the gaps below, halve the total and take it from 100.</p></div>
+      <div class="reveal-pair">
+        <div><h3>Your split</h3><!--svg:game-yours.svg--></div>
+        <div><h3>Burnley's published split</h3><!--svg:game-published.svg--></div>
+      </div>
+      <h3 style="margin-top:var(--space-xl)">The gap, service by service</h3>
+      <div class="gap"><!--svg:game-gap.svg--></div>
+      <div class="notes">
+        <p>Highways and Transport (net income of £343,000, RA line 290) and Planning and Development Services (net income of £426,000, RA line 599) are left out of the round. Adult Social Care at £2,000 is under half a square.</p>
+        <p class="source-line">{{caption_published}}</p>
+      </div>
+      <div class="round-actions"><button class="button" type="button">Next round: Lancashire</button></div>
+    </div>
+  </section>
+
+  <p class="mock-note" style="margin-top:var(--space-xl)">Design mockup for docs/A6-GAME-BRIEF.md, 9 November 2026. Not a published page. The waffles are Estate Kit 0.2.0 waffle output (parts, small size) from docs/design/figures.burnley.json. The example guess is a stand in for a player's input, marked as a fixture in its caption; it is not a published figure. The gap bars are drawn by docs/design/build-mockups.mjs because the kit's zeroBar does not yet draw negatives.</p>
+</main>
+<!--include:_footer.html-->
+</body></html>

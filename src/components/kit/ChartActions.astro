@@ -1,0 +1,74 @@
+---
+/**
+ * The actions under every Estate Kit chart, after UK Demographics' ChartActions.astro
+ * (ukdemographics 733eb02), changed for this site (A5 brief, section 6.2):
+ *
+ * Source: the chart's caption as the fact's source line, the same words the drawing
+ *   carries inside it.
+ * PNG: plain links to files the BUILD_OG=1 pass rendered from the kit's hex mode, one
+ *   per theme, so they need no canvas or script and the source travels inside the image.
+ * Table: a link to the chart's own table twin (the kit's details element). Script
+ *   opens the details on the way and adds "Copy table"; without script the link still
+ *   lands on the table's summary.
+ *
+ * No embed (decision K3) and no data file (decision K2): the table twin is the data.
+ */
+import { CHART_THEMES, chartKeys, chartPngPath, type KitChartName } from "../../lib/kit-charts";
+import { siteFigures } from "../../lib/figures";
+
+interface Props {
+  chart: KitChartName;
+  /** The id of the data-fact wrapper that holds the kit figure. */
+  target: string;
+}
+
+const { chart, target } = Astro.props;
+const caption = siteFigures().captionHtml(chartKeys(chart));
+---
+<div class="chart-actions" data-chart-actions data-chart={chart}>
+  <p class="source-line" set:html={caption} />
+  <ul class="chart-actions-links">
+    {CHART_THEMES.map((theme) => (
+      <li><a href={chartPngPath(chart, theme)} data-chart-png>Image, {theme} (PNG)</a></li>
+    ))}
+    <li><a href={`#${target}`} data-chart-table>The figures as a table</a></li>
+    <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
+  </ul>
+  <p class="chart-actions-status small muted" role="status" aria-live="polite" data-chart-status></p>
+</div>
+
+<script>
+  for (const actions of document.querySelectorAll<HTMLElement>("[data-chart-actions]")) {
+    const fact = actions.closest<HTMLElement>("[data-fact]");
+    const twin = fact?.querySelector<HTMLDetailsElement>("details.ek-twin");
+    const table = twin?.querySelector<HTMLTableElement>("table");
+    const status = actions.querySelector<HTMLElement>("[data-chart-status]");
+    if (!twin || !table || !status) continue;
+    actions.querySelector<HTMLAnchorElement>("[data-chart-table]")?.addEventListener("click", () => {
+      twin.open = true;
+    });
+    const copy = actions.querySelector<HTMLButtonElement>("[data-chart-copy]");
+    if (!copy || !navigator.clipboard) continue;
+    copy.hidden = false;
+    copy.addEventListener("click", async () => {
+      const rows = [...table.querySelectorAll("tr")].map((tr) =>
+        [...tr.querySelectorAll("th, td")].map((cell) => (cell.textContent ?? "").trim()).join("\t"),
+      );
+      try {
+        await navigator.clipboard.writeText(rows.join("\n"));
+        status.textContent = "Table copied, with its source in the last row.";
+      } catch {
+        status.textContent = "The browser did not allow copying. Open the table and select it instead.";
+      }
+    });
+  }
+</script>
+
+<style>
+  .chart-actions { margin-top: var(--space-xs); }
+  .chart-actions .source-line { margin: 0; }
+  .chart-actions-links { list-style: none; padding: 0; margin: var(--space-2xs) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-sm); font-size: var(--text-sm); }
+  .chart-copy { font: inherit; padding: 0; border: 0; background: none; color: var(--accent); text-decoration: underline; cursor: pointer; }
+  .chart-actions-status { margin: var(--space-2xs) 0 0; min-height: 0; }
+  .chart-actions-status:empty { display: none; }
+</style>

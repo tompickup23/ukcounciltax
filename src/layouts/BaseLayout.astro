@@ -1,5 +1,11 @@
 ---
 import "../styles/global.css";
+import "../vendor/estate-kit/src/components/kit.css";
+// The three latin faces the first screen uses, preloaded so the first paint is set in
+// them: without this the hero rewraps when they arrive (lab CLS 0.13 to 0.18 at 1440).
+import serif600 from "@fontsource/source-serif-4/files/source-serif-4-latin-600-normal.woff2?url";
+import sans400 from "@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url";
+import sans600 from "@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2?url";
 import { canonicalUrl } from "../lib/canonical";
 import {breadcrumbList} from "../lib/breadcrumbs";
 import SiteHeader from "../components/SiteHeader.astro";
@@ -92,6 +98,7 @@ const nodes = [
     <link rel="canonical" href={canonicalUrl(path)} />
     <meta name="robots" content={noindex ? "noindex,follow" : "index,follow,max-image-preview:large"} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {[serif600, sans400, sans600].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={fullTitle} />

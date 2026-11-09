@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup A5, homepage hero | UK Council Tax</title>
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="mockup.css"></head>
+<body>
+<!--include:_header.html-->
+<main>
+  <section class="hero" aria-labelledby="hero-h"><div class="wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">Independent data · Official sources · 2026/27</p>
+      <h1 id="hero-h">Council tax 2026/27</h1>
+      <p class="lede">What your bill is, who charges it and how it has changed, from the councils' and MHCLG's own published tables.</p>
+      <form class="door" action="#" role="search" aria-label="Find your council tax">
+        <div><label for="pc">Your postcode</label>
+          <div class="row"><input id="pc" name="postcode" autocomplete="postal-code" inputmode="text" placeholder="For example BB11 9SA"><button class="button" type="submit">Show my council tax</button></div></div>
+        <p class="or">or</p>
+        <div><label for="cn">Council name</label>
+          <div class="row"><input id="cn" name="q" placeholder="For example Burnley"><button class="button secondary" type="submit">Search</button></div></div>
+      </form>
+      <p class="coverage">296 English billing authorities · 32 Scottish councils · 22 Welsh Band D averages</p>
+    </div>
+    <aside class="bill-card" aria-labelledby="bill-h">
+      <div class="head"><span class="eyebrow">Anatomy of a bill</span><span class="small muted">Published example</span></div>
+      <h2 id="bill-h">Burnley, unparished area, Band D</h2>
+      <figure style="margin:0"><!--svg:hero-bill.svg--></figure>
+      <a class="more" href="#">See the local breakdown and model each part</a>
+    </aside>
+  </div></section>
+
+  <nav class="tasks" aria-label="Council tax tools"><div class="wrap grid">
+    <a class="task" href="#"><!--svg:thumb-stack.svg--><strong>What makes up my bill</strong><span>Every body that charges your bill, with parish precepts.</span><p class="source-line">Drawn from Burnley Borough Council, Council Tax Charges 2026/27, page 1.</p></a>
+    <a class="task" href="#"><!--svg:thumb-line.svg--><strong>Increases since 2012/13</strong><span>How much each council raised its share this year and over time.</span><p class="source-line">Drawn from MHCLG, Council Tax levels set by local authorities in England 2026 to 2027, Table 3.</p></a>
+    <a class="task" href="#"><!--svg:thumb-bands.svg--><strong>What could it cost</strong><span>Start from today's charge for your band and change the assumptions.</span><p class="source-line">Drawn from Burnley Borough Council, Council Tax Charges 2026/27, page 1, bands A to H.</p></a>
+    <a class="task" href="#"><!--svg:thumb-strip.svg--><strong>How do areas compare</strong><span>One area against the England average, same band, year and basis.</span><p class="source-line">Drawn from MHCLG 2026/27, Table 10 (Burnley) and Table 7 (England).</p></a>
+  </div></nav>
+
+  <div class="wrap"><p class="mock-note">Design mockup for docs/A5-FACE-BRIEF.md, 9 November 2026. Not a published page. The bill drawing is Estate Kit 0.2.0 billAnatomy output from docs/design/figures.burnley.json; the four card thumbnails are drawn to scale from the same file and are decoration under a link, with no figure printed in them.</p></div>
+</main>
+<!--include:_footer.html-->
+</body></html>

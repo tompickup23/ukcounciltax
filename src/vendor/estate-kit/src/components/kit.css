@@ -1,0 +1,24 @@
+/* The kit's component styles. Every value is a token from generated/tokens.css, so a site
+   that carries the estate-tokens block needs nothing else. */
+.ek-figure { margin: 0 0 var(--space-lg); max-width: 40rem; }
+.ek-chart { display: block; width: 100%; height: auto; overflow: visible; }
+.ek-twin { margin-top: var(--space-xs); font-family: var(--font-sans); font-size: var(--text-sm); color: var(--text-muted); }
+.ek-twin summary { cursor: pointer; color: var(--accent); }
+.ek-table { border-collapse: collapse; margin-top: var(--space-xs); width: 100%; color: var(--text); }
+.ek-table caption { text-align: left; font-weight: 600; padding-bottom: var(--space-2xs); color: var(--text); }
+.ek-table th, .ek-table td { padding: var(--space-2xs) var(--space-xs); border-bottom: 1px solid var(--border); text-align: left; }
+.ek-table thead th { color: var(--text-faint); font-weight: 600; }
+.ek-table .ek-num { text-align: right; font-variant-numeric: tabular-nums; }
+.ek-table tfoot td { color: var(--text-muted); border-bottom: 0; padding-top: var(--space-xs); }
+
+.ek-stat {
+  display: flex; flex-direction: column; gap: var(--space-2xs);
+  padding: var(--space-md) var(--space-lg); max-width: 26rem;
+  background: var(--accent-wash); border-radius: var(--radius);
+  font-family: var(--font-sans); color: var(--text);
+}
+.ek-stat-label { font-size: var(--text-sm); font-weight: 600; color: var(--text-muted); }
+.ek-stat-value { font-family: var(--font-display); font-weight: 600; font-size: var(--text-2xl); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.ek-stat-perspective { font-size: var(--text-base); }
+.ek-source { margin: var(--space-xs) 0 0; font-size: var(--text-xs); color: var(--text-muted); }
+.ek-source a { color: inherit; }

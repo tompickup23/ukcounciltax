@@ -1,0 +1,24 @@
+---
+/**
+ * The wrapper every kit chart renders through: the inline SVG, which carries its own
+ * source line, then the table twin in a details element. The chart has direct labels on
+ * every key value, so nothing essential sits behind the click.
+ */
+import type { ChartOutput } from "../../dist/src/index.js";
+
+interface Props {
+  out: ChartOutput;
+  keys: string[];
+  tableOpen?: boolean;
+  class?: string;
+}
+
+const { out, keys, tableOpen = false, class: className } = Astro.props;
+---
+<figure class:list={["ek-figure", className]} data-figure={keys.join(" ")}>
+  <Fragment set:html={out.svg} />
+  <details class="ek-twin" open={tableOpen}>
+    <summary>The figures as a table</summary>
+    <Fragment set:html={out.table} />
+  </details>
+</figure>

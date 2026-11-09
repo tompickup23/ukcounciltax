@@ -1,11 +1,11 @@
 ---
 import { councilPages, councilPath } from "../lib/paths";
-interface Props { id?: string; anchor?: string }
-const { id = "council-name", anchor = "council-tax" } = Astro.props;
+interface Props { id?: string; anchor?: string; label?: string; bare?: boolean }
+const { id = "council-name", anchor = "council-tax", label = "Find your council by name", bare = false } = Astro.props;
 const rows = councilPages();
 ---
-<section class="card council-finder" data-council-finder>
-  <label class="field" for={id}><span>Find your council by name</span>
+<section class:list={["council-finder", { card: !bare }]} data-council-finder>
+  <label class="field" for={id}><span>{label}</span>
     <input id={id} type="search" placeholder="e.g. Burnley" autocomplete="off" disabled aria-controls={`${id}-results`} aria-describedby={`${id}-status`} />
   </label>
   <p id={`${id}-status`} class="muted small" role="status" data-finder-status>Enter at least two letters. Search covers councils in England.</p>

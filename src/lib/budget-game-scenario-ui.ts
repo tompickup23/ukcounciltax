@@ -1,4 +1,4 @@
-import {allocatePence,BUDGET_SCENARIO_MODEL,SCENARIO_ASSUMPTIONS,scenarioShares} from './budget-scenario';
+import {allocatePence,BUDGET_SCENARIO_MODEL,SCENARIO_ASSUMPTIONS,SCENARIO_ROUNDING,scenarioShares} from './budget-scenario';
 import {gameElement as el,gameButton as button,splitControls} from './budget-game-controls';
 import type {ScenarioData,ScenarioScreen} from './budget-game-scenario-data';
 import type {GameSource} from './budget-game';
@@ -54,9 +54,34 @@ export function createScenario(root:HTMLElement,stage:HTMLElement,data:ScenarioD
     }
     parent.append(notes);
   }
-  function showResult(_screen:ScenarioScreen,state:State,parent:HTMLElement,_grid:HTMLElement) {
+  function showResult(screen:ScenarioScreen,state:State,parent:HTMLElement,grid:HTMLElement) {
     parent.replaceChildren();
-    if(state.dirty)parent.append(el('p','Changed since you showed it. Show your version again.','game-status'));
+    if(!state.result) {
+      if(state.dirty)parent.append(el('p','Changed since you showed it. Show your version again.','game-status'));
+      return;
+    }
+    const result=el('section');result.dataset.scenarioResult='';result.dataset.recordType='scenario';result.setAttribute('aria-label','Your illustrative scenario result');
+    const pair=el('div','','game-reveal-waffles');
+    const yours=el('div');yours.dataset.recordType='scenario';yours.append(el('h4','Your version'));
+    const drawing=grid.cloneNode(true) as HTMLElement;drawing.removeAttribute('data-player-grid');yours.append(drawing);
+    const reference=el('div');reference.dataset.recordType='observation';reference.append(el('h4','Published split, for reference'));
+    reference.append(root.querySelector<HTMLTemplateElement>(`[data-game-published="${screen.roundIndex}"]`)!.content.cloneNode(true));
+    pair.append(yours,reference);result.append(pair);
+    const wrapper=el('div','','game-scenario-table');
+    const table=el('table');table.dataset.recordType='scenario';table.dataset.scenarioTable='';table.append(el('caption',`Your version | ${screen.title}`));
+    const head=el('thead'),header=el('tr');
+    for(const name of [screen.kind==='bill'?'Charging body':'Service','Your share','Your version','Published, for reference']){const th=el('th',name);th.scope='col';header.append(th);}head.append(header);table.append(head);
+    const body=el('tbody');
+    screen.items.forEach((item,index)=>{
+      const row=el('tr'),name=el('th',item.label);name.scope='row';name.dataset.dashOk='';
+      const published=el('td',money(item.publishedPence,screen.kind==='bill'));published.dataset.recordType='observation';published.dataset.publishedPence=String(item.publishedPence);
+      const amount=el('td',money(state.result![index],screen.kind==='bill'));amount.dataset.scenarioPence=String(state.result![index]);amount.dataset.recordType='scenario';
+      row.append(name,el('td',`${state.values[index]}p`),amount,published);body.append(row);
+    });
+    table.append(body);const foot=el('tfoot'),total=el('tr'),label=el('th','Fixed total');label.scope='row';
+    const publishedTotal=el('td',money(screen.totalPence,screen.kind==='bill'));publishedTotal.dataset.recordType=screen.kind==='bill'?'observation':'calculation';
+    total.append(label,el('td','100p'),el('td',money(screen.totalPence,screen.kind==='bill')),publishedTotal);foot.append(total);table.append(foot);wrapper.append(table);result.append(wrapper,el('p',SCENARIO_ROUNDING));
+    sources(screen,result);parent.append(result);document.dispatchEvent(new Event('budget:reveal'));
   }
   function showScreen(index:number,entry=false) {
     current=index;const screen=data.screens[index],state=states[index];const heading=lead();rail();
@@ -87,6 +112,10 @@ export function createScenario(root:HTMLElement,stage:HTMLElement,data:ScenarioD
     actions.append(button(index===data.screens.length-1?'Show scenario summary':'Next screen',()=>index===data.screens.length-1?summary():showScreen(index+1),false),button('Back to your score',back));stage.append(actions);
     focus(entry?heading:title);
   }
-  function summary() {const heading=lead();stage.append(button('Back to your score',back),button('Play again',play));focus(heading);}
+  function summary() {
+    const heading=lead();const card=el('div','','game-score-card');card.dataset.scenarioSummary='';card.append(el('h3',`Your version, ${data.name}`));
+    const list=el('ul');data.screens.forEach((screen,index)=>{const row=el('li');row.append(button(`${screen.stop}: ${states[index].result?'shown':'not shown yet'}`,()=>showScreen(index)));list.append(row);});card.append(list);
+    stage.append(card,button('Back to your score',back),button('Play again',()=>{clear();play();}));focus(heading);
+  }
   return {start:()=>{clear();showScreen(0,true);},clear};
 }

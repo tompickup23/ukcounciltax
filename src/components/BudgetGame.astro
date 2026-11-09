@@ -103,6 +103,14 @@ const scenario = scenarioData(data, Astro.props.gss, name);
   .game-gap-track:before{content:"";position:absolute;left:50%;height:100%;border-left:1px solid var(--border-strong)}
   .game-gap-bar{position:absolute;height:100%;background:var(--accent)}
   @media(min-width:800px){.game-reveal-waffles{grid-template-columns:1fr 1fr}}
+  .game-scenario-table{max-width:100%;overflow-x:auto;margin-block:var(--space-md)}
+  .game-scenario-table table{width:100%;table-layout:fixed}
+  .game-scenario-table th,.game-scenario-table td{padding:.4rem;white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+  .game-scenario-table th:first-child{width:28%;text-align:left}
+  .game-scenario-table thead th:nth-child(2){width:14%}
+  .game-scenario-table [data-record-type=observation]{background:var(--bg-subtle)}
+  .game-scenario-table [data-scenario-pence]{background:var(--accent-wash)}
+  @media(max-width:599px){.game-scenario-table table{font-size:.75rem}}
   .game-result{background:var(--accent-wash);padding:1rem;border-radius:8px;margin-block:1rem}
   .game-result li{margin-block:.75rem}
   .game-direction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-block:var(--space-sm)}

@@ -2,6 +2,14 @@
 
 9 November 2026. Branch `feat/game-as-game`. Review work only; no merge or deployment.
 
+## Archive handover
+
+Implementation is committed and pushed. [PR 36: The budget game as a game (A6)](https://github.com/tompickup23/ukcounciltax/pull/36) is open. The verified implementation commit is `375faec2cbf6ff68f58bb1fbe616c45915777702`; this handover is a documentation-only follow-up.
+
+All required local gates pass, as recorded below. The remote `site` check was still in progress when this handover was prepared. Review the PR and its remote check before any later merge decision. No merge or deployment is authorised by this handover.
+
+The worktree is `/Users/tompickup/wt/uct-face`. Local captures, before and after text files, the capture script and bundle-size evidence remain in its gitignored `output/playwright/a6/` directory. Final gate logs are `/tmp/uct-a6-final-*.log`. The final design report and the approved shared-checker resolution are recorded below. There is no unresolved section 11 stop condition. No implementation work remains in this chat.
+
 ## Results by item
 
 | Item | Result |

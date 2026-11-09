@@ -1,0 +1,54 @@
+---
+import SourceLine from './SourceLine.astro';
+import {budget, budgetMoney, budgetSource} from '../lib/budget';
+import {perResident, population, YEAR_MISMATCH} from '../lib/per-resident';
+interface Props {gss: string}
+const {gss} = Astro.props;
+const council = budget.councils[gss];
+const code = council.class === 'SD' ? council.countyCode! : gss;
+const authority = budget.councils[code];
+const result = perResident[code];
+const isCounty = authority.class === 'SC';
+const source = population.source;
+const money = (value: number) => new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(value);
+const bandLabels = {age18plus: 'aged 18 and over', age18to64: 'aged 18 to 64', age65plus: 'aged 65 and over', under18: 'under 18'};
+---
+<section class="section per-resident" aria-labelledby="per-resident-heading" data-per-resident={code}>
+  <p class="eyebrow">{isCounty ? 'County budget' : 'Council budget'} | Social care</p>
+  <h2 id="per-resident-heading">{authority.name}{isCounty ? ' County Council' : ''}: per resident</h2>
+  {isCounty && <p>These figures use the county’s budget and the ONS county population. No social care ratio is calculated for {council.name} district.</p>}
+  {result.ratios ? <>
+    <p>A ratio is a budget divided by a head count. It does not measure need, efficiency, value or spending on an individual recipient.</p>
+    {result.smallPopulation && <p class="caveat" data-small-population>These ratios use very small populations. ONS mid-2025 records {population.areas[code].under18.toLocaleString('en-GB')} residents under 18 and {population.areas[code].age65plus.toLocaleString('en-GB')} aged 65 and over for {authority.name}. The calculations are sensitive to these small denominators.</p>}
+    <div class="ratios">
+      {Object.entries(result.ratios).map(([key, ratio]) => <article data-ratio={key} data-record-type="calculation">
+        <h3>{ratio.label}</h3>
+        <p class="ratio-value">{money(ratio.value)}</p>
+        <p class="small">Calculated from {money(ratio.numeratorPounds)} divided by {ratio.denominator.count.toLocaleString('en-GB')} residents {bandLabels[ratio.denominator.band]}. Shown to the nearest pound.</p>
+        <p class="small">MHCLG RA budget 2026/27, Part 1, lines {ratio.numeratorLines.map(line => line.line).join(', ')}; ONS population estimates, mid-2025, MYE2 Persons.</p>
+        <p class="small">{YEAR_MISMATCH}</p>
+        <details><summary>Lines used in this calculation</summary><ul>{ratio.numeratorLines.map(line => <li>Line {line.line}: {line.label}.</li>)}</ul></details>
+      </article>)}
+    </div>
+    <div class="unattributed" data-unattributed data-record-type="calculation">
+      <h3>Adult social care not attributed by age</h3>
+      <p><strong>{money(result.unattributed.amount)}</strong>{result.unattributed.share !== null ? ` (${result.unattributed.share.toLocaleString('en-GB', {maximumFractionDigits: 1})}% of adult social care line 360)` : ''}.</p>
+      {result.unattributed.shareReason && <p>{result.unattributed.shareReason}</p>}
+      <p>Calculated as adult social care line 360 ({budgetMoney(authority.values.asctot)}) less the ten age lines above. The share is this amount divided by line 360, multiplied by 100 and shown to one decimal place. This covers social support, assistive equipment, assessment and safeguarding, information and early intervention, and commissioning.</p>
+      <p>The two age ratios use different populations and exclude this amount. They do not add up to the adult ratio.</p>
+      <SourceLine source={budgetSource('raPart1', 'Line 360 less lines 332, 334, 336, 340, 344, 333, 335, 337, 341 and 345')} />
+    </div>
+  </> : <p data-per-resident-unavailable>{result.reason}</p>}
+  <SourceLine source={budgetSource()} />
+  <SourceLine source={{publisher: source.publisher, title: source.title, url: source.fileUrl, table: 'MYE2 Persons', date: source.published, method: 'Single years grouped as under 18, 18 to 64, 65 and over, and 18 and over'}} />
+  <p class="small"><a href="/methodology/#per-resident">How per resident figures are calculated</a></p>
+</section>
+<style>
+  .ratios{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+  article,.unattributed{border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+  article h3{font-size:1.1rem;margin-top:0}.ratio-value{font-size:2rem;font-weight:700;margin-block:.5rem}
+  .unattributed{margin-top:1rem}.unattributed h3{margin-top:0}
+  details{margin-top:1rem}summary{cursor:pointer;font-weight:600}li{margin-block:.4rem}
+  .per-resident{overflow-wrap:anywhere}
+  @media(max-width:640px){.ratios{grid-template-columns:1fr}}
+</style>

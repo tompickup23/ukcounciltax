@@ -109,7 +109,7 @@ for (const path of files(DIST)) {
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
-    for (const href of ['/help/', '/help/#what-council-tax-band-am-i']) {
+    for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
     }
   }

@@ -4,7 +4,7 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-For the current position, read `docs/ASSESSMENT-2026-11-09-TAX-SITES.md` (both sites, 9 November 2026) and `docs/PLAN-2026-11-09-NEXT-SESSIONS.md` (the Codex and Opus sequence) first. PR 15 (cross domain canonicals from this site to ukcouncils.co.uk, 325 URLs including the homepage and brand pages) merged and deployed on 8 November 2026; `docs/HANDOFF-2026-11-08-CANONICALS-REBASE.md` is its record. The budget game programme handover is `docs/HANDOFF-2026-11-09-BUDGET-GAME-PROGRAMME.md` (PR 27).
+For the current position, read `docs/HANDOFF-2026-11-10-SESSION.md` and `docs/PLAN-2026-11-10-REMAINING.md` (what remains, the cross estate linking programme and the outline prompts) first, then `docs/PLAN-2026-11-09-NEXT-SESSIONS.md` (sections 1 to 11, with the design programme in section 11) and `docs/ASSESSMENT-2026-11-09-TAX-SITES.md` (both sites, 9 November 2026). Decisions waiting on Tom are in `docs/DECISIONS-WAITING-2026-11-10.md`. PR 15 (cross domain canonicals from this site to ukcouncils.co.uk, 325 URLs including the homepage and brand pages) merged and deployed on 8 November 2026; `docs/HANDOFF-2026-11-08-CANONICALS-REBASE.md` is its record. The budget game programme handover is `docs/HANDOFF-2026-11-09-BUDGET-GAME-PROGRAMME.md` (PR 27).
 
 For continuation after the 6 October 2026 chat, read `docs/HANDOFF-2026-10-06.md` first (broader project handover). The earlier `docs/HANDOFF-2026-10-05.md` remains for the release day record. They record the completed release, source reuse, remaining work and safeguards.
 

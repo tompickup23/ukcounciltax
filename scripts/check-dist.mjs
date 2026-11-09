@@ -50,6 +50,7 @@ function* files(dir) {
 const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
+let profiles = 0;
 
 for (const path of files(DIST)) {
   if (!/\.(html|xml|txt|json|js|css|svg|webmanifest)$|_headers$|_redirects$/.test(path)) continue;
@@ -108,6 +109,7 @@ for (const path of files(DIST)) {
     }
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
+    profiles += 1;
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
     for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
@@ -174,6 +176,10 @@ for (const url of Object.keys(canonicalMap.mappings)) {
 for (const url of canonicalMap.selfCanonicalUrls) {
   if (!seenUnique.has(url)) failures.push(`unique page was not built: ${url}`);
 }
+if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals, found ${seenMapped.size}`);
+if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
+if (pages !== 688) failures.push(`expected 688 HTML pages, found ${pages}`);
+if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 
 // A top-level 404 prevents Cloudflare Pages from treating this static site as an SPA.

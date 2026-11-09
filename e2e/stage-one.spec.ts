@@ -7,7 +7,7 @@ test.beforeEach(async ({page}) => {
 
 test('name lookup supports keyboard selection and empty results without navigation', async ({page}) => {
   await page.goto('/');
-  const input = page.getByLabel('Find your council by name');
+  const input = page.getByLabel('Council name', {exact: true});
   await input.fill('BURNLEY');
   await expect(page.locator('[data-finder-status]')).toContainText('1 matching councils');
   await input.press('Tab');

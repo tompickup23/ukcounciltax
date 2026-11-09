@@ -27,7 +27,7 @@ test("lands on the council page at the council tax section", async ({ page }) =>
   await answer(page, 200, "E07000117");
   await page.goto("/");
   await page.locator("#postcode-home").fill("bb11 1du");
-  await page.getByRole("button", { name: "Find" }).first().click();
+  await page.getByRole("button", { name: "Show my council tax" }).click();
   await expect(page).toHaveURL(/\/councils\/burnley\/#council-tax$/);
 });
 

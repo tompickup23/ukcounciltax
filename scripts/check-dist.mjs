@@ -22,6 +22,9 @@ import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
+import {budgetGameProblems,gameHeaderProblem,publishedText} from './lib/budget-game.mjs';
+const gameCounts={available:0,absent:0};
+const beforeGameText=JSON.parse(readFileSync('tests/fixtures/a6-published-text.json','utf8'));
 const DIST = resolve(process.cwd(), "dist");
 const SITE_NAME = "UK Council Tax";
 const SITE_URL = "https://ukcounciltax.co.uk";
@@ -63,6 +66,13 @@ for (const path of files(DIST)) {
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
+  if (/^\/tools\/budget\/[^/]+\/index\.html$/.test(rel(path))) {
+    const slug=rel(path).split('/')[3];
+    const result=budgetGameProblems(text,slug,DIST);
+    failures.push(...result.problems);gameCounts[result.available?'available':'absent']++;
+    if(beforeGameText[slug]&&JSON.stringify(publishedText(text))!==JSON.stringify(beforeGameText[slug]))failures.push(`${slug}: pre-A6 published text changed`);
+    await new Promise(resolve=>setImmediate(resolve));
+  }
   const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
 
@@ -382,6 +392,8 @@ for (const problem of headerProblems(readFileSync(join(DIST, "_headers"), "utf-8
   if ((headerText.match(/Content-Security-Policy:/g) ?? []).length !== 1) failures.push("dist/_headers must carry exactly one Content-Security-Policy line");
 }
 
+if(gameCounts.available!==287||gameCounts.absent!==9)failures.push(`game coverage ${gameCounts.available} available and ${gameCounts.absent} no return`);
+failures.push(...gameHeaderProblem(readFileSync(join(process.cwd(),'public/_headers'),'utf8')));
 if (failures.length) {
   console.error(`dist check: ${failures.length} failures\n${failures.map((f) => `  ${f}`).join("\n")}`);
   process.exit(1);

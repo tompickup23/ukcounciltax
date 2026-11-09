@@ -25,6 +25,7 @@ test('static two-tier budget and band selector work without JavaScript', async (
   const context = await browser.newContext({javaScriptEnabled: false, viewport: {width: 375, height: 812}});
   const page = await context.newPage();
   await page.goto(`${baseURL}/tools/budget/burnley/`);
+  await page.locator('#published-budget > summary').click();
   for (const id of ['council-budget', 'county-budget']) {
     const section = page.locator(`#${id}`);
     await expect(section.getByRole('table', {name: 'net current expenditure by service', exact: false})).toBeVisible();
@@ -53,7 +54,7 @@ test('missing return has only current bill information and no budget tables', as
   await expect(page.locator('main')).not.toContainText('2024/25');
 });
 test('note 4 stays next to the council tax requirement', async ({page}) => {
-  await page.goto('/tools/budget/barnet/');
+  await page.goto('/tools/budget/barnet/#council-budget');
   const row = page.getByRole('row').filter({has: page.getByRole('rowheader', {name: /^Council tax requirement/})});
   await expect(row).toContainText('No explanation for this discrepancy has been provided.');
 });
@@ -71,6 +72,7 @@ test('every no-return page preserves its notice and every note 4 page preserves 
       await expect(page.getByRole('table')).toHaveCount(1);
       await expect(page.locator('main')).not.toContainText('2025/26');
     } else {
+      await page.locator('#published-budget > summary').click();
       await expect(page.locator('#council-budget').getByRole('row').filter({has: page.getByRole('rowheader', {name: /^Council tax requirement/})})).toContainText(budget.sourceNotes.raPart1['[note 4]']);
       const game = page.locator('[data-budget-game]');
       await game.getByRole('button', {name: 'Start the game'}).click();

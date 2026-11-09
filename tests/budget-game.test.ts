@@ -90,3 +90,22 @@ it('keeps every stored printed label and service heading equal to the pinned wor
     }
   }
 });
+
+it('uses the kit rule for whole pence and every published split without changing the data', async () => {
+  const {squaresFor}=await import('../src/lib/budget-game');
+  const {gameChart}=await import('../src/lib/budget-game-charts');
+  for(const guesses of [[100,0],[62,12,26],[0,12,29,32,27],[14,71,11,4]]) expect(squaresFor(guesses)).toEqual(guesses);
+  for(const {council,tax} of councilPages()) {
+    const data=gameData(council.gss,council.slug,tax.name);
+    for(const [i,round] of (data?.rounds??[]).entries()) {
+      if(round.kind!=='split'&&round.kind!=='bill')continue;
+      expect(round.items.length).toBeLessThanOrEqual(12);
+      const out=gameChart(round,`${council.slug}-${i}`).out;
+      const counts=[...out.svg.matchAll(/data-ek-squares="(\d+)"/g)].map(match=>Number(match[1]));
+      expect(counts,`${council.slug} round ${i}`).toEqual(squaresFor(shares(round.items,round.base!)));
+      expect(counts.reduce((a,b)=>a+b,0)).toBe(100);
+      if(council.slug==='burnley'&&i===0)expect(counts).toEqual([0,12,29,32,27]);
+      if(council.slug==='burnley'&&round.kind==='bill')expect(counts).toEqual([14,71,11,4]);
+    }
+  }
+},30000);

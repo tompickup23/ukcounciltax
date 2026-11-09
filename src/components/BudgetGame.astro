@@ -31,7 +31,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   <div data-game-stage></div>
   <template data-game-score><Fragment set:html={scoreTemplate(data,name)} /></template>
   <template data-game-gap><span set:html={gapRowSvg} /></template>
-  {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg} /></template>)}
+  {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg.replace('A grid of 100 empty squares.', 'Your split. Each filled square is one penny.')} /></template>)}
   {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
@@ -53,7 +53,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   .game-summary-rows{list-style:none;padding:0;display:grid;gap:var(--space-sm);max-width:40rem}
   .game-score-track{display:block;height:.75rem;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;margin-top:.5rem}
   .game-score-fill{display:block;height:100%;background:var(--accent)}
-  .game-rail{display:flex;list-style:none;padding:0;gap:.5rem;margin-block:var(--space-lg);justify-content:space-between}
+  .game-rail{scroll-margin-top:6rem;display:flex;list-style:none;padding:0;gap:.5rem;margin-block:var(--space-lg);justify-content:space-between}
   .game-rail li{display:flex;flex-direction:column;gap:.25rem;align-items:center;flex:1;min-width:0;font-size:var(--text-sm)}
   .game-stop-number{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:2px solid var(--border-strong);border-radius:50%;font-weight:600}
   .game-rail [aria-current=step] .game-stop-number{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-wash)}

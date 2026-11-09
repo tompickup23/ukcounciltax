@@ -44,7 +44,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     h.id = 'game-round-heading';
     h.tabIndex = -1;
     stage.append(h);
-    h.focus();
+    h.focus({preventScroll:true});
+    queueMicrotask(()=>root.querySelector('[data-game-rail]')?.scrollIntoView({block:'start'}));
   }
   function sourceNotes(round: GameRound, parent: HTMLElement) {
     for (const note of round.notes) parent.append(element('p', note));
@@ -334,6 +335,10 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     }
   }
   root.querySelector('[data-game-start]')!.addEventListener('click', start);
-  const restored = readScores(location.hash, data.rounds.length);
-  if (restored) {scores = restored; summary(true);}
+  const restore = () => {
+    const restored = readScores(location.hash, data.rounds.length);
+    if (restored) {scores = restored; summary(true);}
+  };
+  window.addEventListener('hashchange', restore);
+  restore();
 }

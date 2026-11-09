@@ -27,7 +27,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   <div data-game-stage></div>
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg} /></template>)}
-  {data.rounds.map((round, index) => round.kind === 'split' && <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
+  {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
 <script>

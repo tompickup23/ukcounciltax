@@ -237,7 +237,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
       stage.replaceChildren();
       heading(`${round.title}: published answer`);
       stage.append(element('p', skipped ? 'Round skipped. No score recorded.' : `Your score: ${score} out of 100.`, 'game-score'), element('p', round.explanation));
-      if (round.kind === 'split') {
+      if (round.kind === 'split' || round.kind === 'bill') {
         if (!skipped) stage.append(element('p', 'Your score: add up the gaps below, halve the total and take it from 100.'));
         const pair = element('div', '', 'game-reveal-waffles');
         if (!skipped) {
@@ -263,7 +263,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
             bar.setAttribute('transform', `translate(${zero} 0) scale(${-gap/100} 1) translate(${-zero} 0)`);
             row.append(drawing);gaps.append(row);
           });
-          stage.append(gaps,element('p', `Gap: your pence less the published share. The published share is each service's amount over the ${round.items.length} services' total, times 100.`, 'small'));
+          stage.append(gaps,element('p', round.kind === 'bill' ? 'Gap: your pence less the published share. Each printed component is divided by the published Band D area average, times 100.' : `Gap: your pence less the published share. The published share is each service's amount over the ${round.items.length} services' total, times 100.`, 'small'));
         }
         const counts=squaresFor(shares(round.items,round.base!));
         counts.forEach((count,i)=>{if(count===0)answer.append(element('p', `${round.items[i].label}: under half a square. The published amount is retained in the table.`));});

@@ -2,12 +2,18 @@
 /**
  * System, light or dark. The choice is stored under ukcounciltax-theme and
  * public/theme-init.js applies it before first paint on the next load. Without
- * JavaScript the select does nothing and the system preference stands, which
- * is a correct page.
+ * JavaScript the select would do nothing, so it stays hidden until
+ * public/theme-init.js has put the js class on the html element, and the
+ * system preference stands, which is a correct page.
  */
+interface Props {
+  /** The visible label. */
+  label?: string;
+}
+const { label = "Theme" } = Astro.props;
 ---
 <label class="theme-select">
-  <span class="visually-hidden">Colour theme</span>
+  <span class="theme-select-label">{label}</span>
   <select data-theme-select>
     <option value="system">System theme</option>
     <option value="light">Light</option>
@@ -40,6 +46,8 @@
 </script>
 
 <style>
+  .theme-select { display: none; align-items: center; gap: 0.5rem; }
+  :global(html.js) .theme-select { display: inline-flex; }
   .theme-select select {
     font: inherit;
     font-size: 0.9rem;

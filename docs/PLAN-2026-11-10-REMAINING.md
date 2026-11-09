@@ -23,7 +23,7 @@ Checked live on 10 November 2026 on Burnley's pages.
 | L3 | ukelections | The same line on council seat pages (`/seats/<slug>/` where the slug is a billing authority), not on ward pages; after results week | Decision 7; not before 17 November |
 | L4 | aidoge | One line beside the existing UK Councils link: the council's Band D on UK Council Tax | Decision 7 (and whether a standalone site cross links at all) |
 
-L2 to L4 share one brief template, written once by Opus and varied per repo: the sitemap fetch script, the saved JSON with `fetched` and `source`, the GSS join, the render only when present rule, the counts (296 English billing authorities on both tax sitemaps as of 10 November; 319 self canonical URLs on UK Council Tax after A2), the unit test and the dist check, the text test. Expected sizes: UK Demographics 296 of 350 place pages gain a line; UK Elections 296 of 3,796 seat pages; AI DOGE 296.
+L2 to L4 share one brief template, written once by Opus and varied per repo: the sitemap fetch script, the saved JSON with `fetched` and `source`, the GSS join, the render only when present rule, the counts (296 English billing authorities on both tax sitemaps as of 10 November; 319 canonical map entries on UK Council Tax after A2, of which 69 are listed self canonical and 318 are built as canonicals to UK Councils), the unit test and the dist check, the text test. Expected sizes: UK Demographics 296 of 350 place pages gain a line; UK Elections 296 of 3,796 seat pages; AI DOGE 296.
 
 ## 2. The remaining queue, by lane
 
@@ -33,7 +33,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 
 **Lane B, ukcouncils (Codex):** C3 the budget section (brief in `~/wt/ukc-budget`, after B2 merges) then L1 on this site then B3 seats by party (after decision 1, brief to write).
 
-**Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); A5 build after the A2 PR opens; A6 build after A5 merges; the A3 brief revision; the L2 to L4 brief template; the C3 review; the design check before every design PR.
+**Lane C, Opus (Claude Code):** reviews of A2 and B2 as they open; kit 0.2.0 and the A5 and A6 briefs (running now); kit 0.3.0 (positionStrip, ChartActions, the gates, thumb, diverging zeroBar, grid only waffle) after kit 0.2.0 merges; A5 build after A2 merges, kit v0.2.0 is tagged and K1 is decided; A6 build after A5 merges and kit 0.3.0 is tagged; the A3 brief revision; the L2 to L4 brief template; the C3 review; the design check before every design PR.
 
 **Lane D, other repos (Codex, one at a time):** L2 UK Demographics, L4 AI DOGE, L3 UK Elections after 16 November. Each is one short session from the shared template.
 
@@ -41,7 +41,7 @@ One writer per repo at a time. Codex builds from a brief; Opus prepares, reviews
 
 ### Order of events
 
-1. A2 PR opens: Opus reviews, Tom merges. Opus starts A5 build in `~/wt/uct-face`.
+1. A2 PR opens (PR 32): Opus reviews, Tom merges. Once kit PR 3 has merged, v0.2.0 is tagged and K1 is decided, Opus starts the A5 build in `~/wt/uct-face`.
 2. B2 PR opens: Opus reviews, Tom merges. Codex lane B starts C3.
 3. Design prep reports: Tom looks at the mockups; kit 0.2.0 merges.
 4. A5 merges: Opus revises the A3 brief (kit charts, BenchmarkStrip as the position strip, ChartActions on every chart, DataDrawer for the long tables, the network strip), Codex lane A builds A3.
@@ -57,12 +57,12 @@ These are outlines to be completed by the Opus session that owns the step, with 
 ### Opus: review A2 or B2 (one per PR)
 
 ```text
-Review ukcounciltax PR <n> (A2) against docs/A2-QUICK-WINS-BRIEF.md in the worktree ~/wt/uct-quick-wins: ten items, one commit each. For each item: does the commit do what the brief says and nothing more; do the assertions hold on the built output (run npm run build and npm run test:dist in the worktree if the PR body's counts are not reproducible from the diff); any new text with an em dash, en dash, spaced hyphen, estimate or individual. Check the canonical counts (319 self canonical, 69 mapped to UK Councils after the six brand pages) in tests/canonical.test.ts and check-dist. Post the review as a PR comment: what passes, what blocks, what is a follow-up. Do not merge.
+Review ukcounciltax PR <n> (A2) against docs/A2-QUICK-WINS-BRIEF.md in the worktree ~/wt/uct-quick-wins: ten items, one commit each. For each item: does the commit do what the brief says and nothing more; do the assertions hold on the built output (run npm run build and npm run test:dist in the worktree if the PR body's counts are not reproducible from the diff); any new text with an em dash, en dash, spaced hyphen, estimate or individual. Check the canonical counts (319 canonical map entries, 69 listed self canonical URLs including the six brand pages, 318 built mapped canonicals, the retired rises route accounting for the gap) in tests/canonical.test.ts and check-dist. Post the review as a PR comment: what passes, what blocks, what is a follow-up. Do not merge.
 ```
 
 The B2 variant names `docs/B2-FRONT-DOOR-BRIEF.md`, the source notes as binding, the seven withheld quotes, the 296 and 294 and 174 counts, the first screen Band D check on the Burnley 375 by 812 capture, and the reorganisation hold test.
 
-### Opus: A5 build (after the A2 PR opens)
+### Opus: A5 build (after A2 merges, kit v0.2.0 is tagged and K1 is decided)
 
 ```text
 Build A5 from docs/A5-FACE-BRIEF.md in ~/wt/uct-face, branch feat/face-and-game, rebased onto origin/main after A2 merges. Pin estate kit 0.2.0 as the dependency the brief names and adopt its tokens through scripts/apply-brand.py. Items in the brief's order, one commit each: hero alignment and the postcode and name doors in the hero; the bill anatomy card drawn by the kit's billAnatomy; the four task cards with their small drawings; theme select to the footer; share cards regenerated. Run the design check skill at 390 and 1440 in both themes against the local preview and keep the after sheets beside the before set; LCP under 2.5 s and CLS under 0.1 in the lab run; npm run test:csp with production headers; BUILD_OG=1 for the final build. PR titled "The face: hero, bill card, task cards and kit tokens (A5)" with before and after contact sheets. Do not merge.
@@ -71,7 +71,13 @@ Build A5 from docs/A5-FACE-BRIEF.md in ~/wt/uct-face, branch feat/face-and-game,
 ### Opus: A6 build (after A5 merges)
 
 ```text
-Build A6 from docs/A6-GAME-BRIEF.md in ~/wt/uct-face on a new branch feat/game-as-game from origin/main. Keep src/lib/budget-game.ts scoring and data untouched; change src/scripts/budget-game.ts and src/components/BudgetGame.astro only, plus the score card renderer for the share image. Waffle split rounds with range inputs and the stepper kept for keyboards; two waffle reveal with a zeroBar gap per service; funding round reveal as a ranked bar; reserves as one card; step rail; score card summary rendered server side for the score link; no JavaScript state unchanged; the check button disabled until 100p is placed. Test on a 375 wide viewport end to end with no horizontal scroll; all 287 game pages build; tests/budget-game.test.ts unchanged and passing; csp suite passing. PR titled "The budget game as a game (A6)". Do not merge.
+Build A6 from docs/A6-GAME-BRIEF.md in ~/wt/uct-face on a new branch feat/game-as-game from origin/main. The brief is binding, including its file list (section 2): src/lib/budget-game.ts gains only the squaresFor import, and no rule or data changes. Waffle split rounds with range inputs and the stepper kept for keyboards; two waffle reveal with a zeroBar gap per service; funding round reveal as a ranked bar; reserves as one card; step rail; the score share image as section 6 of the brief sets out (fragment scores never reach a server, so no server render per score); if kit 0.3.0 is not tagged, the section 11 fallback, said in the PR; no JavaScript state unchanged; the check button disabled until 100p is placed. Test on a 375 wide viewport end to end with no horizontal scroll; all 287 game pages build; tests/budget-game.test.ts unchanged and passing; csp suite passing. PR titled "The budget game as a game (A6)". Do not merge.
+```
+
+### Opus: kit 0.3.0 (after kit PR 3 merges; alongside A5)
+
+```text
+In the estate-kit repo (~/wt/kit-uct), fetch, cut feat/kit-0.3.0 from origin/main after PR 3 merged. Build what ~/wt/uct-face/docs/A5-FACE-BRIEF.md section 6.4 and ~/wt/uct-face/docs/A6-GAME-BRIEF.md section 4 call kit 0.3.0, one commit each: positionStrip moved from ~/ukdemographics/src/components/BenchmarkStrip.astro with value, min, median, p90 and max within class and the basis and source, throwing on an out of range value instead of clamping; ChartActions from ukdemographics with the three changes A5 section 6.2 lists; the gates in 6.3; a thumb template (160 by 64, no text, aria-hidden); a diverging zeroBar; a grid only waffle option; subpath exports charts/waffle, charts/zeroBar and charts/statTile free of jsdom and Plot. Tests for each, including the refusal cases. Bump to 0.3.0, update the README and changelog, open the PR. Do not merge, tag or publish.
 ```
 
 ### Opus: A3 brief revision (after A5 merges)

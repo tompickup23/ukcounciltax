@@ -12,11 +12,12 @@ const urls = (xml: string) => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(matc
 const sourceUrls = urls(snapshot("ukcounciltax"));
 const targetUrls = urls(snapshot("ukcouncils"));
 const targets = new Map(targetUrls.map(url => [new URL(url).pathname, url]));
+const brandPaths = new Set(["/", "/about/", "/contact/", "/corrections/", "/privacy/", "/methodology/"]);
 const expected = Object.fromEntries(sourceUrls.flatMap(url => {
   const target = targets.get(new URL(url).pathname);
-  return target ? [[url, target]] : [];
+  return target && !brandPaths.has(new URL(url).pathname) ? [[url, target]] : [];
 }));
-const uniqueUrls = sourceUrls.filter(url => !targets.has(new URL(url).pathname));
+const uniqueUrls = sourceUrls.filter(url => (!targets.has(new URL(url).pathname) || brandPaths.has(new URL(url).pathname)));
 
 describe("the reviewed canonical map", () => {
   it("records the fetch date and hashes of both live sitemap snapshots", () => {
@@ -34,16 +35,16 @@ describe("the reviewed canonical map", () => {
     expect(new Set(targetUrls).size).toBe(targetUrls.length);
   });
 
-  it("maps exactly the 325 shared routes to destinations in the fetched target sitemap", () => {
-    expect(Object.keys(expected)).toHaveLength(325);
+  it("maps exactly the 319 shared routes to destinations in the fetched target sitemap", () => {
+    expect(Object.keys(expected)).toHaveLength(319);
     expect(data.mappings).toEqual(expected);
     for (const [source, target] of Object.entries(expected)) {
       expect(canonicalUrl(new URL(source).pathname)).toBe(target);
     }
   });
 
-  it("keeps all 63 unique pages self canonical", () => {
-    expect(uniqueUrls).toHaveLength(63);
+  it("keeps all 69 unique pages self canonical", () => {
+    expect(uniqueUrls).toHaveLength(69);
     expect(data.selfCanonicalUrls).toEqual([...uniqueUrls].sort());
     for (const url of uniqueUrls) expect(canonicalUrl(new URL(url).pathname)).toBe(url);
   });
@@ -54,7 +55,7 @@ describe("the reviewed canonical map", () => {
     const addedUrls = ["/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/'))].map(absoluteUrl);
     expect(sourceUrls.filter(url => !builtUrls.includes(url))).toEqual([retiredUrl]);
     expect(builtUrls.filter(url => !sourceUrls.includes(url)).sort()).toEqual(addedUrls.sort());
-    expect(builtUrls.filter(url => data.mappings[url])).toHaveLength(324);
+    expect(builtUrls.filter(url => data.mappings[url])).toHaveLength(318);
     for (const url of addedUrls) expect(canonicalUrl(new URL(url).pathname)).toBe(url);
     const redirects = readFileSync(join(process.cwd(), "public", "_redirects"), "utf8");
     expect(redirects).toMatch(/^\/council-tax\/rises-2026-27\/ \/increases\/#2026-27 301$/m);

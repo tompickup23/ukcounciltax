@@ -1,0 +1,57 @@
+---
+/**
+ * A task card's small drawing: decoration under a link, so it is aria-hidden and
+ * prints no text or number. Drawn to scale from zero with the site's figure records,
+ * in the kit's tokens. These follow the A5 mockup (docs/design/build-mockups.mjs) until
+ * the kit's thumb template lands in 0.3.0 (A5 brief, section 6.4).
+ */
+import { BURNLEY_PARTS, siteFigures } from "../lib/figures";
+
+interface Props {
+  kind: "stack" | "line" | "bands" | "strip";
+}
+
+const { kind } = Astro.props;
+const set = siteFigures();
+const W = 160;
+const H = 64;
+const LEFT = 4;
+const SPAN = W - 2 * LEFT;
+const BASE = 60;
+const f = (v: number) => v.toFixed(2);
+
+let body = "";
+if (kind === "stack") {
+  const total = set.value("burnley.bandd.total").value;
+  let x = LEFT;
+  body = BURNLEY_PARTS.map((k, i) => {
+    const w = (set.value(`burnley.bandd.${k}`).value / total) * SPAN;
+    const r = `<rect x="${f(x)}" y="22" width="${f(Math.max(0, w - 2))}" height="20" style="fill:var(--series-${i + 1})"/>`;
+    x += w;
+    return r;
+  }).join("");
+} else if (kind === "line") {
+  const points = set.series("england.area_bandd.history").points;
+  const max = Math.max(...points.map((p) => p.value));
+  const xy = points.map((p, i) => `${f(LEFT + (i / (points.length - 1)) * SPAN)},${f(BASE - (p.value / max) * 54)}`);
+  body = `<line x1="${LEFT}" y1="${BASE}" x2="${W - LEFT}" y2="${BASE}" stroke-width="1" style="stroke:var(--border-strong)"/><polyline points="${xy.join(" ")}" fill="none" stroke-width="3" stroke-linejoin="round" style="stroke:var(--accent)"/>`;
+} else if (kind === "bands") {
+  const points = set.series("burnley.bands.unparished").points;
+  const max = Math.max(...points.map((p) => p.value));
+  const step = SPAN / points.length;
+  body = points
+    .map((p, i) => {
+      const h = (p.value / max) * 56;
+      return `<rect x="${f(LEFT + i * step + 2)}" y="${f(BASE - h)}" width="${f(step - 4)}" height="${f(h)}" rx="2" style="fill:var(${p.label === "D" ? "--accent" : "--series-neutral-soft"})"/>`;
+    })
+    .join("");
+} else {
+  const place = set.value("burnley.area_bandd.current").value;
+  const england = set.value("england.area_bandd.current").value;
+  // A track from zero to a little past the larger value, so both ticks sit inside it.
+  const end = Math.max(place, england) * 1.15;
+  const sx = (v: number) => LEFT + (v / end) * SPAN;
+  body = `<rect x="${LEFT}" y="30" width="${SPAN}" height="4" rx="2" style="fill:var(--border-strong)"/><rect x="${f(sx(england) - 1.5)}" y="16" width="3" height="32" style="fill:var(--series-neutral)"/><rect x="${f(sx(place) - 2)}" y="12" width="4" height="40" style="fill:var(--accent)"/>`;
+}
+---
+<svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${W} ${H}`} class="task-thumb" aria-hidden="true" focusable="false" data-thumb={kind} set:html={body} />

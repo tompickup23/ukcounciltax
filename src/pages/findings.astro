@@ -33,7 +33,7 @@ const basisSource = history.basisCheck ? loadYear(history.basisCheck.year as Yea
 const basisNote = basisSource?.bandTableNotes.find((note) => /parish precepts/i.test(note.text)) ?? null;
 ---
 <BaseLayout
-  title="Findings"
+  title={`Council tax findings: parish precepts and Band D since ${yearLabel(history.firstYear)}`}
   description={`Dated data notes from the official tables: parish and town precepts ${prev} to ${cur}, and whole area Band D since ${first}. Counts with their sources.`}
   path="/findings/"
 >

@@ -63,6 +63,12 @@ for (const path of files(DIST)) {
   if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
 
   const title = /<title>([^<]*)<\/title>/.exec(text)?.[1];
+  const queryTitles = {
+    '/findings/index.html': 'Council tax findings: parish precepts and Band D since 1993/94',
+    '/changes/index.html': 'What changed: council tax data updates',
+    '/tools/future-cost/index.html': 'Council tax future cost calculator',
+  };
+  if (queryTitles[rel(path)] && title !== `${queryTitles[rel(path)]} | ${SITE_NAME}`) failures.push(`incorrect query title on ${rel(path)}`);
   if (!title) failures.push(`no title on ${rel(path)}`);
   else {
     if (title !== SITE_NAME && !title.endsWith(` | ${SITE_NAME}`)) {

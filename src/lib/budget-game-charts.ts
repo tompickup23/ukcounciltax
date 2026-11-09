@@ -1,11 +1,19 @@
 /** Drawings of the unchanged adapter output. Player answers never enter this set. */
 import {defineFigures} from '../vendor/estate-kit/dist/src/figures/figures.js';
+import {zeroBar} from '../vendor/estate-kit/dist/src/charts/zeroBar.js';
 import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import type {Theme} from '../vendor/estate-kit/dist/generated/tokens.js';
 import {budgetYear} from './budget';
 import type {GameRound} from './budget-game';
 
 export function gameChart(round: GameRound, id: string, theme?: Theme) {
+  if (round.kind === 'funding') {
+    const key = `${id}-amounts`;
+    const items = [...round.items].sort((a,b) => Math.abs(b.value)-Math.abs(a.value));
+    const set = defineFigures({[key]: {kind:'series',label:'Funding magnitudes, with add or deduct direction',unit:'gbp',dp:0,axis:'category',points:items.map(item=>({label:`${item.label} (${item.value<0?'deduct':item.value>0?'add':'no contribution'})`,value:Math.abs(item.value)*1000})),source:{...round.source,edition:budgetYear}}});
+    const out = zeroBar({set,figure:key,orientation:'horizontal',title:'Funding by magnitude',site:'ukcounciltax',mode:theme?{kind:'hex',theme,site:'ukcounciltax'}:{kind:'css'}});
+    return {out, keys:[key], captionHtml:set.captionHtml(key)};
+  }
   if (round.kind !== 'split' && round.kind !== 'bill') throw new Error('Only splits have drawings at this stage');
   const keys = round.items.map((_, index) => `${id}-part-${index}`);
   const records = Object.fromEntries(round.items.map((item, index) => [keys[index], {

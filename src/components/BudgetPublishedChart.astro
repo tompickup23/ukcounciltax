@@ -6,7 +6,23 @@ import type {GameRound} from '../lib/budget-game';
 interface Props {round: GameRound; index: number; slug: string; location: string}
 const {round, index, slug, location} = Astro.props;
 const id = `${location}-round-${index}`;
-const {out, keys, captionHtml} = gameChart(round, `budget-${slug}-${index}`);
+const {out: original, keys, captionHtml} = gameChart(round, `budget-${slug}-${index}`);
+const out = {...original};
+if (round.kind === 'funding' && location === 'reveal') {
+  let count = 0;
+  out.svg = out.svg.replace(/<g class="ek-bar">([\s\S]*?)<\/g>/g, (_, body: string) => {
+    const i = count++;
+    const y = Number(body.match(/<text[^>]* y="([^"]+)"/)?.[1] ?? 0);
+    return `<g class="ek-bar" transform="translate(0 ${i*28})">${body}<text data-player-position="${i}" x="4" y="${y+28}" font-size="19" style="fill:var(--text-muted);font-family:var(--font-sans)"></text></g>`;
+  });
+  const shift = count*28;
+  out.svg = out.svg.replace(/(<line[^>]*data-ek-baseline[^>]*\/>)([\s\S]*)(<\/svg>)/, (_, line: string, tail: string, close: string) => {
+    const extended = line.replace(/y2="([^"]+)"/, (_, y: string) => `y2="${Number(y)+shift}"`);
+    return `${extended}<g transform="translate(0 ${shift})">${tail}</g>${close}`;
+  });
+  out.height += shift;
+  out.svg = out.svg.replace(/viewBox="[^"]+"/, `viewBox="0 0 ${out.width} ${out.height}"`).replace(/height="[^"]+"/, `height="${out.height}"`);
+}
 ---
 <div id={id} data-fact data-published-round={index} data-round-kind={round.kind}>
   <ChartFigure out={out} keys={keys} id={`${id}-table`} />

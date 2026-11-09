@@ -7,11 +7,11 @@ import {budgetYear} from './budget';
 import type {GameRound} from './budget-game';
 
 export function gameChart(round: GameRound, id: string, theme?: Theme) {
-  if (round.kind === 'funding') {
+  if (round.kind === 'funding' || round.kind === 'reserves') {
     const key = `${id}-amounts`;
-    const items = [...round.items].sort((a,b) => Math.abs(b.value)-Math.abs(a.value));
-    const set = defineFigures({[key]: {kind:'series',label:'Funding magnitudes, with add or deduct direction',unit:'gbp',dp:0,axis:'category',points:items.map(item=>({label:`${item.label} (${item.value<0?'deduct':item.value>0?'add':'no contribution'})`,value:Math.abs(item.value)*1000})),source:{...round.source,edition:budgetYear}}});
-    const out = zeroBar({set,figure:key,orientation:'horizontal',title:'Funding by magnitude',site:'ukcounciltax',mode:theme?{kind:'hex',theme,site:'ukcounciltax'}:{kind:'css'}});
+    const items = round.kind === 'funding' ? [...round.items].sort((a,b) => Math.abs(b.value)-Math.abs(a.value)) : round.items;
+    const set = defineFigures({[key]: {kind:'series',label:round.kind === 'funding' ? 'Funding magnitudes, with add or deduct direction' : 'Non-ringfenced reserve balances',unit:'gbp',dp:0,axis:'category',points:items.map(item=>({label:round.kind === 'funding' ? `${item.label} (${item.value<0?'deduct':item.value>0?'add':'no contribution'})` : item.label,value:(round.kind === 'funding' ? Math.abs(item.value) : item.value)*1000})),source:{...round.source,edition:budgetYear}}});
+    const out = zeroBar({set,figure:key,orientation:'horizontal',diverging:round.kind === 'reserves' && items.some(item=>item.value<0),title:round.kind === 'funding' ? 'Funding by magnitude' : 'Reserves at the start and end of the year',site:'ukcounciltax',mode:theme?{kind:'hex',theme,site:'ukcounciltax'}:{kind:'css'}});
     return {out, keys:[key], captionHtml:set.captionHtml(key)};
   }
   if (round.kind !== 'split' && round.kind !== 'bill') throw new Error('Only splits have drawings at this stage');

@@ -96,7 +96,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const checkTotal = element('p', '0p of 100p');
     const reason = element('p', '', 'game-check-reason');
     const order = round.items.map((_, i) => i);
-    let direction: HTMLSelectElement, size: HTMLSelectElement;
+    let directionValue = '';
+    let size: HTMLSelectElement;
     if (round.kind === 'split' || round.kind === 'bill') {
       const total = element('p', '0p of 100p', 'game-placed');
       total.setAttribute('aria-live', 'polite');
@@ -178,13 +179,18 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
       redraw(); form.append(rows);
     } else {
       const group = element('fieldset'); group.append(element('legend', 'Your reserve answers'));
-      direction = element('select'); direction.id = 'game-direction'; direction.required = true;
-      const dLabel = element('label', 'Direction'); dLabel.htmlFor = direction.id;
-      for (const [value, label] of [['', 'Choose a direction'], ...Object.entries(directionLabel)]) {const option = element('option', label); option.value = value; direction.append(option);}
+      const directionGroup = element('fieldset');directionGroup.append(element('legend','Direction'));
+      const choices = element('div', '', 'game-direction');
+      for (const [value, label] of Object.entries(directionLabel)) {
+        const control=element('input');control.type='radio';control.name='game-direction';control.value=value;control.required=true;
+        control.addEventListener('change',()=>{directionValue=value;});
+        const choice=element('label',label);choice.prepend(control);choices.append(choice);
+      }
+      directionGroup.append(choices);
       size = element('select'); size.id = 'game-size'; size.required = true;
       const sLabel = element('label', 'Size of the change'); sLabel.htmlFor = size.id;
       ['', ...SIZE_BANDS].forEach((label, i) => {const option = element('option', label || 'Choose a size band'); option.value = i === 0 ? '' : String(i - 1); size.append(option);});
-      group.append(dLabel, direction, sLabel, size); form.append(group);
+      group.append(directionGroup, sLabel, size); form.append(group);
     }
     const actions = element('div', '', 'game-actions');
     if (round.kind === 'split' || round.kind === 'bill') {
@@ -223,12 +229,12 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         } else {
           const change = round.items[1].value - round.items[0].value;
           const d = reserveDirection(change), b = reserveBand(change);
-          if (!skipped && (!direction.value || !size.value)) throw new Error('Choose a direction and a size band.');
-          if (!skipped) score = (direction.value === d ? 50 : 0) + (Number(size.value) === b ? 50 : 0);
+          if (!skipped && (!directionValue || !size.value)) throw new Error('Choose a direction and a size band.');
+          if (!skipped) score = (directionValue === d ? 50 : 0) + (Number(size.value) === b ? 50 : 0);
           for (const item of round.items) answerList.append(element('li', `${item.label}: ${item.detail}`));
           answerList.append(element('li', `Calculated change, end minus start: ${pounds(change)}. ${directionLabel[d]}; ${SIZE_BANDS[b]}.`));
           if (!skipped) {
-            details.push({label: `${round.title}: direction`, detail: `Your answer: ${directionLabel[direction.value]}. Published balances imply: ${directionLabel[d]}. Change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016.`, distance: direction.value === d ? 0 : 100, source: round.source});
+            details.push({label: `${round.title}: direction`, detail: `Your answer: ${directionLabel[directionValue]}. Published balances imply: ${directionLabel[d]}. Change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016.`, distance: directionValue === d ? 0 : 100, source: round.source});
             details.push({label: `${round.title}: size`, detail: `Your answer: ${SIZE_BANDS[Number(size.value)]}. Calculated change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016. Answer band: ${SIZE_BANDS[b]}.`, distance: Number(size.value) === b ? 0 : 100, source: round.source});
           }
         }
@@ -275,6 +281,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         drawing.querySelectorAll('[data-player-position]').forEach((slot,i)=>{slot.textContent=skipped?'Round skipped':`You placed it ${ordinal(order.indexOf(sorted[i])+1)}`;});
         stage.append(drawing);
       }
+      if (round.kind === 'reserves') stage.append(root.querySelector<HTMLTemplateElement>(`[data-game-published="${index}"]`)!.content.cloneNode(true));
       answer.append(answerList); sourceNotes(round, answer); stage.append(answer);
       document.dispatchEvent(new Event('budget:reveal'));
       stage.append(button(index === data.rounds.length - 1 ? 'Show summary' : 'Next round', () => {index++; index === data.rounds.length ? summary() : showRound();}, false));

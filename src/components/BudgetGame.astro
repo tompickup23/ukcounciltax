@@ -27,7 +27,7 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   <div data-game-stage></div>
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg} /></template>)}
-  {data.rounds.map((round, index) => round.kind !== 'reserves' && <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
+  {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
   <script type="application/json" data-budget-game-data set:html={jsonLd(data)} />
 </section>}
 <script>
@@ -80,6 +80,10 @@ const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
   @media(min-width:800px){.game-reveal-waffles{grid-template-columns:1fr 1fr}}
   .game-result{background:var(--accent-wash);padding:1rem;border-radius:8px;margin-block:1rem}
   .game-result li{margin-block:.75rem}
+  .game-direction{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin-block:var(--space-sm)}
+  .game-direction label{display:flex;gap:.25rem;align-items:center;min-height:44px;padding:.5rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);font-weight:600;cursor:pointer}
+  .game-direction label:has(:checked){background:var(--accent-wash);border-color:var(--accent)}
+  .game-direction input{accent-color:var(--accent);flex-shrink:0}
   .budget-game fieldset{min-width:0;margin-block:1rem;border:1px solid var(--border);padding:1rem}
   .budget-game select{max-width:100%;width:100%;min-height:44px}
   .budget-game legend{font-weight:600}

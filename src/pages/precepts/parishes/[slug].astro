@@ -17,7 +17,7 @@ const name = tax.name, year = CURRENT_YEAR, earlier = PREVIOUS_YEAR;
 const parishes = [...parishesFor(gss)].sort((a,b) => a.name.localeCompare(b.name,'en-GB'));
 const summary = parishSummary(parishes);
 const title = `Parish precepts in ${name} ${yearLabel(year)}`;
-const description = `${summary.nonZero} local precepts in ${name}, ${yearLabel(year)}: Band D ${summary.min === summary.max ? parishAmountWords(summary.min!) : `${parishAmountWords(summary.min!)} to ${parishAmountWords(summary.max!)}`}. Changes on ${yearLabel(earlier)} and council own share. MHCLG parish data.`;
+const description = `${summary.nonZero} local ${summary.nonZero === 1 ? 'precept' : 'precepts'} in ${name}, ${yearLabel(year)}: Band D ${summary.min === summary.max ? parishAmountWords(summary.min!) : `${parishAmountWords(summary.min!)} to ${parishAmountWords(summary.max!)}`}. Changes on ${yearLabel(earlier)} and council own share. MHCLG parish data.`;
 const notes = [...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
 const money = (n:number|null) => n === null ? 'Unavailable' : moneyPence(n);
 const parishMoney = (y:ParishYear) => y.status === 'not-existing' ? 'Did not exist' : money(y.bandDPence);

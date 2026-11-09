@@ -20,7 +20,7 @@ function joinedNames(rows: readonly Parish[], value: number): string {
 }
 export function parishRange(name: string, rows: readonly Parish[]): string {
   const summary = parishSummary(rows), year = yearLabel(CURRENT_YEAR);
-  const sentences = [`The ${year} return lists ${summary.records} local precepting authorities in ${name}.`];
+  const sentences = [`The ${year} return lists ${summary.records} local precepting ${summary.records === 1 ? 'authority' : 'authorities'} in ${name}.`];
   const {min,max,nonZero,zero,ceased} = summary;
   if (min !== null && max !== null) {
     const minNames = `${joinedNames(rows,min)}${min < 0 ? ', a negative precept as published' : ''}`;

@@ -28,6 +28,7 @@ it('preserves zero and negative figures and gives bounded tied names',()=>{
  const base=parishesFor('E07000117')[0];
  const fixture=(name:string,value:number):Parish=>({...structuredClone(base),name,years:{...base.years,[CURRENT_YEAR]:{...base.years[CURRENT_YEAR],bandDPence:value}}});
  expect(parishRange('Example',[fixture('Only',100)])).toContain('One set a Band D precept of £1.00 (Only).');
+ expect(parishRange('Example',[fixture('Only',100)])).toContain(`lists 1 local precepting authority in Example.`);
  expect(parishRange('Example',['A','B','C','D'].map(n=>fixture(n,100)))).toContain('(A and 3 others)');
  expect(parishRange('Example',[fixture('Zero',0)])).toContain('1 set a Band D precept of £0.00.');
  expect(parishRange('East Lindsey',parishesFor('E07000137'))).toContain('minus £2.64 (Beesby with Saleby, a negative precept as published)');

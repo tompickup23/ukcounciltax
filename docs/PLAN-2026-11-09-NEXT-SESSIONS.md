@@ -125,3 +125,11 @@ House rules: British English; no em dash, en dash or spaced hyphen anywhere you 
 ### Codex, lane A, round two: A3 then A4
 
 Paste after the Opus briefs are committed and A2 has merged: the same shape as the A1 then A2 prompt in section 7, with the worktrees `~/wt/uct-profile` then `~/wt/uct-rankings` and the briefs `docs/A3-PROFILE-BRIEF.md` then `docs/A4-RANKINGS-PARISHES-BRIEF.md` (notes first where they exist), one PR each, full gate ending with `BUILD_OG=1 npm run build`, no merge.
+
+## 9. State at 02:45 on 10 November 2026
+
+- **B1 is done**: ukcouncils PR 33 (`feat/links-held-fields`, nine commits, full gate green locally, hosted CI running at the time of writing). Tom merges; merging deploys.
+- **B2 prep is done**: `~/wt/ukc-front-door` commit `9649396`, source notes (2,800 words) and brief (4,242 words). Population, collection rate, EFS, verified next election year (174 pages) and the council's GOV.UK service links are in; seats by party, the homepage, the last election date, the 46 cycle derived years and the Surrey abolition line are held with reasons. Four decisions for Tom are listed in the brief. It starts after PR 33 merges.
+- **Lane A has not started**: ukcounciltax PRs 26, 27 and 28 are still open. Nothing on UK Council Tax moves until 26 merges; the game is not live.
+- **Next prompts**: Codex lane B, the B2 build (section 8); Codex lane A, A1 then A2 (section 7) once 26 has merged; Opus, the A3 and A4 prep with the lane A reviews (section 8). The B2 and lane A Codex sessions touch different repositories and may run together.
+- **Lesson recorded**: the Astro 7 preview is a daemon. When Playwright's web server "exits early", a preview for the same worktree is already listening on another port (`astro preview status`); point the suite at it with `E2E_PORT` or stop it with `astro preview stop`. The cached `npx --yes wrangler` can be older than the repo's own and refuse today's compatibility date; the CSP suite's own command is the one that works.

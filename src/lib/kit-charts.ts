@@ -6,6 +6,7 @@
  */
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
 import { billAnatomy, tokens, type BillAnatomyOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
 import { BURNLEY_PARTS, siteFigures } from "./figures";
@@ -30,6 +31,28 @@ export type KitChartName = keyof typeof KIT_CHARTS;
 export function chartKeys(name: KitChartName): string[] {
   const o = KIT_CHARTS[name].options();
   return [...o.parts, o.total];
+}
+
+/** The public path of a chart's 1200 by 630 share card. */
+export function chartCardPath(name: KitChartName): string {
+  return `/og/charts/${name}-card.png`;
+}
+
+/** The share card's alt text: the chart's own story bearing alt, which names no person. */
+export function chartAlt(name: KitChartName): string {
+  return billAnatomy(KIT_CHARTS[name].options()).alt;
+}
+
+/**
+ * One chart as the kit's 1200 by 630 card (post card grammar, gated by the kit's
+ * cardErrors before it returns). The card module rasterises with fonts it finds beside
+ * its own file, so it is loaded from the vendored copy on disk rather than bundled.
+ */
+export async function chartCard(name: KitChartName): Promise<Buffer> {
+  const at = (rel: string) => pathToFileURL(join(process.cwd(), "src", "vendor", "estate-kit", "dist", "src", rel)).href;
+  const { card } = (await import(/* @vite-ignore */ at("output/card.js"))) as typeof import("../vendor/estate-kit/dist/src/output/card.js");
+  const kit = (await import(/* @vite-ignore */ at("index.js"))) as typeof import("../vendor/estate-kit/dist/src/index.js");
+  return card(kit.billAnatomy, { ...KIT_CHARTS[name].options(), site: "ukcounciltax" }, "og").png;
 }
 
 /** The public path of a chart's PNG in one theme. */

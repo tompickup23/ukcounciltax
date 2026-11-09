@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BillAnatomy from "../vendor/estate-kit/src/components/BillAnatomy.astro";
 import TaskThumb from "../components/TaskThumb.astro";
 import ChartActions from "../components/kit/ChartActions.astro";
-import { KIT_CHARTS } from "../lib/kit-charts";
+import { KIT_CHARTS, chartAlt, chartCardPath } from "../lib/kit-charts";
 import { siteFigures } from "../lib/figures";
 import CouncilFinder from "../components/CouncilFinder.astro";
 import BandDLine from "../components/BandDLine.astro";
@@ -33,7 +33,7 @@ function drawnFrom(keys: string[], suffix = ""): string {
   return `Drawn from ${[...docs].map(([doc, where]) => [doc, ...where].join(", ")).join("; ")}${suffix}.`;
 }
 ---
-<BaseLayout path="/" title={`Council tax ${year}: bands, bills and local precepts`}>
+<BaseLayout path="/" title={`Council tax ${year}: bands, bills and local precepts`} ogImage={chartCardPath("home-bill")} ogImageAlt={chartAlt("home-bill")}>
   <section class="home-hero" aria-labelledby="hero-heading">
     <div class="hero-copy">
       <p class="eyebrow">Independent data · Official sources · {year}</p>

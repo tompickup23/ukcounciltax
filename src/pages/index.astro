@@ -2,7 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import BillAnatomy from "../vendor/estate-kit/src/components/BillAnatomy.astro";
 import TaskThumb from "../components/TaskThumb.astro";
-import { BURNLEY_PARTS, siteFigures } from "../lib/figures";
+import ChartActions from "../components/kit/ChartActions.astro";
+import { KIT_CHARTS } from "../lib/kit-charts";
+import { siteFigures } from "../lib/figures";
 import CouncilFinder from "../components/CouncilFinder.astro";
 import BandDLine from "../components/BandDLine.astro";
 import SourceLine from "../components/SourceLine.astro";
@@ -18,7 +20,6 @@ const year = yearLabel(CURRENT_YEAR);
 const previous = yearLabel(PREVIOUS_YEAR);
 const count = councilPages().length;
 const figures = siteFigures();
-const billKeys = BURNLEY_PARTS.map((k) => `burnley.bandd.${k}`);
 const historyFrom = figures.series("england.area_bandd.history").points[0].label;
 /** "Drawn from" and each figure's publisher, title and table or page; figures sharing a document collapse into one. */
 function drawnFrom(keys: string[], suffix = ""): string {
@@ -49,9 +50,9 @@ function drawnFrom(keys: string[], suffix = ""): string {
     <aside class="bill-card" aria-labelledby="bill-heading">
       <div class="bill-card-head"><span class="eyebrow">Anatomy of a bill</span><span class="small muted">Published example</span></div>
       <h2 id="bill-heading">Burnley, unparished area, Band D</h2>
-      <div data-fact class="bill-fact">
-        <BillAnatomy set={figures} parts={billKeys} total="burnley.bandd.total" title="Four bodies charge a Burnley Band D bill" class="bill-figure" />
-        <p class="source-line" set:html={figures.captionHtml([...billKeys, "burnley.bandd.total"])} />
+      <div data-fact class="bill-fact" id="bill-chart">
+        <BillAnatomy {...KIT_CHARTS["home-bill"].options()} class="bill-figure" />
+        <ChartActions chart="home-bill" target="bill-chart" />
       </div>
       <p class="caveat">A parish or town council precept adds to this Band D total where one applies. Before discounts.</p>
       <a class="bill-link" href="/precepts/">See the local breakdown and model each part</a>

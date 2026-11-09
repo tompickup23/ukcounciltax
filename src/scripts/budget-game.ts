@@ -127,6 +127,9 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         status.textContent='Score image saved. Your answers stay in this browser.';
       } catch {status.textContent='The browser could not save the image. Your score link is still available below.';}
     }), button('Play again', start));
+    const another = element('a', 'Play another council', 'button secondary');
+    another.href = '/tools/budget/';
+    actions.append(another);
     scenarioEntry.hidden = false;actions.append(scenarioEntry);
     stage.append(actions, link, status);
   }

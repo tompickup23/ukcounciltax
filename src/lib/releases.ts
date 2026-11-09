@@ -484,3 +484,42 @@ export function expectedDatasets(): string[] {
     "findings-history",
   ];
 }
+
+/** Original page release dates recorded in docs/RELEASE.md; never the build clock. */
+export const STATIC_PAGE_DATES: Record<string, string> = {
+  '/': '2026-10-05',
+  '/your-area/': '2026-10-05',
+  '/about/': '2026-10-05',
+  '/methodology/': '2026-10-05',
+  '/sources/': '2026-10-05',
+  '/privacy/': '2026-10-05',
+  '/compare/': '2026-10-05',
+  '/contact/': '2026-10-05',
+  '/corrections/': '2026-10-05',
+  '/tools/': '2026-10-05',
+  '/tools/future-cost/': '2026-10-05',
+  '/help/': '2026-10-05',
+  '/coverage/': '2026-10-05',
+  '/council-tax-2027-28/': '2026-11-05',
+  '/findings/': FINDINGS_DATED,
+  '/changes/': FINDINGS_DATED,
+};
+
+/** The held edition or recorded page release for each route, not a fresh retrieval claim. */
+export function sitemapLastmod(path: string): string {
+  const nationalSources = readJson<Record<string, {retrieved: string}>>('data/national/sources.json');
+  if (path.startsWith('/tools/budget/')) return nationalSources.raPart1.retrieved;
+  if (path === '/precepts/') return nationalSources.components.retrieved;
+  if (path === '/data/') return Object.values(nationalSources).map(source => source.retrieved).sort().at(-1)!;
+  if (/^\/(scotland|wales)\//.test(path)) {
+    // The manifest identifies the files but has no dates; the joined extract records retrieval.
+    return readJson<DevolvedFile>('data/devolved/council-tax.json').retrieved;
+  }
+  if (path === '/increases/' || path.startsWith('/councils/') || path.startsWith('/council-tax/')) {
+    const edition = loadYear(heldYears().at(-1)!);
+    return edition.source.published || edition.generated;
+  }
+  const date = STATIC_PAGE_DATES[path];
+  if (!date) throw new Error(`No recorded sitemap date for ${path}`);
+  return date;
+}

@@ -211,6 +211,13 @@ if (existsSync(downloads)) for (const path of files(downloads)) {
 const sitemap = readFileSync(join(DIST, "sitemap.xml"), "utf-8");
 const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
+const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
+const today = new Date().toISOString().slice(0, 10);
+if (sitemapEntries.length !== 687 || locs.length !== 687) failures.push(`expected all 687 sitemap entries, found ${sitemapEntries.length}`);
+for (const entry of sitemapEntries) {
+  const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
+  if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);
+}
 for (const loc of locs) {
   if (!loc.startsWith(`${SITE_URL}/`)) {
     failures.push(`sitemap URL on another host: ${loc}`);

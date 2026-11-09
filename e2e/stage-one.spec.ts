@@ -87,7 +87,7 @@ test('regional table keeps a selected band, filters, and only sorts one class', 
   await expect(page.locator('details table thead th')).toHaveCount(9);
 });
 
-test('metadata separates publisher from the council and omits invented sitemap dates', async ({page,request}) => {
+test('metadata separates publisher from the council and retains dated sitemap entries', async ({page,request}) => {
   await page.goto('/councils/burnley/');
   const nodes = await page.locator('script[type="application/ld+json"]').evaluateAll(elements => elements.map(element => JSON.parse(element.textContent!)));
   expect(nodes.find(node => node['@type'] === 'WebPage').about.identifier).toBe('E07000117');
@@ -95,7 +95,9 @@ test('metadata separates publisher from the council and omits invented sitemap d
   expect(nodes.some(node => node['@type'] === 'GovernmentOrganization' && node.url?.includes('ukcouncils'))).toBe(false);
   await expect(page.locator('a[href*="ukfoodhygiene"]')).toHaveCount(0);
   const sitemap = await (await request.get('/sitemap.xml')).text();
-  expect(sitemap).not.toContain('<lastmod>');
+  const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)];
+  expect(entries).toHaveLength(687);
+  for (const entry of entries) expect(entry[1]).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   expect(sitemap).toContain('/compare/</loc>');
   expect(sitemap).not.toContain('?a=');
 });

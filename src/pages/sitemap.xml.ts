@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { sitemapLastmod } from "../lib/releases";
 import { programmaticPaths } from "../lib/paths";
 import { STATIC_PATHS, absoluteUrl } from "../lib/site";
 
@@ -8,10 +9,9 @@ export function sitemapPaths(): string[] {
 }
 
 export const GET: APIRoute = () => {
-  // Source publication dates are not page modification dates. Omit lastmod
-  // until a route-level semantic change history can supply it truthfully.
+  // Use held edition dates and explicitly recorded static page releases.
   const urls = sitemapPaths()
-    .map((path) => `  <url><loc>${absoluteUrl(path)}</loc></url>`)
+    .map((path) => `  <url><loc>${absoluteUrl(path)}</loc><lastmod>${sitemapLastmod(path)}</lastmod></url>`)
     .join("\n");
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

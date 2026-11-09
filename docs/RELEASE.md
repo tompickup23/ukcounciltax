@@ -223,3 +223,7 @@ Final I124 validation after rebasing onto main `c3fc9d8`, 9 November 2026: 225 u
 ## Brand pages self canonical, 9 November 2026
 
 The homepage, About, Contact, Corrections, Privacy and Methodology are this brand's own pages, not duplicates. They are now self canonical; the budget game launches under this homepage. The reviewed map moves from 325 mappings and 63 self canonical URLs to 319 and 69. The retired rises route remains absent, giving 318 built mapped canonicals. All other reviewed mappings and both fetched sitemap snapshots are preserved.
+
+## Sitemap edition dates, 9 November 2026
+
+Every one of the 687 indexed routes now has a lastmod date. English council, band, regional and increase pages use the current England edition's publication date, falling back to its generated date only if needed. Budget pages use the RA retrieval date; precepts use the component retrieval date; the publications catalogue uses the latest held national retrieval date. Scottish and Welsh pages use the retrieval date recorded in the joined devolved extract: the accompanying source manifest identifies the files and hashes but holds no date. Static pages use explicit original release dates in `STATIC_PAGE_DATES`, with the findings and updates pages using their recorded written date. No build timestamp is used and no new retrieval or recent page change is claimed. The gate requires a valid date no later than the day of validation for every URL.

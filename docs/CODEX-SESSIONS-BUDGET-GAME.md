@@ -41,9 +41,9 @@ C1 stopped three times: once on an error in my phase 0 notes, once on a referenc
 | C1 | phases 1 and 2 done and reviewed (296 pages); resume at phase 3 from `915fbd9`; phase 4 split out to C1b | A | National budget game (I001): game rounds and checks, then PR | none | M |
 | R1 | when C1's PR opens | C | Review C1; fix small issues; write the fix list | C1 | S |
 | C1f | after R1, only if needed | A | Fixes from R1 on the same branch | R1 | S |
-| C1b | after C1 merges | A | The "your version" illustrative scenario (old phase 4), its own PR | C1 merged | S |
+| C1b | after C1 merges; starter prompt below | A | The "your version" illustrative scenario (old phase 4), its own PR | C1 merged | S |
 | C2 | built and reviewed: ukcouncils PR 31, every check green, ready for Tom to merge | B | Exceptional Financial Support by year, a standalone page (I007) | Tom's merge | S |
-| C3 | after C1 merges and ukcouncils PR 30 merges | B | Observed "where the money goes" on ukcouncils council pages | C1 merged | M |
+| C3 | brief ready 9 Nov (`~/wt/ukc-budget`, `deb05ac`); start when C1 is deployed and ukcouncils PRs 30 and 32 have merged | B | Observed budget section on ukcouncils council pages, linking to the game | C1 deployed; PRs 30, 32 merged | M |
 | C4 | brief set for a stacked start on C1's local branch now (`b1ed40c`); builds and commits locally, pushes only after C1 merges | A | Spend per resident by age beside the game (I124) | none to start; C1 merged to open its PR | S |
 | D5 | decided 8 Nov: MHCLG only (option C), no live tracker; see `docs/D5-BUDGET-SEASON-2027.md` | C | Budget season live (I005) and the release day runbook | done | S |
 | C6 | early January 2027 | A | The 2027/28 levels day page and ranking card (I028), and precept day (I048), built behind a gate | C4 merged; prep P6 | M |
@@ -64,6 +64,14 @@ C1f paste prompt:
 
 ```text
 Continue on branch feat/budget-game-i001 in ~/wt/uct-budget-game. Read docs/BUDGET-GAME-FIXES.md and make each numbered fix as its own commit, then rerun every check listed in phase 5 of docs/PLAN-2026-11-08-BUDGET-GAME.md and push. Same rules as before: British English, no em or en dashes or spaced hyphens as dashes, every figure sourced, no estimates, no merge or deploy. Reply with each fix number against its commit and the check results.
+```
+
+### C1b. The illustrative scenario (after C1 merges)
+
+The build is phase 4 of `docs/PLAN-2026-11-08-BUDGET-GAME.md` as written, as its own PR. Paste prompt:
+
+```text
+Build the budget game's "your version" illustrative scenario on UK Council Tax (C1b). Fetch origin and make a worktree from origin/main at ~/wt/uct-budget-scenario on branch feat/budget-scenario. Read ~/.codex/AGENTS.md, ~/.claude/CLAUDE.md, CLAUDE.md, docs/BUDGET-GAME-SOURCE-NOTES.md (binding) and docs/PLAN-2026-11-08-BUDGET-GAME.md, then build its PHASE 4 exactly as written, plus the phase 5 checks that apply (unit tests for the arithmetic, the browser and real-header CSP tests for the panel, a release note). Review decisions 7 to 9 in that plan apply: stop only on primary-source or security failures; cite no source the notes do not name; self-review before the PR. Push and open one PR, "Budget game: illustrative scenario (C1b)". Do not merge or deploy. British English; no em dash, en dash or spaced hyphen as a dash; every figure sourced; never estimate.
 ```
 
 ### C2. Exceptional Financial Support by year on ukcouncils (I007)

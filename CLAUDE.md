@@ -4,7 +4,7 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-Latest: `docs/HANDOFF-2026-11-09-ROUND-FOUR.md` (9 November 2026) holds the open PRs (A4 33, A5 34, C3 on ukcouncils 36, L2 on ukdemographics 155), the two review prompts, the B4 item 1a prompt and what follows. Read it first.
+Latest: `docs/HANDOFF-2026-11-09-ROUND-FIVE.md` (9 November 2026): A4, A5 and A6 live, two Codex builds running (A3; game polish then C1b), the review checklist, and Tom's first task for the next session: explore a real "balance the budget" mode (C2) in depth before anything else. Before that: `docs/HANDOFF-2026-11-09-ROUND-FOUR.md` (9 November 2026) holds the open PRs (A4 33, A5 34, C3 on ukcouncils 36, L2 on ukdemographics 155), the two review prompts, the B4 item 1a prompt and what follows. Read it first.
 
 For the current position, read `docs/HANDOFF-2026-11-10-SESSION.md` and `docs/PLAN-2026-11-10-REMAINING.md` (what remains, the cross estate linking programme and the outline prompts) first, then `docs/PLAN-2026-11-09-NEXT-SESSIONS.md` (sections 1 to 11, with the design programme in section 11) and `docs/ASSESSMENT-2026-11-09-TAX-SITES.md` (both sites, 9 November 2026). Decisions waiting on Tom are in `docs/DECISIONS-WAITING-2026-11-10.md`. PR 15 (cross domain canonicals from this site to ukcouncils.co.uk, 325 URLs including the homepage and brand pages) merged and deployed on 8 November 2026; `docs/HANDOFF-2026-11-08-CANONICALS-REBASE.md` is its record. The budget game programme handover is `docs/HANDOFF-2026-11-09-BUDGET-GAME-PROGRAMME.md` (PR 27).
 

@@ -141,3 +141,44 @@ Paste after the Opus briefs are committed and A2 has merged: the same shape as t
 - **Order**: PR 26, then A2, then A3, then A4. Both briefs start from `origin/main` at `baf0f05` and rebase first.
 - **Lane A reviews not started**: no A1 or A2 PR was open. A1's four local commits were read by hand and need no fix list; the full `/code-review medium` and the brief assertions on built pages run when the PRs open.
 - Nothing pushed, merged or deployed.
+
+## 10. State at 03:20 on 10 November 2026, and round three
+
+**Nothing has merged.** ukcounciltax 26, 27 and 28 and ukcouncils 33 are all open and green. The budget game is not live, the UK Council Tax links on UK Councils are not live, and every Codex build in both lanes is gated on those merges (B2's brief stops itself if B1 has not merged; A1 and A2 need PR 26). Merging deploys and is Tom's. Until it happens, only Opus prep and review can move.
+
+**What the last Opus session produced (all committed locally, none pushed):** `docs/A3-PROFILE-BRIEF.md` in `~/wt/uct-profile` (eight phases: the A to H table, one history, the caveat once, class aware component rows, discounts and how to pay with a dated GOV.UK local links check, contents under the hero, the postcode door first with a BillBar, Scottish and Welsh pages); `docs/A4-RANKINGS-PARISHES-SOURCE-NOTES.md` and `docs/A4-RANKINGS-PARISHES-BRIEF.md` in `~/wt/uct-rankings` (Tables 2, 7, 8a, 8b, 8c and 9 and the parish file, all hashes recorded, eight phases from the ranking library to OG cards). Both are ready for Codex in lane A after A2.
+
+**The queue, in order, once the merges land.** Lane A (ukcounciltax): A1, A2, A3, A4, then C1b. Lane B (ukcouncils): B2, then C3 (its brief is 964 words and 12 commits behind main; the Opus round three refreshes it with the PR 26 review carry overs and B2's shared data files). Opus: reviews as each PR opens, the C3 refresh, the C1b brief, then O3 (marks, kit, cards) as round four.
+
+### Opus (Claude Code), round three
+
+```text
+Read /Users/tompickup/ukcounciltax/docs/PLAN-2026-11-09-NEXT-SESSIONS.md (sections 1, 8, 9 and 10) and docs/ASSESSMENT-2026-11-09-TAX-SITES.md (sections 3 and 11), then CLAUDE.md in both /Users/tompickup/ukcounciltax and /Users/tompickup/ukcouncils. Four jobs.
+
+1. Reviews, as each PR opens: ukcouncils PR 33 is open now (brief docs/B1-QUICK-WINS-BRIEF.md on its branch; items 1 to 3 were built by Codex and 4 to 8 in Claude Code, so review all eight against the brief's assertions); then ukcounciltax A1 (feat/per-resident-i124) and A2 (feat/brand-canonicals-nav), and ukcouncils B2 (feat/front-door-content). For each: /code-review medium, the brief's assertions checked by hand on the built pages, small fixes on the branch, a fix list for anything larger. Do not merge.
+
+2. Refresh C3, the UK Councils budget section brief, in /Users/tompickup/wt/ukc-budget (branch feat/council-budget-section; fetch and rebase onto origin/main first). Read docs/BUDGET-SECTION-BRIEF.md, the PR 26 review's carry overs in the assessment section 3 (copy budget.ts, budget-game.ts and the importer rather than import across repos; pin the same three RA hashes and reuse tests/fixtures/budget-ct-reconciliation.json; Note 4 and Note 8 placement; display names from the council tax table with the RA name in source detail; the DSG sentence guarded on grantindsg above zero; CI caches the raw workbooks keyed on hash), and B2's brief so C3 reuses B2's data files and section order rather than adding parallel ones. Rewrite the brief to the standard of docs/B2-FRONT-DOOR-BRIEF.md: items with assertions dry run against data/national/budget.json on ukcounciltax main (after PR 26 merges; if it has not, dry run on origin/feat/budget-game-i001 and say so), the nine no return councils named, counties shown on district pages only, a position in the page order, stop conditions, self review list. Commit locally; do not push.
+
+3. Prepare C1b, the budget game scenario round, in a fresh ukcounciltax worktree: git worktree add ~/wt/uct-scenario -b feat/budget-game-scenario origin/main (after PR 26 has merged; otherwise stop this job and say so). Read docs/PLAN-2026-11-08-BUDGET-GAME.md, docs/BUDGET-GAME-SOURCE-NOTES.md and docs/BUDGET-GAME-REVIEW.md on main, and src/scripts/budget-game.ts. Write docs/C1B-SCENARIO-BRIEF.md: a "your version" round where the player moves the positive service shares and the Band D split and sees the arithmetic consequence, labelled as a user requested scenario with visible assumptions and a model version per CLAUDE.md, kept apart from observed figures; the running total above the inputs; scenario inputs never in the share fragment; a keyboard e2e for a multi input split; the CI cache for the three RA workbooks; no analytics or storage. Settle the predictable design questions (the base the scenario uses, negative headings, what a district's county screen does, the no return pages). Dry run the assertions. Commit locally; do not push.
+
+4. Write one short note for Tom listing the decisions now waiting on him across the briefs: the four in B2 (a seats by party source, the 46 cycle derived election years, the Surrey abolition line, the registry name refresh), any in A3 and A4, and the beacon token and Search Console. Put it at docs/DECISIONS-WAITING-2026-11-10.md in the ukcounciltax checkout and tell Tom where it is.
+
+House rules: British English; no em dash, en dash or spaced hyphen anywhere you write; never estimate or derive; name no individual; nothing pushed, merged or deployed without Tom's word. Finish with a one paragraph report per job.
+```
+
+### Codex, round three
+
+Lane A and lane B can run in two Codex windows at once once the merges land. Lane A: the "A1 then A2" prompt in section 7 with PR 26's merge sha, then A3 (`~/wt/uct-profile`, `docs/A3-PROFILE-BRIEF.md`) and A4 (`~/wt/uct-rankings`, notes then brief) in the same shape, one PR each. Lane B: the B2 prompt in section 8 after PR 33 merges.
+
+### Beyond the queue: the upgrades that would change the sites most
+
+In rough order of visitor value, each a future Opus prep then Codex build unless marked.
+
+1. **The council tax receipt per council (I006):** the Band D bill split by service from the RA lines joined to the Table 10 components, "where every pound of your Band D goes", as a stacked bar and a table with both editions named; the data is on the site once PR 26 merges. The most shareable page the site could have.
+2. **Who runs the council and when it votes next (B3):** seats by party and control as counts, from a pinned, dated, hashed copy of Open Council Data's composition table (CC BY-SA) if Tom accepts it, with the verified next election year from B2. Completes the front door.
+3. **A distress record per council (I046):** section 114 notices, EFS years, audit backstop status, each dated and sourced, on UK Councils, with an index. Nobody publishes it cleanly.
+4. **Your bill by parish:** A4 gives every parish precept; a reviewed postcode to parish crosswalk (R348, Lancashire first) turns the area average into a locality bill for a postcode, with the assumptions shown.
+5. **The signature visuals through the estate kit (O3, O5):** position strips, stacked bill bars, band bars, a Band D choropleth, the EFS timeline, and share cards that carry the figure, domain and source. Design work for Opus, adoption for Codex.
+6. **Levels day 2027/28 staged in advance (C6):** rankings per class, precept day, the year switch behind a flag, so release morning is data only.
+7. **One data repository with signed releases (D1, D2):** both sites pin by hash, one schema per dataset, a dataset landing page with a citation line. Three sessions before 20 March 2027.
+8. **Measurement:** the beacon and Search Console on UK Council Tax, without which none of the above can be judged. Tom's token, one line of code.

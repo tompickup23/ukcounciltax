@@ -66,10 +66,10 @@ const sources = taxSources();
 <script>
   import {compareTax, comparisonQuery, moneyPence, monthlyPence, type TaxRow, type ComparisonState} from '../lib/tax-view';
   import {shareView} from '../lib/share';
-  import type {ExportSource} from '../lib/tax-export';
+  type ComparisonSource = {publisher: string; table?: string; url: string; date?: string | null};
   import {matchesCouncil} from '../lib/council-search';
   const root = document.querySelector<HTMLElement>('[data-tax-compare]')!;
-  const data = JSON.parse(root.querySelector('[data-comparison-data]')!.textContent!) as {site: string; rows: TaxRow[]; years: string[]; currentYear: string; sources: Record<string, ExportSource>};
+  const data = JSON.parse(root.querySelector('[data-comparison-data]')!.textContent!) as {site: string; rows: TaxRow[]; years: string[]; currentYear: string; sources: Record<string, ComparisonSource>};
   const form = root.querySelector<HTMLFormElement>('form')!;
   const fields = root.querySelector<HTMLFieldSetElement>('fieldset')!;
   const status = root.querySelector<HTMLElement>('[data-comparison-status]')!;

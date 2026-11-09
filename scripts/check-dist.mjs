@@ -59,6 +59,8 @@ for (const path of files(DIST)) {
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
+  const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+  if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
 
   const title = /<title>([^<]*)<\/title>/.exec(text)?.[1];
   if (!title) failures.push(`no title on ${rel(path)}`);

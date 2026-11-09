@@ -1,6 +1,7 @@
 ---
+import SourceLine from '../../components/SourceLine.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import {nationEditions,nationPath} from '../../lib/devolved';
+import {nationEditions,nationPath,devolvedSource} from '../../lib/devolved';
 import {moneyPence} from '../../lib/tax-view';
 import {yearLabel} from '../../lib/council-tax';
 export function getStaticPaths(){return ['Scotland','Wales'].map(nation=>({params:{nation:nation.toLowerCase()},props:{nation}}));}
@@ -10,7 +11,7 @@ const editions=nationEditions(nation); const current=editions.at(-1)!; const isS
 <BaseLayout title={`Council tax in ${nation} ${yearLabel(current.year)}`} description={`Published council tax for every council in ${nation}, with official sources and clear coverage notes.`} path={nationPath(nation)}>
 <header class="page-head"><p class="eyebrow">UK coverage / {nation}</p><h1>Council tax in {nation}</h1><p class="lede">{isScotland?'Every council. Every band from A to H. Three years of published charges.':'Band D averages for all 22 councils, with county, community and police elements.'}</p></header>
 <div class="editorial-callout"><strong>{isScotland?'Council tax only, before water charges':'Published Band D averages, rounded to whole pounds'}</strong><p>{current.basis}. {isScotland?'Water and sewerage charges are separate and are not included in these figures.':'Wales has bands A to I. This release holds Band D only; other bands are not inferred from it. Community charges vary within a council area.'}</p></div>
-<p class="source-line">Source: <a href={current.source.url}>{current.source.title}</a>, {current.table}. Retrieved {'5 October 2026'}.</p>
+<SourceLine source={devolvedSource(current)} />
 <div class="table-wrap" tabindex="0" role="region" aria-label={`${nation} Band D table`}><table class="data"><caption>{yearLabel(current.year)} published Band D {isScotland?'council tax':'average'}</caption><thead><tr><th scope="col">Council</th><th scope="col" class="num">Band D</th></tr></thead><tbody>{current.records.map(r=><tr><th scope="row"><a href={nationPath(nation,r.slug)}>{r.name}</a></th><td class="num">{isScotland?moneyPence(r.bandsPence.D):new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(r.bandsPence.D/100)}</td></tr>)}</tbody></table></div>
 <p><a href="/coverage/">Compare coverage across the UK</a> · <a href="/data/">Sources catalogue</a></p>
 </BaseLayout>

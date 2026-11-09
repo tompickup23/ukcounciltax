@@ -327,7 +327,7 @@ interface RegistryFile { generated: string; source: { rule: string; sitemaps: Re
 interface BandStockSource { publisher: string; title: string; url: string; published: string; retrieved: string; tables: string[] }
 
 /** An official title without the file type and size a download link appends. */
-const cleanTitle = (title: string) => title.replace(/\s*,\s*file type:.*$/i, "").trim();
+export const cleanTitle = (title: string) => title.replace(/\s*,\s*file type:.*$/i, "").trim();
 
 export function findingsItems(): ReleaseItem[] {
   const parish = parishFinding();

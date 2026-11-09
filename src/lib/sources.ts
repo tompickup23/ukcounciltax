@@ -11,6 +11,7 @@ export interface SourceRef {
   url: string;
   table?: string;
   date?: string | null;
+  retrieved?: string | null;
   /** Said before the citation, for a figure the site calculated from published ones. */
   method?: string;
 }

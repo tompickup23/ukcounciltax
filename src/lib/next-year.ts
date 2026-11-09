@@ -92,10 +92,18 @@ export const RELEASES: Release[] = [
   },
 ];
 
+/** Expand a publisher's abbreviated month while retaining its original text. */
+export function statedReleaseDate(stated: string, publisher: string): string {
+  const months: Record<string, string> = {Jan: "January", Feb: "February", Mar: "March", Apr: "April", May: "May", Jun: "June", Jul: "July", Aug: "August", Sep: "September", Oct: "October", Nov: "November", Dec: "December"};
+  const match = /^([A-Z][a-z]{2})-(\d{2})$/.exec(stated);
+  const attribution = publisher === "Ministry of Housing, Communities and Local Government" ? "on GOV.UK" : `by the ${publisher}`;
+  return match && months[match[1]] ? `${months[match[1]]} 20${match[2]} (stated ${attribution} as “${stated}”)` : `“${stated}”`;
+}
+
 /** The release-date sentence for one nation, or "not yet announced". */
 export function releaseSentence(release: Release): string {
   if (!release.stated || !release.page) {
     return `Release date for ${yearLabel(NEXT_YEAR)} figures: not yet announced on any ${release.publisher} page this site has read.`;
   }
-  return `Release date as the ${release.publisher} states it: ${release.stated}.`;
+  return `Release date as the ${release.publisher} states it: ${statedReleaseDate(release.stated, release.publisher)}.`;
 }

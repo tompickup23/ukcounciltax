@@ -13,6 +13,7 @@ concurrency:
 jobs:
   site:
     runs-on: ubuntu-24.04
+    # Keep the full production gate within a 60 minute budget.
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7

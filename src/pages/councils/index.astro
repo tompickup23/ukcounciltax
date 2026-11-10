@@ -2,9 +2,14 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { hubCardPath } from "../../lib/og";
+import SourceLine from "../../components/SourceLine.astro";
+import { CURRENT_YEAR, loadYear, pounds, yearLabel } from "../../lib/council-tax";
 import { REGIONS, councilPages, councilPath, slugify } from "../../lib/paths";
+import { councilTaxSource } from "../../lib/sources";
 
 const pages = councilPages();
+const year = yearLabel(CURRENT_YEAR);
+const source = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.bandTable);
 const byRegion = REGIONS.map((region) => ({
   region,
   rows: pages.filter((p) => p.tax.region === region),
@@ -24,6 +29,10 @@ const byRegion = REGIONS.map((region) => ({
       The {pages.length} councils in England that bill council tax. Each page answers what the council
       charges and where the figures come from. Councils in Scotland, Wales and Northern Ireland follow.
     </p>
+    <p>
+      The figure beside each name is its area Band D for {year}: the whole Band D bill averaged across the
+      council's area, including adult social care and average parish precepts. It is not the bill for any address.
+    </p>
   </header>
   <nav aria-label="Jump to a region">
     <ul class="pill-nav">
@@ -33,9 +42,21 @@ const byRegion = REGIONS.map((region) => ({
   {byRegion.map(({ region, rows }) => (
     <section class="section" id={slugify(region)} aria-labelledby={`${slugify(region)}-heading`}>
       <h2 id={`${slugify(region)}-heading`}>Councils in {region}</h2>
-      <ul class="link-list">
-        {rows.map(({ council, tax }) => <li><a href={councilPath(council)}>{tax.name}</a></li>)}
-      </ul>
+      <div class="fact" data-fact>
+        <ul class="link-list council-figures">
+          {rows.map(({ council, tax }) => (
+            <li>
+              <a href={councilPath(council)}>{tax.name}</a>
+              {typeof tax.bands.D === "number" ? <span class="num" data-figure>{pounds(tax.bands.D)}</span> : <span class="muted">not published</span>}
+            </li>
+          ))}
+        </ul>
+        <SourceLine source={source} />
+      </div>
     </section>
   ))}
 </BaseLayout>
+<style>
+  .council-figures li { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; border-bottom: 1px solid var(--border); }
+  .council-figures .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+</style>

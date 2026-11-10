@@ -43,3 +43,17 @@ The row of loose links under the band answer is cut to three: "What makes up thi
 - Phase 12 (Scottish and Welsh pages) is out of this PR, as the handover records.
 - Fetch and rebase onto `origin/main` before anything else. Main has moved since the checkpoint: the game polish, scenario mode, the CI number diff and design check, and (once merged) the navigation PR, which changes `src/lib/site.ts`, the header, the footer, `src/pages/index.astro`, `src/lib/registry.ts` and the privacy page. Keep main's side of any conflict in those files and reapply only what an A3 phase needs.
 - Then apply section 1 in a new commit on top of the checkpoint so phase 1b passes, and continue from phase 1c in the brief's order.
+
+## 5. Ruling on the map geometry assertion (the 10 November stop)
+
+`e2e/phase-two.spec.ts` lines 82 to 84 test the mini map that phase 7 removes. The ceiling of 299 was that component's own drawing width (a 300 unit view box), so it is a property of the deleted component, not a tolerance on the new one. Replacing the assertion with its equivalent for the locator map is the brief's intent and does not breach the stop rule.
+
+Replace those three lines with assertions on the locator map that test the same thing, that the focal area is drawn at a sensible size inside its drawing:
+
+- `#map [data-ek-focus="E07000117"]` exists exactly once on `/councils/burnley/`;
+- its `getBBox()` width and height are each greater than 50;
+- its box lies inside the view box of its own `svg` (read `viewBox` from the element's `ownerSVGElement`; left and top not less than the view box origin, right and bottom not more than origin plus size).
+
+Do not hard code 355 or 267. The rest of that test (print keeps the selected band panel and its source, hides the header and the view actions) stays as it is; if the compact band selector changes which panel prints, stop and report that separately.
+
+Main now carries the navigation PR (43): rebase onto `origin/main` again before the final build. If `e2e/budget-game.spec.ts` fails only on its "external requests" line because of the analytics beacon, that is a known fault on main being fixed in its own PR: do not change that file; rebase once the fix has merged, or record the failure as known.

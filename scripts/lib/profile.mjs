@@ -42,6 +42,11 @@ export function profileProblems(html, slug) {
   if (slug === 'manchester' && rowHeaders.some(label => ['County council','Greater London Authority'].includes(label))) problems.push('Manchester has an inapplicable county row');
   if (slug === 'camden' && rowHeaders.some(label => ['Police','Fire','Combined authority'].includes(label))) problems.push('Camden has an inapplicable separate row');
   if (slug === 'burnley' && JSON.stringify(rowHeaders.slice(1)) !== JSON.stringify(['County council','Police','Fire','Combined authority'])) problems.push('Burnley component rows differ');
+  const position = doc.querySelector('#compared #class-position-chart');
+  if (position?.querySelectorAll('svg.ek-chart').length !== 1) problems.push('one class position strip is required');
+  if (slug === 'burnley') for (const value of ['£2,549.42','£2,255.21','£2,446.43','£2,609.31','£2,756.17']) {
+    if (!text(position?.querySelector('details table')).includes(value)) problems.push(`Burnley position strip lacks ${value}`);
+  }
   dom.window.close();
   return problems;
 }

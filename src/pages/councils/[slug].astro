@@ -10,6 +10,7 @@ import BandMix from '../../components/BandMix.astro';
 import CollectionRates from '../../components/CollectionRates.astro';
 import BudgetSummary from '../../components/BudgetSummary.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
+import PositionStrip from '../../vendor/estate-kit/src/components/PositionStrip.astro';
 import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
 import ChartActions from '../../components/kit/ChartActions.astro';
 import {profileChartOptions} from '../../lib/kit-charts';
@@ -199,6 +200,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         {tax.notes.length > 0 && <p>MHCLG publishes a note on this figure; it is under the band table.</p>}
         <SourceLine source={councilTaxSource(CURRENT_YEAR, `Table 9 and ${rankType.ownTable.replace('_', ' ')}`, 'Positions calculated from the published figures: equal figures share a position')} />
       </div>}
+      <div class="fact" data-fact id="class-position-chart">
+        <PositionStrip {...charts.position} />
+        <ChartActions chart={`councils/${council.slug}/position`} target="class-position-chart" />
+      </div>
       <p class="muted">
         Both averages include parish and adult social care precepts, the same basis as the {name} figure.
         <a href={regionPath(tax.region)}>Band D for every council in {tax.region}</a>.

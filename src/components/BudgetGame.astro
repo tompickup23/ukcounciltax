@@ -11,6 +11,15 @@ const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
 const {name} = Astro.props;
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 const scenario = scenarioData(data, Astro.props.gss, name);
+/** The opening rail: what each round asks. The published split is the answer to round one, so no figure is drawn here. */
+function routeStop(kind: string, index: number) {
+  if (kind === 'split') return index === 0
+    ? {name: 'Council services', task: `Split each pound ${name} spends on services.`}
+    : {name: 'County services', task: 'Split each pound the county council spends on services.'};
+  if (kind === 'bill') return {name: 'Your bill', task: 'Guess who takes each part of a Band D bill.'};
+  if (kind === 'funding') return {name: 'Funding', task: 'Guess where the money comes from.'};
+  return {name: 'Reserves', task: 'Guess what happens to reserves.'};
+}
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
   <div class="game-lead">
@@ -22,10 +31,11 @@ const scenario = scenarioData(data, Astro.props.gss, name);
       <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
       <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
     </div>
-    <figure class="game-teaser">
-      <div aria-hidden="true" data-game-teaser set:html={teaser.svg} />
-      <figcaption>100 squares, one for each penny. Round one fills them with your guess, then with {name}'s published split.</figcaption>
-    </figure>
+    <ol class="game-route" data-game-route aria-label={`The ${data.rounds.length} rounds`}>
+      {data.rounds.map((round, index) => { const stop = routeStop(round.kind, index); return (
+        <li><span class="game-stop-number" aria-hidden="true">{index + 1}</span><span class="game-route-text"><strong>{stop.name}</strong><span>{stop.task}</span></span></li>
+      ); })}
+    </ol>
   </div>
   <ol class="game-rail" data-game-rail aria-label="Game progress" hidden>
     {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
@@ -45,10 +55,14 @@ const scenario = scenarioData(data, Astro.props.gss, name);
 <style is:global>
   .budget-game{padding-block:var(--space-lg)}
   .game-lead{display:grid;gap:var(--space-lg);align-items:start}
-  .game-teaser{margin:0;max-width:343px}
-  .game-teaser svg{display:block;width:100%;height:auto}
-  .game-teaser .ek-sq rect{fill:var(--border);stroke:none}
-  .game-teaser figcaption{margin-top:var(--space-sm);color:var(--text-secondary)}
+  .game-route{list-style:none;margin:0;padding:0;max-width:343px}
+  .game-route li{position:relative;display:grid;grid-template-columns:2.75rem minmax(0,1fr);gap:var(--space-sm);align-items:start;padding-bottom:var(--space-md)}
+  .game-route li:last-child{padding-bottom:0}
+  .game-route li:not(:last-child)::before{content:"";position:absolute;left:1.3125rem;top:2.75rem;bottom:0;border-left:2px solid var(--border-strong)}
+  .game-route .game-stop-number{background:var(--bg)}
+  .game-route-text{display:block;padding-top:.3rem}
+  .game-route-text strong{display:block}
+  .game-route-text span{display:block;color:var(--text-muted);font-size:var(--text-sm)}
   @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
 
   .budget-game [hidden]{display:none!important}

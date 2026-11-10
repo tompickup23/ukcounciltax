@@ -27,6 +27,8 @@ export function profileProblems(html, slug) {
   if (section?.querySelectorAll('#band-bars svg.ek-chart').length !== 1 || section?.querySelectorAll('#band-bars g.ek-bar').length !== 8 || section?.querySelectorAll('#band-bars [data-ek-focus="D"]').length !== 1) problems.push('eight band bars with D marked are required');
   if (text(doc.body).includes('a month over ten instalments')) problems.push('compact profile retains monthly panel text');
   if (slug === 'lewes' && (text(section).match(/pending approval subject to a full council decision on 26 March 2026/g) ?? []).length !== 1) problems.push('Lewes note must appear once in the band answer');
+  if (doc.querySelectorAll('[data-parish-caveat]').length !== 1 || !section?.querySelector('[data-parish-caveat]')) problems.push('one parish caveat must sit in the band answer');
+  if (text(doc.body).includes('A home in a parish with its own precept pays a different amount')) problems.push('the old parish caveat remains');
   const history = doc.querySelector('#history');
   if (doc.querySelectorAll('[data-band-d-line]').length !== 1 || history?.querySelectorAll('details.data-drawer').length !== 1) problems.push('one history chart and drawer are required');
   if (doc.querySelector('.band-d-line-table, #all-band-history, #long-history')) problems.push('duplicate history remains');

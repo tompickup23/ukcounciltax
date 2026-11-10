@@ -133,13 +133,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
       </div>
     </div>
-    <p class="caveat">
-      Every band includes the share of every body that sets council tax here, such as the police and,
-      where they exist, the county council, the fire authority and parish councils, with parish precepts as
-      an average. A home in a parish with
-      its own precept pays a different amount, and discounts such as the single person discount are not
-      taken off.
-    </p>
+    <p class="caveat" data-parish-caveat>Every band includes the share of every body that sets council tax in {name}, with parish and town council precepts as an average across the area. A home in a parish pays that parish's own precept instead of the average, so its bill differs. Discounts, such as the single person discount, are not taken off.</p>
     {tax.notes.length > 0 && (
       <ul class="notes">
         {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}

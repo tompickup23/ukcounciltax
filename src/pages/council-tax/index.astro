@@ -47,27 +47,31 @@ const pages = councilPages();
   {area && (
     <section class="section" aria-labelledby="average-heading">
       <h2 id="average-heading">What is the average council tax in England in {year}?</h2>
-      <div class="fact-grid">
-        <div class="card">
-          <Fact
-            label={`Average area Band D, England, ${year}`}
-            figure={wholePounds(area.england.pounds)}
-            change={`up ${percent(area.england.changePct)} on ${previous}`}
-            source={councilTaxSource(CURRENT_YEAR, area.table)}
-          >
-            <p class="caveat">Includes the adult social care and average parish precepts.</p>
-          </Fact>
+      <div class="average-lead">
+        <Fact
+          label={`Average area Band D, England, ${year}`}
+          figure={wholePounds(area.england.pounds)}
+          change={`up ${percent(area.england.changePct)} on ${previous}`}
+          source={councilTaxSource(CURRENT_YEAR, area.table)}
+        >
+          <p class="caveat">Includes the adult social care and average parish precepts.</p>
+        </Fact>
+        <div class="fact" data-fact>
+          <table class="data average-types">
+            <caption>Average area Band D by type of area, {year}</caption>
+            <thead><tr><th scope="col">Type of area</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {previous}</th></tr></thead>
+            <tbody>
+              {(["london", "metropolitan", "unitary", "shire"] as const).map((type) => (
+                <tr>
+                  <th scope="row">{type === "london" ? "London" : `${type.charAt(0).toUpperCase()}${type.slice(1)} areas`}</th>
+                  <td class="num" data-figure>{wholePounds(area.byAreaType[type].pounds)}</td>
+                  <td class="num">up {percent(area.byAreaType[type].changePct)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <SourceLine source={councilTaxSource(CURRENT_YEAR, area.table)} />
         </div>
-        {(["london", "metropolitan", "unitary", "shire"] as const).map((type) => (
-          <div class="card">
-            <Fact
-              label={`Average area Band D, ${type === "london" ? "London" : `${type} areas`}, ${year}`}
-              figure={wholePounds(area.byAreaType[type].pounds)}
-              change={`up ${percent(area.byAreaType[type].changePct)} on ${previous}`}
-              source={councilTaxSource(CURRENT_YEAR, area.table)}
-            />
-          </div>
-        ))}
       </div>
     </section>
   )}
@@ -86,7 +90,8 @@ const pages = councilPages();
           caveat="Includes adult social care and average parish precepts, so the Band D bill in any one parish or unparished area can differ from this average."
           table={false}
         />
-        <div class="table-wrap">
+        <details class="history-drawer">
+          <summary>Show the table ({history.rows.length} years)</summary>
           <table class="data">
             <caption>Average Band D in England, including parish and adult social care precepts</caption>
             <thead><tr><th scope="col">Year</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change</th></tr></thead>
@@ -100,7 +105,7 @@ const pages = councilPages();
               ))}
             </tbody>
           </table>
-        </div>
+        </details>
         <p class="caveat">Cash figures as published each year, not adjusted for inflation.</p>
         <SourceLine source={councilTaxSource(CURRENT_YEAR, history.table)} />
       </div>
@@ -136,3 +141,11 @@ const pages = councilPages();
     </ul>
   </section>
 </BaseLayout>
+<style>
+  .average-lead { display: grid; gap: var(--space-lg); align-items: start; }
+  .average-types { width: 100%; }
+  @media (min-width: 800px) { .average-lead { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); } }
+  .history-drawer { border-block: 1px solid var(--border); margin-block: var(--space-sm); }
+  .history-drawer summary { cursor: pointer; font-weight: 600; min-height: 44px; padding-block: var(--space-sm); }
+  .history-drawer table { width: 100%; margin-bottom: var(--space-sm); }
+</style>

@@ -144,7 +144,7 @@ function build(): Record<string, unknown> {
     };
     const components = national.components[gss];
     for (const part of [
-      {kind: "own", name: `${authority.name} council, including average local precepts`, bandDPence: components.ownWithParishPence},
+      {kind: "own", name: `${authority.name} council`, bandDPence: components.ownWithParishPence},
       ...components.parts.map(part => ({...part, name: part.kind === "county"
         ? (authority.classCode === "ILB" || authority.classCode === "OLB" ? "Greater London Authority" : "County council")
         : ({police: "Police", fire: "Fire", combined: "Combined authority"})[part.kind]})),

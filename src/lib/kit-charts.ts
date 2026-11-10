@@ -57,7 +57,7 @@ export function profileChartOptions(slug: string) {
     bands: {...common, figure: `${key}.bands`, orientation: "vertical", highlight: "D",
       title: `Bands A to H in ${tax.name}, ${year}, Band D marked`} satisfies ZeroBarOptions,
     bill: {...common, parts: ["own", ...kept.filter(part => part.bandDPence !== 0).map(part => part.kind)].map(part => `${key}.bill.${part}`),
-      total: `${key}.bill.total`, title: `Where a Band D bill in ${tax.name} goes, ${year}`} satisfies BillAnatomyOptions,
+      total: `${key}.bill.total`, title: `Where a Band D bill in ${tax.name} goes, ${year}, council part including average local precepts`} satisfies BillAnatomyOptions,
     position: {...common, figure: `${key}.area_bandd`, distribution: `class.${cls.slug}.area_bandd`, place: tax.name,
       classLabel: cls.label, basis: "Area Band D, including adult social care and average parish precepts, MHCLG Table 9",
       title: `Area Band D in ${tax.name} within the ${rows.length} ${cls.label}, ${year}`} satisfies PositionStripOptions,

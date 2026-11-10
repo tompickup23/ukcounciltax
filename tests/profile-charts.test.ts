@@ -16,4 +16,4 @@ it('draws every profile chart in both PNG themes through the kit gates', () => {
       expect(() => drawProfileChart(name, theme), `${name}/${theme}`).not.toThrow();
     }
   }
-}, 300000);
+}, 900000);

@@ -47,6 +47,9 @@ export function profileProblems(html, slug) {
   if (slug === 'burnley') for (const value of ['£2,549.42','£2,255.21','£2,446.43','£2,609.31','£2,756.17']) {
     if (!text(position?.querySelector('details table')).includes(value)) problems.push(`Burnley position strip lacks ${value}`);
   }
+  const map = doc.querySelector('#map');
+  if (map?.querySelectorAll('svg.ek-chart').length !== 1 || (gss && map.querySelector(`[data-ek-focus="${gss}"]`) === null)) problems.push('one locator map must mark the council');
+  if (doc.querySelector('[data-boundary-map]')) problems.push('the mini map remains');
   dom.window.close();
   return problems;
 }

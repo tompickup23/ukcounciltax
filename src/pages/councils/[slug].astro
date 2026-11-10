@@ -15,7 +15,8 @@ import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
 import ChartActions from '../../components/kit/ChartActions.astro';
 import {profileChartOptions} from '../../lib/kit-charts';
 import {profileBandCells} from '../../lib/profile-bands';
-import MiniMap from "../../components/MiniMap.astro";
+import LocatorMap from '../../vendor/estate-kit/src/components/LocatorMap.astro';
+import {boundarySource} from '../../lib/boundaries';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import BandSelector from "../../components/BandSelector.astro";
@@ -112,7 +113,6 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
-  <div class="council-answer">
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
     <p class="muted">Published yearly charge for each band, before discounts.</p>
@@ -145,8 +145,6 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <BandSelector ons={council.gss} authority={tax} compact />
   </section>
 
-  <MiniMap gss={council.gss} name={name} />
-  </div>
   <div class="action-links" aria-label="Council tax next steps">
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
     <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
@@ -210,6 +208,16 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       </p>
     </section>
   )}
+
+  <section class="section" id="map" aria-labelledby="map-heading">
+    <h2 id="map-heading">Where {name} is</h2>
+    <div class="fact locator-fact" data-fact id="locator-chart">
+      <LocatorMap {...charts.map} />
+      <ChartActions chart={`councils/${council.slug}/map`} target="locator-chart" />
+      <p class="small">Shaded by area Band D, the average bill for each whole council area including adult social care and average parish precepts, which MHCLG publishes on the same basis for every class of council in Table 9. Illustrative boundaries, not property or billing boundaries.</p>
+      <p class="small">Map detail: {boundarySource.method}</p>
+    </div>
+  </section>
 
   <section class="section" id="history" aria-labelledby="history-heading">
     <h2 id="history-heading">How has Band D in {name} changed?</h2>
@@ -280,7 +288,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 </BaseLayout>
 
 <style>
-  .council-answer { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .locator-fact { max-width: 40rem; }
   .band-answer { display: grid; gap: var(--space-lg); min-width: 0; }
   .band-answer > div { min-width: 0; }
   @media (min-width: 960px) { .band-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }

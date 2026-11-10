@@ -64,6 +64,7 @@ function drawnFrom(keys: string[], suffix = ""): string {
     <a class="task-card" href="/tools/future-cost/"><TaskThumb kind="bands" /><strong>What could it cost</strong><span>Start from today's charge for your band and change the assumptions.</span><span class="task-source">{drawnFrom(["burnley.bands.unparished"], ", bands A to H")}</span></a>
     <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>How do areas compare</strong><span>One area against the England average, same band, year and basis.</span><span class="task-source">{drawnFrom(["burnley.area_bandd.current", "england.area_bandd.current"])}</span></a>
   </nav>
+  <section class="editorial-callout section"><p class="eyebrow">Budget game</p><h2>Could you set your council's budget?</h2><p>Guess how your council splits each pound it spends, who takes your Band D bill and where the money comes from, then see the answer the council published.</p><a href="/tools/budget/">Choose a council and play →</a></section>
   {area && (
     <section class="section" aria-labelledby="home-average">
       <h2 id="home-average">How much is council tax in England in {year}?</h2>

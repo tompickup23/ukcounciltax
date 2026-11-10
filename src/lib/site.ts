@@ -70,10 +70,13 @@ export const STATIC_PATHS = [
 export type NavItem = { href: string; label: string; desc: string };
 export type NavGroup = { label: string; items: NavItem[] };
 
-/** The mega menu. A page not listed here is reachable only by link. */
+/**
+ * The header menu: three groups and one direct link. Everything else that is
+ * indexable is in FOOTER_LINKS, so no page is reachable only by link.
+ */
 export const NAV_GROUPS: NavGroup[] = [
   {
-    label: "Councils",
+    label: "Find your council",
     items: [
       { href: "/your-area/", label: "Your area", desc: "Find your council by postcode" },
       { href: "/councils/", label: "Every council", desc: "All 296 councils in England, by region" },
@@ -82,42 +85,48 @@ export const NAV_GROUPS: NavGroup[] = [
     ],
   },
   {
-    label: "Council tax",
+    label: "Compare and rank",
     items: [
       { href: "/council-tax/", label: "Council tax in England", desc: "The England average and every council" },
       { href: "/council-tax/ranked/", label: "Band D ranked", desc: "Every council against councils of the same type" },
       { href: "/compare/", label: "Compare councils", desc: "Compare the same band and year within a council type" },
       { href: "/council-tax/band-d/", label: "Band D", desc: "Band D for every council, by region" },
       { href: increasesYearPath(CURRENT_YEAR), label: `Rises ${yearLabel(CURRENT_YEAR)}`, desc: "How much each council raised its own share" },
+    ],
+  },
+  {
+    label: "Your bill",
+    items: [
+      { href: "/precepts/", label: "What makes up a bill", desc: "Postcode, parish and individual charging bodies" },
+      { href: "/precepts/parishes/", label: "Parish precepts", desc: "Every parish precept by council" },
+      { href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps" },
+      { href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time" },
       { href: NEXT_YEAR_PATH, label: `Council tax ${yearLabel(NEXT_YEAR)}`, desc: "Not yet set: when each nation's figures publish" },
     ],
   },
-  {
-    label: "Tools and help",
-    items: [
-      {href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs"},
-      {href: "/changes/", label: "What changed", desc: "Read the record of data updates"},
-      {href: "/precepts/parishes/", label: "Parish precepts", desc: "Every parish precept by council"},
-      {href: "/precepts/", label: "Your bill and precepts", desc: "Postcode, parish and individual charging bodies"},
-      {href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time"},
-      {href: "/tools/budget/", label: "Council budgets", desc: "Service spending, funding and reserves"},
-      {href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares"},
-      {href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps"},
-      {href: "/coverage/", label: "UK coverage", desc: "What is included in each nation"},
-      {href: "/data/", label: "Official publications", desc: "Official publications and source editions"},
-    ],
-  },
-  {
-    label: "About",
-    items: [
-      { href: "/about/", label: "About", desc: "What the site publishes and its rules" },
-      { href: "/methodology/", label: "Methodology", desc: "How every figure is read" },
-      { href: "/sources/", label: "Sources", desc: "Every table used, with dates" },
-      { href: "/privacy/", label: "Privacy", desc: "What happens to a postcode" },
-      { href: "/contact/", label: "Contact", desc: "Questions about the site and official council services" },
-      { href: "/corrections/", label: "Corrections", desc: "How factual corrections are recorded" },
-    ],
-  },
+];
+
+/** The one header link with no menu: the budget game hub. */
+export const NAV_DIRECT: NavItem = {
+  href: "/tools/budget/",
+  label: "Budget game",
+  desc: "Guess how a council splits its budget, then see the published answer",
+};
+
+/** Reference and site pages, linked from the footer of every page. */
+export const FOOTER_LINKS: NavItem[] = [
+  { href: "/about/", label: "About", desc: "What the site publishes and its rules" },
+  { href: "/methodology/", label: "Methodology", desc: "How every figure is read" },
+  { href: "/sources/", label: "Sources", desc: "Every table used, with dates" },
+  { href: "/data/", label: "Official publications", desc: "Official publications and source editions" },
+  { href: "/coverage/", label: "UK coverage", desc: "What is included in each nation" },
+  { href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs" },
+  { href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares" },
+  { href: "/changes/", label: "What changed", desc: "Read the record of data updates" },
+  { href: "/findings/", label: "Findings", desc: "Dated notes from the published tables" },
+  { href: "/corrections/", label: "Corrections", desc: "How factual corrections are recorded" },
+  { href: "/contact/", label: "Contact", desc: "Questions about the site and official council services" },
+  { href: "/privacy/", label: "Privacy", desc: "What happens to a postcode" },
 ];
 
 /** A path on this site as an absolute URL on the canonical origin. */

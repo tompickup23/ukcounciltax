@@ -127,7 +127,7 @@ function build(): Record<string, unknown> {
   const bandsSource = mhclg(data.source.bandTable);
   const componentSource = {
     publisher: "MHCLG", title: national.sources.components.title,
-    table: "Data_Billing", edition: national.sources.components.retrieved,
+    table: "Data_Billing", edition: `retrieved ${longDate(national.sources.components.retrieved)}`,
     url: national.sources.components.fileUrl,
   };
   for (const [gss, authority] of Object.entries(data.authorities)) {

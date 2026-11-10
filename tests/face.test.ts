@@ -54,3 +54,10 @@ describe("the face checks", () => {
     expect(headerProblems(line("'self'"))).toEqual(["style-src no longer allows the kit's inline style attributes"]);
   });
 });
+
+it("requires one source and one table control in a chart fact", () => {
+  const fact = `<div data-fact>${chart()}${actions}<p class="source-line">Source</p><details><summary>The figures as a table</summary></details></div>`;
+  expect(chartProblems(fact).problems).toEqual([]);
+  expect(chartProblems(fact.replace('</div>', '<p class="source-line">Duplicate</p></div>')).problems).toContain('a kit chart fact must hold exactly one source line');
+  expect(chartProblems(fact.replace('</details>', '</details><a>The figures as a table</a>')).problems).toContain('a kit chart fact must hold exactly one table control');
+});

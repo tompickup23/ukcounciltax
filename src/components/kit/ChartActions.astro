@@ -7,9 +7,8 @@
  *   carries inside it.
  * PNG: plain links to files the BUILD_OG=1 pass rendered from the kit's hex mode, one
  *   per theme, so they need no canvas or script and the source travels inside the image.
- * Table: a link to the chart's own table twin (the kit's details element). Script
- *   opens the details on the way and adds "Copy table"; without script the link still
- *   lands on the table's summary.
+ * Table: the kit's details summary is the only table control. Script adds
+ *   "Copy table"; the published table remains available without script.
  *
  * No embed (decision K3) and no data file (decision K2): the table twin is the data.
  */
@@ -35,7 +34,6 @@ const pngs = Astro.props.pngs ?? {light: chartPngPath(chart!, 'light'), dark: ch
     {CHART_THEMES.map((theme) => (
       <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>
     ))}
-    <li><a href={`#${Astro.props.tableId ?? target}`} data-chart-table>The figures as a table</a></li>
     <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
   </ul>
   <p class="chart-actions-status small muted" role="status" aria-live="polite" data-chart-status></p>
@@ -52,9 +50,6 @@ const pngs = Astro.props.pngs ?? {light: chartPngPath(chart!, 'light'), dark: ch
     const table = twin?.querySelector<HTMLTableElement>("table");
     const status = actions.querySelector<HTMLElement>("[data-chart-status]");
     if (!twin || !table || !status) continue;
-    actions.querySelector<HTMLAnchorElement>("[data-chart-table]")?.addEventListener("click", () => {
-      twin.open = true;
-    });
     const copy = actions.querySelector<HTMLButtonElement>("[data-chart-copy]");
     if (!copy || !navigator.clipboard) continue;
     copy.hidden = false;

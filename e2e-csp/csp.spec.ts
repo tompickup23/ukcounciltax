@@ -121,7 +121,7 @@ test("the postcode door reaches postcodes.io under the policy", async ({ page })
   expect(found, describe(found)).toEqual([]);
 });
 
-test("no analytics beacon is requested while analytics is disabled", async ({ page }) => {
+test("the analytics beacon is allowed by the policy", async ({ page }) => {
   const found = await watch(page);
   const requested: string[] = [];
   page.on("request", (request) => {
@@ -130,7 +130,7 @@ test("no analytics beacon is requested while analytics is disabled", async ({ pa
   await page.goto("/");
   await page.waitForTimeout(1_000);
   // The browser only issues the request if script-src allowed it.
-  expect(requested).toEqual([]);
+  expect(requested.some((url) => url.startsWith("https://static.cloudflareinsights.com/beacon.min.js"))).toBe(true);
   expect(found, describe(found)).toEqual([]);
 });
 

@@ -85,8 +85,22 @@ jobs:
         if: steps.changes.outputs.docs-only != 'true'
       - run: npm run check
         if: steps.changes.outputs.docs-only != 'true'
+      - name: Hash the generated image inputs
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        id: image-inputs
+        run: |
+          image_key=$(node scripts/image-cache-key.mjs)
+          printf 'key=%s\n' "$image_key" >> "$GITHUB_OUTPUT"
+      - name: Cache generated images
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        uses: actions/cache@v6.1.0
+        with:
+          path: .cache/generated-images
+          key: ${{ runner.os }}-${{ runner.arch }}-images-${{ steps.image-inputs.outputs.key }}
       - run: npm run build
         if: steps.changes.outputs.docs-only != 'true'
+        env:
+          OG_IMAGE_CACHE: '1'
       - run: npm run test:dist
         if: steps.changes.outputs.docs-only != 'true'
       - run: npm run test:text

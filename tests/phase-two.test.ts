@@ -2,7 +2,8 @@ import {describe,it,expect} from 'vitest';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {geoArea} from 'd3-geo';
-import {boundaryAreas,boundaryMap,boundarySource} from '../src/lib/boundaries';
+import {boundaryAreas,neighbourAreas,boundarySource} from '../src/lib/boundaries';
+import {drawProfileChart} from '../src/lib/kit-charts';
 import {councilPages} from '../src/lib/paths';
 import {cardPalette} from '../src/styles/palette';
 
@@ -12,15 +13,17 @@ describe('boundary provenance and shape', () => {
     expect(areas).toHaveLength(boundarySource.count);
     expect(new Set(areas.map(f=>f.properties.LAD26CD)).size).toBe(areas.length);
     for (const {council} of councilPages()) expect(areas.some(f=>f.properties.LAD26CD === council.gss),council.slug).toBe(true);
-    expect(boundaryMap('E00000000')).toBeNull();
+    expect(neighbourAreas('E00000000')).toEqual([]);
   });
   it('retains the source checksum and renders the area rather than its spherical complement', () => {
     expect(createHash('sha256').update(readFileSync('data/geography/lad26-england.geojson')).digest('hex')).toBe(boundarySource.sha256);
     for (const area of boundaryAreas()) {expect(geoArea(area)).toBeGreaterThan(0); expect(geoArea(area)).toBeLessThan(1);}
-    const burnley = boundaryMap('E07000117')!;
-    expect(burnley.focal.length).toBeGreaterThan(100);
-    expect(burnley.focal).not.toContain('NaN');
-    expect(burnley.context.length).toBeGreaterThan(100);
+    const burnley = drawProfileChart('councils/burnley/map').svg;
+    const focal = burnley.match(/<path d="([^"]*)"[^>]*data-ek-focus="E07000117"/)![1];
+    const context = [...burnley.matchAll(/<path d="([^"]*)"[^>]*data-ek-area="([^"]*)"/g)].filter(([, , code]) => code !== 'E07000117').map(([, path]) => path).join(' ');
+    expect(focal.length).toBeGreaterThan(100);
+    expect(focal).not.toContain('NaN');
+    expect(context.length).toBeGreaterThan(100);
   });
 });
 function luminance(hex: string) {return hex.slice(1).match(/../g)!.map(x=>parseInt(x,16)/255).map(x=>x<=0.04045?x/12.92:((x+0.055)/1.055)**2.4).reduce((v,x,i)=>v+x*[0.2126,0.7152,0.0722][i],0);}

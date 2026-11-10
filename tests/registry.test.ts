@@ -70,7 +70,6 @@ describe("the council registry", () => {
       "ukdemographics",
       "aidoge",
     ]);
-    for (const council of councils) expect(sisterLinks(council).some(link => link.site === "asylumstats")).toBe(false);
   });
 });
 

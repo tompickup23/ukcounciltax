@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {geoArea, geoBounds, geoMercator, geoPath} from 'd3-geo';
+import {geoArea, geoBounds} from 'd3-geo';
 import type {Feature, FeatureCollection, Polygon, MultiPolygon} from 'geojson';
 import source from '../../data/geography/source.json';
 export const boundarySource = source;
@@ -30,11 +30,4 @@ export function neighbourAreas(gss: string) {
     return c >= x0-dx && a <= x1+dx && d >= y0-dy && b <= y1+dy;
   });
   return [focal, ...neighbours].map(area => ({...area, properties: {code: area.properties.LAD26CD, name: area.properties.LAD26NM}}));
-}
-export function boundaryMap(gss: string) {
-  const [focal, ...neighbours] = neighbourAreas(gss);
-  if (!focal) return null;
-  const projection = geoMercator().fitExtent([[32,24],[268,156]], focal).clipExtent([[0,0],[300,180]]);
-  const path = geoPath(projection).digits(1);
-  return {focal: path(focal)!, context: neighbours.map(area => path(area) ?? '').join(' ')};
 }

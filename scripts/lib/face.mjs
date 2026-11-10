@@ -42,8 +42,8 @@ export function chromeProblems(page) {
 
 /** Problems with the kit charts on any page: each needs its actions. Returns the PNG links found. */
 export function chartProblems(page) {
-  // Player templates and the unfilled lead grid carry no published observations.
-  const html = strip(page).replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, '').replace(/<div\b[^>]*data-game-teaser[^>]*>[\s\S]*?<\/div>/gi, '');
+  // Player templates carry no published observations.
+  const html = strip(page).replace(/<template\b[^>]*>[\s\S]*?<\/template>/gi, '');
   const problems = [];
   const charts = count(html, /<svg\b[^>]*class="[^"]*\bek-chart\b/gi);
   const actions = count(html, /<div\b[^>]*\bdata-chart-actions\b/gi);

@@ -40,7 +40,8 @@ export function budgetGameProblems(html,slug,dist) {
   fail(scenario?.screens.length===data.rounds.filter(r=>r.kind==='split'||r.kind==='bill').length,'scenario screens differ from published rounds');
   fail(doc.querySelector('h1')?.textContent===`Could you set ${name}'s budget?`,'question H1 changed');
   fail(title===`${name} budget game ${data.year} | UK Council Tax`,'title changed');
-  fail(root.querySelectorAll('[data-game-teaser] [data-ek-square]').length===100,'lead grid is not 100 squares');
+  fail(root.querySelectorAll('[data-game-route] > li').length===data.rounds.length,'opening rail does not name every round');
+  fail(root.querySelectorAll('.game-lead [data-ek-square]').length===0,'a grid is drawn before round one');
   const drawer=doc.querySelector('#published-budget');
   fail(drawer?.querySelector('#council-budget'),'council anchor is outside drawer');
   if(data.rounds.filter(r=>r.kind==='split').length===2)fail(drawer?.querySelector('#county-budget'),'county anchor is outside drawer');

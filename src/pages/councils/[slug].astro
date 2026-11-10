@@ -317,13 +317,13 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 </style>
 
 <style is:global>
-  #band-bars [data-band-marked] g.ek-bar path { fill: var(--series-neutral) !important; }
-  #band-bars [data-band-marked="A"] g.ek-bar:nth-of-type(1) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="B"] g.ek-bar:nth-of-type(2) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="C"] g.ek-bar:nth-of-type(3) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="D"] g.ek-bar:nth-of-type(4) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="E"] g.ek-bar:nth-of-type(5) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="F"] g.ek-bar:nth-of-type(6) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="G"] g.ek-bar:nth-of-type(7) path { fill: var(--accent) !important; }
-  #band-bars [data-band-marked="H"] g.ek-bar:nth-of-type(8) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked] g.ek-bars > g.ek-bar > [data-ek-bar] { fill: var(--series-neutral) !important; }
+  #band-bars [data-band-marked="A"] g.ek-bars > g.ek-bar:nth-of-type(1) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="B"] g.ek-bars > g.ek-bar:nth-of-type(2) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="C"] g.ek-bars > g.ek-bar:nth-of-type(3) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="D"] g.ek-bars > g.ek-bar:nth-of-type(4) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="E"] g.ek-bars > g.ek-bar:nth-of-type(5) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="F"] g.ek-bars > g.ek-bar:nth-of-type(6) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="G"] g.ek-bars > g.ek-bar:nth-of-type(7) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="H"] g.ek-bars > g.ek-bar:nth-of-type(8) > [data-ek-bar] { fill: var(--accent) !important; }
 </style>

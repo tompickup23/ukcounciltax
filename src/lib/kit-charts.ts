@@ -50,7 +50,7 @@ export function profileChartOptions(slug: string) {
   const kept = profilePrecepts(tax.classCode, components.parts);
   const areas = neighbourAreas(council.gss);
   return {
-    bands: {...common, figure: `${key}.bands`, orientation: "vertical", highlight: "D",
+    bands: {...common, figure: `${key}.bands`, orientation: "horizontal", highlight: "D",
       title: `Bands A to H in ${tax.name}, ${year}, Band D marked`} satisfies ZeroBarOptions,
     bill: {...common, parts: ["own", ...kept.filter(part => part.bandDPence !== 0).map(part => part.kind)].map(part => `${key}.bill.${part}`),
       total: `${key}.bill.total`, title: `Where a Band D bill in ${tax.name} goes, ${year}, council part including average local precepts`} satisfies BillAnatomyOptions,

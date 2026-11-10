@@ -4,6 +4,7 @@ import {councilTaxLink, councilLinksSource} from '../../lib/council-links';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
+import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
@@ -40,7 +41,7 @@ import {
   type Authority,
 } from "../../lib/council-tax";
 import { councilPages, councilPath, regionPath } from "../../lib/paths";
-import { contextLinks, sisterLinks, type Council } from "../../lib/registry";
+import { type Council } from "../../lib/registry";
 import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
 import { councilCardPath } from "../../lib/og";
 import { councilTaxSource, longDate } from "../../lib/sources";
@@ -91,7 +92,6 @@ const own = tax.own;
 const ownSource = own ? councilTaxSource(CURRENT_YEAR, own.table) : null;
 const countySource = county ? councilTaxSource(CURRENT_YEAR, county.table) : null;
 
-const links = [...contextLinks(council),...sisterLinks(council)];
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
 
@@ -288,16 +288,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 
 
 
-  {links.length > 0 && (
-    <section class="section" id="more" aria-labelledby="more-heading">
-      <h2 id="more-heading">More on {name}</h2>
-      <ul class="sister-links">
-        {links.map((link) => (
-          <li><a href={link.url}>{name} on {link.name}</a></li>
-        ))}
-      </ul>
-    </section>
-  )}
+  <section class="section" id="more" aria-labelledby="more-heading">
+    <h2 id="more-heading">{name} across the network</h2>
+    <NetworkStrip council={council} name={name} />
+  </section>
 </BaseLayout>
 
 <style>

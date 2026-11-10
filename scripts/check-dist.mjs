@@ -57,6 +57,7 @@ const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
 let profiles = 0;
 let paymentLinks = 0, paymentAbsent = 0;
+let networkPopulation = 0, networkElection = 0;
 const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
@@ -72,8 +73,10 @@ for (const path of files(DIST)) {
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
+  if (text.includes('asylumstats.co.uk')) failures.push(`Asylum Stats domain on ${rel(path)}`);
   if (/^\/tools\/budget\/[^/]+\/index\.html$/.test(rel(path))) {
     const slug=rel(path).split('/')[3];
+    if (text.includes('data-network-strip')) failures.push(`budget route contains a network strip: ${slug}`);
     const result=budgetGameProblems(text,slug,DIST);
     failures.push(...result.problems);gameCounts[result.available?'available':'absent']++;
     if(beforeGameText[slug]&&JSON.stringify(publishedText(text))!==JSON.stringify(beforeGameText[slug]))failures.push(`${slug}: pre-A6 published text changed`);
@@ -141,6 +144,8 @@ for (const path of files(DIST)) {
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
     profiles += 1;
+    networkPopulation += (text.match(/data-network-population/g) ?? []).length;
+    networkElection += (text.match(/data-network-election/g) ?? []).length;
     if (/data-council-payment/.test(text)) paymentLinks++;
     if (/We do not hold a checked link to/.test(text)) paymentAbsent++;
     for (const problem of profileProblems(text, rel(path).split("/")[2])) failures.push(`${rel(path)}: ${problem}`);
@@ -214,6 +219,7 @@ if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
+if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
 const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
 for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);

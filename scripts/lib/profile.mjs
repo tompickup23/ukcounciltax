@@ -57,6 +57,9 @@ export function profileProblems(html, slug) {
   for (const id of ['check-discounts-and-reductions','if-paying-is-difficult','check-the-payment-schedule']) if (!payment?.querySelector(`a[href="/help/#${id}"]`)) problems.push(`payment section lacks ${id}`);
   if (slug === 'burnley' && !payment?.querySelector('a[href="https://burnley.gov.uk/counciltax/paying-your-council-tax/"]')) problems.push('Burnley payment URL differs');
   if (slug === 'camden' && !text(payment).includes("We do not hold a checked link to Camden's own council tax page.")) problems.push('Camden absence wording differs');
+  const strip = doc.querySelector('#more [data-network-strip]');
+  if (!strip) problems.push('network strip is missing');
+  if (slug === 'burnley' && (strip?.children.length !== 5 || !text(strip).includes('100,946') || !text(strip).includes('2027'))) problems.push('Burnley network lines differ');
   doc.documentElement.innerHTML = '';
   return problems;
 }

@@ -1,0 +1,15 @@
+import {createHash} from 'node:crypto';
+import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
+import {join} from 'node:path';
+const file = process.argv[2];
+if (!file) throw new Error('Supply the pinned UK Councils next elections file path');
+const raw = readFileSync(file);
+const sha256 = createHash('sha256').update(raw).digest('hex');
+if (sha256 !== 'a589f5b17250eb16c43dc8d76bc734bb1e4e10cf0a1903fd7726057b059d61ba') throw new Error('A3 stop: UK Councils next elections source hash differs');
+const data = JSON.parse(raw);
+const councils = Object.fromEntries(Object.entries(data.councils).filter(([gss, row]) => gss.startsWith('E') && row.nextYear).map(([gss, row]) => [gss, {nextYear: row.nextYear, sourceLabel: row.sourceLabel, sourceUrl: row.sourceUrl}]));
+if (Object.keys(councils).length !== 174) throw new Error('A3 stop: expected 174 next election records');
+const source = {publisher: 'UK Councils', file: 'data/elections/next-elections.json', commit: '151dc0f', sha256, source: data.source};
+mkdirSync(join(process.cwd(), 'data/links'), {recursive: true});
+writeFileSync(join(process.cwd(), 'data/links/next-elections.json'), JSON.stringify({source, councils}, null, 2) + '\n');
+console.log(`Imported ${Object.keys(councils).length} pinned next election records`);

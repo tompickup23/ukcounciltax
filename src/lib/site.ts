@@ -26,7 +26,7 @@ export const DEFAULT_DESCRIPTION =
  * other in connect-src. scripts/check-dist.mjs fails a page that does not
  * carry exactly one beacon with this token.
  */
-export const CF_BEACON_TOKEN = "";
+export const CF_BEACON_TOKEN = "11f6f11ed6cf428d9dd7e1d688f8a64b";
 export const BEACON_SCRIPT = "https://static.cloudflareinsights.com/beacon.min.js";
 export const BEACON_ENDPOINT = "https://cloudflareinsights.com";
 

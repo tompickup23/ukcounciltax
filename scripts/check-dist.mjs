@@ -63,6 +63,7 @@ const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8'))
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
 if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
+let parishSource;
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -160,7 +161,7 @@ for (const path of files(DIST)) {
 
   if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
     parishPagesChecked++;
-    const parishSource = JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
+    parishSource ??= JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
     const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
     if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
   }

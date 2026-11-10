@@ -12,6 +12,13 @@ Written in Claude Code. It turns `PLAN-2026-11-10-SPLIT-AND-NETWORK.md` and `DES
 | ukcouncils PR 37 review (reorganisation panel) | Done, read only. Not ready to merge: four fixes and one decision, section 3 |
 | A3 stop | Resolved by a probe over all 296 councils. Amendments committed in `~/wt/uct-profile` as `docs/A3-AMENDMENTS-2026-11-10.md` |
 
+Later on 10 November:
+
+- PR 42 (the plan and design brief) merged. PR 43 (navigation, links, beacon) merged as `0bec32e`, but with its `site` check failing: the budget game browser test forbids external requests and the beacon is one. That was Claude's error (a wait then merge command that ignored the failed check). Publishing is gated on the same suite, so the live site did not change. PR 45 fixes the test; the full browser suite passes locally against it (244 tests). Main stays red and undeployed until PR 45 merges.
+- Search Console: the TXT record was added and the domain property is verified, under the Google account that holds the network's other properties.
+- Codex B finished PR 37: rebased, retargeted to main, ready for review. The five fixes were checked in the built pages (184 panels; no rail on the 14 documents only pages; no sub judice wording; no zero width characters). Its "unitary" check uses a list of exact allowed page patterns, which is brittle; simplify it in a follow up.
+- Codex A built A3 phases 1b to 11 and stopped on the old mini map size assertion. The ruling is section 5 of `docs/A3-AMENDMENTS-2026-11-10.md` in `~/wt/uct-profile`; Codex was resumed with it.
+
 ## 2. Tom's steps
 
 1. **Merge PR 42** (documents; checks passed).
@@ -92,7 +99,29 @@ Repo ukcouncils. Read CLAUDE.md, then in ~/ukcounciltax (main): docs/PLAN-2026-1
 Repo ukcounciltax. Read CLAUDE.md, docs/DESIGN-ROUND-TWO-BRIEF.md items D5 and D6, and decision S3. Worktree ~/wt/uct-round-two on feat/design-round-two from origin/main. D5: replace the empty grid at the top of /tools/budget/<slug>/ with a drawn five stop rail naming the rounds; the published split is not shown before round one. D6: five position strips on /council-tax/ranked/; the England averages row as five across or one table; the clipped history table in a drawer; Band D beside each name on /councils/ with one source line per region. Before and after captures, the full gate and the number diff. Open the PR; do not merge.
 ```
 
-## 6. Order
+## 6. D1 dry run: what the summary row can show
+
+Counted on 10 November 2026 from ukcouncils `origin/main` data files, for the 296 English billing authorities (the keys of `data/council-tax/england-2026-27.json`). A count of councils holding each fact, nothing more.
+
+| Summary fact | Councils of 296 | File |
+|---|---|---|
+| Band D for 2026/27 | 296 | `data/council-tax/england-2026-27.json` |
+| Type | 296 | `data/registry/councils.json` |
+| Population, mid-2025 | 294 | `data/population/mye25-population.json` |
+| Verified next election year | 174 | `data/elections/next-elections.json` |
+| Budget return available | 287 (nine with no return) | `data/budget/ra-2026-27.json` |
+| Collection rate, 2025/26 | 296 | `data/collection/collection-rates-2025-26.json` |
+| Listed for Exceptional Financial Support | 51 | `data/efs/statements.json` |
+| The council's own pay page | 254 | `data/links/local-links.json` |
+| The council's bin day page | 207 | `data/links/local-links.json` |
+| AI DOGE summary held, of which with a headline | 234, 228 | `data/spending/aidoge-summaries.json` |
+| UK Food Hygiene URL in the registry | 293 | `data/registry/councils.json` |
+| UK Demographics URL | 294 | as above |
+| UK Elections URL | 144 | as above |
+
+So the row always has Band D, type and collection rate; population on all but two; and the election year, budget, support status and service links only where held. The row must lay out cleanly with three facts and with six. The D1 session should recount these before building, since PR 37 and later imports may move them.
+
+## 7. Order
 
 | Step | Who | Starts when |
 |---|---|---|

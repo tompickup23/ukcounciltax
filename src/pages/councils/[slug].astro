@@ -10,6 +10,10 @@ import BandMix from '../../components/BandMix.astro';
 import CollectionRates from '../../components/CollectionRates.astro';
 import BudgetSummary from '../../components/BudgetSummary.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
+import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
+import ChartActions from '../../components/kit/ChartActions.astro';
+import {profileChartOptions} from '../../lib/kit-charts';
+import {profileBandCells} from '../../lib/profile-bands';
 import MiniMap from "../../components/MiniMap.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
@@ -53,6 +57,7 @@ interface Props {
 
 const { council, tax } = Astro.props;
 const current = loadYear(CURRENT_YEAR);
+const charts = profileChartOptions(council.slug);
 const rankType = classFor(tax.classCode)!;
 const classRanks = rankClass(current, rankType);
 const position = classRanks?.find(row => row.gss === council.gss);
@@ -121,11 +126,25 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <div class="council-answer">
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
-    <p class="muted">
-      Choose your band for the published yearly charge, before discounts.
-    </p>
-    <BandSelector ons={council.gss} authority={tax} />
-    <p class="small muted">Monthly equivalents divide the annual charge by ten and round to pennies. Actual bill instalments can differ.</p>
+    <p class="muted">Published yearly charge for each band, before discounts.</p>
+    <div class="band-answer">
+      <div class="fact" data-fact>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Published council tax bands and budgeting equivalents">
+          <table class="data" data-band-table>
+            <caption>Council tax bands A to H in {name}, {year}: the published yearly charge, and that charge divided by 10 and by 12</caption>
+            <thead><tr><th scope="col">Band</th><th scope="col" class="num">Yearly charge</th><th scope="col" class="num">Divided by 10</th><th scope="col" class="num">Divided by 12</th></tr></thead>
+            <tbody>{BANDS.map(band => <tr><th scope="row">{band}</th>{profileBandCells(tax.bands[band]).map((value, index) => <td class="num" data-figure={index === 0 ? '' : undefined}>{value}</td>)}</tr>)}</tbody>
+          </table>
+        </div>
+        <p class="calc-label">The two right hand columns are our calculation: the published yearly charge divided by 10 and by 12, rounded to the penny. They are not your instalments. GOV.UK says “The cost is usually split into 10 monthly payments”, and your council can agree 12. Your bill sets the actual amounts and dates.</p>
+        <SourceLine source={councilTaxSource(CURRENT_YEAR, current.source.bandTable, 'Divided by 10 and by 12 calculated from it')} />
+        <p class="small">Instalment wording: <a href="https://www.gov.uk/council-tax/paying-your-bill">GOV.UK, How Council Tax works, Paying your bill</a>, updated 5 February 2025, read 9 November 2026.</p>
+      </div>
+      <div class="fact" data-fact id="band-bars">
+        <ZeroBar {...charts.bands} />
+        <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
+      </div>
+    </div>
     <p class="caveat">
       Every band includes the share of every body that sets council tax here, such as the police and,
       where they exist, the county council, the fire authority and parish councils, with parish precepts as
@@ -138,6 +157,9 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
       </ul>
     )}
+    <h3>Change on {previous} by band</h3>
+    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link below.</p>
+    <BandSelector ons={council.gss} authority={tax} compact />
   </section>
 
   <MiniMap gss={council.gss} name={name} />
@@ -301,9 +323,23 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 
 <style>
   .council-answer { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-  @media (min-width: 960px) { .council-answer { grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); } }
-  #council-tax { max-width: 48rem; margin-top: 1rem; }
+  .band-answer { display: grid; gap: var(--space-lg); min-width: 0; }
+  .band-answer > div { min-width: 0; }
+  @media (min-width: 960px) { .band-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  #council-tax { margin-top: 1rem; }
   .notes { font-size: 0.9rem; color: var(--text-muted); padding-left: 1.1rem; }
   .sister-links { padding-left: 1.1rem; }
   .sister-links li { margin: 0.25rem 0; }
+</style>
+
+<style is:global>
+  #band-bars [data-band-marked] g.ek-bar path { fill: var(--series-neutral) !important; }
+  #band-bars [data-band-marked="A"] g.ek-bar:nth-of-type(1) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="B"] g.ek-bar:nth-of-type(2) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="C"] g.ek-bar:nth-of-type(3) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="D"] g.ek-bar:nth-of-type(4) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="E"] g.ek-bar:nth-of-type(5) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="F"] g.ek-bar:nth-of-type(6) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="G"] g.ek-bar:nth-of-type(7) path { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="H"] g.ek-bar:nth-of-type(8) path { fill: var(--accent) !important; }
 </style>

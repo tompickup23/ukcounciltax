@@ -19,6 +19,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
+import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
@@ -135,6 +136,7 @@ for (const path of files(DIST)) {
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
     profiles += 1;
+    for (const problem of profileProblems(text, rel(path).split("/")[2])) failures.push(`${rel(path)}: ${problem}`);
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
     for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);

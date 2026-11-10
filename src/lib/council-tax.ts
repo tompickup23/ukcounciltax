@@ -181,6 +181,11 @@ export function tenInstalments(annual: number): number {
   return round(annual / 10, 2);
 }
 
+/** A budgeting equivalent, not the council's instalment schedule. */
+export function twelveInstalments(annual: number): number {
+  return round(annual / 12, 2);
+}
+
 const POUNDS = new Intl.NumberFormat("en-GB", {
   style: "currency",
   currency: "GBP",

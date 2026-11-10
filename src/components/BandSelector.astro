@@ -28,9 +28,10 @@ interface Props {
   authority: Authority;
   idPrefix?: string;
   showChange?: boolean;
+  compact?: boolean;
 }
 
-const { ons, authority, idPrefix = "band", showChange = true } = Astro.props;
+const { ons, authority, idPrefix = "band", showChange = true, compact = false } = Astro.props;
 const bandTable = loadYear(CURRENT_YEAR).source.bandTable;
 const source = councilTaxSource(CURRENT_YEAR, bandTable);
 const changeRef = changeSource(PREVIOUS_YEAR, CURRENT_YEAR);
@@ -66,11 +67,11 @@ const previous = yearLabel(PREVIOUS_YEAR);
             figure={pounds(annual)}
             source={source}
           >
-            <span class="band-monthly">
+            {!compact && <span class="band-monthly">
               {pounds(tenInstalments(annual))} a month over ten instalments, rounded
-            </span>
+            </span>}
           </Fact>
-          <p class="caveat">Area average including parish precepts. Your exact bill and any discounts can differ.</p>
+          {!compact && <p class="caveat">Area average including parish precepts. Your exact bill and any discounts can differ.</p>}
           {change && (
             <Fact
               class="fact-small"
@@ -91,6 +92,9 @@ const previous = yearLabel(PREVIOUS_YEAR);
   for (const selector of document.querySelectorAll<HTMLElement>('.band-selector')) {
     const radios = [...selector.querySelectorAll<HTMLInputElement>('[data-band]')];
     const updateCompare = () => {
+      const band = radios.find(radio => radio.checked)!.value;
+      const bars = document.querySelector<HTMLElement>('#band-bars figure');
+      if (bars) bars.dataset.bandMarked = band;
       for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-council-compare],[data-council-scenario]')) {
       const url = new URL(link.href);
       url.searchParams.set('band', radios.find(radio => radio.checked)!.value);

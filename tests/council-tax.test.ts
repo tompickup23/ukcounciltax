@@ -9,6 +9,7 @@ import {
   loadYear,
   pounds,
   tenInstalments,
+  twelveInstalments,
   yearLabel,
   yearWords,
 } from "../src/lib/council-tax";
@@ -165,4 +166,9 @@ describe("formatting", () => {
     expect(yearLabel("2026-27")).toBe("2026/27");
     expect(yearWords("2026-27")).toBe("2026 to 2027");
   });
+});
+
+it('divides annual charges by twelve with the existing penny rounding', () => {
+  expect(twelveInstalments(2549.42)).toBe(212.45);
+  expect(twelveInstalments(1699.61)).toBe(141.63);
 });

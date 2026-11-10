@@ -32,7 +32,7 @@ const canonicalMap = JSON.parse(readFileSync(join(process.cwd(), "data", "canoni
 const seenMapped = new Set();
 const seenUnique = new Set();
 // The Web Analytics site token, the same value as CF_BEACON_TOKEN in src/lib/site.ts.
-const BEACON_TOKEN = "";
+const BEACON_TOKEN = "11f6f11ed6cf428d9dd7e1d688f8a64b";
 // Built from parts so this file does not carry the entity names it looks for.
 const DASH = new RegExp(`[\\u2013\\u2014]|&${"m"}dash;|&${"n"}dash;`);
 

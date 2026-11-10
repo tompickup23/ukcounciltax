@@ -60,6 +60,11 @@ export function profileProblems(html, slug) {
   const strip = doc.querySelector('#more [data-network-strip]');
   if (!strip) problems.push('network strip is missing');
   if (slug === 'burnley' && (strip?.children.length !== 5 || !text(strip).includes('100,946') || !text(strip).includes('2027'))) problems.push('Burnley network lines differ');
+  const nav = doc.querySelector('main nav.page-contents');
+  const navIds = [...nav?.querySelectorAll('a[href^="#"]') ?? []].map(link => link.getAttribute('href').slice(1));
+  const sectionIds = [...doc.querySelectorAll('main section[id]')].filter(section => nav && (nav.compareDocumentPosition(section) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING)).map(section => section.id);
+  if (!nav || JSON.stringify(navIds) !== JSON.stringify(sectionIds)) problems.push('page contents differ from document section order');
+  if (doc.querySelectorAll('.action-links a').length !== 3) problems.push('the action row must hold three links');
   doc.documentElement.innerHTML = '';
   return problems;
 }

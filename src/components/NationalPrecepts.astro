@@ -11,8 +11,8 @@ import {councilByGss} from '../lib/registry';
 import SourceLine from './SourceLine.astro';
 import {moneyPence} from '../lib/tax-view';
 import {precedingYear,yearLabel} from '../lib/council-tax';
-interface Props {gss:string;name:string;classCode:Authority["classCode"]}
-const {gss,name,classCode}=Astro.props;
+interface Props {gss:string;name:string;classCode:Authority["classCode"];view?:"bill"|"parishes"|"both"}
+const {gss,name,classCode,view="both"}=Astro.props;
 const slug = councilByGss(gss)!.slug;
 const chart = profileChartOptions(slug).bill;
 const rounding = billShareRounding(chart);
@@ -23,7 +23,7 @@ const labels={county:['ILB','OLB'].includes(classCode)?'Greater London Authority
 const source=national.sources.components;
 const year=national.year, earlier=precedingYear(national.year);
 ---
-{data && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
+{data && view !== "parishes" && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
   <p class="eyebrow">Who receives your council tax</p>
   <h2 id="precept-heading">Band D bill breakdown in {name}</h2>
   <p>These are the published <strong>{yearLabel(year)} area averages</strong>. Parish charges are averaged into the council line. They are already included in the total and must not be added again.</p>
@@ -48,7 +48,7 @@ const year=national.year, earlier=precedingYear(national.year);
   {data.notes.length>0&&<ul class="small">{data.notes.map(n=><li>Source note: {n.text}</li>)}</ul>}
   <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Data_Billing and Precepting_Bodies. Retrieved {source.retrieved}. <a href="/data/">Download data and checksums</a>.</p>
 </section>}
-<section class="section" id="parish-precepts" aria-labelledby="parish-heading">
+{view !== "bill" && <section class="section" id="parish-precepts" aria-labelledby="parish-heading">
   <h2 id="parish-heading">Parish and local precepts in {name}</h2>
   <div class="fact" data-fact>
     {parishes.length ? <>
@@ -57,4 +57,4 @@ const year=national.year, earlier=precedingYear(national.year);
     </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
     <SourceLine source={parishRef} />
   </div>
-</section>
+</section>}

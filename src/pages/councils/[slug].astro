@@ -1,6 +1,9 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
 import {councilTaxLink, councilLinksSource} from '../../lib/council-links';
+import {national} from '../../lib/national-data';
+import {bandStockFor} from '../../lib/band-stock';
+import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
@@ -115,6 +118,23 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
+  <PageContents items={[
+    {id: 'council-tax', label: 'Bands A to H'},
+    ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
+    ...(englandArea && areaSource ? [{id: 'compared', label: `${rankType.label} and England`}] : []),
+    {id: 'map', label: 'Map'},
+    {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
+    {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
+    ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
+    ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+    {id: 'parish-precepts', label: 'Parish charges'},
+    ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
+    ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
+    {id: 'where-money-goes', label: 'Where the money goes'},
+    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+    {id: 'more', label: `${name} across the network`},
+  ]} />
+
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
     <p class="muted">Published yearly charge for each band, before discounts.</p>
@@ -148,30 +168,15 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   </section>
 
   <div class="action-links" aria-label="Council tax next steps">
+    <a href="#precept-breakdown">What makes up this bill</a>
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
-    <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
-    <a href="/precepts/">What makes up my bill</a>
     <a href={`/tools/budget/${council.slug}/`}>Explore {name}'s budget and play the budget game</a>
-    <a href="/help/">Help with your bill</a>
-    <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a>
-    <a href="/increases/">Council tax increases {yearLabel(CURRENT_YEAR)} by council</a>
-    <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
-    <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
   </div>
   <CouncilActions slug={council.slug} />
-  <BandMix gss={council.gss} name={name} />
-  <CollectionRates gss={council.gss} name={name} />
-  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
-  <PageContents items={[
-    {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
-    {id: 'parish-precepts', label: 'Parish charges'},
-    ...(englandArea ? [{id: 'compared', label: 'England and area averages'}] : []),
-    {id: 'history', label: 'Previous years'},
-    ...(own ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
-  ]} />
 
-  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} />
+
+
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="bill" />
 
   {englandArea && areaSource && (
     <section class="section" id="compared" aria-labelledby="compared-heading">
@@ -226,6 +231,19 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <LongTaxHistory gss={council.gss} name={name} view="chart" />
   </section>
 
+  <section class="section" id="discounts-and-paying" aria-labelledby="discounts-heading">
+    <h2 id="discounts-heading">Discounts, exemptions and how to pay in {name}</h2>
+    <p>Discounts and exemptions depend on who lives in the home and the home itself. A household with one counted adult may get a 25% discount, and some people and some homes are not counted or are exempt. This site does not decide eligibility. <a href="/help/#check-discounts-and-reductions">Discounts, reductions and who is counted</a>.</p>
+    <p>If paying is difficult, contact the council early. <a href="/help/#if-paying-is-difficult">If paying is difficult</a>.</p>
+    {paymentLink ? <>
+      <p><a href={paymentLink} data-council-payment>Pay or manage your council tax on {council.officialName}'s website</a>.</p>
+      <p class="source-line">Link from <a href={councilLinksSource.url}>GOV.UK Local Links Manager</a>, service “Pay your Council Tax” (LGSL 57), export of {longDate(councilLinksSource.exportDate)}, checked by UK Places on {longDate(councilLinksSource.checkedOn)}.</p>
+    </> : <p>We do not hold a checked link to {name}'s own council tax page. <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council on GOV.UK</a>.</p>}
+    <p><a href="/help/">Help with your bill</a> · <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a> · <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a> · <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>.</p>
+    <p><a data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a> · <a href="/precepts/">What makes up my bill</a> · <a href="/increases/">Council tax increases {year} by council</a>.</p>
+    <p>Check the payment dates on your bill. <a href="/help/#check-the-payment-schedule">How council tax is paid</a>.</p>
+  </section>
+
   {own && ownSource && (
     <section class="section" id="who-sets-it" aria-labelledby="who-sets-heading">
       <h2 id="who-sets-heading">Who sets council tax in {name}?</h2>
@@ -264,17 +282,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   )}
 
   <PreceptContext region={tax.region} gss={council.gss} />
-
-  <section class="section" id="discounts-and-paying" aria-labelledby="discounts-heading">
-    <h2 id="discounts-heading">Discounts, exemptions and how to pay in {name}</h2>
-    <p>Discounts and exemptions depend on who lives in the home and the home itself. A household with one counted adult may get a 25% discount, and some people and some homes are not counted or are exempt. This site does not decide eligibility. <a href="/help/#check-discounts-and-reductions">Discounts, reductions and who is counted</a>.</p>
-    <p>If paying is difficult, contact the council early. <a href="/help/#if-paying-is-difficult">If paying is difficult</a>.</p>
-    {paymentLink ? <>
-      <p><a href={paymentLink} data-council-payment>Pay or manage your council tax on {council.officialName}'s website</a>.</p>
-      <p class="source-line">Link from <a href={councilLinksSource.url}>GOV.UK Local Links Manager</a>, service “Pay your Council Tax” (LGSL 57), export of {longDate(councilLinksSource.exportDate)}, checked by UK Places on {longDate(councilLinksSource.checkedOn)}.</p>
-    </> : <p>We do not hold a checked link to {name}'s own council tax page. <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council on GOV.UK</a>.</p>}
-    <p>Check the payment dates on your bill. <a href="/help/#check-the-payment-schedule">How council tax is paid</a>.</p>
-  </section>
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="parishes" />
+  <BandMix gss={council.gss} name={name} />
+  <CollectionRates gss={council.gss} name={name} />
+  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
 
   {council.reorganisation && (
     <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">

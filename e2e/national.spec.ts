@@ -13,7 +13,7 @@ test('national precept search leads to council components and a filterable paris
  });
 test('bundled mayoral services and the City of London exception remain visible',async({page})=>{
  await page.goto('/councils/manchester/');const parts=page.locator('#precept-breakdown');await expect(parts).toContainText('General functions');await expect(parts).toContainText('PCC functions');await expect(parts).toContainText('£153.95');
- await page.goto('/councils/city-of-london/');await expect(page.locator('#precept-breakdown')).toContainText('£176.38');await expect(page.locator('#precept-breakdown tr').filter({hasText:'Police'}).first()).toContainText('£0.00');
+ await page.goto('/councils/city-of-london/');await expect(page.locator('#precept-breakdown')).toContainText('£176.38');await expect(page.locator('#precept-breakdown th[scope="row"]').filter({hasText:/^Police$/})).toHaveCount(0);await expect(page.getByText('The City of London is outside the Metropolitan Police District.',{exact:false})).toBeVisible();
 });
 test('negative parish precepts are shown as published',async({page})=>{
  await page.goto('/precepts/parishes/east-lindsey/');await page.getByLabel('Filter parish or local body').fill('Beesby');await expect(page.locator('[data-parish-name]:visible')).toContainText('-£2.64');

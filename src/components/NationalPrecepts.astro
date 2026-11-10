@@ -1,4 +1,9 @@
 ---
+import BillAnatomy from '../vendor/estate-kit/src/components/BillAnatomy.astro';
+import ChartActions from './kit/ChartActions.astro';
+import {profileChartOptions, billShareRounding} from '../lib/kit-charts';
+import {profilePrecepts} from '../lib/profile-precepts';
+import type {Authority} from '../lib/council-tax';
 import {national,parishesFor} from '../lib/national-data';
 import {parishRange, parishSource as parishRef} from '../lib/parish-pages';
 import {parishPath} from '../lib/paths';
@@ -6,12 +11,15 @@ import {councilByGss} from '../lib/registry';
 import SourceLine from './SourceLine.astro';
 import {moneyPence} from '../lib/tax-view';
 import {precedingYear,yearLabel} from '../lib/council-tax';
-interface Props {gss:string;name:string}
-const {gss,name}=Astro.props;
+interface Props {gss:string;name:string;classCode:Authority["classCode"]}
+const {gss,name,classCode}=Astro.props;
+const slug = councilByGss(gss)!.slug;
+const chart = profileChartOptions(slug).bill;
+const rounding = billShareRounding(chart);
 const data=national.components[gss];
 const parishes=parishesFor(gss);
 const money=(n:number|null)=>n===null?'Unavailable':moneyPence(n);
-const labels={county:'County or GLA',police:'Police',fire:'Fire',combined:'Combined authority'};
+const labels={county:['ILB','OLB'].includes(classCode)?'Greater London Authority':'County council',police:'Police',fire:'Fire',combined:'Combined authority'};
 const source=national.sources.components;
 const year=national.year, earlier=precedingYear(national.year);
 ---
@@ -19,12 +27,17 @@ const year=national.year, earlier=precedingYear(national.year);
   <p class="eyebrow">Who receives your council tax</p>
   <h2 id="precept-heading">Band D bill breakdown in {name}</h2>
   <p>These are the published <strong>{yearLabel(year)} area averages</strong>. Parish charges are averaged into the council line. They are already included in the total and must not be added again.</p>
+  <div class="fact" data-fact id="bill-breakdown-chart">
+    <BillAnatomy {...chart} />
+    <ChartActions chart={`councils/${slug}/bill`} target="bill-breakdown-chart" />
+    {rounding && <p class="small" data-share-rounding>{rounding}</p>}
+  </div>
   <div class="table-wrap" tabindex="0" role="region" aria-label="National Band D component table"><table class="data">
     <caption>{name}: published Band D components, {yearLabel(year)}</caption>
     <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
     <tbody>
       <tr><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(data.ownWithParishPence)}</td></tr>
-      {data.parts.map(p=><tr><th scope="row">{labels[p.kind]}</th><td>{p.name??(p.bandDPence===0?'No separate precept reported':'Body unavailable')}</td><td class="num">{money(p.bandDPence)}</td></tr>)}
+      {profilePrecepts(classCode, data.parts).map(p=><tr><th scope="row">{labels[p.kind]}</th><td>{p.name??(p.bandDPence===0?'No separate precept reported':'Body unavailable')}</td><td class="num">{money(p.bandDPence)}</td></tr>)}
     </tbody>
     <tfoot><tr><th scope="row" colspan="2">Published area average, including all precepts</th><td class="num">{money(data.areaPence)}</td></tr></tfoot>
   </table></div>

@@ -12,6 +12,7 @@ import { billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, t
 import { CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
 import { loadRegistry } from "./registry";
 import { classFor, rankClass } from "./rankings";
+import {profilePrecepts} from "./profile-precepts";
 import { national } from "./national-data";
 import { neighbourAreas, boundarySource } from "./boundaries";
 import { BURNLEY_PARTS, siteFigures } from "./figures";
@@ -46,12 +47,7 @@ export function profileChartOptions(slug: string) {
   const year = yearLabel(CURRENT_YEAR);
   const common = {set: siteFigures()};
   const components = national.components[council.gss];
-  const kept = components.parts.filter(part => {
-    const drop = part.kind === "county" ? ["UA", "MD"].includes(tax.classCode)
-      : ["ILB", "OLB"].includes(tax.classCode);
-    if (drop && (part.bandDPence !== 0 || part.name !== null)) throw new Error(`A3 stop: cannot drop ${council.gss}/${part.kind}`);
-    return !drop;
-  });
+  const kept = profilePrecepts(tax.classCode, components.parts);
   const areas = neighbourAreas(council.gss);
   return {
     bands: {...common, figure: `${key}.bands`, orientation: "vertical", highlight: "D",

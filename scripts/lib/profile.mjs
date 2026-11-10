@@ -35,6 +35,13 @@ export function profileProblems(html, slug) {
   const gss = bySlug[slug]?.gss;
   if (gss && history?.querySelectorAll('tbody tr').length !== Object.values(national.history[gss].area.values).filter(value => value !== null).length) problems.push('history rows differ from the published values');
   if (slug === 'burnley' && (!text(history).includes('1993/94') || !text(history).includes('£628') || history?.querySelectorAll('tbody tr').length !== 34)) problems.push('Burnley history anchors differ');
+  const bill = doc.querySelector('#precept-breakdown');
+  if (bill?.querySelectorAll('svg.ek-chart').length !== 1) problems.push('one bill chart is required');
+  if (text(doc.body).includes('County or GLA')) problems.push('generic county label remains');
+  const rowHeaders = [...bill?.querySelectorAll('table.data tbody th[scope="row"]') ?? []].map(text);
+  if (slug === 'manchester' && rowHeaders.some(label => ['County council','Greater London Authority'].includes(label))) problems.push('Manchester has an inapplicable county row');
+  if (slug === 'camden' && rowHeaders.some(label => ['Police','Fire','Combined authority'].includes(label))) problems.push('Camden has an inapplicable separate row');
+  if (slug === 'burnley' && JSON.stringify(rowHeaders.slice(1)) !== JSON.stringify(['County council','Police','Fire','Combined authority'])) problems.push('Burnley component rows differ');
   dom.window.close();
   return problems;
 }

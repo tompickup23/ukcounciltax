@@ -170,7 +170,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
   ]} />
 
-  <NationalPrecepts gss={council.gss} name={name} />
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} />
 
   {englandArea && areaSource && (
     <section class="section" id="compared" aria-labelledby="compared-heading">

@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { requireImages } from "./lib/og-policy.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
@@ -324,7 +325,7 @@ if (existsSync(bandFile)) {
 
 // When the build rendered cards (BUILD_OG=1), every og:image must resolve to
 // a card in the tree. An iteration build renders none and skips this.
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   const devolvedCards = ['scotland', 'wales'].flatMap(nation => existsSync(join(DIST, 'og', nation)) ? [...files(join(DIST, 'og', nation))].filter(path => path.endsWith('.png')) : []);
   if (devolvedCards.length !== 54) failures.push(`expected 54 devolved cards, found ${devolvedCards.length}`);
   let cards = 0;
@@ -396,7 +397,7 @@ else {
 // chart PNG link resolves to a file. The CSP still allows the kit's inline style
 // attributes (A5 brief, section 5).
 if (!homeChecked) failures.push("homepage not found for the face checks");
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
   console.log(`dist check: ${chartPngLinks.length} chart PNG links resolve`);
 }

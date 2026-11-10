@@ -133,3 +133,85 @@ So the row always has Band D, type and collection rate; population on all but tw
 | D5 and D6 on ukcounciltax | Claude Code | A3 merged |
 | D4 (UK Councils homepage) and D2 on ukcouncils | Claude Code | D1 merged |
 | Balance the budget exploration (T3; round five handover) | Claude Code | Any time; documents only |
+
+## 8. Revised plan after day one: quality, efficiency and order
+
+Written late on 10 November 2026, after PRs 42, 43 and 45 merged and deployed, PR 37 passed its checks, and A3 opened as PR 46 with a review posted. It replaces section 7's order where they differ.
+
+### 8.1 What day one showed
+
+| What happened | Cost | Rule from now on |
+|---|---|---|
+| A brief fixed a chart label that the kit refuses for 194 of 296 councils | A3 stopped for a day | Any wording a brief fixes for a drawing is run through the kit gate for all 296 in both themes before the brief is handed over |
+| Three tests asserted the old state (no beacon, twice; the mini map's size) | One Codex stop; one red main | Every brief carries an obsolete assertion clause: an assertion on a component the brief removes or a state it changes is replaced by its equivalent, in its own commit, and listed in the PR |
+| PR 43 was opened without the browser suite and merged on a failed check through a chained command | Main red for an hour; no bad deploy, because publishing is gated | A PR that changes every page runs the full local gate, browser suite included, before it opens. Merging is always its own step after the check results are read; never chained to a watch |
+| A clipped figure on the band bars passed every gate | Found only by looking | The reviewer looks at every chart label at 375 and 1440 in both themes. The kit gains a text against mark overlap check (8.3) |
+| Each Codex stop needed Tom to carry a ruling back | Round trips | Briefs pre authorise the predictable choices and say which class of problem is a stop |
+
+### 8.2 Efficiency: the pipeline is the bottleneck
+
+Measured from the run list on 10 November: the `site` job on ukcounciltax takes 17 to 25 minutes on every pull request, including the two documents only ones, and the same job runs again on main before publishing, so a change takes about 45 minutes from green PR to live. It builds with `BUILD_OG=1` every time. A3 raises the local build from 548 to 980 seconds, so the job will approach its 40 minute limit. ukcouncils already builds without share images in CI and finishes in about 13 minutes.
+
+One session, mechanical, suited to Codex, ahead of any further feature work on ukcounciltax:
+
+1. Documents only changes (`docs/**`, `*.md`) skip the build, browser and deploy steps while still reporting the checks a merge needs.
+2. Pull requests build without `BUILD_OG`; main keeps the full build before publishing. A small test still renders a fixed sample of share images and chart PNGs on pull requests so the renderer is exercised.
+3. Cache the generated images across runs, keyed on a hash of the data files, the kit and the drawing code, so an unchanged chart is not redrawn.
+4. Memoise `profileChartOptions` and the parish page read of `england.json` (review of PR 46).
+5. Raise the job limit to 60 minutes until items 2 to 4 have landed, so A3 cannot time out.
+6. Decide the chart PNG weight (Tom): 1x instead of 2x, or no map PNGs. A3's PNGs are 320 MB; only the two download links under each chart use them.
+
+Target: under 10 minutes for a pull request and under 20 from merge to live.
+
+Other savings: both tax sites take the same shared pieces (short source line, summary row, overlap gate) from the kit once, not built twice; the sister link table is produced once; Tom's merges are batched into one list per sitting; the finished worktrees on each repo (twelve and eleven listed today, most merged) are removed once Tom agrees.
+
+### 8.3 Kit 0.4.0 first, as its own lane
+
+The kit is where a fix reaches both sites and the LGR page. In `tompickup23/estate-kit`, Claude Code, no conflict with either site lane:
+
+- an overlap check between text and marks, so a label under a bar fails the gate;
+- a label on whichever bar is marked, not only A, D and H;
+- the source printed once (inside the drawing or as the HTML line, by option);
+- a short source line with its full entry, for D3;
+- a summary row of stat tiles that lays out cleanly with three to six facts, for D1;
+- body names taken from the data, not composed ("City of London council" is wrong).
+
+### 8.4 Order, by lane
+
+One writer per repository. Lanes run at the same time.
+
+| Lane | Now | Next | Then |
+|---|---|---|---|
+| ukcounciltax, Codex | PR 46 fix pass (running) | Pipeline speed (8.2) | T2 the receipt; T4 the band check |
+| ukcounciltax, Claude Code | Review PR 46 again when the fix pass lands | D5 and D6 after PR 46 merges | C6 levels day staged, by mid January |
+| ukcouncils, Claude Code | D1 and D3, the dossier, once PR 37 is merged | D4 homepage, D2 navigation | C2 who runs it; C5 what the council does; the national reorganisation page |
+| estate-kit, Claude Code | Kit 0.4.0 (8.3) | Adopt in both sites with the next PR in each | |
+| Tom | Merge PR 37 and PR 44; submit the sitemap in Search Console | Merge PR 46 after the fix pass | Rule on chart PNG weight; approve worktree cleanup |
+
+D1 can start before kit 0.4.0 lands by using the site's existing `Fact` and drawer components, then swap to the kit's summary row in its follow up. It should not wait.
+
+### 8.5 Dates that bind
+
+| Date | What |
+|---|---|
+| Weekly from 17 November 2026 | A short measurement note: Cloudflare page loads and Search Console clicks, impressions and Google's chosen canonical for ten shared URLs. Nothing is judged on less than two weeks of data |
+| December 2026 | Rerun the UK Places link check: `src/lib/council-links.ts` fails every build from 4 January 2027 |
+| December 2026 to February 2027 | Referendum principles: the facts only explainer and the 2027/28 page indexed on UK Council Tax |
+| Mid January 2027 | Levels day staged (C6); the UK Councils dossier live on all 296 pages |
+| 20 March 2027 | Data and structure freeze on both sites |
+| May to June 2027 | The reversal, gated on the dossier and on Search Console evidence |
+
+### 8.6 Prompt: pipeline speed (Codex, ukcounciltax, after PR 46 merges)
+
+```text
+Repo ukcounciltax. Create worktree ~/wt/uct-ci on branch chore/ci-speed from origin/main. Node 22. Read CLAUDE.md, .github/workflows/release.yml and docs/PLAN-2026-11-10-EXECUTION.md section 8.2. One commit per item, in this order.
+
+1. Raise the site job's timeout to 60 minutes.
+2. Documents only changes: when a pull request or a push to main changes only docs/** or *.md files, skip install, build, tests, browser suites and publish, and still report the site, number diff and design check checks as passed so the PR can merge. Do it inside the existing jobs with a first step that detects the changed paths; do not use workflow level paths-ignore, which would leave required checks unreported.
+3. Pull requests build without BUILD_OG; pushes to main keep BUILD_OG=1 before publishing. Add a unit or dist test that renders a fixed sample (the homepage card, Burnley's share card and Burnley's four profile chart PNGs in both themes) so the renderer is exercised on every pull request. Confirm npm run test:dist and the chart link checks behave correctly when images are not built, without weakening them on main.
+4. Cache generated images across runs with actions/cache, keyed on a hash of data/**, src/vendor/estate-kit/**, src/lib/kit-charts.ts, src/lib/figures.ts, src/lib/og.ts and the og routes. A cache hit must never serve an image for changed data: prove it with a test that changes one figure and shows the key changes.
+5. Memoise profileChartOptions and the per page read of data/national/england.json in scripts/check-dist.mjs. No output may change: compare a full build before and after byte for byte for HTML and by hash for images.
+6. Record before and after timings for a pull request run and a main run in docs/RELEASE.md.
+
+Stop and report if any change would weaken a gate on main, alter a built page, or leave a required check unreported. British English; no em dash, en dash or spaced hyphen anywhere; stage named paths only; open the PR; do not merge.
+```

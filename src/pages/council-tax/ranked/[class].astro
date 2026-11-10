@@ -5,7 +5,7 @@ import Fact from '../../../components/Fact.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import {CURRENT_YEAR, loadYear, pounds, wholePounds, yearLabel} from '../../../lib/council-tax';
 import {rankingClasses, rankingPage, rankingRule, rankingMethod} from '../../../lib/ranking-page';
-import {positionCell} from '../../../lib/rankings';
+import {positionCell, sentenceCase} from '../../../lib/rankings';
 import {rankingPath} from '../../../lib/paths';
 import {councilTaxSource} from '../../../lib/sources';
 export function getStaticPaths() { return rankingClasses.map(cls => ({params:{class:cls.slug},props:{cls}})); }
@@ -16,7 +16,7 @@ const source = councilTaxSource(CURRENT_YEAR, data.table, rankingMethod);
 const london = cls.slug === 'london-boroughs';
 ---
 <BaseLayout title={data.title} description={data.description} path={rankingPath(cls.slug)}>
-  <Breadcrumbs items={[{label:'Council tax',href:'/council-tax/'},{label:'Ranked',href:'/council-tax/ranked/'},{label:cls.label}]} />
+  <Breadcrumbs items={[{label:'Council tax',href:'/council-tax/'},{label:'Ranked',href:'/council-tax/ranked/'},{label:sentenceCase(cls.label)}]} />
   <header class="page-head"><h1>{data.title}</h1><p class="lede">All {cls.label} in England, by published Band D for {year}, lowest first. Position 1 is the lowest. {rankingRule}</p></header>
   <section class="section" aria-labelledby="basis-heading">
     <h2 id="basis-heading">What is ranked</h2>
@@ -32,18 +32,19 @@ const london = cls.slug === 'london-boroughs';
   </section>
   {data.rows ? <>
     <div class="fact" data-fact>
-      <div class="table-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table class="data">
-        <caption>{cls.label}, Band D {year}, lowest to highest {data.county ? 'own' : 'area'} Band D</caption>
-        <thead><tr><th scope="col">Position</th><th scope="col">Council</th>{london && <th scope="col">Type</th>}{!data.county && <><th scope="col" class="num">Area Band D</th><th scope="col" class="num">Position by own share</th></>}<th scope="col" class="num">Own Band D</th></tr></thead>
+      <div class="table-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table class:list={["data", {"billing-ranking": !data.county}]}>
+        <caption>{sentenceCase(cls.label)}, Band D {year}, lowest to highest {data.county ? 'own' : 'area'} Band D</caption>
+        <thead><tr><th scope="col">Position</th><th scope="col">Council</th>{london && <th scope="col">Type</th>}{!data.county && <><th scope="col" class="num">Area Band D</th><th scope="col" class="num own-column">Position by own share</th></>}<th scope="col" class:list={["num", {"own-column": !data.county}]}>Own Band D</th></tr></thead>
         <tbody>{data.rows.map(row => <tr>
           <td data-figure>{positionCell(data.county ? row.ownPosition : row.areaPosition!,data.county ? row.ownTied : row.areaTied)}</td>
           <th scope="row">{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}
+            {!data.county && <span class="own-inline" data-figure>Own share: {positionCell(row.ownPosition,row.ownTied)}, {pounds(row.own)}</span>}
             {[...row.areaNotes,...row.ownNotes].map(note => <span class="note-marker"> <a href={`#note-${row.gss}-${note.id}`}>note {note.id}</a></span>)}
             {row.areaNotes.map(note => <small class="row-note">{note.text}</small>)}
           </th>
           {london && <td>{row.londonType}</td>}
-          {!data.county && <><td class="num" data-figure>{pounds(row.area)}</td><td class="num" data-figure>{positionCell(row.ownPosition,row.ownTied)}</td></>}
-          <td class="num" data-figure>{pounds(row.own)}</td>
+          {!data.county && <><td class="num" data-figure>{pounds(row.area)}</td><td class="num own-column" data-figure>{positionCell(row.ownPosition,row.ownTied)}</td></>}
+          <td class:list={["num", {"own-column": !data.county}]} data-figure>{pounds(row.own)}</td>
         </tr>)}</tbody>
       </table></div>
       <SourceLine source={source} />
@@ -52,4 +53,6 @@ const london = cls.slug === 'london-boroughs';
   </> : <section class="section"><p>{data.description}</p><ul>{data.available.map(row => <li>{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}</li>)}</ul></section>}
   <section class="section" aria-labelledby="related-heading"><h2 id="related-heading">Other council types and comparisons</h2><ul>{rankingClasses.filter(other => other.slug !== cls.slug).map(other => <li><a href={rankingPath(other.slug)}>{other.label}</a></li>)}<li><a href="/council-tax/">Council tax in England</a></li><li><a href="/increases/">Annual increases</a></li></ul></section>
 </BaseLayout>
-<style>.row-note{display:block;font-weight:400;max-width:28rem}.note-marker{font-weight:400;font-size:.85em}</style>
+<style>.row-note{display:block;font-weight:400;max-width:28rem}.note-marker{font-weight:400;font-size:.85em}.own-inline{display:none}
+@media(max-width:599px){.billing-ranking .own-column{display:none}.own-inline{display:block;font-size:.8rem;font-weight:400;margin-top:var(--space-2xs)}.billing-ranking{width:100%;font-size:.875rem}.billing-ranking th,.billing-ranking td{padding:.45rem .3rem}.billing-ranking th[scope="row"]{overflow-wrap:anywhere}}
+</style>

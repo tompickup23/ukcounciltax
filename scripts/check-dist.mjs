@@ -57,7 +57,7 @@ const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
 let profiles = 0;
 let paymentLinks = 0, paymentAbsent = 0;
-let networkPopulation = 0, networkElection = 0;
+let networkPopulation = 0, networkElection = 0, parishPagesChecked = 0;
 const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
@@ -155,6 +155,12 @@ for (const path of files(DIST)) {
     }
   }
 
+  if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
+    parishPagesChecked++;
+    const parishSource = JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
+    const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
+    if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
+  }
   const devolvedPage = /^\/(scotland|wales)\/([^/]+)\/index\.html$/.exec(rel(path));
   if (devolvedPage) {
     const image = /<meta property="og:image" content="([^"]+)"/.exec(text)?.[1];
@@ -219,6 +225,7 @@ if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
+if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
 const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');

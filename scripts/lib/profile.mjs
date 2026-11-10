@@ -1,4 +1,8 @@
 import {JSDOM} from 'jsdom';
+import {readFileSync} from 'node:fs';
+const national = JSON.parse(readFileSync('data/national/england.json', 'utf8'));
+const registry = JSON.parse(readFileSync('data/registry/councils.json', 'utf8'));
+const bySlug = Object.fromEntries(Object.values(registry.councils).map(council => [council.slug, council]));
 
 /** Checks the complete static answer, independently of the band selector. */
 export function profileProblems(html, slug) {
@@ -23,6 +27,12 @@ export function profileProblems(html, slug) {
   if (section?.querySelectorAll('#band-bars svg.ek-chart').length !== 1 || section?.querySelectorAll('#band-bars g.ek-bar').length !== 8 || section?.querySelectorAll('#band-bars [data-ek-focus="D"]').length !== 1) problems.push('eight band bars with D marked are required');
   if (text(doc.body).includes('a month over ten instalments')) problems.push('compact profile retains monthly panel text');
   if (slug === 'lewes' && (text(section).match(/pending approval subject to a full council decision on 26 March 2026/g) ?? []).length !== 1) problems.push('Lewes note must appear once in the band answer');
+  const history = doc.querySelector('#history');
+  if (doc.querySelectorAll('[data-band-d-line]').length !== 1 || history?.querySelectorAll('details.data-drawer').length !== 1) problems.push('one history chart and drawer are required');
+  if (doc.querySelector('.band-d-line-table, #all-band-history, #long-history')) problems.push('duplicate history remains');
+  const gss = bySlug[slug]?.gss;
+  if (gss && history?.querySelectorAll('tbody tr').length !== Object.values(national.history[gss].area.values).filter(value => value !== null).length) problems.push('history rows differ from the published values');
+  if (slug === 'burnley' && (!text(history).includes('1993/94') || !text(history).includes('£628') || history?.querySelectorAll('tbody tr').length !== 34)) problems.push('Burnley history anchors differ');
   dom.window.close();
   return problems;
 }

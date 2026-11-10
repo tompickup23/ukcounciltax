@@ -26,7 +26,6 @@ import {
   AREA_TYPE_LABEL,
   CURRENT_YEAR,
   PREVIOUS_YEAR,
-  YEARS,
   areaTypeFor,
   bandChange,
   increasesYearPath,
@@ -88,17 +87,6 @@ const own = tax.own;
 const ownSource = own ? councilTaxSource(CURRENT_YEAR, own.table) : null;
 const countySource = county ? councilTaxSource(CURRENT_YEAR, county.table) : null;
 
-/** Band D as published in each year held, for the short history. */
-const history = YEARS.map((y) => {
-  const data = loadYear(y);
-  const row = data.authorities[council.gss];
-  return row ? { year: y, bandD: row.bands.D, table: data.source.bandTable } : null;
-}).filter((row): row is { year: (typeof YEARS)[number]; bandD: number; table: string } => row !== null);
-
-const historySource = {
-  ...councilTaxSource(CURRENT_YEAR, current.source.bandTable),
-  table: `${current.source.bandTable.replace("_", " ")} each year, linked in the table`,
-};
 const links = [...contextLinks(council),...sisterLinks(council)];
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
@@ -182,9 +170,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <PageContents items={[
     {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
     {id: 'parish-precepts', label: 'Parish charges'},
-    {id: 'long-history', label: 'Long-term history'},
     ...(englandArea ? [{id: 'compared', label: 'England and area averages'}] : []),
-    ...(history.length > 1 ? [{id: 'history', label: 'Previous years'}] : []),
+    {id: 'history', label: 'Previous years'},
     ...(own ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
     ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
   ]} />
@@ -225,38 +212,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     </section>
   )}
 
-  {history.length > 1 && (
-    <section class="section" id="history" aria-labelledby="history-heading">
-      <h2 id="history-heading">How has Band D in {name} changed?</h2>
-      <div class="fact" data-fact>
-        <LongTaxHistory gss={council.gss} name={name} view="chart" />
-        <SourceLine source={historySource} />
-        <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts.</p>
-        <div class="table-wrap" tabindex="0" role="region" aria-label="Council tax history table">
-          <table class="data">
-            <caption>Area Band D in {name}, as published each year</caption>
-            <thead>
-              <tr><th scope="col">Year</th><th scope="col" class="num">Band D</th><th scope="col">Source</th></tr>
-            </thead>
-            <tbody>
-              {history.map((row) => (
-                <tr>
-                  <th scope="row">{yearLabel(row.year)}</th>
-                  <td class="num" data-figure>{pounds(row.bandD)}</td>
-                  <td><a href={loadYear(row.year).source.url}>MHCLG {row.table.replace("_", " ")}</a></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <SourceLine source={historySource} />
-      </div>
-    </section>
-  )}
-
-  <section class="section" id="all-band-history"><h2>Every band over time</h2><div class="table-wrap" tabindex="0" role="region" aria-label="All band history"><table class="data"><caption>{name} area charges, including average parish precepts</caption><thead><tr><th scope="col">Band</th>{YEARS.map(y=><th scope="col" class="num">{yearLabel(y)}</th>)}<th scope="col" class="num">Two-year change</th></tr></thead><tbody>{BANDS.map(b=>{const start=loadYear(YEARS[0]).authorities[council.gss]?.bands[b];return <tr><th scope="row">{b}</th>{YEARS.map(y=><td class="num">{pounds(loadYear(y).authorities[council.gss]?.bands[b])}</td>)}<td class="num">{start?pounds(tax.bands[b]-start):'Unavailable'}</td></tr>;})}</tbody></table></div><p class="source-line">Sources: {YEARS.map(y=><span><a href={loadYear(y).source.url}>MHCLG {yearLabel(y)}</a> · </span>)}Change calculated from the two published charges. Nominal amounts, before discounts.</p><p><a href={`/tools/future-cost/?council=${council.slug}&band=D`}>Explore what future annual changes could mean for {name}</a>.</p></section>
-
-  <LongTaxHistory gss={council.gss} name={name} />
+  <section class="section" id="history" aria-labelledby="history-heading">
+    <h2 id="history-heading">How has Band D in {name} changed?</h2>
+    <LongTaxHistory gss={council.gss} name={name} view="chart" />
+  </section>
 
   {own && ownSource && (
     <section class="section" id="who-sets-it" aria-labelledby="who-sets-heading">

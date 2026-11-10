@@ -1,37 +1,34 @@
 ---
 import {national} from '../lib/national-data';
 import BandDLine from './BandDLine.astro';
-import {longDate} from '../lib/sources';
-/** view="chart" draws only the Band D line from the area series, with its source line and parish caveat. */
-interface Props {gss:string;name:string;view?:'section'|'chart'}
-const {gss,name,view='section'}=Astro.props;
-const series=national.history[gss];
-const source=national.sources.history;
-const money=(v:number|null|undefined)=>v==null?'Unavailable':new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',minimumFractionDigits:Number.isInteger(v)?0:2,maximumFractionDigits:2}).format(v);
-const years=series?Object.keys(series.area.values):[];
-const available=years.filter(y=>series.area.values[y]!==null);
-const noteIds=[...new Set(Object.values(series??{}).flatMap(s=>s.notes.match(/\[(?:note \d+|r)\]/g)??[]))];
-const notes=national.historyNotes.filter(row=>noteIds.includes(row[0]));
-const first=available[0];
-const last=available.at(-1);
-const start=first?series.area.values[first]:null,end=last?series.area.values[last]:null;
-const change=start!==null&&end!==null&&start>0?(end/start-1)*100:null;
-const wholePounds=(v:number)=>new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(v);
-const retrieved=longDate(source.retrieved);
+import DataDrawer from './DataDrawer.astro';
+import SourceLine from './SourceLine.astro';
+import {wholePounds, yearLabel} from '../lib/council-tax';
+interface Props {gss: string; name: string; view: 'chart'}
+const {gss, name} = Astro.props;
+const series = national.history[gss];
+const source = national.sources.history;
+const years = series ? Object.keys(series.area.values) : [];
+const available = years.filter(year => series.area.values[year] !== null);
+const first = available[0], last = available.at(-1);
+const reference = {publisher: source.publisher, title: source.title, url: source.fileUrl, table: 'Area_CT', retrieved: source.retrieved};
 ---
-{series&&view==='chart'&&<BandDLine id={`band-d-line-${gss}`} series={years.map(y=>({year:y,value:series.area.values[y]}))} format={wholePounds} title={`Band D area council tax in ${name}, ${first?.replace('-','/')} to ${last?.replace('-','/')}`} basis="Band D area council tax, including average parish precepts, as published each year in whole pounds"><p class="source-line">Source: <a href={source.fileUrl}>{source.publisher}, {source.title}</a>, Area_CT{retrieved?`, file retrieved ${retrieved}`:''}.</p><p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts, so the Band D bill in any one parish or unparished part of {name} can differ from this figure.</p></BandDLine>}
-{series&&view==='section'&&<section class="section" id="long-history" aria-labelledby="long-history-heading">
-  <h2 id="long-history-heading">Long-term Band D history</h2>
-  <p>The national live table holds {available.length} published area figures for {name}, from {first?.replace('-','/')} to {last?.replace('-','/')}. This series is generally rounded to whole pounds, so it can differ from the penny figures in the recent band tables.</p>
-  {change!==null&&<p class="lede">{money(start)} to {money(end)} <span class="small">({change>=0?'+':''}{change.toFixed(1)}% in cash terms)</span></p>}
-  <p class="caveat">Not adjusted for inflation. A change in services or council structure can affect comparisons. Missing years stay missing; we do not join predecessor councils ourselves. MHCLG carries forward predecessor-area history only where its published series does so, including some district-to-unitary changes with unchanged boundaries.</p>
-  <details><summary>View the full Band D history and separate council shares</summary>
-    <div class="table-wrap" tabindex="0" role="region" aria-label="Long-term Band D history"><table class="data">
-      <caption>{name}: published Band D history, displayed pounds</caption><thead><tr><th scope="col">Year</th><th scope="col" class="num">Whole-area average</th><th scope="col" class="num">Council excluding parishes</th><th scope="col" class="num">Council including average parishes</th></tr></thead>
-      <tbody>{years.map(y=><tr><th scope="row">{y.replace('-','/')}</th><td class="num">{money(series.area.values[y])}</td><td class="num">{money(series.ownExcludingParish.values[y])}</td><td class="num">{money(series.ownIncludingParish.values[y])}</td></tr>)}</tbody>
-    </table></div>
-    <p class="small">The council-share columns are alternative measures, not additions to the whole-area figure. The excluding-parishes series begins in 1996/97. A council's own share can change when responsibilities transfer even where its area remains the same.</p>
-  </details>
-  {notes.length>0&&<ul class="small">{notes.map(n=><li>{n[0]}: {n[1]}</li>)}</ul>}
-  <p class="source-line">Source: <a href={source.fileUrl}>{source.title}</a>, Area_CT, exc_PP and inc_PP. Changes calculated from the displayed source values.</p>
-</section>}
+{series && <>
+  <div class="fact" data-fact>
+    <BandDLine id={`band-d-line-${gss}`} series={years.map(year => ({year, value: series.area.values[year]}))} format={wholePounds} title={`Band D area council tax in ${name}, ${first?.replace('-', '/')} to ${last?.replace('-', '/')}`} basis="Band D area council tax, including average parish precepts, as published each year in whole pounds" table={false}>
+      <SourceLine source={reference} />
+      <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts, so the Band D bill in any one parish or unparished part of {name} can differ from this figure.</p>
+    </BandDLine>
+  </div>
+  <DataDrawer id="history-values" title="Published Band D values" headingLevel="h3" tableCount={1} summary={`Show the ${available.length} published values`}>
+    <div class="fact" data-fact>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Published Band D history">
+        <table class="data"><caption>Area Band D in {name}, as published each year in whole pounds</caption>
+          <thead><tr><th scope="col">Year</th><th scope="col" class="num">Band D</th></tr></thead>
+          <tbody>{available.map(year => <tr><th scope="row">{yearLabel(year)}</th><td class="num" data-figure>{wholePounds(series.area.values[year])}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <SourceLine source={reference} />
+    </div>
+  </DataDrawer>
+</>}

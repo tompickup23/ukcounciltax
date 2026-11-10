@@ -8,7 +8,7 @@ import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
-import { billAnatomy, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
+import { billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
 import { CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
 import { loadRegistry } from "./registry";
 import { classFor, rankClass } from "./rankings";
@@ -146,4 +146,15 @@ export function chartPng(name: KitChartName, theme: Theme): Buffer {
     font: { fontFiles, loadSystemFonts: false, defaultFontFamily: tokens.font.sans.family },
   });
   return svg.render().asPng();
+}
+
+/** Sum the shares exactly as the kit prints them, in tenths of one percent. */
+export function billShareRounding(options: BillAnatomyOptions): string | null {
+  const set = options.set ?? siteFigures();
+  const total = Math.round(set.value(options.total).value * 100);
+  const tenths = options.parts.reduce((sum, key) => {
+    const part = Math.round(set.value(key).value * 100);
+    return sum + Math.round(parseFloat(formatValue((part / total) * 100, "percent", 1)) * 10);
+  }, 0);
+  return tenths === 1000 ? null : `Each share is rounded to one decimal place, so together they add to ${(tenths / 10).toFixed(1)}%.`;
 }

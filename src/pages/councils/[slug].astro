@@ -5,7 +5,7 @@ import {national} from '../../lib/national-data';
 import {bandStockFor} from '../../lib/band-stock';
 import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
-import {classFor, rankClass, positionWords} from '../../lib/rankings';
+import {classFor, rankClass, positionWords, sentenceCase} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
 import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
@@ -121,7 +121,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <PageContents items={[
     {id: 'council-tax', label: 'Bands A to H'},
     ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
-    ...(englandArea && areaSource ? [{id: 'compared', label: `${rankType.label} and England`}] : []),
+    ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
     {id: 'map', label: 'Map'},
     {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
     {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},

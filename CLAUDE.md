@@ -4,7 +4,9 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-Latest: `docs/HANDOFF-2026-11-09-ROUND-FIVE.md` (9 November 2026): A4, A5 and A6 live, two Codex builds running (A3; game polish then C1b), the review checklist, and Tom's first task for the next session: explore a real "balance the budget" mode (C2) in depth before anything else. Before that: `docs/HANDOFF-2026-11-09-ROUND-FOUR.md` (9 November 2026) holds the open PRs (A4 33, A5 34, C3 on ukcouncils 36, L2 on ukdemographics 155), the two review prompts, the B4 item 1a prompt and what follows. Read it first.
+Latest: `docs/HANDOFF-2026-11-10-DESIGN-AND-SPLIT.md` (10 November 2026): the split and design decisions, every pull request's state across ukcounciltax, ukcouncils and estate-kit, what the dossier, kit 0.4.0 and A3 still need, six working rules from the day, and the resume prompt. Read it first, then `docs/PLAN-2026-11-10-EXECUTION.md` section 8.
+
+Earlier: `docs/HANDOFF-2026-11-09-ROUND-FIVE.md` (9 November 2026): A4, A5 and A6 live, two Codex builds running (A3; game polish then C1b), the review checklist, and Tom's first task for the next session: explore a real "balance the budget" mode (C2) in depth before anything else. Before that: `docs/HANDOFF-2026-11-09-ROUND-FOUR.md` (9 November 2026) holds the open PRs (A4 33, A5 34, C3 on ukcouncils 36, L2 on ukdemographics 155), the two review prompts, the B4 item 1a prompt and what follows. Read it first.
 
 Direction (10 November 2026): `docs/PLAN-2026-11-10-SPLIT-AND-NETWORK.md` sets the split between this site (the bill) and UK Councils (the council, and the front door to the sister sites), route ownership, where each sister site feeds in and the phases to the reversal in May to June 2027; decisions N1 to N5, S1 to S3 are taken. `docs/DESIGN-ROUND-TWO-BRIEF.md` holds design items D1 to D6. From 10 November nothing new is built on both sites.
 

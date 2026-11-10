@@ -303,3 +303,12 @@ A fresh `79fa7bd` build provided the number baseline. All 2,368 annual band amou
 The unchanged pinned design checker completed all seven requested pages with drawers closed at both widths and themes. Its one advisory finding is the two verbatim charging-body titles on Manchester; the existing text rule permits these source names. All other design rules pass in the quiet final run. Captures also record the kit's partly covered Band D label, with its complete value retained in the adjacent tables. No kit file or tolerance was changed.
 
 Per phase evidence, dry run tables, measured build comparison, Decisions taken and capture details are in [the A3 review](A3-REVIEW-2026-11-10.md). Every differing baseline page has a reason in [the number review](A3-NUMBER-REVIEW-2026-11-10.tsv). No merge or deployment was performed.
+
+
+## A3 review fixes, 10 November 2026
+
+The six review items are fixed separately. Horizontal band bars keep all labels clear in the eight inspected Burnley and Bournemouth, Christchurch and Poole captures at 375 and 1440 in both themes. The contents and history captions, retrieval-date wording, dead-code cleanup and two review-record corrections are included. The live locator test retains the previous geometry thresholds.
+
+The full Node 22.23.4 gate passed: Astro check without diagnostics, `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 CSP tests with one worker and 250 browser tests with two workers. The build contains 909 HTML pages, 908 sitemap URLs, 4,986 valid chart PNG links and all 2,368 profile PNGs. The internal link audit passed all 68,818 destinations.
+
+The fresh current-main comparison at `1500163` passed with 515 differing pages and no differences outside existing allowed paths. Exact profile amounts and histories match main. The refreshed measurements, captures and per-page register are recorded in `docs/A3-REVIEW-2026-11-10.md` and `docs/A3-NUMBER-REVIEW-MAIN-2026-11-10.tsv`. This supersedes the earlier clipped-label limitation and original build measurements for the revised branch. No kit, source, gate or tolerance was changed. No merge or deployment was performed.

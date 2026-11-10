@@ -69,7 +69,7 @@ describe("the council registry", () => {
       "ukelections",
       "ukdemographics",
       "aidoge",
-      "asylumstats",
     ]);
+    for (const council of councils) expect(sisterLinks(council).some(link => link.site === "asylumstats")).toBe(false);
   });
 });

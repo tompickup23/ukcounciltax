@@ -7,6 +7,17 @@ import { CURRENT_YEAR, loadYear } from "../src/lib/council-tax";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DIST = join(ROOT, "dist");
+const NORTH_KESTEVEN = join(DIST, "councils/north-kesteven/index.html");
+it.skipIf(!existsSync(NORTH_KESTEVEN))("preserves North Kesteven's five published history amounts with pence", () => {
+  const html = readFileSync(NORTH_KESTEVEN, "utf8");
+  const history = html.match(/<section[^>]*id="history"[\s\S]*?<\/table>/)?.[0] ?? "";
+  for (const [year, amount] of [["2022/23", "£1,990.16"], ["2023/24", "£2,088.04"], ["2024/25", "£2,186.65"], ["2025/26", "£2,261.06"], ["2026/27", "£2,337.81"]]) {
+    const row = [...history.matchAll(/<tr>[\s\S]*?<\/tr>/g)].find(match => match[0].includes(year))?.[0];
+    expect(row, year).toContain(amount);
+  }
+  expect(history).toContain("at the published precision");
+  expect(history).toContain("2026/27: £2,337.81");
+});
 const areaSeries = (gss: string): SeriesPoint[] =>
   Object.entries(national.history[gss].area.values).map(([year, value]) => ({ year, value }));
 const englandSeries = (): SeriesPoint[] =>

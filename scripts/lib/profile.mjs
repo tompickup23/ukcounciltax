@@ -36,6 +36,11 @@ export function profileProblems(html, slug) {
   if (doc.querySelector('.band-d-line-table, #all-band-history, #long-history')) problems.push('duplicate history remains');
   const gss = bySlug[slug]?.gss;
   if (gss && history?.querySelectorAll('tbody tr').length !== Object.values(national.history[gss].area.values).filter(value => value !== null).length) problems.push('history rows differ from the published values');
+  if (gss) {
+    const published = Object.entries(national.history[gss].area.values).filter(([, value]) => value !== null).map(([year, value]) => [year.replace('-', '/'), new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2}).format(value)]);
+    const displayed = [...history?.querySelectorAll('tbody tr') ?? []].map(row => [...row.querySelectorAll('th,td')].map(text));
+    if (JSON.stringify(displayed) !== JSON.stringify(published)) problems.push('history amounts differ from their published precision');
+  }
   if (slug === 'burnley' && (!text(history).includes('1993/94') || !text(history).includes('£628') || history?.querySelectorAll('tbody tr').length !== 34)) problems.push('Burnley history anchors differ');
   const bill = doc.querySelector('#precept-breakdown');
   if (bill?.querySelectorAll('svg.ek-chart').length !== 1) problems.push('one bill chart is required');

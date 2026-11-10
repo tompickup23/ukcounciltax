@@ -8,7 +8,7 @@ Read `CLAUDE.md`, then this note, then `docs/HANDOFF-2026-11-09-ROUND-FOUR.md` f
 
 Tom's instruction: look into this first and explore it more deeply, before anything else in this note. The outline is section 6. That outline was written from a short look, so treat it as a starting point, not a conclusion. Go further:
 
-- **The Lancashire game.** Play it at tompickup.co.uk/lcc-budget-game/ and read `~/Documents/Reports/LCC_Budget_Game` (`template.html`, `content.json`, `game_data.json`, the README). List each mechanic (blocks, lines, dials, cards, reserves, delivery rates, unit costs, the council tax round), and for each one say what national data could feed it for every council, and what could not.
+- **The Lancashire game.** Read the separate Lancashire budget game's source (held privately; `template.html`, `content.json`, `game_data.json`, the README). List each mechanic (blocks, lines, dials, cards, reserves, delivery rates, unit costs, the council tax round), and for each one say what national data could feed it for every council, and what could not.
 - **National sources, checked against the primary documents.** RA 2026/27 (which lines exist: services, financing, reserves, any income or fees); Table 10 and the tax base; the referendum principles report by class; Core Spending Power from the multi year settlement for 2027/28 and 2028/29; revenue outturn (RO) subjective analysis, for whether employee costs exist by council; adult social care finance returns, for unit costs. For each: publisher, table, edition, coverage of the 296, and what it is a count of.
 - **Competitors.** Delib Budget Simulator and any council's own simulator: what players do, completion rates, what people share.
 - **Design.** What the player decides, in which order; how the gap is framed honestly (the freeze start is one option); two tier areas; neutrality (no savings story, no party framing); what stays a labelled scenario under the site's scenario rule; how it sits beside the guessing game (a second mode, or the game's final round).
@@ -64,7 +64,7 @@ A3 specifics: the brief's section 0 asks Codex to follow A6's choices; check the
 
 ## 6. Open question for Tom: a real "balance the budget" mode (C2)
 
-Today's game and C1b both split a fixed total; neither sets a budget. The Lancashire game (`~/Documents/Reports/LCC_Budget_Game`, live at tompickup.co.uk/lcc-budget-game/) does, from Lancashire's own budget papers: a gap, pressures, council tax with the referendum limit and 1% yield, reserves, dials and shock cards. The original plan ruled out a "close the gap" round (decision D4 in `docs/PLAN-2026-11-08-BUDGET-GAME.md`) because no national return holds a medium term gap.
+Today's game and C1b both split a fixed total; neither sets a budget. The separate Lancashire game (held privately, not part of this site) does, from Lancashire's own budget papers: a gap, pressures, council tax with the referendum limit and 1% yield, reserves, dials and shock cards. The original plan ruled out a "close the gap" round (decision D4 in `docs/PLAN-2026-11-08-BUDGET-GAME.md`) because no national return holds a medium term gap.
 
 What a C2 could do for all 287 councils from data the site already holds (RA 2026/27 service and financing lines, reserve balances, Table 10 tax base, the published Band D change):
 

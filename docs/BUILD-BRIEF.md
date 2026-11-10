@@ -10,7 +10,7 @@ Recommended promise: **Understand your council tax, see what changed, and explor
 
 The opportunity is more than another band lookup. Combine published charges, a clearly explained bill breakdown, historical changes and transparent scenarios. Use the existing England service as the starting point and Lancashire as the first detailed parish/precept pilot. National source imports can then extend coverage without duplicating the wider national data programme.
 
-This brief was checked against version 5, sections 8a and 8b, of the Lancashire to National build plan and the UK Council Tax section of `/Users/tompickup/Documents/Reports/UK_State_Product_Strategy_2026-10-05.md`. It develops that strategy's reuse, bill-components and parish-variation direction. Existing Lancashire-first and publication gates remain; live migration still requires separate authorisation.
+This brief was checked against version 5, sections 8a and 8b, of the Lancashire to National build plan and the UK Council Tax section of the private product strategy of 5 October 2026 (not in this repository). It develops that strategy's reuse, bill-components and parish-variation direction. Existing Lancashire-first and publication gates remain; live migration still requires separate authorisation.
 
 ## 2. What the existing project actually holds
 

@@ -1,5 +1,6 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
+import {councilTaxLink, councilLinksSource} from '../../lib/council-links';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
@@ -59,6 +60,7 @@ interface Props {
 const { council, tax } = Astro.props;
 const current = loadYear(CURRENT_YEAR);
 const charts = profileChartOptions(council.slug);
+const paymentLink = councilTaxLink(council.gss);
 const rankType = classFor(tax.classCode)!;
 const classRanks = rankClass(current, rankType);
 const position = classRanks?.find(row => row.gss === council.gss);
@@ -262,6 +264,17 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   )}
 
   <PreceptContext region={tax.region} gss={council.gss} />
+
+  <section class="section" id="discounts-and-paying" aria-labelledby="discounts-heading">
+    <h2 id="discounts-heading">Discounts, exemptions and how to pay in {name}</h2>
+    <p>Discounts and exemptions depend on who lives in the home and the home itself. A household with one counted adult may get a 25% discount, and some people and some homes are not counted or are exempt. This site does not decide eligibility. <a href="/help/#check-discounts-and-reductions">Discounts, reductions and who is counted</a>.</p>
+    <p>If paying is difficult, contact the council early. <a href="/help/#if-paying-is-difficult">If paying is difficult</a>.</p>
+    {paymentLink ? <>
+      <p><a href={paymentLink} data-council-payment>Pay or manage your council tax on {council.officialName}'s website</a>.</p>
+      <p class="source-line">Link from <a href={councilLinksSource.url}>GOV.UK Local Links Manager</a>, service “Pay your Council Tax” (LGSL 57), export of {longDate(councilLinksSource.exportDate)}, checked by UK Places on {longDate(councilLinksSource.checkedOn)}.</p>
+    </> : <p>We do not hold a checked link to {name}'s own council tax page. <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council on GOV.UK</a>.</p>}
+    <p>Check the payment dates on your bill. <a href="/help/#check-the-payment-schedule">How council tax is paid</a>.</p>
+  </section>
 
   {council.reorganisation && (
     <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">

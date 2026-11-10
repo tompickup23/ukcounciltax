@@ -4,10 +4,12 @@ const national = JSON.parse(readFileSync('data/national/england.json', 'utf8'));
 const registry = JSON.parse(readFileSync('data/registry/councils.json', 'utf8'));
 const bySlug = Object.fromEntries(Object.values(registry.councils).map(council => [council.slug, council]));
 
+const dom = new JSDOM('');
+
 /** Checks the complete static answer, independently of the band selector. */
 export function profileProblems(html, slug) {
-  const dom = new JSDOM(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ''));
   const doc = dom.window.document;
+  doc.documentElement.innerHTML = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, '');
   const problems = [];
   const text = element => element?.textContent.replace(/\s+/g, ' ').trim() ?? '';
   const section = doc.querySelector('#council-tax');
@@ -50,6 +52,11 @@ export function profileProblems(html, slug) {
   const map = doc.querySelector('#map');
   if (map?.querySelectorAll('svg.ek-chart').length !== 1 || (gss && map.querySelector(`[data-ek-focus="${gss}"]`) === null)) problems.push('one locator map must mark the council');
   if (doc.querySelector('[data-boundary-map]')) problems.push('the mini map remains');
-  dom.window.close();
+  const payment = doc.querySelector('#discounts-and-paying');
+  if (!payment) problems.push('discounts and payment section is missing');
+  for (const id of ['check-discounts-and-reductions','if-paying-is-difficult','check-the-payment-schedule']) if (!payment?.querySelector(`a[href="/help/#${id}"]`)) problems.push(`payment section lacks ${id}`);
+  if (slug === 'burnley' && !payment?.querySelector('a[href="https://burnley.gov.uk/counciltax/paying-your-council-tax/"]')) problems.push('Burnley payment URL differs');
+  if (slug === 'camden' && !text(payment).includes("We do not hold a checked link to Camden's own council tax page.")) problems.push('Camden absence wording differs');
+  doc.documentElement.innerHTML = '';
   return problems;
 }

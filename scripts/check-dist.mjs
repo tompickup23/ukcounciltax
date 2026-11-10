@@ -56,6 +56,11 @@ const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
 let profiles = 0;
+let paymentLinks = 0, paymentAbsent = 0;
+const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
+const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
+if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
+if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -136,6 +141,8 @@ for (const path of files(DIST)) {
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
     profiles += 1;
+    if (/data-council-payment/.test(text)) paymentLinks++;
+    if (/We do not hold a checked link to/.test(text)) paymentAbsent++;
     for (const problem of profileProblems(text, rel(path).split("/")[2])) failures.push(`${rel(path)}: ${problem}`);
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
     for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
@@ -207,6 +214,9 @@ if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
+if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
+const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
+for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 

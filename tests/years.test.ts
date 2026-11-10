@@ -75,7 +75,6 @@ describe("the year variable", () => {
       { file: "src/pages/data.astro", text: "'MD3472: approval of 2026/27 council tax and precepts'", why: "verbatim GLA decision title" },
       { file: "src/pages/data.astro", text: "'2026/27; approved 26 February 2026'", why: "the edition of one fixed GLA decision" },
       { file: "src/pages/coverage.astro", text: "series from 1993/94", why: "historic series start, a property of the source" },
-      { file: "src/components/LongTaxHistory.astro", text: "series begins in 1996/97", why: "historic series start, a property of the source" },
     ];
     // Owned by a parallel change and outside this one; listed so the test
     // names them rather than skipping them silently.

@@ -1,0 +1,897 @@
+{
+  "source": {
+    "publisher": "UK Councils",
+    "file": "data/elections/next-elections.json",
+    "commit": "151dc0f",
+    "sha256": "a589f5b17250eb16c43dc8d76bc734bb1e4e10cf0a1903fd7726057b059d61ba",
+    "source": {
+      "publisher": "UK Elections",
+      "title": "council election register",
+      "file": "data/identity/council-next-elections.json",
+      "commit": "3cf7cf60b0bf7772f17dd743643ca680dd777199",
+      "sha256": "e24e7ed63284de8577e2f11d0991af8b1402e6d93ca1b5a20a0756d703d4e27f",
+      "checked": "2026-10-24",
+      "method": "Each record's year was read from the council's electoral change order on legislation.gov.uk, another statutory instrument, or the council's own election pages, quoted verbatim. Scottish and Welsh councils follow their statutory five-year cycle. Records marked unverified carry no year and are shown as 'Not verified'.",
+      "rule": "Printed only where the record is verified and the quoted text contains the year.",
+      "predecessors": {
+        "publisher": "Office for National Statistics",
+        "title": "Code History Database (June 2026), Changes table",
+        "via": "UK Places src/data/registry/gss-predecessors.json",
+        "commit": "b1a32625943981c9f5a1c97e1c8f89d2dadc1985",
+        "sha256": "4826532fd29bd7fe9cb6b71a218f6c79f6e7936e875ccb4427057b6f51991a87"
+      }
+    }
+  },
+  "councils": {
+    "E06000002": {
+      "nextYear": 2027,
+      "sourceLabel": "Middlesbrough (Electoral Changes) Order 2025, SI 2025/1345, art.1(3)(b)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/1345/made"
+    },
+    "E06000003": {
+      "nextYear": 2027,
+      "sourceLabel": "Redcar and Cleveland Borough Council, Upcoming elections",
+      "sourceUrl": "https://www.redcar-cleveland.gov.uk/voting-and-elections/upcoming-elections"
+    },
+    "E06000004": {
+      "nextYear": 2027,
+      "sourceLabel": "Stockton-on-Tees Borough Council, \"Elections and voting\"",
+      "sourceUrl": "https://www.stockton.gov.uk/elections-voting"
+    },
+    "E06000005": {
+      "nextYear": 2027,
+      "sourceLabel": "Darlington Borough Council, Current and future elections",
+      "sourceUrl": "https://www.darlington.gov.uk/elections/current-and-future-elections/"
+    },
+    "E06000007": {
+      "nextYear": 2028,
+      "sourceLabel": "Warrington Borough Council, \"The different types of elections\"",
+      "sourceUrl": "https://www.warrington.gov.uk/different-types-elections"
+    },
+    "E06000010": {
+      "nextYear": 2027,
+      "sourceLabel": "Hull City Council, Local elections (web page)",
+      "sourceUrl": "https://www.hull.gov.uk/elections-voting/local-elections"
+    },
+    "E06000011": {
+      "nextYear": 2027,
+      "sourceLabel": "East Riding of Yorkshire (Electoral Changes) Order 2026, SI 2026/53, art.1(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2026/53/made"
+    },
+    "E06000012": {
+      "nextYear": 2027,
+      "sourceLabel": "North East Lincolnshire Council, Election dates and results (web page)",
+      "sourceUrl": "https://www.nelincs.gov.uk/your-council/elections-and-voting/election-dates-and-results/"
+    },
+    "E06000014": {
+      "nextYear": 2027,
+      "sourceLabel": "City of York Council, \"Elections\"",
+      "sourceUrl": "https://www.york.gov.uk/elections"
+    },
+    "E06000015": {
+      "nextYear": 2027,
+      "sourceLabel": "Derby City Council, Election information page",
+      "sourceUrl": "https://www.derby.gov.uk/council-and-democracy/councillors-democracy-elections/elections/election-information"
+    },
+    "E06000016": {
+      "nextYear": 2027,
+      "sourceLabel": "Leicester City Council, Local Government Reorganisation",
+      "sourceUrl": "https://www.leicester.gov.uk/local-government-reorganisation"
+    },
+    "E06000017": {
+      "nextYear": 2027,
+      "sourceLabel": "Rutland County Council, \"Upcoming elections\"",
+      "sourceUrl": "https://www.rutland.gov.uk/elections-voting/upcoming-elections"
+    },
+    "E06000018": {
+      "nextYear": 2027,
+      "sourceLabel": "Nottingham City Council, Upcoming elections (table)",
+      "sourceUrl": "https://nottinghamcity.gov.uk/your-council/voting-elections/upcoming-elections"
+    },
+    "E06000019": {
+      "nextYear": 2027,
+      "sourceLabel": "Herefordshire Council, Upcoming elections and referendums",
+      "sourceUrl": "https://www.herefordshire.gov.uk/your-council/elections-and-voting/upcoming-elections-and-referendums/"
+    },
+    "E06000020": {
+      "nextYear": 2027,
+      "sourceLabel": "Telford & Wrekin Council newsroom, \"Telford & Wrekin Council launches review of polling stations\"",
+      "sourceUrl": "https://newsroom.telford.gov.uk/news/telford-wrekin-council-launches-review-of-polling-stations"
+    },
+    "E06000022": {
+      "nextYear": 2027,
+      "sourceLabel": "Bath and North East Somerset Council, BNES council elections page",
+      "sourceUrl": "https://www.bathnes.gov.uk/bnes-council-elections"
+    },
+    "E06000023": {
+      "nextYear": 2028,
+      "sourceLabel": "Bristol City Council, Types of elections (Dates of elections table)",
+      "sourceUrl": "https://www.bristol.gov.uk/council/voting-and-elections/types-of-elections"
+    },
+    "E06000024": {
+      "nextYear": 2027,
+      "sourceLabel": "North Somerset Council, Upcoming and scheduled elections",
+      "sourceUrl": "https://n-somerset.gov.uk/council-democracy/voting-elections/upcoming-scheduled-elections"
+    },
+    "E06000026": {
+      "nextYear": 2027,
+      "sourceLabel": "Plymouth City Council, Dates of upcoming polls (web page)",
+      "sourceUrl": "https://www.plymouth.gov.uk/dates-upcoming-elections"
+    },
+    "E06000027": {
+      "nextYear": 2027,
+      "sourceLabel": "Torbay Council, \"Local elections\"",
+      "sourceUrl": "https://www.torbay.gov.uk/council/voting-and-elections/elections/local/"
+    },
+    "E06000032": {
+      "nextYear": 2027,
+      "sourceLabel": "Luton Borough Council, Upcoming elections",
+      "sourceUrl": "https://www.luton.gov.uk/upcomingelections"
+    },
+    "E06000034": {
+      "nextYear": 2030,
+      "sourceLabel": "Local Authorities (Changes to Years of Ordinary Elections) (England) Order 2025, SI 2025/137, explanatory note",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/137/made"
+    },
+    "E06000035": {
+      "nextYear": 2027,
+      "sourceLabel": "Medway Council, Elections and voting",
+      "sourceUrl": "https://www.medway.gov.uk/info/200168/elections_and_voting"
+    },
+    "E06000036": {
+      "nextYear": 2027,
+      "sourceLabel": "Bracknell Forest Council, Future elections",
+      "sourceUrl": "https://www.bracknell-forest.gov.uk/elections-and-voting/future-elections"
+    },
+    "E06000037": {
+      "nextYear": 2027,
+      "sourceLabel": "West Berkshire Council, \"Local elections 2027\"",
+      "sourceUrl": "https://citizen.westberks.gov.uk/local-elections-2027"
+    },
+    "E06000041": {
+      "nextYear": 2027,
+      "sourceLabel": "Wokingham (Electoral Changes) Order 2023, SI 2023/1271, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/1271/made"
+    },
+    "E06000042": {
+      "nextYear": 2027,
+      "sourceLabel": "Milton Keynes (Electoral Changes) Order 2025, SI 2025/1237, art.4(3) and Sch.2",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/1237/made"
+    },
+    "E06000045": {
+      "nextYear": 2027,
+      "sourceLabel": "Southampton (Electoral Changes) Order 2023, SI 2023/204, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/204/made"
+    },
+    "E06000046": {
+      "nextYear": 2029,
+      "sourceLabel": "Local Authorities (Changes to Years of Ordinary Elections) (England) Order 2025, SI 2025/137, art.3(2)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/137/made"
+    },
+    "E06000049": {
+      "nextYear": 2027,
+      "sourceLabel": "Cheshire East Council, Elections Thursday 6 May 2027",
+      "sourceUrl": "https://www.cheshireeast.gov.uk/council_and_democracy/voting_and_elections/elections/elections-thursday-6-may-2027.aspx"
+    },
+    "E06000050": {
+      "nextYear": 2027,
+      "sourceLabel": "Cheshire West and Chester Council, 2027 Elections",
+      "sourceUrl": "https://www.cheshirewestandchester.gov.uk/your-council/voting-and-elections/2027-elections"
+    },
+    "E06000051": {
+      "nextYear": 2029,
+      "sourceLabel": "Shropshire Council, \"Upcoming elections\"",
+      "sourceUrl": "https://next.shropshire.gov.uk/elections-and-electoral-registration/upcoming-elections"
+    },
+    "E06000052": {
+      "nextYear": 2029,
+      "sourceLabel": "Cornwall Council, Elections and referendums",
+      "sourceUrl": "https://www.cornwall.gov.uk/the-council-and-democracy/elections/elections-and-referendums/"
+    },
+    "E06000053": {
+      "nextYear": 2029,
+      "sourceLabel": "Council of the Isles of Scilly, Elections",
+      "sourceUrl": "https://www.scilly.gov.uk/elections"
+    },
+    "E06000054": {
+      "nextYear": 2029,
+      "sourceLabel": "Wiltshire Council, \"Types of elections\"",
+      "sourceUrl": "https://www.wiltshire.gov.uk/elections-types"
+    },
+    "E06000057": {
+      "nextYear": 2029,
+      "sourceLabel": "Northumberland County Council, Residents encouraged to take part in county-wide review (news)",
+      "sourceUrl": "https://www.northumberland.gov.uk/news/residents-encouraged-take-part-county-wide-review"
+    },
+    "E06000058": {
+      "nextYear": 2027,
+      "sourceLabel": "BCP Council, Upcoming elections and referendums and who can vote in them",
+      "sourceUrl": "https://www.bcpcouncil.gov.uk/elections-and-voting/upcoming-elections-and-referendums-and-who-can-vote-in-them"
+    },
+    "E06000059": {
+      "nextYear": 2029,
+      "sourceLabel": "Bournemouth, Dorset and Poole (Structural Changes) Order 2018, SI 2018/648, art.39(1)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2018/648/article/39"
+    },
+    "E06000060": {
+      "nextYear": 2029,
+      "sourceLabel": "Buckinghamshire Council, Elections page (Dates of elections table)",
+      "sourceUrl": "https://www.buckinghamshire.gov.uk/elections"
+    },
+    "E06000061": {
+      "nextYear": 2029,
+      "sourceLabel": "North Northamptonshire Council, Election results",
+      "sourceUrl": "https://www.northnorthants.gov.uk/elections-and-voting/election-results"
+    },
+    "E06000062": {
+      "nextYear": 2029,
+      "sourceLabel": "West Northamptonshire Council, Election notices and future elections (web page)",
+      "sourceUrl": "https://www.westnorthants.gov.uk/elections-and-voting/election-notices-and-future-elections"
+    },
+    "E06000063": {
+      "nextYear": 2027,
+      "sourceLabel": "Cumbria (Structural Changes) Order 2022, SI 2022/331, art.21(1)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/331/made"
+    },
+    "E06000064": {
+      "nextYear": 2027,
+      "sourceLabel": "Cumbria (Structural Changes) Order 2022, SI 2022/331, art.21(1)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/331/made"
+    },
+    "E06000065": {
+      "nextYear": 2027,
+      "sourceLabel": "North Yorkshire (Electoral Changes) Order 2026, SI 2026/1046, art.1(3)(b); North Yorkshire Council elections page",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2026/1046/made"
+    },
+    "E06000066": {
+      "nextYear": 2027,
+      "sourceLabel": "Somerset (Structural Changes) Order 2022, SI 2022/329, art.13(1)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/329/made"
+    },
+    "E07000008": {
+      "nextYear": 2027,
+      "sourceLabel": "Cambridge City Council, Upcoming elections",
+      "sourceUrl": "https://www.cambridge.gov.uk/upcoming-elections"
+    },
+    "E07000009": {
+      "nextYear": 2027,
+      "sourceLabel": "East Cambridgeshire District Council, Become a district councillor",
+      "sourceUrl": "https://www.eastcambs.gov.uk/about-council/councillors-and-committees/become-district-councillor"
+    },
+    "E07000010": {
+      "nextYear": 2027,
+      "sourceLabel": "Fenland District Council, No Local Elections in Fenland in 2026",
+      "sourceUrl": "https://fenland.gov.uk/article/18787/No-Elections-in-Fenland-in-2026"
+    },
+    "E07000032": {
+      "nextYear": 2027,
+      "sourceLabel": "Amber Valley Borough Council, Elections page",
+      "sourceUrl": "https://www.ambervalley.gov.uk/councillors-and-elections/elections"
+    },
+    "E07000034": {
+      "nextYear": 2027,
+      "sourceLabel": "Chesterfield Borough Council news, Candidates announced for Staveley by-elections",
+      "sourceUrl": "https://www.chesterfield.gov.uk/latest-news/candidates-announced-for-staveley-by-elections/"
+    },
+    "E07000037": {
+      "nextYear": 2027,
+      "sourceLabel": "High Peak Borough Council, Voting and elections",
+      "sourceUrl": "https://www.highpeak.gov.uk/elections"
+    },
+    "E07000038": {
+      "nextYear": 2027,
+      "sourceLabel": "North East Derbyshire District Council, No Scheduled Elections in 2026",
+      "sourceUrl": "https://www.ne-derbyshire.gov.uk/news-and-media/latest-news/no-scheduled-elections-in-may-2026-due-to-fallow-year"
+    },
+    "E07000039": {
+      "nextYear": 2027,
+      "sourceLabel": "South Derbyshire District Council, \"Current Elections\"",
+      "sourceUrl": "https://www.southderbyshire.gov.uk/our-services/voting-and-elections/current-elections"
+    },
+    "E07000040": {
+      "nextYear": 2027,
+      "sourceLabel": "East Devon District Council, Who is my councillor",
+      "sourceUrl": "https://eastdevon.gov.uk/council-and-democracy/who-is-my-councillor/"
+    },
+    "E07000045": {
+      "nextYear": 2027,
+      "sourceLabel": "Teignbridge District Council, \"Dates of next elections\"",
+      "sourceUrl": "https://www.teignbridge.gov.uk/voting-and-elections/current-elections/dates-of-next-elections/"
+    },
+    "E07000046": {
+      "nextYear": 2027,
+      "sourceLabel": "Torridge District Council, \"Torridge District Council election results\"",
+      "sourceUrl": "https://torridge.gov.uk/article/12922/Torridge-District-Council-election-results"
+    },
+    "E07000061": {
+      "nextYear": 2027,
+      "sourceLabel": "Lewes and Eastbourne Councils, Upcoming Elections",
+      "sourceUrl": "https://www.lewes-eastbourne.gov.uk/article/1925/Upcoming-Elections"
+    },
+    "E07000064": {
+      "nextYear": 2027,
+      "sourceLabel": "Rother District Council, Stand for election page",
+      "sourceUrl": "https://www.rother.gov.uk/elections-and-voting/stand-for-election/"
+    },
+    "E07000065": {
+      "nextYear": 2027,
+      "sourceLabel": "Wealden District Council, \"About the elected council\"",
+      "sourceUrl": "https://wealden.gov.uk/councillors-and-committees/about-the-elected-council"
+    },
+    "E07000066": {
+      "nextYear": 2027,
+      "sourceLabel": "Basildon (Electoral Changes) Order 2023, SI 2023/731, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/731/made"
+    },
+    "E07000068": {
+      "nextYear": 2027,
+      "sourceLabel": "Brentwood (Electoral Changes) Order 2023, SI 2023/732, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/732/made"
+    },
+    "E07000069": {
+      "nextYear": 2027,
+      "sourceLabel": "Castle Point (Electoral Changes) Order 2023, SI 2023/799, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/799/made"
+    },
+    "E07000070": {
+      "nextYear": 2027,
+      "sourceLabel": "Chelmsford City Council, Upcoming elections",
+      "sourceUrl": "https://www.chelmsford.gov.uk/voting-and-elections/upcoming-elections/"
+    },
+    "E07000072": {
+      "nextYear": 2027,
+      "sourceLabel": "Epping Forest (Electoral Changes) Order 2023, SI 2023/819, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/819/made"
+    },
+    "E07000073": {
+      "nextYear": 2027,
+      "sourceLabel": "Harlow (Electoral Changes) Order 2023, SI 2023/797, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/797/made"
+    },
+    "E07000074": {
+      "nextYear": 2027,
+      "sourceLabel": "Maldon District Council, Upcoming elections",
+      "sourceUrl": "https://www.maldon.gov.uk/info/20067/elections_and_voting/9332/upcoming_elections"
+    },
+    "E07000075": {
+      "nextYear": 2027,
+      "sourceLabel": "Rochford District Council, Upcoming Elections page (last updated 10 September 2026)",
+      "sourceUrl": "https://www.rochford.gov.uk/upcoming-elections"
+    },
+    "E07000077": {
+      "nextYear": 2027,
+      "sourceLabel": "Uttlesford District Council, \"Elections and voting\"",
+      "sourceUrl": "https://www.uttlesford.gov.uk/article/5012/Elections-and-voting"
+    },
+    "E07000078": {
+      "nextYear": 2028,
+      "sourceLabel": "Cheltenham (Electoral Changes) Order 2023, SI 2023/820, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/820/made"
+    },
+    "E07000079": {
+      "nextYear": 2027,
+      "sourceLabel": "Cotswold District Council, Current and future elections",
+      "sourceUrl": "https://www.cotswold.gov.uk/about-the-council/elections-and-voting/current-and-future-elections/"
+    },
+    "E07000080": {
+      "nextYear": 2027,
+      "sourceLabel": "Forest of Dean District Council, Current and future elections",
+      "sourceUrl": "https://www.fdean.gov.uk/about-the-council/elections-and-voting/current-and-future-elections/"
+    },
+    "E07000081": {
+      "nextYear": 2028,
+      "sourceLabel": "Gloucester City Council, Upcoming elections (table of next elections)",
+      "sourceUrl": "https://gloucester.gov.uk/about-the-council/elections-and-voting/upcoming-elections"
+    },
+    "E07000087": {
+      "nextYear": 2028,
+      "sourceLabel": "Fareham (Electoral Changes) Order 2023, SI 2023/796, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/796/made"
+    },
+    "E07000090": {
+      "nextYear": 2027,
+      "sourceLabel": "Havant (Electoral Changes) Order 2023, SI 2023/200, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/200/made"
+    },
+    "E07000091": {
+      "nextYear": 2027,
+      "sourceLabel": "New Forest District Council, Election types",
+      "sourceUrl": "https://newforest.gov.uk/article/1208/Upcoming-elections"
+    },
+    "E07000093": {
+      "nextYear": 2027,
+      "sourceLabel": "Test Valley Borough Council, \"Forthcoming Elections\"",
+      "sourceUrl": "https://www.testvalley.gov.uk/aboutyourcouncil/localdemocracy/elections/elections"
+    },
+    "E07000096": {
+      "nextYear": 2027,
+      "sourceLabel": "Dacorum Borough Council, Boundary reviews (electoral review timetable)",
+      "sourceUrl": "https://www.dacorum.gov.uk/home/council-democracy/elections-and-voting/boundary-reviews"
+    },
+    "E07000098": {
+      "nextYear": 2027,
+      "sourceLabel": "Hertsmere Borough Council, Elections, Notices and Results",
+      "sourceUrl": "https://www.hertsmere.gov.uk/your-council/elections/election-notices"
+    },
+    "E07000105": {
+      "nextYear": 2027,
+      "sourceLabel": "Ashford Borough Council, Who is my elected representative",
+      "sourceUrl": "https://www.ashford.gov.uk/your-council/register-to-vote-and-elections/elections-and-referendums/who-is-my-elected-representative/"
+    },
+    "E07000106": {
+      "nextYear": 2027,
+      "sourceLabel": "Canterbury City Council, Upcoming elections",
+      "sourceUrl": "https://www.canterbury.gov.uk/voting-and-elections/upcoming-elections"
+    },
+    "E07000108": {
+      "nextYear": 2027,
+      "sourceLabel": "Dover District Council, Future Elections",
+      "sourceUrl": "https://www.dover.gov.uk/Council--Democracy/Elections/Future-Elections.aspx"
+    },
+    "E07000109": {
+      "nextYear": 2027,
+      "sourceLabel": "Gravesham Borough Council, Future elections",
+      "sourceUrl": "https://www.gravesham.gov.uk/elections-voting/future-elections"
+    },
+    "E07000111": {
+      "nextYear": 2027,
+      "sourceLabel": "Sevenoaks District Council, \"Scheduled future elections and referendums\"",
+      "sourceUrl": "https://www.sevenoaks.gov.uk/info/20053/elections_and_voting/179/scheduled_future_elections_and_referendums"
+    },
+    "E07000112": {
+      "nextYear": 2027,
+      "sourceLabel": "Folkestone and Hythe District Council, Upcoming elections",
+      "sourceUrl": "https://folkestone-hythe.gov.uk/elections/upcoming-elections"
+    },
+    "E07000115": {
+      "nextYear": 2027,
+      "sourceLabel": "Tonbridge and Malling Borough Council, \"Voting and elections\"",
+      "sourceUrl": "https://www.tmbc.gov.uk/voting-elections"
+    },
+    "E07000116": {
+      "nextYear": 2027,
+      "sourceLabel": "Tunbridge Wells (Electoral Changes) Order 2024, SI 2024/2, Schedule 2",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/2/made"
+    },
+    "E07000117": {
+      "nextYear": 2027,
+      "sourceLabel": "Burnley Borough Council, Postal Voting page",
+      "sourceUrl": "https://burnley.gov.uk/council-democracy/elections-voting/postal-voting/"
+    },
+    "E07000118": {
+      "nextYear": 2027,
+      "sourceLabel": "Chorley Council, Election of councillors in Chorley",
+      "sourceUrl": "https://chorley.gov.uk/elections-voting/Election-of-councillors-in-Chorley"
+    },
+    "E07000120": {
+      "nextYear": 2027,
+      "sourceLabel": "Hyndburn Borough Council, Hyndburn Borough Council Elections page",
+      "sourceUrl": "https://www.hyndburnbc.gov.uk/hyndburn-borough-council-elections/"
+    },
+    "E07000121": {
+      "nextYear": 2027,
+      "sourceLabel": "Lancaster City Council, Electoral vacancies and notices",
+      "sourceUrl": "https://www.lancaster.gov.uk/the-council-and-democracy/voting-and-elections/vacancies"
+    },
+    "E07000123": {
+      "nextYear": 2027,
+      "sourceLabel": "Preston City Council, Review of Local Government Reorganisation FAQs",
+      "sourceUrl": "https://preston.gov.uk/lgr/review-of-local-government-reorganisation-faqs"
+    },
+    "E07000124": {
+      "nextYear": 2027,
+      "sourceLabel": "Ribble Valley Borough Council, Statement of Accounts 2024/25, p.15",
+      "sourceUrl": "https://www.ribblevalley.gov.uk/downloads/file/4642/statement-of-accounts-2024-25"
+    },
+    "E07000126": {
+      "nextYear": 2027,
+      "sourceLabel": "South Ribble Borough Council, \"Elections and voting\"",
+      "sourceUrl": "https://southribble.gov.uk/elections-voting"
+    },
+    "E07000127": {
+      "nextYear": 2027,
+      "sourceLabel": "West Lancashire (Electoral Changes) Order 2022, SI 2022/1179, art.4(3)(c)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/1179/made"
+    },
+    "E07000129": {
+      "nextYear": 2027,
+      "sourceLabel": "Blaby District Council, Types of Elections",
+      "sourceUrl": "https://www.blaby.gov.uk/elections-and-voting/elections/types-of-elections/"
+    },
+    "E07000130": {
+      "nextYear": 2027,
+      "sourceLabel": "Charnwood Borough Council, Elections coming up",
+      "sourceUrl": "https://www.charnwood.gov.uk/pages/elections_coming_up"
+    },
+    "E07000132": {
+      "nextYear": 2027,
+      "sourceLabel": "Hinckley and Bosworth Borough Council, Borough council elections",
+      "sourceUrl": "https://www.hinckley-bosworth.gov.uk/info/200033/elections_and_voting/453/borough_council_elections"
+    },
+    "E07000133": {
+      "nextYear": 2027,
+      "sourceLabel": "Melton Borough Council, Current and scheduled elections",
+      "sourceUrl": "https://www.melton.gov.uk/elections-and-voting/elections/current-and-scheduled-elections"
+    },
+    "E07000134": {
+      "nextYear": 2027,
+      "sourceLabel": "North West Leicestershire District Council, Boundary reviews",
+      "sourceUrl": "https://www.nwleics.gov.uk/pages/boundary_reviews"
+    },
+    "E07000136": {
+      "nextYear": 2027,
+      "sourceLabel": "Boston Borough Council, Elections page",
+      "sourceUrl": "https://www.boston.gov.uk/elections"
+    },
+    "E07000138": {
+      "nextYear": 2027,
+      "sourceLabel": "City of Lincoln Council, Forthcoming election and referendum dates",
+      "sourceUrl": "https://www.lincoln.gov.uk/voting-elections/forthcoming-election-referendum-dates"
+    },
+    "E07000139": {
+      "nextYear": 2027,
+      "sourceLabel": "North Kesteven District Council, Becoming a Councillor",
+      "sourceUrl": "https://www.n-kesteven.gov.uk/council-democracy/how-council-works/your-councillors/becoming-councillor"
+    },
+    "E07000140": {
+      "nextYear": 2027,
+      "sourceLabel": "South Holland District Council, \"Elections\"",
+      "sourceUrl": "https://www.sholland.gov.uk/elections"
+    },
+    "E07000141": {
+      "nextYear": 2027,
+      "sourceLabel": "South Kesteven District Council, \"Scheduled elections and referendums\"",
+      "sourceUrl": "https://www.southkesteven.gov.uk/your-council-and-democracy/elections-and-voting/scheduled-elections-and-referendums"
+    },
+    "E07000142": {
+      "nextYear": 2027,
+      "sourceLabel": "West Lindsey District Council, \"Scheduled elections\"",
+      "sourceUrl": "https://www.west-lindsey.gov.uk/elections-voting/scheduled-elections"
+    },
+    "E07000143": {
+      "nextYear": 2027,
+      "sourceLabel": "Breckland Council, Become a district councillor",
+      "sourceUrl": "https://www.breckland.gov.uk/elections/become-district-councillor"
+    },
+    "E07000144": {
+      "nextYear": 2027,
+      "sourceLabel": "Broadland and South Norfolk councils (shared site), Working at elections",
+      "sourceUrl": "https://www.southnorfolkandbroadland.gov.uk/council/elections/working-elections"
+    },
+    "E07000146": {
+      "nextYear": 2027,
+      "sourceLabel": "Borough Council of King's Lynn and West Norfolk, Upcoming elections",
+      "sourceUrl": "https://www.west-norfolk.gov.uk/info/20090/elections_and_voting/456/upcoming_elections"
+    },
+    "E07000147": {
+      "nextYear": 2027,
+      "sourceLabel": "North Norfolk District Council, County council elections set for May (news, Feb 2026)",
+      "sourceUrl": "https://www.north-norfolk.gov.uk/news/2026/february/county-council-elections-set-for-may/"
+    },
+    "E07000170": {
+      "nextYear": 2027,
+      "sourceLabel": "Ashfield District Council, Election notices (election cycle table)",
+      "sourceUrl": "https://www.ashfield.gov.uk/elections-and-voting/election-notices/"
+    },
+    "E07000171": {
+      "nextYear": 2027,
+      "sourceLabel": "Bassetlaw District Council, Becoming a councillor (FAQ)",
+      "sourceUrl": "https://www.bassetlaw.gov.uk/council-and-democracy/elections-in-bassetlaw/elections-information/becoming-a-councillor/"
+    },
+    "E07000172": {
+      "nextYear": 2027,
+      "sourceLabel": "Broxtowe Borough Council, Upcoming elections",
+      "sourceUrl": "https://www.broxtowe.gov.uk/for-you/elections-voting/upcoming-elections/"
+    },
+    "E07000173": {
+      "nextYear": 2027,
+      "sourceLabel": "Gedling Borough Council, Become a Councillor",
+      "sourceUrl": "https://www.gedling.gov.uk/democracy-and-elections/your-councillors/become-councillor"
+    },
+    "E07000174": {
+      "nextYear": 2027,
+      "sourceLabel": "Mansfield District Council, Current elections",
+      "sourceUrl": "https://www.mansfield.gov.uk/elections-voting/current-elections"
+    },
+    "E07000176": {
+      "nextYear": 2027,
+      "sourceLabel": "Rushcliffe Borough Council, \"Elections: What and When?\"",
+      "sourceUrl": "https://www.rushcliffe.gov.uk/elections/elections-what-and-when"
+    },
+    "E07000177": {
+      "nextYear": 2027,
+      "sourceLabel": "Cherwell District Council, Upcoming Elections (Elections 2026 and 2027)",
+      "sourceUrl": "https://www.cherwell.gov.uk/info/11/elections/1319/elections-2026"
+    },
+    "E07000178": {
+      "nextYear": 2028,
+      "sourceLabel": "Oxford City Council, Oxford City Council elections 2026 page",
+      "sourceUrl": "https://www.oxford.gov.uk/elections-voting/oxford-city-council-elections-2026"
+    },
+    "E07000179": {
+      "nextYear": 2027,
+      "sourceLabel": "South Oxfordshire District Council, \"Current and Upcoming Elections\"",
+      "sourceUrl": "https://www.southoxon.gov.uk/south-oxfordshire-district-council/local-democracy-and-elections/elections-and-voting/current-and-upcoming-elections/"
+    },
+    "E07000180": {
+      "nextYear": 2027,
+      "sourceLabel": "Vale of White Horse District Council, \"Current and Upcoming Elections\"",
+      "sourceUrl": "https://www.whitehorsedc.gov.uk/?p=9011"
+    },
+    "E07000181": {
+      "nextYear": 2027,
+      "sourceLabel": "West Oxfordshire District Council, Current and future elections page",
+      "sourceUrl": "https://www.westoxon.gov.uk/about-the-council/elections-and-voting/current-and-future-elections/"
+    },
+    "E07000192": {
+      "nextYear": 2027,
+      "sourceLabel": "Cannock Chase (Electoral Changes) Order 2023, SI 2023/1023, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/1023/made"
+    },
+    "E07000196": {
+      "nextYear": 2027,
+      "sourceLabel": "South Staffordshire Council, \"Forthcoming elections and results\"",
+      "sourceUrl": "https://www.sstaffs.gov.uk/elections/election-results.cfm?area=63"
+    },
+    "E07000197": {
+      "nextYear": 2027,
+      "sourceLabel": "Stafford Borough Council, \"Elections\"",
+      "sourceUrl": "https://www.staffordbc.gov.uk/elections"
+    },
+    "E07000198": {
+      "nextYear": 2027,
+      "sourceLabel": "Staffordshire Moorlands District Council, \"Voting and elections\"",
+      "sourceUrl": "https://www.staffsmoorlands.gov.uk/elections"
+    },
+    "E07000199": {
+      "nextYear": 2027,
+      "sourceLabel": "Tamworth Borough Council, Elections 2027 page",
+      "sourceUrl": "https://www.tamworth.gov.uk/elections-2027"
+    },
+    "E07000200": {
+      "nextYear": 2027,
+      "sourceLabel": "Babergh District Council, Devolution and local government reorganisation page",
+      "sourceUrl": "https://www.babergh.gov.uk/w/devolution-and-local-government-reorganisation"
+    },
+    "E07000202": {
+      "nextYear": 2027,
+      "sourceLabel": "Ipswich Borough Council, Current elections page",
+      "sourceUrl": "https://www.ipswich.gov.uk/your-council/elections-and-electoral-registration/current-elections"
+    },
+    "E07000203": {
+      "nextYear": 2027,
+      "sourceLabel": "Mid Suffolk District Council, LGR and devolution",
+      "sourceUrl": "https://www.midsuffolk.gov.uk/en/lgr-and-devolution"
+    },
+    "E07000218": {
+      "nextYear": 2027,
+      "sourceLabel": "North Warwickshire Borough Council, Upcoming elections",
+      "sourceUrl": "https://www.northwarks.gov.uk/elections-voting/elections-2-may-2024"
+    },
+    "E07000219": {
+      "nextYear": 2028,
+      "sourceLabel": "Nuneaton & Bedworth (Electoral Changes) Order 2024, SI 2024/3, art.4(3)(b)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/3/made"
+    },
+    "E07000222": {
+      "nextYear": 2027,
+      "sourceLabel": "Warwick District Council news, \"Local elections 2026: no elections scheduled for Warwick District\"",
+      "sourceUrl": "https://www.warwickdc.gov.uk/news/article/1433/local_elections_2026_-_no_elections_scheduled_for_warwick_district"
+    },
+    "E07000224": {
+      "nextYear": 2027,
+      "sourceLabel": "Arun District Council, Calendar of elections and referendums",
+      "sourceUrl": "https://www.arun.gov.uk/calendar-of-elections"
+    },
+    "E07000225": {
+      "nextYear": 2027,
+      "sourceLabel": "Chichester District Council, Future elections (table of scheduled future elections)",
+      "sourceUrl": "https://www.chichester.gov.uk/upcomingelections"
+    },
+    "E07000227": {
+      "nextYear": 2027,
+      "sourceLabel": "Horsham District Council, Elections: Upcoming elections",
+      "sourceUrl": "https://www.horsham.gov.uk/council-democracy-and-elections/elections/upcoming-elections"
+    },
+    "E07000229": {
+      "nextYear": 2027,
+      "sourceLabel": "Adur & Worthing Councils, Upcoming elections page",
+      "sourceUrl": "https://www.adur-worthing.gov.uk/elections-and-voting/upcoming-elections/"
+    },
+    "E07000234": {
+      "nextYear": 2027,
+      "sourceLabel": "Bromsgrove District Council, Current elections and referendums",
+      "sourceUrl": "https://www.bromsgrove.gov.uk/council/elections/current-elections-and-referendums/"
+    },
+    "E07000236": {
+      "nextYear": 2027,
+      "sourceLabel": "Redditch (Electoral Changes) Order 2023, SI 2023/654, art.4(3)(b)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/654/made"
+    },
+    "E07000239": {
+      "nextYear": 2027,
+      "sourceLabel": "Wyre Forest District Council, \"When do elections take place?\"",
+      "sourceUrl": "https://www.wyreforestdc.gov.uk/your-council/elections-and-voting/upcoming-elections-and-vacancies/when-do-elections-take-place/"
+    },
+    "E07000240": {
+      "nextYear": 2027,
+      "sourceLabel": "St Albans City and District Council, Elections and results page",
+      "sourceUrl": "https://www.stalbans.gov.uk/elections-and-results"
+    },
+    "E07000243": {
+      "nextYear": 2027,
+      "sourceLabel": "Stevenage (Electoral Changes) Order 2023, SI 2023/653, art.4(3)(b)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2023/653/made"
+    },
+    "E07000244": {
+      "nextYear": 2027,
+      "sourceLabel": "East Suffolk Council, Become a councillor",
+      "sourceUrl": "https://www.eastsuffolk.gov.uk/your-council/councillors/become-councillor"
+    },
+    "E07000245": {
+      "nextYear": 2027,
+      "sourceLabel": "West Suffolk Council, How to become a councillor: frequently asked questions",
+      "sourceUrl": "https://www.westsuffolk.gov.uk/Council/elections/how-to-become-a-councillor/frequently-asked-questions.cfm"
+    },
+    "E08000001": {
+      "nextYear": 2027,
+      "sourceLabel": "Bolton (Electoral Changes) Order 2022, SI 2022/964, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/964/made"
+    },
+    "E08000003": {
+      "nextYear": 2027,
+      "sourceLabel": "Manchester City Council, The next election",
+      "sourceUrl": "https://www.manchester.gov.uk/the-council-and-democracy/elections-and-voting/elections/the-next-election"
+    },
+    "E08000004": {
+      "nextYear": 2027,
+      "sourceLabel": "Oldham (Electoral Changes) Order 2022, SI 2022/778, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/778/made"
+    },
+    "E08000005": {
+      "nextYear": 2027,
+      "sourceLabel": "Rochdale Borough Council, Your next election: Local elections",
+      "sourceUrl": "https://www.rochdale.gov.uk/elections-voting/next-election"
+    },
+    "E08000006": {
+      "nextYear": 2027,
+      "sourceLabel": "Salford City Council, Future elections",
+      "sourceUrl": "https://www.salford.gov.uk/your-council/elections-and-voting/future-elections/"
+    },
+    "E08000007": {
+      "nextYear": 2027,
+      "sourceLabel": "Stockport (Electoral Changes) Order 2022, SI 2022/1135, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/1135/made"
+    },
+    "E08000008": {
+      "nextYear": 2027,
+      "sourceLabel": "Tameside (Electoral Changes) Order 2022, SI 2022/661, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/661/made"
+    },
+    "E08000009": {
+      "nextYear": 2027,
+      "sourceLabel": "Trafford (Electoral Changes) Order 2022, SI 2022/1375, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/1375/made"
+    },
+    "E08000010": {
+      "nextYear": 2027,
+      "sourceLabel": "Wigan (Electoral Changes) Order 2022, SI 2022/1372, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/1372/made"
+    },
+    "E08000014": {
+      "nextYear": 2027,
+      "sourceLabel": "Sefton (Electoral Changes) Order 2024, SI 2024/1178, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/1178/made"
+    },
+    "E08000015": {
+      "nextYear": 2027,
+      "sourceLabel": "Wirral Council, \"Local elections\"",
+      "sourceUrl": "https://www.wirral.gov.uk/elections-and-voting/elections/local-elections"
+    },
+    "E08000017": {
+      "nextYear": 2029,
+      "sourceLabel": "City of Doncaster Council, Upcoming elections",
+      "sourceUrl": "https://www.doncaster.gov.uk/services/the-council-democracy/upcoming-elections"
+    },
+    "E08000018": {
+      "nextYear": 2028,
+      "sourceLabel": "Rotherham Metropolitan Borough Council, Upcoming elections",
+      "sourceUrl": "https://www.rotherham.gov.uk/elections-voting/upcoming-elections"
+    },
+    "E08000021": {
+      "nextYear": 2027,
+      "sourceLabel": "Newcastle upon Tyne (Electoral Changes) Order 2025, SI 2025/566, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/566/made"
+    },
+    "E08000022": {
+      "nextYear": 2027,
+      "sourceLabel": "North Tyneside (Electoral Changes) Order 2024, SI 2024/138, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/138/made"
+    },
+    "E08000023": {
+      "nextYear": 2027,
+      "sourceLabel": "South Tyneside (Electoral Changes) Order 2025, SI 2025/816, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/816/made"
+    },
+    "E08000024": {
+      "nextYear": 2027,
+      "sourceLabel": "Sunderland (Electoral Changes) Order 2025, SI 2025/564, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/564/made"
+    },
+    "E08000025": {
+      "nextYear": 2030,
+      "sourceLabel": "Birmingham City Council, Birmingham City Council election on 7 May 2026 (page updated 8 June 2026); corroborated by City of Birmingham (Scheme of Elections) Order 2015, SI 2015/43, art.2 as amended by SI 2015/666",
+      "sourceUrl": "https://www.birmingham.gov.uk/info/20097/elections_and_voting/3187/birmingham_city_council_election_on_7_may_2026"
+    },
+    "E08000026": {
+      "nextYear": 2027,
+      "sourceLabel": "Coventry (Electoral Changes) Order 2024, SI 2024/1181, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/1181/made"
+    },
+    "E08000027": {
+      "nextYear": 2027,
+      "sourceLabel": "Dudley (Electoral Changes) Order 2024, SI 2024/156, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/156/made"
+    },
+    "E08000028": {
+      "nextYear": 2027,
+      "sourceLabel": "Sandwell (Electoral Changes) Order 2025, SI 2025/1344, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/1344/made"
+    },
+    "E08000029": {
+      "nextYear": 2027,
+      "sourceLabel": "Solihull (Electoral Changes) Order 2025, SI 2025/868, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/868/made"
+    },
+    "E08000030": {
+      "nextYear": 2027,
+      "sourceLabel": "Walsall (Electoral Changes) Order 2025, SI 2025/155, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/155/made"
+    },
+    "E08000031": {
+      "nextYear": 2027,
+      "sourceLabel": "Wolverhampton (Electoral Changes) Order 2022, SI 2022/967, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2022/967/made"
+    },
+    "E08000032": {
+      "nextYear": 2027,
+      "sourceLabel": "Bradford (Electoral Changes) Order 2025, SI 2025/461, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/461/made"
+    },
+    "E08000033": {
+      "nextYear": 2027,
+      "sourceLabel": "Calderdale (Electoral Changes) Order 2024, SI 2024/1182, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/1182/made"
+    },
+    "E08000034": {
+      "nextYear": 2027,
+      "sourceLabel": "Kirklees (Electoral Changes) Order 2025, SI 2025/565, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/565/made"
+    },
+    "E08000035": {
+      "nextYear": 2027,
+      "sourceLabel": "Leeds City Council, Leeds City Council elections",
+      "sourceUrl": "https://www.leeds.gov.uk/your-council/elections/leeds-city-council-elections"
+    },
+    "E08000036": {
+      "nextYear": 2027,
+      "sourceLabel": "Wakefield (Electoral Changes) Order 2025, SI 2025/459, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/459/made"
+    },
+    "E08000037": {
+      "nextYear": 2027,
+      "sourceLabel": "Gateshead (Electoral Changes) Order 2024, SI 2024/1179, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2024/1179/made"
+    },
+    "E08000038": {
+      "nextYear": 2027,
+      "sourceLabel": "Barnsley (Electoral Changes) Order 2025, SI 2025/460, art.4(3)",
+      "sourceUrl": "https://www.legislation.gov.uk/uksi/2025/460/made"
+    },
+    "E09000001": {
+      "nextYear": 2029,
+      "sourceLabel": "City of London Corporation, Court of Common Council committee details (democracy.cityoflondon.gov.uk)",
+      "sourceUrl": "https://democracy.cityoflondon.gov.uk/mgCommitteeDetails.aspx?ID=223"
+    }
+  }
+}

@@ -19,6 +19,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
+import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
@@ -55,6 +56,12 @@ const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
 let pages = 0;
 let profiles = 0;
+let paymentLinks = 0, paymentAbsent = 0;
+let networkPopulation = 0, networkElection = 0, parishPagesChecked = 0;
+const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
+const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
+if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
+if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -66,8 +73,10 @@ for (const path of files(DIST)) {
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
+  if (text.includes('asylumstats.co.uk')) failures.push(`Asylum Stats domain on ${rel(path)}`);
   if (/^\/tools\/budget\/[^/]+\/index\.html$/.test(rel(path))) {
     const slug=rel(path).split('/')[3];
+    if (text.includes('data-network-strip')) failures.push(`budget route contains a network strip: ${slug}`);
     const result=budgetGameProblems(text,slug,DIST);
     failures.push(...result.problems);gameCounts[result.available?'available':'absent']++;
     if(beforeGameText[slug]&&JSON.stringify(publishedText(text))!==JSON.stringify(beforeGameText[slug]))failures.push(`${slug}: pre-A6 published text changed`);
@@ -135,12 +144,25 @@ for (const path of files(DIST)) {
   }
   if (/^\/councils\/[^/]+\/index\.html$/.test(rel(path))) {
     profiles += 1;
+    networkPopulation += (text.match(/data-network-population/g) ?? []).length;
+    networkElection += (text.match(/data-network-election/g) ?? []).length;
+    if (/data-council-payment/.test(text)) paymentLinks++;
+    if (/We do not hold a checked link to/.test(text)) paymentAbsent++;
+    for (const problem of profileProblems(text, rel(path).split("/")[2])) failures.push(`${rel(path)}: ${problem}`);
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
     for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
     }
+    // Release the previous profile's detached DOM before parsing the next one.
+    await new Promise(resolve=>setImmediate(resolve));
   }
 
+  if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
+    parishPagesChecked++;
+    const parishSource = JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
+    const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
+    if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
+  }
   const devolvedPage = /^\/(scotland|wales)\/([^/]+)\/index\.html$/.exec(rel(path));
   if (devolvedPage) {
     const image = /<meta property="og:image" content="([^"]+)"/.exec(text)?.[1];
@@ -205,6 +227,11 @@ if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
+if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
+if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
+if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
+const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
+for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
 

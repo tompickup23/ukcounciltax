@@ -1,0 +1,20 @@
+---
+import {networkLinks, populationSource, electionsChecked} from '../lib/network';
+import {longDate} from '../lib/sources';
+import type {Council} from '../lib/registry';
+interface Props {council: Council; name: string}
+const {council, name} = Astro.props;
+const links = networkLinks(council, name);
+---
+<ul class="network-strip" data-network-strip>
+  {links.map(link => <li data-fact={link.residents !== undefined || link.election ? '' : undefined}>
+    <a href={link.url} data-figure={link.residents !== undefined || link.election ? '' : undefined}>{link.label}</a>
+    {link.residents !== undefined && <p class="source-line" data-network-population>Source: <a href={populationSource.fileUrl}>{populationSource.publisher}, {populationSource.title}</a>, MYE2 Persons, published {longDate(populationSource.published)}.</p>}
+    {link.election && <p class="source-line" data-network-election>Source: <a href={link.election.sourceUrl}>{link.election.sourceLabel}</a>, recorded in UK Elections' council election register, checked {longDate(electionsChecked)}.</p>}
+  </li>)}
+</ul>
+<style>
+.network-strip{list-style:none;padding:0;margin:0}
+.network-strip li{padding-block:var(--space-sm);border-bottom:1px solid var(--border)}
+.network-strip .source-line{margin-bottom:0}
+</style>

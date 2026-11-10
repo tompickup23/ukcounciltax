@@ -290,3 +290,25 @@ Not merged or deployed at the time of writing; Tom owns the merge.
 - The Asylum Stats link is removed from council pages (decision N2, 10 November 2026). No built page links that site.
 - Cloudflare Web Analytics is enabled with the site's own token (decision 6, 9 November 2026). Every built page carries exactly one beacon; the dist check enforces the token. The privacy page now describes it. This supersedes "Own analytics is disabled" above.
 - Local gate: check, `BUILD_OG=1` build, 293 unit tests, dist check (909 pages, 908 sitemap URLs) and text sweep pass. The CSP suite result is in the pull request.
+
+
+## Council profile overhaul A3, 10 November 2026
+
+Phases 1 through 11 are complete on `feat/profile-home-overhaul`, rebased onto main `1500163`. Profiles now show published bands, a class aware bill breakdown, class position, locator map, consolidated history, checked payment links and sourced network lines. Phase 12 remains excluded. Main's navigation and analytics fix are preserved. The map geometry ruling is isolated in its own commit, with the selected-band print checks unchanged.
+
+The final Node 22.23.4 gate passed Astro check, the full `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 production CSP tests with one worker and 250 browser tests. The internal link audit checked 68,818 destinations without a missing target. The successful build took 979.73 seconds and produced 7,680 files, 1,026,415,422 bytes and 909 HTML pages. All 2,368 profile chart PNGs were generated.
+
+A fresh `79fa7bd` build provided the number baseline. All 2,368 annual band amounts, 2,368 change panels, 9,590 retained history values and 1,282 retained bill rows match exactly. Five North Kesteven history amounts now retain their published pence; no source data or hashes changed. All 198 omitted bill rows are unnamed zeros.
+
+The unchanged pinned design checker completed all seven requested pages with drawers closed at both widths and themes. Its one advisory finding is the two verbatim charging-body titles on Manchester; the existing text rule permits these source names. All other design rules pass in the quiet final run. Captures also record the kit's partly covered Band D label, with its complete value retained in the adjacent tables. No kit file or tolerance was changed.
+
+Per phase evidence, dry run tables, measured build comparison, Decisions taken and capture details are in [the A3 review](A3-REVIEW-2026-11-10.md). Every differing baseline page has a reason in [the number review](A3-NUMBER-REVIEW-2026-11-10.tsv). No merge or deployment was performed.
+
+
+## A3 review fixes, 10 November 2026
+
+The six review items are fixed separately. Horizontal band bars keep all labels clear in the eight inspected Burnley and Bournemouth, Christchurch and Poole captures at 375 and 1440 in both themes. The contents and history captions, retrieval-date wording, dead-code cleanup and two review-record corrections are included. The live locator test retains the previous geometry thresholds.
+
+The full Node 22.23.4 gate passed: Astro check without diagnostics, `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 CSP tests with one worker and 250 browser tests with two workers. The build contains 909 HTML pages, 908 sitemap URLs, 4,986 valid chart PNG links and all 2,368 profile PNGs. The internal link audit passed all 68,818 destinations.
+
+The fresh current-main comparison at `1500163` passed with 515 differing pages and no differences outside existing allowed paths. Exact profile amounts and histories match main. The refreshed measurements, captures and per-page register are recorded in `docs/A3-REVIEW-2026-11-10.md` and `docs/A3-NUMBER-REVIEW-MAIN-2026-11-10.tsv`. This supersedes the earlier clipped-label limitation and original build measurements for the revised branch. No kit, source, gate or tolerance was changed. No merge or deployment was performed.

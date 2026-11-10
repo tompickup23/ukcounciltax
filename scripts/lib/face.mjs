@@ -48,6 +48,12 @@ export function chartProblems(page) {
   const charts = count(html, /<svg\b[^>]*class="[^"]*\bek-chart\b/gi);
   const actions = count(html, /<div\b[^>]*\bdata-chart-actions\b/gi);
   if (charts !== actions) problems.push(`${charts} kit charts but ${actions} chart actions`);
+  for (const match of html.matchAll(/<[a-z][^>]*\sdata-fact(?:\s|=|>)[^>]*>/gi)) {
+    const fact = element(html.slice(match.index), /^<[a-z]/) ?? "";
+    if (!/<svg\b[^>]*class="[^"]*\bek-chart\b/.test(fact)) continue;
+    if (count(fact, /class="[^"]*\bsource-line\b/g) !== 1) problems.push("a kit chart fact must hold exactly one source line");
+    if (count(fact, /The figures as a table/g) !== 1) problems.push("a kit chart fact must hold exactly one table control");
+  }
   const pngs = [...html.matchAll(/<a\b[^>]*href="([^"]+\.png)"[^>]*\bdata-chart-png\b/gi)].map((m) => m[1]);
   if (pngs.length !== charts * 2) problems.push(`${pngs.length} chart PNG links for ${charts} charts in two themes`);
   return { problems, pngs };

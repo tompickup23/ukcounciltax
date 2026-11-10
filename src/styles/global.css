@@ -435,8 +435,6 @@ table.data thead th:first-child { left: 0; z-index: 3; }
   .shell { max-width: none; width: 100%; padding: 0; }
   main { padding: 0; }
   .card, .fact, figure { box-shadow: none; break-inside: avoid; }
-  .council-answer { display: block !important; }
-  .council-map { max-width: 16rem; }
   .table-wrap { overflow: visible !important; max-height: none !important; border: 0; }
   table.data { min-width: 0 !important; width: 100%; font-size: 9pt; }
   table.data th, table.data td { position: static !important; white-space: normal; background: white !important; }

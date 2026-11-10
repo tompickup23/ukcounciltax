@@ -43,7 +43,6 @@ const parishMoney = (y:ParishYear) => y.status === 'not-existing' ? 'Did not exi
     {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
     {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
     <p class="small muted">Change is the {yearLabel(year)} Band D minus the {yearLabel(earlier)} Band D on the same source row, our calculation. A row that did not exist in either year is not comparable. Missing and ceased entries stay distinct from published £0.00 precepts.</p>
-    <SourceLine source={parishSource} />
   </section>
   <p><a href={councilPath(council)}>{name} council tax</a> · <a href="/precepts/parishes/">Parish precepts by council</a> · <a href="/precepts/">Your bill and precepts</a></p>
 </BaseLayout>

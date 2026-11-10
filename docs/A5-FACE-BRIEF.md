@@ -47,7 +47,7 @@ Four cards, one drawing each, drawn to scale from figures by key, `aria-hidden="
 | What makes up my bill | `/precepts/` | stacked bar | Burnley Band D parts, PDF page 1 |
 | Increases since 2012/13 | `/increases/` | line | England average area Band D, MHCLG Table 3, 2012/13 to 2026/27 |
 | What could it cost | `/tools/future-cost/` | band bars A to H, D in the accent | Burnley unparished totals by band, PDF page 1 |
-| How do areas compare | `/compare/` | two ticks on a strip | Burnley area Band D 2,549.42 (Table 10) and England 2,392 (Table 7), both area Band D including parish precepts and adult social care |
+| How do areas compare | `/compare/` | two ticks on a strip | Burnley area Band D 2,549.42 (Table 9) and England 2,392 (Table 7), both area Band D including parish precepts and adult social care |
 
 The thumbnails in the mockup are drawn by `build-mockups.mjs`. In the build they come from a kit `thumb` template (section 6.4), so the colours, the zero baseline and the figure keys are the kit's. The pairing of drawing to card is a judgement; the band bars could equally go on a "Find your band" card if Tom prefers.
 

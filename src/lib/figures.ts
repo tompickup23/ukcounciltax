@@ -14,6 +14,9 @@
  */
 import { defineFigures, type FigureSet, type SeriesPoint } from "../vendor/estate-kit/dist/src/index.js";
 import { BANDS, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
+import { loadRegistry } from "./registry";
+import { national } from "./national-data";
+import { RANK_CLASSES, rankClass } from "./rankings";
 import { localBills } from "./local-bill-data";
 import { longDate, tableName } from "./sources";
 
@@ -120,6 +123,49 @@ function build(): Record<string, unknown> {
     value: burnley.bands.D,
     source: mhclg(data.source.bandTable),
   };
+  const registry = loadRegistry();
+  const bandsSource = mhclg(data.source.bandTable);
+  const componentSource = {
+    publisher: "MHCLG", title: national.sources.components.title,
+    table: "Data_Billing", edition: `retrieved ${longDate(national.sources.components.retrieved)}`,
+    url: national.sources.components.fileUrl,
+  };
+  for (const [gss, authority] of Object.entries(data.authorities)) {
+    const slug = registry.councils[gss].slug;
+    const key = `council.${slug}`;
+    records[`${key}.bands`] = {
+      kind: "series", axis: "category", label: `Bands A to H in ${authority.name}, ${year}`,
+      unit: "gbp", dp: 2, source: bandsSource,
+      points: BANDS.map(band => ({label: band, value: authority.bands[band]})),
+    };
+    records[`${key}.area_bandd`] = {
+      kind: "value", label: `Area Band D in ${authority.name}, ${year}`,
+      name: authority.name, value: authority.bands.D, unit: "gbp", dp: 2, source: bandsSource,
+    };
+    const components = national.components[gss];
+    for (const part of [
+      {kind: "own", name: `${authority.name} council`, bandDPence: components.ownWithParishPence},
+      ...components.parts.map(part => ({...part, name: part.kind === "county"
+        ? (authority.classCode === "ILB" || authority.classCode === "OLB" ? "Greater London Authority" : "County council")
+        : ({police: "Police", fire: "Fire", combined: "Combined authority"})[part.kind]})),
+      {kind: "total", name: "Published area average", bandDPence: components.areaPence},
+    ]) {
+      if (part.bandDPence === null) throw new Error(`A3: missing component ${gss}/${part.kind}`);
+      records[`${key}.bill.${part.kind}`] = {
+        kind: "value", label: `${part.name}, ${year}`, name: part.name,
+        value: part.bandDPence / 100, unit: "gbp", dp: 2, source: componentSource,
+      };
+    }
+  }
+  for (const cls of RANK_CLASSES) {
+    const rows = rankClass(data, cls);
+    if (!rows) throw new Error(`A3: incomplete class ${cls.slug}`);
+    records[`class.${cls.slug}.area_bandd`] = {
+      kind: "series", axis: "category", label: `Area Band D within ${cls.label}, ${year}`,
+      unit: "gbp", dp: 2, source: bandsSource,
+      points: rows.map(row => ({label: row.name, value: row.area})),
+    };
+  }
   return records;
 }
 

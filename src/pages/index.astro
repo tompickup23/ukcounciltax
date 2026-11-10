@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import BillAnatomy from "../vendor/estate-kit/src/components/BillAnatomy.astro";
 import TaskThumb from "../components/TaskThumb.astro";
 import ChartActions from "../components/kit/ChartActions.astro";
-import { KIT_CHARTS, chartAlt, chartCardPath } from "../lib/kit-charts";
+import { KIT_CHARTS, billShareRounding, chartAlt, chartCardPath } from "../lib/kit-charts";
 import { siteFigures } from "../lib/figures";
 import CouncilFinder from "../components/CouncilFinder.astro";
 import BandDLine from "../components/BandDLine.astro";
@@ -20,6 +20,7 @@ const year = yearLabel(CURRENT_YEAR);
 const previous = yearLabel(PREVIOUS_YEAR);
 const count = councilPages().length;
 const figures = siteFigures();
+const rounding = billShareRounding(KIT_CHARTS["home-bill"].options());
 const historyFrom = figures.series("england.area_bandd.history").points[0].label;
 /** "Drawn from" and each figure's publisher, title and table or page; figures sharing a document collapse into one. */
 function drawnFrom(keys: string[], suffix = ""): string {
@@ -53,6 +54,7 @@ function drawnFrom(keys: string[], suffix = ""): string {
       <div data-fact class="bill-fact" id="bill-chart">
         <BillAnatomy {...KIT_CHARTS["home-bill"].options()} class="bill-figure" />
         <ChartActions chart="home-bill" target="bill-chart" />
+        {rounding && <p class="small" data-share-rounding>{rounding}</p>}
       </div>
       <p class="caveat">A parish or town council precept adds to this Band D total where one applies. Before discounts.</p>
       <a class="bill-link" href="/precepts/">See the local breakdown and model each part</a>

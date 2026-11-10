@@ -79,9 +79,18 @@ test('table and comparison views retain figures without CSV controls', async ({p
 });
 test('maps and print preserve the selected answer and source without interactive controls', async ({page}) => {
   await page.goto('/councils/burnley/#band-H');
-  await expect(page.locator('[data-boundary-map]')).toHaveAttribute('data-boundary-map','E07000117');
-  const bounds = await page.locator('[data-map-focal]').evaluate(el=>{const b=(el as SVGGraphicsElement).getBBox();return {width:b.width,height:b.height};});
-  expect(bounds.width).toBeGreaterThan(50); expect(bounds.height).toBeGreaterThan(50); expect(bounds.width).toBeLessThan(299);
+  const focal = page.locator('#map [data-ek-focus="E07000117"]');
+  await expect(focal).toHaveCount(1);
+  const {bounds, viewBox} = await focal.evaluate(el=>{
+    const graphic = el as SVGGraphicsElement;
+    const box = graphic.getBBox();
+    const view = graphic.ownerSVGElement!.viewBox.baseVal;
+    return {bounds:{x:box.x,y:box.y,width:box.width,height:box.height},viewBox:{x:view.x,y:view.y,width:view.width,height:view.height}};
+  });
+  expect(bounds.width).toBeGreaterThan(50); expect(bounds.height).toBeGreaterThan(50);
+  expect(bounds.x).toBeGreaterThanOrEqual(viewBox.x); expect(bounds.y).toBeGreaterThanOrEqual(viewBox.y);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewBox.x + viewBox.width);
+  expect(bounds.y + bounds.height).toBeLessThanOrEqual(viewBox.y + viewBox.height);
   await page.emulateMedia({media:'print'});
   await expect(page.locator('[data-band-panel="H"]')).toBeVisible(); await expect(page.locator('[data-band-panel="D"]')).toBeHidden();
   await expect(page.locator('[data-band-panel="H"] .source-line').first()).toBeVisible();

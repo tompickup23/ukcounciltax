@@ -1,8 +1,13 @@
 ---
 /** Published charges, histories, precept context and links for one billing authority. */
+import {councilTaxLink, councilLinksSource} from '../../lib/council-links';
+import {national} from '../../lib/national-data';
+import {bandStockFor} from '../../lib/band-stock';
+import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
-import {classFor, rankClass, positionWords} from '../../lib/rankings';
+import {classFor, rankClass, positionWords, sentenceCase} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
+import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
 import PreceptContext from '../../components/PreceptContext.astro';
@@ -10,7 +15,13 @@ import BandMix from '../../components/BandMix.astro';
 import CollectionRates from '../../components/CollectionRates.astro';
 import BudgetSummary from '../../components/BudgetSummary.astro';
 import CouncilActions from "../../components/CouncilActions.astro";
-import MiniMap from "../../components/MiniMap.astro";
+import PositionStrip from '../../vendor/estate-kit/src/components/PositionStrip.astro';
+import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
+import ChartActions from '../../components/kit/ChartActions.astro';
+import {profileChartOptions} from '../../lib/kit-charts';
+import {profileBandCells} from '../../lib/profile-bands';
+import LocatorMap from '../../vendor/estate-kit/src/components/LocatorMap.astro';
+import {boundarySource} from '../../lib/boundaries';
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import BandSelector from "../../components/BandSelector.astro";
@@ -22,7 +33,6 @@ import {
   AREA_TYPE_LABEL,
   CURRENT_YEAR,
   PREVIOUS_YEAR,
-  YEARS,
   areaTypeFor,
   bandChange,
   increasesYearPath,
@@ -34,7 +44,7 @@ import {
   type Authority,
 } from "../../lib/council-tax";
 import { councilPages, councilPath, regionPath } from "../../lib/paths";
-import { contextLinks, sisterLinks, type Council } from "../../lib/registry";
+import { type Council } from "../../lib/registry";
 import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
 import { councilCardPath } from "../../lib/og";
 import { councilTaxSource, longDate } from "../../lib/sources";
@@ -53,6 +63,8 @@ interface Props {
 
 const { council, tax } = Astro.props;
 const current = loadYear(CURRENT_YEAR);
+const charts = profileChartOptions(council.slug);
+const paymentLink = councilTaxLink(council.gss);
 const rankType = classFor(tax.classCode)!;
 const classRanks = rankClass(current, rankType);
 const position = classRanks?.find(row => row.gss === council.gss);
@@ -83,18 +95,6 @@ const own = tax.own;
 const ownSource = own ? councilTaxSource(CURRENT_YEAR, own.table) : null;
 const countySource = county ? councilTaxSource(CURRENT_YEAR, county.table) : null;
 
-/** Band D as published in each year held, for the short history. */
-const history = YEARS.map((y) => {
-  const data = loadYear(y);
-  const row = data.authorities[council.gss];
-  return row ? { year: y, bandD: row.bands.D, table: data.source.bandTable } : null;
-}).filter((row): row is { year: (typeof YEARS)[number]; bandD: number; table: string } => row !== null);
-
-const historySource = {
-  ...councilTaxSource(CURRENT_YEAR, current.source.bandTable),
-  table: `${current.source.bandTable.replace("_", " ")} each year, linked in the table`,
-};
-const links = [...contextLinks(council),...sisterLinks(council)];
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
 
@@ -118,56 +118,65 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
-  <div class="council-answer">
+  <PageContents items={[
+    {id: 'council-tax', label: 'Bands A to H'},
+    ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
+    ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
+    {id: 'map', label: 'Map'},
+    {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
+    {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
+    ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
+    ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+    {id: 'parish-precepts', label: 'Parish charges'},
+    ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
+    ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
+    {id: 'where-money-goes', label: 'Where the money goes'},
+    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+    {id: 'more', label: `${name} across the network`},
+  ]} />
+
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
-    <p class="muted">
-      Choose your band for the published yearly charge, before discounts.
-    </p>
-    <BandSelector ons={council.gss} authority={tax} />
-    <p class="small muted">Monthly equivalents divide the annual charge by ten and round to pennies. Actual bill instalments can differ.</p>
-    <p class="caveat">
-      Every band includes the share of every body that sets council tax here, such as the police and,
-      where they exist, the county council, the fire authority and parish councils, with parish precepts as
-      an average. A home in a parish with
-      its own precept pays a different amount, and discounts such as the single person discount are not
-      taken off.
-    </p>
+    <p class="muted">Published yearly charge for each band, before discounts.</p>
+    <div class="band-answer">
+      <div class="fact" data-fact>
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Published council tax bands and budgeting equivalents">
+          <table class="data" data-band-table>
+            <caption>Council tax bands A to H in {name}, {year}: the published yearly charge, and that charge divided by 10 and by 12</caption>
+            <thead><tr><th scope="col">Band</th><th scope="col" class="num">Yearly charge</th><th scope="col" class="num">Divided by 10</th><th scope="col" class="num">Divided by 12</th></tr></thead>
+            <tbody>{BANDS.map(band => <tr><th scope="row">{band}</th>{profileBandCells(tax.bands[band]).map((value, index) => <td class="num" data-figure={index === 0 ? '' : undefined}>{value}</td>)}</tr>)}</tbody>
+          </table>
+        </div>
+        <p class="calc-label">The two right hand columns are our calculation: the published yearly charge divided by 10 and by 12, rounded to the penny. They are not your instalments. GOV.UK says “The cost is usually split into 10 monthly payments”, and your council can agree 12. Your bill sets the actual amounts and dates.</p>
+        <SourceLine source={councilTaxSource(CURRENT_YEAR, current.source.bandTable, 'Divided by 10 and by 12 calculated from it')} />
+        <p class="small">Instalment wording: <a href="https://www.gov.uk/council-tax/paying-your-bill">GOV.UK, How Council Tax works, Paying your bill</a>, updated 5 February 2025, read 9 November 2026.</p>
+      </div>
+      <div class="fact" data-fact id="band-bars">
+        <ZeroBar {...charts.bands} />
+        <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
+      </div>
+    </div>
+    <p class="caveat" data-parish-caveat>Every band includes the share of every body that sets council tax in {name}, with parish and town council precepts as an average across the area. A home in a parish pays that parish's own precept instead of the average, so its bill differs. Discounts, such as the single person discount, are not taken off.</p>
     {tax.notes.length > 0 && (
       <ul class="notes">
         {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
       </ul>
     )}
+    <h3>Change on {previous} by band</h3>
+    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link below.</p>
+    <BandSelector ons={council.gss} authority={tax} compact />
   </section>
 
-  <MiniMap gss={council.gss} name={name} />
-  </div>
   <div class="action-links" aria-label="Council tax next steps">
+    <a href="#precept-breakdown">What makes up this bill</a>
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
-    <a class="button secondary" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a>
-    <a href="/precepts/">What makes up my bill</a>
     <a href={`/tools/budget/${council.slug}/`}>Explore {name}'s budget and play the budget game</a>
-    <a href="/help/">Help with your bill</a>
-    <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a>
-    <a href="/increases/">Council tax increases {yearLabel(CURRENT_YEAR)} by council</a>
-    <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a>
-    <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>
   </div>
   <CouncilActions slug={council.slug} />
-  <BandMix gss={council.gss} name={name} />
-  <CollectionRates gss={council.gss} name={name} />
-  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
-  <PageContents items={[
-    {id: 'precept-breakdown', label: 'Police, fire and other precepts'},
-    {id: 'parish-precepts', label: 'Parish charges'},
-    {id: 'long-history', label: 'Long-term history'},
-    ...(englandArea ? [{id: 'compared', label: 'England and area averages'}] : []),
-    ...(history.length > 1 ? [{id: 'history', label: 'Previous years'}] : []),
-    ...(own ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
-  ]} />
 
-  <NationalPrecepts gss={council.gss} name={name} />
+
+
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="bill" />
 
   {englandArea && areaSource && (
     <section class="section" id="compared" aria-labelledby="compared-heading">
@@ -196,6 +205,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         {tax.notes.length > 0 && <p>MHCLG publishes a note on this figure; it is under the band table.</p>}
         <SourceLine source={councilTaxSource(CURRENT_YEAR, `Table 9 and ${rankType.ownTable.replace('_', ' ')}`, 'Positions calculated from the published figures: equal figures share a position')} />
       </div>}
+      <div class="fact" data-fact id="class-position-chart">
+        <PositionStrip {...charts.position} />
+        <ChartActions chart={`councils/${council.slug}/position`} target="class-position-chart" />
+      </div>
       <p class="muted">
         Both averages include parish and adult social care precepts, the same basis as the {name} figure.
         <a href={regionPath(tax.region)}>Band D for every council in {tax.region}</a>.
@@ -203,38 +216,33 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     </section>
   )}
 
-  {history.length > 1 && (
-    <section class="section" id="history" aria-labelledby="history-heading">
-      <h2 id="history-heading">How has Band D in {name} changed?</h2>
-      <div class="fact" data-fact>
-        <LongTaxHistory gss={council.gss} name={name} view="chart" />
-        <SourceLine source={historySource} />
-        <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts.</p>
-        <div class="table-wrap" tabindex="0" role="region" aria-label="Council tax history table">
-          <table class="data">
-            <caption>Area Band D in {name}, as published each year</caption>
-            <thead>
-              <tr><th scope="col">Year</th><th scope="col" class="num">Band D</th><th scope="col">Source</th></tr>
-            </thead>
-            <tbody>
-              {history.map((row) => (
-                <tr>
-                  <th scope="row">{yearLabel(row.year)}</th>
-                  <td class="num" data-figure>{pounds(row.bandD)}</td>
-                  <td><a href={loadYear(row.year).source.url}>MHCLG {row.table.replace("_", " ")}</a></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <SourceLine source={historySource} />
-      </div>
-    </section>
-  )}
+  <section class="section" id="map" aria-labelledby="map-heading">
+    <h2 id="map-heading">Where {name} is</h2>
+    <div class="fact locator-fact" data-fact id="locator-chart">
+      <LocatorMap {...charts.map} />
+      <ChartActions chart={`councils/${council.slug}/map`} target="locator-chart" />
+      <p class="small">Shaded by area Band D, the average bill for each whole council area including adult social care and average parish precepts, which MHCLG publishes on the same basis for every class of council in Table 9. Illustrative boundaries, not property or billing boundaries.</p>
+      <p class="small">Map detail: {boundarySource.method}</p>
+    </div>
+  </section>
 
-  <section class="section" id="all-band-history"><h2>Every band over time</h2><div class="table-wrap" tabindex="0" role="region" aria-label="All band history"><table class="data"><caption>{name} area charges, including average parish precepts</caption><thead><tr><th scope="col">Band</th>{YEARS.map(y=><th scope="col" class="num">{yearLabel(y)}</th>)}<th scope="col" class="num">Two-year change</th></tr></thead><tbody>{BANDS.map(b=>{const start=loadYear(YEARS[0]).authorities[council.gss]?.bands[b];return <tr><th scope="row">{b}</th>{YEARS.map(y=><td class="num">{pounds(loadYear(y).authorities[council.gss]?.bands[b])}</td>)}<td class="num">{start?pounds(tax.bands[b]-start):'Unavailable'}</td></tr>;})}</tbody></table></div><p class="source-line">Sources: {YEARS.map(y=><span><a href={loadYear(y).source.url}>MHCLG {yearLabel(y)}</a> · </span>)}Change calculated from the two published charges. Nominal amounts, before discounts.</p><p><a href={`/tools/future-cost/?council=${council.slug}&band=D`}>Explore what future annual changes could mean for {name}</a>.</p></section>
+  <section class="section" id="history" aria-labelledby="history-heading">
+    <h2 id="history-heading">How has Band D in {name} changed?</h2>
+    <LongTaxHistory gss={council.gss} name={name} view="chart" />
+  </section>
 
-  <LongTaxHistory gss={council.gss} name={name} />
+  <section class="section" id="discounts-and-paying" aria-labelledby="discounts-heading">
+    <h2 id="discounts-heading">Discounts, exemptions and how to pay in {name}</h2>
+    <p>Discounts and exemptions depend on who lives in the home and the home itself. A household with one counted adult may get a 25% discount, and some people and some homes are not counted or are exempt. This site does not decide eligibility. <a href="/help/#check-discounts-and-reductions">Discounts, reductions and who is counted</a>.</p>
+    <p>If paying is difficult, contact the council early. <a href="/help/#if-paying-is-difficult">If paying is difficult</a>.</p>
+    {paymentLink ? <>
+      <p><a href={paymentLink} data-council-payment>Pay or manage your council tax on {council.officialName}'s website</a>.</p>
+      <p class="source-line">Link from <a href={councilLinksSource.url}>GOV.UK Local Links Manager</a>, service “Pay your Council Tax” (LGSL 57), export of {longDate(councilLinksSource.exportDate)}, checked by UK Places on {longDate(councilLinksSource.checkedOn)}.</p>
+    </> : <p>We do not hold a checked link to {name}'s own council tax page. <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council on GOV.UK</a>.</p>}
+    <p><a href="/help/">Help with your bill</a> · <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a> · <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a> · <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>.</p>
+    <p><a data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a> · <a href="/precepts/">What makes up my bill</a> · <a href="/increases/">Council tax increases {year} by council</a>.</p>
+    <p>Check the payment dates on your bill. <a href="/help/#check-the-payment-schedule">How council tax is paid</a>.</p>
+  </section>
 
   {own && ownSource && (
     <section class="section" id="who-sets-it" aria-labelledby="who-sets-heading">
@@ -274,6 +282,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   )}
 
   <PreceptContext region={tax.region} gss={council.gss} />
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="parishes" />
+  <BandMix gss={council.gss} name={name} />
+  <CollectionRates gss={council.gss} name={name} />
+  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
 
   {council.reorganisation && (
     <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">
@@ -287,23 +299,29 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 
 
 
-  {links.length > 0 && (
-    <section class="section" id="more" aria-labelledby="more-heading">
-      <h2 id="more-heading">More on {name}</h2>
-      <ul class="sister-links">
-        {links.map((link) => (
-          <li><a href={link.url}>{name} on {link.name}</a></li>
-        ))}
-      </ul>
-    </section>
-  )}
+  <section class="section" id="more" aria-labelledby="more-heading">
+    <h2 id="more-heading">{name} across the network</h2>
+    <NetworkStrip council={council} name={name} />
+  </section>
 </BaseLayout>
 
 <style>
-  .council-answer { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
-  @media (min-width: 960px) { .council-answer { grid-template-columns: minmax(0, 2fr) minmax(15rem, 1fr); } }
-  #council-tax { max-width: 48rem; margin-top: 1rem; }
+  .locator-fact { max-width: 40rem; }
+  .band-answer { display: grid; gap: var(--space-lg); min-width: 0; }
+  .band-answer > div { min-width: 0; }
+  @media (min-width: 960px) { .band-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  #council-tax { margin-top: 1rem; }
   .notes { font-size: 0.9rem; color: var(--text-muted); padding-left: 1.1rem; }
-  .sister-links { padding-left: 1.1rem; }
-  .sister-links li { margin: 0.25rem 0; }
+</style>
+
+<style is:global>
+  #band-bars [data-band-marked] g.ek-bars > g.ek-bar > [data-ek-bar] { fill: var(--series-neutral) !important; }
+  #band-bars [data-band-marked="A"] g.ek-bars > g.ek-bar:nth-of-type(1) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="B"] g.ek-bars > g.ek-bar:nth-of-type(2) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="C"] g.ek-bars > g.ek-bar:nth-of-type(3) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="D"] g.ek-bars > g.ek-bar:nth-of-type(4) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="E"] g.ek-bars > g.ek-bar:nth-of-type(5) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="F"] g.ek-bars > g.ek-bar:nth-of-type(6) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="G"] g.ek-bars > g.ek-bar:nth-of-type(7) > [data-ek-bar] { fill: var(--accent) !important; }
+  #band-bars [data-band-marked="H"] g.ek-bars > g.ek-bar:nth-of-type(8) > [data-ek-bar] { fill: var(--accent) !important; }
 </style>

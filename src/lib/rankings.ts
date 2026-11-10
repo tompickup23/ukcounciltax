@@ -56,3 +56,5 @@ export function ordinal(n: number): string {
 }
 export const positionWords = (position: number, tied: boolean) => `${tied ? 'joint ' : ''}${ordinal(position)}`;
 export const positionCell = (position: number, tied: boolean) => `${position}${tied ? '=' : ''}`;
+
+export function sentenceCase(label: string): string { return label.charAt(0).toUpperCase() + label.slice(1); }

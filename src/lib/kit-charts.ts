@@ -9,9 +9,9 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
 import { billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
-import { CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
+import { AREA_TYPE_LABEL, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
 import { loadRegistry } from "./registry";
-import { classFor, rankClass } from "./rankings";
+import { COUNTY_CLASS, RANK_CLASSES, classFor, rankClass, rankCounties } from "./rankings";
 import {profilePrecepts} from "./profile-precepts";
 import { national } from "./national-data";
 import { neighbourAreas, boundarySource } from "./boundaries";
@@ -34,7 +34,34 @@ export const KIT_CHARTS = {
 export const PROFILE_CHARTS = ["bands", "bill", "position", "map"] as const;
 export type ProfileChart = typeof PROFILE_CHARTS[number];
 export type ProfileChartName = `councils/${string}/${ProfileChart}`;
-export type KitChartName = keyof typeof KIT_CHARTS | ProfileChartName;
+export type ClassChartName = `ranked-${string}`;
+export type KitChartName = keyof typeof KIT_CHARTS | ProfileChartName | ClassChartName;
+const isClassChart = (name: string): name is ClassChartName => name.startsWith("ranked-");
+
+/** One strip per ranked class on /council-tax/ranked/: the class's published values with its published average marked. */
+export function classChartNames(): ClassChartName[] {
+  return [...RANK_CLASSES, COUNTY_CLASS].map(cls => `ranked-${cls.slug}` as ClassChartName);
+}
+
+export function classChartOptions(name: ClassChartName): PositionStripOptions {
+  const slug = name.slice("ranked-".length);
+  const data = loadYear(CURRENT_YEAR);
+  const year = yearLabel(CURRENT_YEAR);
+  const common = {set: siteFigures(), figure: `class.${slug}.average`};
+  if (slug === COUNTY_CLASS.slug) {
+    const rows = rankCounties(data);
+    if (!rows) throw new Error("D6: county precepts are incomplete");
+    return {...common, distribution: `class.${slug}.own_bandd`, classLabel: COUNTY_CLASS.label,
+      basis: "Each county council's own Band D precept, including adult social care, MHCLG Table 8b; the average is MHCLG Table 2",
+      title: `Own Band D across the ${rows.length} ${COUNTY_CLASS.label}, ${year}, with their published average`};
+  }
+  const cls = RANK_CLASSES.find(cls => cls.slug === slug);
+  const rows = cls && rankClass(data, cls);
+  if (!cls || !rows) throw new Error(`D6: no complete class ${slug}`);
+  return {...common, distribution: `class.${slug}.area_bandd`, classLabel: cls.label,
+    basis: "Area Band D, including adult social care and average parish precepts, MHCLG Table 9; the average is MHCLG Table 7",
+    title: `Area Band D across the ${rows.length} ${cls.label}, ${year}, with the published average for ${AREA_TYPE_LABEL[cls.areaType]}`};
+}
 
 export function profileChartOptions(slug: string) {
   const data = loadYear(CURRENT_YEAR);
@@ -83,6 +110,7 @@ export function drawProfileChart(name: ProfileChartName, theme?: Theme): ChartOu
 
 /** The figure keys a chart draws, for its source line. */
 export function chartKeys(name: KitChartName): string[] {
+  if (isClassChart(name)) { const o = classChartOptions(name); return [o.figure, o.distribution]; }
   if (name !== "home-bill") {
     const [, slug, chart] = name.split("/") as [string, string, ProfileChart];
     const opts = profileChartOptions(slug);
@@ -125,6 +153,7 @@ export function chartPngPath(name: KitChartName, theme: Theme): string {
 }
 
 function draw(name: KitChartName, theme: Theme): ChartOutput {
+  if (isClassChart(name)) return positionStrip({ ...classChartOptions(name), mode: { kind: "hex", theme, site: "ukcounciltax" } });
   if (name !== "home-bill") return drawProfileChart(name, theme);
   return billAnatomy({ ...KIT_CHARTS[name].options(), mode: { kind: "hex", theme, site: "ukcounciltax" } });
 }

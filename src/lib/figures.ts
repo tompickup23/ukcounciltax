@@ -13,10 +13,10 @@
  * tables the year file names (history, England average and the band table).
  */
 import { defineFigures, type FigureSet, type SeriesPoint } from "../vendor/estate-kit/dist/src/index.js";
-import { BANDS, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
+import { AREA_TYPE_LABEL, BANDS, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
 import { loadRegistry } from "./registry";
 import { national } from "./national-data";
-import { RANK_CLASSES, rankClass } from "./rankings";
+import { COUNTY_CLASS, RANK_CLASSES, rankClass, rankCounties } from "./rankings";
 import { localBills } from "./local-bill-data";
 import { longDate, tableName } from "./sources";
 
@@ -165,7 +165,24 @@ function build(): Record<string, unknown> {
       unit: "gbp", dp: 2, source: bandsSource,
       points: rows.map(row => ({label: row.name, value: row.area})),
     };
+    // The published average for the class's area type, for the strip on /council-tax/ranked/.
+    records[`class.${cls.slug}.average`] = {
+      kind: "value", label: `Average area Band D for ${AREA_TYPE_LABEL[cls.areaType]}, ${year}`,
+      name: `Average for ${AREA_TYPE_LABEL[cls.areaType]}`, value: area.byAreaType[cls.areaType].pounds, unit: "gbp", source: mhclg(area.table),
+    };
   }
+  const counties = rankCounties(data);
+  const countyAverage = data.england.byClass?.rows.find(row => row.class === COUNTY_CLASS.table2);
+  if (!counties || !data.england.byClass || typeof countyAverage?.bandD !== "number") throw new Error("D6: the county precepts or their published average are incomplete");
+  records[`class.${COUNTY_CLASS.slug}.own_bandd`] = {
+    kind: "series", axis: "category", label: `Own Band D within ${COUNTY_CLASS.label}, ${year}`,
+    unit: "gbp", dp: 2, source: mhclg(COUNTY_CLASS.ownTable),
+    points: counties.map(row => ({label: row.name, value: row.own})),
+  };
+  records[`class.${COUNTY_CLASS.slug}.average`] = {
+    kind: "value", label: `Average Band D for ${COUNTY_CLASS.label}, ${year}`,
+    name: `Average for ${COUNTY_CLASS.label}`, value: countyAverage.bandD, unit: "gbp", source: mhclg(data.england.byClass.table),
+  };
   return records;
 }
 

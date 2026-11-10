@@ -6,6 +6,10 @@ import {CURRENT_YEAR, loadYear, pounds, yearLabel} from '../../../lib/council-ta
 import {rankingClasses, rankingPage, rankingRule} from '../../../lib/ranking-page';
 import {rankingPath} from '../../../lib/paths';
 import {councilTaxSource} from '../../../lib/sources';
+import PositionStrip from '../../../vendor/estate-kit/src/components/PositionStrip.astro';
+import ChartActions from '../../../components/kit/ChartActions.astro';
+import {classChartOptions, type ClassChartName} from '../../../lib/kit-charts';
+import {sentenceCase} from '../../../lib/rankings';
 const year = yearLabel(CURRENT_YEAR);
 const title = `Council tax Band D ranked by type of council ${year}`;
 const classes = rankingClasses.map(cls => ({cls,...rankingPage(loadYear(CURRENT_YEAR),cls)}));
@@ -18,4 +22,17 @@ const classes = rankingClasses.map(cls => ({cls,...rankingPage(loadYear(CURRENT_
     <thead><tr><th scope="col">Class</th><th scope="col">Councils</th><th scope="col">Lowest area Band D (counties: own)</th><th scope="col">Highest area Band D (counties: own)</th></tr></thead>
     <tbody>{classes.map(({cls,rows,county}) => <tr><th scope="row"><a href={rankingPath(cls.slug)}>{cls.label}</a></th>{rows ? <><td data-figure>{rows.length}</td><td data-figure>{pounds(county ? rows[0].own : rows[0].area)} in {rows[0].name}</td><td data-figure>{pounds(county ? rows.at(-1)!.own : rows.at(-1)!.area)} in {rows.at(-1)!.name}</td></> : <td colspan="3">not ranked for {year}</td>}</tr>)}</tbody>
   </table></div><SourceLine source={councilTaxSource(CURRENT_YEAR,'Tables 9, 8a, 8b and 8c')} /></div>
+  {classes.filter(({rows}) => rows).map(({cls,rows,county}) => { const chart = `ranked-${cls.slug}` as ClassChartName; return (
+    <section class="section class-strip" aria-labelledby={`${cls.slug}-heading`}>
+      <h2 id={`${cls.slug}-heading`}><a href={rankingPath(cls.slug)}>{sentenceCase(cls.label)}</a></h2>
+      <p>{county
+        ? `The ${rows!.length} county councils by their own Band D precept, which is one part of the bill in each of their shire districts. The dot is the average MHCLG publishes for county councils.`
+        : `The ${rows!.length} ${cls.label} by area Band D, the whole Band D bill averaged across each council's area. The dot is the average MHCLG publishes for the type. The median, the middle council, is marked separately and is calculated from the councils' own figures.`}</p>
+      <div class="fact" data-fact id={`${cls.slug}-strip`}>
+        <PositionStrip {...classChartOptions(chart)} />
+        <ChartActions chart={chart} target={`${cls.slug}-strip`} />
+      </div>
+      <p><a href={rankingPath(cls.slug)}>All {rows!.length} {cls.label}, lowest to highest</a></p>
+    </section>
+  ); })}
 </BaseLayout>

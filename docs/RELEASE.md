@@ -312,3 +312,39 @@ The six review items are fixed separately. Horizontal band bars keep all labels 
 The full Node 22.23.4 gate passed: Astro check without diagnostics, `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 CSP tests with one worker and 250 browser tests with two workers. The build contains 909 HTML pages, 908 sitemap URLs, 4,986 valid chart PNG links and all 2,368 profile PNGs. The internal link audit passed all 68,818 destinations.
 
 The fresh current-main comparison at `1500163` passed with 515 differing pages and no differences outside existing allowed paths. Exact profile amounts and histories match main. The refreshed measurements, captures and per-page register are recorded in `docs/A3-REVIEW-2026-11-10.md` and `docs/A3-NUMBER-REVIEW-MAIN-2026-11-10.tsv`. This supersedes the earlier clipped-label limitation and original build measurements for the revised branch. No kit, source, gate or tolerance was changed. No merge or deployment was performed.
+
+## Release pipeline efficiency, 10 November 2026
+
+The site job keeps its 60 minute timeout, which was already present at base `8f7002f`. All three existing check names remain. Each job first checks changed paths through GitHub's API. Only `docs/**` and root `*.md` changes qualify for the documents only result. Mixed changes, renames from code, incomplete file lists and manual runs retain the gate. The documents only path skips checkout, dependencies, tests, builds, browsers and publication, while reporting successful checks.
+
+Code pull requests build without `BUILD_OG`. The unit suite renders the actual homepage card, the generic home card, Burnley's share card and all four Burnley profile chart PNGs in both themes. The production job keeps `BUILD_OG=1` across the build and checks. Missing images fail production checks even if the whole image directory is absent. A PR without images retains chart actions, source, figure and page link checks. Only marked chart PNG downloads may be absent.
+
+Generated images use an exact content key without fallback keys. The key covers every file under `data/` and `src/`, including the downloaded raw sources, vendored kit, drawing code, palette, fonts and OG routes, plus package manifests, Astro configuration and cache implementation. The workflow calculates it after verifying the pinned RA files. Platform, architecture and Node version also contribute. The renderer uses the same key internally. The sample tests do not enable the image cache. The first merged run may still need to populate the main cache because [GitHub keeps child branch caches separate from their parent](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#restrictions-for-accessing-a-cache). A regression test changes just one England Band D figure by one penny in a temporary fixture, preserving every other byte, and proves the key changes and returns to its original value when reverted.
+
+Profile chart options are reused per council within a build. The parish source is read once by the dist check. The pinned game number fixture is unchanged.
+
+Timing evidence uses successful site job durations, rather than queue time. The requested before runs are:
+
+| Run | Site job | Build | Dist check | Browser suite | CSP suite |
+| --- | --- | --- | --- | --- | --- |
+| [Main after PR 47](https://github.com/tompickup23/ukcounciltax/actions/runs/42827264926) | 39m07s | 12m36s | 1m58s | 12m02s | 6m09s |
+| [PR 48 first run](https://github.com/tompickup23/ukcounciltax/actions/runs/42860213990) | 39m43s | 13m41s | 1m55s | 12m18s | 6m15s |
+| [PR 48 latest run](https://github.com/tompickup23/ukcounciltax/actions/runs/42869199791) | 34m09s | 11m37s | 1m37s | 10m37s | 5m21s |
+
+The after runs use code commit `886d002` on `chore/ci-speed`:
+
+| Run | Site job | Build | Dist check | Browser suite | CSP suite |
+| --- | --- | --- | --- | --- | --- |
+| [PR after, images omitted](https://github.com/tompickup23/ukcounciltax/actions/runs/42908100114) | 19m37s | 2m14s | 1m38s | 7m14s | 3m46s |
+| [Full production gate, cold cache](https://github.com/tompickup23/ukcounciltax/actions/runs/42908112615) | 23m14s | 9m17s | 1m19s | 5m48s | 3m05s |
+| [Full production gate, warm cache](https://github.com/tompickup23/ukcounciltax/actions/runs/42911813708) | 20m30s | 2m23s | 1m43s | 7m30s | 4m01s |
+
+The two full production gate runs use `workflow_dispatch` on this branch with `BUILD_OG=1`. They execute main's verification steps, but are not post-merge main runs: publication and IndexNow were skipped by the existing branch guard. No merge or deployment was performed. An actual post-merge main timing remains to be recorded after an authorised merge. The warm run log confirms an exact image cache hit.
+
+These are observed runs, not controlled benchmarks. Browser durations varied despite unchanged suites and worker counts. The measured 19m37s PR gate and 20m30s warm production gate do not yet meet the plan's under 10 minute PR and under 20 minute merge-to-live targets. The PR browser and CSP steps alone took 11 minutes.
+
+The full local baseline from `8f7002f` took 1,743.54 seconds. The updated build at `886d002` with an empty cache took 1,097.88 seconds; its warm build took 111.20 seconds. These local elapsed times are separate from the CI timings above.
+
+Both updated full builds match all 909 baseline HTML files byte for byte and all 5,640 image files by SHA256. A further comparison found identical hashes for all 7,691 output files, including search assets, headers and sitemaps. All 5,638 generated PNGs were reused on the warm build without rewriting a cache file. The other PNG is the existing `public/apple-touch-icon.png`; the remaining image is the favicon SVG. The reproducible comparison is `node scripts/compare-builds.mjs <before> <after>`.
+
+Verification passed Astro check, unit tests, the full dist check, text sweep, 68,838 internal link destinations, all 250 browser tests and all 89 production CSP tests. The PR's build without images also passed dist, text, link, browser and CSP checks. CI runs unit tests before building, so its 304 passing unit tests retain the 20 existing built-output skips. A separate local run of the eight test files containing those checks passed all 38 tests after the full build. Production checked 909 share-card references and all 4,996 chart PNG links. No gate, fixture, browser suite or worker count was reduced.

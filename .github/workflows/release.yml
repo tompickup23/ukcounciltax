@@ -34,14 +34,9 @@ jobs:
               });
               // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
               complete = files.length < 3000;
-            } else if (context.eventName === 'push' && /^[a-f0-9]{40}$/.test(context.payload.before ?? '') && !/^0+$/.test(context.payload.before)) {
-              const comparison = await github.rest.repos.compareCommitsWithBasehead({
-                ...context.repo, basehead: `${context.payload.before}...${context.sha}`, per_page: 100
-              });
-              files = comparison.data.files ?? [];
-              // Compare returns at most 300 files, including changes across the push.
-              complete = comparison.data.status === 'ahead' && files.length < 300;
             }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
             const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
             const docsOnly = complete && files.length > 0 && files.every(file =>
               document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
@@ -156,14 +151,9 @@ jobs:
               });
               // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
               complete = files.length < 3000;
-            } else if (context.eventName === 'push' && /^[a-f0-9]{40}$/.test(context.payload.before ?? '') && !/^0+$/.test(context.payload.before)) {
-              const comparison = await github.rest.repos.compareCommitsWithBasehead({
-                ...context.repo, basehead: `${context.payload.before}...${context.sha}`, per_page: 100
-              });
-              files = comparison.data.files ?? [];
-              // Compare returns at most 300 files, including changes across the push.
-              complete = comparison.data.status === 'ahead' && files.length < 300;
             }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
             const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
             const docsOnly = complete && files.length > 0 && files.every(file =>
               document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
@@ -271,14 +261,9 @@ jobs:
               });
               // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
               complete = files.length < 3000;
-            } else if (context.eventName === 'push' && /^[a-f0-9]{40}$/.test(context.payload.before ?? '') && !/^0+$/.test(context.payload.before)) {
-              const comparison = await github.rest.repos.compareCommitsWithBasehead({
-                ...context.repo, basehead: `${context.payload.before}...${context.sha}`, per_page: 100
-              });
-              files = comparison.data.files ?? [];
-              // Compare returns at most 300 files, including changes across the push.
-              complete = comparison.data.status === 'ahead' && files.length < 300;
             }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
             const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
             const docsOnly = complete && files.length > 0 && files.every(file =>
               document(file.filename) && (!file.previous_filename || document(file.previous_filename)));

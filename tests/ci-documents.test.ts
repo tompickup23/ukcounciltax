@@ -30,7 +30,7 @@ describe('documents only release checks', () => {
       for (const step of steps) expect(step).toContain("if: steps.changes.outputs.docs-only != 'true'");
     }
   });
-  for (const event of ['pull_request', 'push']) {
+  for (const event of ['pull_request']) {
     it(`passes documents only ${event} changes, including root Markdown`, async () => {
       expect(await detect(event, [{filename: 'docs/notes.txt'}, {filename: 'README.md'}, {filename: 'docs/nested/guide.md'}])).toBe('true');
     });
@@ -42,6 +42,9 @@ describe('documents only release checks', () => {
       expect(await detect(event, [])).toBe('false');
     });
   }
+  it('always runs the gate on a push, so a cancelled code release is never skipped by a documents only push', async () => {
+    expect(await detect('push', [{filename: 'docs/notes.md'}, {filename: 'README.md'}])).toBe('false');
+  });
   it('fails closed for truncated lists, new branches and manual runs', async () => {
     expect(await detect('push', Array(300).fill({filename: 'README.md'}))).toBe('false');
     expect(await detect('pull_request', Array(3000).fill({filename: 'README.md'}))).toBe('false');

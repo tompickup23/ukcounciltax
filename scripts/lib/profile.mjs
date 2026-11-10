@@ -8,8 +8,7 @@ const dom = new JSDOM('');
 
 /** Checks the complete static answer, independently of the band selector. */
 export function profileProblems(html, slug) {
-  const doc = dom.window.document;
-  doc.documentElement.innerHTML = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, '');
+  const doc = JSDOM.fragment(html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, ''));
   const problems = [];
   const text = element => element?.textContent.replace(/\s+/g, ' ').trim() ?? '';
   const section = doc.querySelector('#council-tax');
@@ -27,10 +26,10 @@ export function profileProblems(html, slug) {
     }
   }
   if (section?.querySelectorAll('#band-bars svg.ek-chart').length !== 1 || section?.querySelectorAll('#band-bars g.ek-bar').length !== 8 || section?.querySelectorAll('#band-bars [data-ek-focus="D"]').length !== 1) problems.push('eight band bars with D marked are required');
-  if (text(doc.body).includes('a month over ten instalments')) problems.push('compact profile retains monthly panel text');
+  if (text(doc).includes('a month over ten instalments')) problems.push('compact profile retains monthly panel text');
   if (slug === 'lewes' && (text(section).match(/pending approval subject to a full council decision on 26 March 2026/g) ?? []).length !== 1) problems.push('Lewes note must appear once in the band answer');
   if (doc.querySelectorAll('[data-parish-caveat]').length !== 1 || !section?.querySelector('[data-parish-caveat]')) problems.push('one parish caveat must sit in the band answer');
-  if (text(doc.body).includes('A home in a parish with its own precept pays a different amount')) problems.push('the old parish caveat remains');
+  if (text(doc).includes('A home in a parish with its own precept pays a different amount')) problems.push('the old parish caveat remains');
   const history = doc.querySelector('#history');
   if (doc.querySelectorAll('[data-band-d-line]').length !== 1 || history?.querySelectorAll('details.data-drawer').length !== 1) problems.push('one history chart and drawer are required');
   if (doc.querySelector('.band-d-line-table, #all-band-history, #long-history')) problems.push('duplicate history remains');
@@ -44,7 +43,7 @@ export function profileProblems(html, slug) {
   if (slug === 'burnley' && (!text(history).includes('1993/94') || !text(history).includes('£628') || history?.querySelectorAll('tbody tr').length !== 34)) problems.push('Burnley history anchors differ');
   const bill = doc.querySelector('#precept-breakdown');
   if (bill?.querySelectorAll('svg.ek-chart').length !== 1) problems.push('one bill chart is required');
-  if (text(doc.body).includes('County or GLA')) problems.push('generic county label remains');
+  if (text(doc).includes('County or GLA')) problems.push('generic county label remains');
   const rowHeaders = [...bill?.querySelectorAll('table.data tbody th[scope="row"]') ?? []].map(text);
   if (slug === 'manchester' && rowHeaders.some(label => ['County council','Greater London Authority'].includes(label))) problems.push('Manchester has an inapplicable county row');
   if (slug === 'camden' && rowHeaders.some(label => ['Police','Fire','Combined authority'].includes(label))) problems.push('Camden has an inapplicable separate row');
@@ -70,6 +69,6 @@ export function profileProblems(html, slug) {
   const sectionIds = [...doc.querySelectorAll('main section[id]')].filter(section => nav && (nav.compareDocumentPosition(section) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING)).map(section => section.id);
   if (!nav || JSON.stringify(navIds) !== JSON.stringify(sectionIds)) problems.push('page contents differ from document section order');
   if (doc.querySelectorAll('.action-links a').length !== 3) problems.push('the action row must hold three links');
-  doc.documentElement.innerHTML = '';
+  doc.replaceChildren();
   return problems;
 }

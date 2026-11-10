@@ -153,6 +153,8 @@ for (const path of files(DIST)) {
     for (const href of ['/help/', '/help/#what-council-tax-band-am-i', `/tools/budget/${rel(path).split('/')[2]}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`council profile lacks body link ${href}: ${rel(path)}`);
     }
+    // Release the previous profile's detached DOM before parsing the next one.
+    await new Promise(resolve=>setImmediate(resolve));
   }
 
   if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {

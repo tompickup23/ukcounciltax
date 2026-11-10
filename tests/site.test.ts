@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { SITE_NAME, SITE_URL, STATIC_PATHS, NAV_GROUPS, pageTitle } from "../src/lib/site";
+import { SITE_NAME, SITE_URL, STATIC_PATHS, NAV_GROUPS, NAV_DIRECT, FOOTER_LINKS, pageTitle } from "../src/lib/site";
 
 import { programmaticPaths } from "../src/lib/paths";
 
@@ -225,5 +225,20 @@ describe("navigation", () => {
     const items = NAV_GROUPS.flatMap(group => group.items);
     expect(new Set(items.map(item => item.label)).size).toBe(items.length);
     for (const item of items) expect(paths.has(item.href.split(/[?#]/)[0]), item.href).toBe(true);
+  });
+
+  it("links every static route from the header or the footer, each once", () => {
+    const paths = new Set<string>([...STATIC_PATHS, ...programmaticPaths()]);
+    const all = [...NAV_GROUPS.flatMap(group => group.items), NAV_DIRECT, ...FOOTER_LINKS];
+    for (const item of all) expect(paths.has(item.href.split(/[?#]/)[0]), item.href).toBe(true);
+    const hrefs = all.map(item => item.href);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+    for (const path of STATIC_PATHS) if (path !== "/") expect(hrefs.some(href => href.split(/[?#]/)[0] === path), path).toBe(true);
+  });
+
+  it("keeps the header short: three groups, one direct link, no more than fifteen links", () => {
+    expect(NAV_GROUPS).toHaveLength(3);
+    expect(NAV_GROUPS.flatMap(group => group.items).length + 1).toBeLessThanOrEqual(15);
+    expect(NAV_DIRECT.href).toBe("/tools/budget/");
   });
 });

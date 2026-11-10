@@ -1,6 +1,8 @@
 import {expect, test, type Page, type Locator} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+const ANALYTICS_ORIGINS = ['https://static.cloudflareinsights.com', 'https://cloudflareinsights.com'];
+
 async function keyboardTo(page: Page, target: Locator) {
   for (let i = 0; i < 220; i++) {
     if (await target.evaluate(el => el === document.activeElement)) return;
@@ -20,7 +22,15 @@ for (const slug of ['burnley', 'birmingham']) for (const theme of ['light', 'dar
     test.setTimeout(120_000);
     await page.emulateMedia({colorScheme: theme});
     const external: string[] = [];
-    page.on('request', request => {if (!request.isNavigationRequest() && new URL(request.url()).origin !== new URL(page.url()).origin) external.push(request.url());});
+    // The site's analytics beacon is on every page and is not part of the game.
+    // Its requests are stopped and left out, so this still proves the game itself calls nothing external.
+    await page.route('https://static.cloudflareinsights.com/**', route => route.abort());
+    await page.route('https://cloudflareinsights.com/**', route => route.abort());
+    page.on('request', request => {
+      const origin = new URL(request.url()).origin;
+      if (ANALYTICS_ORIGINS.includes(origin)) return;
+      if (!request.isNavigationRequest() && origin !== new URL(page.url()).origin) external.push(request.url());
+    });
     await page.goto(`/tools/budget/${slug}/?postcode=ignore&band=H`);
     const root = page.locator('[data-budget-game]');
     const stage = root.locator('[data-game-stage]');

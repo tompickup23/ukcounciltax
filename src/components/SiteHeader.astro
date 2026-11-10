@@ -6,7 +6,7 @@
  * opens the active group. Colours are tokens only. Search loads its index on demand.
  */
 import Search from "./Search.astro";
-import { NAV_GROUPS, SITE_NAME, SITE_TAGLINE, type NavGroup } from "../lib/site";
+import { NAV_DIRECT, NAV_GROUPS, SITE_NAME, SITE_TAGLINE, type NavGroup } from "../lib/site";
 
 const pathname = Astro.url.pathname;
 
@@ -56,6 +56,7 @@ function isActiveGroup(group: NavGroup): boolean {
             </div>
           </details>
         ))}
+        <a class="mega-trigger mega-direct" href={NAV_DIRECT.href} aria-current={isActiveItem(NAV_DIRECT.href) ? "page" : undefined}>{NAV_DIRECT.label}</a>
       </nav>
       <Search />
       <button class="mobile-menu-btn" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
@@ -96,6 +97,7 @@ function isActiveGroup(group: NavGroup): boolean {
           </div>
         </details>
       ))}
+      <a href={NAV_DIRECT.href} class:list={["mobile-drawer-home", { active: isActiveItem(NAV_DIRECT.href) }]}>{NAV_DIRECT.label}</a>
     </div>
   </nav>
 </div>
@@ -189,6 +191,8 @@ function isActiveGroup(group: NavGroup): boolean {
   .mega-trigger::marker { content: ""; }
   .mega-trigger:hover, .mega-group[open] .mega-trigger { color: var(--text); background: var(--bg-subtle); }
   .mega-group[data-active="true"] .mega-trigger { color: var(--text); }
+  .mega-direct { text-decoration: none; }
+  .mega-direct[aria-current="page"] { color: var(--text); }
   .mega-group[data-active="true"] .mega-trigger::after {
     content: "";
     position: absolute;

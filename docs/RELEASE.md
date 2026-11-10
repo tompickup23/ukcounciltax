@@ -281,3 +281,12 @@ Conservative decisions: the merged A6 controls were extracted into one shared he
 Final validation on Node 22.23.4: Astro checked 227 files without diagnostics; 273 unit tests across 38 files passed with no skips. The final `BUILD_OG=1` build produced 909 pages, all share cards, Pagefind and CSP hashes. Distribution checks passed 909 HTML pages and 908 sitemap URLs, including 2,618 valid chart PNG links. The original published text fixture and the separate complete static number fixture are identical for Burnley, Birmingham and Coventry. The text sweep passed 916 files and the internal link audit checked 79,492 destinations with none missing. The game bundle is 9,659 gzip bytes against the agreed 14,034 byte ceiling.
 
 The full browser suite passed 244 tests with one worker against the built local preview. The production header suite passed 89 tests with one worker, including both scenario widths and themes. The design check passed every rule for Burnley, Birmingham and Coventry at 390 and 1440 in light and dark, including the touch icon check. Report: `.ops/c1b/design/20261109T165614Z_mddwofox/report.md`. The 44 requested scenario capture states at 375 and 1440, plus full stage captures, remain local in `.ops/c1b/` and were visually inspected. The phone table keeps full amounts readable in separately labelled columns. Captures, logs and reports are not committed. No merge or deployment was performed.
+
+## Navigation, links and the analytics beacon, 10 November 2026
+
+Not merged or deployed at the time of writing; Tom owns the merge.
+
+- Header: three groups and a direct budget game link; header links fall from 30 to 19. Reference and site pages are linked from a footer list on every page. The homepage gains a budget game callout. No route, title or figure changes.
+- The Asylum Stats link is removed from council pages (decision N2, 10 November 2026). No built page links that site.
+- Cloudflare Web Analytics is enabled with the site's own token (decision 6, 9 November 2026). Every built page carries exactly one beacon; the dist check enforces the token. The privacy page now describes it. This supersedes "Own analytics is disabled" above.
+- Local gate: check, `BUILD_OG=1` build, 293 unit tests, dist check (909 pages, 908 sitemap URLs) and text sweep pass. The CSP suite result is in the pull request.

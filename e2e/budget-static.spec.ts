@@ -16,7 +16,7 @@ for (const theme of ['light', 'dark'] as const) {
 }
 test('budget index links all billing authorities', async ({page}) => {
   await page.goto('/tools/budget/');
-  await expect(page.locator('.budget-directory a')).toHaveCount(296);
+  await expect(page.locator('[data-council-picker] tbody a')).toHaveCount(296);
   const result = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
   expect(result.violations).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);

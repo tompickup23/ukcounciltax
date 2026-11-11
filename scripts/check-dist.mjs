@@ -61,7 +61,7 @@ let networkPopulation = 0, networkElection = 0, parishPagesChecked = 0;
 const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
-if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
+if (Date.now() >= linksExpiry-(15 * 86400000)) console.warn(`Council payment links expire on ${new Date(linksExpiry).toISOString().slice(0, 10)}. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.`);
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -229,7 +229,7 @@ if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pag
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
-if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
+if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
 const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
 for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);

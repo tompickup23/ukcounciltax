@@ -312,3 +312,15 @@ The six review items are fixed separately. Horizontal band bars keep all labels 
 The full Node 22.23.4 gate passed: Astro check without diagnostics, `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 CSP tests with one worker and 250 browser tests with two workers. The build contains 909 HTML pages, 908 sitemap URLs, 4,986 valid chart PNG links and all 2,368 profile PNGs. The internal link audit passed all 68,818 destinations.
 
 The fresh current-main comparison at `1500163` passed with 515 differing pages and no differences outside existing allowed paths. Exact profile amounts and histories match main. The refreshed measurements, captures and per-page register are recorded in `docs/A3-REVIEW-2026-11-10.md` and `docs/A3-NUMBER-REVIEW-MAIN-2026-11-10.tsv`. This supersedes the earlier clipped-label limitation and original build measurements for the revised branch. No kit, source, gate or tolerance was changed. No merge or deployment was performed.
+
+
+## Council payment links refresh, 11 November 2026
+
+Imported UK Places `src/data/local-links.json` at commit `2bea52dbe74c7a689a500b3b73ff63dcefb900b6`, SHA256 `085eb3b0511aca0f3fad79a9aa3f0decd5a7b5529240229ceed7731b3fb0b617`. The export and UK Places check dates are both 11 November 2026. The existing GOV.UK Local Links Manager source and service identifiers are unchanged.
+
+The reviewed export adds 19 council tax links, changes 15 and removes Halton and Aberdeen City only. UK Places recorded HTTP 404 for Halton and a failed fetch for Aberdeen City. There are 316 imported links: 266 English, 29 Scottish and 21 Welsh. English profiles show 266 payment links and 30 existing fallback notices. The Scottish and Welsh entries remain in the imported data; their page templates do not consume these payment links.
+
+The 91 day expiry rule is unchanged, with the new boundary at 10 February 2027, 00:00 UTC. Expiry messages no longer claim the previous January boundary. No charge, budget, population or other published figure is refreshed. The per authority link changes and permitted page differences are recorded in the pull request. No merge or deployment is part of this refresh.
+
+
+Validation on Node 22.23.4: `npm test` passed 302 tests before the build, with 20 checks deferred until built pages existed. A targeted post-build run passed all 61 tests in the 12 relevant files, including every deferred check and the payment expiry boundary. Astro checked 248 files with no diagnostics. The full `BUILD_OG=1` build, distribution check for 909 pages and 908 sitemap URLs, and text sweep over 916 files passed. All 308 browser tests passed against the local preview, which was then stopped. An exact link audit verified all 266 rendered payment URLs and their new source dates, plus all 30 fallback notices. No other dataset or figure rendering changed.

@@ -41,8 +41,6 @@ interface Props {
   tailHeading?: string;
   /** What the box says about a postcode outside the rows. */
   outside?: string;
-  /** One column of names only, for a page that carries the picker as a second thought (the game page). */
-  compact?: boolean;
 }
 
 const {
@@ -54,7 +52,6 @@ const {
   status,
   tailHeading,
   outside = "That postcode is not in a council listed here.",
-  compact = false,
 } = Astro.props;
 const head = rows.filter((row) => !row.noReturn);
 const tail = rows.filter((row) => row.noReturn);
@@ -62,7 +59,7 @@ const regionOrder: string[] = [...REGIONS, "Scotland", "Wales"];
 const regions = regionOrder.filter((region) => rows.some((row) => row.region === region));
 const extraTypes = [...new Set(rows.map((row) => row.type))].filter((type) => type.endsWith(" council"));
 const types = [...pickerTypes(rows), ...extraTypes.map((type) => ({ label: type, value: slugify(type) }))];
-const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
+const columns = 3 + (figure ? 1 : 0) + (status ? 1 : 0);
 ---
 <section class="council-picker" data-council-picker data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
   <form class="picker-controls" role="search" data-picker-form novalidate>
@@ -94,8 +91,8 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
         <thead>
           <tr>
             <th scope="col" aria-sort="ascending" data-sort-key="name"><span class="nojs-only">Council</span><button type="button" class="sort-button js-only" data-sort="name">Council</button></th>
-            {!compact && <th scope="col" class="wide-only" data-sort-key="region"><span class="nojs-only">Region</span><button type="button" class="sort-button js-only" data-sort="region">Region</button></th>}
-            {!compact && <th scope="col" class="wide-only" data-sort-key="type"><span class="nojs-only">Type</span><button type="button" class="sort-button js-only" data-sort="type">Type</button></th>}
+            <th scope="col" class="wide-only" data-sort-key="region"><span class="nojs-only">Region</span><button type="button" class="sort-button js-only" data-sort="region">Region</button></th>
+            <th scope="col" class="wide-only" data-sort-key="type"><span class="nojs-only">Type</span><button type="button" class="sort-button js-only" data-sort="type">Type</button></th>
             {status && <th scope="col">{status.heading}</th>}
             {figure && <th scope="col" class="num" data-sort-key="figure"><span class="nojs-only">{figure.heading}</span><button type="button" class="sort-button js-only" data-sort="figure">{figure.heading}</button></th>}
           </tr>
@@ -107,9 +104,9 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
               const value = figure ? figure.values[row.gss] : undefined;
               return (
                 <tr data-row data-gss={row.gss} data-search={row.search} data-region={slugify(row.region)} data-type={slugify(row.type)} data-figure-sort={value ? value.sort : undefined}>
-                  {compact ? <th scope="row"><a href={row.href}>{row.name}</a></th> : <th scope="row"><a href={row.href}>{row.name}</a><span class="picker-meta">{row.type}{row.county ? `, ${row.county}` : ""} · {row.region}</span></th>}
-                  {!compact && <td class="wide-only" data-cell="region">{row.region}</td>}
-                  {!compact && <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>}
+                  <th scope="row"><a href={row.href}>{row.name}</a><span class="picker-meta">{row.type}{row.county ? `, ${row.county}` : ""} · {row.region}</span></th>
+                  <td class="wide-only" data-cell="region">{row.region}</td>
+                  <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>
                   {status && <td>{row.noReturn ? <strong>{status.no}</strong> : <span class="picker-received">{status.yes}</span>}</td>}
                   {figure && <td class="num">{value ? <span data-figure>{value.text}</span> : <span class="muted">{figure.missing}</span>}</td>}
                 </tr>

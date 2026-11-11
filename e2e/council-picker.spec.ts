@@ -37,7 +37,6 @@ async function openFilters(page: Page) {
 
 const count = (page: Page) => page.locator("[data-picker-count]");
 const visibleRows = (page: Page) => page.locator("tr[data-row]:visible");
-const shownNumber = async (page: Page) => Number((await count(page).textContent())!.split(" ")[0]);
 
 async function axe(page: Page) {
   const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();

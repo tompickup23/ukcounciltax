@@ -4,6 +4,19 @@ import { expect, test, type ConsoleMessage, type Page } from "@playwright/test";
 import { hashesIn, scriptSrcOf } from "../scripts/inject_csp_hashes.mjs";
 import { STATIC_PATHS } from "../src/lib/site";
 
+test('council destinations and page labels load under the production policy', async ({ page }) => {
+  const found = await watch(page);
+  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.getByLabel('Council, region or topic').fill('Burnley');
+  await expect(page.locator('[data-council-profile]').first()).toHaveAttribute('href', '/councils/burnley/');
+  await expect(page.getByRole('link', { name: 'Budget game for Burnley', exact: true })).toHaveAttribute('href', '/tools/budget/burnley/');
+  const hit = page.locator('[data-search-results] li').filter({ has: page.locator('a[href="/councils/burnley/"]') });
+  await expect(hit.locator('[data-search-type]')).toHaveText('Council');
+  await page.getByLabel('Council, region or topic').fill('lancashire');
+  await expect(page.locator('[data-council-profile]')).toHaveCount(12);
+  expect(found, describe(found)).toEqual([]);
+});
+
 // The analytics beacon is on every page. Test runs are not page loads, so its
 // requests are stopped here; the browser has already checked them against the
 // CSP by the time a route sees them.

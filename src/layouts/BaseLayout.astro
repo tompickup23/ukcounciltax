@@ -21,6 +21,7 @@ import {
   pageTitle,
 } from "../lib/site";
 import { hubCardPath } from "../lib/og";
+import { pageTypeFor } from "../lib/page-type";
 
 interface Props {
   /** The page's own title. The site name is appended after a pipe. Omit on the home page. */
@@ -119,7 +120,7 @@ const nodes = [
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader />
-    <main id="main" class="shell" data-pagefind-body>
+    <main id="main" class="shell" data-pagefind-body data-pagefind-meta={`type:${pageTypeFor(path)}`}>
       <slot />
     </main>
     <SiteFooter />

@@ -363,6 +363,25 @@ for (const asset of ["pagefind.js", "pagefind-worker.js"]) {
   if (!existsSync(join(DIST, "pagefind", asset))) failures.push(`missing search asset ${asset}`);
 }
 
+// The lazy council index must cover every profile once, with real destinations.
+const councilIndexFile = join(DIST, 'council-index.json');
+if (!existsSync(councilIndexFile)) failures.push('council-index.json missing');
+else {
+  const rows = JSON.parse(readFileSync(councilIndexFile, 'utf8'));
+  const expected = locs.map(url => new URL(url).pathname).filter(path => /^\/(?:councils|scotland|wales)\/[^/]+\/$/.test(path)).sort();
+  const actual = rows.map(row => row.url).sort();
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) failures.push('council index differs from profile routes');
+  if (new Set(rows.map(row => row.gss)).size !== rows.length) failures.push('duplicate council in search index');
+  for (const row of rows) {
+    if (!row.name || !row.search || !row.type || !row.region || !['England', 'Scotland', 'Wales'].includes(row.nation)) failures.push(`incomplete search row ${row.url}`);
+    for (const url of [row.url, row.budgetUrl, row.parishUrl].filter(Boolean)) {
+      if (!locs.includes(`${SITE_URL}${url}`) || !existsSync(join(DIST, url, 'index.html'))) failures.push(`missing council search destination ${url}`);
+    }
+    if (row.nation !== 'England' && (row.budgetUrl || row.parishUrl)) failures.push(`devolved search row has English destinations ${row.url}`);
+    if (row.budgetUrl && !readFileSync(join(DIST, row.budgetUrl, 'index.html'), 'utf8').includes('data-budget-game')) failures.push(`search links to an absent game ${row.budgetUrl}`);
+  }
+}
+
 // security.txt (RFC 9116): a mailto Contact, an Expires in the future and at
 // most a year ahead, and a Canonical on this origin. Astro copies it from
 // public/.well-known; a build that drops the dot directory fails here.

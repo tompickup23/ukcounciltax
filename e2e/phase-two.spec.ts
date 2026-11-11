@@ -31,6 +31,8 @@ test('search index failures show a browse fallback and retry succeeds', async ({
   await page.goto('/'); await page.locator('[data-search-open]').click();
   await page.getByLabel('Council, region or topic').fill('Burnley');
   await expect(page.locator('[data-search-retry]')).toBeVisible({timeout:15000});
+  await expect(page.locator('[data-council-profile]').first()).toHaveAttribute('href', '/councils/burnley/');
+  await expect(page.locator('[data-search-status]')).toContainText('1 matching council; Page search could not load');
   await expect(page.getByRole('dialog').getByRole('link',{name:'Browse all councils',exact:true})).toBeVisible();
   blocked = false; await page.locator('[data-search-retry]').click();
   await expect(page.locator('[data-search-results] a[href="/councils/burnley/"]')).toBeVisible();

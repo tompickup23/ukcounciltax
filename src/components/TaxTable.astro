@@ -30,7 +30,7 @@ function change(current: number | undefined, previous: number | undefined) {
   <p class="small" data-table-status role="status">{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
   <div class="fact" data-fact>
     <div class="table-wrap" tabindex="0" role="region" aria-label={caption}>
-      <table class="data compact-tax">
+      <table class="data compact-tax" data-pagefind-ignore>
         <caption data-table-caption>{caption}: Band {band}, {yearLabel(CURRENT_YEAR)}</caption>
         <thead><tr><th scope="col">Council</th><th scope="col" class="num">Annual area charge</th></tr></thead>
         <tbody>{rows.map(row => {

@@ -116,7 +116,7 @@ const columns = 3 + (figure ? 1 : 0);
 </section>
 
 <script>
-  import { matchesCouncil, normalise } from "../lib/council-search";
+  import { matchesCouncil, matchingRegion, normalise } from "../lib/council-search";
 
   const POSTCODE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/;
   const collator = new Intl.Collator("en-GB");
@@ -140,13 +140,15 @@ const columns = 3 + (figure ? 1 : 0);
 
     const filter = () => {
       const query = normalise(input.value);
+      const regionQuery = matchingRegion(query, rows.map(row => row.dataset.region ?? ''));
       const postcode = POSTCODE.test(input.value.toUpperCase().trim());
       let shown = 0;
       for (const row of rows) {
         const visible =
           (!chosen.region || row.dataset.region === chosen.region) &&
           (!chosen.type || row.dataset.type === chosen.type) &&
-          (postcode || query.length === 0 || matchesCouncil(query, row.dataset.search ?? ""));
+          (postcode || query.length === 0 || (matchesCouncil(query, row.dataset.search ?? "")
+            && (!regionQuery || normalise(row.dataset.region ?? '') === regionQuery)));
         row.hidden = !visible;
         if (visible) shown += 1;
       }

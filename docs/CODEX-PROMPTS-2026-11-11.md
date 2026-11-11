@@ -10,14 +10,14 @@ One writer works in each repository at a time, so the prompts for one repository
 
 | Prompt | Repository | Waits for | Size |
 |---|---|---|---|
-| 1. Local links import | ukcounciltax | PR 56 merged | Small. Binding date: builds fail from 4 January 2027 |
+| 1. Local links import | ukcounciltax | Nothing. It can start while PR 56 is open: PR 56 changes only `src/components/CouncilPicker.astro` and `e2e/council-picker.spec.ts`, which this import does not touch | Small. Binding date: builds fail from 4 January 2027 |
 | 2. Local links import | ukcouncils | Nothing | Small |
 | 3. Typed search (NV4) | ukcounciltax | Prompt 1 merged | Medium. Changes every page |
 | 4. Compare improvements | ukcounciltax | Prompt 3 merged | Medium |
 | 5. Picker and councils index (NV1, NV3) | ukcouncils | Prompt 2 merged, and ukcounciltax PR 56 merged | Medium |
 | 6. Chart image weight (W4) | ukcounciltax | PR 51 merged, and prompt 4 merged | Medium |
 
-Prompts 1 and 2 can run at the same time, as can 3 and 5, because they are in different repositories.
+Prompts 1 and 2 can run at the same time, as can 3 and 5, because they are in different repositories. Only prompt 5 needs the code in PR 56, because it copies the picker.
 
 Not written here, with the reason:
 
@@ -33,7 +33,7 @@ Repository tompickup23/ukcounciltax. One PR. Node 22: put ~/.nvm/versions/node/v
 
 Why: src/lib/council-links.ts throws on every build from 4 January 2027, 91 days after the payment links were checked on 5 October 2026. UK Places refreshed its reviewed export on 11 November 2026 and this imports it.
 
-Setup: worktree ~/wt/uct-links on branch data/council-links-2026-11 from origin/main. Copy the ignored folder data/raw/ from ~/wt/uct-picker-scroll/data/raw/ (three unit test files fail without it). Read CLAUDE.md, scripts/import-council-links.mjs, src/lib/council-links.ts and data/council-links.json.
+Setup: worktree ~/wt/uct-links on branch data/council-links-2026-11 from origin/main. Start now: this does not wait for PR 56 or any other open pull request, since it touches none of their files. Copy the ignored folder data/raw/ from ~/wt/uct-picker-scroll/data/raw/ (three unit test files fail without it). Read CLAUDE.md, scripts/import-council-links.mjs, src/lib/council-links.ts and data/council-links.json.
 
 Task: import from tompickup23/ukplaces at commit 2bea52dbe74c7a689a500b3b73ff63dcefb900b6 (the merge of its PR 49; pin to this commit, not a branch). The sha256 of src/data/local-links.json at that commit is 085eb3b0511aca0f3fad79a9aa3f0decd5a7b5529240229ceed7731b3fb0b617. data/council-links.json must record the new export date, checked date, commit and sha256. Do not change the 91 day rule.
 

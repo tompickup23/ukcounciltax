@@ -25,7 +25,18 @@ const bandD = Object.fromEntries(
   <header class="page-head">
     <p class="eyebrow">Councils</p>
     <h1>Every council in England</h1>
-    <p class="lede">
+    <p class="lede">Find a council by postcode or name.</p>
+  </header>
+  <CouncilPicker
+    id="councils-picker"
+    rows={englishRows("profile")}
+    caption={`Every council in England that bills council tax, with its area Band D for ${year}`}
+    figure={{ heading: `Area Band D ${year}`, values: bandD, missing: "not published", source }}
+    outside="That postcode is not in an English billing authority. Use the postcode box on the homepage for Scotland and Wales."
+  />
+  <section class="section" aria-labelledby="about-councils">
+    <h2 id="about-councils">About this list</h2>
+    <p>
       The {pages.length} councils in England that bill council tax. Each page answers what the council
       charges and where the figures come from. Councils in Scotland, Wales and Northern Ireland follow.
     </p>
@@ -33,20 +44,10 @@ const bandD = Object.fromEntries(
       The figure beside each name is its area Band D for {year}: the whole Band D bill averaged across the
       council's area, including adult social care and average parish precepts. It is not the bill for any address.
     </p>
-  </header>
+  </section>
   <nav aria-label="Council tax by region">
     <ul class="pill-nav">
       {REGIONS.map((region) => <li><a href={regionPath(region)}>{region}</a></li>)}
     </ul>
   </nav>
-  <section class="section" aria-labelledby="all-councils-heading">
-    <h2 id="all-councils-heading">Find a council</h2>
-    <CouncilPicker
-      id="councils-picker"
-      rows={englishRows("profile")}
-      caption={`Every council in England that bills council tax, with its area Band D for ${year}`}
-      figure={{ heading: `Area Band D ${year}`, values: bandD, missing: "not published", source }}
-      outside="That postcode is not in an English billing authority. Use the postcode box on the homepage for Scotland and Wales."
-    />
-  </section>
 </BaseLayout>

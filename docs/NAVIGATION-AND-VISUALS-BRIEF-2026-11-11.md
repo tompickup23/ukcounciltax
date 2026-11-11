@@ -177,7 +177,7 @@ The kit already covers some of this ground: `PositionStrip` does the job of a be
 The round two handover records that a kit chart on any page needs chart actions and a PNG in each theme, or the dist check fails, and the execution plan records 320 MB of PNGs after A3 with the weight ruling still waiting on Tom. Every item in section 3.2 that draws per council adds to that. So:
 
 - NV8 is one national map per use, not one per council.
-- NV9, NV10 and NV12 should not start until the weight ruling is made (W4), or they should be drawn without a PNG export where the kit allows it.
+- NV9, NV10 and NV12 waited on the weight ruling (W4). It was made on 11 November 2026 (section 6), so they follow it: 2x, light theme only, palette compressed, no locator map PNG.
 - NV1 to NV7 add no chart and are not affected.
 
 ## 5. Where this fits in the existing order
@@ -189,7 +189,7 @@ The order in force is the round three handover (section 3), the execution plan (
 | 1 | After PR 51 merges, November 2026 | ukcounciltax | NV1, NV2, NV3 and the UK Council Tax parts of NV7 | Takes the place of "one searchable picker per side" in the compare improvements: build the picker once, then compare uses it |
 | 2 | Straight after stage 1 | ukcounciltax | The compare improvements as already ordered, using NV1, with NV11's paired bars; NV4 | Round three handover, section 3 item 4 |
 | 3 | After the dossier's short source line PR, December 2026 | ukcouncils | NV1 and NV3 copied across, NV4, the UK Councils 404, NV6 for Exceptional Financial Support | D2 and D4, which the round two handover lists as "not yet": the picker and typed search are the working part of the front door, so they go in the same PRs |
-| 4 | After kit 0.5.0 is tagged and W4 is ruled, December 2026 to January 2027 | estate-kit | Kit 0.6.0: linked area map, ranked bars with change marker, share bar, tile with sparkline, history strip | The kit lane, so each drawing is built once |
+| 4 | After kit 0.5.0 is tagged (W4 was ruled on 11 November 2026), December 2026 to January 2027 | estate-kit | Kit 0.6.0: linked area map, ranked bars with change marker, share bar, tile with sparkline, history strip | The kit lane, so each drawing is built once |
 | 5 | By mid January 2027 | ukcounciltax | NV8 on `/council-tax/`, NV9, NV10, NV6 for increases | C6 levels day staged: the map and the increases drawing are what a reader wants on levels day |
 | 6 | January to February 2027 | ukcouncils | NV8 on `/councils/`, NV12, NV5 | Follows the dossier on all 296 pages; C3 and C7 where they overlap |
 | 7 | Before 20 March 2027 | both | NV5 on UK Council Tax, NV13, NV14 on anything not yet gated | Nothing structural lands after the freeze |
@@ -203,14 +203,15 @@ Three points on the fit:
 
 ## 6. Decisions for Tom
 
-Tom accepted W1, W3, W5 and W6 on 11 November 2026 ("Accept all four", in chat). W2 and W4 are open. None of them authorises a push, merge or deployment.
+Tom accepted W1, W3, W5 and W6 on 11 November 2026 ("Accept all four", in chat), then W2, W4 and W7 later the same day ("Accept all three", in chat). None is open. None of them authorises a push, merge or deployment.
 
 - **W1. The order. Taken 11 November 2026: accepted.** Stage 1 goes ahead of the compare improvements on UK Council Tax, and compare then uses the picker.
-- **W2. What the England map may colour.** Area Band D is one measure on one basis for all 296 billing authorities, and the councils index already prints it for all of them side by side. The council's own share is not comparable across types. Recommended: area Band D only on UK Council Tax, with the caption saying what it includes; council type on UK Councils.
+- **W2. What the England map may colour.** Area Band D is one measure on one basis for all 296 billing authorities, and the councils index already prints it for all of them side by side. The council's own share is not comparable across types. **Taken 11 November 2026: as recommended,** area Band D only on UK Council Tax, with the caption saying what it includes; council type on UK Councils. Three conditions go with it: the classes are fixed in a registry and not recomputed each year, so a council does not change colour because others moved; unknown is drawn as unknown, never as the lowest class; the map is England only, with Scotland and Wales kept off it.
 - **W3. Where the picker lives.** Copied into each site, like other components, or added to the kit. **Taken 11 November 2026: copied.** The kit holds drawings; the picker is page furniture with site specific destinations.
-- **W4. Chart image weight.** Already waiting from the execution plan (1x instead of 2x, or no map PNGs). It now gates stages 4 to 6.
+- **W4. Chart image weight.** Already waiting from the execution plan (1x instead of 2x, or no map PNGs). **Taken 11 November 2026: neither as offered.** PNGs stay at 2x, because the file exists only as a download and a 1x image looks soft once pasted elsewhere. The weight comes down three other ways: a PNG in the light theme only (the dist check that asks for one in each theme changes to match); palette compression, where a look at the result shows no visible change; and no PNG for the per council locator map. Not measured when taken: the first build under this ruling renders Burnley's four profile charts each way and records the byte counts in its pull request, and a saving too small to matter comes back to Tom. Stages 4 to 6 are no longer gated.
 - **W5. Remembering the last council.** The picker could keep the last chosen council in the browser to offer it first. The project rule is that no personal household data is stored. A council choice is not household data, but it is a choice about the reader. **Taken 11 November 2026: do not store it.** Offer "your council" only within one visit, from the page the reader came from.
 - **W6. Devolved names in the finder.** Add the 54 Scottish and Welsh councils to the name finder on UK Council Tax (NV7). **Taken 11 November 2026: yes,** with each labelled by nation so the different systems are not mixed.
+- **W7. The picker's list on a phone.** Found in the review of PR 55: the table's 608 px inner scroll box leaves about 100 px in which to scroll the page past it, and a swipe inside it scrolls the list (about 41 swipes to its end). **Taken 11 November 2026: no inner scroll below 600 px.** With scripts on, the unfiltered list shows a short first set of rows and a "Show all 296" button, and typing filters as now. With scripts off, the full table sits in the page flow. The fix is not built; it goes with the compare improvements (row D of the handover) or ahead of them.
 
 ## 7. Gate for every item
 

@@ -203,12 +203,14 @@ Three points on the fit:
 
 ## 6. Decisions for Tom
 
-- **W1. The order.** Accept stage 1 ahead of the compare improvements on UK Council Tax, with compare then using the picker. Recommended: yes.
+Tom accepted W1, W3, W5 and W6 on 11 November 2026 ("Accept all four", in chat). W2 and W4 are open. None of them authorises a push, merge or deployment.
+
+- **W1. The order. Taken 11 November 2026: accepted.** Stage 1 goes ahead of the compare improvements on UK Council Tax, and compare then uses the picker.
 - **W2. What the England map may colour.** Area Band D is one measure on one basis for all 296 billing authorities, and the councils index already prints it for all of them side by side. The council's own share is not comparable across types. Recommended: area Band D only on UK Council Tax, with the caption saying what it includes; council type on UK Councils.
-- **W3. Where the picker lives.** Copied into each site, like other components, or added to the kit. Recommended: copied. The kit holds drawings; the picker is page furniture with site specific destinations.
+- **W3. Where the picker lives.** Copied into each site, like other components, or added to the kit. **Taken 11 November 2026: copied.** The kit holds drawings; the picker is page furniture with site specific destinations.
 - **W4. Chart image weight.** Already waiting from the execution plan (1x instead of 2x, or no map PNGs). It now gates stages 4 to 6.
-- **W5. Remembering the last council.** The picker could keep the last chosen council in the browser to offer it first. The project rule is that no personal household data is stored. A council choice is not household data, but it is a choice about the reader. Recommended: do not store it; offer "your council" only within one visit, from the page the reader came from.
-- **W6. Devolved names in the finder.** Add the 54 Scottish and Welsh councils to the name finder on UK Council Tax (NV7). Recommended: yes, with each labelled by nation so the different systems are not mixed.
+- **W5. Remembering the last council.** The picker could keep the last chosen council in the browser to offer it first. The project rule is that no personal household data is stored. A council choice is not household data, but it is a choice about the reader. **Taken 11 November 2026: do not store it.** Offer "your council" only within one visit, from the page the reader came from.
+- **W6. Devolved names in the finder.** Add the 54 Scottish and Welsh councils to the name finder on UK Council Tax (NV7). **Taken 11 November 2026: yes,** with each labelled by nation so the different systems are not mixed.
 
 ## 7. Gate for every item
 

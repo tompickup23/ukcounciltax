@@ -10,6 +10,7 @@
  * stated as the rule; no sentence says why any council set what it set.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Fact from '../components/Fact.astro';
 import SourceLine from '../components/SourceLine.astro';
 import {taxRows} from '../lib/tax-view-data';
@@ -74,6 +75,7 @@ function yearSection(year:Year){
 const sections=YEARS.slice().reverse().map(yearSection);
 ---
 <BaseLayout title={`Council tax increases in England by council, ${first} to ${label}`} description={`Council tax increases in England by council, ${first} to ${label}: whole-area changes by band, each council's own share, and when ${next} figures publish.`} path="/increases/" ogImage={hubCardPath("rises")}>
+<Breadcrumbs items={[{label: 'Increases'}]} />
 <header class="page-head"><p class="eyebrow">Follow the change</p><h1>Council tax increases in England by council, {first} to {label}</h1><p class="lede">The change in your whole bill can differ from the percentage announced by one council.</p></header>
 <p><a href="/council-tax/ranked/">Band D levels ranked within each type of council</a></p>
 <nav class="card" aria-label="Years on this page"><p><strong>Jump to a year:</strong> <a href={`#${NEXT_YEAR}`}>{next}, not yet set</a>{sections.map(s=><> · <a href={`#${s.year}`}>{s.label}</a></>)}</p></nav>

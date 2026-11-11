@@ -2,18 +2,18 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { hubCardPath } from "../../lib/og";
-import SourceLine from "../../components/SourceLine.astro";
+import CouncilPicker from "../../components/CouncilPicker.astro";
+import { englishRows } from "../../lib/council-picker";
 import { CURRENT_YEAR, loadYear, pounds, yearLabel } from "../../lib/council-tax";
-import { REGIONS, councilPages, councilPath, slugify } from "../../lib/paths";
+import { REGIONS, councilPages, regionPath } from "../../lib/paths";
 import { councilTaxSource } from "../../lib/sources";
 
 const pages = councilPages();
 const year = yearLabel(CURRENT_YEAR);
 const source = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.bandTable);
-const byRegion = REGIONS.map((region) => ({
-  region,
-  rows: pages.filter((p) => p.tax.region === region),
-}));
+const bandD = Object.fromEntries(
+  pages.map(({ council, tax }) => [council.gss, typeof tax.bands.D === "number" ? { text: pounds(tax.bands.D), sort: tax.bands.D } : null]),
+);
 ---
 <BaseLayout
   title="Every council in England, by region"
@@ -34,29 +34,19 @@ const byRegion = REGIONS.map((region) => ({
       council's area, including adult social care and average parish precepts. It is not the bill for any address.
     </p>
   </header>
-  <nav aria-label="Jump to a region">
+  <nav aria-label="Council tax by region">
     <ul class="pill-nav">
-      {REGIONS.map((region) => <li><a href={`#${slugify(region)}`}>{region}</a></li>)}
+      {REGIONS.map((region) => <li><a href={regionPath(region)}>{region}</a></li>)}
     </ul>
   </nav>
-  {byRegion.map(({ region, rows }) => (
-    <section class="section" id={slugify(region)} aria-labelledby={`${slugify(region)}-heading`}>
-      <h2 id={`${slugify(region)}-heading`}>Councils in {region}</h2>
-      <div class="fact" data-fact>
-        <ul class="link-list council-figures">
-          {rows.map(({ council, tax }) => (
-            <li>
-              <a href={councilPath(council)}>{tax.name}</a>
-              {typeof tax.bands.D === "number" ? <span class="num" data-figure>{pounds(tax.bands.D)}</span> : <span class="muted">not published</span>}
-            </li>
-          ))}
-        </ul>
-        <SourceLine source={source} />
-      </div>
-    </section>
-  ))}
+  <section class="section" aria-labelledby="all-councils-heading">
+    <h2 id="all-councils-heading">Find a council</h2>
+    <CouncilPicker
+      id="councils-picker"
+      rows={englishRows("profile")}
+      caption={`Every council in England that bills council tax, with its area Band D for ${year}`}
+      figure={{ heading: `Area Band D ${year}`, values: bandD, missing: "not published", source }}
+      outside="That postcode is not in an English billing authority. Use the postcode box on the homepage for Scotland and Wales."
+    />
+  </section>
 </BaseLayout>
-<style>
-  .council-figures li { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; border-bottom: 1px solid var(--border); }
-  .council-figures .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
-</style>

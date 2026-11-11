@@ -2,7 +2,9 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
+import CouncilPicker from '../../../components/CouncilPicker.astro';
 import {councilPages} from '../../../lib/paths';
+import {englishRows} from '../../../lib/council-picker';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
 const pages = councilPages();
 const available = pages.filter(({council}) => budgetFor(council.gss).council.status === 'available');
@@ -10,12 +12,13 @@ const missing = pages.filter(({council}) => budgetFor(council.gss).council.statu
 ---
 <BaseLayout title="Council budget game" description={`Explore published ${budgetYear} council budgets, funding, reserves and Band D bill breakdowns for every English billing authority.`} path="/tools/budget/">
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
-  <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Play the budget game, then explore the service spending, funding and reserves behind the figures. Each answer links to the original source.</p></header>
-  <p>Budget returns are available for {available.length} of {pages.length} English billing authorities. District pages also carry their county's budget. These are approved budgets, not outturn spending or a forecast of what will happen.</p>
-  <SourceLine source={budgetSource()} />
-  <details class="section"><summary>Councils without a budget return</summary><p>No {budgetYear} return was received in time for MHCLG's publication on 11 June 2026 for: {missing.map(({tax}) => tax.name).join(', ')}. Their pages show the published council tax bill breakdown only; no budget from another year is substituted.</p></details>
-  <section class="section" aria-labelledby="choose-council"><h2 id="choose-council">Choose a council</h2>
-    <ul class="budget-directory">{pages.map(({council, tax}) => <li><a href={`/tools/budget/${council.slug}/`}>{tax.name}</a>{budgetFor(council.gss).council.status === 'no return' && <span class="small muted"> (no budget return)</span>}</li>)}</ul>
+  <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Find your council and play its budget game.</p></header>
+  <CouncilPicker id="budget-picker" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+  <section class="section" aria-labelledby="about-budgets">
+    <h2 id="about-budgets">About these budgets</h2>
+    <p>Budget returns are available for {available.length} of {pages.length} English billing authorities. District pages also carry their county's budget. These are approved budgets, not outturn spending or a forecast of what will happen.</p>
+    <SourceLine source={budgetSource()} />
+    <p>Each game explores the service spending, funding and reserves behind the figures, and each answer links to the original source. The table lists every English billing authority in alphabetical order. The {missing.length} councils without a {budgetYear} return are listed after the others; their pages show the published council tax bill breakdown only.</p>
   </section>
+  <details class="section"><summary>Councils without a budget return</summary><p>No {budgetYear} return was received in time for MHCLG's publication on 11 June 2026 for: {missing.map(({tax}) => tax.name).join(', ')}. Their pages show the published council tax bill breakdown only; no budget from another year is substituted.</p></details>
 </BaseLayout>
-<style>.budget-directory{columns:3 16rem;padding-left:1.25rem}.budget-directory li{break-inside:avoid;margin-bottom:.6rem}</style>

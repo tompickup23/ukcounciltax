@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import {YEARS, loadYear, yearLabel} from '../lib/council-tax';
 import {national} from '../lib/national-data';
 import {devolved} from '../lib/devolved';
@@ -20,6 +21,7 @@ const publications = [
 ];
 ---
 <BaseLayout title="Council tax sources and official publications" description="Official council tax publications, publishers, editions, tables, retrieval dates and licences. Follow the original publisher links." path="/data/">
+<Breadcrumbs items={[{label: 'Sources'}]} />
 <header class="page-head"><p class="eyebrow">Official evidence</p><h1>Sources</h1><p class="lede">The publications behind the figures, linked to the original publisher.</p></header>
 <p>UK Council Tax publishes pages, not compiled datasets. Source manifests and file checksums are retained in the project for verification. Read, share or print the supported views; use the publisher links below for original files.</p>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Official source publications">

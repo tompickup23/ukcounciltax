@@ -64,3 +64,19 @@ Worktrees from this session: `~/wt/ukc-compare` and `~/wt/uct-compare` (merged),
 ```text
 Read CLAUDE.md, docs/HANDOFF-2026-11-10-DESIGN-AND-SPLIT.md, docs/HANDOFF-2026-11-10-ROUND-TWO.md and docs/HANDOFF-2026-11-10-ROUND-THREE.md in ukcounciltax (origin/main). Run gh pr list on ukcounciltax, ukcouncils, estate-kit and ukplaces and say what is open. Confirm the UK Council Tax footer reads "government service. UK Council Tax republishes". For PR 51 read its checks and the review in section 2 and ask me before merging. Then take the next item from section 3. Do not merge, tag or deploy without my word.
 ```
+
+## 7. Codex prompt given to Tom: local links refresh
+
+```text
+Three repos, in this order, one PR each. Node 22. British English; no em dash, en dash or spaced hyphen anywhere; stage named paths only, never git add -A or git add .; open each PR; do not merge, tag or deploy. ukcounciltax and ukcouncils are public: never commit a secret, a home path or anything from ~/Documents.
+
+Why: UK Council Tax's src/lib/council-links.ts throws on every build from 4 January 2027, 91 days after the payment links were checked on 5 October 2026. UK Councils shows the same links as the "Pay council tax" action on 254 council pages. Both read UK Places' reviewed export.
+
+Part 1, tompickup23/ukplaces. Worktree ~/wt/ukp-links on branch data/local-links-2026-11 from origin/main. Read CLAUDE.md and scripts/build-local-links.mjs. Run npm run build:local-links, then npm run test:local-links and the repo's normal test and build commands. Review the diff of src/data/local-links.json: report links added, removed and changed per service, and every authority whose council tax link disappeared, with the reason the script recorded. Stop and report without opening a PR if more than 10 council tax links disappear, if any GSS code changes, or if the export date or checked date is not today. Open the PR with that report in the body.
+
+Part 2, tompickup23/ukcounciltax. Worktree ~/wt/uct-links on branch data/council-links-2026-11 from origin/main. Copy data/raw/ from ~/wt/uct-profile/data/raw/. Read CLAUDE.md, docs/HANDOFF-2026-11-10-ROUND-THREE.md, scripts/import-council-links.mjs and src/lib/council-links.ts. Import from the Part 1 PR head commit, so data/council-links.json records the new export date, checked date, commit and sha256. Do not change the 91 day rule. Run npm test, npm run check, BUILD_OG=1 npm run build, npm run test:dist and npm run test:text; for the browser suites start npx astro preview --host 127.0.0.1 --port 44396 yourself, run with E2E_BASE_URL=http://127.0.0.1:44396, then npx astro preview stop. Open the PR as a draft, saying its commit field must be re pinned to the UK Places merge commit once Tom merges Part 1 (squash changes the hash; the sha256 must not change).
+
+Part 3, tompickup23/ukcouncils. Worktree ~/wt/ukc-links on branch data/local-links-2026-11 from origin/main. Copy data/raw/ from ~/wt/ukc-dossier-2/data/raw/. Same import from the same commit with scripts/import-local-links.mjs into data/links/local-links.json. Report how many profiles now have three actions and how many two (254 and 42 before). Run npm run check, npm test, npm run build, npm run test:dist; for the browser suites start the preview yourself and run with E2E_PORT, as in Part 2; then npm run test:csp. Draft PR with the same re pin note. Put any page whose pay link changed under a "## Pages allowed to differ" heading as a fenced list of globs.
+
+Stop and report if an import script refuses the data, a pinned hash differs from what you computed, or any figure other than links and their source dates changes.
+```

@@ -69,16 +69,19 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
     <label class="field picker-box" for={`${id}-q`}><span>{label}</span>
       <input id={`${id}-q`} type="search" autocomplete="off" spellcheck="false" placeholder="e.g. BB11 1DU or Lancashire" aria-describedby={`${id}-count ${id}-note`} data-picker-input />
     </label>
-    <p class="small muted picker-note" id={`${id}-note`}>A name filters the table as you type, and matches the council's official name, its county and its region. A postcode is sent to postcodes.io to find its council when you press Enter, and is not stored. <a href="/privacy/">Privacy</a>.</p>
-    <div class="picker-chips" role="group" aria-label="Region">
-      <button type="button" class="chip" aria-pressed="true" data-chip="region" data-value="">All regions</button>
-      {regions.map((region) => <button type="button" class="chip" aria-pressed="false" data-chip="region" data-value={slugify(region)}>{region}</button>)}
-    </div>
-    <div class="picker-chips" role="group" aria-label="Council type">
-      <button type="button" class="chip" aria-pressed="true" data-chip="type" data-value="">All types</button>
-      {types.map((type) => <button type="button" class="chip" aria-pressed="false" data-chip="type" data-value={type.value}>{type.label}</button>)}
-    </div>
+    <p class="small muted picker-note" id={`${id}-note`}>A postcode is sent to postcodes.io and not stored. <a href="/privacy/">Privacy</a></p>
     <p class="picker-count" id={`${id}-count`} aria-live="polite" data-picker-count></p>
+    <details class="picker-filters" data-picker-filters>
+      <summary>Filter by region or type <span class="picker-filter-count" data-filter-count>(none on)</span></summary>
+      <div class="picker-chips" role="group" aria-label="Region">
+        <button type="button" class="chip" aria-pressed="true" data-chip="region" data-value="">All regions</button>
+        {regions.map((region) => <button type="button" class="chip" aria-pressed="false" data-chip="region" data-value={slugify(region)}>{region}</button>)}
+      </div>
+      <div class="picker-chips" role="group" aria-label="Council type">
+        <button type="button" class="chip" aria-pressed="true" data-chip="type" data-value="">All types</button>
+        {types.map((type) => <button type="button" class="chip" aria-pressed="false" data-chip="type" data-value={type.value}>{type.label}</button>)}
+      </div>
+    </details>
   </form>
   <div class:list={["picker-table-box", { fact: figure }]} data-fact={figure ? "" : undefined}>
     <div class="table-wrap" tabindex="0" role="region" aria-labelledby={`${id}-caption`} data-pagefind-ignore>
@@ -184,11 +187,24 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
       });
     }
 
+    // The chips sit in a closed drawer on a phone, so the rows stay near the box,
+    // and open above the table from 600 px wide. The drawer says how many are on.
+    const filters = picker.querySelector<HTMLDetailsElement>("[data-picker-filters]");
+    const filterCount = picker.querySelector<HTMLElement>("[data-filter-count]");
+    const wide = window.matchMedia("(min-width: 600px)");
+    const fitFilters = () => {
+      if (filters) filters.open = wide.matches;
+    };
+    fitFilters();
+    wide.addEventListener("change", fitFilters);
+
     for (const chip of picker.querySelectorAll<HTMLButtonElement>("[data-chip]")) {
       chip.addEventListener("click", () => {
         const kind = chip.dataset.chip as "region" | "type";
         chosen[kind] = chip.dataset.value ?? "";
         for (const other of picker.querySelectorAll<HTMLButtonElement>(`[data-chip="${kind}"]`)) other.setAttribute("aria-pressed", String(other === chip));
+        const on = [chosen.region, chosen.type].filter(Boolean).length;
+        if (filterCount) filterCount.textContent = on === 0 ? "(none on)" : `(${on} on)`;
         filter();
       });
     }
@@ -239,6 +255,12 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
   .council-picker .picker-box input { min-height: 48px; }
   .council-picker .picker-note { margin: 0; max-width: 44rem; }
   .council-picker .picker-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .council-picker .picker-chips + .picker-chips { margin-top: 0.4rem; }
+  .council-picker .picker-filters > summary {
+    cursor: pointer; font-weight: 600; color: var(--accent); min-height: 44px; display: flex; align-items: center; gap: 0.35rem;
+  }
+  .council-picker .picker-filters[open] > summary { margin-bottom: 0.4rem; }
+  .council-picker .picker-filter-count { font-weight: 400; color: var(--text-muted); }
   .council-picker .chip {
     font: inherit; font-size: 0.88rem; line-height: 1.2; padding: 0.45rem 0.75rem; min-height: 36px;
     border: 1px solid var(--border); border-radius: 999px; background: var(--bg-card); color: var(--text); cursor: pointer;
@@ -263,6 +285,11 @@ const columns = (compact ? 1 : 3) + (figure ? 1 : 0) + (status ? 1 : 0);
   html.js .council-picker .nojs-only { display: none; }
   @media (min-width: 600px) {
   .council-picker .picker-meta { display: none; }
+  .council-picker .picker-filters > summary { display: none; }
+  }
+  /* Shown before the script opens the drawer, so nothing moves on a wide screen. */
+  @media (min-width: 600px) {
+  .council-picker .picker-filters::details-content { content-visibility: visible; display: block; }
   }
   @media (max-width: 599px) {
   .council-picker .wide-only { display: none; }

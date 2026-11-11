@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { OFFICIAL_BAND_CHECK } from '../lib/site';
 
 // Official guidance read for the band sections below. Each claim block cites
@@ -16,6 +17,7 @@ const ASSESSED_TITLE = 'How domestic properties are assessed for Council Tax ban
 const SCOTTISH_ASSESSORS = 'https://www.saa.gov.uk/assessors-links/';
 ---
 <BaseLayout title="Help understanding your council tax bill" description="Check your band, understand the parts of a bill and find official help with discounts, reductions and payments." path="/help/">
+<Breadcrumbs items={[{label: 'Help'}]} />
 <header class="page-head"><p class="eyebrow">Practical next steps</p><h1>Understand your bill</h1><p class="lede">Start with the property, then the household, then the payment schedule.</p></header>
 <div class="prose">
 

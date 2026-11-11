@@ -6,10 +6,14 @@
  * the kit's thumb template lands in 0.3.0 (A5 brief, section 6.4).
  */
 import { BURNLEY_PARTS, siteFigures } from "../lib/figures";
+import { budgetFor, services } from "../lib/budget";
 
 interface Props {
-  kind: "stack" | "line" | "bands" | "strip";
+  kind: "stack" | "line" | "bands" | "strip" | "game";
 }
+
+/** The budget game card's council: Burnley, the same published example the other cards draw. */
+const GAME_THUMB_GSS = "E07000117";
 
 const { kind } = Astro.props;
 const set = siteFigures();
@@ -44,6 +48,19 @@ if (kind === "stack") {
       const h = (p.value / max) * 56;
       return `<rect x="${f(LEFT + i * step + 2)}" y="${f(BASE - h)}" width="${f(step - 4)}" height="${f(h)}" rx="2" style="fill:var(${p.label === "D" ? "--accent" : "--series-neutral-soft"})"/>`;
     })
+    .join("");
+} else if (kind === "game") {
+  // Burnley's largest positive service headings in its RA budget, ranked, as
+  // bars from zero: the first question the budget game asks.
+  const rows = services(budgetFor(GAME_THUMB_GSS).council)
+    .filter((row) => row.value !== null && row.value > 0)
+    .map((row) => row.value as number)
+    .sort((a, b) => b - a)
+    .slice(0, 4);
+  const max = rows[0];
+  const band = 56 / rows.length;
+  body = rows
+    .map((v, i) => `<rect x="${LEFT}" y="${f(4 + i * band)}" width="${f((v / max) * SPAN)}" height="${f(band - 4)}" rx="2" style="fill:var(${i === 0 ? "--accent" : "--series-neutral-soft"})"/>`)
     .join("");
 } else {
   const place = set.value("burnley.area_bandd.current").value;

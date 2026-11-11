@@ -13,6 +13,8 @@ import PostcodeDoor from "../components/PostcodeDoor.astro";
 import { BANDS, CURRENT_YEAR, PREVIOUS_YEAR, increasesYearPath, loadYear, percent, wholePounds, yearLabel } from "../lib/council-tax";
 import { REGIONS, bandPath, councilPages, regionPath } from "../lib/paths";
 import { councilTaxSource } from "../lib/sources";
+import { budgetSource } from "../lib/budget";
+import { drawnFrom } from "../lib/task-cards";
 
 const data = loadYear(CURRENT_YEAR);
 const area = data.england.areaBandD;
@@ -21,18 +23,8 @@ const previous = yearLabel(PREVIOUS_YEAR);
 const count = councilPages().length;
 const figures = siteFigures();
 const rounding = billShareRounding(KIT_CHARTS["home-bill"].options());
+const game = budgetSource();
 const historyFrom = figures.series("england.area_bandd.history").points[0].label;
-/** "Drawn from" and each figure's publisher, title and table or page; figures sharing a document collapse into one. */
-function drawnFrom(keys: string[], suffix = ""): string {
-  const docs = new Map<string, string[]>();
-  for (const key of keys) {
-    const { publisher, title, table, page } = figures.get(key).source;
-    const doc = `${publisher}, ${title}`;
-    const where = table ?? page;
-    docs.set(doc, [...new Set([...(docs.get(doc) ?? []), ...(where ? [where] : [])])]);
-  }
-  return `Drawn from ${[...docs].map(([doc, where]) => [doc, ...where].join(", ")).join("; ")}${suffix}.`;
-}
 ---
 <BaseLayout path="/" title={`Council tax ${year}: bands, bills and local precepts`} ogImage={chartCardPath("home-bill")} ogImageAlt={chartAlt("home-bill")}>
   <section class="home-hero" aria-labelledby="hero-heading">
@@ -61,12 +53,12 @@ function drawnFrom(keys: string[], suffix = ""): string {
     </aside>
   </section>
   <nav class="task-cards section" aria-label="Council tax tools">
+    <a class="task-card task-card-wide" href="/tools/budget/"><TaskThumb kind="game" /><span class="task-card-text"><span class="task-eyebrow">Budget game</span><strong>Could you set your council's budget?</strong><span>Guess how your council splits each pound it spends, who takes your Band D bill and where the money comes from, then see the answer the council published.</span><span class="task-source">Drawn from {game.publisher}, {game.title}, {game.table}, Burnley.</span></span></a>
     <a class="task-card" href="/precepts/"><TaskThumb kind="stack" /><strong>What makes up my bill</strong><span>Every body that charges your bill, with parish precepts and the complete Burnley schedule.</span><span class="task-source">{drawnFrom(["burnley.bandd.total"])}</span></a>
     <a class="task-card" href="/increases/"><TaskThumb kind="line" /><strong>Increases since {historyFrom}</strong><span>How much each council raised its share this year, and the England average over time.</span><span class="task-source">{drawnFrom(["england.area_bandd.history"])}</span></a>
     <a class="task-card" href="/tools/future-cost/"><TaskThumb kind="bands" /><strong>What could it cost</strong><span>Start from today's charge for your band and change the assumptions.</span><span class="task-source">{drawnFrom(["burnley.bands.unparished"], ", bands A to H")}</span></a>
     <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>How do areas compare</strong><span>One area against the England average, same band, year and basis.</span><span class="task-source">{drawnFrom(["burnley.area_bandd.current", "england.area_bandd.current"])}</span></a>
   </nav>
-  <section class="editorial-callout section"><p class="eyebrow">Budget game</p><h2>Could you set your council's budget?</h2><p>Guess how your council splits each pound it spends, who takes your Band D bill and where the money comes from, then see the answer the council published.</p><a href="/tools/budget/">Choose a council and play →</a></section>
   {area && (
     <section class="section" aria-labelledby="home-average">
       <h2 id="home-average">How much is council tax in England in {year}?</h2>
@@ -134,14 +126,4 @@ function drawnFrom(keys: string[], suffix = ""): string {
 .bill-card :global(.bill-figure){margin:0}
 .bill-card .caveat{margin:var(--space-xs) 0 0}
 .bill-link{display:inline-block;margin-top:var(--space-sm);font-weight:600}
-.task-cards{display:grid;gap:var(--space-md);grid-template-columns:minmax(0,1fr)}
-@media(min-width:600px){.task-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(min-width:1100px){.task-cards{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.task-card{display:flex;flex-direction:column;gap:var(--space-xs);padding:var(--space-md);border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text);text-decoration:none;transition:border-color .15s ease}
-.task-card:hover{border-color:var(--accent)}
-.task-card :global(.task-thumb){display:block;width:100%;max-width:12rem;height:auto;aspect-ratio:160/64}
-.task-card strong{font-family:var(--font-display);font-size:1.25rem;line-height:1.2;color:var(--accent)}
-.task-card span{color:var(--text-muted)}
-.task-card .task-source{font-size:var(--text-xs);color:var(--text-faint);margin-top:auto}
-@media(prefers-reduced-motion:reduce){.task-card{transition:none}}
 </style>

@@ -24,10 +24,9 @@ function change(current: number | undefined, previous: number | undefined) {
     <label class="field" for={`${id}-filter`}>Council name<input id={`${id}-filter`} type="search" autocomplete="off" data-table-filter /></label>
     <label class="field">Band<select data-table-band>{BANDS.map(b => <option selected={b === band}>{b}</option>)}</select></label>
     <label class="field">Council type<select data-table-class><option value="">All types</option>{classes.map(([code,label]) => <option value={code}>{label}</option>)}</select></label>
-    <label class="field">Sort<select data-table-sort><option value="name">Council name</option><option value="high" disabled>Annual charge, highest first</option><option value="low" disabled>Annual charge, lowest first</option></select></label>
+    <div class="field sort-field"><label for={`${id}-sort`}>Sort</label><select id={`${id}-sort`} data-table-sort aria-describedby={`${id}-sort-note`}><option value="name">Council name</option><option value="high" disabled>Annual charge, highest first</option><option value="low" disabled>Annual charge, lowest first</option></select><p class="small muted sort-note" id={`${id}-sort-note`} data-sort-note>Choose one council type to sort by annual charge.</p></div>
   </fieldset>
   <div class="action-links table-actions" data-pagefind-ignore><button class="button secondary" type="button" data-table-print disabled>Print</button></div>
-  <p class="small muted" data-sort-note>Choose one council type to sort by annual charge.</p>
   <p class="small" data-table-status role="status">{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
   <div class="fact" data-fact>
     <div class="table-wrap" tabindex="0" role="region" aria-label={caption}>
@@ -100,6 +99,7 @@ function change(current: number | undefined, previous: number | undefined) {
 </script>
 <style>
   .table-controls { display: grid; grid-template-columns: 2fr 0.7fr 1.4fr 1.6fr; gap: 0.7rem; border: 0; padding: 0; margin: 0; min-width: 0; }
+  .sort-note { margin: 0; font-weight: 400; }
   .row-detail { display: block; font-size: 0.8rem; color: var(--text-muted); font-weight: 400; white-space: normal; }
   .compact-tax th:first-child { width: 58%; }
   @media(max-width: 640px) { .table-controls { grid-template-columns: 1fr 1fr; } .compact-tax th:first-child { min-width: 0; } }

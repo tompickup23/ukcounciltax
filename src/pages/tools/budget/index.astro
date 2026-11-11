@@ -13,7 +13,7 @@ const missing = pages.filter(({council}) => budgetFor(council.gss).council.statu
 <BaseLayout title="Council budget game" description={`Explore published ${budgetYear} council budgets, funding, reserves and Band D bill breakdowns for every English billing authority.`} path="/tools/budget/">
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
   <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Find your council and play its budget game.</p></header>
-  <CouncilPicker id="budget-picker" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} status={{heading: `${budgetYear} budget return`, yes: 'Received', no: 'Not received'}} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+  <CouncilPicker id="budget-picker" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
   <section class="section" aria-labelledby="about-budgets">
     <h2 id="about-budgets">About these budgets</h2>
     <p>Budget returns are available for {available.length} of {pages.length} English billing authorities. District pages also carry their county's budget. These are approved budgets, not outturn spending or a forecast of what will happen.</p>

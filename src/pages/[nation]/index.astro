@@ -1,6 +1,7 @@
 ---
 import SourceLine from '../../components/SourceLine.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import {nationEditions,nationPath,devolvedSource,devolvedChangePercent} from '../../lib/devolved';
 import {moneyPence} from '../../lib/tax-view';
 import {yearLabel} from '../../lib/council-tax';
@@ -11,6 +12,7 @@ const previous=editions.at(-2);
 const previousByCode=new Map(previous?.records.map(row=>[row.gss,row]) ?? []); const current=editions.at(-1)!; const isScotland=nation==='Scotland';
 ---
 <BaseLayout title={`Council tax in ${nation} ${yearLabel(current.year)}`} description={`Published council tax for every council in ${nation}, with official sources and clear coverage notes.`} path={nationPath(nation)}>
+<Breadcrumbs items={[{label: nation}]} />
 <header class="page-head"><p class="eyebrow">UK coverage / {nation}</p><h1>Council tax in {nation}</h1><p class="lede">{isScotland?'Every council. Every band from A to H. Three years of published charges.':'Band D averages for all 22 councils, with county, community and police elements.'}</p></header>
 <div class="editorial-callout"><strong>{isScotland?'Council tax only, before water charges':'Published Band D averages, rounded to whole pounds'}</strong><p>{current.basis}. {isScotland?'Water and sewerage charges are separate and are not included in these figures.':'Wales has bands A to I. This release holds Band D only; other bands are not inferred from it. Community charges vary within a council area.'}</p></div>
 <SourceLine source={devolvedSource(current)} />

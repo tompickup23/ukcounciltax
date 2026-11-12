@@ -16,7 +16,7 @@ for (const theme of ['light', 'dark'] as const) {
 }
 test('budget index links all billing authorities', async ({page}) => {
   await page.goto('/tools/budget/');
-  await expect(page.locator('.budget-directory a')).toHaveCount(296);
+  await expect(page.locator('[data-council-picker] tbody a')).toHaveCount(296);
   const result = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
   expect(result.violations).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
@@ -121,4 +121,20 @@ test('per resident exclusions show reasons without figures', async ({page}) => {
     await expect(block.locator('[data-per-resident-unavailable]')).toContainText(['barnsley', 'sheffield'].includes(slug) ? 'different boundary codes' : 'No 2026/27 return');
     await expect(block).not.toContainText('£0');
   }
+});
+test('Burnley offers its 11 neighbours and a plain link to every council', async ({page}) => {
+  await page.goto('/tools/budget/burnley/');
+  const neighbours = page.locator('[data-play-neighbour]');
+  await expect(neighbours.getByRole('heading', {name: 'Play a neighbour'})).toBeVisible();
+  await expect(neighbours.locator('li a')).toHaveCount(11);
+  const link = page.locator('[data-choose-another] a');
+  await expect(link).toHaveText('Choose another council');
+  await expect(link).toHaveAttribute('href', '/tools/budget/');
+  await expect(page.locator('[data-game-onward] [data-council-picker]')).toHaveCount(0);
+});
+test('Isle of Wight offers no neighbour and prints no empty heading', async ({page}) => {
+  await page.goto('/tools/budget/isle-of-wight/');
+  await expect(page.locator('[data-play-neighbour]')).toHaveCount(0);
+  await expect(page.getByRole('heading', {name: 'Play a neighbour'})).toHaveCount(0);
+  await expect(page.locator('[data-choose-another] a')).toHaveAttribute('href', '/tools/budget/');
 });

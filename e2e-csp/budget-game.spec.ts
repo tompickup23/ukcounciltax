@@ -22,6 +22,6 @@ for (const slug of ['', 'burnley/', 'birmingham/']) test(`budget game has no act
     await expect(game.getByRole('heading', {name: 'Your game summary'})).toBeVisible();
     const download=page.waitForEvent('download');await game.getByRole('button',{name:'Save score as PNG'}).click();await download;
     await page.goto(`/tools/budget/${slug}#council-budget`);await expect(page.locator('#published-budget')).toHaveAttribute('open','');
-  } else await expect(page.locator('.budget-directory a')).toHaveCount(296);
+  } else await expect(page.locator('[data-council-picker] tbody a')).toHaveCount(296);
   expect(violations).toEqual([]);
 });

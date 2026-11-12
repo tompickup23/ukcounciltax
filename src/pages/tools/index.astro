@@ -1,9 +1,20 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import TaskThumb from '../../components/TaskThumb.astro';
+import {budgetSource} from '../../lib/budget';
+import {drawnFrom} from '../../lib/task-cards';
+const game = budgetSource();
 ---
 <BaseLayout title="Council tax calculators and tools" description="Compare council tax, explore future costs, understand annual increases and read sourced figures." path="/tools/">
+<Breadcrumbs items={[{label: 'Tools'}]} />
 <header class="page-head"><p class="eyebrow">Explore and understand</p><h1>Council tax tools</h1><p class="lede">Published facts for today. Explicit assumptions for tomorrow.</p></header>
-<a class="card budget-link" href="/tools/budget/"><strong>Where the money goes</strong><span>Play the council budget game and explore published service spending, funding, reserves and the Band D bill split.</span></a>
-<div class="task-nav section"><a class="card" href="/precepts/"><strong>Local bill and precepts</strong><span>Find charging bodies by locality and model different increases for each component.</span></a><a class="card" href="/tools/future-cost/"><strong>Future cost calculator</strong><span>Change the annual increase and horizon. See annual and cumulative costs.</span></a><a class="card" href="/compare/"><strong>Compare two councils</strong><span>Compare the same band, year and council type.</span></a><a class="card" href="/increases/"><strong>Annual increase explorer</strong><span>Separate the whole bill from the council's own share.</span></a><a class="card" href="/data/"><strong>Download the evidence</strong><span>Reusable data with source editions, licences and checksums.</span></a></div>
+<nav class="task-cards section" aria-label="Council tax tools">
+  <a class="task-card task-card-wide" href="/tools/budget/"><TaskThumb kind="game" /><span class="task-card-text"><span class="task-eyebrow">Budget game</span><strong>Where the money goes</strong><span>Play the council budget game and explore published service spending, funding, reserves and the Band D bill split.</span><span class="task-source">Drawn from {game.publisher}, {game.title}, {game.table}, Burnley.</span></span></a>
+  <a class="task-card" href="/precepts/"><TaskThumb kind="stack" /><strong>Local bill and precepts</strong><span>Find charging bodies by locality and model different increases for each component.</span><span class="task-source">{drawnFrom(['burnley.bandd.total'])}</span></a>
+  <a class="task-card" href="/tools/future-cost/"><TaskThumb kind="bands" /><strong>Future cost calculator</strong><span>Change the annual increase and horizon. See annual and cumulative costs.</span><span class="task-source">{drawnFrom(['burnley.bands.unparished'], ', bands A to H')}</span></a>
+  <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>Compare two councils</strong><span>Compare the same band, year and council type.</span><span class="task-source">{drawnFrom(['burnley.area_bandd.current', 'england.area_bandd.current'])}</span></a>
+  <a class="task-card" href="/increases/"><TaskThumb kind="line" /><strong>Annual increase explorer</strong><span>Separate the whole bill from the council's own share.</span><span class="task-source">{drawnFrom(['england.area_bandd.history'])}</span></a>
+</nav>
+<section class="section" aria-labelledby="evidence-heading"><h2 id="evidence-heading">Download the evidence</h2><p>Reusable data with source editions, licences and checksums. <a href="/data/">Read the sources and download the data</a>.</p></section>
 </BaseLayout>
-<style>.budget-link{display:block}.budget-link strong,.budget-link span{display:block}.budget-link strong{font-family:var(--font-display);font-size:1.35rem}</style>

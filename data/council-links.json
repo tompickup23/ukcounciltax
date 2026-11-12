@@ -2,9 +2,9 @@
   "source": {
     "name": "GOV.UK Local Links Manager",
     "url": "https://local-links-manager.publishing.service.gov.uk/data/links_to_services_provided_by_local_authorities.csv",
-    "exportDate": "2026-10-05",
+    "exportDate": "2026-11-11",
     "licence": "Open Government Licence v3.0",
-    "checkedOn": "2026-10-05",
+    "checkedOn": "2026-11-11",
     "checkedBy": "UK Places",
     "service": {
       "title": "Pay your Council Tax",
@@ -13,8 +13,8 @@
     },
     "via": {
       "file": "src/data/local-links.json",
-      "commit": "b1a3262",
-      "sha256": "5c9e6a32e96fa0307ed077711ffb357922fa0c56052d368365ae68e488e181f9"
+      "commit": "2bea52dbe74c7a689a500b3b73ff63dcefb900b6",
+      "sha256": "085eb3b0511aca0f3fad79a9aa3f0decd5a7b5529240229ceed7731b3fb0b617"
     }
   },
   "links": {
@@ -27,14 +27,11 @@
     "E06000005": {
       "councilTax": "https://www.darlington.gov.uk/council-tax/"
     },
-    "E06000006": {
-      "councilTax": "https://www3.halton.gov.uk/Pages/CouncilandBenefits/Pay-Council-Tax.aspx"
-    },
     "E06000007": {
       "councilTax": "https://www.warrington.gov.uk/directdebit"
     },
     "E06000008": {
-      "councilTax": "https://www.blackburn.gov.uk/council-tax/paying-your-council-tax"
+      "councilTax": "https://www.blackburn.gov.uk/council-tax/paying-your-council-tax/"
     },
     "E06000009": {
       "councilTax": "https://www.blackpool.gov.uk/Residents/Council-tax/Pay-Council-tax.aspx"
@@ -130,13 +127,16 @@
       "councilTax": "https://www.milton-keynes.gov.uk/benefits-council-tax/how-to-pay-your-council-tax"
     },
     "E06000043": {
-      "councilTax": "https://www.brighton-hove.gov.uk/council-tax/paying-your-council-tax"
+      "councilTax": "https://www.brighton-hove.gov.uk/council-tax/paying-your-council-tax/"
     },
     "E06000044": {
       "councilTax": "https://www.portsmouth.gov.uk/services/council-tax/"
     },
     "E06000045": {
       "councilTax": "https://www.southampton.gov.uk/council-tax/your-council-tax/pay-your-council-tax/"
+    },
+    "E06000046": {
+      "councilTax": "https://www.iow.gov.uk/ctinfo"
     },
     "E06000047": {
       "councilTax": "https://www.durham.gov.uk/article/3447/Pay-your-Council-Tax"
@@ -155,6 +155,9 @@
     },
     "E06000053": {
       "councilTax": "https://www.scilly.gov.uk/make-a-payment"
+    },
+    "E06000054": {
+      "councilTax": "https://www.wiltshire.gov.uk/article/7067/Paying-your-council-tax"
     },
     "E06000055": {
       "councilTax": "https://www.bedford.gov.uk/council-tax/manage-and-pay-your-council-tax/how-pay-your-council-tax"
@@ -183,6 +186,12 @@
     "E07000008": {
       "councilTax": "https://www.cambridge.gov.uk/paying-your-council-tax"
     },
+    "E07000009": {
+      "councilTax": "https://eastcambs.gov.uk/council-tax-benefits-and-business-rates/council-tax/pay-your-council-tax/"
+    },
+    "E07000010": {
+      "councilTax": "https://www.fenland.gov.uk/counciltax"
+    },
     "E07000011": {
       "councilTax": "https://www.huntingdonshire.gov.uk/contact-us/make-a-payment/"
     },
@@ -192,8 +201,14 @@
     "E07000032": {
       "councilTax": "https://www.ambervalley.gov.uk/council-tax/paying-your-bill/"
     },
+    "E07000033": {
+      "councilTax": "https://www.bolsover.gov.uk/services/c/council-tax/how-to-pay"
+    },
     "E07000034": {
       "councilTax": "https://www.chesterfield.gov.uk/i-want-to/i-want-to-pay/pay-council-rent-council-tax-or-business-rates/"
+    },
+    "E07000035": {
+      "councilTax": "https://www.derbyshiredales.gov.uk/council-tax/pay-council-tax"
     },
     "E07000036": {
       "councilTax": "https://www.erewash.gov.uk/council-tax/how-pay-your-council-tax"
@@ -201,14 +216,17 @@
     "E07000037": {
       "councilTax": "https://www.highpeak.gov.uk/payments"
     },
+    "E07000038": {
+      "councilTax": "https://www.ne-derbyshire.gov.uk/council-tax/how-to-pay"
+    },
     "E07000039": {
       "councilTax": "https://www.southderbyshire.gov.uk/our-services/council-tax/ways-to-pay"
     },
     "E07000040": {
-      "councilTax": "https://eastdevon.gov.uk/council-tax/paying-council-tax/"
+      "councilTax": "https://eastdevon.gov.uk/council-tax/paying-council-tax"
     },
     "E07000041": {
-      "councilTax": "https://exeter.gov.uk/council-tax/paying-your-council-tax/pay-your-council-tax/"
+      "councilTax": "https://exeter.gov.uk/council-tax/paying-your-council-tax/pay-your-council-tax"
     },
     "E07000042": {
       "councilTax": "https://www.middevon.gov.uk/residents/council-tax/how-can-i-pay-my-council-tax/"
@@ -217,19 +235,25 @@
       "councilTax": "https://www.northdevon.gov.uk/council-tax"
     },
     "E07000044": {
-      "councilTax": "https://www.southhams.gov.uk/council-tax"
+      "councilTax": "https://www.southhams.gov.uk/council-tax/"
     },
     "E07000045": {
-      "councilTax": "https://www.teignbridge.gov.uk/council-tax/paying-council-tax/ways-to-pay-for-your-council-tax/pay-council-tax-online/"
+      "councilTax": "https://www.teignbridge.gov.uk/council-tax/paying-council-tax/ways-to-pay-for-your-council-tax/pay-council-tax-online"
     },
     "E07000046": {
       "councilTax": "https://www.torridge.gov.uk/waystopay"
     },
     "E07000047": {
-      "councilTax": "https://www.westdevon.gov.uk/council-tax"
+      "councilTax": "https://www.westdevon.gov.uk/council-tax/"
+    },
+    "E07000061": {
+      "councilTax": "https://www.lewes-eastbourne.gov.uk/pay-your-council-tax"
     },
     "E07000062": {
       "councilTax": "https://www.hastings.gov.uk/council-tax/pay/"
+    },
+    "E07000063": {
+      "councilTax": "https://www.lewes-eastbourne.gov.uk/pay-your-council-tax"
     },
     "E07000064": {
       "councilTax": "https://www.rother.gov.uk/council-tax/pay-business-rates/"
@@ -286,7 +310,7 @@
       "councilTax": "https://tewkesbury.gov.uk/services/council-tax-benefits-and-business-rates/council-tax/pay-your-council-tax-bill/"
     },
     "E07000084": {
-      "councilTax": "https://www.basingstoke.gov.uk/paymyctax"
+      "councilTax": "https://www.basingstoke.gov.uk/paymyctax/"
     },
     "E07000085": {
       "councilTax": "https://www.easthants.gov.uk/council-tax/paying-your-council-tax"
@@ -303,6 +327,9 @@
     "E07000090": {
       "councilTax": "https://www.havant.gov.uk/pay"
     },
+    "E07000091": {
+      "councilTax": "https://www.newforest.gov.uk/paycounciltax"
+    },
     "E07000092": {
       "councilTax": "https://www.rushmoor.gov.uk/council-tax/paying-your-council-tax/how-to-pay-your-council-tax/"
     },
@@ -316,7 +343,7 @@
       "councilTax": "https://www.broxbourne.gov.uk/council-tax/pay-council-tax/1"
     },
     "E07000096": {
-      "councilTax": "https://www.dacorum.gov.uk/home/council-tax"
+      "councilTax": "https://www.dacorum.gov.uk/home/council-tax/"
     },
     "E07000098": {
       "councilTax": "https://www.hertsmere.gov.uk/council-tax/pay-my-council-tax"
@@ -370,7 +397,7 @@
       "councilTax": "https://www.hyndburnbc.gov.uk/ctaxandbenefits/"
     },
     "E07000121": {
-      "councilTax": "https://www.lancaster.gov.uk/council-tax/pay-your-council-tax"
+      "councilTax": "https://www.lancaster.gov.uk/council-tax/pay-your-council-tax/"
     },
     "E07000122": {
       "councilTax": "https://www.pendle.gov.uk/info/20102/your_council_tax_bill/303/pay_your_council_tax"
@@ -413,6 +440,9 @@
     },
     "E07000135": {
       "councilTax": "https://www.oadby-wigston.gov.uk/pages/how_to_pay_council_tax"
+    },
+    "E07000136": {
+      "councilTax": "https://www.boston.gov.uk/PayYourCouncilTax"
     },
     "E07000138": {
       "councilTax": "https://www.lincoln.gov.uk/online/pay-council-tax-online"
@@ -484,7 +514,7 @@
       "councilTax": "https://www.cannockchasedc.gov.uk/residents/council-tax/how-pay-your-council-tax"
     },
     "E07000193": {
-      "councilTax": "https://www.eaststaffsbc.gov.uk/council-tax/ways-pay-your-council-tax"
+      "councilTax": "https://www.eaststaffsbc.gov.uk/council-tax/ways-pay-your-council-tax/"
     },
     "E07000194": {
       "councilTax": "https://www.lichfielddc.gov.uk/council-tax/pay-council-tax/1"
@@ -526,19 +556,19 @@
       "councilTax": "https://www.reigate-banstead.gov.uk/pay-council-tax"
     },
     "E07000212": {
-      "councilTax": "https://www.runnymede.gov.uk/council-tax-11/council-tax-3"
+      "councilTax": "https://www.runnymede.gov.uk/council-tax/council-tax-annual-bill-info"
     },
     "E07000213": {
       "councilTax": "https://www.spelthorne.gov.uk/pay-online"
     },
     "E07000214": {
-      "councilTax": "https://www.surreyheath.gov.uk/council-tax/pay-your-council-tax"
+      "councilTax": "https://www.surreyheath.gov.uk/council-tax"
     },
     "E07000215": {
       "councilTax": "https://www.tandridge.gov.uk/Council-tax"
     },
     "E07000216": {
-      "councilTax": "https://www.waverley.gov.uk/Services/Council-Tax/Pay-Council-Tax"
+      "councilTax": "https://www.waverley.gov.uk/council-tax"
     },
     "E07000217": {
       "councilTax": "https://www.woking.gov.uk/council-tax/council-tax-payments-refunds/pay-your-council-tax"
@@ -684,6 +714,9 @@
     "E08000036": {
       "councilTax": "https://www.wakefield.gov.uk/council-tax/how-to-pay-your-council-tax"
     },
+    "E08000037": {
+      "councilTax": "https://www.gateshead.gov.uk/article/2760/Pay-your-Council-Tax"
+    },
     "E08000038": {
       "councilTax": "https://www.barnsley.gov.uk/services/council-tax/how-to-pay-your-council-tax/"
     },
@@ -707,6 +740,9 @@
     },
     "E09000006": {
       "councilTax": "https://www.bromley.gov.uk/council-tax/paying-council-tax"
+    },
+    "E09000007": {
+      "councilTax": "https://www.camden.gov.uk/pay-council-tax"
     },
     "E09000008": {
       "councilTax": "https://www.croydon.gov.uk/council-tax/paying-your-council-tax/ways-pay-your-council-tax"
@@ -792,6 +828,9 @@
     "S12000010": {
       "councilTax": "https://www.eastlothian.gov.uk/info/210559/council_tax_and_benefits/12129/pay_council_tax"
     },
+    "S12000011": {
+      "councilTax": "https://www.eastrenfrewshire.gov.uk/pay-your-council-tax"
+    },
     "S12000013": {
       "councilTax": "https://www.cne-siar.gov.uk/council-tax-benefits-and-grants/council-tax/council-tax-payment"
     },
@@ -802,7 +841,7 @@
       "councilTax": "https://www.highland.gov.uk/council-tax/pay-council-tax/2"
     },
     "S12000018": {
-      "councilTax": "https://www.inverclyde.gov.uk/council-and-government/council-tax/about-paying-council-tax"
+      "councilTax": "https://www.inverclyde.gov.uk/council-and-government/council-tax/about-paying-council-tax/"
     },
     "S12000019": {
       "councilTax": "https://www.midlothian.gov.uk/info/606/council_tax/105/pay_council_tax"
@@ -813,17 +852,20 @@
     "S12000021": {
       "councilTax": "https://www.north-ayrshire.gov.uk/council-tax/pay-council-tax"
     },
+    "S12000023": {
+      "councilTax": "https://www.orkney.gov.uk/benefits-council-tax-and-money"
+    },
     "S12000026": {
       "councilTax": "https://www.scotborders.gov.uk/payments"
     },
     "S12000027": {
       "councilTax": "https://www.shetland.gov.uk/council-tax/pay-council-tax-1"
     },
+    "S12000028": {
+      "councilTax": "https://www.south-ayrshire.gov.uk/pay-council-tax"
+    },
     "S12000029": {
       "councilTax": "https://www.southlanarkshire.gov.uk/info/200180/how_to_pay/1651/how_to_pay_council_tax"
-    },
-    "S12000033": {
-      "councilTax": "https://www.aberdeencity.gov.uk/services/council-tax/pay-council-tax"
     },
     "S12000034": {
       "councilTax": "https://www.aberdeenshire.gov.uk/council-tax/ways-to-pay/"
@@ -855,6 +897,9 @@
     "S12000048": {
       "councilTax": "https://www.pkc.gov.uk/article/15359/Council-tax-payments"
     },
+    "S12000049": {
+      "councilTax": "https://www.glasgow.gov.uk/ct"
+    },
     "S12000050": {
       "councilTax": "https://www.northlanarkshire.gov.uk/council-tax/pay-your-council-tax"
     },
@@ -885,6 +930,9 @@
     "W06000010": {
       "councilTax": "https://www.carmarthenshire.gov.wales/council-services/council-tax/"
     },
+    "W06000011": {
+      "councilTax": "https://www.swansea.gov.uk/paycounciltax?lang=en"
+    },
     "W06000012": {
       "councilTax": "https://www.npt.gov.uk/council-tax/pay-your-council-tax/"
     },
@@ -908,6 +956,9 @@
     },
     "W06000021": {
       "councilTax": "https://www.monmouthshire.gov.uk/home/report-pay-or-request/pay-for-it/"
+    },
+    "W06000022": {
+      "councilTax": "https://live.newport.gov.uk/council-tax/pay-your-council-tax"
     },
     "W06000023": {
       "councilTax": "https://en.powys.gov.uk/paycounciltax"

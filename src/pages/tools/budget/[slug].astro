@@ -12,6 +12,7 @@ import BudgetBill from '../../../components/BudgetBill.astro';
 import BudgetGame from '../../../components/BudgetGame.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import PageContents from '../../../components/PageContents.astro';
+import {gameNeighbours} from '../../../lib/game-neighbours';
 import {councilPages, type CouncilPage} from '../../../lib/paths';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
 export function getStaticPaths() {
@@ -23,6 +24,7 @@ const data = budgetFor(council.gss);
 const available = data.council.status === 'available';
 const game = available ? gameData(council.gss, council.slug, tax.name) : null;
 const tableCount = [data.council, ...(data.county ? [data.county] : [])].reduce((sum, body) => sum + 4 + services(body).filter(row => row.value !== 0 && row.subLines.length).length, 0);
+const nearby = gameNeighbours(council.gss);
 const title = available ? `${tax.name} budget game ${budgetYear}` : `${tax.name} budget ${budgetYear}: no return received`;
 const description = available
   ? `Published ${budgetYear} budget for ${tax.name}: service spending, funding, reserves and the Band D bill split, from the MHCLG RA return.`
@@ -43,5 +45,20 @@ const description = available
   <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />
   <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={tax} showChange={false} /></section>
-  <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a> · <a href="/tools/budget/">Choose another council</a></p>
+  <section class="section game-onward" aria-labelledby="onward-heading" data-game-onward>
+    <h2 id="onward-heading">Play another council</h2>
+    {nearby.neighbours.length > 0 && <div class="neighbour-row" data-play-neighbour>
+      <h3>Play a neighbour</h3>
+      <p class="small muted">{nearby.basis === 'county' ? `The other districts of ${nearby.county} that have a budget game.` : `Councils whose areas touch ${tax.name}'s in the ONS boundary file, and that have a budget game. The file is clipped to the coastline, so councils that face each other across an estuary or a tidal river may not touch in it.`}</p>
+      <ul class="pill-nav" data-pagefind-ignore>{nearby.neighbours.map(n => <li><a href={`/tools/budget/${n.slug}/`}>{n.name}</a></li>)}</ul>
+    </div>}
+    <p class="choose-another" data-choose-another><a href="/tools/budget/">Choose another council</a> from the full list of English billing authorities.</p>
+    <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a></p>
+  </section>
 </BaseLayout>
+<style>
+  .neighbour-row h3 { font-size: 1.05rem; margin: 0 0 0.25rem; }
+  .neighbour-row p { margin: 0 0 0.6rem; }
+  .choose-another { margin: 1rem 0 0.5rem; }
+  .choose-another a { font-weight: 600; }
+</style>

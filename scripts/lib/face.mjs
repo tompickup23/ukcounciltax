@@ -92,7 +92,7 @@ export function homeProblems(page) {
   if (!tasks) problems.push("no task cards");
   else {
     const links = [...tasks.matchAll(/<a\b[\s\S]*?<\/a>/gi)].map((m) => m[0]);
-    if (links.length !== 4) problems.push(`${links.length} task links, not four`);
+    if (links.length !== 5) problems.push(`${links.length} task links, not five`);
     links.forEach((link, i) => {
       const svgs = [...link.matchAll(/<svg\b[^>]*>/gi)].map((m) => m[0]);
       if (svgs.length !== 1 || !/\saria-hidden="true"/.test(svgs[0])) problems.push(`task link ${i + 1} needs exactly one aria-hidden drawing`);

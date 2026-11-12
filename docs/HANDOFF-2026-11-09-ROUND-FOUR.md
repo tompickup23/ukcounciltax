@@ -6,7 +6,7 @@ Saved before archiving the Claude Code session that ran rounds three and four. N
 
 - Reviewed and merged, with review fixes: ukcounciltax PR 32 (A2, `02f7061`), ukcouncils PR 35 (B2, `151dc0f`), estate-kit PR 3 (0.2.0, tagged `v0.2.0`), estate-kit PR 4 (0.3.0, tagged `v0.3.0`), ukcounciltax PR 31 (plan and decisions, `aad466c`). A2 and B2 deployed and were checked live.
 - Tom took every outstanding decision on 9 November 2026: 1 to 8, K1 to K5, G1, G2 (recorded in `DECISIONS-WAITING-2026-11-10.md`), D1 for the registry names (GOV.UK Local Links Manager), and the C3 line 906 ruling (print the MHCLG label verbatim, inside the financing table only).
-- The LGR interactive plan (Reports PR 626) was read. The model stays on tompickup.co.uk; UK Councils gets a neutral MHCLG panel, B4, after C3 (decision 8). B4a source notes and brief are pushed on ukcouncils `feat/reorganisation-panel` (`3f5041f`).
+- The separate LGR interactive plan (held privately) was read. The model stays off both tax sites; UK Councils gets a neutral MHCLG panel, B4, after C3 (decision 8). B4a source notes and brief are pushed on ukcouncils `feat/reorganisation-panel` (`3f5041f`).
 - L2 and L3 briefs and the link template are pushed (ukdemographics and ukelections `feat/tax-site-links`, ukcouncils `docs/sister-link-template`). The L2 brief's Wales note was corrected (`e1409fc`); a UK Council Tax only line for Welsh pages is follow up L2b.
 
 ## Open PRs, all green, none reviewed yet

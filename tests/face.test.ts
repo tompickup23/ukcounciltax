@@ -9,7 +9,7 @@ const actions = '<div class="chart-actions" data-chart-actions><a href="/og/char
 const door = '<form class="postcode-door" data-postcode-door><input id="postcode-home"><noscript><p><a href="/councils/">Browse all councils</a></p></noscript></form>';
 const finder = '<section class="council-finder" data-council-finder><input id="council-name" disabled><noscript><p><a href="/councils/">Browse all councils</a></p></noscript></section>';
 const task = (svg = '<svg viewBox="0 0 160 64" class="task-thumb" aria-hidden="true"><rect/></svg>') => `<a class="task-card" href="/x/">${svg}<strong>Task</strong></a>`;
-const home = ({ copy = door + finder, card = chart(), tasks = [task(), task(), task(), task()] } = {}) =>
+const home = ({ copy = door + finder, card = chart(), tasks = [task(), task(), task(), task(), task()] } = {}) =>
   `<section class="home-hero"><div class="hero-copy">${copy}</div><aside class="bill-card">${card}${actions}</aside></section><nav class="task-cards section">${tasks.join("")}</nav>`;
 
 describe("the face checks", () => {
@@ -32,9 +32,9 @@ describe("the face checks", () => {
 
   it("catch task drawings that speak or are missing", () => {
     const speaking = task('<svg viewBox="0 0 160 64" aria-hidden="true"><text>£2,540</text></svg>');
-    expect(homeProblems(home({ tasks: [speaking, task(), task(), task()] }))).toContain("task link 1 draws text");
+    expect(homeProblems(home({ tasks: [speaking, task(), task(), task(), task()] }))).toContain("task link 1 draws text");
     expect(homeProblems(home({ tasks: [task('<svg viewBox="0 0 160 64"></svg>'), task(), task()] }))).toEqual(
-      expect.arrayContaining(["3 task links, not four", "task link 1 needs exactly one aria-hidden drawing"]),
+      expect.arrayContaining(["3 task links, not five", "task link 1 needs exactly one aria-hidden drawing"]),
     );
   });
 

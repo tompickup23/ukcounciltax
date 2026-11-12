@@ -1,38 +1,52 @@
 ---
-import { councilPages, councilPath } from "../lib/paths";
-interface Props { id?: string; anchor?: string; label?: string; bare?: boolean }
-const { id = "council-name", anchor = "council-tax", label = "Find your council by name", bare = false } = Astro.props;
-const rows = councilPages();
+/**
+ * The name finder: a short list of matches under one box. It reads the same
+ * rows and the same matching code as the council picker, so a name, official
+ * name, county or region finds a council here exactly as it does there.
+ *
+ * Scottish and Welsh councils join when the section asked for exists on their
+ * pages (the council tax section does; the precept breakdown is England's
+ * alone), each labelled by nation so the systems are never mixed.
+ */
+import { devolvedRows, englishRows, type Destination } from "../lib/council-picker";
+interface Props { id?: string; anchor?: string; label?: string; bare?: boolean; destination?: Destination }
+const { id = "council-name", anchor = "council-tax", label = "Find your council by name", bare = false, destination = "profile" } = Astro.props;
+const withDevolved = destination === "profile" && anchor === "council-tax";
+const rows = [...englishRows(destination), ...(withDevolved ? devolvedRows() : [])];
+const coverage = withDevolved ? "councils in England, Scotland and Wales" : "councils in England";
 ---
-<section class:list={["council-finder", { card: !bare }]} data-council-finder>
+<section class:list={["council-finder", { card: !bare }]} data-council-finder data-coverage={coverage}>
   <label class="field" for={id}><span>{label}</span>
     <input id={id} type="search" placeholder="e.g. Burnley" autocomplete="off" disabled aria-controls={`${id}-results`} aria-describedby={`${id}-status`} />
   </label>
-  <p id={`${id}-status`} class="muted small" role="status" data-finder-status>Enter at least two letters. Search covers councils in England.</p>
-  <ul id={`${id}-results`} class="finder-results" hidden>
-    {rows.map(({council, tax}) => <li hidden data-name={`${tax.name} ${council.officialName}`}>
-      <a href={`${councilPath(council)}#${anchor}`}>{tax.name}<span>{tax.class} · {tax.region}</span></a>
+  <p id={`${id}-status`} class="muted small" role="status" data-finder-status>Enter at least two letters. Search covers {coverage}.</p>
+  <ul id={`${id}-results`} class="finder-results" hidden data-pagefind-ignore>
+    {rows.map((row) => <li hidden data-name={row.search} data-region={row.region}>
+      <a href={`${row.href}#${anchor}`}>{row.name}<span>{row.type} · {row.region}</span></a>
     </li>)}
   </ul>
   <noscript><p>Name search needs JavaScript. <a href="/councils/">Browse all councils</a>.</p></noscript>
 </section>
 <script>
-  import { matchesCouncil, normalise } from "../lib/council-search";
+  import { matchesCouncil, matchingRegion, normalise } from "../lib/council-search";
   for (const finder of document.querySelectorAll<HTMLElement>('[data-council-finder]')) {
     const input = finder.querySelector<HTMLInputElement>('input')!;
     const list = finder.querySelector<HTMLUListElement>('ul')!;
     const status = finder.querySelector<HTMLElement>('[data-finder-status]')!;
+    const coverage = finder.dataset.coverage ?? 'councils in England';
     const rows = [...list.querySelectorAll<HTMLLIElement>('li')];
     input.disabled = false;
     input.addEventListener('input', () => {
       const query = normalise(input.value);
-      const matches = query.length < 2 ? [] : rows.filter(row => matchesCouncil(query, row.dataset.name ?? ''));
+      const region = matchingRegion(query, rows.map(row => row.dataset.region ?? ''));
+      const matches = query.length < 2 ? [] : rows.filter(row => matchesCouncil(query, row.dataset.name ?? '')
+        && (!region || normalise(row.dataset.region ?? '') === region));
       matches.sort((a,b) => Number(normalise(b.querySelector('a')!.firstChild!.textContent!) === query) - Number(normalise(a.querySelector('a')!.firstChild!.textContent!) === query));
       const visible = new Set(matches.slice(0,8));
       rows.forEach(row => { row.hidden = !visible.has(row); });
       for (const row of matches.slice(0,8)) list.append(row);
       list.hidden = !visible.size;
-      status.textContent = query.length < 2 ? 'Enter at least two letters. Search covers councils in England.' : matches.length ? `${matches.length} matching councils${matches.length > 8 ? '; showing the first eight. Keep typing to narrow the list' : ''}. Tab to choose a result.` : 'No matching council in England. Try a shorter name or browse all councils.';
+      status.textContent = query.length < 2 ? `Enter at least two letters. Search covers ${coverage}.` : matches.length ? `${matches.length} matching councils${matches.length > 8 ? '; showing the first eight. Keep typing to narrow the list' : ''}. Tab to choose a result.` : `No matching council. Search covers ${coverage}; try a shorter name or browse all councils.`;
     });
   }
 </script>

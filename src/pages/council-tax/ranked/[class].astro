@@ -32,7 +32,7 @@ const london = cls.slug === 'london-boroughs';
   </section>
   {data.rows ? <>
     <div class="fact" data-fact>
-      <div class="table-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table class:list={["data", {"billing-ranking": !data.county}]}>
+      <div class="table-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table data-pagefind-ignore class:list={["data", {"billing-ranking": !data.county}]}>
         <caption>{sentenceCase(cls.label)}, Band D {year}, lowest to highest {data.county ? 'own' : 'area'} Band D</caption>
         <thead><tr><th scope="col">Position</th><th scope="col">Council</th>{london && <th scope="col">Type</th>}{!data.county && <><th scope="col" class="num">Area Band D</th><th scope="col" class="num own-column">Position by own share</th></>}<th scope="col" class:list={["num", {"own-column": !data.county}]}>Own Band D</th></tr></thead>
         <tbody>{data.rows.map(row => <tr>

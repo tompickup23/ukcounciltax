@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import {CURRENT_YEAR,YEARS,yearLabel} from '../lib/council-tax';
 import {nationEditions} from '../lib/devolved';
 import SourceLine from '../components/SourceLine.astro';
@@ -10,6 +11,7 @@ const budgetPages = councilPages();
 const missingBudgets = budgetPages.filter(({council}) => budgetFor(council.gss).council.status === 'no return');
 ---
 <BaseLayout title="UK council tax coverage" description="What UK Council Tax covers in England, Scotland, Wales and Northern Ireland, and why their figures differ." path="/coverage/">
+<Breadcrumbs items={[{label: 'UK coverage'}]} />
 <header class="page-head"><p class="eyebrow">Four nations, distinct systems</p><h1>What the figures cover</h1><p class="lede">A useful comparison starts with knowing what is included.</p></header>
 <section class="section prose"><h2>English council budgets, {budgetYear}</h2><p>The RA return covers {budgetPages.length - missingBudgets.length} of {budgetPages.length} English billing authorities. <a href="/tools/budget/">Every billing authority has a budget page</a>; district pages also include their county's budget. The following councils had no return received in time for MHCLG's publication on 11 June 2026: {missingBudgets.map(({tax}) => tax.name).join(', ')}.</p><p>Those pages show the separate Table 10 bill split and no game. No other year is substituted. These are budgets, not outturn spending; Scotland, Wales and Northern Ireland are outside this RA edition.</p><SourceLine source={budgetSource()} /></section>
 <div class="task-nav section">

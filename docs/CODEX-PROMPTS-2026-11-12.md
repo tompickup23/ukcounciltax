@@ -10,7 +10,7 @@ One writer works in each repository at a time. The prompts for one repository ru
 
 | Prompt | Repository | Waits for | Size |
 |---|---|---|---|
-| 1. The way in to the increases page (NV6) | ukcounciltax | The onward links PR of 12 November merged (it touches other files, so this can also start beside it) | Medium |
+| 1. The way in to the increases page (NV6) | ukcounciltax | PR 63 (onward links) merged (it touches other files, so this can also start beside it) | Medium |
 | 2. Kit 0.5.0 | ukcounciltax | Prompt 1 merged | Medium. Touches every chart |
 | 3. Small faults (NV7) and the parish index | ukcounciltax | Prompt 2 merged | Medium |
 | 4. The way in to Exceptional Financial Support (NV6) | ukcouncils | Nothing | Medium |

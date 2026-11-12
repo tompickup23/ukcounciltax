@@ -34,7 +34,7 @@ The payment and service links now stop builds on 10 February 2027 (91 days after
 | ukcounciltax | 61 | C2 research: a freeze counterfactual for 280 candidate authorities; documents only | Tom's decision (X2 below) |
 | ukcounciltax | 54 | The navigation brief, both prompt sets, this note and the earlier handovers | Tom's word to merge. It now holds main and the content of PR 53 |
 | ukcounciltax | 53 | Round three handover | Nothing: it shows as merged when 54 merges with a merge commit |
-| ukcounciltax | the onward links PR of 12 November | Scottish and Welsh council pages gain links to two other councils and the nation's table | Tom's word to merge |
+| ukcounciltax | 63 | Scottish and Welsh council pages gain links to two other councils and the nation's table | Tom's word to merge |
 | estate-kit | 21 | Print sheets and the off web track, 0.5.1 | Its CI fails at start (billing); the owner's review |
 | estate-kit | 9 | One vendor command and a guard for the copy | The owner's review |
 
@@ -60,7 +60,7 @@ One writer per repository. Dates that bind are unchanged: levels day staged and 
 
 | Order | Repository | What | Who | Prompt |
 |---|---|---|---|---|
-| Now | ukcounciltax | Onward links on Scottish and Welsh council pages (part of NV5) | Built, 12 November | PR open |
+| Now | ukcounciltax | Onward links on Scottish and Welsh council pages (part of NV5) | Built, 12 November | PR 63 |
 | 1 | ukcounciltax | The way in to the increases page (NV6) | Codex | Round two, prompt 1 |
 | 2 | ukcounciltax | Kit 0.5.0 | Codex | Round two, prompt 2 |
 | 3 | ukcounciltax | Small faults (NV7) and the parish index | Codex | Round two, prompt 3 |

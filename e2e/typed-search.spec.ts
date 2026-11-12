@@ -83,6 +83,11 @@ test('the directory picker and name finder use the same exact region rule', asyn
   const expected = councilIndex().filter(row => row.region === 'North West');
   await page.goto('/councils/');
   await page.locator('[data-picker-input]').fill('North West');
+  if ((page.viewportSize()?.width ?? 1280) < 600) {
+    await expect(page.locator('tr[data-row]:visible')).toHaveCount(12);
+    await expect(page.locator('[data-picker-count]')).toContainText(`${expected.length} of 296 match`);
+    await page.getByRole('button', { name: `Show all ${expected.length} matching councils` }).click();
+  }
   await expect(page.locator('tr[data-row]:visible')).toHaveCount(expected.length);
   expect(await page.locator('tr[data-row]:visible').evaluateAll(rows => rows.every(row => (row as HTMLElement).dataset.region === 'north-west'))).toBe(true);
   await page.goto('/');

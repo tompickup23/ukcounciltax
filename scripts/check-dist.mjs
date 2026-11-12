@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { requireImages } from "./lib/og-policy.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
@@ -62,6 +63,7 @@ const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8'))
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
 if (Date.now() >= linksExpiry-(15 * 86400000)) console.warn(`Council payment links expire on ${new Date(linksExpiry).toISOString().slice(0, 10)}. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.`);
+let parishSource;
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -159,7 +161,7 @@ for (const path of files(DIST)) {
 
   if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
     parishPagesChecked++;
-    const parishSource = JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
+    parishSource ??= JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
     const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
     if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
   }
@@ -324,7 +326,7 @@ if (existsSync(bandFile)) {
 
 // When the build rendered cards (BUILD_OG=1), every og:image must resolve to
 // a card in the tree. An iteration build renders none and skips this.
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   const devolvedCards = ['scotland', 'wales'].flatMap(nation => existsSync(join(DIST, 'og', nation)) ? [...files(join(DIST, 'og', nation))].filter(path => path.endsWith('.png')) : []);
   if (devolvedCards.length !== 54) failures.push(`expected 54 devolved cards, found ${devolvedCards.length}`);
   let cards = 0;
@@ -415,7 +417,7 @@ else {
 // chart PNG link resolves to a file. The CSP still allows the kit's inline style
 // attributes (A5 brief, section 5).
 if (!homeChecked) failures.push("homepage not found for the face checks");
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
   console.log(`dist check: ${chartPngLinks.length} chart PNG links resolve`);
 }

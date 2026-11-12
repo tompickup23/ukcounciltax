@@ -1,3 +1,4 @@
+import {requireImages} from './og-policy.mjs';
 import {JSDOM} from 'jsdom';
 import {readFileSync,existsSync} from 'node:fs';
 import {join} from 'node:path';
@@ -62,7 +63,7 @@ export function budgetGameProblems(html,slug,dist) {
     }
     for(const chart of [template?.content,published].filter(Boolean)){
       const links=[...chart.querySelectorAll('[data-chart-png]')];fail(links.length===2,`round ${i} needs two PNG actions`);
-      for(const link of links)fail(existsSync(join(dist,link.getAttribute('href'))),`missing PNG ${link.getAttribute('href')}`);
+      if(requireImages(dist))for(const link of links)fail(existsSync(join(dist,link.getAttribute('href'))),`missing PNG ${link.getAttribute('href')}`);
     }
   }
   const script=[...doc.querySelectorAll('script[src]')].map(node=>node.getAttribute('src')).find(src=>src.includes('BudgetGame.'));
@@ -70,7 +71,7 @@ export function budgetGameProblems(html,slug,dist) {
   if(script){const size=gzipSync(readFileSync(join(dist,script))).length;fail(size<=GAME_GZIP_CEILING,`game gzip ${size} exceeds ${GAME_GZIP_CEILING}`);}
   const card=doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
   fail(card&&new URL(card).pathname===`/og/budget/${slug}.png`,'wrong static game card');
-  if(card)fail(existsSync(join(dist,new URL(card).pathname)),'static game card missing');
+  if(card&&requireImages(dist))fail(existsSync(join(dist,new URL(card).pathname)),'static game card missing');
   return {problems,available:true};
 }
 export function gameHeaderProblem(text) {

@@ -63,7 +63,19 @@ export function classChartOptions(name: ClassChartName): PositionStripOptions {
     title: `Area Band D across the ${rows.length} ${cls.label}, ${year}, with the published average for ${AREA_TYPE_LABEL[cls.areaType]}`};
 }
 
+// One set of options per council for the lifetime of this build. All callers
+// pass fresh outer drawing options, so theme and paint mode remain independent.
+const profileOptionsCache = new Map<string, ReturnType<typeof makeProfileChartOptions>>();
 export function profileChartOptions(slug: string) {
+  let options = profileOptionsCache.get(slug);
+  if (!options) {
+    options = makeProfileChartOptions(slug);
+    profileOptionsCache.set(slug, options);
+  }
+  return options;
+}
+
+function makeProfileChartOptions(slug: string) {
   const data = loadYear(CURRENT_YEAR);
   const council = Object.values(loadRegistry().councils).find(council => council.slug === slug);
   if (!council || !data.authorities[council.gss]) throw new Error(`A3: no billing authority ${slug}`);

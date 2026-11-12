@@ -1,3 +1,4 @@
+import {cachedImageRoute} from "../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from "astro";
 import { HUB_CARDS, buildOg, renderOgCard, type HubCard, type OgCard } from "../../lib/og";
 import { CURRENT_YEAR, loadYear, percent, wholePounds, yearLabel } from "../../lib/council-tax";
@@ -33,7 +34,7 @@ export function getStaticPaths() {
   return HUB_CARDS.map((card) => ({ params: { card } }));
 }
 
-export const GET: APIRoute = async ({ params }) => {
+export const GET: APIRoute = cachedImageRoute(async ({ params }) => {
   const png = await renderOgCard(cards()[params.card as HubCard]);
   return new Response(png, { headers: { "Content-Type": "image/png" } });
-};
+});

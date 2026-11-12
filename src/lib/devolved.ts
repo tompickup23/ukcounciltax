@@ -16,3 +16,16 @@ export function devolvedSource(edition: Edition): SourceRef {
 export function devolvedChangePercent(current: number, previous: number): string {
   return percent((current-previous)/previous*100);
 }
+/**
+ * The two councils nearest by name in the same nation and year, for onward links.
+ * At either end of the alphabet both come from the one side that has councils.
+ */
+export function nationNeighbours(nation: string, slug: string): DevolvedRow[] {
+  const edition = nationEditions(nation).at(-1);
+  if (!edition) return [];
+  const rows = edition.records.slice().sort((a, b) => a.name.localeCompare(b.name, 'en-GB'));
+  const index = rows.findIndex(r => r.slug === slug);
+  if (index < 0 || rows.length < 3) return [];
+  const start = Math.min(Math.max(index - 1, 0), rows.length - 3);
+  return rows.slice(start, start + 3).filter(r => r.slug !== slug);
+}

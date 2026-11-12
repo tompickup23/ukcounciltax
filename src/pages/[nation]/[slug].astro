@@ -3,7 +3,7 @@ import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import SourceLine from '../../components/SourceLine.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import {devolved,nationEditions,nationPath,devolvedSource,devolvedChangePercent} from '../../lib/devolved';
+import {devolved,nationEditions,nationPath,devolvedSource,devolvedChangePercent,nationNeighbours} from '../../lib/devolved';
 import {moneyPence} from '../../lib/tax-view';
 import {CURRENT_YEAR,yearLabel} from '../../lib/council-tax';
 import {councilByGss,sisterLinks,contextLinks} from '../../lib/registry';
@@ -11,6 +11,7 @@ export function getStaticPaths(){return devolved.editions.filter(e=>e.year===CUR
 const {nation,row}=Astro.props;const editions=nationEditions(nation);const current=editions.at(-1)!;const isScotland=nation==='Scotland';
 const bands=Object.keys(row.bandsPence); const council=councilByGss(row.gss);const links=council?[...contextLinks(council),...sisterLinks(council)]:[];
 const format=(n:number)=>isScotland?moneyPence(n):new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(n/100);
+const neighbours=nationNeighbours(nation,row.slug);
 const past=editions.at(-2)?.records.find(r=>r.gss===row.gss);
 const change=past?row.bandsPence.D-past.bandsPence.D:null;
 const metadata=councilMetadata({name:row.name,currentPence:row.bandsPence.D,previousPence:past?.bandsPence.D??null,basis:isScotland?'council tax excluding water and sewerage':'area average including community and police precepts, in whole pounds',wholePounds:!isScotland,percentageDigits:1,nation:isScotland?'Scotland':'Wales'});
@@ -22,5 +23,6 @@ const metadata=councilMetadata({name:row.name,currentPence:row.bandsPence.D,prev
 <section class="section" id="council-tax"><h2>{isScotland?'Every band, across three years':'Published Band D'}</h2><div class="table-wrap" tabindex="0" role="region" aria-label="Published charges"><table class="data"><caption>{row.name}, {current.basis.toLowerCase()}</caption><thead><tr><th scope="col">Band</th>{editions.map(e=><th scope="col" class="num">{e.year.replace('-','/')}</th>)}</tr></thead><tbody>{bands.map(b=><tr><th scope="row">{b}</th>{editions.map(e=><td class="num">{format(e.records.find(r=>r.gss===row.gss)!.bandsPence[b])}</td>)}</tr>)}</tbody></table></div>{editions.map(e=><SourceLine source={{...devolvedSource(e),url:e.source.fileUrl}} />)}<p class="caveat">Cash figures, not adjusted for inflation.</p></section>
 {row.componentsPounds && <section class="section"><h2>What makes up the Band D average?</h2><div class="fact-grid">{Object.entries(row.componentsPounds).map(([label,value])=><div class="card"><h3>{label==='county'?'County council':label==='community'?'Community councils':'Police authority'}</h3><p class="lede">{format(Number(value)*100)}</p></div>)}</div><SourceLine source={devolvedSource(current)} /><p class="caveat">Components are separately rounded to whole pounds and may not add to the rounded total.</p></section>}
 <section class="section"><h2>Your next steps</h2><div class="task-nav"><a class="card" href={isScotland?'https://www.saa.gov.uk/':'https://www.gov.uk/council-tax-bands'}><strong>Check your property's band</strong><span>Use the official valuation service.</span></a>{isScotland && <a class="card" href="https://www.scottishwater.co.uk/your-home/your-charges/your-charges-2026-2027"><strong>Water and sewerage charges</strong><span>Check the separate charges from Scottish Water.</span></a>}<a class="card" href="/help/"><strong>Help with the bill</strong><span>Official routes for discounts and support.</span></a></div></section>
+<nav class="section" aria-labelledby="other-councils" data-onward data-pagefind-ignore><h2 id="other-councils">Other councils in {nation}</h2><ul>{neighbours.map(n=><li><a href={nationPath(nation,n.slug)}>{n.name} council tax</a></li>)}<li><a href={nationPath(nation)}>Every council in {nation}, in one table</a></li></ul><p class="muted">The councils listed are the nearest by name, not by place.</p></nav>
 {links.length>0 && <section class="section"><h2>More about {row.name}</h2><ul>{links.map(l=><li><a href={l.url}>{l.name}: {row.name}</a></li>)}</ul></section>}
 </BaseLayout>

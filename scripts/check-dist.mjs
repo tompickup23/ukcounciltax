@@ -61,7 +61,7 @@ let networkPopulation = 0, networkElection = 0, parishPagesChecked = 0;
 const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
-if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
+if (Date.now() >= linksExpiry-(15 * 86400000)) console.warn(`Council payment links expire on ${new Date(linksExpiry).toISOString().slice(0, 10)}. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.`);
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -229,7 +229,7 @@ if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pag
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
-if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
+if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
 const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
 for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
@@ -361,6 +361,25 @@ else {
 }
 for (const asset of ["pagefind.js", "pagefind-worker.js"]) {
   if (!existsSync(join(DIST, "pagefind", asset))) failures.push(`missing search asset ${asset}`);
+}
+
+// The lazy council index must cover every profile once, with real destinations.
+const councilIndexFile = join(DIST, 'council-index.json');
+if (!existsSync(councilIndexFile)) failures.push('council-index.json missing');
+else {
+  const rows = JSON.parse(readFileSync(councilIndexFile, 'utf8'));
+  const expected = locs.map(url => new URL(url).pathname).filter(path => /^\/(?:councils|scotland|wales)\/[^/]+\/$/.test(path)).sort();
+  const actual = rows.map(row => row.url).sort();
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) failures.push('council index differs from profile routes');
+  if (new Set(rows.map(row => row.gss)).size !== rows.length) failures.push('duplicate council in search index');
+  for (const row of rows) {
+    if (!row.name || !row.search || !row.type || !row.region || !['England', 'Scotland', 'Wales'].includes(row.nation)) failures.push(`incomplete search row ${row.url}`);
+    for (const url of [row.url, row.budgetUrl, row.parishUrl].filter(Boolean)) {
+      if (!locs.includes(`${SITE_URL}${url}`) || !existsSync(join(DIST, url, 'index.html'))) failures.push(`missing council search destination ${url}`);
+    }
+    if (row.nation !== 'England' && (row.budgetUrl || row.parishUrl)) failures.push(`devolved search row has English destinations ${row.url}`);
+    if (row.budgetUrl && !readFileSync(join(DIST, row.budgetUrl, 'index.html'), 'utf8').includes('data-budget-game')) failures.push(`search links to an absent game ${row.budgetUrl}`);
+  }
 }
 
 // security.txt (RFC 9116): a mailto Contact, an Expires in the future and at

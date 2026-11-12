@@ -50,7 +50,7 @@ const description = available
     {nearby.neighbours.length > 0 && <div class="neighbour-row" data-play-neighbour>
       <h3>Play a neighbour</h3>
       <p class="small muted">{nearby.basis === 'county' ? `The other districts of ${nearby.county} that have a budget game.` : `Councils whose areas touch ${tax.name}'s in the ONS boundary file, and that have a budget game. The file is clipped to the coastline, so councils that face each other across an estuary or a tidal river may not touch in it.`}</p>
-      <ul class="pill-nav">{nearby.neighbours.map(n => <li><a href={`/tools/budget/${n.slug}/`}>{n.name}</a></li>)}</ul>
+      <ul class="pill-nav" data-pagefind-ignore>{nearby.neighbours.map(n => <li><a href={`/tools/budget/${n.slug}/`}>{n.name}</a></li>)}</ul>
     </div>}
     <p class="choose-another" data-choose-another><a href="/tools/budget/">Choose another council</a> from the full list of English billing authorities.</p>
     <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a></p>

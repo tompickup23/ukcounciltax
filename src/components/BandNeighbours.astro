@@ -55,7 +55,7 @@ const id = `neighbours-${slugify(place ?? nation)}`;
 {rows.length > 0 && (
   <div class="fact neighbours" data-fact data-band-neighbours data-nation={nation} data-band={band}>
     <div class="table-wrap" tabindex="0" role="region" aria-label={`Band ${band} with the bands either side, ${place}`}>
-      <table class="data" id={id}>
+      <table class="data" id={id} data-pagefind-ignore>
         <caption>Band {band} beside the published charge one band lower and one band higher, {place}, {year}</caption>
         <thead>
           <tr>

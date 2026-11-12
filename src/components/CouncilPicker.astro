@@ -122,7 +122,7 @@ const columns = 3 + (figure ? 1 : 0);
 </section>
 
 <script>
-  import { matchesCouncil, normalise } from "../lib/council-search";
+  import { matchesCouncil, matchingRegion, normalise } from "../lib/council-search";
 
   const POSTCODE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/;
   const collator = new Intl.Collator("en-GB");
@@ -151,13 +151,15 @@ const columns = 3 + (figure ? 1 : 0);
 
     const filter = () => {
       const query = normalise(input.value);
+      const regionQuery = matchingRegion(query, rows.map(row => row.dataset.region ?? ''));
       const postcode = POSTCODE.test(input.value.toUpperCase().trim());
       // In the order on the page, so the rows kept on a phone are the first under the current sort.
       const matched = [...table.querySelectorAll<HTMLTableRowElement>("tr[data-row]")].filter(
         (row) =>
           (!chosen.region || row.dataset.region === chosen.region) &&
           (!chosen.type || row.dataset.type === chosen.type) &&
-          (postcode || query.length === 0 || matchesCouncil(query, row.dataset.search ?? "")),
+          (postcode || query.length === 0 || (matchesCouncil(query, row.dataset.search ?? "")
+            && (!regionQuery || normalise(row.dataset.region ?? '') === regionQuery))),
       );
       const capped = !wide.matches && !expanded && matched.length > PHONE_ROWS;
       const listed = new Set(capped ? matched.slice(0, PHONE_ROWS) : matched);

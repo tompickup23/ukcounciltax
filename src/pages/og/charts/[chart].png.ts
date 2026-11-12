@@ -1,3 +1,4 @@
+import {cachedImageRoute} from "../../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from "astro";
 import { buildOg } from "../../../lib/og";
 import { CHART_THEMES, KIT_CHARTS, chartCard, chartPng, classChartNames, type KitChartName } from "../../../lib/kit-charts";
@@ -23,8 +24,8 @@ export function getStaticPaths() {
   return paths;
 }
 
-export const GET: APIRoute = async ({ props }) => {
+export const GET: APIRoute = cachedImageRoute(async ({ props }) => {
   const { name, theme } = props as { name: KitChartName; theme: Theme | "card" };
   const png = theme === "card" ? await chartCard(name as keyof typeof KIT_CHARTS) : chartPng(name, theme);
   return new Response(new Uint8Array(png), { headers: { "Content-Type": "image/png" } });
-};
+});

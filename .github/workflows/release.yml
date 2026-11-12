@@ -12,16 +12,47 @@ concurrency:
   cancel-in-progress: true
 jobs:
   site:
+    env:
+      BUILD_OG: ${{ github.event_name != 'pull_request' && '1' || '' }}
+    permissions:
+      contents: read
+      pull-requests: read
     runs-on: ubuntu-24.04
+    # Keep the full production gate within a 60 minute budget.
     timeout-minutes: 60
     steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
       - uses: actions/checkout@v7
+        if: steps.changes.outputs.docs-only != 'true'
       - uses: actions/setup-node@v7
+        if: steps.changes.outputs.docs-only != 'true'
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+        if: steps.changes.outputs.docs-only != 'true'
       - name: Read the three pinned RA source hashes
+        if: steps.changes.outputs.docs-only != 'true'
         id: ra-source-hashes
         run: |
           node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
@@ -32,6 +63,7 @@ jobs:
           console.log('hashes='+hashes.join('-'));
           NODE
       - name: Restore the pinned RA workbooks
+        if: steps.changes.outputs.docs-only != 'true'
         uses: actions/cache@v6.1.0
         with:
           path: |
@@ -40,17 +72,36 @@ jobs:
             data/raw/SG_2026-27.ods
           key: ${{ runner.os }}-ra-${{ steps.ra-source-hashes.outputs.hashes }}
       - name: Prepare and verify the pinned RA workbooks
+        if: steps.changes.outputs.docs-only != 'true'
         run: |
           node scripts/import-ra-budget.mjs
           git diff --exit-code -- data/national/budget.json
       - run: npm test
+        if: steps.changes.outputs.docs-only != 'true'
       - run: npm run check
+        if: steps.changes.outputs.docs-only != 'true'
+      - name: Hash the generated image inputs
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        id: image-inputs
+        run: |
+          image_key=$(node scripts/image-cache-key.mjs)
+          printf 'key=%s\n' "$image_key" >> "$GITHUB_OUTPUT"
+      - name: Cache generated images
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        uses: actions/cache@v6.1.0
+        with:
+          path: .cache/generated-images
+          key: ${{ runner.os }}-${{ runner.arch }}-images-${{ steps.image-inputs.outputs.key }}
       - run: npm run build
+        if: steps.changes.outputs.docs-only != 'true'
         env:
-          BUILD_OG: '1'
+          OG_IMAGE_CACHE: '1'
       - run: npm run test:dist
+        if: steps.changes.outputs.docs-only != 'true'
       - run: npm run test:text
+        if: steps.changes.outputs.docs-only != 'true'
       - run: node scripts/audit-links.mjs
+        if: steps.changes.outputs.docs-only != 'true'
       - run: |
           # The browser comes from Playwright's own host. Its system packages come from
           # Ubuntu's package servers, which could not be resolved on 11 November 2026 and
@@ -59,10 +110,13 @@ jobs:
           # browser tests that follow, loudly.
           npx playwright install chromium
           timeout --kill-after=10 180 npx playwright install-deps chromium || echo "::warning::Chromium system packages were not installed because the Ubuntu package servers could not be reached. The run continues with the packages the runner image holds."
+        if: steps.changes.outputs.docs-only != 'true'
       - run: npm run test:e2e -- --workers=2
+        if: steps.changes.outputs.docs-only != 'true'
       - run: npm run test:csp -- --workers=2
+        if: steps.changes.outputs.docs-only != 'true'
       - name: Publish verified production build
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: steps.changes.outputs.docs-only != 'true' && (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
         run: npx wrangler pages deploy dist --project-name ukcounciltax --branch main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -70,14 +124,14 @@ jobs:
       # Tells IndexNow (Bing and partners) about the live sitemap. Runs only after
       # a successful production publish and can never fail the release.
       - name: Notify IndexNow
-        if: success() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        if: steps.changes.outputs.docs-only != 'true' && (success() && github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
         continue-on-error: true
         timeout-minutes: 3
         run: |
           sleep 20
           node scripts/indexnow.mjs || echo "::warning::IndexNow submission failed; the deploy is unaffected"
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: steps.changes.outputs.docs-only != 'true' && (failure())
         with:
           name: browser-test-results
           path: test-results/
@@ -85,14 +139,35 @@ jobs:
 
   number-diff:
     name: number diff
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     permissions:
       contents: read
       pull-requests: write
     steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
       - name: Check out the PR head
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -100,6 +175,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out main
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         uses: actions/checkout@v7
         with:
           ref: main
@@ -107,6 +183,7 @@ jobs:
           persist-credentials: false
 
       - uses: actions/setup-node@v7
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         with:
           node-version-file: candidate/.nvmrc
           cache: npm
@@ -115,25 +192,28 @@ jobs:
             baseline/package-lock.json
 
       - name: Build main
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         working-directory: baseline
         run: |
           npm ci
           env -u BUILD_OG npm run build
 
       - name: Build the PR head
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         working-directory: candidate
         run: |
           npm ci
           env -u BUILD_OG npm run build
 
       - name: Compare page numbers
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         id: numbers
         continue-on-error: true
         working-directory: candidate
         run: node .github/scripts/number-review.mjs ../baseline/dist dist ../number-diff.txt
 
       - name: Keep the full number report
-        if: always()
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always())
         uses: actions/upload-artifact@v7
         with:
           name: number-diff
@@ -142,7 +222,7 @@ jobs:
           retention-days: 14
 
       - name: Update the number review comment
-        if: always() && github.event.pull_request.head.repo.full_name == github.repository
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always() && github.event.pull_request.head.repo.full_name == github.repository)
         uses: actions/github-script@v8
         with:
           script: |
@@ -161,14 +241,13 @@ jobs:
             else await github.rest.issues.createComment({...context.repo, issue_number: context.issue.number, body});
 
       - name: Require an allowed number comparison
-        if: always() && steps.numbers.outcome != 'success'
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always() && steps.numbers.outcome != 'success')
         run: |
           echo 'The number comparison found unallowed differences or could not complete.'
           exit 1
 
   design-check:
     name: design check
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     continue-on-error: true
@@ -176,18 +255,42 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
       - name: Check out the PR head
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
       - uses: actions/setup-node@v7
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         with:
           node-version-file: .nvmrc
           cache: npm
 
       - name: Install and build
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         run: |
           npm ci
           env -u BUILD_OG npm run build
@@ -197,15 +300,18 @@ jobs:
       # not an ancestor of main as checked on 9 November 2026. The private
       # source repository cannot be read using this repository's CI token.
       - name: Verify the pinned design checker
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         run: echo 'a304667cf7b5de3244bcb9d13bdb5c673a973053862520699ee1fdfcbb61d683  .github/design-check/design_check.py' | sha256sum --check
 
       - uses: astral-sh/setup-uv@v10.3.3
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         with:
           python-version: '3.12'
           enable-cache: true
           cache-dependency-glob: .github/design-check/design_check.py
 
       - name: Install headless Chromium for the checker
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         run: |
           # The browser comes from Playwright's own host. Its system packages come from
           # Ubuntu's package servers, which could not be resolved on 11 November 2026 and
@@ -216,6 +322,7 @@ jobs:
           timeout --kill-after=10 180 uv run --with 'playwright>=1.50,<2' python -m playwright install-deps chromium || echo "::warning::Chromium system packages were not installed because the Ubuntu package servers could not be reached. The run continues with the packages the runner image holds."
 
       - name: Serve the built PR
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         run: |
           npx astro preview --host 127.0.0.1 --port 4321 > "$RUNNER_TEMP/astro-preview.log" 2>&1 &
           echo "$!" > "$RUNNER_TEMP/astro-preview.pid"
@@ -229,10 +336,11 @@ jobs:
           exit 1
 
       - name: Capture both widths and themes
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request'
         run: node .github/scripts/design-review.mjs "$RUNNER_TEMP/design-check"
 
       - name: Keep the report and captures
-        if: always()
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always())
         uses: actions/upload-artifact@v7
         with:
           name: design-check
@@ -243,7 +351,7 @@ jobs:
           retention-days: 14
 
       - name: Update the design review comment
-        if: always() && github.event.pull_request.head.repo.full_name == github.repository
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always() && github.event.pull_request.head.repo.full_name == github.repository)
         uses: actions/github-script@v8
         env:
           DESIGN_SUMMARY: ${{ runner.temp }}/design-check/summary.md
@@ -264,7 +372,7 @@ jobs:
             else await github.rest.issues.createComment({...context.repo, issue_number: context.issue.number, body});
 
       - name: Stop the preview
-        if: always()
+        if: steps.changes.outputs.docs-only != 'true' && github.event_name == 'pull_request' && (always())
         run: |
           if [ -f "$RUNNER_TEMP/astro-preview.pid" ]; then
             kill "$(cat "$RUNNER_TEMP/astro-preview.pid")" || true

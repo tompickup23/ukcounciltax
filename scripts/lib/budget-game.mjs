@@ -62,7 +62,7 @@ export function budgetGameProblems(html,slug,dist) {
       }
     }
     for(const chart of [template?.content,published].filter(Boolean)){
-      const links=[...chart.querySelectorAll('[data-chart-png]')];fail(links.length===2,`round ${i} needs two PNG actions`);
+      const links=[...chart.querySelectorAll('[data-chart-png]')];fail(links.length===1 && /-light\.png$/.test(links[0]?.getAttribute('href') ?? ''),`round ${i} needs one light PNG action`);
       if(requireImages(dist))for(const link of links)fail(existsSync(join(dist,link.getAttribute('href'))),`missing PNG ${link.getAttribute('href')}`);
     }
   }

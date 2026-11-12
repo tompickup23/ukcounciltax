@@ -419,6 +419,11 @@ else {
 if (!homeChecked) failures.push("homepage not found for the face checks");
 if (requireImages(DIST)) {
   for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
+  if (existsSync(join(DIST, 'og'))) for (const image of files(join(DIST, 'og'))) {
+    const route = rel(image);
+    if (/^\/og\/(?:charts\/.+|budget\/[^/]+\/round-\d+)-dark\.png$/.test(route)) failures.push(`obsolete dark chart PNG: ${route}`);
+    if (/^\/og\/charts\/councils\/[^/]+\/map-(?:light|dark)\.png$/.test(route)) failures.push(`obsolete locator PNG: ${route}`);
+  }
   console.log(`dist check: ${chartPngLinks.length} chart PNG links resolve`);
 }
 for (const problem of headerProblems(readFileSync(join(DIST, "_headers"), "utf-8"))) failures.push(problem);

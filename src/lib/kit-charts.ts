@@ -17,7 +17,7 @@ import { national } from "./national-data";
 import { neighbourAreas, boundarySource } from "./boundaries";
 import { BURNLEY_PARTS, siteFigures } from "./figures";
 
-export const CHART_THEMES = ["light", "dark"] as const satisfies readonly Theme[];
+export const CHART_THEMES = ["light"] as const satisfies readonly Theme[];
 
 export const KIT_CHARTS = {
   "home-bill": {

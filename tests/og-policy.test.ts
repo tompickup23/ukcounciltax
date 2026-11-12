@@ -23,6 +23,7 @@ it('exempts only marked chart PNG downloads in a build without images', () => {
   expect(omittedChartPng(path, '<a data-chart-png>', false)).toBe(true);
   expect(omittedChartPng(path, '<a data-chart-png>', true)).toBe(false);
   expect(omittedChartPng(path, '<a>', false)).toBe(false);
+  expect(omittedChartPng('/og/charts/bands-dark.png', '<a data-chart-png>', false)).toBe(false);
   expect(omittedChartPng('/missing.png', '<a data-chart-png>', false)).toBe(false);
   expect(omittedChartPng('/og/charts/bands-missing.png', '<a data-chart-png>', false)).toBe(false);
 });
@@ -46,7 +47,7 @@ it('keeps the real link audit strict for main, partial trees and ordinary missin
 it('checks budget image files on main while retaining image links in PR HTML', () => {
   const dist = root();
   writeFileSync(join(dist, 'BudgetGame.js'), '');
-  const actions = '<a data-chart-png href="/og/budget/example/round-0-light.png">light</a><a data-chart-png href="/og/budget/example/round-0-dark.png">dark</a>';
+  const actions = '<a data-chart-png href="/og/budget/example/round-0-light.png">light</a>';
   const html = `<title>Example budget game 2026/27 | UK Council Tax</title><h1>Could you set Example's budget?</h1>
     <meta property="og:image" content="https://ukcounciltax.co.uk/og/budget/example.png">
     <div data-budget-game data-council-name="Example"><script data-budget-game-data type="application/json">{"year":"2026/27","rounds":[{"kind":"reserves"}]}</script>
@@ -59,8 +60,8 @@ it('checks budget image files on main while retaining image links in PR HTML', (
   vi.stubEnv('BUILD_OG', '');
   expect(problems()).toEqual([]);
   vi.stubEnv('BUILD_OG', '1');
-  expect(problems()).toHaveLength(5);
+  expect(problems()).toHaveLength(3);
   expect(problems()).toContain('example: static game card missing');
   vi.stubEnv('BUILD_OG', '');
-  expect(budgetGameProblems(html.replaceAll(actions, ''), 'example', dist).problems).toContain('example: round 0 needs two PNG actions');
+  expect(budgetGameProblems(html.replaceAll(actions, ''), 'example', dist).problems).toContain('example: round 0 needs one light PNG action');
 });

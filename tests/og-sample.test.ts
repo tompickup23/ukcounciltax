@@ -27,10 +27,8 @@ it('renders the homepage card, fallback card and Burnley share card through thei
   await png(council, {props: {tax: burnley.tax}}, 1200, 630);
 }, 60000);
 
-it('rasterises all four Burnley profile charts in both themes', async () => {
-  for (const name of ['bands', 'bill', 'position', 'map']) {
-    const light = await png(profile, {props: {name: `councils/burnley/${name}`, theme: 'light'}});
-    const dark = await png(profile, {props: {name: `councils/burnley/${name}`, theme: 'dark'}});
-    expect(light.equals(dark), `${name} themes must differ`).toBe(false);
+it('rasterises the three downloadable Burnley profile charts at twice their width', async () => {
+  for (const name of ['bands', 'bill', 'position']) {
+    await png(profile, {props: {name: `councils/burnley/${name}`, theme: 'light'}});
   }
 }, 60000);

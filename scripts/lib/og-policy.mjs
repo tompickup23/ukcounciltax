@@ -11,5 +11,5 @@ export function requireImages(dist, env = process.env) {
 // Page links, ordinary assets and unmarked PNG links still have to resolve.
 export function omittedChartPng(path, anchor, imagesRequired) {
   return !imagesRequired && /\bdata-chart-png(?:\s|=|>)/.test(anchor)
-    && /^\/og\/(?:charts|budget)\/[a-z0-9/-]+-(?:light|dark)\.png$/.test(path);
+    && /^\/og\/(?:charts|budget)\/[a-z0-9/-]+-light\.png$/.test(path);
 }

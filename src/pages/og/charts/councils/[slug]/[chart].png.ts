@@ -6,7 +6,7 @@ import type {Theme} from '../../../../../vendor/estate-kit/dist/src/index.js';
 export const prerender = true;
 export function getStaticPaths() {
   if (!buildOg) return [];
-  return profileChartNames().flatMap(name => {
+  return profileChartNames().filter(name => !name.endsWith('/map')).flatMap(name => {
     const [, slug, chart] = name.split('/');
     return CHART_THEMES.map(theme => ({params: {slug, chart: `${chart}-${theme}`}, props: {name, theme}}));
   });

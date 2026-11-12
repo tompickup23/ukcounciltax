@@ -22,4 +22,6 @@ The ten sampled UKCT URLs below are indexed. Each inspection reports its own UKC
 | `/councils/manchester/` | 3 November 2026, 13:20:25 |
 | `/councils/leeds/` | 8 November 2026, 17:28:51 |
 
+The full local production build at `bcb5a92` declares the UKCT homepage itself canonical and declares the corresponding UK Councils URL for the other nine sampled routes. Those nine recorded crawls predate the 8 November cross-domain canonical deployment. The indexed-copy results therefore do not establish acceptance of the newer canonical instructions. The homepage self-canonical matches the current local build.
+
 Times are copied as displayed by Search Console. A separate command-line live fetch received HTTP 403, so it supplied no current HTML evidence. Recheck this same sample after Google reports new crawls and compare with the published canonical policy. Do not change canonicals to force a result during the current staging period.

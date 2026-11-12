@@ -158,3 +158,19 @@ test("_headers allows exactly the inline scripts the built tree has", async () =
   const needed = [...hashesIn(join(ROOT, "dist")).keys()].sort();
   expect(allowed).toEqual(needed);
 });
+
+
+test('comparison choosers and calculated answer work under the production policy', async ({page}) => {
+  const found = await watch(page);
+  await page.route('https://api.postcodes.io/postcodes/**', route => route.fulfill({json:{result:{codes:{admin_district:'E07000117'}}}}));
+  await page.goto('/compare/');
+  await page.locator('[data-picker-filter="a"]').fill('BB11 1DU');
+  await page.getByRole('button',{name:'Find first council'}).click();
+  await expect(page.locator('[data-chosen="a"]')).toContainText('Selected: Burnley');
+  await page.locator('[data-picker-filter="b"]').fill('pendle');
+  await page.locator('[data-compare-choice="pendle"]').click();
+  await page.getByRole('button',{name:'Compare',exact:true}).click();
+  await expect(page.locator('[data-result-percentage]')).toContainText('% of the lower annual charge');
+  await expect(page.locator('[data-result-monthly-difference]')).toContainText('a month, spread over 12 months');
+  expect(found, describe(found)).toEqual([]);
+});

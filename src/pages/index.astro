@@ -57,7 +57,7 @@ const historyFrom = figures.series("england.area_bandd.history").points[0].label
     <a class="task-card" href="/precepts/"><TaskThumb kind="stack" /><strong>What makes up my bill</strong><span>Every body that charges your bill, with parish precepts and the complete Burnley schedule.</span><span class="task-source">{drawnFrom(["burnley.bandd.total"])}</span></a>
     <a class="task-card" href="/increases/"><TaskThumb kind="line" /><strong>Increases since {historyFrom}</strong><span>How much each council raised its share this year, and the England average over time.</span><span class="task-source">{drawnFrom(["england.area_bandd.history"])}</span></a>
     <a class="task-card" href="/tools/future-cost/"><TaskThumb kind="bands" /><strong>What could it cost</strong><span>Start from today's charge for your band and change the assumptions.</span><span class="task-source">{drawnFrom(["burnley.bands.unparished"], ", bands A to H")}</span></a>
-    <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>How do areas compare</strong><span>One area against the England average, same band, year and basis.</span><span class="task-source">{drawnFrom(["burnley.area_bandd.current", "england.area_bandd.current"])}</span></a>
+    <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>How do areas compare</strong><span>Two councils, same band, year and type. See the annual difference and its monthly equivalent.</span><span class="task-source">{drawnFrom(["burnley.area_bandd.current", "england.area_bandd.current"])}</span></a>
   </nav>
   {area && (
     <section class="section" aria-labelledby="home-average">

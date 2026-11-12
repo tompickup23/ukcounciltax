@@ -1,3 +1,4 @@
+import {cachedImageRoute} from "../../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from "astro";
 import { buildOg, renderOgCard } from "../../../lib/og";
 import {
@@ -17,7 +18,7 @@ export function getStaticPaths() {
   return councilPages().map(({ council, tax }) => ({ params: { slug: council.slug }, props: { gss: council.gss, tax } }));
 }
 
-export const GET: APIRoute = async ({ props }) => {
+export const GET: APIRoute = cachedImageRoute(async ({ props }) => {
   const { tax } = props as { tax: Authority };
   const data = loadYear(CURRENT_YEAR);
   const png = await renderOgCard({
@@ -27,4 +28,4 @@ export const GET: APIRoute = async ({ props }) => {
     source: `MHCLG ${tableName(data.source.bandTable)}, ${longDate(data.source.published)}`,
   });
   return new Response(png, { headers: { "Content-Type": "image/png" } });
-};
+});

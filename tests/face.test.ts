@@ -5,7 +5,7 @@ const header = (inner = "") => `<div class="site-header-bar"><header class="site
 const footer = (inner = '<select data-theme-select><option>System theme</option></select>') => `<footer class="site-footer"><div class="shell">${inner}</div></footer>`;
 const chart = (source = "Source: Burnley Borough Council, Council Tax Charges 2026/27, page 1, 2026/27.") =>
   `<figure class="ek-figure" data-figure="a b"><svg viewBox="0 0 600 387" role="img" aria-label="A bar" class="ek-chart"><rect x="0" y="0" width="1" height="1"/><text x="4" y="380">${source}</text></svg></figure>`;
-const actions = '<div class="chart-actions" data-chart-actions><a href="/og/charts/home-bill-light.png" data-chart-png>light</a><a href="/og/charts/home-bill-dark.png" data-chart-png>dark</a></div>';
+const actions = '<div class="chart-actions" data-chart-actions><a href="/og/charts/home-bill-light.png" data-chart-png>light</a></div>';
 const door = '<form class="postcode-door" data-postcode-door><input id="postcode-home"><noscript><p><a href="/councils/">Browse all councils</a></p></noscript></form>';
 const finder = '<section class="council-finder" data-council-finder><input id="council-name" disabled><noscript><p><a href="/councils/">Browse all councils</a></p></noscript></section>';
 const task = (svg = '<svg viewBox="0 0 160 64" class="task-thumb" aria-hidden="true"><rect/></svg>') => `<a class="task-card" href="/x/">${svg}<strong>Task</strong></a>`;
@@ -16,7 +16,7 @@ describe("the face checks", () => {
   it("pass a sound homepage", () => {
     expect(homeProblems(home())).toEqual([]);
     expect(chromeProblems(header() + footer())).toEqual([]);
-    expect(chartProblems(home())).toEqual({ problems: [], pngs: ["/og/charts/home-bill-light.png", "/og/charts/home-bill-dark.png"] });
+    expect(chartProblems(home())).toEqual({ problems: [], pngs: ["/og/charts/home-bill-light.png"] });
   });
 
   it("catch a finder after the bill card or without its fallback", () => {
@@ -45,7 +45,7 @@ describe("the face checks", () => {
   });
 
   it("catch a kit chart without its actions", () => {
-    expect(chartProblems(chart()).problems).toEqual(["1 kit charts but 0 chart actions", "0 chart PNG links for 1 charts in two themes"]);
+    expect(chartProblems(chart()).problems).toEqual(["1 kit charts but 0 chart actions"]);
   });
 
   it("catch a CSP that stops the kit's inline style attributes", () => {
@@ -60,4 +60,11 @@ it("requires one source and one table control in a chart fact", () => {
   expect(chartProblems(fact).problems).toEqual([]);
   expect(chartProblems(fact.replace('</div>', '<p class="source-line">Duplicate</p></div>')).problems).toContain('a kit chart fact must hold exactly one source line');
   expect(chartProblems(fact.replace('</details>', '</details><a>The figures as a table</a>')).problems).toContain('a kit chart fact must hold exactly one table control');
+});
+
+it('allows no PNG for a locator and requires exactly one light download for other charts', () => {
+  expect(chartProblems(chart() + '<div data-chart-actions data-chart="councils/burnley/map"></div>').problems).toEqual([]);
+  expect(chartProblems(chart() + actions.replace('data-chart-actions', 'data-chart-actions data-chart="councils/burnley/map"')).problems).toContain('a locator map must not offer a PNG');
+  expect(chartProblems(chart() + actions.replace('-light.png', '-dark.png')).problems).toContain('a chart must offer exactly one light PNG');
+  expect(chartProblems(chart() + actions.replace('</div>', '<a href="/og/charts/another-light.png" data-chart-png>Duplicate</a></div>')).problems).toContain('a chart must offer exactly one light PNG');
 });

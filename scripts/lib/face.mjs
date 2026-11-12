@@ -55,7 +55,17 @@ export function chartProblems(page) {
     if (count(fact, /The figures as a table/g) !== 1) problems.push("a kit chart fact must hold exactly one table control");
   }
   const pngs = [...html.matchAll(/<a\b[^>]*href="([^"]+\.png)"[^>]*\bdata-chart-png\b/gi)].map((m) => m[1]);
-  if (pngs.length !== charts * 2) problems.push(`${pngs.length} chart PNG links for ${charts} charts in two themes`);
+  let expected = 0;
+  for (const match of html.matchAll(/<div\b[^>]*\bdata-chart-actions\b[^>]*>/gi)) {
+    const block = element(html.slice(match.index), /^<div/) ?? '';
+    const name = /\bdata-chart="([^"]+)"/.exec(match[0])?.[1] ?? '';
+    const locator = /^councils\/[a-z0-9-]+\/map$/.test(name);
+    const links = [...block.matchAll(/<a\b[^>]*href="([^"]+\.png)"[^>]*\bdata-chart-png\b/gi)].map(m => m[1]);
+    expected += locator ? 0 : 1;
+    if (locator && links.length) problems.push('a locator map must not offer a PNG');
+    if (!locator && (links.length !== 1 || !links[0].endsWith('-light.png'))) problems.push('a chart must offer exactly one light PNG');
+  }
+  if (pngs.length !== expected) problems.push(`${pngs.length} chart PNG links but ${expected} expected`);
   return { problems, pngs };
 }
 

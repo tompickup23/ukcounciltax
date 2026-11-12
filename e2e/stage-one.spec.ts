@@ -46,12 +46,12 @@ test('comparison restores its source values, swaps and restores history', async 
 
 test('pickers restrict the second council and support filtered selection', async ({page}) => {
   await page.goto('/compare/');
-  await page.getByLabel('Filter first council names').fill('burnley');
-  await page.getByLabel('First council', {exact:true}).selectOption('burnley');
+  await page.getByLabel('First council, county, region or postcode', {exact:true}).fill('burnley');
+  await page.locator('[data-chooser-matches="a"] [data-compare-choice="burnley"]').click();
   await expect(page.locator('#council-b option[value="manchester"]')).toHaveCount(0);
   await expect(page.locator('#council-b option[value="burnley"]')).toHaveCount(0);
-  await page.getByLabel('Filter second council names').fill('pendle');
-  await page.getByLabel('Second council', {exact:true}).selectOption('pendle');
+  await page.getByLabel('Second council, county, region or postcode', {exact:true}).fill('pendle');
+  await page.locator('[data-chooser-matches="b"] [data-compare-choice="pendle"]').click();
   await page.getByLabel('Band', {exact:true}).selectOption('A');
   await page.getByRole('button', {name: 'Compare', exact:true}).click();
   await expect(page.locator('[data-result-side="a"]')).toContainText('£1,699.61');
@@ -92,7 +92,8 @@ test('compare: the result takes focus after Compare, and band or year changes up
   await expect(page.locator('[data-comparison-results]')).toBeVisible();
   await expect(page.locator('[data-result-side="a"]')).toContainText('£1,699.61');
   await expect(page).toHaveURL(/band=A/);
-  await page.getByLabel('Second council', {exact: true}).selectOption('hyndburn');
+  await page.getByLabel('Second council, county, region or postcode', {exact:true}).fill('hyndburn');
+  await page.locator('[data-chooser-matches="b"] [data-compare-choice="hyndburn"]').click();
   await expect(page.locator('[data-comparison-results]')).toBeHidden();
 });
 

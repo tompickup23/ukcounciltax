@@ -312,3 +312,83 @@ The six review items are fixed separately. Horizontal band bars keep all labels 
 The full Node 22.23.4 gate passed: Astro check without diagnostics, `BUILD_OG=1` build, 309 unit tests, distribution and text checks, 89 CSP tests with one worker and 250 browser tests with two workers. The build contains 909 HTML pages, 908 sitemap URLs, 4,986 valid chart PNG links and all 2,368 profile PNGs. The internal link audit passed all 68,818 destinations.
 
 The fresh current-main comparison at `1500163` passed with 515 differing pages and no differences outside existing allowed paths. Exact profile amounts and histories match main. The refreshed measurements, captures and per-page register are recorded in `docs/A3-REVIEW-2026-11-10.md` and `docs/A3-NUMBER-REVIEW-MAIN-2026-11-10.tsv`. This supersedes the earlier clipped-label limitation and original build measurements for the revised branch. No kit, source, gate or tolerance was changed. No merge or deployment was performed.
+
+## Release pipeline efficiency, 10 November 2026
+
+The site job keeps its 60 minute timeout, which was already present at base `8f7002f`. All three existing check names remain. Each job first checks changed paths through GitHub's API. Only `docs/**` and root `*.md` changes qualify for the documents only result. Mixed changes, renames from code, incomplete file lists and manual runs retain the gate. The documents only result applies to pull requests only. Every push to main runs the full gate and publishes, because the release group cancels a running release when a newer push arrives: a documents only push that skipped would leave a cancelled code change unpublished. The documents only path skips checkout, dependencies, tests, builds, browsers and publication, while reporting successful checks.
+
+Code pull requests build without `BUILD_OG`. The unit suite renders the actual homepage card, the generic home card, Burnley's share card and all four Burnley profile chart PNGs in both themes. The production job keeps `BUILD_OG=1` across the build and checks. Missing images fail production checks even if the whole image directory is absent. A PR without images retains chart actions, source, figure and page link checks. Only marked chart PNG downloads may be absent.
+
+Generated images use an exact content key without fallback keys. The key covers every file under `data/` and `src/`, including the downloaded raw sources, vendored kit, drawing code, palette, fonts and OG routes, plus package manifests, Astro configuration and cache implementation. The workflow calculates it after verifying the pinned RA files. Platform, architecture and Node version also contribute. The renderer uses the same key internally. The sample tests do not enable the image cache. The first merged run may still need to populate the main cache because [GitHub keeps child branch caches separate from their parent](https://docs.github.com/en/actions/reference/workflows-and-actions/dependency-caching#restrictions-for-accessing-a-cache). A regression test changes just one England Band D figure by one penny in a temporary fixture, preserving every other byte, and proves the key changes and returns to its original value when reverted.
+
+Profile chart options are reused per council within a build. The parish source is read once by the dist check. The pinned game number fixture is unchanged.
+
+Timing evidence uses successful site job durations, rather than queue time. The requested before runs are:
+
+| Run | Site job | Build | Dist check | Browser suite | CSP suite |
+| --- | --- | --- | --- | --- | --- |
+| [Main after PR 47](https://github.com/tompickup23/ukcounciltax/actions/runs/42827264926) | 39m07s | 12m36s | 1m58s | 12m02s | 6m09s |
+| [PR 48 first run](https://github.com/tompickup23/ukcounciltax/actions/runs/42860213990) | 39m43s | 13m41s | 1m55s | 12m18s | 6m15s |
+| [PR 48 latest run](https://github.com/tompickup23/ukcounciltax/actions/runs/42869199791) | 34m09s | 11m37s | 1m37s | 10m37s | 5m21s |
+
+The after runs use code commit `886d002` on `chore/ci-speed`:
+
+| Run | Site job | Build | Dist check | Browser suite | CSP suite |
+| --- | --- | --- | --- | --- | --- |
+| [PR after, images omitted](https://github.com/tompickup23/ukcounciltax/actions/runs/42908100114) | 19m37s | 2m14s | 1m38s | 7m14s | 3m46s |
+| [Full production gate, cold cache](https://github.com/tompickup23/ukcounciltax/actions/runs/42908112615) | 23m14s | 9m17s | 1m19s | 5m48s | 3m05s |
+| [Full production gate, warm cache](https://github.com/tompickup23/ukcounciltax/actions/runs/42911813708) | 20m30s | 2m23s | 1m43s | 7m30s | 4m01s |
+
+The two full production gate runs use `workflow_dispatch` on this branch with `BUILD_OG=1`. They execute main's verification steps, but are not post-merge main runs: publication and IndexNow were skipped by the existing branch guard. No merge or deployment was performed. An actual post-merge main timing remains to be recorded after an authorised merge. The warm run log confirms an exact image cache hit.
+
+These are observed runs, not controlled benchmarks. Browser durations varied despite unchanged suites and worker counts. The measured 19m37s PR gate and 20m30s warm production gate do not yet meet the plan's under 10 minute PR and under 20 minute merge-to-live targets. The PR browser and CSP steps alone took 11 minutes.
+
+The full local baseline from `8f7002f` took 1,743.54 seconds. The updated build at `886d002` with an empty cache took 1,097.88 seconds; its warm build took 111.20 seconds. These local elapsed times are separate from the CI timings above.
+
+Both updated full builds match all 909 baseline HTML files byte for byte and all 5,640 image files by SHA256. A further comparison found identical hashes for all 7,691 output files, including search assets, headers and sitemaps. All 5,638 generated PNGs were reused on the warm build without rewriting a cache file. The other PNG is the existing `public/apple-touch-icon.png`; the remaining image is the favicon SVG. The reproducible comparison is `node scripts/compare-builds.mjs <before> <after>`.
+
+Verification passed Astro check, unit tests, the full dist check, text sweep, 68,838 internal link destinations, all 250 browser tests and all 89 production CSP tests. The PR's build without images also passed dist, text, link, browser and CSP checks. CI runs unit tests before building, so its 304 passing unit tests retain the 20 existing built-output skips. A separate local run of the eight test files containing those checks passed all 38 tests after the full build. Production checked 909 share-card references and all 4,996 chart PNG links. No gate, fixture, browser suite or worker count was reduced.
+
+## Council payment links refresh, 11 November 2026
+
+Imported UK Places `src/data/local-links.json` at commit `2bea52dbe74c7a689a500b3b73ff63dcefb900b6`, SHA256 `085eb3b0511aca0f3fad79a9aa3f0decd5a7b5529240229ceed7731b3fb0b617`. The export and UK Places check dates are both 11 November 2026. The existing GOV.UK Local Links Manager source and service identifiers are unchanged.
+
+The reviewed export adds 19 council tax links, changes 15 and removes Halton and Aberdeen City only. UK Places recorded HTTP 404 for Halton and a failed fetch for Aberdeen City. There are 316 imported links: 266 English, 29 Scottish and 21 Welsh. English profiles show 266 payment links and 30 existing fallback notices. The Scottish and Welsh entries remain in the imported data; their page templates do not consume these payment links.
+
+The 91 day expiry rule is unchanged, with the new boundary at 10 February 2027, 00:00 UTC. Expiry messages no longer claim the previous January boundary. No charge, budget, population or other published figure is refreshed. The per authority link changes and permitted page differences are recorded in the pull request. No merge or deployment is part of this refresh.
+
+
+Validation on Node 22.23.4: `npm test` passed 302 tests before the build, with 20 checks deferred until built pages existed. A targeted post-build run passed all 61 tests in the 12 relevant files, including every deferred check and the payment expiry boundary. Astro checked 248 files with no diagnostics. The full `BUILD_OG=1` build, distribution check for 909 pages and 908 sitemap URLs, and text sweep over 916 files passed. All 308 browser tests passed against the local preview, which was then stopped. An exact link audit verified all 266 rendered payment URLs and their new source dates, plus all 30 fallback notices. No other dataset or figure rendering changed.
+
+
+## Typed council search NV4, 11 November 2026
+
+The site search now places matching councils above full text results, with separate counts and links to the profile, budget game and parish page where held. The lazy index covers all 350 profiles: 296 English, 32 Scottish and 22 Welsh. It offers 287 games and 214 parish destinations from the existing route and return data. The nine absent returns stay absent. Scottish and Welsh rows identify their nation and offer no game.
+
+The implementation copies the UK Councils search pattern at `993ed703f39fe5ea19e11987d55e04ee7134c028`, with no runtime imports between repositories. Matching uses this site's shared picker helper, including official names, counties and regions. A complete region name selects exactly that region in the dialog, directory picker and name finder. Lancashire returns its twelve districts. Exact council names lead the results; twelve council rows appear initially, with a button for the next twelve. Full text results retain excerpts and gain page type labels. Budget pages use the label Budget because nine explain an absent return. Council-name tables and neighbour navigation are excluded from Pagefind, with their visible figures retained.
+
+The first keystrokes, keyboard navigation, empty results, pagination, stale responses and independent index failures are tested. The directory link remains useful without JavaScript. Queries stay in memory; this adds no query storage or security permission. The comparison tool and its behaviour are unchanged.
+
+Measurements against a fresh build of main `3c8f547da1c97f3442be57ec146cbeb50fd6584a`: Burnley full text matches fall from 42 to 17. The index is 91,146 bytes, or 10,432 gzip bytes. Burnley's HTML changes from 144,672 bytes (32,189 gzip) to 143,006 bytes (31,497 gzip). These are HTML measurements, not total page transfer: the search script moves from inline code to a separately cached bundle, and the council index loads on a search.
+
+Final validation on Node 22.23.4: the full unit run passed 318 tests, with 20 checks deferred until built pages existed. The final post-build run passed all 75 tests in 12 files, including every deferred check and the revised matching tests. Astro checked 253 files without diagnostics. The full `BUILD_OG=1` build, distribution checks for 909 pages and 908 sitemap URLs, all 4,996 chart PNG links and the text sweep over 917 files passed. All 348 browser tests and all 95 actual-header CSP tests passed with two workers. The unchanged pinned design checker passed the homepage, Burnley profile and Burnley game at 390 and 1440 in both themes with zero findings. The final dialog was visually inspected at 375 and 1440 in both themes. An earlier parallel built-page check hit the existing five-second budget fixture timeout; its unchanged rerun and the final post-build run both passed. No assertion or timeout was relaxed. Captures and logs remain local; the preview was stopped.
+
+This branch follows the unmerged payment-link refresh in PR 58. The static number comparison permits only that parent's 267 profile source-date and citation changes; search introduces no further printed number difference. All council amounts, chart text and the four financial source hashes are unchanged. No merge, tag or deployment was performed.
+
+## Comparison improvements, session 4, 11 November 2026
+
+Built on the completed typed-search branch (PR 59), with its payment-link parent PR 58. This preserves the preceding sessions without merging or publishing them. UK Councils is unchanged.
+
+The comparison answer now precedes its form. It states which council has the higher annual charge, the absolute difference, the difference as a percentage of the lower charge, and the annual difference divided by twelve. Both calculations and their rounding are visible, with the published source beside the annual difference. The twelve-month amount is a budgeting equivalent, not a council instalment. The previous ten-instalment figures are removed from this comparison; both annual charges remain unchanged.
+
+Both compact choosers use the existing picker metadata and matching for names, counties and regions. Postcode requests run on Find or Enter, time out after ten seconds, and cannot overwrite a later query or selection. Cancelled requests clear their progress message. The second chooser retains the existing group restrictions. Searches and postcodes stay out of storage and shared URLs. Without scripts, a complete council list opens two profile tables in separate tabs. The homepage card now describes the two-council comparison.
+
+The PR 52 checks for refusals, missing years, shared-link normalisation, London grouping, history, swapping and in-place updates remain. Its select interactions are replaced with equivalent search-button interactions in a separate test commit. New browser checks derive the three answer figures from the held data for two pairs and cover both postcode choosers, recovery, stale replies, county and region matching, keyboard use, accessibility and the no-script fallback.
+
+The initial interactive content reveals after state restoration while retaining its layout. The design check measured zero cumulative layout shift for empty and shared comparisons at both widths in both themes after this change. Browser tests now guard that behaviour as well as the no-script fallback.
+
+Final validation on Node 22.23.4: the full unit run passed 318 tests, with 20 built-page checks deferred. The final post-build run passed all 83 tests in the 12 relevant files, including every deferred check; 49 source safeguards also passed after the final changes. Astro checked 255 files with no diagnostics. The full `BUILD_OG=1` build passed, followed by distribution checks for 909 pages, 908 sitemap URLs and 4,996 chart PNG links, the text sweep over 917 files, and an audit of 71,128 internal-link destinations. All 376 browser tests and all 96 actual-header CSP tests passed with two workers. The unchanged pinned design checker passed the homepage, empty comparison and shared comparison at 390 and 1440 in both themes with zero findings. The final comparison was visually inspected at 375 and 1440 in both themes. The preview and manual browser were stopped.
+
+One post-build budget fixture check reached its existing five-second timeout while other checks ran concurrently. The complete unchanged post-build suite then passed on its own. No assertion or timeout was relaxed. Validation also caught and fixed a cancelled postcode progress message and initial layout movement; regression tests cover both.
+
+Against the session 3 build, only `index.html` and `compare/index.html` differ. All 5,639 PNGs are byte-for-byte identical, no HTML or PNG was added or removed, and the numeric comparison reports zero pages with changed printed values. The 296 comparison rows, bands, years and source metadata match exactly after removing the added search metadata. The financial source files and public security headers are unchanged. No merge, tag or deployment was performed.

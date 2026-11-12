@@ -18,6 +18,7 @@
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { requireImages } from "./lib/og-policy.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
@@ -61,7 +62,8 @@ let networkPopulation = 0, networkElection = 0, parishPagesChecked = 0;
 const linksChecked = JSON.parse(readFileSync('data/council-links.json', 'utf8')).source.checkedOn;
 const linksExpiry = Date.parse(`${linksChecked}T00:00:00Z`) + 91 * 86400000;
 if (Date.now() >= linksExpiry) throw new Error('A3 stop: council payment links are stale. Rerun UK Places local links and import the reviewed data commit here.');
-if (Date.now() >= linksExpiry - 15 * 86400000) console.warn('Council payment links expire after 3 January 2027. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.');
+if (Date.now() >= linksExpiry-(15 * 86400000)) console.warn(`Council payment links expire on ${new Date(linksExpiry).toISOString().slice(0, 10)}. Rerun UK Places local links, review the new hash and import-council-links.mjs before then.`);
+let parishSource;
 const chartPngLinks = [];
 let homeChecked = false;
 
@@ -159,7 +161,7 @@ for (const path of files(DIST)) {
 
   if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
     parishPagesChecked++;
-    const parishSource = JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
+    parishSource ??= JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
     const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
     if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
   }
@@ -229,7 +231,7 @@ if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pag
 if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
-if (paymentLinks !== 254 || paymentAbsent !== 42) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 254 and 42`);
+if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
 const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
 for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
@@ -324,7 +326,7 @@ if (existsSync(bandFile)) {
 
 // When the build rendered cards (BUILD_OG=1), every og:image must resolve to
 // a card in the tree. An iteration build renders none and skips this.
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   const devolvedCards = ['scotland', 'wales'].flatMap(nation => existsSync(join(DIST, 'og', nation)) ? [...files(join(DIST, 'og', nation))].filter(path => path.endsWith('.png')) : []);
   if (devolvedCards.length !== 54) failures.push(`expected 54 devolved cards, found ${devolvedCards.length}`);
   let cards = 0;
@@ -363,6 +365,25 @@ for (const asset of ["pagefind.js", "pagefind-worker.js"]) {
   if (!existsSync(join(DIST, "pagefind", asset))) failures.push(`missing search asset ${asset}`);
 }
 
+// The lazy council index must cover every profile once, with real destinations.
+const councilIndexFile = join(DIST, 'council-index.json');
+if (!existsSync(councilIndexFile)) failures.push('council-index.json missing');
+else {
+  const rows = JSON.parse(readFileSync(councilIndexFile, 'utf8'));
+  const expected = locs.map(url => new URL(url).pathname).filter(path => /^\/(?:councils|scotland|wales)\/[^/]+\/$/.test(path)).sort();
+  const actual = rows.map(row => row.url).sort();
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) failures.push('council index differs from profile routes');
+  if (new Set(rows.map(row => row.gss)).size !== rows.length) failures.push('duplicate council in search index');
+  for (const row of rows) {
+    if (!row.name || !row.search || !row.type || !row.region || !['England', 'Scotland', 'Wales'].includes(row.nation)) failures.push(`incomplete search row ${row.url}`);
+    for (const url of [row.url, row.budgetUrl, row.parishUrl].filter(Boolean)) {
+      if (!locs.includes(`${SITE_URL}${url}`) || !existsSync(join(DIST, url, 'index.html'))) failures.push(`missing council search destination ${url}`);
+    }
+    if (row.nation !== 'England' && (row.budgetUrl || row.parishUrl)) failures.push(`devolved search row has English destinations ${row.url}`);
+    if (row.budgetUrl && !readFileSync(join(DIST, row.budgetUrl, 'index.html'), 'utf8').includes('data-budget-game')) failures.push(`search links to an absent game ${row.budgetUrl}`);
+  }
+}
+
 // security.txt (RFC 9116): a mailto Contact, an Expires in the future and at
 // most a year ahead, and a Canonical on this origin. Astro copies it from
 // public/.well-known; a build that drops the dot directory fails here.
@@ -396,8 +417,13 @@ else {
 // chart PNG link resolves to a file. The CSP still allows the kit's inline style
 // attributes (A5 brief, section 5).
 if (!homeChecked) failures.push("homepage not found for the face checks");
-if (existsSync(join(DIST, "og"))) {
+if (requireImages(DIST)) {
   for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
+  if (existsSync(join(DIST, 'og'))) for (const image of files(join(DIST, 'og'))) {
+    const route = rel(image);
+    if (/^\/og\/(?:charts\/.+|budget\/[^/]+\/round-\d+)-dark\.png$/.test(route)) failures.push(`obsolete dark chart PNG: ${route}`);
+    if (/^\/og\/charts\/councils\/[^/]+\/map-(?:light|dark)\.png$/.test(route)) failures.push(`obsolete locator PNG: ${route}`);
+  }
   console.log(`dist check: ${chartPngLinks.length} chart PNG links resolve`);
 }
 for (const problem of headerProblems(readFileSync(join(DIST, "_headers"), "utf-8"))) failures.push(problem);

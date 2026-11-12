@@ -10,6 +10,11 @@
  * shifts and nothing shows that would not work. Nothing is stored: not the
  * query, not the postcode, not the council chosen.
  *
+ * Below 600 px the table has no scroll of its own (W7, 11 November 2026): a
+ * list that scrolls inside a page that scrolls traps the thumb. With script,
+ * a list longer than PHONE_ROWS shows that many and a button for the rest;
+ * without script the whole table sits in the page.
+ *
  * A postcode goes to api.postcodes.io from the browser, as the postcode door
  * does, and nowhere else. The district code that comes back is matched to a
  * row in this table, so a postcode lands on the same destination as a click.
@@ -111,15 +116,18 @@ const columns = 3 + (figure ? 1 : 0);
         ))}
       </table>
     </div>
+    <button type="button" class="button secondary picker-more" data-picker-more hidden></button>
     {figure && <SourceLine source={figure.source} />}
   </div>
 </section>
 
 <script>
-  import { matchesCouncil, normalise } from "../lib/council-search";
+  import { matchesCouncil, matchingRegion, normalise } from "../lib/council-search";
 
   const POSTCODE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/;
   const collator = new Intl.Collator("en-GB");
+  /** The most rows a phone lists before the button for the rest. */
+  const PHONE_ROWS = 12;
 
   for (const picker of document.querySelectorAll<HTMLElement>("[data-council-picker]")) {
     const form = picker.querySelector<HTMLFormElement>("[data-picker-form]")!;
@@ -130,6 +138,9 @@ const columns = 3 + (figure ? 1 : 0);
     const tailHead = table.querySelector<HTMLTableRowElement>("[data-picker-tail]");
     const rows = [...table.querySelectorAll<HTMLTableRowElement>("tr[data-row]")];
     const total = rows.length;
+    const more = picker.querySelector<HTMLButtonElement>("[data-picker-more]");
+    const wide = window.matchMedia("(min-width: 600px)");
+    let expanded = false;
     const chosen = { region: "", type: "" };
     let sortKey = "name";
     let direction = 1;
@@ -140,19 +151,41 @@ const columns = 3 + (figure ? 1 : 0);
 
     const filter = () => {
       const query = normalise(input.value);
+      const regionQuery = matchingRegion(query, rows.map(row => row.dataset.region ?? ''));
       const postcode = POSTCODE.test(input.value.toUpperCase().trim());
-      let shown = 0;
-      for (const row of rows) {
-        const visible =
+      // In the order on the page, so the rows kept on a phone are the first under the current sort.
+      const matched = [...table.querySelectorAll<HTMLTableRowElement>("tr[data-row]")].filter(
+        (row) =>
           (!chosen.region || row.dataset.region === chosen.region) &&
           (!chosen.type || row.dataset.type === chosen.type) &&
-          (postcode || query.length === 0 || matchesCouncil(query, row.dataset.search ?? ""));
-        row.hidden = !visible;
-        if (visible) shown += 1;
-      }
+          (postcode || query.length === 0 || (matchesCouncil(query, row.dataset.search ?? "")
+            && (!regionQuery || normalise(row.dataset.region ?? '') === regionQuery))),
+      );
+      const capped = !wide.matches && !expanded && matched.length > PHONE_ROWS;
+      const listed = new Set(capped ? matched.slice(0, PHONE_ROWS) : matched);
+      for (const row of rows) row.hidden = !listed.has(row);
       if (tailHead) tailHead.hidden = !rows.some((row) => !row.hidden && row.parentElement === tailHead.parentElement);
-      count.textContent = `${shown} of ${total} shown`;
+      if (more) {
+        more.hidden = !capped;
+        more.textContent = matched.length === total ? `Show all ${total} councils` : `Show all ${matched.length} matching councils`;
+      }
+      if (!capped) count.textContent = `${matched.length} of ${total} shown`;
+      else if (matched.length === total) count.textContent = `First ${PHONE_ROWS} of ${total} listed`;
+      else count.textContent = `${matched.length} of ${total} match, first ${PHONE_ROWS} listed`;
     };
+
+    // A new query or chip starts from the short list again.
+    const refilter = () => {
+      expanded = false;
+      filter();
+    };
+
+    more?.addEventListener("click", () => {
+      const before = new Set(rows.filter((row) => !row.hidden));
+      expanded = true;
+      filter();
+      [...table.querySelectorAll<HTMLTableRowElement>("tr[data-row]")].find((row) => !row.hidden && !before.has(row))?.querySelector("a")?.focus();
+    });
 
     const sort = () => {
       for (const group of groups) {
@@ -172,6 +205,7 @@ const columns = 3 + (figure ? 1 : 0);
         if (th.dataset.sortKey === sortKey) th.setAttribute("aria-sort", direction === 1 ? "ascending" : "descending");
         else th.removeAttribute("aria-sort");
       }
+      filter();
     };
 
     for (const button of picker.querySelectorAll<HTMLButtonElement>("[data-sort]")) {
@@ -187,12 +221,14 @@ const columns = 3 + (figure ? 1 : 0);
     // and open above the table from 600 px wide. The drawer says how many are on.
     const filters = picker.querySelector<HTMLDetailsElement>("[data-picker-filters]");
     const filterCount = picker.querySelector<HTMLElement>("[data-filter-count]");
-    const wide = window.matchMedia("(min-width: 600px)");
     const fitFilters = () => {
       if (filters) filters.open = wide.matches;
     };
     fitFilters();
-    wide.addEventListener("change", fitFilters);
+    wide.addEventListener("change", () => {
+      fitFilters();
+      filter();
+    });
 
     for (const chip of picker.querySelectorAll<HTMLButtonElement>("[data-chip]")) {
       chip.addEventListener("click", () => {
@@ -201,18 +237,18 @@ const columns = 3 + (figure ? 1 : 0);
         for (const other of picker.querySelectorAll<HTMLButtonElement>(`[data-chip="${kind}"]`)) other.setAttribute("aria-pressed", String(other === chip));
         const on = [chosen.region, chosen.type].filter(Boolean).length;
         if (filterCount) filterCount.textContent = on === 0 ? "(none on)" : `(${on} on)`;
-        filter();
+        refilter();
       });
     }
 
-    input.addEventListener("input", filter);
+    input.addEventListener("input", refilter);
     filter();
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const postcode = input.value.toUpperCase().replace(/\s+/g, " ").trim();
       if (!POSTCODE.test(postcode)) {
-        const first = rows.find((row) => !row.hidden)?.querySelector("a");
+        const first = table.querySelector<HTMLAnchorElement>("tr[data-row]:not([hidden]) a");
         if (first) first.focus();
         return;
       }
@@ -271,6 +307,8 @@ const columns = 3 + (figure ? 1 : 0);
   .council-picker .chip[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent); color: var(--accent); font-weight: 600; }
   .council-picker .picker-count { margin: 0; font-weight: 600; min-height: 1.5em; }
   .council-picker .picker-table-box .table-wrap { max-height: 38rem; }
+  .council-picker .picker-more { margin-top: 0.6rem; min-height: 48px; width: 100%; }
+  .council-picker .picker-more[hidden] { display: none; }
   .council-picker .picker-table th[scope="row"] a { font-weight: 600; }
   /* The table fits its box at every width, so the name column need not stick, and the row stripes run across it. */
   .council-picker .picker-table tbody th[scope="row"] { position: static; background: transparent; min-width: 0; max-width: none; }
@@ -294,6 +332,8 @@ const columns = 3 + (figure ? 1 : 0);
   }
   @media (max-width: 599px) {
   .council-picker .wide-only { display: none; }
+  /* No scroll inside the page's scroll on a phone: the list runs in the page. */
+  .council-picker .picker-table-box .table-wrap { max-height: none; }
   }
   @media print {
   .council-picker .picker-controls { display: none !important; }

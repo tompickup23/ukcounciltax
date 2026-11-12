@@ -12,7 +12,7 @@ export function getStaticPaths() {
   if (process.env.BUILD_OG !== '1') return [];
   return councilPages().flatMap(({council,tax}) => {
     const data=gameData(council.gss,council.slug,tax.name);
-    return data?.rounds.flatMap((round,index)=>(['light','dark'] as const).map(theme=>({params:{slug:council.slug,chart:`round-${index}-${theme}`},props:{round,index,slug:council.slug,theme}}))) ?? [];
+    return data?.rounds.flatMap((round,index)=>(['light'] as const).map(theme=>({params:{slug:council.slug,chart:`round-${index}-${theme}`},props:{round,index,slug:council.slug,theme}}))) ?? [];
   });
 }
 export const GET: APIRoute = cachedImageRoute(({props}) => {

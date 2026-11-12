@@ -7,7 +7,7 @@ import type { Theme } from "../../../vendor/estate-kit/dist/src/index.js";
 export const prerender = true;
 
 /**
- * One PNG per kit chart per theme, and each chart's 1200 by 630 share card, built only
+ * One light PNG per kit chart, and each chart's 1200 by 630 share card, built only
  * in the BUILD_OG=1 pass like the other share cards.
  */
 export function getStaticPaths() {
@@ -17,7 +17,7 @@ export function getStaticPaths() {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
     paths.push({ params: { chart: `${name}-card` }, props: { name, theme: "card" } });
   }
-  // The class strips on /council-tax/ranked/ have a PNG per theme and no share card.
+  // The class strips on /council-tax/ranked/ have one light PNG and no share card.
   for (const name of classChartNames()) {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
   }

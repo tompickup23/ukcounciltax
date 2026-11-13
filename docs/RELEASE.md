@@ -392,3 +392,23 @@ Final validation on Node 22.23.4: the full unit run passed 318 tests, with 20 bu
 One post-build budget fixture check reached its existing five-second timeout while other checks ran concurrently. The complete unchanged post-build suite then passed on its own. No assertion or timeout was relaxed. Validation also caught and fixed a cancelled postcode progress message and initial layout movement; regression tests cover both.
 
 Against the session 3 build, only `index.html` and `compare/index.html` differ. All 5,639 PNGs are byte-for-byte identical, no HTML or PNG was added or removed, and the numeric comparison reports zero pages with changed printed values. The 296 comparison rows, bands, years and source metadata match exactly after removing the added search metadata. The financial source files and public security headers are unchanged. No merge, tag or deployment was performed.
+
+
+## Increases page way in, 13 November 2026
+
+Review candidate for round two prompt 1. The current published answer now
+leads, the next-year notice links to its existing page, a council finder jumps
+to the current own-share row, and earlier years sit in native details with
+working deep links. All 12 tables, 1,291 rows, 17 figure source lines and 39
+existing anchors are preserved. No financial figure, source data, canonical or
+redirect changed. Phone page height fell from 17,671 to 8,487 pixels.
+
+The full build, distribution and text checks passed. Unit checks and all 404
+browser tests passed. The production-header run passed 94 cases; two existing
+budget-game cases timed out during a long execution gap and passed a focused
+rerun with their original assertions and timeouts unchanged. All 2,845 PNGs are
+byte-identical to the baseline. The only numerical text differences are the
+dates and repeated year labels removed by shortening the next-year notice.
+
+Measurements, decisions and validation are recorded in
+`docs/INCREASES-WAY-IN-2026-11-13.md`. This entry does not record a deployment.

@@ -1,0 +1,94 @@
+---
+interface Props {
+  rows: { gss: string; name: string; search: string; region: string; type: string }[];
+}
+const { rows } = Astro.props;
+---
+<form class="increase-finder card" role="search" aria-label="Find my council" data-increase-finder data-pagefind-ignore>
+  <label class="field" for="increase-council">Find my council
+    <input id="increase-council" type="search" autocomplete="off" spellcheck="false" placeholder="Council name, county or region" aria-describedby="increase-finder-note increase-finder-status" />
+  </label>
+  <p class="small muted" id="increase-finder-note">Choose a council to jump to its published own-share change. This is separate from the change in the whole bill.</p>
+  <p id="increase-finder-status" role="status">Type a council name, county or region.</p>
+  <ul class="increase-matches" aria-label="Matching councils" hidden>
+    {rows.map(row => <li data-search={row.search} data-region={row.region} hidden>
+      <button type="button" data-increase-choice={row.gss}><span>{row.name}</span><small>{row.type}</small></button>
+    </li>)}
+  </ul>
+  <button class="button secondary" type="button" data-increase-more hidden>Show all matching councils</button>
+</form>
+
+<script>
+  import { matchesCouncil, matchingRegion, normalise, COUNCILS_SHOWN } from '../lib/council-search';
+
+  const finder = document.querySelector<HTMLFormElement>('[data-increase-finder]')!;
+  const input = finder.querySelector<HTMLInputElement>('input')!;
+  const status = finder.querySelector<HTMLElement>('[role="status"]')!;
+  const list = finder.querySelector<HTMLUListElement>('ul')!;
+  const choices = [...list.querySelectorAll<HTMLLIElement>('li')];
+  const more = finder.querySelector<HTMLButtonElement>('[data-increase-more]')!;
+  let expanded = false;
+
+  function filter() {
+    const query = normalise(input.value);
+    const region = matchingRegion(query, choices.map(row => row.dataset.region ?? ''));
+    const matches = query ? choices.filter(row => matchesCouncil(query, row.dataset.search ?? '')
+      && (!region || normalise(row.dataset.region ?? '') === region)) : [];
+    const shown = expanded ? matches : matches.slice(0, COUNCILS_SHOWN);
+    const visible = new Set(shown);
+    for (const row of choices) row.hidden = !visible.has(row);
+    list.hidden = matches.length === 0;
+    more.hidden = shown.length === matches.length;
+    status.textContent = !query ? 'Type a council name, county or region.'
+      : matches.length === 0 ? 'No matching council. Try a council name, county or region in England.'
+      : `${matches.length} matching ${matches.length === 1 ? 'council' : 'councils'}${shown.length < matches.length ? `, first ${shown.length} listed` : ''}. Choose a council to see its own-share change.`;
+  }
+
+  input.addEventListener('input', () => { expanded = false; filter(); });
+  finder.addEventListener('submit', event => {
+    event.preventDefault();
+    list.querySelector<HTMLButtonElement>('li:not([hidden]) button')?.focus();
+  });
+  more.addEventListener('click', () => {
+    const before = new Set(choices.filter(row => !row.hidden));
+    expanded = true;
+    filter();
+    choices.find(row => !row.hidden && !before.has(row))?.querySelector('button')?.focus();
+  });
+  for (const button of list.querySelectorAll<HTMLButtonElement>('[data-increase-choice]')) {
+    button.addEventListener('click', () => {
+      const row = document.querySelector<HTMLTableRowElement>(`[data-own-change="${button.dataset.increaseChoice}"]`);
+      for (const marked of document.querySelectorAll('[data-increase-selected]')) marked.removeAttribute('data-increase-selected');
+      if (!row) {
+        status.textContent = `No published own-share change is listed for ${button.querySelector('span')!.textContent}.`;
+        return;
+      }
+      row.setAttribute('data-increase-selected', '');
+      for (let parent = row.parentElement; parent; parent = parent.parentElement) {
+        if (parent instanceof HTMLDetailsElement) parent.open = true;
+      }
+      row.tabIndex = -1;
+      row.focus({ preventScroll: true });
+      row.scrollIntoView({ block: 'center', inline: 'start' });
+    });
+  }
+  finder.dataset.ready = '';
+</script>
+
+<style>
+  /* Reserve the box before the module runs, using the existing pre-paint JS marker. */
+  .increase-finder { display: none; }
+  :global(html.js) .increase-finder { display: block; visibility: hidden; }
+  :global(html.js) .increase-finder[data-ready] { visibility: visible; }
+  .increase-finder p { margin: 0.5rem 0 0; }
+  .increase-finder input { width: 100%; min-width: 0; min-height: 48px; }
+  .increase-matches { list-style: none; margin: 0.75rem 0; padding: 0; }
+  .increase-matches button {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 1rem;
+    width: 100%; min-height: 48px; padding: 0.6rem 0.75rem; text-align: left;
+    font: inherit; color: var(--accent); background: var(--bg); border: 1px solid var(--border); cursor: pointer;
+  }
+  .increase-matches button:hover { background: var(--accent-wash); }
+  .increase-matches small { color: var(--text-muted); }
+  @media print { :global(html.js) .increase-finder { display: none; } }
+</style>

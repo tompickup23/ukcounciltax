@@ -10,6 +10,9 @@
 export type Unit = "gbp" | "pence" | "percent" | "count" | "rate" | "index";
 export declare const UNITS: Unit[];
 export interface Source {
+    /** Optional linked citation metadata, required only by the full and short HTML helpers. */
+    id?: string;
+    publicationDate?: string;
     /** The body that published the document, as it names itself. */
     publisher: string;
     /** The document title, verbatim. */

@@ -109,6 +109,376 @@ export declare const tokens: {
             readonly name: "UK Council Tax";
             readonly domain: "ukcounciltax.co.uk";
         };
+        readonly councilintel: {
+            readonly deep: "#0a5f70";
+            readonly bright: "#3fc8dd";
+            readonly wash: "#e8f7fa";
+            readonly darkWash: "#2a3f45";
+            readonly name: "Council Intel";
+            readonly domain: "councilintel.co.uk";
+        };
+    };
+    readonly skins: {
+        readonly about: "A skin per site, beside its accent triple: a paper triple (paper, warm paper, line) for each theme, a display scale that reaches hero size, a display face with an italic slot and the body face, a section rhythm, a radius pair and a motion set (one easing, two durations under 300 ms, both set to 0ms by a reduced motion guard), and, where a kit colour fails on the skin's paper, an override of that colour. A site entry names its register and inherits that register's skin; an editorial entry gives its own values, each quoted in $meta.sources.skins. A record entry may carry its own paper, radius and overrides where the site's own stylesheet holds them (Council Intel), each quoted in $meta.sources.skins; a record entry without them reproduces the kit exactly. Keys listed in proposed were derived by scripts/derive-skin-dark.mjs, not read from the site, and wait on the owner.";
+        readonly registers: {
+            readonly record: {
+                readonly about: "For the data sites: restrained, dense, colour kept for data. Every value is one the kit already ships, so a record site's output does not change.";
+                readonly skin: {
+                    readonly paper: {
+                        readonly light: {
+                            readonly paper: "#ffffff";
+                            readonly warm: "#f5f6f7";
+                            readonly line: "#dbdfe3";
+                        };
+                        readonly dark: {
+                            readonly paper: "#0f1317";
+                            readonly warm: "#171c21";
+                            readonly line: "#2a3138";
+                        };
+                    };
+                    readonly display: {
+                        readonly "1": "clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem)";
+                        readonly "2": "clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem)";
+                        readonly hero: "clamp(2rem, 1.55rem + 2vw, 3rem)";
+                    };
+                    readonly face: {
+                        readonly display: "\"Source Serif 4\", Georgia, \"Times New Roman\", serif";
+                        readonly italic: "\"Source Serif 4\", Georgia, \"Times New Roman\", serif";
+                        readonly italicStyle: "normal";
+                        readonly sans: "\"Source Sans 3\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif";
+                    };
+                    readonly section: "4.5rem";
+                    readonly radius: {
+                        readonly radius: "10px";
+                        readonly "radius-sm": "6px";
+                    };
+                    readonly motion: {
+                        readonly ease: "cubic-bezier(0.16, 1, 0.3, 1)";
+                        readonly fast: "160ms";
+                        readonly base: "200ms";
+                    };
+                };
+            };
+            readonly editorial: {
+                readonly about: "For UK AI, Lancashire AI and Tour de France Lancashire: tinted paper, display type at hero scale with an italic, a wide section rhythm, more motion. The three already share this skeleton (RETHINK_2026-11.md section 3.1), so each entry gives its own values and the register adds none.";
+            };
+        };
+        readonly desk: {
+            readonly about: "A desk is a dark ground band inside a light page, in both themes: its ground, ink, muted text, rule, the three state colours drawn on it and each state's ink on its badge ground. A skin that has one lists its values under desk; generated CSS sets them as --ground, --ground-ink, --ground-muted, --ground-rule, --ground-positive and so on, and a [data-ground=\"desk\"] rule points the kit's names at them, so text, rules and a chart in css mode inside the band take the desk's values. names maps each kit name to a desk key, to another kit name (kit:accent-bright), or to the kit's dark value of a name (dark:series-1): the series and neutrals on the desk are the kit's dark set, which is validated for a dark ground. There is no wash on the desk, so accent-wash is the ground.";
+            readonly names: {
+                readonly bg: "ground";
+                readonly "bg-subtle": "ground";
+                readonly "bg-card": "ground";
+                readonly text: "ink";
+                readonly "text-muted": "muted";
+                readonly "text-faint": "muted";
+                readonly border: "rule";
+                readonly "border-strong": "rule";
+                readonly positive: "positive";
+                readonly warning: "warning";
+                readonly critical: "critical";
+                readonly accent: "kit:accent-bright";
+                readonly "accent-ink": "ground";
+                readonly "accent-wash": "ground";
+                readonly "series-1": "dark:series-1";
+                readonly "series-2": "dark:series-2";
+                readonly "series-3": "dark:series-3";
+                readonly "series-4": "dark:series-4";
+                readonly "series-neutral": "dark:series-neutral";
+                readonly "series-neutral-soft": "dark:series-neutral-soft";
+            };
+        };
+        readonly sites: {
+            readonly ukdemographics: {
+                readonly register: "record";
+            };
+            readonly ukelections: {
+                readonly register: "record";
+            };
+            readonly ukfoodhygiene: {
+                readonly register: "record";
+            };
+            readonly ukschoolholidaydates: {
+                readonly register: "record";
+            };
+            readonly asylumstats: {
+                readonly register: "record";
+            };
+            readonly aidoge: {
+                readonly register: "record";
+            };
+            readonly ukcounciltax: {
+                readonly register: "record";
+            };
+            readonly councilintel: {
+                readonly register: "record";
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#fafaf8";
+                        readonly warm: "#f1f2ef";
+                        readonly line: "#d9dde0";
+                    };
+                    readonly dark: {
+                        readonly paper: "#263035";
+                        readonly warm: "#2e393f";
+                        readonly line: "#404c53";
+                    };
+                };
+                readonly radius: {
+                    readonly radius: "4px";
+                    readonly "radius-sm": "3px";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "bg-card": "#fafaf8";
+                        readonly text: "#15191c";
+                        readonly "text-muted": "#5c6670";
+                        readonly "border-strong": "#b9c0c6";
+                        readonly "series-neutral-soft": "#818891";
+                    };
+                    readonly dark: {
+                        readonly "bg-card": "#263035";
+                        readonly text: "#eef1f2";
+                        readonly "text-muted": "#a9b2b9";
+                        readonly "text-faint": "#a2adb6";
+                        readonly "border-strong": "#525f68";
+                        readonly accent: "#5fd0e2";
+                        readonly critical: "#f79d94";
+                    };
+                };
+                readonly proposed: readonly ["overrides.light.series-neutral-soft"];
+                readonly desk: {
+                    readonly light: {
+                        readonly ground: "#0d2b33";
+                        readonly ink: "#eef4f5";
+                        readonly muted: "#9fb6bc";
+                        readonly rule: "#1f4650";
+                        readonly positive: "#43b386";
+                        readonly warning: "#e2a93b";
+                        readonly critical: "#ef6a5f";
+                        readonly "positive-ink": "#b7ead3";
+                        readonly "positive-bg": "#1b4a3a";
+                        readonly "warning-ink": "#ffe4a8";
+                        readonly "warning-bg": "#4f3a0e";
+                        readonly "critical-ink": "#ffc9c3";
+                        readonly "critical-bg": "#5a1f19";
+                    };
+                    readonly dark: {
+                        readonly ground: "#08191e";
+                        readonly ink: "#eef4f5";
+                        readonly muted: "#93a8ae";
+                        readonly rule: "#1b3a42";
+                        readonly positive: "#43b386";
+                        readonly warning: "#e2a93b";
+                        readonly critical: "#ef6a5f";
+                        readonly "positive-ink": "#b7ead3";
+                        readonly "positive-bg": "#1b4a3a";
+                        readonly "warning-ink": "#ffe4a8";
+                        readonly "warning-bg": "#4f3a0e";
+                        readonly "critical-ink": "#ffc9c3";
+                        readonly "critical-bg": "#5a1f19";
+                    };
+                };
+            };
+            readonly ukai: {
+                readonly register: "editorial";
+                readonly name: "UK Artificial Intelligence";
+                readonly domain: "ukartificialintelligence.co.uk";
+                readonly accent: {
+                    readonly deep: "#255848";
+                    readonly bright: "#87ae91";
+                    readonly wash: "#e4e9dc";
+                    readonly darkWash: "#1e2928";
+                };
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#f8f6ef";
+                        readonly warm: "#eeece2";
+                        readonly line: "#d5d9cc";
+                    };
+                    readonly dark: {
+                        readonly paper: "#10171a";
+                        readonly warm: "#182124";
+                        readonly line: "#29363a";
+                    };
+                };
+                readonly display: {
+                    readonly "1": "27px";
+                    readonly "2": "clamp(36px, 4.4vw, 57px)";
+                    readonly hero: "clamp(70px, 7.6vw, 106px)";
+                };
+                readonly face: {
+                    readonly display: "\"Newsreader\", Georgia, \"Times New Roman\", serif";
+                    readonly italic: "\"Newsreader\", Georgia, \"Times New Roman\", serif";
+                    readonly italicStyle: "italic";
+                    readonly sans: "\"Manrope\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif";
+                };
+                readonly section: "96px";
+                readonly radius: {
+                    readonly radius: "12px";
+                    readonly "radius-sm": "3px";
+                };
+                readonly motion: {
+                    readonly ease: "cubic-bezier(0.2, 0.8, 0.2, 1)";
+                    readonly fast: "180ms";
+                    readonly base: "250ms";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "series-neutral-soft": "#818891";
+                    };
+                };
+                readonly proposed: readonly ["paper.dark", "accent.darkWash", "overrides.light.series-neutral-soft"];
+            };
+            readonly lancashireai: {
+                readonly register: "editorial";
+                readonly name: "Lancashire AI";
+                readonly domain: "lancashireai.co.uk";
+                readonly accent: {
+                    readonly deep: "#9d2235";
+                    readonly bright: "#c17480";
+                    readonly wash: "#f3e5e1";
+                    readonly darkWash: "#2c2025";
+                };
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#faf6f0";
+                        readonly warm: "#f2ebe0";
+                        readonly line: "#e5dcd0";
+                    };
+                    readonly dark: {
+                        readonly paper: "#181419";
+                        readonly warm: "#221c23";
+                        readonly line: "#382f38";
+                    };
+                };
+                readonly display: {
+                    readonly "1": "22px";
+                    readonly "2": "clamp(30px, 4.4vw, 46px)";
+                    readonly hero: "clamp(44px, 5.6vw, 80px)";
+                };
+                readonly face: {
+                    readonly display: "\"Fraunces\", Georgia, \"Times New Roman\", serif";
+                    readonly italic: "\"Fraunces\", Georgia, \"Times New Roman\", serif";
+                    readonly italicStyle: "italic";
+                    readonly sans: "\"Inter\", -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif";
+                };
+                readonly section: "108px";
+                readonly radius: {
+                    readonly radius: "16px";
+                    readonly "radius-sm": "10px";
+                };
+                readonly motion: {
+                    readonly ease: "cubic-bezier(0.2, 0.8, 0.2, 1)";
+                    readonly fast: "180ms";
+                    readonly base: "250ms";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "series-neutral-soft": "#818891";
+                    };
+                };
+                readonly proposed: readonly ["paper.dark", "accent.bright", "accent.darkWash", "overrides.light.series-neutral-soft"];
+            };
+            readonly tourdefrancelancashire: {
+                readonly register: "editorial";
+                readonly name: "Tour de France Lancashire";
+                readonly domain: "tourdefrancelancashire.co.uk";
+                readonly accent: {
+                    readonly deep: "#c8102e";
+                    readonly bright: "#db6175";
+                    readonly wash: "#f7e4dd";
+                    readonly darkWash: "#311c23";
+                };
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#fbf6ec";
+                        readonly warm: "#f4eedf";
+                        readonly line: "#e2d8c3";
+                    };
+                    readonly dark: {
+                        readonly paper: "#1a1318";
+                        readonly warm: "#251b22";
+                        readonly line: "#3d2d37";
+                    };
+                };
+                readonly display: {
+                    readonly "1": "clamp(1.25rem, 2vw, 1.6rem)";
+                    readonly "2": "clamp(1.8rem, 3.6vw, 2.9rem)";
+                    readonly hero: "clamp(2.7rem, 6.6vw, 5.4rem)";
+                };
+                readonly face: {
+                    readonly display: "\"Fraunces\", Georgia, \"Times New Roman\", serif";
+                    readonly italic: "\"Fraunces\", Georgia, \"Times New Roman\", serif";
+                    readonly italicStyle: "italic";
+                    readonly sans: "\"Hanken Grotesk\", system-ui, -apple-system, \"Segoe UI\", sans-serif";
+                };
+                readonly section: "clamp(3.2rem, 7vw, 6rem)";
+                readonly radius: {
+                    readonly radius: "18px";
+                    readonly "radius-sm": "12px";
+                };
+                readonly motion: {
+                    readonly ease: "cubic-bezier(0.2, 0.7, 0.2, 1)";
+                    readonly fast: "180ms";
+                    readonly base: "250ms";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "series-neutral-soft": "#828992";
+                    };
+                };
+                readonly proposed: readonly ["paper.dark", "accent.bright", "accent.wash", "accent.darkWash", "overrides.light.series-neutral-soft"];
+            };
+        };
+    };
+    readonly aliases: {
+        readonly about: "Each site's legacy custom property names, mapped to kit names, written by the token build as generated/aliases/<site>.css: a block a site splices below the kit's estate-tokens block (and below its skin block), so the next splice of the kit leaves it alone. One list per name set; a site names the set it uses. Nothing new may use these names; they go as each template is rewritten. Decision D in RETHINK_2026-11.md.";
+        readonly sets: {
+            readonly "pre-system-2026-08": {
+                readonly about: "The 28 names the pre system stylesheet used, mapped when UK Demographics moved to the estate block on 29 August 2026 and copied by UK Council Tax. --tooltip-bg and --tooltip-fg are not here: the kit block sets both themes of each, and a copy below it would undo the dark values.";
+                readonly names: {
+                    readonly "bg-soft": "var(--bg-subtle)";
+                    readonly "bg-deep": "var(--bg-subtle)";
+                    readonly surface: "var(--bg-card)";
+                    readonly "surface-muted": "var(--bg-subtle)";
+                    readonly ink: "var(--text)";
+                    readonly "ink-soft": "var(--text-muted)";
+                    readonly muted: "var(--text-muted)";
+                    readonly panel: "var(--bg-card)";
+                    readonly "panel-strong": "var(--bg-subtle)";
+                    readonly "panel-soft": "var(--bg-subtle)";
+                    readonly "accent-2": "var(--positive)";
+                    readonly "accent-3": "var(--accent)";
+                    readonly "accent-teal": "var(--accent-bright)";
+                    readonly "accent-teal-deep": "var(--accent)";
+                    readonly "accent-glow": "color-mix(in srgb, var(--accent) 18%, transparent)";
+                    readonly coral: "var(--critical)";
+                    readonly "focus-ring": "var(--accent)";
+                    readonly "status-warn-bg": "color-mix(in srgb, var(--warning) 8%, transparent)";
+                    readonly "status-warn-border": "color-mix(in srgb, var(--warning) 45%, transparent)";
+                    readonly "status-warn-text": "var(--warning)";
+                    readonly "status-warn-tint": "color-mix(in srgb, var(--warning) 14%, transparent)";
+                    readonly "status-warn-dark": "var(--warning)";
+                    readonly "status-good-text": "var(--positive)";
+                    readonly "status-bad-text": "var(--critical)";
+                    readonly "body-bg-image": "var(--bg)";
+                    readonly "grid-line": "transparent";
+                    readonly "grid-vignette": "transparent";
+                    readonly "header-backdrop": "var(--bg)";
+                };
+            };
+        };
+        readonly sites: {
+            readonly ukdemographics: {
+                readonly set: "pre-system-2026-08";
+                readonly source: "ukdemographics src/styles/global.css at origin/main 9f7192f, read 11 November 2026: lines 75 to 98 (the Compatibility aliases, --bg-soft to --status-bad-text) and lines 105 to 108 (the retired gradient names), inside its estate-tokens block; lines 99 and 100 (--tooltip-bg, --tooltip-fg) are dropped. Its three @fontsource imports, lines 17 to 19, move above the kit block.";
+            };
+            readonly ukcounciltax: {
+                readonly set: "pre-system-2026-08";
+                readonly source: "ukcounciltax src/styles/global.css at origin/main ede1678, read 11 November 2026: lines 143 to 166 and 171 to 174, in the site's own :root rule below estate-tokens:end, which it already took from the kit (HANDOVER_2026-11.md section How a site adopts the kit).";
+            };
+        };
     };
     readonly font: {
         readonly display: {
@@ -357,3 +727,55 @@ export declare function partyColour(name: string): string;
 export declare function partyName(name: string): string;
 /** Every colour for one theme and site, as plain hex, for renderers that cannot read CSS. */
 export declare function palette(theme: Theme, site?: SiteKey): Record<string, string>;
+export type SkinKey = keyof typeof tokens.skins.sites;
+export type Register = keyof typeof tokens.skins.registers;
+export declare const SKIN_KEYS: SkinKey[];
+export interface Skin {
+    register: Register;
+    name?: string;
+    domain?: string;
+    accent?: {
+        deep: string;
+        bright: string;
+        wash: string;
+        darkWash: string;
+    };
+    paper: Record<Theme, {
+        paper: string;
+        warm: string;
+        line: string;
+    }>;
+    display: {
+        "1": string;
+        "2": string;
+        hero: string;
+    };
+    face: {
+        display: string;
+        italic: string;
+        italicStyle: string;
+        sans: string;
+    };
+    section: string;
+    radius: {
+        radius: string;
+        "radius-sm": string;
+    };
+    motion: {
+        ease: string;
+        fast: string;
+        base: string;
+    };
+    overrides?: Partial<Record<Theme, Record<string, string>>>;
+    proposed?: readonly string[];
+    /** A dark ground band inside the page, in both themes (tokens.json skins.desk). */
+    desk?: Record<Theme, Record<string, string>>;
+}
+/** One site's skin: its register's skin under its own values. */
+export declare function skin(key: SkinKey): Skin;
+/** Every colour for one theme and skin, as plain hex: the kit's colours with the skin's paper as bg, bg-subtle and border, and the skin's accent where it has one. */
+export declare function skinPalette(theme: Theme, key: SkinKey): Record<string, string>;
+/** The skins that have a desk. */
+export declare const DESK_KEYS: ("ukdemographics" | "ukelections" | "ukfoodhygiene" | "ukschoolholidaydates" | "asylumstats" | "aidoge" | "ukcounciltax" | "councilintel" | "ukai" | "lancashireai" | "tourdefrancelancashire")[];
+/** Every colour on a skin's desk, as plain hex: the skin palette with the kit's names pointed at the desk, as the [data-ground="desk"] rule does. */
+export declare function deskPalette(theme: Theme, key: SkinKey): Record<string, string>;

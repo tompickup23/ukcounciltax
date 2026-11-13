@@ -20,9 +20,9 @@
  * text, and past the four series the parts take the same four again with a diagonal
  * stroke, then with a cross, so no two parts look alike in greyscale either.
  */
-import { Canvas, esc, n2, textWidth } from "./canvas.js";
+import { Canvas, esc, n2, onDesk, textWidth } from "./canvas.js";
 import { reconcile } from "./money.js";
-import { frame } from "./frame.js";
+import { frame, withGround } from "./frame.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue } from "../figures/figures.js";
 import { squareClass, squaresFor, WAFFLE_MAX_PARTS, WAFFLE_PAINTS } from "./waffleRule.js";
@@ -108,7 +108,7 @@ export function waffle(o) {
             rounding = ` ${unseen.map((r) => r.label).join(", ")} ${unseen.length === 1 ? "is" : "are"} under half a square and not drawn.`;
     }
     const caption = set.caption(keys);
-    const fr = frame({ ...o, set }, caption, 0, "waffle");
+    const fr = frame({ ...o, set }, caption, 0, "waffle", keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const small = o.size === "small";
     // The small size is read on a phone at about 0.57 of its drawn size, so its key takes the
@@ -158,6 +158,7 @@ export function waffle(o) {
         for (let n = 0; n < r.squares; n++, i++) {
             const x = P.x + (i % 10) * (cell + gap), y = P.y + Math.floor(i / 10) * (cell + gap);
             canvas.add(square(x, y, cell, r, r.paint ? ' data-ek-on=""' : ""));
+            canvas.obstacle(`square ${i + 1}`, { x, y, w: cell, h: cell });
         }
         if (r.key && o.parts)
             canvas.add(`</g>`);
@@ -185,6 +186,7 @@ export function waffle(o) {
         for (const r of runs) {
             const top = ky;
             canvas.add(square(kx, ky + font.label * 0.2, sw, r));
+            canvas.obstacle(`the key square for ${r.label}`, { x: kx, y: ky + font.label * 0.2, w: sw, h: sw });
             const end = canvas.para(kx + sw + 10, ky - font.label * 0.15, r.label, nameW, { size: font.label, fill: "text", bg });
             const base = top + font.label * 0.85;
             // The amount is the figure's display form; the share is computed from the parts and printed as such.
@@ -207,6 +209,7 @@ export function waffle(o) {
     else {
         for (const r of runs) {
             canvas.add(square(kx, ky + 4, sw, r));
+            canvas.obstacle(`the key square for ${r.label}`, { x: kx, y: ky + 4, w: sw, h: sw });
             ky = canvas.para(kx + sw + 10, ky - font.label * 0.15, r.label, kw - sw - 10, { size: font.label, fill: "text", bg }) + 10;
         }
         canvas.text(kx, ky + font.axis + 4, "Each square is one per cent.", { size: font.axis, fill: "text-muted", bg });
@@ -216,7 +219,7 @@ export function waffle(o) {
     const alt = o.alt ?? `${altBody}${rounding}${fr.title ? " " + fr.title : ""}`;
     const svg = canvas.finish(`Waffle ${keys[0]} ${tpl.key}${small ? " small" : ""}`, alt);
     const table = tableTwin({ caption: fr.title ?? set.value(keys[0]).label, head: tableHead, rows: tableRows, source: caption });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }
 /** The two hatch strokes of a square of side s at x, y: the diagonal, and the cross's second stroke. */
 function hatchPaths(x, y, s) {
@@ -289,7 +292,7 @@ function waffleGrid(o) {
     const side = W - pad * 2;
     const gap = Math.max(2, side * 0.008);
     const cell = (side - gap * 9) / 10;
-    const mode = o.mode ?? { kind: "css" };
+    const mode = withGround(o.mode ?? { kind: "css" }, o.ground);
     const canvas = new Canvas(mode, W, W);
     const used = [...new Set(squares.map((_, i) => WAFFLE_PAINTS[i].fill))];
     for (const fill of used)
@@ -315,7 +318,7 @@ function waffleGrid(o) {
     }
     canvas.add(`</g>`);
     canvas.H = W;
-    if (hex) {
+    if (hex || onDesk(mode)) {
         canvas.rect(0, 0, W, W, "bg");
         canvas.parts.unshift(canvas.parts.pop());
     }

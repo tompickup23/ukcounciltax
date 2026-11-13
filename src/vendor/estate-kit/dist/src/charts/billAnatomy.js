@@ -19,6 +19,7 @@ import { frame } from "./frame.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue } from "../figures/figures.js";
 import { pence, reconcile } from "./money.js";
+import { checkNames } from "../qa/names.js";
 const SERIES = ["series-1", "series-2", "series-3", "series-4"];
 export function billAnatomy(o) {
     const set = currentFigures(o.set);
@@ -27,9 +28,11 @@ export function billAnatomy(o) {
     if (parts.length < 2)
         throw new Error("BillAnatomy needs at least two parts");
     reconcile(o.parts.map((k, i) => [k, parts[i]]), [o.total, total], "a bill part");
+    if (o.requireNames)
+        checkNames(set, [...o.parts, o.total], "BillAnatomy");
     const keys = [...o.parts, o.total];
     const caption = set.caption(keys);
-    const fr = frame({ ...o, set }, caption, 0, "billAnatomy");
+    const fr = frame({ ...o, set }, caption, 0, "billAnatomy", keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const names = parts.map((f) => f.name ?? f.label);
@@ -59,6 +62,7 @@ export function billAnatomy(o) {
         const w = (pence(f.value) / pence(total.value)) * totalW;
         const drawW = Math.max(0, w - (i < parts.length - 1 ? gap : 0));
         canvas.add(`<g class="ek-bill-part"><title>${esc(`${names[i]}: ${shown[i]}, ${share[i]} of the bill`)}</title><rect x="${n2(x)}" y="${n2(barY)}" width="${n2(drawW)}" height="${n2(barH)}" ${canvas.paint({ fill: colours[i] })} data-ek-part="${esc(o.parts[i])}"${o.parts[i] === highlight ? ` data-ek-focus="${esc(highlight)}"` : ""} data-value="${f.value}" data-x="${n2(x)}" data-w="${n2(w)}"/></g>`);
+        canvas.obstacle(`the bar part for ${names[i]}`, { x, y: barY, w: drawW, h: barH });
         x += w;
     });
     canvas.add(`</g>`);
@@ -74,6 +78,7 @@ export function billAnatomy(o) {
     let y = P.y + barH + 18;
     parts.forEach((_, i) => {
         canvas.add(`<rect x="${n2(P.x)}" y="${n2(y + (rowH - sw) / 2)}" width="${n2(sw)}" height="${n2(sw)}" rx="2" ${canvas.paint({ fill: colours[i] })}/>`);
+        canvas.obstacle(`the key swatch for ${names[i]}`, { x: P.x, y: y + (rowH - sw) / 2, w: sw, h: sw });
         canvas.text(P.x + sw + 10, y + rowH / 2, names[i], { size: font.label, fill: "text", bg, baseline: "middle" });
         canvas.text(P.x + P.w - shareW, y + rowH / 2, shown[i], { size: font.label, weight: 600, fill: "text", bg, baseline: "middle", anchor: "end", tabular: true, role: "value" });
         canvas.text(P.x + P.w, y + rowH / 2, share[i], { size: font.label, fill: "text-muted", bg, baseline: "middle", anchor: "end", tabular: true, role: "value" });
@@ -93,5 +98,5 @@ export function billAnatomy(o) {
         rows: [...names.map((n, i) => [n, shown[i], share[i]]), [total.name ?? total.label, set.show(o.total), "100%"]],
         source: caption
     });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

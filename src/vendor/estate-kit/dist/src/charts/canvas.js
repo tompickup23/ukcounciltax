@@ -7,10 +7,12 @@
  * then run against both themes of every site. "hex" writes plain hex for one theme, for
  * resvg, which cannot read custom properties.
  */
-import { palette, SITE_KEYS } from "../../generated/tokens.js";
+import { deskPalette, palette, skinPalette, DESK_KEYS, SITE_KEYS, SKIN_KEYS } from "../../generated/tokens.js";
 import { tokens } from "../../generated/tokens.js";
 import { METRICS } from "../../generated/metrics.js";
 import { assertGates, emptyChecks } from "../qa/gates.js";
+/** True when a render draws on a desk. */
+export const onDesk = (mode) => mode.ground === "desk";
 export const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 export const n2 = (v) => (Math.round(v * 100) / 100).toString();
 const FAMILY_ATTR = {
@@ -95,7 +97,7 @@ export class Canvas {
             else if (this.mode.kind === "css")
                 style.push(`${prop}:var(--${c})`);
             else
-                out.push(`${prop}="${palette(this.mode.theme, this.mode.site)[c] ?? fail(c)}"`);
+                out.push(`${prop}="${hexPalette(this.mode.theme, this.mode.site, this.mode.ground)[c] ?? fail(c)}"`);
         }
         if (style.length)
             out.push(`style="${style.join(";")}"`);
@@ -147,6 +149,12 @@ export class Canvas {
     scaleLabels(...labels) { for (const l of labels)
         this.checks.scale.add(l); }
     mark(what, fill, against) { this.checks.marks.push({ what, fill, against }); }
+    /** Registers the box a drawn mark fills, so the gates refuse any text that overlaps it. */
+    obstacle(what, box) {
+        if (this.silent || box.w <= 0 || box.h <= 0)
+            return;
+        (this.checks.obstacles ??= []).push({ what, box });
+    }
     series(what, colours) { if (colours.length > 1)
         this.checks.series.push({ what, colours }); }
     /** Runs the gates and returns the finished SVG. */
@@ -156,20 +164,57 @@ export class Canvas {
             const body = this.parts.join("").replace(/<title>[^<]*<\/title>/g, "");
             if (/<text[\s>]/.test(body))
                 throw new Error(`${what}: a thumb draws no text`);
-            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(this.H)}" width="${n2(this.W)}" height="${n2(this.H)}" aria-hidden="true" focusable="false" class="ek-chart ek-thumb"${extraAttrs ? " " + extraAttrs : ""}>${body}</svg>`;
+            const desk = onDesk(this.mode) ? ' data-ground="desk"' : "";
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(this.H)}" width="${n2(this.W)}" height="${n2(this.H)}" aria-hidden="true" focusable="false" class="ek-chart ek-thumb"${desk}${extraAttrs ? " " + extraAttrs : ""}>${body}</svg>`;
         }
         this.checks.alt = label;
         assertGates(this.checks, gatePalettes(this.mode), what);
         const H = this.H;
-        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(H)}" width="${n2(this.W)}" height="${n2(H)}" role="img" aria-label="${esc(label)}" class="ek-chart"${extraAttrs ? " " + extraAttrs : ""}>${this.parts.join("")}</svg>`;
+        // On a desk the SVG carries the marker itself, so the skin's [data-ground="desk"] rule
+        // points its names at the desk wherever the string is inserted.
+        const desk = onDesk(this.mode) ? ' data-ground="desk"' : "";
+        return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n2(this.W)} ${n2(H)}" width="${n2(this.W)}" height="${n2(H)}" role="img" aria-label="${esc(label)}" class="ek-chart"${desk}${extraAttrs ? " " + extraAttrs : ""}>${this.parts.join("")}</svg>`;
     }
 }
 function fail(token) {
     throw new Error(`no token "${token}" in the palette`);
 }
-/** The palettes a render must pass: both themes of every site in css mode, one in hex mode. */
+/**
+ * The colours a hex render paints with: the site's skin palette where the site has a
+ * skin. A plain record skin's palette equals its site's, so only a site whose skin holds
+ * values of its own (Council Intel's paper and text) paints differently.
+ */
+export function hexPalette(theme, site, ground = "paper") {
+    if (ground === "desk")
+        return deskPalette(theme, site);
+    return SKIN_KEYS.includes(site) ? skinPalette(theme, site) : palette(theme, site);
+}
+/** A skin whose palette differs from its site's: an editorial skin, or a record skin with values of its own. */
+export function skinAddsGround(key) {
+    if (!SITE_KEYS.includes(key))
+        return true;
+    return ["light", "dark"].some((theme) => {
+        const site = palette(theme, key), mine = skinPalette(theme, key);
+        return Object.entries(site).some(([k, v]) => mine[k] !== v);
+    });
+}
+/**
+ * The palettes a render must pass: both themes of every site in css mode, one in hex mode,
+ * and on a desk both themes of every skin's desk.
+ * Css mode also takes both themes of every skin whose palette is not its site's: the
+ * editorial skins, and a record skin with its own paper (Council Intel).
+ */
 export function gatePalettes(mode) {
     if (mode.kind === "hex")
-        return [{ name: `${mode.theme} ${mode.site}`, pal: palette(mode.theme, mode.site) }];
-    return ["light", "dark"].flatMap((theme) => SITE_KEYS.map((site) => ({ name: `${theme} ${site}`, pal: palette(theme, site) })));
+        return [{ name: `${mode.theme} ${mode.site}${onDesk(mode) ? " desk" : ""}`, pal: hexPalette(mode.theme, mode.site, mode.ground) }];
+    // On a desk, css mode is gated against both themes of every skin that has one.
+    if (onDesk(mode)) {
+        if (!DESK_KEYS.length)
+            throw new Error("no skin has a desk to draw on");
+        return ["light", "dark"].flatMap((theme) => DESK_KEYS.map((key) => ({ name: `${theme} ${key} desk`, pal: deskPalette(theme, key) })));
+    }
+    return ["light", "dark"].flatMap((theme) => [
+        ...SITE_KEYS.map((site) => ({ name: `${theme} ${site}`, pal: palette(theme, site) })),
+        ...SKIN_KEYS.filter(skinAddsGround).map((key) => ({ name: `${theme} ${key} skin`, pal: skinPalette(theme, key) }))
+    ]);
 }

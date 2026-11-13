@@ -42,3 +42,9 @@
 .ek-waffle-grid .sq-p3 > rect, .ek-waffle-grid .sq-p7 > rect, .ek-waffle-grid .sq-p11 > rect { fill: var(--series-4); stroke: none; }
 .ek-waffle-grid :is(.sq-p4, .sq-p5, .sq-p6, .sq-p7, .sq-p8, .sq-p9, .sq-p10, .sq-p11) .ek-hatch-d { visibility: visible; }
 .ek-waffle-grid :is(.sq-p8, .sq-p9, .sq-p10, .sq-p11) .ek-hatch-x { visibility: visible; }
+
+.ek-source { overflow-wrap: anywhere; }
+
+.ek-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--space-sm); margin-block: var(--space-md); }
+.ek-summary-fact { min-width: 0; background: var(--accent-wash); border-radius: var(--radius); overflow: hidden; }
+.ek-summary-fact .ek-source { padding: 0 var(--space-sm) var(--space-sm); margin-top: 0; }

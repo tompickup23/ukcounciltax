@@ -20,7 +20,9 @@
  * Excel PERCENTILE.INC and numpy's default), so the median of an even count is the mean of
  * the middle two.
  */
+import { checkNames } from "../qa/names.js";
 import { esc, n2, textWidth } from "./canvas.js";
+import { annotate, linear, stackRows } from "./grammar/index.js";
 import { frame } from "./frame.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue, showPoint } from "../figures/figures.js";
@@ -79,28 +81,31 @@ export function positionStrip(o) {
         p90: formatValue(st.p90, d.unit, d.dp),
         max: showPoint(d, maxP)
     };
+    if (o.requireNames)
+        checkNames(set, [o.figure], "PositionStrip");
     const placeName = v.name ?? o.place ?? v.label;
     const method = `Median and 90th percentile calculated from the published values of the ${st.n} ${o.classLabel}, by linear interpolation.`;
     const basis = `Basis: ${o.basis.trim().replace(/\.$/, "")}.`;
     const keys = [o.figure, o.distribution];
     const caption = set.caption(keys);
-    const fr = frame({ ...o, set }, caption, 0, "positionStrip");
+    const fr = frame({ ...o, set }, caption, 0, "positionStrip", keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const P = fr.plot;
     canvas.allow(...Object.values(shown));
     canvas.scaleLabels(...Object.values(SCALE_LABELS));
-    const xOf = (x) => P.x + ((x - st.min) / (st.max - st.min)) * P.w;
+    const xOf = linear(st.min, st.max, P.x, P.w).at;
     const clampX = (left, w) => Math.min(Math.max(left, P.x), P.x + P.w - w);
-    // The place: its name and value above the dot, as one block clamped to the plot.
-    const nameW = textWidth(placeName, font.label), gap = font.label * 0.4;
-    const valW = textWidth(shown.value, font.value, "sans", 600);
-    const blockW = nameW + gap + valW;
+    // The place: its name and value above the dot, as one annotation clamped to the plot.
     const dotX = xOf(v.value);
-    const left = clampX(dotX - blockW / 2, blockW);
     const top = tpl.thumb ? P.y + P.h / 2 - font.value * 1.35 - (Math.max(10, font.label * 0.55) * 1.8) : P.y;
-    canvas.text(left, top + font.value, placeName, { size: font.label, fill: "text", bg });
-    canvas.text(left + nameW + gap, top + font.value, shown.value, { size: font.value, weight: 600, fill: "text", bg, tabular: true, role: "value" });
+    annotate(canvas, {
+        pieces: [
+            { text: placeName, size: font.label, fill: "text" },
+            { text: shown.value, size: font.value, weight: 600, fill: "text", tabular: true, role: "value" }
+        ],
+        gap: font.label * 0.4, x: dotX, y: top + font.value, within: { min: P.x, max: P.x + P.w }, bg
+    });
     // The track, the band from lowest to the 90th percentile, the ticks and the dot.
     const trackH = Math.max(10, font.label * 0.55);
     const tick = trackH * 1.8;
@@ -119,6 +124,11 @@ export function positionStrip(o) {
     const focus = esc(o.place ?? o.figure);
     canvas.add(`<g class="ek-strip-place"><title>${esc(`${placeName}: ${shown.value}`)}</title><circle cx="${n2(dotX)}" cy="${n2(trackY)}" r="${n2(r)}" ${canvas.paint({ fill: "accent", stroke: bg })} stroke-width="3" data-ek-pos="${n2(dotX)}" data-value="${v.value}" data-ek-focus="${focus}"/></g>`);
     canvas.add(`</g>`);
+    // The marks register their boxes, so no label may sit on the track, a tick or the dot.
+    canvas.obstacle("the strip track", { x: P.x, y: trackY - trackH / 2, w: P.w, h: trackH });
+    for (const k of ["median", "p90"])
+        canvas.obstacle(`the ${k} tick`, { x: xOf(st[k]) - 1.25, y: trackY - tick, w: 2.5, h: tick * 2 });
+    canvas.obstacle(`the dot for ${placeName}`, { x: dotX - r - 1.5, y: trackY - r - 1.5, w: (r + 1.5) * 2, h: (r + 1.5) * 2 });
     if (tpl.thumb) {
         fr.close(P.y + P.h);
         return { svg: canvas.finish(`PositionStrip ${o.figure} thumb`, ""), table: "", alt: "", caption, width: canvas.W, height: canvas.H };
@@ -133,13 +143,7 @@ export function positionStrip(o) {
         const l = k === "min" ? P.x : k === "max" ? P.x + P.w - w : clampX(anchorX - w / 2, w);
         return { k, label, w, l, row: 0 };
     });
-    const placed = [];
-    const pad = font.axis * 0.6;
-    for (const b of blocks) {
-        while (placed.some((q) => q.row === b.row && b.l < q.l + q.w + pad && b.l + b.w + pad > q.l))
-            b.row++;
-        placed.push(b);
-    }
+    const placed = stackRows(blocks, font.axis * 0.6);
     const scaleTop = trackY + tick + font.axis * 0.6;
     for (const b of placed) {
         const y = scaleTop + b.row * (lh * 2 + font.axis * 0.4);
@@ -171,5 +175,5 @@ export function positionStrip(o) {
         source: `${method} ${basis} ${caption}`,
         numeric: false
     });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

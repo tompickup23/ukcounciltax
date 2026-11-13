@@ -89,7 +89,7 @@ export function cardErrors(svg, format, site = "ukdemographics") {
 export function card(chart, o, format = "og", extras = {}) {
     if (!o.title?.trim())
         throw new Error("a card carries one message: pass the takeaway as title");
-    const out = chart({ ...o, template: format });
+    const out = chart({ ...o, sourcePlacement: "drawing", template: format });
     const errs = cardErrors(out.svg, format, o.site);
     if (extras.focus !== undefined && !out.svg.includes(`data-ek-focus="${esc(extras.focus)}"`))
         errs.push(`${format}: the focus "${extras.focus}" is not drawn`);
@@ -109,7 +109,7 @@ export function chartPngs(chart, o, extras = {}) {
         throw new Error("chartPngs draws the inline chart; use card() for a card");
     const site = o.site ?? "ukdemographics";
     const one = (theme) => {
-        const out = chart({ ...o, template: "inline", mode: { kind: "hex", theme, site } });
+        const out = chart({ ...o, sourcePlacement: "drawing", template: "inline", mode: { kind: "hex", theme, site } });
         const xmp = cardXmp({ title: out.title ?? out.alt, caption: out.caption, site, licence: extras.licence, year: extras.year });
         return { png: toPalettePng(out.svg, { xmp }), svg: out.svg, width: out.width, height: out.height };
     };

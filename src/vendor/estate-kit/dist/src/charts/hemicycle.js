@@ -54,7 +54,7 @@ export function hemicycle(o) {
     const colourOf = figs.map((f, i) => (mode === "party" ? partyColour(keysOf[i]) : SERIES[i]));
     const keys = [...o.parties, o.total, ...(o.majority ? [o.majority] : [])];
     const caption = set.caption(keys);
-    const fr = frame({ ...o, set }, caption, 0);
+    const fr = frame({ ...o, set }, caption, 0, undefined, keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const palettes = gatePalettes(canvas.mode);
@@ -104,6 +104,7 @@ export function hemicycle(o) {
             const { x, y } = xy(positions[cursor++]);
             const ring = ringed[i] ? ` ${canvas.paint({ stroke: "text" })} stroke-width="${n2(Math.max(0.75, dotR * 0.18))}"` : "";
             canvas.add(`<circle cx="${n2(x)}" cy="${n2(y)}" r="${n2(dotR)}" ${canvas.paint({ fill: colourOf[i] })}${ring} data-ek-seat="${esc(o.parties[i])}"/>`);
+            canvas.obstacle(`a seat for ${names[i]}`, { x: x - dotR, y: y - dotR, w: dotR * 2, h: dotR * 2 });
         }
         canvas.add(`</g>`);
     }
@@ -112,6 +113,7 @@ export function hemicycle(o) {
         canvas.add(`<g class="ek-empty"><title>${esc(`${o.emptyLabel ?? "Vacant"}: ${empty}`)}</title>`);
         for (; cursor < positions.length; cursor++) {
             const { x, y } = xy(positions[cursor]);
+            canvas.obstacle("an empty seat", { x: x - dotR, y: y - dotR, w: dotR * 2, h: dotR * 2 });
             canvas.add(`<circle cx="${n2(x)}" cy="${n2(y)}" r="${n2(dotR * 0.85)}" fill="none" ${canvas.paint({ stroke: "text-muted" })} stroke-width="${n2(Math.max(1, dotR * 0.22))}" data-ek-seat=""/>`);
         }
         canvas.add(`</g>`);
@@ -133,6 +135,7 @@ export function hemicycle(o) {
     for (const i of keyRows) {
         const ring = ringed[i] ? ` ${canvas.paint({ stroke: "text" })} stroke-width="1"` : "";
         canvas.add(`<circle cx="${n2(kx + sw / 2)}" cy="${n2(ky + rowH / 2)}" r="${n2(sw / 2)}" ${canvas.paint({ fill: colourOf[i] })}${ring}/>`);
+        canvas.obstacle(`the key dot for ${names[i]}`, { x: kx, y: ky + rowH / 2 - sw / 2, w: sw, h: sw });
         canvas.text(kx + sw + 10, ky + rowH / 2, names[i], { size: font.label, fill: "text", bg, baseline: "middle" });
         canvas.text(kx + kw, ky + rowH / 2, set.show(o.parties[i]), { size: font.label, weight: 600, fill: "text", bg, baseline: "middle", anchor: "end", tabular: true });
         ky += rowH;
@@ -154,5 +157,5 @@ export function hemicycle(o) {
         rows: [...keyRows.map((i) => [names[i], set.show(o.parties[i])]), ...(empty ? [[o.emptyLabel ?? "Vacant", String(empty)]] : []), ["Chamber", set.show(o.total)], ["Needed for a majority", String(majority)]],
         source: o.majority ? caption : `${caption} The majority is more than half the chamber.`
     });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

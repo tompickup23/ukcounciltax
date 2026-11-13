@@ -6,5 +6,7 @@ export interface BillAnatomyOptions extends ChartOptions {
     total: string;
     /** With more than four parts, the part key drawn in the accent. Defaults to the largest. */
     highlight?: string;
+    /** Opt in: every part and the total must carry a published `name` (see `nameErrors`). Off by default, as in 0.4.0. */
+    requireNames?: boolean;
 }
 export declare function billAnatomy(o: BillAnatomyOptions): ChartOutput;

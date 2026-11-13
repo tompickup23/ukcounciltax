@@ -33,6 +33,11 @@ export interface MarkCheck {
     fill: Colour;
     against: Colour[];
 }
+/** A drawn mark no text may sit on: a bar, measured as the box it fills. */
+export interface ObstacleCheck {
+    what: string;
+    box: Box;
+}
 export interface SeriesCheck {
     what: string;
     colours: Colour[];
@@ -41,6 +46,8 @@ export interface Checks {
     texts: TextCheck[];
     marks: MarkCheck[];
     series: SeriesCheck[];
+    /** Marks no text may overlap (kit 0.4.0). Absent on checks built by hand. */
+    obstacles?: ObstacleCheck[];
     /** The display forms the chart took from its figures; every "value" text must be one. */
     manifest: Set<string>;
     /** Scale labels the alt text may use. */

@@ -21,7 +21,6 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const DIST = resolve(process.cwd(), "dist");
-const HEADERS = join(DIST, "_headers");
 
 /**
  * The script types a browser executes. Anything else in a <script> tag is data
@@ -101,18 +100,19 @@ function rewrite(headers, hashes) {
   }).join("\n");
 }
 
-function main() {
+export function injectHashes(dist = DIST) {
+  const headersPath = join(dist, '_headers');
   let headers;
   try {
-    headers = readFileSync(HEADERS, "utf-8");
+    headers = readFileSync(headersPath, "utf-8");
   } catch {
     console.error("dist/_headers is not there. Run astro build first.");
     process.exit(1);
   }
 
-  const found = hashesIn();
+  const found = hashesIn(dist);
   const hashes = [...found.keys()].sort();
-  writeFileSync(HEADERS, rewrite(headers, hashes));
+  writeFileSync(headersPath, rewrite(headers, hashes));
 
   const listed = [...found.entries()]
     .map(([hash, where]) => `  ${hash}  ${where.bytes} bytes  ${where.page}`)
@@ -121,4 +121,4 @@ function main() {
 }
 
 // Importable from a test without running the write.
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) injectHashes();

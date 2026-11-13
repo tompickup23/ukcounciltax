@@ -10,6 +10,8 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist && node scripts/inject_csp_hashes.mjs",
     "preview": "astro preview",
+    "build:pilot": "node scripts/build-c2-pilot.mjs",
+    "preview:pilot": "wrangler pages dev .ops/c2-dist --port 44427 --ip 127.0.0.1 --compatibility-date=2026-01-01 --show-interactive-dev-session=false",
     "check": "astro check",
     "test": "vitest run",
     "test:dist": "node scripts/check-dist.mjs",

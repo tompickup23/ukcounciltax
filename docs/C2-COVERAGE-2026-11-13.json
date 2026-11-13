@@ -1,0 +1,2047 @@
+{
+  "checkedOn": "2026-11-13",
+  "meaning": "Screen only. No national referendum mapping or release approval. Half-thousand tolerance checks compatibility with printed precision, not proof of an explanation.",
+  "sourceHashes": {
+    "data/national/budget.json": "704c213738abbff846e9210a6fbb9eda058efb3d72beb5467fd7755cfeefdd0a",
+    "data/national/england.json": "81e6926afd4f4e1c226a1333ee7e5c7be2aa4c2d6f6bbc4c87b52e80ebb36c0f",
+    "data/council-tax/england-2026-27.json": "800ce7c73753b36c01d0bd0a4fd1146761aefee63d35e61f6e23d2721af18576",
+    "data/council-tax/england-2025-26.json": "1ac86282f8f0c8f6df4876d1efeefa17fa859905829de6c8c22b16ee5364cbf5"
+  },
+  "total": 296,
+  "screenPassed": 178,
+  "reasonCounts": {
+    "RA parish component needs review": 29,
+    "RA total differs by more than half a thousand pounds": 54,
+    "Authority-specific notes need review": 33,
+    "Missing RA return": 9,
+    "RA note 4 cross-return discrepancy": 7
+  },
+  "councils": [
+    {
+      "gss": "E06000001",
+      "name": "Hartlepool",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E06000002",
+      "name": "Middlesbrough",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000003",
+      "name": "Redcar and Cleveland",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000004",
+      "name": "Stockton-on-Tees",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000005",
+      "name": "Darlington",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000006",
+      "name": "Halton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000007",
+      "name": "Warrington",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000008",
+      "name": "Blackburn with Darwen",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000009",
+      "name": "Blackpool",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000010",
+      "name": "Kingston upon Hull",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000011",
+      "name": "East Riding of Yorkshire",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000012",
+      "name": "North East Lincolnshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000013",
+      "name": "North Lincolnshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000014",
+      "name": "York",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000015",
+      "name": "Derby",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000016",
+      "name": "Leicester",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000017",
+      "name": "Rutland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E06000018",
+      "name": "Nottingham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000019",
+      "name": "Herefordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000020",
+      "name": "Telford and Wrekin",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000021",
+      "name": "Stoke-on-Trent",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000022",
+      "name": "Bath and North East Somerset",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000023",
+      "name": "Bristol",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000024",
+      "name": "North Somerset",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000025",
+      "name": "South Gloucestershire",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E06000026",
+      "name": "Plymouth",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000027",
+      "name": "Torbay",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000030",
+      "name": "Swindon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000031",
+      "name": "Peterborough",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000032",
+      "name": "Luton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000033",
+      "name": "Southend-on-Sea",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000034",
+      "name": "Thurrock",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000035",
+      "name": "Medway",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000036",
+      "name": "Bracknell Forest",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000037",
+      "name": "West Berkshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000038",
+      "name": "Reading",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000039",
+      "name": "Slough",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E06000040",
+      "name": "Windsor and Maidenhead",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000041",
+      "name": "Wokingham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000042",
+      "name": "Milton Keynes",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000043",
+      "name": "Brighton and Hove",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000044",
+      "name": "Portsmouth",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000045",
+      "name": "Southampton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000046",
+      "name": "Isle of Wight",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000047",
+      "name": "Durham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000049",
+      "name": "Cheshire East",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000050",
+      "name": "Cheshire West and Chester",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000051",
+      "name": "Shropshire",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000052",
+      "name": "Cornwall",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000053",
+      "name": "Isles of Scilly",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000054",
+      "name": "Wiltshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000055",
+      "name": "Bedford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000056",
+      "name": "Central Bedfordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000057",
+      "name": "Northumberland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000058",
+      "name": "Bournemouth, Christchurch and Poole",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E06000059",
+      "name": "Dorset",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000060",
+      "name": "Buckinghamshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000061",
+      "name": "North Northamptonshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000062",
+      "name": "West Northamptonshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000063",
+      "name": "Cumberland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E06000064",
+      "name": "Westmorland and Furness",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E06000065",
+      "name": "North Yorkshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E06000066",
+      "name": "Somerset",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000008",
+      "name": "Cambridge",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000009",
+      "name": "East Cambridgeshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000010",
+      "name": "Fenland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000011",
+      "name": "Huntingdonshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000012",
+      "name": "South Cambridgeshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000032",
+      "name": "Amber Valley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000033",
+      "name": "Bolsover",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000034",
+      "name": "Chesterfield",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000035",
+      "name": "Derbyshire Dales",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000036",
+      "name": "Erewash",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000037",
+      "name": "High Peak",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000038",
+      "name": "North East Derbyshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000039",
+      "name": "South Derbyshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000040",
+      "name": "East Devon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000041",
+      "name": "Exeter",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000042",
+      "name": "Mid Devon",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000043",
+      "name": "North Devon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000044",
+      "name": "South Hams",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000045",
+      "name": "Teignbridge",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000046",
+      "name": "Torridge",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000047",
+      "name": "West Devon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000061",
+      "name": "Eastbourne",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000062",
+      "name": "Hastings",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000063",
+      "name": "Lewes",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000064",
+      "name": "Rother",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000065",
+      "name": "Wealden",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000066",
+      "name": "Basildon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000067",
+      "name": "Braintree",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000068",
+      "name": "Brentwood",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000069",
+      "name": "Castle Point",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E07000070",
+      "name": "Chelmsford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000071",
+      "name": "Colchester",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E07000072",
+      "name": "Epping Forest",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E07000073",
+      "name": "Harlow",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000074",
+      "name": "Maldon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000075",
+      "name": "Rochford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000076",
+      "name": "Tendring",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000077",
+      "name": "Uttlesford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000078",
+      "name": "Cheltenham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000079",
+      "name": "Cotswold",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000080",
+      "name": "Forest of Dean",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000081",
+      "name": "Gloucester",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000082",
+      "name": "Stroud",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000083",
+      "name": "Tewkesbury",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000084",
+      "name": "Basingstoke and Deane",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000085",
+      "name": "East Hampshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000086",
+      "name": "Eastleigh",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000087",
+      "name": "Fareham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000088",
+      "name": "Gosport",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000089",
+      "name": "Hart",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000090",
+      "name": "Havant",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000091",
+      "name": "New Forest",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000092",
+      "name": "Rushmoor",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000093",
+      "name": "Test Valley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000094",
+      "name": "Winchester",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000095",
+      "name": "Broxbourne",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000096",
+      "name": "Dacorum",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000098",
+      "name": "Hertsmere",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000099",
+      "name": "North Hertfordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000102",
+      "name": "Three Rivers",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000103",
+      "name": "Watford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000105",
+      "name": "Ashford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000106",
+      "name": "Canterbury",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000107",
+      "name": "Dartford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000108",
+      "name": "Dover",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000109",
+      "name": "Gravesham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000110",
+      "name": "Maidstone",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000111",
+      "name": "Sevenoaks",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000112",
+      "name": "Folkestone and Hythe",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000113",
+      "name": "Swale",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000114",
+      "name": "Thanet",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000115",
+      "name": "Tonbridge and Malling",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000116",
+      "name": "Tunbridge Wells",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000117",
+      "name": "Burnley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000118",
+      "name": "Chorley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000119",
+      "name": "Fylde",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000120",
+      "name": "Hyndburn",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000121",
+      "name": "Lancaster",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000122",
+      "name": "Pendle",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000123",
+      "name": "Preston",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000124",
+      "name": "Ribble Valley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000125",
+      "name": "Rossendale",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000126",
+      "name": "South Ribble",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000127",
+      "name": "West Lancashire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000128",
+      "name": "Wyre",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000129",
+      "name": "Blaby",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000130",
+      "name": "Charnwood",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000131",
+      "name": "Harborough",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E07000132",
+      "name": "Hinckley and Bosworth",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000133",
+      "name": "Melton",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000134",
+      "name": "North West Leicestershire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000135",
+      "name": "Oadby and Wigston",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000136",
+      "name": "Boston",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000137",
+      "name": "East Lindsey",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000138",
+      "name": "Lincoln",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000139",
+      "name": "North Kesteven",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000140",
+      "name": "South Holland",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000141",
+      "name": "South Kesteven",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000142",
+      "name": "West Lindsey",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000143",
+      "name": "Breckland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000144",
+      "name": "Broadland",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000145",
+      "name": "Great Yarmouth",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000146",
+      "name": "Kings Lynn and West Norfolk",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E07000147",
+      "name": "North Norfolk",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000148",
+      "name": "Norwich",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000149",
+      "name": "South Norfolk",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000170",
+      "name": "Ashfield",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000171",
+      "name": "Bassetlaw",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000172",
+      "name": "Broxtowe",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000173",
+      "name": "Gedling",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000174",
+      "name": "Mansfield",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000175",
+      "name": "Newark and Sherwood",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000176",
+      "name": "Rushcliffe",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000177",
+      "name": "Cherwell",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000178",
+      "name": "Oxford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000179",
+      "name": "South Oxfordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000180",
+      "name": "Vale of White Horse",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000181",
+      "name": "West Oxfordshire",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000192",
+      "name": "Cannock Chase",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000193",
+      "name": "East Staffordshire",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000194",
+      "name": "Lichfield",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000195",
+      "name": "Newcastle-under-Lyme",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000196",
+      "name": "South Staffordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000197",
+      "name": "Stafford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000198",
+      "name": "Staffordshire Moorlands",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000199",
+      "name": "Tamworth",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000200",
+      "name": "Babergh",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000202",
+      "name": "Ipswich",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000203",
+      "name": "Mid Suffolk",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000207",
+      "name": "Elmbridge",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000208",
+      "name": "Epsom and Ewell",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000209",
+      "name": "Guildford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E07000210",
+      "name": "Mole Valley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000211",
+      "name": "Reigate and Banstead",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E07000212",
+      "name": "Runnymede",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000213",
+      "name": "Spelthorne",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000214",
+      "name": "Surrey Heath",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000215",
+      "name": "Tandridge",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000216",
+      "name": "Waverley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000217",
+      "name": "Woking",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E07000218",
+      "name": "North Warwickshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000219",
+      "name": "Nuneaton and Bedworth",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000220",
+      "name": "Rugby",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E07000221",
+      "name": "Stratford-on-Avon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000222",
+      "name": "Warwick",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E07000223",
+      "name": "Adur",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000224",
+      "name": "Arun",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000225",
+      "name": "Chichester",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000226",
+      "name": "Crawley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000227",
+      "name": "Horsham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000228",
+      "name": "Mid Sussex",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000229",
+      "name": "Worthing",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000234",
+      "name": "Bromsgrove",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000235",
+      "name": "Malvern Hills",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000236",
+      "name": "Redditch",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000237",
+      "name": "Worcester",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000238",
+      "name": "Wychavon",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000239",
+      "name": "Wyre Forest",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000240",
+      "name": "St Albans",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000241",
+      "name": "Welwyn Hatfield",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000242",
+      "name": "East Hertfordshire",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E07000243",
+      "name": "Stevenage",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E07000244",
+      "name": "East Suffolk",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E07000245",
+      "name": "West Suffolk",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000001",
+      "name": "Bolton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000002",
+      "name": "Bury",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E08000003",
+      "name": "Manchester",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000004",
+      "name": "Oldham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000005",
+      "name": "Rochdale",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000006",
+      "name": "Salford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000007",
+      "name": "Stockport",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000008",
+      "name": "Tameside",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000009",
+      "name": "Trafford",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000010",
+      "name": "Wigan",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000011",
+      "name": "Knowsley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000012",
+      "name": "Liverpool",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000013",
+      "name": "St Helens",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000014",
+      "name": "Sefton",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E08000015",
+      "name": "Wirral",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E08000017",
+      "name": "Doncaster",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000018",
+      "name": "Rotherham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E08000021",
+      "name": "Newcastle upon Tyne",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000022",
+      "name": "North Tyneside",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000023",
+      "name": "South Tyneside",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000024",
+      "name": "Sunderland",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E08000025",
+      "name": "Birmingham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000026",
+      "name": "Coventry",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E08000027",
+      "name": "Dudley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E08000028",
+      "name": "Sandwell",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000029",
+      "name": "Solihull",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000030",
+      "name": "Walsall",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000031",
+      "name": "Wolverhampton",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E08000032",
+      "name": "Bradford",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000033",
+      "name": "Calderdale",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000034",
+      "name": "Kirklees",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E08000035",
+      "name": "Leeds",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000036",
+      "name": "Wakefield",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000037",
+      "name": "Gateshead",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000038",
+      "name": "Barnsley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E08000039",
+      "name": "Sheffield",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000001",
+      "name": "City of London",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA parish component needs review"
+      ]
+    },
+    {
+      "gss": "E09000002",
+      "name": "Barking and Dagenham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000003",
+      "name": "Barnet",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E09000004",
+      "name": "Bexley",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000005",
+      "name": "Brent",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000006",
+      "name": "Bromley",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000007",
+      "name": "Camden",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000008",
+      "name": "Croydon",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000009",
+      "name": "Ealing",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000010",
+      "name": "Enfield",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA note 4 cross-return discrepancy"
+      ]
+    },
+    {
+      "gss": "E09000011",
+      "name": "Greenwich",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Missing RA return"
+      ]
+    },
+    {
+      "gss": "E09000012",
+      "name": "Hackney",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000013",
+      "name": "Hammersmith and Fulham",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000014",
+      "name": "Haringey",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000015",
+      "name": "Harrow",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000016",
+      "name": "Havering",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000017",
+      "name": "Hillingdon",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000018",
+      "name": "Hounslow",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000019",
+      "name": "Islington",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000020",
+      "name": "Kensington and Chelsea",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000021",
+      "name": "Kingston upon Thames",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000022",
+      "name": "Lambeth",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000023",
+      "name": "Lewisham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000024",
+      "name": "Merton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000025",
+      "name": "Newham",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000026",
+      "name": "Redbridge",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000027",
+      "name": "Richmond upon Thames",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    },
+    {
+      "gss": "E09000028",
+      "name": "Southwark",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000029",
+      "name": "Sutton",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000030",
+      "name": "Tower Hamlets",
+      "arithmeticAndComponentScreenPassed": true,
+      "reasons": []
+    },
+    {
+      "gss": "E09000031",
+      "name": "Waltham Forest",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000032",
+      "name": "Wandsworth",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds",
+        "Authority-specific notes need review"
+      ]
+    },
+    {
+      "gss": "E09000033",
+      "name": "Westminster",
+      "arithmeticAndComponentScreenPassed": false,
+      "reasons": [
+        "RA total differs by more than half a thousand pounds"
+      ]
+    }
+  ]
+}

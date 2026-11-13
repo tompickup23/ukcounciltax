@@ -1,0 +1,717 @@
+{
+  "model": "budget-freeze 0.1",
+  "sourceHashes": {
+    "data/national/budget.json": "704c213738abbff846e9210a6fbb9eda058efb3d72beb5467fd7755cfeefdd0a",
+    "data/national/england.json": "81e6926afd4f4e1c226a1333ee7e5c7be2aa4c2d6f6bbc4c87b52e80ebb36c0f",
+    "data/council-tax/england-2026-27.json": "800ce7c73753b36c01d0bd0a4fd1146761aefee63d35e61f6e23d2721af18576",
+    "data/council-tax/england-2025-26.json": "1ac86282f8f0c8f6df4876d1efeefa17fa859905829de6c8c22b16ee5364cbf5"
+  },
+  "rawSources": [
+    {
+      "file": "RA_2026-27_data_Part_1.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods",
+      "sha256": "3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db"
+    },
+    {
+      "file": "RA_2026-27_data_Part_2.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/6a281185e371d9d2c0052b0a/RA_2026-27_data_Part_2.ods",
+      "sha256": "55c34505c69513fcba446f3484061d2bd115c4ce06bb5bafba7b36e330be4d65"
+    },
+    {
+      "file": "SG_2026-27.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/6a28119b6d178a6fb7e31f7f/SG_2026-27.ods",
+      "sha256": "6150792dcea97ca58b912a5fbf9fdc99562ba782fb7d6f5c8885e6ca1a17e3b5"
+    },
+    {
+      "file": "table-10-2026-27.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods",
+      "sha256": "b5b8345743fb722e48699243d1654a3e35b96c89a14c6eb26888035c3e38feb0"
+    },
+    {
+      "file": "Tables_1-9_2026-27.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/69de1fa63e81003ae0422508/Tables_1-9_2026-27.ods",
+      "sha256": "66b7c20f70c804038c0a392ff2b7249fd09e83f4e88ac87d0278ce7e19da5537"
+    },
+    {
+      "file": "Tables_1-9_2025-26.ods",
+      "url": "https://assets.publishing.service.gov.uk/media/69e88e1c9ca985145673b7f4/Tables_1-9_2025-26.ods",
+      "sha256": "7d9f98b6c152d276d7fb672db0a7cec866df24e175bb28ebb55cbe845a8afbc3"
+    },
+    {
+      "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+      "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+      "sha256": "128ea9300b33124e88474412be96e050ed210dddcc17cf4b7620bade53df3ac3"
+    }
+  ],
+  "referendum": {
+    "publisher": "MHCLG",
+    "title": "Council Tax Referendum Principles Report 2026/27",
+    "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+    "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+    "sha256": "128ea9300b33124e88474412be96e050ed210dddcc17cf4b7620bade53df3ac3",
+    "published": "2026-02-09",
+    "checked": "2026-11-13",
+    "licence": "Open Government Licence v3.0"
+  },
+  "reviewedOn": "2026-11-13",
+  "pilots": [
+    {
+      "gss": "E07000117",
+      "slug": "burnley",
+      "rule": "district",
+      "classCode": "SD",
+      "ruleLocation": "Annex A, paragraphs 1, 2(e) and 7, printed pages 6 to 8",
+      "name": "Burnley",
+      "year": "2026-27",
+      "ownPence": "35144",
+      "priorOwnPence": "34458",
+      "taxBaseHundredths": "2449700",
+      "services": [
+        {
+          "id": "edutot",
+          "label": "Education Services",
+          "line": 190,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "transtot",
+          "label": "Highways and Transport",
+          "line": 290,
+          "pence": "-34300000",
+          "editable": false,
+          "heldReason": "Net income stays fixed"
+        },
+        {
+          "id": "csctot",
+          "label": "Children's Social Care",
+          "line": 330,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "asctot",
+          "label": "Adult Social Care",
+          "line": 360,
+          "pence": "200000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "phtot",
+          "label": "Public Health",
+          "line": 390,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "housgfcftot",
+          "label": "Housing Services (General Fund Revenue Account [GFRA] only)",
+          "line": 490,
+          "pence": "223600000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "cultot",
+          "label": "Cultural and Related Services",
+          "line": 509,
+          "pence": "528700000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "envtot",
+          "label": "Environmental and Regulatory Services",
+          "line": 590,
+          "pence": "568100000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "plantot",
+          "label": "Planning and Development Services",
+          "line": 599,
+          "pence": "-42600000",
+          "editable": false,
+          "heldReason": "Net income stays fixed"
+        },
+        {
+          "id": "poltot",
+          "label": "Police",
+          "line": 601,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "frstot",
+          "label": "Fire",
+          "line": 602,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "centot",
+          "label": "Central Services",
+          "line": 690,
+          "pence": "480900000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "othtot",
+          "label": "Other",
+          "line": 698,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        }
+      ],
+      "sourceWarnings": [
+        "Source review outstanding: the RA parish component differs from Table 10 by more than half a printed thousand pounds. This pilot is not cleared for public release."
+      ],
+      "grantDsgThousands": 0,
+      "ledger": [
+        {
+          "id": "edutot",
+          "line": 190,
+          "label": "TOTAL EDUCATION SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "transtot",
+          "line": 290,
+          "label": "TOTAL HIGHWAYS AND TRANSPORT SERVICES",
+          "thousands": -343
+        },
+        {
+          "id": "csctot",
+          "line": 330,
+          "label": "TOTAL CHILDREN'S SOCIAL CARE",
+          "thousands": 0
+        },
+        {
+          "id": "asctot",
+          "line": 360,
+          "label": "TOTAL ADULT SOCIAL CARE",
+          "thousands": 2
+        },
+        {
+          "id": "phtot",
+          "line": 390,
+          "label": "TOTAL PUBLIC HEALTH",
+          "thousands": 0
+        },
+        {
+          "id": "housgfcftot",
+          "line": 490,
+          "label": "TOTAL HOUSING SERVICES (GFRA only)",
+          "thousands": 2236
+        },
+        {
+          "id": "cultot",
+          "line": 509,
+          "label": "TOTAL CULTURAL AND RELATED SERVICES",
+          "thousands": 5287
+        },
+        {
+          "id": "envtot",
+          "line": 590,
+          "label": "TOTAL ENVIRONMENTAL AND REGULATORY SERVICES",
+          "thousands": 5681
+        },
+        {
+          "id": "plantot",
+          "line": 599,
+          "label": "TOTAL PLANNING AND DEVELOPMENT SERVICES",
+          "thousands": -426
+        },
+        {
+          "id": "poltot",
+          "line": 601,
+          "label": "TOTAL POLICE SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "frstot",
+          "line": 602,
+          "label": "TOTAL FIRE AND RESCUE SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "centot",
+          "line": 690,
+          "label": "TOTAL CENTRAL SERVICES",
+          "thousands": 4809
+        },
+        {
+          "id": "othtot",
+          "line": 698,
+          "label": "TOTAL OTHER SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "servicetot",
+          "line": 799,
+          "label": "TOTAL SERVICE EXPENDITURE",
+          "thousands": 17246
+        },
+        {
+          "id": "revenuetot",
+          "line": 900,
+          "label": "REVENUE EXPENDITURE",
+          "thousands": 25831
+        },
+        {
+          "id": "grantinaef",
+          "line": 904,
+          "label": "Specific and special grants inside AEF [SG line 699 as income]",
+          "thousands": -3150
+        },
+        {
+          "id": "trnsreorg",
+          "line": 906,
+          "label": "Inter-authority transfers in respect of reorganisation",
+          "thousands": 0
+        },
+        {
+          "id": "appressch",
+          "line": 911,
+          "label": "Appropriations to(+)/ from(-) schools' reserves",
+          "thousands": 0
+        },
+        {
+          "id": "appresdsg",
+          "line": 913,
+          "label": "Appropriations to(+)/ from(-) dedicated schools grant reserves",
+          "thousands": 0
+        },
+        {
+          "id": "appresph",
+          "line": 914,
+          "label": "Appropriations to(+)/ from(-) public health financial reserves",
+          "thousands": 0
+        },
+        {
+          "id": "appresoth",
+          "line": 915,
+          "label": "Appropriations to(+)/ from(-) other earmarked financial reserves",
+          "thousands": -2149
+        },
+        {
+          "id": "appresunall",
+          "line": 916,
+          "label": "Appropriations to(+)/ from(-) unallocated financial reserves",
+          "thousands": 0
+        },
+        {
+          "id": "grantrsg",
+          "line": 951,
+          "label": "Revenue Support Grant",
+          "thousands": -6908
+        },
+        {
+          "id": "grantpol",
+          "line": 956,
+          "label": "Police grant",
+          "thousands": 0
+        },
+        {
+          "id": "retainnndr",
+          "line": 970,
+          "label": "Retained income from Rate Retention Scheme **",
+          "thousands": -4787
+        },
+        {
+          "id": "colfunct",
+          "line": 980,
+          "label": "Collection fund surpluses and deficits for Council Tax",
+          "thousands": -5
+        },
+        {
+          "id": "othinc",
+          "line": 985,
+          "label": "Other Items",
+          "thousands": 0
+        },
+        {
+          "id": "ctrtot",
+          "line": 990,
+          "label": "COUNCIL TAX REQUIREMENT (total of lines 900 to 985)",
+          "thousands": 8832
+        },
+        {
+          "id": "parishaggprecept",
+          "line": 821,
+          "label": "Parish Precepts",
+          "thousands": 222
+        }
+      ],
+      "reconciliation": {
+        "table10TotalPence": "883202600",
+        "table10OwnPence": "860922600",
+        "table10ParishPence": "22280000",
+        "raTotalDifferencePence": "-2600",
+        "parishDifferencePence": "-80000",
+        "componentReviewRequired": true,
+        "ownYieldDifferenceUnits": "-3200",
+        "freezeDifferenceUnits": "1680494200"
+      },
+      "sources": [
+        {
+          "title": "RA Part 1, service lines, 799, 900 to 990 and 821, 11 June 2026",
+          "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods"
+        },
+        {
+          "title": "Annual Table 8c, own Band D excluding parish, 2026/27",
+          "url": "https://assets.publishing.service.gov.uk/media/69de1fa63e81003ae0422508/Tables_1-9_2026-27.ods"
+        },
+        {
+          "title": "Annual Table 8c, own Band D excluding parish, 2025/26",
+          "url": "https://assets.publishing.service.gov.uk/media/69e88e1c9ca985145673b7f4/Tables_1-9_2025-26.ods"
+        },
+        {
+          "title": "Table 10, Data_Billing, current tax base and own/parish requirements, 2026/27",
+          "url": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods"
+        },
+        {
+          "title": "Referendum principles, 9 February 2026. Annex A, paragraphs 1, 2(e) and 7, printed pages 6 to 8",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf"
+        }
+      ]
+    },
+    {
+      "gss": "E06000008",
+      "slug": "blackburn-with-darwen",
+      "rule": "ordinary-social-care",
+      "classCode": "UA",
+      "ruleLocation": "Annex A, paragraphs 1, 2(a) and 3; Annex B, printed page 13 names Blackburn with Darwen",
+      "name": "Blackburn with Darwen",
+      "year": "2026-27",
+      "ownPence": "206296",
+      "priorOwnPence": "196493",
+      "taxBaseHundredths": "3824603",
+      "services": [
+        {
+          "id": "edutot",
+          "label": "Education Services",
+          "line": 190,
+          "pence": "16312600000",
+          "editable": false,
+          "heldReason": "Held fixed because funding restrictions are not modelled"
+        },
+        {
+          "id": "transtot",
+          "label": "Highways and Transport",
+          "line": 290,
+          "pence": "547400000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "csctot",
+          "label": "Children's Social Care",
+          "line": 330,
+          "pence": "7074900000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "asctot",
+          "label": "Adult Social Care",
+          "line": 360,
+          "pence": "8995900000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "phtot",
+          "label": "Public Health",
+          "line": 390,
+          "pence": "2043900000",
+          "editable": false,
+          "heldReason": "Held fixed because funding restrictions are not modelled"
+        },
+        {
+          "id": "housgfcftot",
+          "label": "Housing Services (General Fund Revenue Account [GFRA] only)",
+          "line": 490,
+          "pence": "620100000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "cultot",
+          "label": "Cultural and Related Services",
+          "line": 509,
+          "pence": "894500000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "envtot",
+          "label": "Environmental and Regulatory Services",
+          "line": 590,
+          "pence": "1783200000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "plantot",
+          "label": "Planning and Development Services",
+          "line": 599,
+          "pence": "632900000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "poltot",
+          "label": "Police",
+          "line": 601,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "frstot",
+          "label": "Fire",
+          "line": 602,
+          "pence": "0",
+          "editable": false,
+          "heldReason": "Published zero stays fixed"
+        },
+        {
+          "id": "centot",
+          "label": "Central Services",
+          "line": 690,
+          "pence": "707800000",
+          "editable": true,
+          "heldReason": null
+        },
+        {
+          "id": "othtot",
+          "label": "Other",
+          "line": 698,
+          "pence": "414900000",
+          "editable": true,
+          "heldReason": null
+        }
+      ],
+      "sourceWarnings": [],
+      "grantDsgThousands": 145512,
+      "ledger": [
+        {
+          "id": "edutot",
+          "line": 190,
+          "label": "TOTAL EDUCATION SERVICES",
+          "thousands": 163126
+        },
+        {
+          "id": "transtot",
+          "line": 290,
+          "label": "TOTAL HIGHWAYS AND TRANSPORT SERVICES",
+          "thousands": 5474
+        },
+        {
+          "id": "csctot",
+          "line": 330,
+          "label": "TOTAL CHILDREN'S SOCIAL CARE",
+          "thousands": 70749
+        },
+        {
+          "id": "asctot",
+          "line": 360,
+          "label": "TOTAL ADULT SOCIAL CARE",
+          "thousands": 89959
+        },
+        {
+          "id": "phtot",
+          "line": 390,
+          "label": "TOTAL PUBLIC HEALTH",
+          "thousands": 20439
+        },
+        {
+          "id": "housgfcftot",
+          "line": 490,
+          "label": "TOTAL HOUSING SERVICES (GFRA only)",
+          "thousands": 6201
+        },
+        {
+          "id": "cultot",
+          "line": 509,
+          "label": "TOTAL CULTURAL AND RELATED SERVICES",
+          "thousands": 8945
+        },
+        {
+          "id": "envtot",
+          "line": 590,
+          "label": "TOTAL ENVIRONMENTAL AND REGULATORY SERVICES",
+          "thousands": 17832
+        },
+        {
+          "id": "plantot",
+          "line": 599,
+          "label": "TOTAL PLANNING AND DEVELOPMENT SERVICES",
+          "thousands": 6329
+        },
+        {
+          "id": "poltot",
+          "line": 601,
+          "label": "TOTAL POLICE SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "frstot",
+          "line": 602,
+          "label": "TOTAL FIRE AND RESCUE SERVICES",
+          "thousands": 0
+        },
+        {
+          "id": "centot",
+          "line": 690,
+          "label": "TOTAL CENTRAL SERVICES",
+          "thousands": 7078
+        },
+        {
+          "id": "othtot",
+          "line": 698,
+          "label": "TOTAL OTHER SERVICES",
+          "thousands": 4149
+        },
+        {
+          "id": "servicetot",
+          "line": 799,
+          "label": "TOTAL SERVICE EXPENDITURE",
+          "thousands": 400281
+        },
+        {
+          "id": "revenuetot",
+          "line": 900,
+          "label": "REVENUE EXPENDITURE",
+          "thousands": 423364
+        },
+        {
+          "id": "grantinaef",
+          "line": 904,
+          "label": "Specific and special grants inside AEF [SG line 699 as income]",
+          "thousands": -216725
+        },
+        {
+          "id": "trnsreorg",
+          "line": 906,
+          "label": "Inter-authority transfers in respect of reorganisation",
+          "thousands": 0
+        },
+        {
+          "id": "appressch",
+          "line": 911,
+          "label": "Appropriations to(+)/ from(-) schools' reserves",
+          "thousands": 0
+        },
+        {
+          "id": "appresdsg",
+          "line": 913,
+          "label": "Appropriations to(+)/ from(-) dedicated schools grant reserves",
+          "thousands": 2317
+        },
+        {
+          "id": "appresph",
+          "line": 914,
+          "label": "Appropriations to(+)/ from(-) public health financial reserves",
+          "thousands": 0
+        },
+        {
+          "id": "appresoth",
+          "line": 915,
+          "label": "Appropriations to(+)/ from(-) other earmarked financial reserves",
+          "thousands": -11197
+        },
+        {
+          "id": "appresunall",
+          "line": 916,
+          "label": "Appropriations to(+)/ from(-) unallocated financial reserves",
+          "thousands": 0
+        },
+        {
+          "id": "grantrsg",
+          "line": 951,
+          "label": "Revenue Support Grant",
+          "thousands": -55157
+        },
+        {
+          "id": "grantpol",
+          "line": 956,
+          "label": "Police grant",
+          "thousands": 0
+        },
+        {
+          "id": "retainnndr",
+          "line": 970,
+          "label": "Retained income from Rate Retention Scheme **",
+          "thousands": -60526
+        },
+        {
+          "id": "colfunct",
+          "line": 980,
+          "label": "Collection fund surpluses and deficits for Council Tax",
+          "thousands": -2978
+        },
+        {
+          "id": "othinc",
+          "line": 985,
+          "label": "Other Items",
+          "thousands": 0
+        },
+        {
+          "id": "ctrtot",
+          "line": 990,
+          "label": "COUNCIL TAX REQUIREMENT (total of lines 900 to 985)",
+          "thousands": 79098
+        },
+        {
+          "id": "parishaggprecept",
+          "line": 821,
+          "label": "Parish Precepts",
+          "thousands": 198
+        }
+      ],
+      "reconciliation": {
+        "table10TotalPence": "7909823400",
+        "table10OwnPence": "7890000000",
+        "table10ParishPence": "19823400",
+        "raTotalDifferencePence": "-23400",
+        "parishDifferencePence": "-23400",
+        "componentReviewRequired": false,
+        "ownYieldDifferenceUnits": "300488",
+        "freezeDifferenceUnits": "37492583209"
+      },
+      "sources": [
+        {
+          "title": "RA Part 1, service lines, 799, 900 to 990 and 821, 11 June 2026",
+          "url": "https://assets.publishing.service.gov.uk/media/6a2962166d178a6fb7e32089/RA_2026-27_data_Part_1.ods"
+        },
+        {
+          "title": "Annual Table 8a, own Band D excluding parish, 2026/27",
+          "url": "https://assets.publishing.service.gov.uk/media/69de1fa63e81003ae0422508/Tables_1-9_2026-27.ods"
+        },
+        {
+          "title": "Annual Table 8a, own Band D excluding parish, 2025/26",
+          "url": "https://assets.publishing.service.gov.uk/media/69e88e1c9ca985145673b7f4/Tables_1-9_2025-26.ods"
+        },
+        {
+          "title": "Table 10, Data_Billing, current tax base and own/parish requirements, 2026/27",
+          "url": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods"
+        },
+        {
+          "title": "Referendum principles, 9 February 2026. Annex A, paragraphs 1, 2(a) and 3; Annex B, printed page 13 names Blackburn with Darwen",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf"
+        }
+      ]
+    }
+  ]
+}

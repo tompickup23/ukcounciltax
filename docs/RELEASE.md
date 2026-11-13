@@ -1,5 +1,15 @@
 # UK Council Tax specialist build, 5 October 2026
 
+## Local C2 experiment, 13 November 2026
+
+An opt-in, local-only tax-and-spending pilot for Burnley and Blackburn with
+Darwen is built separately from the public site. It preserves published data,
+uses exact money arithmetic and keeps the current game unchanged. No production
+route, sitemap, canonical or deployment changes. Source evidence, coverage
+screening, verification and the production brief are in
+`docs/C2-PILOT-2026-11-13.md`. Burnley's parish component needs review before any
+public release. This entry records local work, not a published feature.
+
 ## Scope and provenance
 
 New standalone Astro project, copied selectively from UK Councils commit 779dec32274f39d9d84bb311c49e8476d3b1e2a9. The source project and its live deployment are not migrated by this release. UK Council Tax remains the specialist tax product; broad council, elections, demographics and spending context is linked to public ecosystem routes.

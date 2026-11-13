@@ -470,3 +470,17 @@ Review fix, same day: on band pages a region with no matching council now
 leaves the page with its heading and jump link, and one status line under the
 shared controls reports the result. Details and measurements are in
 `docs/SMALL-FAULTS-2026-11-13.md`.
+
+## Held registry reorganisation field, 13 November 2026
+
+Council profiles no longer render the registry `reorganisation` field. Until
+this change the 14 Lancashire profiles printed the July registry note under
+"Is this council being reorganised?", with a contents link. UK Councils has
+held the same field since 5 November 2026. This change removes the section and
+its contents entry and adds no replacement wording, source or figure. The
+registry file is unchanged; the correction belongs in UK Places.
+
+`npm run test:dist` now fails if any built file carries the held wording, and
+`tests/reorganisation-held.test.ts` fails if any file under `src` reads the
+field. Only the 14 Lancashire profiles differ. The candidate awaits review;
+publication is separate.

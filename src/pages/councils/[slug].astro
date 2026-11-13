@@ -7,6 +7,7 @@ import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords, sentenceCase} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
+import NearbyCouncils from "../../components/NearbyCouncils.astro";
 import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
@@ -139,6 +140,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
       {id: 'where-money-goes', label: 'Where the money goes'},
       ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+      {id: 'similar', label: 'Nearby and alike'},
       {id: 'more', label: `${name} across the network`},
     ]},
   ]} />
@@ -306,6 +308,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   )}
 
 
+
+  <NearbyCouncils council={council} rankingHref={rankingPath(rankType.slug)} rankingLabel={rankType.label} />
 
   <section class="section" id="more" aria-labelledby="more-heading">
     <h2 id="more-heading">{name} across the network</h2>

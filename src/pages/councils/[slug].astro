@@ -118,21 +118,29 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
-  <PageContents items={[
-    {id: 'council-tax', label: 'Bands A to H'},
-    ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
-    ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
-    {id: 'map', label: 'Map'},
-    {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
-    {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
-    ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-    ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
-    {id: 'parish-precepts', label: 'Parish charges'},
-    ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
-    ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
-    {id: 'where-money-goes', label: 'Where the money goes'},
-    ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
-    {id: 'more', label: `${name} across the network`},
+  <PageContents groups={[
+    {label: 'Your council tax', items: [
+      {id: 'council-tax', label: 'Bands A to H'},
+      ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
+      ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
+    ]},
+    {label: 'Area and history', items: [
+      {id: 'map', label: 'Map'},
+      {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
+    ]},
+    {label: 'Paying and precepts', items: [
+      {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
+      ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
+      ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+      {id: 'parish-precepts', label: 'Parish charges'},
+    ]},
+    {label: 'Council and local context', items: [
+      ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
+      ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
+      {id: 'where-money-goes', label: 'Where the money goes'},
+      ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+      {id: 'more', label: `${name} across the network`},
+    ]},
   ]} />
 
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
@@ -211,7 +219,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       </div>
       <p class="muted">
         Both averages include parish and adult social care precepts, the same basis as the {name} figure.
-        <a href={regionPath(tax.region)}>Band D for every council in {tax.region}</a>.
+        <a href={`${regionPath(tax.region)}?type=${tax.classCode}`}>Band D in {tax.region}, starting with {rankType.label}</a>.
       </p>
     </section>
   )}

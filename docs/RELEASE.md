@@ -438,3 +438,30 @@ tests and 67,188 internal link destinations. No gate or assertion was changed.
 Measurements, per-kind counts, the eight Burnley hashes and visual review are
 in `docs/KIT-050-REVIEW-2026-11-13.md`. The kit candidate remains unmerged and
 undeployed pending review.
+
+## Small faults and parish index review, 13 November 2026
+
+Prerequisite PR 65 merged as `d7c151c`; production run 43426163952 completed
+successfully and the release stylesheet and eight Burnley downloads were
+verified live. UK Councils PR 49 also merged and deployed successfully in its
+separate approved release.
+
+This review candidate gives band pages one shared name, type and sort control,
+retains the complete-class restriction on monetary sorting, and restores a
+validated incoming council type from profile links. Profiles group their
+existing contents links under four headings in document order. The parish
+index adds council and region sorting with explicit accessible names and
+aria-sort, plus region chips with aria-pressed. Band and region pages finish
+with onward links. The existing 54 devolved name-finder rows remain unchanged.
+
+No new source, data, amount, comparison basis, route, canonical or security
+permission is introduced. Details and final verification are recorded in
+`docs/SMALL-FAULTS-2026-11-13.md`. The candidate awaits review; its publication
+is separate from the two prerequisite releases above.
+
+Validation passed: 356 unit tests, 38 final build-dependent rechecks, Astro
+check, full image build, distribution and text checks, 67,291 internal link
+destinations, 420 browser tests and 104 actual production-header tests. The
+number comparison found zero differences; all 2,845 PNG hashes are identical
+to the full baseline build. The pinned design checker passed all four changed
+page types in both themes and widths.

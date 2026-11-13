@@ -1,5 +1,7 @@
 export * from "./figures/figures.js";
 export { tokens, palette, partyColour, partyKey, partyName, SITE_KEYS, VERSION, type SiteKey, type Theme } from "../generated/tokens.js";
+export { skin, skinPalette, deskPalette, SKIN_KEYS, DESK_KEYS, type Skin, type SkinKey, type Register } from "../generated/tokens.js";
+export { gatePalettes, hexPalette, type Ground, type Mode } from "./charts/canvas.js";
 export { zeroBar, type ZeroBarOptions } from "./charts/zeroBar.js";
 export { line, type LineOptions } from "./charts/line.js";
 export { waffle, squaresFor, squareClass, WAFFLE_PAINTS, WAFFLE_MAX_PARTS, type WaffleOptions, type WaffleSize, type Paint, type Hatch } from "./charts/waffle.js";
@@ -14,3 +16,8 @@ export { hasMark, markSvg } from "./output/marks.js";
 export { chartActionsHtml, chartPngNames, type ChartActionsOptions } from "./output/actions.js";
 export { assertGates, gateErrors, DASHES } from "./qa/gates.js";
 export { contrast, seenDistance, VISIONS } from "./qa/colour.js";
+export { linkedSource, shortSourceText, shortSourceHtml, sourceEntryHtml, sourceLinesHtml, type LinkedSource } from "./figures/sources.js";
+export { checkSources, sourceErrors } from "./qa/sources.js";
+export { checkNames, nameErrors } from "./qa/names.js";
+export { summaryRowTiles, summaryRowHtml, type SummaryFact, type SummaryRowOptions, type SummaryTile } from "./charts/summaryRow.js";
+export { linear, zeroDomain, zeroScale, bands, barPath, openBar, polylineObstacles, overlaps, firstClear, stackRows, spread, annotate, measure, zeroLine, type BarSpec, type Candidate, type Annotation, type Piece } from "./charts/grammar/index.js";

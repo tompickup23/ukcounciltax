@@ -30,6 +30,7 @@ const thumb = out.svg.includes('class="ek-chart ek-thumb"');
 ) : (
   <figure class:list={["ek-figure", className]} data-figure={keys.join(" ")}>
     <Fragment set:html={out.svg} />
+    {out.sourceHtml && <figcaption class="ek-source" set:html={out.sourceHtml} />}
     {act && <ChartActions twinId={id} label={act.label ?? out.title ?? out.alt} png={act.png} />}
     {out.table && (
       <details class="ek-twin" id={id} open={tableOpen}>

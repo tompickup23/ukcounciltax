@@ -5,10 +5,11 @@
  * left and the source, which ends with its edition or date, on the right. Charts draw only
  * inside the plot rectangle this hands them.
  */
-import { palette, tokens } from "../../generated/tokens.js";
+import { tokens } from "../../generated/tokens.js";
 import { TEMPLATES } from "../output/templates.js";
 import { markSvg } from "../output/marks.js";
-import { Canvas, textWidth, wrap } from "./canvas.js";
+import { Canvas, esc, hexPalette, onDesk, textWidth, wrap } from "./canvas.js";
+import { sourceLinesHtml } from "../figures/sources.js";
 import { currentFigures } from "../figures/figures.js";
 /** Replaces {key} and {key:form} with a figure's display form, so prose never types a number. */
 export function fillSlots(text, set) {
@@ -18,13 +19,15 @@ export function fillSlots(text, set) {
  * Lays out header and footer and hands back the plot rectangle. For inline the plot
  * height is the chart's own need; for a card it is what the fixed canvas leaves.
  */
-export function frame(o, caption, plotNeed, thumbForm) {
+export function frame(o, caption, plotNeed, thumbForm, figures = []) {
     const tpl = TEMPLATES[o.template ?? "inline"];
     if (tpl.thumb && !thumbForm)
         throw new Error("this chart has no thumb form: only ZeroBar, Waffle, BillAnatomy and PositionStrip draw the 160 by 64 thumb");
     const set = currentFigures(o.set);
     const site = o.site ?? "ukdemographics";
-    const mode = tpl.card ? { kind: "hex", theme: "dark", site } : o.mode ?? { kind: "css" };
+    const mode = tpl.card ? { kind: "hex", theme: "dark", site } : withGround(o.mode ?? { kind: "css" }, o.ground);
+    const htmlSource = !tpl.card && !tpl.thumb && mode.kind === "css" && o.sourcePlacement === "html";
+    const sourceOutput = htmlSource ? { sourceHtml: o.sourceFormat ? sourceLinesHtml(figures, o.sourceFormat) : esc(caption) } : undefined;
     const title = o.title ? fillSlots(o.title, set) : undefined;
     if (tpl.card && !title)
         throw new Error("a card needs a title: the takeaway sentence");
@@ -34,7 +37,7 @@ export function frame(o, caption, plotNeed, thumbForm) {
         canvas.silent = true;
         const plot = { x: tpl.pad, y: tpl.pad, w: tpl.W - tpl.pad * 2, h: tpl.H - tpl.pad * 2 };
         const close = () => {
-            if (mode.kind === "hex") {
+            if (mode.kind === "hex" || onDesk(mode)) {
                 canvas.rect(0, 0, canvas.W, canvas.H, "bg");
                 canvas.parts.unshift(canvas.parts.pop());
             }
@@ -50,7 +53,7 @@ export function frame(o, caption, plotNeed, thumbForm) {
         canvas.rect(0, 0, tpl.W, Math.round(tpl.H * 0.013), "accent-bright", 'data-ek-card="rule"');
         // The lockup: the mark, then the name in the display face, as the brand build draws it.
         const markH = Math.round(f.brand * 1.56);
-        const mark = markSvg(site, tpl.pad, y, markH, palette("dark", site).bg);
+        const mark = markSvg(site, tpl.pad, y, markH, hexPalette("dark", site).bg);
         if (mark)
             canvas.add(mark);
         canvas.text(tpl.pad + (mark ? markH * 1.26 : 0), y + markH / 2 + f.brand * 0.35, tokens.sites[site].name, { size: f.brand, weight: 600, family: "display", fill: "text", bg, cls: "ek-lockup" });
@@ -78,17 +81,22 @@ export function frame(o, caption, plotNeed, thumbForm) {
             footLines.forEach((l, i) => canvas.text(tpl.W - tpl.pad, fy + f.source + i * f.source * 1.3, l, { size: f.source, fill: "text-muted", bg, anchor: "end", cls: "ek-source" }));
             return;
         }
-        const end = canvas.para(tpl.pad, fy, caption, footW, { size: f.source, fill: "text-muted", bg, lineHeight: 1.3 });
+        const end = htmlSource ? plotBottom : canvas.para(tpl.pad, fy, caption, footW, { size: f.source, fill: "text-muted", bg, lineHeight: 1.3 });
         if (!tpl.H)
             canvas.H = end + tpl.pad;
         // A hex render outside a card has no page behind it, so it paints its own ground;
         // otherwise a dark theme PNG would land transparent and its light text vanish.
-        if (mode.kind === "hex") {
+        // So does a chart on a desk, so its light text never lands on the paper.
+        if (mode.kind === "hex" || onDesk(mode)) {
             canvas.rect(0, 0, canvas.W, canvas.H, bg);
             canvas.parts.unshift(canvas.parts.pop());
         }
     };
-    return { canvas, tpl, plot, bg, set, title, close };
+    return { canvas, tpl, plot, bg, set, title, close, sourceOutput };
+}
+/** The paint mode with the chart's ground on it; a ground on the mode itself wins. */
+export function withGround(mode, ground) {
+    return ground && !mode.ground ? { ...mode, ground } : mode;
 }
 export const NICE_STEPS = [1, 2, 2.5, 5, 10];
 /** A round ceiling at or above max, so the top gridline is a readable number. */

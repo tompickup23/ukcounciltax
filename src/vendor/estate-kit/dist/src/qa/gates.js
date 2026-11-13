@@ -11,6 +11,10 @@
  * boxes may overlap, measured from the fonts' own advance widths; and no ranking or loaded
  * word in a title or the alt text. Scale labels ("lowest", "highest") label a scale, not an
  * area, so the alt text may name them.
+ *
+ * Kit 0.4.0 adds text against marks: a chart registers the boxes its marks fill, and no
+ * text box may overlap one. UK Council Tax's band bars shipped a Band D label with its last
+ * digit under the next bar, which the text against text check could not see.
  */
 import { contrast, seenDistance, VISIONS } from "./colour.js";
 /** The dash pattern of the map renderer: em dash, en dash, a spaced hyphen, the entities. */
@@ -22,7 +26,7 @@ export const LOADED_WORDS = /\b(spread|spreading|replaced|replacement|influx|flo
 /** OKLab distance two series must keep under every vision (ukdemographics tests/ethnic-palette.test.ts). */
 export const MIN_SERIES_DISTANCE = 0.09;
 export const MIN_MARK_CONTRAST = 3;
-export const emptyChecks = () => ({ texts: [], marks: [], series: [], manifest: new Set(), scale: new Set() });
+export const emptyChecks = () => ({ texts: [], marks: [], series: [], obstacles: [], manifest: new Set(), scale: new Set() });
 const overlap = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 /** Ranking or loaded words in a string, with the given scale labels taken out first. */
 export function wordErrors(text, where, scale = []) {
@@ -63,6 +67,13 @@ export function layoutErrors(checks) {
                 continue;
             if (overlap(a.box, b.box))
                 errs.push(`text overlaps: "${a.content}" and "${b.content}"`);
+        }
+    // A label under a mark is drawn over and read short: "£2,549.42" under the next bar
+    // reads "£2,549.4". Text against text was the only overlap checked before kit 0.4.0.
+    for (const a of boxed)
+        for (const m of checks.obstacles ?? []) {
+            if (overlap(a.box, m.box))
+                errs.push(`text over a mark: "${a.content}" and ${m.what}`);
         }
     return errs;
 }

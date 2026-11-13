@@ -19,6 +19,7 @@ import { geoMercator, geoPath } from "d3-geo";
 import { tokens } from "../../generated/tokens.js";
 import { esc, n2, textWidth } from "./canvas.js";
 import { frame } from "./frame.js";
+import { gutterLabels, leaderAnchor, lockedWidth, placePlates, polylineObstacles, segmentHitsBox, segmentsCross } from "./grammar/index.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue } from "../figures/figures.js";
 const R = tokens.ramp;
@@ -69,11 +70,13 @@ function pole(a, proj, P) {
         return m;
     };
     const pts = rings.flat();
+    const bx0 = Math.min(...pts.map((p) => p[0])), by0 = Math.min(...pts.map((p) => p[1]));
+    const bounds = { x: bx0, y: by0, w: Math.max(...pts.map((p) => p[0])) - bx0, h: Math.max(...pts.map((p) => p[1])) - by0 };
     let [x0, x1] = [Math.max(P.x, Math.min(...pts.map((p) => p[0]))), Math.min(P.x + P.w, Math.max(...pts.map((p) => p[0])))];
     let [y0, y1] = [Math.max(P.y, Math.min(...pts.map((p) => p[1]))), Math.min(P.y + P.h, Math.max(...pts.map((p) => p[1])))];
     let best = { x: (x0 + x1) / 2, y: (y0 + y1) / 2, r: 0 };
     if (x1 <= x0 || y1 <= y0)
-        return { ...best, inside };
+        return { ...best, inside, bounds };
     for (let pass = 0; pass < 4; pass++) {
         const step = Math.max(x1 - x0, y1 - y0) / 36;
         for (let x = x0; x <= x1; x += step)
@@ -87,7 +90,7 @@ function pole(a, proj, P) {
         const sp = step * 2;
         [x0, x1, y0, y1] = [best.x - sp, best.x + sp, best.y - sp, best.y + sp];
     }
-    return { ...best, inside };
+    return { ...best, inside, bounds };
 }
 export function locatorMap(o) {
     const set = currentFigures(o.set);
@@ -113,8 +116,16 @@ export function locatorMap(o) {
             throw new Error(`${o.values[code]}: area ${code} is not among the areas`);
     }
     const classOf = (v) => breaks.filter((b) => v >= b).length;
+    for (const other of o.lockAcross ?? [])
+        for (const [code, k] of Object.entries(other)) {
+            const f = set.value(k);
+            if (f.unit !== unit)
+                throw new Error(`${k}: every edition a map is locked across must share its unit`);
+            if (!areas.some((a) => a.properties.code === code))
+                throw new Error(`${k}: area ${code} is not among the areas`);
+        }
     const caption = `${set.caption(keys)} ${o.boundaryCredit}`;
-    const fr = frame({ ...o, set }, caption, 0);
+    const fr = frame({ ...o, set }, caption, 0, undefined, keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const fmt = (v) => formatValue(v, unit ?? "rate", Number.isInteger(v) ? 0 : 1);
@@ -139,16 +150,81 @@ export function locatorMap(o) {
     // place itself with a margin, as UKD's focus frames do, so a large neighbour cannot shrink
     // it to a corner; neighbours run to the panel edge and are cut there.
     canvas.rect(P.x, P.y, P.w, P.h, R.ground, `rx="${tokens.radius["radius-sm"].replace("px", "")}"`);
-    // All the areas fill the panel, unless that leaves the place under a third of it either
-    // way; then the projection fits the place with UKD's margins and the neighbours are cut.
-    const pad = Math.max(12, P.w * 0.03);
-    let proj = geoMercator().fitExtent([[P.x + pad, P.y + pad], [P.x + P.w - pad, P.y + P.h - pad]], { type: "FeatureCollection", features: areas });
-    const [[fx0, fy0], [fx1, fy1]] = geoPath(proj).bounds(focus);
-    if ((fx1 - fx0) / P.w < 1 / 3 && (fy1 - fy0) / P.h < 1 / 3) {
-        const inset = tpl.key === "inline" ? [0.2, 0.17] : [0.26, 0.2];
-        proj = geoMercator().fitExtent([[P.x + P.w * inset[0], P.y + P.h * inset[1]], [P.x + P.w * (1 - inset[0]), P.y + P.h * (1 - inset[1])]], focus);
+    // Plate sizes depend on text only, so they are known before the projection. Locked
+    // across editions: a plate is as wide as the widest value it holds in any of them.
+    const valueOf = (code) => (figs[code] ? set.show(o.values[code]) : "no figure");
+    const valuesIn = (code) => [valueOf(code), ...(o.lockAcross ?? []).map((m) => (m[code] ? set.show(m[code]) : "no figure"))];
+    const plate = (a) => {
+        const code = a.properties.code, isFocus = code === o.focus;
+        const ns = isFocus ? font.label : font.axis, vs = isFocus ? font.value : font.label;
+        const nameFamily = isFocus ? "display" : "sans";
+        const pad = Math.round(ns * 0.4);
+        const w = Math.max(textWidth(a.properties.name, ns, nameFamily, 600), lockedWidth(valuesIn(code), (s) => textWidth(s, vs, "sans", 600))) + 2 * pad;
+        const h = ns + vs + pad * 2 + 4;
+        return { a, code, isFocus, ns, vs, nameFamily, pad, w, h };
+    };
+    const gap = 6;
+    /** The projection, the plates and any gutter labels for a map fitted inside M. Draws nothing. */
+    const layoutIn = (M, sides) => {
+        // All the areas fill the panel, unless that leaves the place under a third of it either
+        // way; then the projection fits the place with UKD's margins and the neighbours are cut.
+        const pad = Math.max(12, M.w * 0.03);
+        let proj = geoMercator().fitExtent([[M.x + pad, M.y + pad], [M.x + M.w - pad, M.y + M.h - pad]], { type: "FeatureCollection", features: areas });
+        const [[fx0, fy0], [fx1, fy1]] = geoPath(proj).bounds(focus);
+        if ((fx1 - fx0) / M.w < 1 / 3 && (fy1 - fy0) / M.h < 1 / 3) {
+            const inset = tpl.key === "inline" ? [0.2, 0.17] : [0.26, 0.2];
+            proj = geoMercator().fitExtent([[M.x + M.w * inset[0], M.y + M.h * inset[1]], [M.x + M.w * (1 - inset[0]), M.y + M.h * (1 - inset[1])]], focus);
+        }
+        const cands = areas.map((a) => ({ ...plate(a), pole: pole(a, proj, P) }));
+        cands.sort((p, q) => Number(q.isFocus) - Number(p.isFocus) || q.pole.r - p.pole.r);
+        const { placed, unplaced: missed } = placePlates(cands.map((c) => ({
+            item: c, w: c.w, h: c.h, anchor: { x: c.pole.x, y: c.pole.y }, r: c.pole.r,
+            eligible: c.isFocus || c.pole.r >= Math.min(c.w, c.h) * 0.3,
+            always: c.isFocus,
+            // A plate may cross a boundary, never leave its own area: its centre stays inside.
+            fits: (x, y) => c.pole.inside(x + c.w / 2, y + c.h / 2)
+        })), { panel: M, gap, inset: 6 });
+        const gutter = [];
+        if (sides && missed.length) {
+            // Each neighbour with no plate goes to the gutter on its side, its leader starting on
+            // a part of its area no plate covers. A leader may cross areas, never a plate or
+            // another leader: a label whose leader would is named under the key instead.
+            const covered = (x, y) => placed.some((q) => x + 6 > q.x && x < q.x + q.w + 6 && y + 6 > q.y && y < q.y + q.h + 6);
+            const items = missed.map((c) => ({ item: c, w: c.w, h: c.h, anchor: leaderAnchor({ x: c.pole.x, y: c.pole.y }, c.pole.bounds, c.pole.inside, covered) }));
+            const laid = gutterLabels(items, { panel: P, gap, minY: P.y + 6, maxY: P.y + P.h - 6, inset: 8, only: sides === 1 ? "R" : undefined });
+            const boxes = placed.map((q) => ({ x: q.x, y: q.y, w: q.w, h: q.h }));
+            const hit = (b) => b.x < P.x + 6 || b.y < P.y + 6 || b.x + b.w > P.x + P.w - 6 || b.y + b.h > P.y + P.h - 6 ||
+                boxes.some((q) => b.x < q.x + q.w + gap && b.x + b.w + gap > q.x && b.y < q.y + q.h + gap && b.y + b.h + gap > q.y);
+            for (const g of laid) {
+                const box = { x: g.x - g.w / 2, y: g.y - g.h / 2, w: g.w, h: g.h };
+                const a = g.anchor, b = { x: g.side === "L" ? box.x + box.w : box.x, y: g.y };
+                if (hit(box) || boxes.some((q) => segmentHitsBox(a, b, q, 2)) || gutter.some((l) => segmentsCross(a, b, l.a, l.b)))
+                    continue;
+                boxes.push(box);
+                gutter.push({ item: g.item, side: g.side, box, a, b });
+            }
+        }
+        const inGutter = new Set(gutter.map((g) => g.item.code));
+        return { proj, placed, gutter, unplaced: missed.map((c) => c.code).filter((code) => !inGutter.has(code)) };
+    };
+    // Gutter mode keeps a gutter either side for the labels, as UKD's group maps do, and fits
+    // the map between them; where two would leave the map under half the panel, one gutter
+    // on the right. It is used only when it names more areas on the map than the plain
+    // layout, which is otherwise drawn exactly as without the option.
+    const plain = layoutIn(P, 0);
+    let L = plain;
+    if (o.neighbourLabels === "gutter" && plain.unplaced.length) {
+        // As wide as the widest plate that missed the map, and a margin either side.
+        const gutterW = Math.max(0, ...areas.filter((a) => plain.unplaced.includes(a.properties.code)).map((a) => plate(a).w)) + 16;
+        const sides = P.w - 2 * gutterW >= P.w * 0.5 ? 2 : P.w - gutterW >= P.w * 0.5 ? 1 : 0;
+        if (sides) {
+            const M = sides === 2 ? { x: P.x + gutterW, y: P.y, w: P.w - 2 * gutterW, h: P.h } : { x: P.x, y: P.y, w: P.w - gutterW, h: P.h };
+            const withGutters = layoutIn(M, sides);
+            if (withGutters.unplaced.length < plain.unplaced.length)
+                L = withGutters;
+        }
     }
-    const path = geoPath(proj);
+    const path = geoPath(L.proj);
     const clipId = `ek-clip-${esc(o.focus)}-${tpl.key}`;
     canvas.mark("focus outline", R.ink, [R.ground]);
     canvas.add(`<defs><pattern id="ek-na-${esc(o.focus)}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="${R.na}"/><rect width="2.5" height="8" fill="${R.naStripe}"/></pattern><clipPath id="${clipId}"><rect x="${n2(P.x)}" y="${n2(P.y)}" width="${n2(P.w)}" height="${n2(P.h)}" rx="${tokens.radius["radius-sm"].replace("px", "")}"/></clipPath></defs>`);
@@ -163,55 +239,23 @@ export function locatorMap(o) {
     const fd = path(focus) ?? "";
     canvas.add(`<path d="${fd}" fill="none" stroke="${R.ground}" stroke-width="7" stroke-linejoin="round"/><path d="${fd}" fill="none" stroke="${R.ink}" stroke-width="3.5" stroke-linejoin="round" data-ek-focus="${esc(o.focus)}"/>`);
     canvas.add(`</g>`);
-    // Plates, after UKD layout.ts: each centres on its area's pole of inaccessibility (the
-    // point inside the area, and inside the panel, furthest from any edge). The place goes
-    // first and always gets its plate; then the neighbours, largest first, each where it
-    // fits without touching another plate or the panel edge. A neighbour that fits nowhere
-    // is named with its value under the key, so every area on the map is labelled.
-    const valueOf = (code) => (figs[code] ? set.show(o.values[code]) : "no figure");
-    const cands = areas.map((a) => {
-        const code = a.properties.code, isFocus = code === o.focus;
-        const ns = isFocus ? font.label : font.axis, vs = isFocus ? font.value : font.label;
-        const nameFamily = isFocus ? "display" : "sans";
-        const pad = Math.round(ns * 0.4);
-        const w = Math.max(textWidth(a.properties.name, ns, nameFamily, 600), textWidth(valueOf(code), vs, "sans", 600)) + 2 * pad;
-        const h = ns + vs + pad * 2 + 4;
-        return { a, code, isFocus, ns, vs, nameFamily, pad, w, h, pole: pole(a, proj, P) };
-    });
-    cands.sort((p, q) => Number(q.isFocus) - Number(p.isFocus) || q.pole.r - p.pole.r);
-    const placed = [];
-    const gap = 6;
-    const clash = (x, y, w, h) => placed.some((q) => x < q.x + q.w + gap && x + w + gap > q.x && y < q.y + q.h + gap && y + h + gap > q.y);
-    const outside = (x, y, w, h) => x < P.x + 6 || y < P.y + 6 || x + w > P.x + P.w - 6 || y + h > P.y + P.h - 6;
-    const unplaced = [];
-    for (const c of cands) {
-        let pos = null;
-        if (c.isFocus || c.pole.r >= Math.min(c.w, c.h) * 0.3) {
-            const tries = [[0, 0]];
-            for (const rad of [0.35, 0.7, 1.0, 1.4])
-                for (let i = 0; i < 12; i++)
-                    tries.push([Math.cos((i * Math.PI) / 6) * c.pole.r * rad, Math.sin((i * Math.PI) / 6) * c.pole.r * rad]);
-            for (const [dx, dy] of tries) {
-                const x = c.pole.x + dx - c.w / 2, y = c.pole.y + dy - c.h / 2;
-                // A plate may cross a boundary, never leave its own area: its centre stays inside.
-                if (!clash(x, y, c.w, c.h) && !outside(x, y, c.w, c.h) && c.pole.inside(x + c.w / 2, y + c.h / 2)) {
-                    pos = [x, y];
-                    break;
-                }
-            }
-        }
-        if (!pos && c.isFocus)
-            pos = [Math.min(Math.max(c.pole.x - c.w / 2, P.x + 6), P.x + P.w - c.w - 6), Math.min(Math.max(c.pole.y - c.h / 2, P.y + 6), P.y + P.h - c.h - 6)];
-        if (!pos) {
-            unplaced.push(c.code);
-            continue;
-        }
-        const [x, y] = pos;
-        placed.push({ x, y, w: c.w, h: c.h });
-        canvas.add(`<rect x="${n2(x)}" y="${n2(y)}" width="${n2(c.w)}" height="${n2(c.h)}" rx="4" fill="${R.ground}" fill-opacity="0.92"${c.isFocus ? ` stroke="${R.ink}" stroke-width="1.5"` : ""} data-ek-plate="${esc(c.code)}"/>`);
+    const drawPlate = (c, x, y, extra = "") => {
+        canvas.add(`<rect x="${n2(x)}" y="${n2(y)}" width="${n2(c.w)}" height="${n2(c.h)}" rx="4" fill="${R.ground}" fill-opacity="0.92"${c.isFocus ? ` stroke="${R.ink}" stroke-width="1.5"` : ""} data-ek-plate="${esc(c.code)}"${extra}/>`);
         canvas.text(x + c.pad, y + c.pad + c.ns * 0.85, c.a.properties.name, { size: c.ns, weight: 600, family: c.nameFamily, fill: R.ink, bg: R.ground });
         canvas.text(x + c.pad, y + c.pad + 4 + c.ns + c.vs * 0.85, valueOf(c.code), { size: c.vs, weight: 600, fill: c.isFocus ? R.ink : R.muted, bg: R.ground, tabular: true });
+    };
+    for (const p of L.placed)
+        drawPlate(p.item, p.x, p.y);
+    if (L.gutter.length)
+        canvas.mark("gutter leader", R.muted, [R.ground]);
+    for (const g of L.gutter) {
+        // The leader registers its segment, so no text may sit across it.
+        polylineObstacles(canvas, `the leader for ${g.item.a.properties.name}`, [g.a, g.b], 1.25);
+        canvas.add(`<g class="ek-gutter" data-ek-side="${g.side}"><line x1="${n2(g.a.x)}" y1="${n2(g.a.y)}" x2="${n2(g.b.x)}" y2="${n2(g.b.y)}" stroke="${R.muted}" stroke-width="1.25" data-ek-leader="${esc(g.item.code)}"/><circle cx="${n2(g.a.x)}" cy="${n2(g.a.y)}" r="2.5" fill="${R.ink}"/>`);
+        drawPlate(g.item, g.box.x, g.box.y, ` data-ek-gutter="${g.side}"`);
+        canvas.add(`</g>`);
     }
+    const unplaced = L.unplaced;
     // The key: one swatch per class with its range, then no figure, then the place.
     const keyX0 = beside ? P.x + P.w + 24 : P.x;
     const keyY0 = beside ? P.y : P.y + P.h + 20;
@@ -229,6 +273,7 @@ export function locatorMap(o) {
     rowsIn.forEach(([fill, text, stroke], i) => {
         const kx = keyX0 + Math.floor(i / perCol) * colW, ky = keyY0 + font.axis + 10 + (i % perCol) * rowH;
         canvas.add(`<rect x="${n2(kx)}" y="${n2(ky + (rowH - sw) / 2)}" width="${n2(sw)}" height="${n2(sw)}" rx="2" fill="${fill}"${stroke}/>`);
+        canvas.obstacle(`the key swatch for ${text}`, { x: kx, y: ky + (rowH - sw) / 2, w: sw, h: sw });
         canvas.text(kx + sw + 10, ky + rowH / 2, text, { size: font.label, fill: "text", bg, baseline: "middle" });
     });
     let ky = keyY0 + keyH;
@@ -249,5 +294,7 @@ export function locatorMap(o) {
         .sort((p, q) => (q.f?.value ?? -Infinity) - (p.f?.value ?? -Infinity))
         .map(({ a, f }) => [a.properties.name + (a.properties.code === o.focus ? " (this place)" : ""), f ? set.show(o.values[a.properties.code]) : "no figure"]);
     const table = tableTwin({ caption: fr.title ?? (fv?.label ?? "Map"), head: ["Area", fv?.name ?? "Figure"], rows, source: caption });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    if (fr.sourceOutput && o.sourceFormat)
+        fr.sourceOutput.sourceHtml += ` ${esc(o.boundaryCredit)}`;
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

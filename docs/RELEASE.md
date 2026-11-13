@@ -412,3 +412,29 @@ dates and repeated year labels removed by shortening the next-year notice.
 
 Measurements, decisions and validation are recorded in
 `docs/INCREASES-WAY-IN-2026-11-13.md`. This entry does not record a deployment.
+
+## Estate Kit 0.5.0 review candidate, 13 November 2026
+
+The increases prerequisite in PR 64 merged at `8ee0140` and production run
+43405371552 successfully published it. All 16 focused increases browser tests
+passed against the live custom domain after publication.
+
+This candidate upgrades the exact vendored Estate Kit from v0.3.0 to v0.5.0,
+commit `5680ba5e00bd764313f63ac820ab6fa2a7e3a610`, built from a clean tag
+archive. All 97 recorded files match that build and all 96 files shared with
+UK Councils match its release hashes. This site's colour file is unchanged.
+The existing site code works without compatibility edits. Optional linked
+citations, summary rows and body name checks remain unused.
+
+All 2,845 PNGs and every inline SVG are identical to the baseline. The 2,202
+chart PNGs remain 326,095,835 bytes, with zero changed chart pixels. The full
+build took 252.01 seconds against 238.70 seconds for the baseline, both with
+the image cache disabled. The whole-build number comparison is empty without
+an allow list. No financial data, figure, source or label changed.
+
+Validation passed 356 unit tests, Astro check with no diagnostics, the full
+image build, distribution and text checks, 404 browser tests, 96 actual-header
+tests and 67,188 internal link destinations. No gate or assertion was changed.
+Measurements, per-kind counts, the eight Burnley hashes and visual review are
+in `docs/KIT-050-REVIEW-2026-11-13.md`. The kit candidate remains unmerged and
+undeployed pending review.

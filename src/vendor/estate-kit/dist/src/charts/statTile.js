@@ -12,6 +12,7 @@
 import { n2, textWidth, wrap } from "./canvas.js";
 import { frame, fillSlots } from "./frame.js";
 import { tableTwin } from "./table.js";
+import { sourceLinesHtml } from "../figures/sources.js";
 import { currentFigures } from "../figures/figures.js";
 const slotKeys = (text) => [...text.matchAll(/\{([a-z0-9_.]+)(?::(?:full|round|short))?\}/gi)].map((m) => m[1]);
 /** The checked strings of a tile. Throws if a money figure has no perspective and no stated reason. */
@@ -29,14 +30,14 @@ export function statTileParts(o, set = currentFigures(o.set), hasSlot = false) {
         value: set.show(o.figure),
         perspective: o.perspective ? fillSlots(o.perspective, set) : undefined,
         caption: set.caption(keys),
-        captionHtml: set.captionHtml(keys),
+        captionHtml: o.sourceFormat ? sourceLinesHtml(keys.map(k => set.get(k)), o.sourceFormat) : set.captionHtml(keys),
         keys
     };
 }
 export function statTile(o) {
     const set = currentFigures(o.set);
     const parts = statTileParts(o, set);
-    const fr = frame({ ...o, set }, parts.caption, 0);
+    const fr = frame({ ...o, set }, parts.caption, 0, undefined, parts.keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     // The figure takes the template's stat size, or less if that would run past the plot.
@@ -56,7 +57,7 @@ export function statTile(o) {
     const alt = o.alt ?? `${parts.label}: ${parts.value}.${parts.perspective ? " " + parts.perspective + "." : ""}`;
     const svg = canvas.finish(`StatTile ${o.figure} ${tpl.key}`, alt);
     const table = tableTwin({ caption: parts.label, head: ["", "Figure"], rows: [[parts.label, parts.value]], source: parts.caption });
-    return { svg, table, alt, caption: parts.caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption: parts.caption, title: fr.title, width: canvas.W, height: canvas.H };
 }
 export function scoreCard(o) {
     const set = currentFigures(o.set);
@@ -81,7 +82,7 @@ export function scoreCard(o) {
     const outOf = played.length * max;
     const skipped = o.rows.length - played.length;
     const caption = set.caption(keys);
-    const fr = frame({ ...o, set }, caption, 0);
+    const fr = frame({ ...o, set }, caption, 0, undefined, keys.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     const P = fr.plot;
@@ -120,6 +121,8 @@ export function scoreCard(o) {
         const name = wrap(r.label, nameW - 12, font.label)[0] + (wrap(r.label, nameW - 12, font.label).length > 1 ? "…" : "");
         canvas.text(P.x, cy, name, { size: font.label, fill: "text", bg, baseline: "middle" });
         canvas.add(`<rect x="${n2(x0)}" y="${n2(cy - barH / 2)}" width="${n2(trackW)}" height="${n2(barH)}" rx="${n2(barH / 2)}" ${canvas.paint({ fill: "bg-subtle", stroke: "border" })}/>`);
+        // The track holds the score bar, so one box covers both.
+        canvas.obstacle(`the score track for ${r.label}`, { x: x0, y: cy - barH / 2, w: trackW, h: barH });
         const v = scores[i];
         if (v === null) {
             canvas.text(P.x + P.w, cy, "Skipped", { size: font.label, fill: "text-muted", bg, baseline: "middle", anchor: "end" });
@@ -144,5 +147,5 @@ export function scoreCard(o) {
         rows: [...o.rows.map((r, i) => [r.label, scores[i] === null ? "Skipped" : String(scores[i])]), ["Total", `${total} of ${outOf}`]],
         source: caption
     });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

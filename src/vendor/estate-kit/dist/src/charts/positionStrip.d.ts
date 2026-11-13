@@ -10,6 +10,8 @@ export interface PositionStripOptions extends ChartOptions {
     classLabel: string;
     /** The charge basis, stated in the drawing: "Area Band D, including parish precepts". */
     basis: string;
+    /** Opt in: the place's figure must carry a published `name` (see `nameErrors`). Off by default, as in 0.4.0. */
+    requireNames?: boolean;
 }
 /** The fewest members a class may have: a 90th percentile of fewer values says little. */
 export declare const MIN_CLASS = 10;

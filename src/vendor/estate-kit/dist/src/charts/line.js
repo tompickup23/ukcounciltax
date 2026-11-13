@@ -14,6 +14,7 @@ import { contrast } from "../qa/colour.js";
 import { MIN_MARK_CONTRAST, resolve } from "../qa/gates.js";
 import { partyColour, partyName } from "../../generated/tokens.js";
 import { gatePalettes, n2, textWidth } from "./canvas.js";
+import { polylineObstacles, spread } from "./grammar/index.js";
 import { frame, niceMax } from "./frame.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue, showPoint } from "../figures/figures.js";
@@ -30,7 +31,7 @@ export function line(o) {
     if (figs.some((f) => f.unit !== unit || f.axis !== axis))
         throw new Error("every series on one Line must share a unit and an axis kind");
     const caption = set.caption(o.series);
-    const fr = frame({ ...o, set }, caption, 0);
+    const fr = frame({ ...o, set }, caption, 0, undefined, o.series.map(k => set.get(k)));
     const { canvas, tpl, bg } = fr;
     const font = tpl.font;
     // In party mode the data's name finds the colour and the display name prints (the TUV key carries a spaced hyphen).
@@ -100,7 +101,10 @@ export function line(o) {
     chart.setAttribute("font-size", n2(font.axis));
     for (const s of chart.querySelectorAll("style"))
         s.remove();
-    let inner = chart.outerHTML.replace(/ class="plot-[^"]*"/g, "");
+    // Plot names each mark group with aria-label ("line", "rule", "y-grid"). An aria-label on
+    // a g with no role is prohibited (axe aria-prohibited-attr, found by the catalogue), and
+    // the chart already speaks through its own label, caption and table twin, so they go.
+    let inner = chart.outerHTML.replace(/ class="plot-[^"]*"/g, "").replace(/ aria-label="[^"]*"/g, "");
     // Plot paints ticks and text in currentColor; give it the muted text token.
     if (canvas.mode.kind === "css") {
         colours.forEach((c, i) => { if (!c.startsWith("#"))
@@ -119,9 +123,11 @@ export function line(o) {
         const x = axis === "time" ? new Date(last.label) : last.label;
         return { i, x: P.x + xS.apply(x), y: P.y + yS.apply(last.value) };
     }).sort((a, b) => a.y - b.y);
-    for (let k = 1; k < ends.length; k++)
-        if (ends[k].y - ends[k - 1].y < gapY)
-            ends[k].y = ends[k - 1].y + gapY;
+    spread(ends, gapY);
+    // Each line registers its segments, so no label may cross a line.
+    figs.forEach((f, i) => polylineObstacles(canvas, `the line for ${names[i]}`, f.points.map((p) => ({
+        x: P.x + xS.apply(axis === "time" ? new Date(p.label) : p.label), y: P.y + yS.apply(p.value)
+    })), cased[i] ? 5.2 : 3));
     for (const e of ends) {
         const lx = P.x + P.w - endW + 10;
         canvas.add(`<line x1="${n2(lx)}" y1="${n2(e.y)}" x2="${n2(lx + 14)}" y2="${n2(e.y)}" ${canvas.paint({ stroke: colours[e.i] })} stroke-width="4" stroke-linecap="round"/>`);
@@ -139,5 +145,5 @@ export function line(o) {
             ...figs.map((f) => { const p = f.points.find((q) => q.label === x); return p ? showPoint(f, p) : "no figure"; })]),
         source: caption
     });
-    return { svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
+    return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

@@ -1,0 +1,34 @@
+---
+import { BANDS } from '../lib/council-tax';
+import type { TaxBand } from '../lib/tax-view';
+interface Props {
+  id: string;
+  caption: string;
+  classes: [string, string][];
+  band?: TaxBand;
+  fixedBand?: boolean;
+  /** One set of controls for several tables: adds the single status line for all of them. */
+  shared?: boolean;
+}
+const { id, caption, classes, band = 'D', fixedBand = false, shared = false } = Astro.props;
+---
+<div id={id} data-table-controls hidden>
+  <fieldset class:list={['table-controls', { 'fixed-band': fixedBand }]} disabled>
+    <legend class="visually-hidden">Filter and sort {caption}</legend>
+    <label class="field" for={`${id}-filter`}>Council name<input id={`${id}-filter`} type="search" autocomplete="off" data-table-filter /></label>
+    {!fixedBand && <label class="field">Band<select data-table-band>{BANDS.map(b => <option selected={b === band}>{b}</option>)}</select></label>}
+    <label class="field">Council type<select data-table-class><option value="">All types</option>{classes.map(([code, label]) => <option value={code}>{label}</option>)}</select></label>
+    <div class="field"><label for={`${id}-sort`}>Sort</label><select id={`${id}-sort`} data-table-sort aria-describedby={`${id}-sort-note`}><option value="name">Council name</option><option value="high" disabled>Annual charge, highest first</option><option value="low" disabled>Annual charge, lowest first</option></select><p class="small muted sort-note" id={`${id}-sort-note`} data-sort-note>Choose one council type to sort by annual charge.</p></div>
+  </fieldset>
+  {shared && <p class="small shared-status" role="status" data-controls-status></p>}
+  <div class="action-links table-actions" data-pagefind-ignore><button class="button secondary" type="button" data-table-print disabled>Print</button></div>
+</div>
+<style>
+  [data-table-controls][hidden] { display: none; }
+  .table-controls { display: grid; grid-template-columns: 2fr 0.7fr 1.4fr 1.6fr; gap: 0.7rem; border: 0; padding: 0; margin: 0; min-width: 0; }
+  .fixed-band { grid-template-columns: 2fr 1.4fr 1.6fr; }
+  .sort-note { margin: 0; font-weight: 400; }
+  .shared-status { margin: 0.7rem 0 0; }
+  @media(max-width: 640px) { .table-controls { grid-template-columns: 1fr 1fr; } .fixed-band > .field:first-of-type { grid-column: 1 / -1; } }
+  @media print { [data-table-controls] { display: none; } }
+</style>

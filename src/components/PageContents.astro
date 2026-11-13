@@ -1,10 +1,20 @@
 ---
 /** Anchor navigation adapted from UK Demographics, using this site's tokens. */
-interface Props { items: {id: string; label: string}[] }
-const {items} = Astro.props;
+interface Item { id: string; label: string }
+interface Props { items?: Item[]; groups?: {label: string; items: Item[]}[] }
+const {items = [], groups = []} = Astro.props;
 ---
 <nav aria-label="On this page" class="page-contents">
   <p class="eyebrow">On this page</p>
-  <ul class="pill-nav">{items.map(item => <li><a href={`#${item.id}`}>{item.label}</a></li>)}</ul>
+  {groups.length ? <div class="contents-groups">{groups.filter(group => group.items.length).map(group => <div data-contents-group>
+    <h2>{group.label}</h2>
+    <ul class="pill-nav">{group.items.map(item => <li><a href={`#${item.id}`}>{item.label}</a></li>)}</ul>
+  </div>)}</div> : <ul class="pill-nav">{items.map(item => <li><a href={`#${item.id}`}>{item.label}</a></li>)}</ul>}
 </nav>
-<style>.page-contents { margin: 1.5rem 0; padding: 1rem 0; border-block: 1px solid var(--border); }</style>
+<style>
+  .page-contents { margin: 1.5rem 0; padding: 1rem 0; border-block: 1px solid var(--border); }
+  .contents-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.5rem; }
+  .contents-groups h2 { margin: 0 0 0.35rem; font-family: var(--font-sans); font-size: 1rem; }
+  .contents-groups ul { list-style: none; margin: 0; padding: 0; }
+  @media (max-width: 599px) { .contents-groups { grid-template-columns: 1fr; } }
+</style>

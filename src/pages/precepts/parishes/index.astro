@@ -4,7 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import {CURRENT_YEAR, loadYear, yearLabel} from '../../../lib/council-tax';
 import {national, parishesFor} from '../../../lib/national-data';
-import {parishPages, parishPath} from '../../../lib/paths';
+import {parishPages, parishPath, REGIONS} from '../../../lib/paths';
 import {parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
 const pages = parishPages();
 const year = yearLabel(CURRENT_YEAR), tax = loadYear(CURRENT_YEAR);
@@ -14,10 +14,71 @@ const description = `${national.parishes.length.toLocaleString('en-GB')} local p
 <BaseLayout title={title} description={description} path="/precepts/parishes/">
   <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts'}]} />
   <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length-pages.length} councils have no local precepting authority in this return.</p><SourceLine source={parishSource} /></div></header>
-  <p>Choose a council to see its parish and local body records. A parish Band D precept applies only within its charging area and is not a full council tax bill. These records are listed by council name, without ranking parishes or billing areas.</p>
-  <div class="fact" data-fact><div class="table-wrap" tabindex="0" role="region" aria-label="Parish precepts by billing council"><table class="data" data-pagefind-ignore>
+  <p>Choose a council to see its parish and local body records. A parish Band D precept applies only within its charging area and is not a full council tax bill. These records are listed in council name order, without ranking parish charges or billing areas.</p>
+  <div class="parish-filters" data-parish-filters hidden>
+    <div class="picker-chips" role="group" aria-label="Region">
+      <button type="button" class="chip" aria-pressed="true" data-parish-region="">All regions</button>
+      {REGIONS.filter(region => pages.some(council => council.region === region)).map(region => <button type="button" class="chip" aria-pressed="false" data-parish-region={region}>{region}</button>)}
+    </div>
+    <p class="small" role="status" data-parish-count></p>
+  </div>
+  <div class="fact" data-fact><div class="table-wrap" tabindex="0" role="region" aria-label="Parish precepts by billing council"><table class="data" data-pagefind-ignore data-parish-index>
     <caption>Local precepting authority records by council, {year}</caption>
-    <thead><tr><th scope="col">Council</th><th scope="col">Region</th><th scope="col" class="num">Records</th><th scope="col" class="num">Records with a non zero {year} Band D</th><th scope="col" class="num">Lowest non zero Band D</th><th scope="col" class="num">Highest non zero Band D</th></tr></thead>
-    <tbody>{pages.map(council => {const summary = parishSummary(parishesFor(council.gss)); return <tr><th scope="row"><a href={parishPath(council)}>{tax.authorities[council.gss].name}</a></th><td>{council.region}</td><td class="num" data-figure>{summary.records}</td><td class="num" data-figure>{summary.nonZero}</td><td class="num" data-figure>{summary.min === null ? 'No non zero precept' : parishAmountWords(summary.min)}</td><td class="num" data-figure>{summary.max === null ? 'No non zero precept' : parishAmountWords(summary.max)}</td></tr>;})}</tbody>
+    <thead><tr><th scope="col" data-parish-key="name" aria-sort="ascending"><span data-sort-label>Council</span><button type="button" class="sort-button" data-parish-sort="name" aria-label="Sort by council" hidden>Council</button></th><th scope="col" data-parish-key="region"><span data-sort-label>Region</span><button type="button" class="sort-button" data-parish-sort="region" aria-label="Sort by region" hidden>Region</button></th><th scope="col" class="num">Records</th><th scope="col" class="num">Records with a non zero {year} Band D</th><th scope="col" class="num">Lowest non zero Band D</th><th scope="col" class="num">Highest non zero Band D</th></tr></thead>
+    <tbody>{pages.map(council => {const summary = parishSummary(parishesFor(council.gss)); return <tr data-region={council.region} data-name={tax.authorities[council.gss].name}><th scope="row"><a href={parishPath(council)}>{tax.authorities[council.gss].name}</a></th><td>{council.region}</td><td class="num" data-figure>{summary.records}</td><td class="num" data-figure>{summary.nonZero}</td><td class="num" data-figure>{summary.min === null ? 'No non zero precept' : parishAmountWords(summary.min)}</td><td class="num" data-figure>{summary.max === null ? 'No non zero precept' : parishAmountWords(summary.max)}</td></tr>;})}</tbody>
   </table></div><SourceLine source={parishSource} /></div>
 </BaseLayout>
+
+<script>
+  const table = document.querySelector<HTMLTableElement>('[data-parish-index]');
+  if (table) {
+    const body = table.tBodies[0];
+    const rows = [...body.rows];
+    const controls = document.querySelector<HTMLElement>('[data-parish-filters]')!;
+    const count = controls.querySelector<HTMLElement>('[data-parish-count]')!;
+    const collator = new Intl.Collator('en-GB');
+    let chosenRegion = '';
+    let key: 'name' | 'region' = 'name';
+    let direction = 1;
+    const filter = () => {
+      for (const row of rows) row.hidden = Boolean(chosenRegion && row.dataset.region !== chosenRegion);
+      count.textContent = `${rows.filter(row => !row.hidden).length} of ${rows.length} councils shown`;
+    };
+    for (const button of table.querySelectorAll<HTMLButtonElement>('[data-parish-sort]')) {
+      button.hidden = false;
+      button.parentElement!.querySelector<HTMLElement>('[data-sort-label]')!.hidden = true;
+      button.addEventListener('click', () => {
+        const next = button.dataset.parishSort as typeof key;
+        direction = next === key ? -direction : 1;
+        key = next;
+        const sorted = [...rows].sort((a, b) => collator.compare(a.dataset[key]!, b.dataset[key]!) * direction || collator.compare(a.dataset.name!, b.dataset.name!));
+        body.append(...sorted);
+        for (const header of table.querySelectorAll<HTMLElement>('[data-parish-key]')) {
+          if (header.dataset.parishKey === key) header.setAttribute('aria-sort', direction === 1 ? 'ascending' : 'descending');
+          else header.removeAttribute('aria-sort');
+        }
+      });
+    }
+    for (const chip of controls.querySelectorAll<HTMLButtonElement>('[data-parish-region]')) {
+      chip.addEventListener('click', () => {
+        chosenRegion = chip.dataset.parishRegion!;
+        for (const other of controls.querySelectorAll('[data-parish-region]')) other.setAttribute('aria-pressed', String(other === chip));
+        filter();
+      });
+    }
+    controls.hidden = false;
+    filter();
+  }
+</script>
+<style>
+  [hidden] { display: none; }
+  .parish-filters { margin-block: 1rem; }
+  .picker-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip { font: inherit; font-size: 0.88rem; line-height: 1.2; padding: 0.45rem 0.75rem; min-height: 36px; border: 1px solid var(--border); border-radius: 999px; background: var(--bg-card); color: var(--text); cursor: pointer; }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--accent-wash); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+  .sort-button { font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 0.15em; }
+  th[aria-sort="ascending"] .sort-button::after { content: " \2191"; }
+  th[aria-sort="descending"] .sort-button::after { content: " \2193"; }
+  @media print { .parish-filters { display: none; } }
+</style>

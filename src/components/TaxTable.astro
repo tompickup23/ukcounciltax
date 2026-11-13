@@ -1,16 +1,17 @@
 ---
 import SourceLine from './SourceLine.astro';
+import TaxTableControls from './TaxTableControls.astro';
 import {CURRENT_YEAR, PREVIOUS_YEAR, BANDS, yearLabel} from '../lib/council-tax';
 import {taxRows, taxSources} from '../lib/tax-view-data';
 import {completeClass, moneyPence, monthlyPence, type TaxBand} from '../lib/tax-view';
 import {changeSource} from '../lib/sources';
 import {jsonLd} from '../lib/site';
-interface Props { id: string; region?: string; band?: TaxBand; caption: string }
-const {id, region, band = 'D', caption} = Astro.props;
+interface Props { id: string; region?: string; band?: TaxBand; caption: string; controlsId?: string }
+const {id, region, band = 'D', caption, controlsId} = Astro.props;
 const all = taxRows();
 const rows = all.filter(row => !region || row.region === region);
 const classes = [...new Map(rows.map(row => [row.classCode, row.classLabel])).entries()];
-const complete = Object.fromEntries(classes.map(([code]) => [code, Object.fromEntries(BANDS.map(b => [b, completeClass(all, code, CURRENT_YEAR, b)]))]));
+const complete = Object.fromEntries([...new Set(all.map(row => row.classCode))].map(code => [code, Object.fromEntries(BANDS.map(b => [b, completeClass(all, code, CURRENT_YEAR, b)]))]));
 const source = taxSources()[CURRENT_YEAR];
 function change(current: number | undefined, previous: number | undefined) {
   if (!current || !previous) return null;
@@ -18,16 +19,9 @@ function change(current: number | undefined, previous: number | undefined) {
   return difference === 0 ? 'Unchanged' : `${difference > 0 ? 'Up' : 'Down'} ${moneyPence(Math.abs(difference))} (${(Math.abs(difference) / previous * 100).toFixed(1)}%)`;
 }
 ---
-<section data-tax-table data-year={CURRENT_YEAR} data-previous={PREVIOUS_YEAR} data-initial-band={band}>
-  <fieldset class="table-controls" disabled>
-    <legend class="visually-hidden">Filter and sort {caption}</legend>
-    <label class="field" for={`${id}-filter`}>Council name<input id={`${id}-filter`} type="search" autocomplete="off" data-table-filter /></label>
-    <label class="field">Band<select data-table-band>{BANDS.map(b => <option selected={b === band}>{b}</option>)}</select></label>
-    <label class="field">Council type<select data-table-class><option value="">All types</option>{classes.map(([code,label]) => <option value={code}>{label}</option>)}</select></label>
-    <div class="field sort-field"><label for={`${id}-sort`}>Sort</label><select id={`${id}-sort`} data-table-sort aria-describedby={`${id}-sort-note`}><option value="name">Council name</option><option value="high" disabled>Annual charge, highest first</option><option value="low" disabled>Annual charge, lowest first</option></select><p class="small muted sort-note" id={`${id}-sort-note`} data-sort-note>Choose one council type to sort by annual charge.</p></div>
-  </fieldset>
-  <div class="action-links table-actions" data-pagefind-ignore><button class="button secondary" type="button" data-table-print disabled>Print</button></div>
-  <p class="small" data-table-status role="status">{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
+<section data-tax-table data-year={CURRENT_YEAR} data-previous={PREVIOUS_YEAR} data-initial-band={band} data-region={region} data-controls-id={controlsId}>
+  {!controlsId && <TaxTableControls id={`${id}-controls`} caption={caption} classes={classes} band={band} />}
+  <p class="small" data-table-status role={controlsId ? undefined : 'status'}>{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
   <div class="fact" data-fact>
     <div class="table-wrap" tabindex="0" role="region" aria-label={caption}>
       <table class="data compact-tax" data-pagefind-ignore>
@@ -59,16 +53,19 @@ function change(current: number | undefined, previous: number | undefined) {
     const year = root.dataset.year!; const previous = root.dataset.previous!;
     const body = root.querySelector('tbody')!;
     const elements = new Map([...body.querySelectorAll<HTMLTableRowElement>('tr')].map(row => [row.dataset.slug!, row]));
-    const band = root.querySelector<HTMLSelectElement>('[data-table-band]')!;
-    const type = root.querySelector<HTMLSelectElement>('[data-table-class]')!;
-    const sort = root.querySelector<HTMLSelectElement>('[data-table-sort]')!;
-    const filter = root.querySelector<HTMLInputElement>('[data-table-filter]')!;
+    const controls = root.dataset.controlsId ? document.getElementById(root.dataset.controlsId)! : root.querySelector<HTMLElement>('[data-table-controls]')!;
+    const band = controls.querySelector<HTMLSelectElement>('[data-table-band]');
+    const type = controls.querySelector<HTMLSelectElement>('[data-table-class]')!;
+    const sort = controls.querySelector<HTMLSelectElement>('[data-table-sort]')!;
+    const filter = controls.querySelector<HTMLInputElement>('[data-table-filter]')!;
+    // With shared controls, the heading and table of a region with no match leave the page.
+    const group = root.dataset.controlsId ? root.parentElement!.closest<HTMLElement>('section') : null;
     function update() {
-      const b = band.value as TaxBand;
+      const b = (band?.value ?? root.dataset.initialBand) as TaxBand;
       const sortable = Boolean(type.value && complete[type.value]?.[b]);
       for (const option of [...sort.options]) if (option.value !== 'name') option.disabled = !sortable;
       if (!sortable) sort.value = 'name';
-      root.querySelector('[data-sort-note]')!.textContent = sortable ? 'Numeric sorting compares one council type in the same complete published year.' : 'Choose one council type to sort by annual charge.';
+      controls.querySelector('[data-sort-note]')!.textContent = sortable ? 'Numeric sorting compares one council type in the same complete published year.' : 'Choose one council type to sort by annual charge.';
       const visible = rows.filter(row => (!type.value || row.classCode === type.value) && matchesCouncil(filter.value, row.name));
       visible.sort((a,c) => sort.value === 'name' ? a.name.localeCompare(c.name) : (sort.value === 'high' ? -1 : 1) * ((a.years[year][b] as number) - (c.years[year][b] as number)) || a.name.localeCompare(c.name));
       for (const element of elements.values()) element.hidden = true;
@@ -87,20 +84,47 @@ function change(current: number | undefined, previous: number | undefined) {
         element.querySelector<HTMLAnchorElement>('a')!.href = `/councils/${row.slug}/#band-${b}`;
         body.append(element);
       }
-      root.querySelector('[data-table-status]')!.textContent = visible.length ? `${visible.length} councils, Band ${b}, ${year.replace('-', '/')}.` : 'No matching councils. Clear the name filter or choose another council type.';
+      root.querySelector('[data-table-status]')!.textContent = visible.length ? `${visible.length} ${visible.length === 1 ? 'council' : 'councils'}, Band ${b}, ${year.replace('-', '/')}.` : 'No matching councils. Clear the name filter or choose another council type.';
       root.querySelector('[data-table-caption]')!.textContent = `${caption}: Band ${b}, ${year.replace('-', '/')}`;
+      root.dataset.shown = String(visible.length);
+      if (group) group.hidden = visible.length === 0;
     }
-    root.querySelector<HTMLFieldSetElement>('fieldset')!.disabled = false;
-    const print = root.querySelector<HTMLButtonElement>('[data-table-print]')!;
-    print.disabled = false; print.addEventListener('click', () => window.print());
+    if (controls.hidden) {
+      controls.hidden = false;
+      controls.querySelector<HTMLFieldSetElement>('fieldset')!.disabled = false;
+      const print = controls.querySelector<HTMLButtonElement>('[data-table-print]')!;
+      print.disabled = false; print.addEventListener('click', () => window.print());
+      const requestedType = new URLSearchParams(location.search).get('type');
+      if (requestedType && [...type.options].some(option => option.value === requestedType)) type.value = requestedType;
+    }
+    if (type.value) update();
     filter.addEventListener('input', update);
-    for (const control of [band,type,sort]) control.addEventListener('change', update);
+    for (const control of [band,type,sort]) control?.addEventListener('change', update);
+  }
+  // One status line for tables that share controls. Its listeners are added after every
+  // table's own, so each table has already updated when the line is written.
+  for (const status of document.querySelectorAll<HTMLElement>('[data-controls-status]')) {
+    const controls = status.closest<HTMLElement>('[data-table-controls]')!;
+    const tables = [...document.querySelectorAll<HTMLElement>(`[data-tax-table][data-controls-id="${controls.id}"]`)];
+    const summarise = () => {
+      const counts = tables.map(table => table.dataset.shown === undefined ? table.querySelectorAll('tbody tr').length : Number(table.dataset.shown));
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      const regions = tables.filter((_, index) => counts[index] > 0).map(table => table.dataset.region!);
+      status.textContent = total === 0 ? 'No matching councils. Clear the name filter or choose another council type.'
+        : `${total} ${total === 1 ? 'council' : 'councils'} shown, in ${regions.length <= 3 ? regions.join(regions.length === 2 ? ' and ' : ', ').replace(/, ([^,]+)$/, ' and $1') : regions.length === tables.length ? `all ${tables.length} regions` : `${regions.length} of ${tables.length} regions`}.`;
+      tables.forEach((table, index) => {
+        const section = table.parentElement!.closest<HTMLElement>('section');
+        const jump = section?.id ? document.querySelector<HTMLElement>(`[data-region-jump] a[href="#${section.id}"]`)?.closest('li') : null;
+        if (jump) jump.hidden = counts[index] === 0;
+      });
+    };
+    summarise();
+    controls.querySelector('[data-table-filter]')!.addEventListener('input', summarise);
+    for (const select of controls.querySelectorAll('select')) select.addEventListener('change', summarise);
   }
 </script>
 <style>
-  .table-controls { display: grid; grid-template-columns: 2fr 0.7fr 1.4fr 1.6fr; gap: 0.7rem; border: 0; padding: 0; margin: 0; min-width: 0; }
-  .sort-note { margin: 0; font-weight: 400; }
   .row-detail { display: block; font-size: 0.8rem; color: var(--text-muted); font-weight: 400; white-space: normal; }
   .compact-tax th:first-child { width: 58%; }
-  @media(max-width: 640px) { .table-controls { grid-template-columns: 1fr 1fr; } .compact-tax th:first-child { min-width: 0; } }
+  @media(max-width: 640px) { .compact-tax th:first-child { min-width: 0; } }
 </style>

@@ -465,3 +465,8 @@ destinations, 420 browser tests and 104 actual production-header tests. The
 number comparison found zero differences; all 2,845 PNG hashes are identical
 to the full baseline build. The pinned design checker passed all four changed
 page types in both themes and widths.
+
+Review fix, same day: on band pages a region with no matching council now
+leaves the page with its heading and jump link, and one status line under the
+shared controls reports the result. Details and measurements are in
+`docs/SMALL-FAULTS-2026-11-13.md`.

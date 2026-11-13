@@ -109,3 +109,41 @@ were pinned separately for each merge; no unrelated pull request was merged.
 
 The next UK Councils session is round two prompt 5, nearby and alike on council
 profiles. This session implements the next UK Council Tax session only.
+
+## Review fix, 13 November 2026
+
+A review used the built Band D page at 375 wide. One filter now drove nine
+tables, but a region with no match kept its heading, an empty table and its
+source lines. Typing "kensington" left the one match 3,116 px below the
+filter box, past six empty regions; choosing "Shire district" left three
+empty tables of 400 to 450 px each; and nine status lines changed on every
+keystroke.
+
+Changes:
+
+- A region with no matching council leaves the page with its heading, and
+  its link in "Jump to a region" leaves with it. With scripts off nothing is
+  hidden.
+- One status line sits under the shared controls, for example
+  "1 council shown, in London." or "164 councils shown, in 6 of 9 regions."
+  It is the only live region for the nine tables; the line above each table
+  stays as plain text. Region pages, which have their own controls, are
+  unchanged.
+- A table's own line now reads "1 council", not "1 councils".
+- The parish index sentence no longer promises sorting when scripts are off.
+
+Measured on the fixed build, both themes agreeing, 812 px viewport:
+
+| Band D state | Match below the controls, 375 | Page height, 375 | Page height, 1440 | Regions shown |
+| --- | ---: | ---: | ---: | ---: |
+| No filter | 215 px | 12,052 | 9,439 | 9 |
+| Name "kensington" | 189 px (3,116 before) | 4,088 | 2,773 | 1 |
+| Shire district | 215 px | 9,250 | 7,104 | 6 |
+| Inner London borough | 189 px | 4,499 | 3,177 | 1 |
+
+The unfiltered page is 33 px taller than the first build at both widths (the
+new status line). No sideways overflow in any state.
+
+Not changed: the controls stay at the top of the tables and do not follow
+the reader down the page. Hiding empty regions shortens the journey back,
+but a reader in the last region still scrolls up to change the filter.

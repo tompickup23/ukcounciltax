@@ -21,7 +21,7 @@ function change(current: number | undefined, previous: number | undefined) {
 ---
 <section data-tax-table data-year={CURRENT_YEAR} data-previous={PREVIOUS_YEAR} data-initial-band={band} data-region={region} data-controls-id={controlsId}>
   {!controlsId && <TaxTableControls id={`${id}-controls`} caption={caption} classes={classes} band={band} />}
-  <p class="small" data-table-status role="status">{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
+  <p class="small" data-table-status role={controlsId ? undefined : 'status'}>{rows.length} councils, Band {band}, {yearLabel(CURRENT_YEAR)}.</p>
   <div class="fact" data-fact>
     <div class="table-wrap" tabindex="0" role="region" aria-label={caption}>
       <table class="data compact-tax" data-pagefind-ignore>
@@ -58,6 +58,8 @@ function change(current: number | undefined, previous: number | undefined) {
     const type = controls.querySelector<HTMLSelectElement>('[data-table-class]')!;
     const sort = controls.querySelector<HTMLSelectElement>('[data-table-sort]')!;
     const filter = controls.querySelector<HTMLInputElement>('[data-table-filter]')!;
+    // With shared controls, the heading and table of a region with no match leave the page.
+    const group = root.dataset.controlsId ? root.parentElement!.closest<HTMLElement>('section') : null;
     function update() {
       const b = (band?.value ?? root.dataset.initialBand) as TaxBand;
       const sortable = Boolean(type.value && complete[type.value]?.[b]);
@@ -82,8 +84,10 @@ function change(current: number | undefined, previous: number | undefined) {
         element.querySelector<HTMLAnchorElement>('a')!.href = `/councils/${row.slug}/#band-${b}`;
         body.append(element);
       }
-      root.querySelector('[data-table-status]')!.textContent = visible.length ? `${visible.length} councils, Band ${b}, ${year.replace('-', '/')}.` : 'No matching councils. Clear the name filter or choose another council type.';
+      root.querySelector('[data-table-status]')!.textContent = visible.length ? `${visible.length} ${visible.length === 1 ? 'council' : 'councils'}, Band ${b}, ${year.replace('-', '/')}.` : 'No matching councils. Clear the name filter or choose another council type.';
       root.querySelector('[data-table-caption]')!.textContent = `${caption}: Band ${b}, ${year.replace('-', '/')}`;
+      root.dataset.shown = String(visible.length);
+      if (group) group.hidden = visible.length === 0;
     }
     if (controls.hidden) {
       controls.hidden = false;
@@ -96,6 +100,27 @@ function change(current: number | undefined, previous: number | undefined) {
     if (type.value) update();
     filter.addEventListener('input', update);
     for (const control of [band,type,sort]) control?.addEventListener('change', update);
+  }
+  // One status line for tables that share controls. Its listeners are added after every
+  // table's own, so each table has already updated when the line is written.
+  for (const status of document.querySelectorAll<HTMLElement>('[data-controls-status]')) {
+    const controls = status.closest<HTMLElement>('[data-table-controls]')!;
+    const tables = [...document.querySelectorAll<HTMLElement>(`[data-tax-table][data-controls-id="${controls.id}"]`)];
+    const summarise = () => {
+      const counts = tables.map(table => table.dataset.shown === undefined ? table.querySelectorAll('tbody tr').length : Number(table.dataset.shown));
+      const total = counts.reduce((sum, count) => sum + count, 0);
+      const regions = tables.filter((_, index) => counts[index] > 0).map(table => table.dataset.region!);
+      status.textContent = total === 0 ? 'No matching councils. Clear the name filter or choose another council type.'
+        : `${total} ${total === 1 ? 'council' : 'councils'} shown, in ${regions.length <= 3 ? regions.join(regions.length === 2 ? ' and ' : ', ').replace(/, ([^,]+)$/, ' and $1') : regions.length === tables.length ? `all ${tables.length} regions` : `${regions.length} of ${tables.length} regions`}.`;
+      tables.forEach((table, index) => {
+        const section = table.parentElement!.closest<HTMLElement>('section');
+        const jump = section?.id ? document.querySelector<HTMLElement>(`[data-region-jump] a[href="#${section.id}"]`)?.closest('li') : null;
+        if (jump) jump.hidden = counts[index] === 0;
+      });
+    };
+    summarise();
+    controls.querySelector('[data-table-filter]')!.addEventListener('input', summarise);
+    for (const select of controls.querySelectorAll('select')) select.addEventListener('change', summarise);
   }
 </script>
 <style>

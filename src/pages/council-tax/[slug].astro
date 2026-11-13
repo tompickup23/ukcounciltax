@@ -107,7 +107,7 @@ if (props.kind === "band") {
           ))}
         </ul>
       </nav>
-      <nav aria-label="Jump to a region">
+      <nav aria-label="Jump to a region" data-region-jump>
         <ul class="pill-nav">
           {REGIONS.map((region) => <li><a href={`#${slugify(region)}`}>{region}</a></li>)}
         </ul>
@@ -115,7 +115,7 @@ if (props.kind === "band") {
       <p class="band-help">
         Not sure which band your home is in? See <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a> on the help page.
       </p>
-      <TaxTableControls id="band-table-controls" caption={`English Band ${props.band} charges by region`} classes={[...new Map(taxRows().map(row => [row.classCode, row.classLabel])).entries()]} band={props.band} fixedBand />
+      <TaxTableControls id="band-table-controls" caption={`English Band ${props.band} charges by region`} classes={[...new Map(taxRows().map(row => [row.classCode, row.classLabel])).entries()]} band={props.band} fixedBand shared />
       {REGIONS.map((region) => (
         <section class="section" id={slugify(region)} aria-labelledby={`${slugify(region)}-heading`}>
           <h2 id={`${slugify(region)}-heading`}>How much is Band {props.band} in {region}?</h2>

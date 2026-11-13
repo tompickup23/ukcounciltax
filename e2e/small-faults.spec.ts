@@ -27,12 +27,28 @@ test('one set of band controls filters and sorts every region within one class',
   await page.locator('[data-table-filter]').fill('burnley');
   const shown = page.locator('[data-tax-table] tbody tr:not([hidden])');
   await expect(shown).toHaveCount(1);
+  // A region with no match leaves the page with its heading and its jump link, and one line reports the result.
+  await expect(page.locator('section.section:has([data-tax-table]):visible')).toHaveCount(1);
+  await expect(page.locator('#north-west')).toBeVisible();
+  await expect(page.locator('#london')).toBeHidden();
+  await expect(page.locator('[data-region-jump] li:visible')).toHaveCount(1);
+  await expect(page.locator('[data-controls-status]')).toHaveText('1 council shown, in North West.');
+  await expect(page.locator('#north-west [data-table-status]')).toHaveText(/^1 council, Band D/);
+  await expect(page.locator('main [role="status"]:has-text("council")')).toHaveCount(1);
+  await page.locator('[data-table-filter]').fill('zzzz');
+  await expect(page.locator('section.section:has([data-tax-table]):visible')).toHaveCount(0);
+  await expect(page.locator('[data-controls-status]')).toHaveText('No matching councils. Clear the name filter or choose another council type.');
+  await page.locator('[data-table-filter]').fill('burnley');
+  await expect(shown).toHaveCount(1);
   await expect(shown.locator('[data-row-annual]')).toHaveText(moneyPence(taxRows().find(row => row.slug === 'burnley')!.years[CURRENT_YEAR].D!));
   await page.locator('[data-table-class]').selectOption('');
   await expect(page.locator('[data-table-sort]')).toHaveValue('name');
   await expect(page.locator('[data-table-sort] option[value="high"]')).toBeDisabled();
   await page.locator('[data-table-filter]').fill('');
   await expect(page.locator('[data-tax-table] tbody tr:not([hidden])')).toHaveCount(taxRows().length);
+  await expect(page.locator('section.section:has([data-tax-table]):visible')).toHaveCount(9);
+  await expect(page.locator('[data-region-jump] li:visible')).toHaveCount(9);
+  await expect(page.locator('[data-controls-status]')).toHaveText(`${taxRows().length} councils shown, in all 9 regions.`);
 });
 
 test('profile region link starts with its council type and invalid types leave all rows available', async ({ page }) => {

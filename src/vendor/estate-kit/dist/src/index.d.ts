@@ -1,5 +1,6 @@
 export * from "./figures/figures.js";
 export { tokens, palette, partyColour, partyKey, partyName, SITE_KEYS, VERSION, type SiteKey, type Theme } from "../generated/tokens.js";
+export { printSheet, PRINT_KEYS, type PrintKey } from "../generated/tokens.js";
 export { skin, skinPalette, deskPalette, SKIN_KEYS, DESK_KEYS, type Skin, type SkinKey, type Register } from "../generated/tokens.js";
 export { gatePalettes, hexPalette, type Ground, type Mode } from "./charts/canvas.js";
 export { zeroBar, type ZeroBarOptions } from "./charts/zeroBar.js";

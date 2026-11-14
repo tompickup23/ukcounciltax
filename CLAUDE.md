@@ -4,6 +4,8 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
+Current plan (13 November 2026): `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`: the state of both sites and the kit, what the sessions prioritised, the decisions waiting on Tom and the order of sessions. Read it first. The Codex archive notes of 12 and 13 November 2026 are beside it in `docs/` (sessions complete, increases, small faults, nearby, WebKit and the PR 67 review); several are superseded on status, so check GitHub before relying on one.
+
 Latest: `docs/HANDOFF-2026-11-12-REVIEW-AND-NEXT.md` (12 November 2026): all six Codex prompts of 11 November merged and live, UK Councils PR 48 (kit 0.5.0, short citations) merged and live after a review pass, the open pull requests, where the kit stands, decisions X1 to X4 and the plan. The next five Codex prompts are in `docs/CODEX-PROMPTS-2026-11-12.md`. Codex's own archive note of the same day is `docs/HANDOFF-2026-11-12-SESSIONS-COMPLETE.md`. Read GitHub for the state, not a local main.
 
 Before it: `docs/HANDOFF-2026-11-11-SESSION-FOUR.md`: prepared session 4, comparison improvements, built on typed-search PR 59 and its parent PR 58. It records validation and the remaining gates for sessions 5 and 6. Nothing in the handoff authorises a merge or deployment.
@@ -34,6 +36,9 @@ The 3 November contradiction on the Cloudflare Insights host is resolved for the
 Published charges must come from official tables with publisher, year, basis, table and file hash. Never derive missing bands or carry figures forward. Label Scotland water exclusions, Wales Band I and Northern Ireland domestic rates separately. Unknown is not zero. Compare only compatible systems, classes, years and charge bases. Distinguish own-council share from full area averages and locality bills.
 
 Explicit user-requested scenarios are permitted, with visible assumptions and model version. Keep them separate from observed figures. No personal household data stored. No individuals named. Neutral language, British English, pipe titles, no em/en dashes. Every amount has a nearby source or calculation explanation.
+
+## Held data
+The registry `reorganisation` field is held, from 13 November 2026, following the hold UK Councils has kept since 5 November 2026 (its CLAUDE.md, "Held data"). No page renders it: not the council page section, its contents entry, structured data, share text or the search index. The field comes from the UK Places spine and its note on the fourteen Lancashire councils is recorded there as withdrawn. The fix belongs in UK Places; do not edit `data/registry/councils.json` by hand. Render the field again only after the registry is rebuilt from a corrected source, and any new statement about reorganisation needs Tom's decision and two sources. `npm run test:dist` and `tests/reorganisation-held.test.ts` fail if the text reaches `dist/`.
 
 ## Implementation
 Use process.cwd() for data paths. Components are copied, not imported across repos. SITE_URL in src/lib/site.ts owns the origin. Add new static routes to STATIC_PATHS. Static HTML remains useful without JavaScript. No horizontal page overflow at 375px. Use estate font/tokens and rerender brand tokens through scripts/apply-brand.py. No inline script permission: postbuild hashes and production-header tests are required.

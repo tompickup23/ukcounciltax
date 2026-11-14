@@ -139,7 +139,6 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
       ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
       {id: 'where-money-goes', label: 'Where the money goes'},
-      ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
       {id: 'similar', label: 'Nearby and alike'},
       {id: 'more', label: `${name} across the network`},
     ]},
@@ -297,15 +296,6 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <CollectionRates gss={council.gss} name={name} />
   <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
 
-  {council.reorganisation && (
-    <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">
-      <h2 id="reorganisation-heading">Is {name} council being reorganised?</h2>
-      <p>{council.reorganisation.note}</p>
-      <p class="source-line">
-        Source: <a href={council.reorganisation.sourceUrl}>{new URL(council.reorganisation.sourceUrl).hostname}</a>{longDate(council.reorganisation.sourceDate) ? `, ${longDate(council.reorganisation.sourceDate)}` : ""}, as recorded by UK Places.
-      </p>
-    </section>
-  )}
 
 
 

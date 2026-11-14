@@ -495,3 +495,17 @@ passes all four requested pages in both themes and widths with zero findings.
 Measurements, provenance and caveats are in
 `docs/NEARBY-AND-ALIKE-2026-11-13.md`. This is a review candidate, not a record
 of merge or deployment.
+
+## Held registry reorganisation field, 13 November 2026
+
+Council profiles no longer render the registry `reorganisation` field. Until
+this change the 14 Lancashire profiles printed the July registry note under
+"Is this council being reorganised?", with a contents link. UK Councils has
+held the same field since 5 November 2026. This change removes the section and
+its contents entry and adds no replacement wording, source or figure. The
+registry file is unchanged; the correction belongs in UK Places.
+
+`npm run test:dist` now fails if any built file carries the held wording, and
+`tests/reorganisation-held.test.ts` fails if any file under `src` reads the
+field. Only the 14 Lancashire profiles differ. The candidate awaits review;
+publication is separate.

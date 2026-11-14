@@ -4,6 +4,8 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
+Current plan (13 November 2026): `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`: the state of both sites and the kit, what the sessions prioritised, the decisions waiting on Tom and the order of sessions. Read it first. The Codex archive notes of 12 and 13 November 2026 are beside it in `docs/` (sessions complete, increases, small faults, nearby, WebKit and the PR 67 review); several are superseded on status, so check GitHub before relying on one.
+
 Latest: `docs/HANDOFF-2026-11-12-REVIEW-AND-NEXT.md` (12 November 2026): all six Codex prompts of 11 November merged and live, UK Councils PR 48 (kit 0.5.0, short citations) merged and live after a review pass, the open pull requests, where the kit stands, decisions X1 to X4 and the plan. The next five Codex prompts are in `docs/CODEX-PROMPTS-2026-11-12.md`. Codex's own archive note of the same day is `docs/HANDOFF-2026-11-12-SESSIONS-COMPLETE.md`. Read GitHub for the state, not a local main.
 
 Before it: `docs/HANDOFF-2026-11-11-SESSION-FOUR.md`: prepared session 4, comparison improvements, built on typed-search PR 59 and its parent PR 58. It records validation and the remaining gates for sessions 5 and 6. Nothing in the handoff authorises a merge or deployment.

@@ -37,6 +37,9 @@ Published charges must come from official tables with publisher, year, basis, ta
 
 Explicit user-requested scenarios are permitted, with visible assumptions and model version. Keep them separate from observed figures. No personal household data stored. No individuals named. Neutral language, British English, pipe titles, no em/en dashes. Every amount has a nearby source or calculation explanation.
 
+## Held data
+The registry `reorganisation` field is held, from 13 November 2026, following the hold UK Councils has kept since 5 November 2026 (its CLAUDE.md, "Held data"). No page renders it: not the council page section, its contents entry, structured data, share text or the search index. The field comes from the UK Places spine and its note on the fourteen Lancashire councils is recorded there as withdrawn. The fix belongs in UK Places; do not edit `data/registry/councils.json` by hand. Render the field again only after the registry is rebuilt from a corrected source, and any new statement about reorganisation needs Tom's decision and two sources. `npm run test:dist` and `tests/reorganisation-held.test.ts` fail if the text reaches `dist/`.
+
 ## Implementation
 Use process.cwd() for data paths. Components are copied, not imported across repos. SITE_URL in src/lib/site.ts owns the origin. Add new static routes to STATIC_PATHS. Static HTML remains useful without JavaScript. No horizontal page overflow at 375px. Use estate font/tokens and rerender brand tokens through scripts/apply-brand.py. No inline script permission: postbuild hashes and production-header tests are required.
 

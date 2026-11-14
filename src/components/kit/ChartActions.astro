@@ -29,7 +29,7 @@ const pngs = Astro.props.pngs ?? {light: chartPngPath(chart!, 'light')};
 const locator = chart?.startsWith('councils/') && chart.endsWith('/map');
 ---
 <div class="chart-actions" data-chart-actions data-chart={chart ?? target}>
-  <p class="source-line" set:html={caption} />
+  <slot name="source"><p class="source-line" set:html={caption} /></slot>
   <ul class="chart-actions-links">
     {!locator && CHART_THEMES.map((theme) => (
       <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>

@@ -17,6 +17,7 @@ import { AREA_TYPE_LABEL, BANDS, CURRENT_YEAR, loadYear, yearLabel } from "./cou
 import { loadRegistry } from "./registry";
 import { national } from "./national-data";
 import { COUNTY_CLASS, RANK_CLASSES, rankClass, rankCounties } from "./rankings";
+import {increaseGroups, increaseFigureKey} from "./increase-groups";
 import { localBills } from "./local-bill-data";
 import { longDate, tableName } from "./sources";
 
@@ -95,6 +96,14 @@ function build(): Record<string, unknown> {
     edition: longDate(data.source.published) ?? yearLabel(CURRENT_YEAR),
     url: data.source.url,
   });
+  for (const group of increaseGroups(CURRENT_YEAR)) {
+    for (const row of group.rows) {
+      records[increaseFigureKey(CURRENT_YEAR, group.id, row.gss)] = {
+        kind: "value", label: "Published own share percentage change", name: row.name,
+        unit: "percent", dp: 2, value: row.own.changePct, source: mhclg(group.table),
+      };
+    }
+  }
   const history = data.england.history;
   const area = data.england.areaBandD;
   const burnley = Object.values(data.authorities).find((a) => a.name === "Burnley");

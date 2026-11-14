@@ -44,7 +44,7 @@ import {
   yearLabel,
   type Authority,
 } from "../../lib/council-tax";
-import { councilPages, councilPath, regionPath } from "../../lib/paths";
+import { councilPages, councilPath, regionPath, scenarioGamePath, SCENARIO_GAME_SLUGS } from "../../lib/paths";
 import { type Council } from "../../lib/registry";
 import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
 import { councilCardPath } from "../../lib/og";
@@ -63,6 +63,7 @@ interface Props {
 }
 
 const { council, tax } = Astro.props;
+const hasScenarioGame = (SCENARIO_GAME_SLUGS as readonly string[]).includes(council.slug);
 const current = loadYear(CURRENT_YEAR);
 const charts = profileChartOptions(council.slug);
 const paymentLink = councilTaxLink(council.gss);
@@ -295,6 +296,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <BandMix gss={council.gss} name={name} />
   <CollectionRates gss={council.gss} name={name} />
   <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
+  {hasScenarioGame && <p>A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from {name} Borough Council's own published budget gap and lets you set council tax, spending and reserves.</p>}
 
 
 

@@ -1,0 +1,203 @@
+<div class="test edition" data-game-edition>Edition of 14 November 2026. <span id="runid">Model run run-f2ca9ce5ee34f595.</span> Figures from Burnley Borough Council's published papers.</div>
+<div class="wrap">
+  <header class="top hero">
+    <div class="herogrid">
+      <div class="stack">
+        <div class="eyebrow">Burnley Borough Council &middot; budget for <span class="py"></span> and <span class="ny"></span></div>
+        <h2 class="game-title">Can you balance <span class="rose">Burnley?</span></h2>
+        <p class="lede">Burnley Borough Council's Net Budget Requirement for <span class="by"></span> is <b class="num" id="hdrReq"></b>. See where it goes and what pays for it. Then take the council's own budget gap for the next two years and make your own choices.</p>
+      </div>
+      <div class="wafflebox"><div id="heroWaffle"></div><div class="legend" id="heroLegend"></div><div class="cap" id="heroCap"></div></div>
+    </div>
+    <div class="intro">
+      <div><i>Steps 1 and 2</i><b>Learn</b><span>Where the money goes, and what your council tax band pays.</span></div>
+      <div><i>Step 3</i><b>This year</b><span>How the budget moved from 2025/26, what was added and what was saved.</span></div>
+      <div><i>Steps 4 and 5</i><b>Play two years</b><span>Start from the council's own gap for <span class="py"></span>, keep or change its assumptions, close it, then do the same for <span class="ny"></span>.</span></div>
+      <div><i>Step 6</i><b>Result</b><span>Your council tax, your cuts and the reserves you leave.</span></div>
+    </div>
+  </header>
+  <nav class="stepper" id="stepper" aria-label="Steps"></nav>
+
+  <!-- 1 GUESS -->
+  <section class="step" data-step="1">
+    <div class="stack">
+      <div class="eyebrow">Step 1 of 6 &middot; Warm up</div>
+      <h2>Where does each £100 go?</h2>
+      <p class="task">Guess how every £100 of net service cost is split. Move the sliders (they always add up to £100), then press Reveal.</p>
+      <div class="grid2">
+        <div class="panel" id="guessPanel"></div>
+        <div class="panel stack" id="revealPanel">
+          <div class="eyebrow">Your guess against the real budget</div>
+          <div id="cmp" class="cmp"></div>
+          <div id="scoreBox" hidden><div class="row"><div class="score" id="score"></div><p id="scoreTxt"></p></div></div>
+          <div class="row"><button class="btn" id="revealBtn">Reveal the real split</button></div>
+          <p class="src" id="guessSrc"></p>
+        </div>
+      </div>
+      <div class="panel stack"><h3>From net service cost to the Net Budget Requirement</h3><div id="bridge"></div><p class="src" id="bridgeSrc"></p></div>
+      <p class="note" id="detailNote1"></p>
+    </div>
+    <div class="nav"><span></span><button class="btn" data-go="2">Next: your bill</button></div>
+  </section>
+
+  <!-- 2 BILL -->
+  <section class="step" data-step="2" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 2 of 6 &middot; Your council tax</div>
+      <h2>Your band, and the borough council's part of the bill</h2>
+      <p class="task">Choose your council tax band.</p>
+      <div class="chips bandchips" role="group" aria-label="Council tax band"></div>
+      <div class="grid2">
+        <div class="panel stack">
+          <div class="eyebrow">Band <span class="bandname"></span>, Burnley Borough Council only, <span class="by"></span></div>
+          <div class="bignum num" id="billBig"></div>
+          <p id="billTxt"></p>
+          <p class="quote" id="billQuote"></p>
+          <p class="src" id="billSrc"></p>
+        </div>
+        <div class="panel stack">
+          <h3>The full bill for Band <span class="bandname"></span>, <span class="by"></span></h3>
+          <div id="fullBill"></div>
+          <p class="note" id="bandsNote"></p>
+          <p class="src" id="fullBillSrc"></p>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack">
+          <h3>Band D, 2016/17 to 2026/27</h3>
+          <div id="histChart"></div>
+          <p class="small" id="histTxt"></p>
+          <p class="src" id="histSrc"></p>
+        </div>
+        <div class="panel stack">
+          <h3>What pays for the budget</h3>
+          <p>Council tax raises <b class="num" id="ctCash"></b> of the <span class="num" id="reqB"></span>. Government grant and business rates cover most of the rest.</p>
+          <div class="hbars" id="fundBar"></div>
+          <p class="src" id="fundSrc"></p>
+        </div>
+      </div>
+      <div class="panel stack">
+        <h3>An illustration of the borough's charge for Band <span class="bandname"></span></h3>
+        <div class="donutwrap"><div class="donut"><div id="billDonut"></div><div class="mid"><b class="num" id="donutMid"></b><span>a year</span></div></div><div class="lrows" id="billBar"></div></div>
+        <p class="src">An illustrative share of the borough council's charge, using each group's share of net service cost. Council tax is not ring fenced to services, so this pictures the budget; it is not an invoice.</p>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="1">Back</button><button class="btn" data-go="3">Next: this year's budget</button></div>
+  </section>
+
+  <!-- 3 THIS YEAR -->
+  <section class="step" data-step="3" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 3 of 6 &middot; The budget for <span class="by"></span></div>
+      <h2>How the budget moved from 2025/26</h2>
+      <p class="lede" id="moveLede"></p>
+      <div class="totals" id="moveTotals"></div>
+      <div class="grid2">
+        <div class="panel stack"><h3>What moved it</h3><div class="legend" id="moveLegend"></div><div class="div" id="moveChart"></div><p class="src" id="moveSrc"></p></div>
+        <div class="stack">
+          <div class="panel stack"><h3>Growth added</h3><p class="quote" id="growthQuote"></p><div id="growthList"></div><p class="src" id="growthSrc"></p></div>
+          <div class="panel stack"><h3>Savings</h3><div id="savingsList"></div><p class="src" id="savingsSrc"></p></div>
+        </div>
+      </div>
+      <div class="panel stack"><h3>Reserves</h3><div class="facts" id="resFacts"></div><div class="hbars" id="resBars"></div><p class="src" id="resSrc"></p></div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="2">Back</button><button class="btn" data-go="4">Next: start the game</button></div>
+  </section>
+
+  <!-- 4 THE COUNCIL'S GAP -->
+  <section class="step" data-step="4" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 4 of 6 &middot; The starting gap &middot; <span class="yr"></span></div>
+      <h2>The council's own gap for <span class="yr"></span></h2>
+      <p class="lede" id="gapLede"></p>
+      <div id="carryBox"></div>
+      <div class="grid2">
+        <div class="panel stack">
+          <div class="eyebrow">Budget gap <span class="yr"></span>, as the council prints it</div>
+          <div class="bignum num" id="gapBig"></div>
+          <div id="gapParts"></div>
+          <p class="note" id="gapNote"></p>
+          <p class="src" id="gapSrc"></p>
+        </div>
+        <div class="panel stack"><h3>What the council assumed</h3><div id="assume"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack">
+          <h3>Keep or change the assumptions</h3>
+          <p class="task"><span>Leave the dials where they are to keep the council's assumptions, or set your own for <span class="yr"></span>.</span></p>
+          <p class="note" id="scenarioNote"></p>
+          <div id="dials"></div>
+          <div id="dialSum"></div>
+        </div>
+        <div class="stack">
+          <div class="panel stack"><h3>The same gap at a higher council tax</h3><div id="altBox"></div></div>
+          <div class="panel stack"><h3>What the council has identified so far</h3><div id="identified"></div><p class="note" id="identifiedNote"></p><p class="src" id="identifiedSrc"></p></div>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="panel stack"><h3>The council's two tables</h3><div class="tscroll"><table class="t" id="gapTable"></table></div><p class="src" id="gapTableSrc"></p></div>
+        <div class="panel stack"><h3>Not in any held paper</h3><div id="blanks"></div></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" id="back4">Back</button><button class="btn" data-go="5">Next: close the gap</button></div>
+  </section>
+
+  <!-- 5 LEVERS -->
+  <section class="step" data-step="5" hidden>
+    <div class="stack">
+      <div class="eyebrow">Step 5 of 6 &middot; Your budget &middot; <span class="yr"></span></div>
+      <h2>Close the gap for <span class="yr"></span></h2>
+      <p class="lede" id="leverLede"></p>
+      <div class="board" id="board"></div>
+      <div class="panel tool">
+        <div class="toolhead"><span class="n">1</span><h3>Council tax</h3><span class="closes" id="tCt"></span></div>
+        <div class="lever">
+          <label for="ct"><b id="ctLabel">Borough council tax rise</b></label><span class="ctval num" id="ctVal"></span>
+          <input type="range" id="ct" min="-2" max="2.99" step="0.01">
+          <div class="chips" id="rateChips" role="group" aria-label="Council tax rise"></div>
+          <div class="meta" id="ctMeta"></div>
+        </div>
+        <p class="note">Your band, for the borough council's line of the bill:</p>
+        <div class="chips bandchips" role="group" aria-label="Council tax band"></div>
+        <div id="bandEffect"></div>
+        <p class="src" id="bandNote"></p>
+        <details><summary><b>The council tax cases</b> <span class="muted small">the model's cases with the tax base growing as the council assumes</span></summary>
+          <div class="tscroll" data-s="margin-top:10px"><table class="t" id="ctCases"></table></div><p class="src" id="ctCasesSrc"></p></details>
+      </div>
+      <div class="tool">
+        <div class="toolhead"><span class="n">2</span><h3>Spending</h3><span class="closes" id="tSp"></span></div>
+        <p class="note" id="cutNote"></p>
+        <p class="note" id="detailNote5"></p>
+        <div id="levers"></div>
+      </div>
+      <div class="panel tool">
+        <div class="toolhead"><span class="n">3</span><h3>Reserves, spent once</h3><span class="closes" id="tRes"></span></div>
+        <p class="note" id="resNote"></p>
+        <div id="resLevers"></div>
+      </div>
+    </div>
+    <div class="nav"><button class="btn ghost" data-go="4">Back</button><button class="btn" data-go="6">See your result</button></div>
+  </section>
+
+  <!-- 6 RESULT -->
+  <section class="step" data-step="6" hidden>
+    <div class="stack" id="result"></div>
+    <div class="nav"><button class="btn ghost" data-go="5">Back to your budget</button><span class="row"><button class="btn ghost" id="againBtn">Play again</button><button class="btn" id="nextYearBtn">Continue to <span class="ny"></span></button></span></div>
+  </section>
+
+  <footer>
+    <div class="eyebrow">About the figures</div>
+    <p class="src" id="labelNote"></p>
+    <details><summary>What is not held</summary><ul id="notHeld" class="small"></ul></details>
+    <details><summary>Documents</summary><ul id="docs" class="small"></ul></details>
+    <p class="src">Built from Burnley Borough Council's published committee papers, Budget Book and accounts, and from tables published by the Ministry of Housing, Communities and Local Government. Every figure names its document and page. This is a game: it shows the size of the choices, not what the council will decide.</p>
+  </footer>
+</div>
+
+<div class="meter" id="meter" hidden>
+  <div class="in">
+    <div><div class="lbl" id="mLbl">Gap to close</div><div class="gap num" id="mGap"></div></div>
+    <div class="gtrack" aria-hidden="true"></div>
+    <div class="lbl" id="mSub" data-s="text-align:right"></div>
+  </div>
+</div>

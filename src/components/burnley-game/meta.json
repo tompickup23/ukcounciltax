@@ -1,0 +1,18 @@
+{
+  "runId": "run-f2ca9ce5ee34f595",
+  "edition": "2026-11-14",
+  "editionText": "14 November 2026",
+  "baseYear": "2026/27",
+  "playYear": "2027/28",
+  "nextYear": "2028/29",
+  "source": "Reports repository, Burnley_Budget_Model_work/game/dist",
+  "sourceSha256": {
+    "index.html": "7cfe6832527729a8c2cffd024619f62a2ef1201425b58a9df184cb9d89e7bbd7",
+    "game.js": "97c53321561facd7665bbb1bd3a52e6e42e025c06b1612a673e9e631d53ba833",
+    "game.css": "62ad557823ffcafbcd4ba44e37007a1191d57efbc1912aafb7d18db391fbc63f"
+  },
+  "servedSha256": {
+    "game.js": "97c53321561facd7665bbb1bd3a52e6e42e025c06b1612a673e9e631d53ba833",
+    "game.css": "6de2a244ae946f9c21fe6d0b4c8be479700c56328daa1d05541f3f76221b6644"
+  }
+}

@@ -515,6 +515,8 @@ export function sitemapLastmod(path: string): string {
     return date;
   }
   if (path.startsWith('/tools/budget/')) return nationalSources.raPart1.retrieved;
+  // A scenario game carries the edition date of the model build it was copied from.
+  if (/^\/councils\/[^/]+\/budget-game\/$/.test(path)) return readJson<{edition: string}>('src/components/burnley-game/meta.json').edition;
   if (path === '/precepts/') return nationalSources.components.retrieved;
   if (path === '/data/') return Object.values(nationalSources).map(source => source.retrieved).sort().at(-1)!;
   if (/^\/(scotland|wales)\//.test(path)) {

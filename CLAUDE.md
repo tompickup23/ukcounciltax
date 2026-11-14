@@ -4,7 +4,7 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-Current plan (13 November 2026): `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`: the state of both sites and the kit, what the sessions prioritised, the decisions waiting on Tom and the order of sessions. Read it first. The Codex archive notes of 12 and 13 November 2026 are beside it in `docs/` (sessions complete, increases, small faults, nearby, WebKit and the PR 67 review); several are superseded on status, so check GitHub before relying on one.
+Current plan (13 November 2026, with the update and handover of 14 November in its section 6): `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`: the state of both sites and the kit, what the sessions prioritised, the decisions waiting on Tom and the order of sessions. Read it first. The Codex archive notes of 12 and 13 November 2026 are beside it in `docs/` (sessions complete, increases, small faults, nearby, WebKit and the PR 67 review); several are superseded on status, so check GitHub before relying on one.
 
 Latest: `docs/HANDOFF-2026-11-12-REVIEW-AND-NEXT.md` (12 November 2026): all six Codex prompts of 11 November merged and live, UK Councils PR 48 (kit 0.5.0, short citations) merged and live after a review pass, the open pull requests, where the kit stands, decisions X1 to X4 and the plan. The next five Codex prompts are in `docs/CODEX-PROMPTS-2026-11-12.md`. Codex's own archive note of the same day is `docs/HANDOFF-2026-11-12-SESSIONS-COMPLETE.md`. Read GitHub for the state, not a local main.
 
@@ -42,6 +42,9 @@ The registry `reorganisation` field is held, from 13 November 2026, following th
 
 ## Implementation
 Use process.cwd() for data paths. Components are copied, not imported across repos. SITE_URL in src/lib/site.ts owns the origin. Add new static routes to STATIC_PATHS. Static HTML remains useful without JavaScript. No horizontal page overflow at 375px. Use estate font/tokens and rerender brand tokens through scripts/apply-brand.py. No inline script permission: postbuild hashes and production-header tests are required.
+
+## Before archiving a session
+Commit and push any code to a branch before an archive step, as a draft pull request if it is not for review. A handoff note that exists only in a worktree is lost when the worktree is removed: put it in the pull request. Work left uncommitted on 13 November 2026 survived only as a Codex snapshot under `refs/codex/snapshots`; look there, and in Codex's archived session logs, before concluding that a session's work was never done.
 
 ## Verification
 Run npm test, npm run check, npm run build, npm run test:dist and npm run test:text. Run relevant browser and actual-CSP tests for interactive changes. BUILD_OG=1 for the final build. Recheck source counts and output routes. Never publish a half-finished data refresh. Keep release provenance and limitations in docs/RELEASE.md.

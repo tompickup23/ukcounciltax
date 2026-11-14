@@ -7,6 +7,7 @@ import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords, sentenceCase} from '../../lib/rankings';
 import {rankingPath} from '../../lib/paths';
+import NearbyCouncils from "../../components/NearbyCouncils.astro";
 import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
 import LongTaxHistory from '../../components/LongTaxHistory.astro';
@@ -43,7 +44,7 @@ import {
   yearLabel,
   type Authority,
 } from "../../lib/council-tax";
-import { councilPages, councilPath, regionPath } from "../../lib/paths";
+import { councilPages, councilPath, regionPath, scenarioGamePath, SCENARIO_GAME_SLUGS } from "../../lib/paths";
 import { type Council } from "../../lib/registry";
 import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
 import { councilCardPath } from "../../lib/og";
@@ -62,6 +63,7 @@ interface Props {
 }
 
 const { council, tax } = Astro.props;
+const hasScenarioGame = (SCENARIO_GAME_SLUGS as readonly string[]).includes(council.slug);
 const current = loadYear(CURRENT_YEAR);
 const charts = profileChartOptions(council.slug);
 const paymentLink = councilTaxLink(council.gss);
@@ -138,7 +140,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
       ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
       {id: 'where-money-goes', label: 'Where the money goes'},
-      ...(council.reorganisation ? [{id: 'reorganisation', label: 'Reorganisation'}] : []),
+      {id: 'similar', label: 'Nearby and alike'},
       {id: 'more', label: `${name} across the network`},
     ]},
   ]} />
@@ -294,18 +296,12 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <BandMix gss={council.gss} name={name} />
   <CollectionRates gss={council.gss} name={name} />
   <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
-
-  {council.reorganisation && (
-    <section class="section" id="reorganisation" aria-labelledby="reorganisation-heading">
-      <h2 id="reorganisation-heading">Is {name} council being reorganised?</h2>
-      <p>{council.reorganisation.note}</p>
-      <p class="source-line">
-        Source: <a href={council.reorganisation.sourceUrl}>{new URL(council.reorganisation.sourceUrl).hostname}</a>{longDate(council.reorganisation.sourceDate) ? `, ${longDate(council.reorganisation.sourceDate)}` : ""}, as recorded by UK Places.
-      </p>
-    </section>
-  )}
+  {hasScenarioGame && <p>A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from {name} Borough Council's own published budget gap and lets you set council tax, spending and reserves.</p>}
 
 
+
+
+  <NearbyCouncils council={council} rankingHref={rankingPath(rankType.slug)} rankingLabel={rankType.label} />
 
   <section class="section" id="more" aria-labelledby="more-heading">
     <h2 id="more-heading">{name} across the network</h2>

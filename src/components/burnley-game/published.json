@@ -1,0 +1,37 @@
+{
+  "note": "The four published figures printed as static HTML above the Burnley budget scenario game, with their sources. Site copy, not written by the sync script. tests/burnley-scenario-game.test.ts holds each value equal to the figure game.js carries.",
+  "figures": [
+    {
+      "id": "gap-assumed",
+      "label": "Budget gap for 2027/28, at a council tax rise of 1.99%",
+      "value": "£0.594 million",
+      "gameValue": "\"value_m\": 0.594",
+      "source": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals, report to the Executive, 16 September 2026, Table 4, page 5",
+      "note": "The council prints the figure in millions to three decimal places."
+    },
+    {
+      "id": "gap-alternative",
+      "label": "Budget gap for 2027/28, at a council tax rise of 2.99%",
+      "value": "£0.507 million",
+      "gameValue": "\"value_m\": 0.507",
+      "source": "Burnley Borough Council, Revenue Budget 2027-30, Latest Position and Savings Proposals, report to the Executive, 16 September 2026, Table 5, page 6",
+      "note": ""
+    },
+    {
+      "id": "net-budget-requirement",
+      "label": "Net Budget Requirement for 2026/27",
+      "value": "£22,428,686",
+      "gameValue": "\"value\": 22428686",
+      "source": "Burnley Borough Council, Revenue Budget 2026/27, report to the Executive, 25 February 2026, page 1",
+      "note": ""
+    },
+    {
+      "id": "band-d",
+      "label": "Band D charge for 2026/27, Burnley Borough Council's own part of the bill",
+      "value": "£351.44",
+      "gameValue": "\"value\": 351.44",
+      "source": "Burnley Borough Council, Council Tax Resolution 2026/27, Appendix A, Full Council, 3 March 2026",
+      "note": ""
+    }
+  ]
+}

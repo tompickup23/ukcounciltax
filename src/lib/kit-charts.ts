@@ -8,7 +8,9 @@ import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
-import { billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
+import { rankedBars, type RankedBarsOptions, billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
+import {palettePng} from "../vendor/estate-kit/dist/src/output/pngPalette.js";
+import {increaseGroups, increaseFigureKey, INCREASE_GROUP_IDS, type IncreaseGroupId} from "./increase-groups";
 import { AREA_TYPE_LABEL, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
 import { loadRegistry } from "./registry";
 import { COUNTY_CLASS, RANK_CLASSES, classFor, rankClass, rankCounties } from "./rankings";
@@ -35,7 +37,26 @@ export const PROFILE_CHARTS = ["bands", "bill", "position", "map"] as const;
 export type ProfileChart = typeof PROFILE_CHARTS[number];
 export type ProfileChartName = `councils/${string}/${ProfileChart}`;
 export type ClassChartName = `ranked-${string}`;
-export type KitChartName = keyof typeof KIT_CHARTS | ProfileChartName | ClassChartName;
+export type IncreaseChartName = `increases-${IncreaseGroupId}`;
+export type KitChartName = keyof typeof KIT_CHARTS | ProfileChartName | ClassChartName | IncreaseChartName;
+const isIncreaseChart = (name: string): name is IncreaseChartName => name.startsWith("increases-");
+
+export function increaseChartNames(): IncreaseChartName[] {
+  return INCREASE_GROUP_IDS.map(id => `increases-${id}` as IncreaseChartName);
+}
+
+export function increaseChartOptions(name: IncreaseChartName): RankedBarsOptions {
+  const group = increaseGroups(CURRENT_YEAR).find(group => name === `increases-${group.id}`);
+  if (!group) throw new Error(`No increases group for ${name}`);
+  const year = yearLabel(CURRENT_YEAR);
+  return {
+    set: siteFigures(),
+    rows: group.rows.map(row => ({figure: increaseFigureKey(CURRENT_YEAR, group.id, row.gss)})),
+    classLabel: group.label,
+    basis: `Published percentage change in the council's own Band D share, England, ${year}. Excludes parish precepts and other bodies' shares`,
+    title: `Own share percentage change, ${year}`,
+  };
+}
 const isClassChart = (name: string): name is ClassChartName => name.startsWith("ranked-");
 
 /** One strip per ranked class on /council-tax/ranked/: the class's published values with its published average marked. */
@@ -122,6 +143,7 @@ export function drawProfileChart(name: ProfileChartName, theme?: Theme): ChartOu
 
 /** The figure keys a chart draws, for its source line. */
 export function chartKeys(name: KitChartName): string[] {
+  if (isIncreaseChart(name)) return increaseChartOptions(name).rows.map(row => row.figure);
   if (isClassChart(name)) { const o = classChartOptions(name); return [o.figure, o.distribution]; }
   if (name !== "home-bill") {
     const [, slug, chart] = name.split("/") as [string, string, ProfileChart];
@@ -165,6 +187,7 @@ export function chartPngPath(name: KitChartName, theme: Theme): string {
 }
 
 function draw(name: KitChartName, theme: Theme): ChartOutput {
+  if (isIncreaseChart(name)) return rankedBars({...increaseChartOptions(name), mode: {kind: "hex", theme, site: "ukcounciltax"}});
   if (isClassChart(name)) return positionStrip({ ...classChartOptions(name), mode: { kind: "hex", theme, site: "ukcounciltax" } });
   if (name !== "home-bill") return drawProfileChart(name, theme);
   return billAnatomy({ ...KIT_CHARTS[name].options(), mode: { kind: "hex", theme, site: "ukcounciltax" } });
@@ -182,7 +205,11 @@ export function chartPng(name: KitChartName, theme: Theme): Buffer {
     fitTo: { mode: "width", value: out.width * 2 },
     font: { fontFiles, loadSystemFonts: false, defaultFontFamily: tokens.font.sans.family },
   });
-  return svg.render().asPng();
+  const rendered = svg.render();
+  // W4: new increase downloads are light, 2x and palette compressed.
+  return isIncreaseChart(name)
+    ? palettePng(rendered.pixels, rendered.width, rendered.height, {colours: 256})
+    : rendered.asPng();
 }
 
 /** Sum the shares exactly as the kit prints them, in tenths of one percent. */

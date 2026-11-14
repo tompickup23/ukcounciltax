@@ -13,6 +13,7 @@
  *   * a band page or the national table that does not list every authority
  *     in the band table, or a council page count that does not match it
  *   * a council page with no MHCLG source line or no parish precept caveat
+ *   * any built file carrying the held registry reorganisation text
  *
  * Exits non-zero naming each failure.
  */
@@ -37,6 +38,8 @@ const seenUnique = new Set();
 const BEACON_TOKEN = "11f6f11ed6cf428d9dd7e1d688f8a64b";
 // Built from parts so this file does not carry the entity names it looks for.
 const DASH = new RegExp(`[\\u2013\\u2014]|&${"m"}dash;|&${"n"}dash;`);
+// The registry reorganisation field is held: see "Held data" in CLAUDE.md.
+const HELD_PHRASES = ["government-decided", "four-unitary", "Structural Change Order"];
 
 if (!existsSync(DIST)) {
   console.error("dist/ is not there. Run npm run build first.");
@@ -70,6 +73,7 @@ let homeChecked = false;
 for (const path of files(DIST)) {
   if (!/\.(html|xml|txt|json|js|css|svg|webmanifest)$|_headers$|_redirects$/.test(path)) continue;
   const text = readFileSync(path, "utf-8");
+  for (const phrase of HELD_PHRASES) if (text.includes(phrase)) failures.push(`held reorganisation text "${phrase}" in ${rel(path)}`);
   if (path.endsWith(".html") && /href=["\']\/downloads\/|data-(?:export-view|table-export|download-scenario)/.test(text)) failures.push(`download control in ${rel(path)}`);
   if (DASH.test(text)) failures.push(`dash in ${rel(path)}`);
   if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
@@ -228,7 +232,8 @@ for (const url of canonicalMap.selfCanonicalUrls) {
 if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals, found ${seenMapped.size}`);
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
-if (pages !== 909) failures.push(`expected 909 HTML pages, found ${pages}`);
+// The Burnley budget scenario game adds one route, /councils/burnley/budget-game/.
+if (pages !== 910) failures.push(`expected 910 HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
@@ -274,7 +279,7 @@ const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
 const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
 const today = new Date().toISOString().slice(0, 10);
-if (sitemapEntries.length !== 908 || locs.length !== 908) failures.push(`expected all 908 sitemap entries, found ${sitemapEntries.length}`);
+if (sitemapEntries.length !== 909 || locs.length !== 909) failures.push(`expected all 909 sitemap entries, found ${sitemapEntries.length}`);
 for (const entry of sitemapEntries) {
   const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
   if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);

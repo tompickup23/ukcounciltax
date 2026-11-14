@@ -47,6 +47,16 @@ export function councilPath(council: Council): string {
   return `/councils/${council.slug}/`;
 }
 
+/**
+ * Councils with a budget scenario game built from their own published papers.
+ * The game is copied in by scripts/sync-burnley-game.sh; see docs/RELEASE.md.
+ */
+export const SCENARIO_GAME_SLUGS = ["burnley"] as const;
+
+export function scenarioGamePath(slug: string): string {
+  return `/councils/${slug}/budget-game/`;
+}
+
 export interface CouncilPage {
   council: Council;
   tax: Authority;
@@ -73,6 +83,7 @@ export function programmaticPaths(): string[] {
     ...REGIONS.map(regionPath),
     ...councilPages().map(({ council }) => councilPath(council)),
     ...councilPages().map(({ council }) => `/tools/budget/${council.slug}/`),
+    ...SCENARIO_GAME_SLUGS.map(scenarioGamePath),
   ];
 }
 

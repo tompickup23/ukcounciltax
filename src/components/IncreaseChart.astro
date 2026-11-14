@@ -1,0 +1,29 @@
+---
+import RankedBars from '../vendor/estate-kit/src/components/RankedBars.astro';
+import ChartActions from './kit/ChartActions.astro';
+import SourceLine from './SourceLine.astro';
+import {CURRENT_YEAR, yearLabel} from '../lib/council-tax';
+import {increaseChartOptions, type IncreaseChartName} from '../lib/kit-charts';
+import {councilTaxSource} from '../lib/sources';
+
+interface Props {chart: IncreaseChartName; label: string; table: string}
+const {chart, label, table} = Astro.props;
+// At 375px these two complete drawings exceed the 2,500px limit; the county drawing stays open.
+const collapsed = chart !== 'increases-county';
+const Wrapper = collapsed ? 'details' : 'div';
+const target = `${chart}-drawing`;
+---
+<Wrapper class="increase-drawing" data-increase-drawing={chart}>
+  {collapsed && <summary>Show {label}: own share percentage changes, {yearLabel(CURRENT_YEAR)}</summary>}
+  <div class="fact" data-fact id={target} data-pagefind-ignore>
+    <RankedBars {...increaseChartOptions(chart)} id={`${chart}-table`} />
+    <ChartActions chart={chart} target={target}>
+      <SourceLine slot="source" source={councilTaxSource(CURRENT_YEAR, table)} />
+    </ChartActions>
+  </div>
+</Wrapper>
+<style>
+  .increase-drawing { margin-block: var(--space-sm); }
+  .increase-drawing > summary { cursor: pointer; color: var(--accent); min-height: 44px; }
+  .increase-drawing[open] > summary { margin-bottom: var(--space-sm); }
+</style>

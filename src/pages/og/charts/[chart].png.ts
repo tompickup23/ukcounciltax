@@ -1,7 +1,7 @@
 import {cachedImageRoute} from "../../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from "astro";
 import { buildOg } from "../../../lib/og";
-import { CHART_THEMES, KIT_CHARTS, chartCard, chartPng, classChartNames, type KitChartName } from "../../../lib/kit-charts";
+import { CHART_THEMES, KIT_CHARTS, chartCard, chartPng, classChartNames, increaseChartNames, type KitChartName } from "../../../lib/kit-charts";
 import type { Theme } from "../../../vendor/estate-kit/dist/src/index.js";
 
 export const prerender = true;
@@ -17,8 +17,8 @@ export function getStaticPaths() {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
     paths.push({ params: { chart: `${name}-card` }, props: { name, theme: "card" } });
   }
-  // The class strips on /council-tax/ranked/ have one light PNG and no share card.
-  for (const name of classChartNames()) {
+  // The class strips and own share increases have one light PNG and no share card.
+  for (const name of [...classChartNames(), ...increaseChartNames()]) {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
   }
   return paths;

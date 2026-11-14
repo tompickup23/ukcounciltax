@@ -1,0 +1,12 @@
+/* Site skin for the Burnley budget game. Appended to the scoped game.css by scripts/sync-burnley-game.sh.
+   The estate faces replace the game's own stacks; the game keeps its own surface and chart colours inside the wrapper. */
+.burnley-game{--f-body:var(--font-sans);--f-display:var(--font-sans);--f-data:var(--font-sans);border:1px solid var(--line);border-radius:12px;overflow:clip;font-variant-numeric:tabular-nums}
+.burnley-game .wrap{padding-block:0 32px}
+.burnley-game .test.edition{background:var(--sunk);color:var(--ink);text-align:left}
+/* The site header is sticky and 65px tall, so the game's own sticky stepper sits under it. */
+.burnley-game .stepper{top:65px}
+body > .tip{font-family:var(--font-sans);font-size:.82rem;font-weight:600;line-height:1.35}
+/* The game scrolls a step to the top of the window less its stepper. Each step starts 65px higher and pads the same, so its heading clears the site header as well. */
+.burnley-game section.step{margin-top:-65px;padding-top:95px}
+/* The gap meter is fixed to the foot of the window from step 4, so the page leaves room for it above the site footer's last line. */
+body:has(.burnley-game .meter:not([hidden])){padding-bottom:110px}

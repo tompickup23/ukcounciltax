@@ -48,7 +48,9 @@
         {
           "allOf": [{ "$ref": "#/$defs/base" }],
           "required": ["value"],
-          "properties": { "kind": { "const": "value" }, "value": { "type": "number" }, "display": { "$ref": "#/$defs/display" } }
+          "properties": { "kind": { "const": "value" }, "value": { "type": ["number", "null"] }, "display": { "$ref": "#/$defs/display" } },
+          "if": { "properties": { "value": { "type": "null" } } },
+          "then": { "not": { "required": ["display"] } }
         },
         {
           "allOf": [{ "$ref": "#/$defs/base" }],

@@ -24,3 +24,6 @@ export { checkSources, sourceErrors } from "./qa/sources.js";
 export { checkNames, nameErrors } from "./qa/names.js";
 export { summaryRowTiles, summaryRowHtml } from "./charts/summaryRow.js";
 export { linear, zeroDomain, zeroScale, bands, barPath, openBar, polylineObstacles, overlaps, firstClear, stackRows, spread, annotate, measure, zeroLine } from "./charts/grammar/index.js";
+export { rankedBars } from "./charts/rankedBars.js";
+export { areaMap } from "./charts/areaMap.js";
+export { defineMapIndicators, mapClass, colourFor } from "./charts/mapIndicators.js";

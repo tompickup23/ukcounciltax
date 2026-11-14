@@ -26,10 +26,11 @@ import {
   precedingYear,
   wholePounds,
   yearLabel,
-  type OwnFigures,
   type Year,
 } from '../lib/council-tax';
 import IncreaseFinder from '../components/IncreaseFinder.astro';
+import IncreaseChart from '../components/IncreaseChart.astro';
+import {increaseGroups} from '../lib/increase-groups';
 import {englishRows} from '../lib/council-picker';
 import {loadRegistry} from '../lib/registry';
 import {councilPages, councilPath} from '../lib/paths';
@@ -52,19 +53,9 @@ const finderRows=[...englishRows('profile'), ...Object.entries(current.counties)
   region:registry.councils[gss]?.region??'', type:'Shire county council',
 }))].sort((a,b)=>a.name.localeCompare(b.name,'en-GB'));
 
-interface Row {gss:string;name:string;href:string|null;own:OwnFigures}
-const sortRows=(list:Row[])=>list
-  .filter(r=>typeof r.own.changePct==='number')
-  .sort((a,b)=>(b.own.changePct as number)-(a.own.changePct as number)||a.name.localeCompare(b.name));
-
 /** One year's own-share content, built from that year's MHCLG file alone. */
 function yearSection(year:Year){
   const file=loadYear(year);
-  const authorities=Object.entries(file.authorities).filter(([,a])=>a.own);
-  const rowsFor=(district:boolean)=>sortRows(authorities
-    .filter(([,a])=>(a.classCode==='SD')===district)
-    .map(([gss,a])=>({gss,name:a.name,href:pageByGss.get(gss)??null,own:a.own as OwnFigures})));
-  const tables=file.source.ownTables;
   return {
     year,
     label:yearLabel(year),
@@ -73,11 +64,7 @@ function yearSection(year:Year){
     area:file.england.areaBandD,
     classes:file.england.byClass,
     principles:file.source.referendumPrinciples,
-    groups:[
-      {id:'unitary',label:'London boroughs, metropolitan districts and unitary authorities',question:'How much did London boroughs, metropolitan districts and unitary authorities raise their share',table:tables.unitary,rows:rowsFor(false),pounds:false},
-      {id:'county',label:'Shire county councils',question:'How much did county councils raise their share',table:tables.county,rows:sortRows(Object.entries(file.counties).map(([gss,own])=>({gss,name:`${own.name} County Council`,href:null,own}))),pounds:false},
-      {id:'district',label:'Shire district councils',question:'How much did district councils raise their share',table:tables.district,rows:rowsFor(true),pounds:true},
-    ],
+    groups:increaseGroups(year).map(group=>({...group,rows:group.rows.map(row=>({...row,href:pageByGss.get(row.gss)??null}))})),
   };
 }
 const sections=YEARS.slice().reverse().map(yearSection);
@@ -134,6 +121,7 @@ return (
 <div class="section" id={`${s.year}-${group.id}`} aria-labelledby={`${s.year}-${group.id}-heading`}>
 <h3 id={`${s.year}-${group.id}-heading`}>{group.question} in {s.label}?</h3>
 <p class="muted">Largest first. The council's own Band D excludes parish precepts and the other bodies' shares.</p>
+{s.year===CURRENT_YEAR && <IncreaseChart chart={`increases-${group.id}`} label={group.label} table={group.table} />}
 <div class="fact" data-fact>
 <div class="table-wrap" tabindex="0" role="region" aria-label={`${group.label}, own Band D ${s.label}`}><table class="data" data-pagefind-ignore><caption>{group.label}, own Band D {s.label}, change on {s.previous}, largest first</caption><thead><tr><th scope="col">Council</th><th scope="col" class="num">Own Band D</th><th scope="col" class="num">Change</th>{group.pounds && <th scope="col" class="num">In pounds</th>}<th scope="col">Note</th></tr></thead><tbody>{group.rows.map(row=><tr data-own-change={s.year===CURRENT_YEAR?row.gss:undefined}><th scope="row">{row.href?<a href={row.href}>{row.name}</a>:row.name}</th><td class="num">{pounds(row.own.bandD)}</td><td class="num" data-figure>{percent(row.own.changePct, 2)}</td>{group.pounds && <td class="num">{pounds(row.own.changePounds)}</td>}<td class="note-cell">{row.own.notes.map(n=>n.text).join(' ')}</td></tr>)}</tbody></table></div>
 <SourceLine source={councilTaxSource(s.year, group.table)} />

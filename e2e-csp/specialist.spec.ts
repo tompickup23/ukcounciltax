@@ -5,6 +5,17 @@ for(const path of ['/precepts/','/increases/','/tools/future-cost/'])test(`speci
  if(path==='/tools/future-cost/')await expect(page.locator('[data-final]')).toHaveText('£3,253.78');
  if(path==='/precepts/'){await page.getByLabel('Council with a complete imported schedule').selectOption('E07000117');await page.getByLabel('Parish or locality').selectOption('unparished');await page.getByRole('checkbox').check();await page.getByRole('button',{name:'Show the published breakdown'}).click();await expect(page.locator('[data-bill-total]')).toContainText('£2,540.32');}
  if(path==='/increases/'){
+  await expect(page.locator('[data-increase-drawing]')).toHaveCount(3);
+  await page.context().grantPermissions(['clipboard-read','clipboard-write']);
+  for(const id of ['unitary','county','district']){
+   const drawing=page.locator(`[data-increase-drawing="increases-${id}"]`);
+   if(id!=='county')await drawing.locator(':scope > summary').click();
+   await expect(drawing.locator('svg')).toBeVisible();
+   await drawing.getByRole('button',{name:'Copy table',exact:true}).click();
+   await expect(drawing.locator('[data-chart-status]')).toContainText('Table copied');
+   expect(await page.evaluate(()=>navigator.clipboard.readText())).toContain('Source: MHCLG');
+   if(id!=='county')await drawing.locator(':scope > summary').click();
+  }
   await page.getByLabel('Find a council').fill('Burnley');await expect(page.locator('[data-increases] tbody tr:visible')).toHaveCount(1);
   await page.getByRole('searchbox',{name:'Find my council',exact:true}).fill('Burnley');
   await page.getByRole('button',{name:'Burnley Shire district',exact:true}).click();

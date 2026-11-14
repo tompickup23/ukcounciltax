@@ -497,7 +497,7 @@ page itself.
 
 Provenance. The game is built and checked in the Reports repository, in
 `Burnley_Budget_Model_work/game/`, from the Burnley budget model. This edition
-is model run `run-a81dd5ae34f2b6d2`, built 14 November 2026, copied by
+is model run `run-f2ca9ce5ee34f595`, built 14 November 2026, copied by
 `scripts/sync-burnley-game.sh` from its `game/dist/` folder. The SHA-256 of
 each copied file, before and after adaptation, is in
 `src/components/burnley-game/meta.json`. `game.js`, which carries the data,

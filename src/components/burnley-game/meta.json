@@ -1,5 +1,5 @@
 {
-  "runId": "run-a81dd5ae34f2b6d2",
+  "runId": "run-f2ca9ce5ee34f595",
   "edition": "2026-11-14",
   "editionText": "14 November 2026",
   "baseYear": "2026/27",
@@ -7,12 +7,12 @@
   "nextYear": "2028/29",
   "source": "Reports repository, Burnley_Budget_Model_work/game/dist",
   "sourceSha256": {
-    "index.html": "b52904408a376be04dba95c2db1b34f05baa47dfd49b29f5cb68064fdd5e2125",
-    "game.js": "3430d65a8c3742d3b60c88fd1dc8a36c6b420fb02d640221816b3dda85da62d7",
-    "game.css": "5a951a2d70157d978455682ac9cacc2eb06dbf05ed8785de17a0f9e32521abdc"
+    "index.html": "7cfe6832527729a8c2cffd024619f62a2ef1201425b58a9df184cb9d89e7bbd7",
+    "game.js": "97c53321561facd7665bbb1bd3a52e6e42e025c06b1612a673e9e631d53ba833",
+    "game.css": "62ad557823ffcafbcd4ba44e37007a1191d57efbc1912aafb7d18db391fbc63f"
   },
   "servedSha256": {
-    "game.js": "3430d65a8c3742d3b60c88fd1dc8a36c6b420fb02d640221816b3dda85da62d7",
-    "game.css": "6a1476c0d889492a024f54044880e0f34acc760355de27ee7f596927067ee117"
+    "game.js": "97c53321561facd7665bbb1bd3a52e6e42e025c06b1612a673e9e631d53ba833",
+    "game.css": "6de2a244ae946f9c21fe6d0b4c8be479700c56328daa1d05541f3f76221b6644"
   }
 }

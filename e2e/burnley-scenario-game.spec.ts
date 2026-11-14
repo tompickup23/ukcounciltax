@@ -49,3 +49,10 @@ test('Burnley council page links the scenario game and no other council page doe
   await page.goto('/councils/pendle/');
   await expect(page.locator('[data-scenario-game-link]')).toHaveCount(0);
 });
+
+test('Burnley budget page links the scenario game and no other budget page does', async ({page}) => {
+  await page.goto('/tools/budget/burnley/');
+  await expect(page.locator('[data-scenario-game-link]')).toHaveAttribute('href', SCENARIO_GAME_PATH);
+  await page.goto('/tools/budget/pendle/');
+  await expect(page.locator('[data-scenario-game-link]')).toHaveCount(0);
+});

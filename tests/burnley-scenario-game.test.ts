@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {readFileSync} from 'node:fs';
+import {existsSync, readFileSync} from 'node:fs';
 import {describe, expect, it} from 'vitest';
 import {gameMarkup, longDate, scopeCss, scopeSelector, strictProblems} from '../scripts/lib/burnley-game-sync.mjs';
 import {programmaticPaths, scenarioGamePath, SCENARIO_GAME_SLUGS} from '../src/lib/paths';
@@ -105,5 +105,19 @@ describe('the page around the game', () => {
     expect(page).toMatch(/<script is:inline src=\{`\$\{assets\}\/game\.js/);
     expect(page).toMatch(/<link rel="stylesheet" href=\{`\$\{assets\}\/game\.css/);
     expect([...page.matchAll(/<script\b/g)]).toHaveLength(1);
+  });
+});
+
+describe('the national budget page link to the scenario game', () => {
+  it.skipIf(!existsSync('dist/tools/budget/burnley/index.html'))('appears on the Burnley budget page and on no other council budget page', () => {
+    const burnley = read('dist/tools/budget/burnley/index.html');
+    expect(burnley.match(/data-scenario-game-link/g)).toHaveLength(1);
+    expect(burnley).toContain(`href="${scenarioGamePath('burnley')}" data-scenario-game-link`);
+    expect(burnley).toContain('Burnley Borough Council has also published its own budget gap for the next two years.');
+    for (const slug of ['pendle', 'hyndburn', 'coventry']) {
+      const file = `dist/tools/budget/${slug}/index.html`;
+      if (!existsSync(file)) throw new Error(`Build the site before checking ${file}`);
+      expect(read(file), slug).not.toContain('data-scenario-game-link');
+    }
   });
 });

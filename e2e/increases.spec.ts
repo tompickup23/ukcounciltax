@@ -23,8 +23,8 @@ test('current figures lead, earlier years close, and the finder covers every pub
   const rows = await page.locator('[data-own-change]').evaluateAll(all => all.map(el => el.getAttribute('data-own-change')).sort());
   const choices = await page.locator('[data-increase-choice]').evaluateAll(all => all.map(el => el.getAttribute('data-increase-choice')).sort());
   expect(choices).toEqual(rows);
-  await expect(page.locator('main table')).toHaveCount(12);
-  await expect(page.locator('main table tr')).toHaveCount(1291);
+  await expect(page.locator('main table:not(.ek-table)')).toHaveCount(12);
+  await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(1291);
 });
 
 for (const theme of ['light', 'dark'] as const) {
@@ -110,15 +110,115 @@ test('without scripts the finder is hidden and every table remains reachable', a
     const page = await context.newPage();
     await page.goto(`${baseURL}/increases/`);
     await expect(page.locator('[data-increase-finder]')).toBeHidden();
-    await expect(page.locator(`[id="${CURRENT_YEAR}-district"] table`)).toBeVisible();
+    await expect(page.locator(`[id="${CURRENT_YEAR}-district"] table.data`)).toBeVisible();
     for (const year of YEARS.filter(year => year !== CURRENT_YEAR)) {
       const section = page.locator(`details[data-increase-year="${year}"]`);
       await expect(section).not.toHaveAttribute('open');
       await section.locator('summary').click();
       await expect(section.locator('table').first()).toBeVisible();
     }
-    await expect(page.locator('main table')).toHaveCount(12);
-    await expect(page.locator('main table tr')).toHaveCount(1291);
+    await expect(page.locator('main table:not(.ek-table)')).toHaveCount(12);
+    await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(1291);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
   } finally { await context.close(); }
 });
+
+for (const theme of ['light', 'dark'] as const) {
+  test(`NV14: complete current drawings with scripts off in ${theme}`, async ({browser, baseURL}, testInfo) => {
+    const viewport = {width: testInfo.project.name === 'mobile' ? 375 : 1440, height: 900};
+    const context = await browser.newContext({javaScriptEnabled: false, colorScheme: theme, viewport});
+    const auditContext = await browser.newContext({colorScheme: theme, viewport});
+    try {
+      const page = await context.newPage();
+      await page.goto(`${baseURL}/increases/`);
+      await page.evaluate(() => document.fonts.ready);
+      const current = page.locator(`[data-increase-year="${CURRENT_YEAR}"]`);
+      await expect(page.locator('svg.ek-chart')).toHaveCount(3);
+      await expect(page.locator('details[data-increase-year] svg.ek-chart')).toHaveCount(0);
+      await expect(page.locator('details.increase-drawing[open]')).toHaveCount(0);
+      await expect(page.locator('[data-chart-copy]:visible')).toHaveCount(0);
+      expect(await current.locator('[data-fact]').first().evaluate(el => Boolean(el.compareDocumentPosition(document.querySelector('[data-increase-drawing]')!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+      expect(await page.locator('[data-increase-finder]').evaluate(el => Boolean(el.compareDocumentPosition(document.querySelector('[data-increase-drawing]')!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+      for (const id of ['unitary', 'county', 'district']) {
+        const group = current.locator(`[id="${CURRENT_YEAR}-${id}"]`);
+        const drawing = group.locator('[data-increase-drawing]');
+        const original = group.locator('table.data');
+        await expect(original).toBeVisible();
+        expect(await original.evaluate(el => el.closest('details'))).toBeNull();
+        if (id !== 'county') await drawing.locator(':scope > summary').click();
+        const expected = await original.locator('tbody tr').evaluateAll(rows => rows.map(row => ({
+          gss: row.getAttribute('data-own-change'), name: row.querySelector('th')!.textContent!.trim(), change: row.querySelectorAll('td')[1].textContent!.trim(),
+        })));
+        const bars = await drawing.locator('[data-ek-row]').evaluateAll(rows => rows.map(row => ({
+          gss: row.getAttribute('data-ek-row')!.split('.').at(-1), title: row.querySelector('title')!.textContent,
+        })));
+        expect(bars).toEqual(expected.map(row => ({gss: row.gss, title: `${row.name}: ${row.change}`})));
+        expect(await drawing.locator('.source-line').innerText()).toBe(await group.locator(':scope > [data-fact] > .source-line').innerText());
+        const twin = drawing.locator('details.ek-twin');
+        await twin.locator('summary').click();
+        await expect(twin.locator('tbody tr')).toHaveCount(expected.length);
+        await twin.locator('summary').click();
+        const svg = drawing.locator('svg');
+        const bounds = await svg.evaluate(el => {
+          const box = el.getBoundingClientRect();
+          return [...el.querySelectorAll('text')].filter(text => {
+            const label = text.getBoundingClientRect();
+            return label.left < box.left-1 || label.right > box.right+1 || label.top < box.top-1 || label.bottom > box.bottom+1;
+          }).map(text => text.textContent);
+        });
+        expect(bounds).toEqual([]);
+        if (id === 'district') {
+          const fall = expected.reduce((a, b) => parseFloat(a.change) < parseFloat(b.change) ? a : b);
+          expect(parseFloat(fall.change)).toBeLessThan(0);
+          const geometry = await drawing.locator(`[data-ek-row$=".${fall.gss}"]`).evaluate(el => {
+            const box = (el.querySelector('path') as SVGGraphicsElement).getBBox();
+            return {zero: Number(el.getAttribute('data-ek-zero')), left: box.x, right: box.x+box.width};
+          });
+          expect(geometry.left).toBeLessThan(geometry.zero);
+          expect(Math.abs(geometry.right-geometry.zero)).toBeLessThan(0.02);
+        }
+        await svg.screenshot({path: testInfo.outputPath(`${id}-${theme}.png`)});
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth-document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
+      // Axe needs timers. Audit the same static content with every page script removed.
+      const audit = await auditContext.newPage();
+      await audit.route('**/*', async route => {
+        const request = route.request();
+        if (request.resourceType() === 'script' || !request.url().startsWith(baseURL!)) return route.abort();
+        if (request.resourceType() !== 'document') return route.continue();
+        const response = await route.fetch();
+        await route.fulfill({response, body: (await response.text()).replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')});
+      });
+      await audit.goto(`${baseURL}/increases/`);
+      for (const drawer of await audit.locator('details.increase-drawing > summary').all()) await drawer.click();
+      const staticContent = async (target: typeof page) => target.locator('main').evaluate(el => {
+        const clone = el.cloneNode(true) as HTMLElement;
+        clone.querySelectorAll('script, noscript').forEach(node => node.remove());
+        // Playwright restores caret styles after screenshots as empty attributes.
+        clone.querySelectorAll('[style=""]').forEach(node => node.removeAttribute('style'));
+        return clone.innerHTML;
+      });
+      expect(await staticContent(audit)).toBe(await staticContent(page));
+      await expect(audit.locator('script')).toHaveCount(0);
+      const result = await new AxeBuilder({page: audit}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+      expect(result.violations.map(v => ({id: v.id, targets: v.nodes.map(n => n.target)}))).toEqual([]);
+    } finally { await context.close(); await auditContext.close(); }
+  });
+
+  test(`NV9: drawing actions retain their source in ${theme}`, async ({page, context}) => {
+    await page.emulateMedia({colorScheme: theme});
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.goto('/increases/');
+    for (const id of ['unitary', 'county', 'district']) {
+      const drawing = page.locator(`[data-increase-drawing="increases-${id}"]`);
+      if (id !== 'county') await drawing.locator(':scope > summary').click();
+      await expect(drawing.locator('[data-chart-png]')).toHaveCount(1);
+      await expect(drawing.locator('[data-chart-png]')).toHaveAttribute('href', `/og/charts/increases-${id}-light.png`);
+      await drawing.getByRole('button', {name: 'Copy table', exact: true}).click();
+      await expect(drawing.locator('[data-chart-status]')).toContainText('Table copied');
+      const copied = await page.evaluate(() => navigator.clipboard.readText());
+      expect(copied).toContain('Source: MHCLG');
+      expect(copied).toContain('%');
+    }
+  });
+}

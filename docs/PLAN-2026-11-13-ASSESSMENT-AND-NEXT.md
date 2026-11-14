@@ -72,3 +72,48 @@ Three lanes, one writer in each repository. The kit lane is the critical path an
 Dates that bind are unchanged: levels day staged and the dossier complete by mid January 2027; the links check before 10 February 2027; the freeze on 20 March 2027; the reversal in May to June 2027. Sessions 3, 4 and 7 are the path to the first of those, with about nine weeks left.
 
 Left out on purpose: a WebKit lane in CI (the manual pass found nothing; a phone check by hand takes Tom five minutes), the share bar, sparkline tile and history strip (after the stop rule lifts). The C2 build is no longer left out: it has a working pilot and its timing is X2.
+
+## 6. Update and handover, 14 November 2026
+
+Written in Claude Code before this chat was archived at Tom's request. Sections 1 to 5 stand as written on 13 November; where they differ from this section, this section is the later record.
+
+### 6.1 Merged and live since section 1
+
+| PR | What | Merge |
+|---|---|---|
+| ukcounciltax 70 | Reorganisation field held on the 14 Lancashire profiles | `c947f8a`, live; Burnley, Blackpool and Wyre checked |
+| ukcounciltax 67 | Nearby and alike on 296 English profiles | `1a21412`, live; four profiles checked |
+| ukcounciltax 69, ukcouncils 51 | This plan, the archive notes, the PR 67 review, the WebKit review | `f8f74b1`, `89ca008` |
+| ukcounciltax 72, ukcouncils 52 | The design checker's Playwright pinned to 1.65.1 | `1e4494e`, `75cdac1` |
+
+PR 67 was merged with its design check not complete. The cause was the checker's browser, not the change: Playwright 1.65.2 (PyPI, published 14 November 2026, 00:29 UTC) ships Chromium build 1255 and stopped the pinned checker on the runner; 1.65.1 ships build 1254. PRs 72 and 52 name the checker's packages in `.github/scripts/design-review.mjs` and leave the checker file and its checksum unchanged. What breaks under 1.65.2 is not established, because the checker hides its traceback. Look at that before moving past 1.65.1.
+
+### 6.2 Open pull requests
+
+| PR | What | State |
+|---|---|---|
+| ukcounciltax 71 | Burnley budget scenario game at `/councils/burnley/budget-game/`, built by another Claude Code session from the Burnley budget model in Reports | Not ready. Its pushed branch predates PR 67, so its number diff fails; it has no "Pages allowed to differ" block; its description names an older model run. Its own session holds unpushed commits in `~/.aidoge-worktrees/ukcounciltax-burnley-game2`. Reviewed read only: no names, parties or private paths in the diff, no network request or storage in the game script, no inline script |
+| ukcounciltax 68 | The recovered C2 freeze pilot, draft | Safe copy. Needs main merged in before it can land |
+| ukcounciltax 61 | C2 research documents | Its files are also carried in PR 68 |
+| burnleycouncil 1189 | The canonical UK Councils plan, committed for the first time | Documents only |
+| tompickup.co.uk 111 | The same Burnley game on the personal site | Not looked at here |
+
+### 6.3 What the Burnley game changes
+
+Burnley now has a "balance the budget" page built from the council's own printed gap (Burnley Borough Council, Revenue Budget 2027-30, report to the Executive, 16 September 2026, Tables 4 and 5), which is better evidence than the C2 pilot can use and avoids the unexplained parish difference that held Burnley back there. C2 therefore splits in two: a generic freeze counterfactual for councils that pass the pilot's screen, starting with Blackburn with Darwen, and bespoke scenario games where a full council model exists. The page will go stale: it needs a refresh after the December settlement and after the February 2027 budget papers.
+
+### 6.4 Options put to Tom, none yet taken
+
+1. X3: make estate-kit public after a scrub for private paths, secrets and anything from Reports (it carries Council Intel skins). Settling the Actions billing is the alternative.
+2. X1: two new chart forms only, ranked bars first, then the linked area map.
+3. C2: land the Burnley game once its session tidies it; build the generic tier after levels day; consider `/tools/budget/burnley/scenario/` as its address before it goes live.
+4. Session 2 of section 5 (housekeeping) is partly done: see 6.5. Still to do there: one short state file per repository, and the local main checkouts fast forwarded once their untracked copies of notes that are now on main are removed.
+
+### 6.5 Local cleanup done on 14 November
+
+Thirty four worktrees for merged branches were removed across the two sites, which freed about 6 GB. Kept: `uct-c2-pilot` (PR 68), `uct-handoff-1110c` (PR 61), and `uct-ci` and `ukc-search`, because session prompts copy `data/raw/` from them. Before removal, three sets of stray files were saved to the ignored folder `.ops/archive-2026-11-14-worktree-cleanup/` in the main ukcounciltax checkout: the staged EFS index work of 9 November (superseded by ukcouncils PR 49; it would rename the anchors other pages link to), local edits to the A3 archive handover, and the B1 build logs. Other folders and logs under `~/wt` that are not worktrees were left alone.
+
+### 6.6 Rule added to both sites' guides
+
+A session that writes code commits and pushes it to a branch, as a draft pull request if it is not for review, before any archive step. The C2 pilot survived an archive only as a tool's snapshot (`refs/codex/snapshots` in the local repository). When work seems to be missing, look there and in Codex's archived session logs before concluding it was never done.
+

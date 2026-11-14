@@ -4,7 +4,7 @@ Standalone specialist council-tax website, Astro 6 and TypeScript. Origin https:
 
 ## Session continuation
 
-Read `docs/STATE.md` first: open pull requests, what is live, what is next and the decisions waiting, in 20 lines. Each session replaces it inside its own pull request. The plan is `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`. Older handoffs stay in `docs/` as a record; check GitHub before relying on one.
+Read `docs/STATE.md` first: open pull requests, what is live, what is next and the decisions waiting, in 20 lines. Each session replaces it inside its own pull request. The plan is `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`; the standing direction (this site owns the bill, UK Councils the council) is `docs/PLAN-2026-11-10-SPLIT-AND-NETWORK.md`. Older handoffs stay in `docs/` as a record; check GitHub before relying on one.
 
 ## Authority
 Tom authorised creation and publication using GitHub and Cloudflare on 5 October 2026. Preserve UK Councils and other sites unless a specific integration is within his request. Never copy secrets, private financial data or private investigations. UK Food Hygiene is public tier B in the UK State network since 6 October 2026 (repository private; site linked). Only verified live ecosystem destinations belong in links.

@@ -19,14 +19,7 @@ import { national } from "./national-data";
 import { COUNTY_CLASS, RANK_CLASSES, rankClass, rankCounties } from "./rankings";
 import { localBills } from "./local-bill-data";
 import { longDate, tableName } from "./sources";
-
-/** Pages read from the published schedule, keyed by the file hash they were read from. */
-const SCHEDULE_PAGES: Record<string, { page: string; total: string }> = {
-  b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9: {
-    page: "page 1",
-    total: "Row: Total, other parts of the borough.",
-  },
-};
+import { SCHEDULE_PAGES } from "./local-bill-chart";
 
 export const BURNLEY_PARTS = ["billing", "county", "police", "fire"] as const;
 

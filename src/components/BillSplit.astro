@@ -3,15 +3,24 @@
  * Where each 100 pounds of a published local bill goes, and the weekly
  * figure per band. Both are calculations of the published schedule, shown
  * with the calculation beside them and the source line directly under each.
+ *
+ * With `chart`, the split is drawn as the kit's bill bar (NV10) and the
+ * calculation lines sit under it. The chart must draw the same locality and
+ * band as the lines, which the caller answers for.
  */
+import BillAnatomy from '../vendor/estate-kit/src/components/BillAnatomy.astro';
+import ChartActions from './kit/ChartActions.astro';
+import {KIT_CHARTS, billShareRounding} from '../lib/kit-charts';
 import type {LocalBill} from '../lib/local-bill';
 import {shareSplit, weeklyByBand, shareSentence, formatShare, ROUNDING_NOTE, WEEKLY_NOTE} from '../lib/bill-split';
 import {moneyPence} from '../lib/tax-view';
 import {yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
 
-interface Props {bill: LocalBill; localityId: string; heading?: 'h2' | 'h3'; compact?: boolean; idPrefix?: string}
-const {bill, localityId, heading = 'h2', compact = false, idPrefix = 'split'} = Astro.props;
+interface Props {bill: LocalBill; localityId: string; heading?: 'h2' | 'h3'; compact?: boolean; idPrefix?: string; chart?: keyof typeof KIT_CHARTS}
+const {bill, localityId, heading = 'h2', compact = false, idPrefix = 'split', chart} = Astro.props;
+const chartOptions = chart ? KIT_CHARTS[chart].options() : null;
+const chartRounding = chartOptions ? billShareRounding(chartOptions) : null;
 const Heading = heading;
 const band = 'D';
 const year = yearLabel(bill.year);
@@ -27,10 +36,15 @@ const parishCaveat = locality.parishPence
   <section aria-labelledby={`${idPrefix}-shares`}>
     <Heading id={`${idPrefix}-shares`}>Out of every 100 pounds, Band D, {locality.name}, {year}</Heading>
     <p class="calc-label">Calculation of the published figures: each body's published Band D charge divided by the published Band D total of {moneyPence(split.total)}, times 100.</p>
+    {chart && chartOptions && <div class="fact" data-fact id={`${idPrefix}-chart`}>
+      <BillAnatomy {...chartOptions} id={`${idPrefix}-chart-table`} />
+      <ChartActions chart={chart} target={`${idPrefix}-chart`} />
+      {chartRounding && <p class="small" data-share-rounding>{chartRounding}</p>}
+    </div>}
     <ul class="shares">
       {split.rows.map((row, i) => (
         <li>
-          <span class="share-head"><span class={`dot dot-${i % 6}`} aria-hidden="true"></span><strong>{row.label}</strong><span class="share-figure">{formatShare(row.share)}</span></span>
+          <span class="share-head">{!chart && <span class={`dot dot-${i % 6}`} aria-hidden="true"></span>}<strong>{row.label}</strong><span class="share-figure">{formatShare(row.share)}</span></span>
           <span class="share-calc">{shareSentence(row, split.total, moneyPence)}</span>
         </li>
       ))}

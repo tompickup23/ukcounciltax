@@ -471,6 +471,31 @@ leaves the page with its heading and jump link, and one status line under the
 shared controls reports the result. Details and measurements are in
 `docs/SMALL-FAULTS-2026-11-13.md`.
 
+
+## Nearby and alike review candidate, 13 November 2026
+
+All 296 English council tax profiles gain the reviewed UK Councils form of
+Nearby and alike: open boundary-neighbour and same-county lists, same-type
+regional links, a contents entry and the existing council-class ranking link.
+The pinned geometry uses outline intersection, retaining the six pairs missed
+by identical-point matching. The independent GEOS dry run confirms all 753
+boundary pairs and 1,244 directed same-county links. Map limitations and island
+gaps are visible beside the lists. No financial comparison is added.
+
+All 909 pages retain their existing anchors, links, titles, canonicals and
+inline charts. All 2,845 PNGs are byte-identical. Scottish and Welsh pages and
+the budget game retain their exact HTML. The number diff adds only one 2026
+source-title token on each English profile. Source data, the kit, redirects
+and headers are unchanged.
+
+Validation passed 362 unit tests with no skips, Astro check with no diagnostics,
+the full image build, distribution and text checks, 72,249 internal links,
+440 browser tests and 104 actual-header tests. The pinned design checker
+passes all four requested pages in both themes and widths with zero findings.
+Measurements, provenance and caveats are in
+`docs/NEARBY-AND-ALIKE-2026-11-13.md`. This is a review candidate, not a record
+of merge or deployment.
+
 ## Held registry reorganisation field, 13 November 2026
 
 Council profiles no longer render the registry `reorganisation` field. Until

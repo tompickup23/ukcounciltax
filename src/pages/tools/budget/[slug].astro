@@ -13,7 +13,7 @@ import BudgetGame from '../../../components/BudgetGame.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import PageContents from '../../../components/PageContents.astro';
 import {gameNeighbours} from '../../../lib/game-neighbours';
-import {councilPages, type CouncilPage} from '../../../lib/paths';
+import {councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
 export function getStaticPaths() {
   return councilPages().map(({council, tax}) => ({params: {slug: council.slug}, props: {council, tax}}));
@@ -25,6 +25,7 @@ const available = data.council.status === 'available';
 const game = available ? gameData(council.gss, council.slug, tax.name) : null;
 const tableCount = [data.council, ...(data.county ? [data.county] : [])].reduce((sum, body) => sum + 4 + services(body).filter(row => row.value !== 0 && row.subLines.length).length, 0);
 const nearby = gameNeighbours(council.gss);
+const hasScenarioGame = (SCENARIO_GAME_SLUGS as readonly string[]).includes(council.slug);
 const title = available ? `${tax.name} budget game ${budgetYear}` : `${tax.name} budget ${budgetYear}: no return received`;
 const description = available
   ? `Published ${budgetYear} budget for ${tax.name}: service spending, funding, reserves and the Band D bill split, from the MHCLG RA return.`
@@ -35,6 +36,7 @@ const description = available
   {!available && <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>{tax.name} budget</h1><p class="lede">The published budget, with service spending and council tax kept as separate measures.</p></header>}
   {available ? <>
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
+    {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
     <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
     {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}

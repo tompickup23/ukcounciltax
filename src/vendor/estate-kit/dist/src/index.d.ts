@@ -22,3 +22,6 @@ export { checkSources, sourceErrors } from "./qa/sources.js";
 export { checkNames, nameErrors } from "./qa/names.js";
 export { summaryRowTiles, summaryRowHtml, type SummaryFact, type SummaryRowOptions, type SummaryTile } from "./charts/summaryRow.js";
 export { linear, zeroDomain, zeroScale, bands, barPath, openBar, polylineObstacles, overlaps, firstClear, stackRows, spread, annotate, measure, zeroLine, type BarSpec, type Candidate, type Annotation, type Piece } from "./charts/grammar/index.js";
+export { rankedBars, type RankedBarsOptions, type RankedBarRow } from "./charts/rankedBars.js";
+export { areaMap, type AreaMapOptions } from "./charts/areaMap.js";
+export { defineMapIndicators, mapClass, colourFor, type MapIndicator, type MapIndicatorRegistry, type FixedMapIndicator, type CategoricalMapIndicator } from "./charts/mapIndicators.js";

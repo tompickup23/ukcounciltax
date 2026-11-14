@@ -1,0 +1,37 @@
+/* estate-aliases:start
+   Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
+   Site: ukcounciltax, set pre-system-2026-08. Splice below estate-tokens:end and the estate-skin block.
+   Legacy names only: nothing new may use them. */
+
+:root {
+  --bg-soft: var(--bg-subtle);
+  --bg-deep: var(--bg-subtle);
+  --surface: var(--bg-card);
+  --surface-muted: var(--bg-subtle);
+  --ink: var(--text);
+  --ink-soft: var(--text-muted);
+  --muted: var(--text-muted);
+  --panel: var(--bg-card);
+  --panel-strong: var(--bg-subtle);
+  --panel-soft: var(--bg-subtle);
+  --accent-2: var(--positive);
+  --accent-3: var(--accent);
+  --accent-teal: var(--accent-bright);
+  --accent-teal-deep: var(--accent);
+  --accent-glow: color-mix(in srgb, var(--accent) 18%, transparent);
+  --coral: var(--critical);
+  --focus-ring: var(--accent);
+  --status-warn-bg: color-mix(in srgb, var(--warning) 8%, transparent);
+  --status-warn-border: color-mix(in srgb, var(--warning) 45%, transparent);
+  --status-warn-text: var(--warning);
+  --status-warn-tint: color-mix(in srgb, var(--warning) 14%, transparent);
+  --status-warn-dark: var(--warning);
+  --status-good-text: var(--positive);
+  --status-bad-text: var(--critical);
+  --body-bg-image: var(--bg);
+  --grid-line: transparent;
+  --grid-vignette: transparent;
+  --header-backdrop: var(--bg);
+}
+
+/* estate-aliases:end */

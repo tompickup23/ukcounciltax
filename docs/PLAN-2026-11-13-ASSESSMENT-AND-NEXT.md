@@ -42,7 +42,7 @@ Written in Claude Code at Tom's request, late on 13 November 2026, while the las
 
 | Decision | Recommendation | Unblocks |
 |---|---|---|
-| Hold the reorganisation field on UKCT (new) | Yes: stop rendering it everywhere, as UK Councils does. A removal, so no new claim is made | The live error |
+| Hold the reorganisation field on UKCT (new) | Taken and done: PR 70 merged as `c947f8a` and deployed late on 13 November 2026; three live Lancashire profiles checked | The live error |
 | Merge PR 67 | Yes, after a fresh read of its checks | Closes NV5 |
 | X3, the kit's CI | Settle billing or make estate-kit public, as the two sites were | Everything in the kit |
 | X1, new chart forms | Two forms only: ranked bars and the linked area map | Kit 0.6.0, then levels day |
@@ -55,7 +55,7 @@ Three lanes, one writer in each repository. The kit lane is the critical path an
 
 | Order | Lane | Session | Size | Waits for |
 |---|---|---|---|---|
-| 1 | ukcounciltax | Hold the registry `reorganisation` field: the profile section, its contents entry, structured data, share text and the search index, with a dist test that fails if the field renders. Copy the UK Councils rule. No replacement wording, no hand edit of the registry | Small | Tom's word |
+| 1 | ukcounciltax | Hold the registry `reorganisation` field: the profile section, its contents entry, structured data, share text and the search index, with a dist test that fails if the field renders. Copy the UK Councils rule. No replacement wording, no hand edit of the registry. Done as PR 70 | Small | Done |
 | 2 | both, one chat | Housekeeping: `docs/STATE.md` in each repository, the archive notes committed or folded in, `CLAUDE.md` pointers cut to one, local mains fast forwarded, the canonical plan committed in `~/clawd`, worktrees removed if X4 is given | Small | PR 67 merged |
 | 3 | estate-kit | CI restored, then PR 9 (one vendor command) | Small | X3 |
 | 4 | estate-kit | 0.6.0: ranked bars with a change marker, and the linked area map, each with golden files and the layout gate (NV14) | Large | X1, session 3 |

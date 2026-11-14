@@ -1,0 +1,78 @@
+---
+/**
+ * A budget scenario game for one council, built from that council's own
+ * published papers in the Reports repository and copied here by
+ * scripts/sync-burnley-game.sh. Burnley is the only council with one.
+ *
+ * The published figures and their sources are printed as static HTML above
+ * the game, so the page is useful without JavaScript. The game's script and
+ * stylesheet are static files of this site, loaded by ordinary elements: the
+ * page adds no inline script and needs nothing from the security policy.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import markup from '../../../components/burnley-game/markup.html?raw';
+import meta from '../../../components/burnley-game/meta.json';
+import published from '../../../components/burnley-game/published.json';
+import {councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
+
+export function getStaticPaths() {
+  return councilPages()
+    .filter(({council}) => (SCENARIO_GAME_SLUGS as readonly string[]).includes(council.slug))
+    .map(({council, tax}) => ({params: {slug: council.slug}, props: {council, tax}}));
+}
+interface Props extends CouncilPage {}
+const {council, tax} = Astro.props;
+const path = scenarioGamePath(council.slug);
+const assets = '/budget-game/burnley';
+const version = (file: 'game.js' | 'game.css') => meta.servedSha256[file].slice(0, 12);
+---
+<BaseLayout
+  title={`${tax.name} budget scenario game ${meta.playYear}`}
+  description={`Start from ${tax.name} Borough Council's published budget gap for ${meta.playYear}, then set council tax, spending and reserves yourself. A scenario, with sources.`}
+  path={path}
+>
+  <Breadcrumbs items={[{label: 'Councils', href: '/councils/'}, {label: tax.name, href: `/councils/${council.slug}/`}, {label: 'Budget scenario game'}]} />
+  <header class="page-head">
+    <p class="eyebrow">Budget scenario | {meta.playYear} and {meta.nextYear}</p>
+    <h1>{tax.name} budget scenario game</h1>
+    <p class="lede">Burnley Borough Council has published its own budget gap for the next two years. This page starts from that gap and lets you set council tax, spending and reserves to see what each choice does to it.</p>
+  </header>
+
+  <section class="section" aria-labelledby="published-heading" data-game-published>
+    <h2 id="published-heading">The published figures the game starts from</h2>
+    <p>These four figures are the council's own, as printed in its papers. They do not change when you move anything in the game.</p>
+    <dl class="published-figures">
+      {published.figures.map(figure => <div data-published-figure={figure.id}>
+        <dt>{figure.label}</dt>
+        <dd>{figure.value}</dd>
+        <dd class="source-line">Source: {figure.source}.{figure.note ? ` ${figure.note}` : ''}</dd>
+      </div>)}
+    </dl>
+  </section>
+
+  <section class="section" aria-labelledby="scenario-heading" data-game-scenario>
+    <h2 id="scenario-heading">What is yours and what is the council's</h2>
+    <p>The dials in the game are your own scenario. They are not a forecast and not the council's plan. Only the two budget gaps above are the council's printed figures for {meta.playYear}: every other result is this page's own sum from your settings, and the game explains each sum beside the figure it produces.</p>
+    <p>The base year is {meta.baseYear}. The council's budget for {meta.playYear} and the {meta.playYear} local government finance settlement are not yet published, so nothing here is a statement of what the council will decide.</p>
+    <p data-model-version>Model version: <strong>{meta.runId}</strong>. Edition of {meta.editionText}.</p>
+    <p>The scenario figures are kept apart from this site's published council tax tables: <a href={`/councils/${council.slug}/`}>council tax in {tax.name}</a> and <a href={`/tools/budget/${council.slug}/`}>the published budget for {tax.name}</a> are unchanged by this page.</p>
+  </section>
+
+  <p class="needs-script" data-game-needs-script>The game below needs JavaScript. The published figures above do not.</p>
+
+  <link rel="stylesheet" href={`${assets}/game.css?v=${version('game.css')}`} />
+  <div class="burnley-game" data-burnley-game data-pagefind-ignore set:html={markup} />
+  <script is:inline src={`${assets}/game.js?v=${version('game.js')}`}></script>
+</BaseLayout>
+<style>
+  .published-figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: 1rem; margin: 1rem 0 0; }
+  .published-figures div { border: 1px solid var(--border); border-radius: var(--radius, 8px); background: var(--bg-card); padding: 1rem; }
+  .published-figures dt { color: var(--text-muted); font-size: 0.95rem; }
+  .published-figures dd { margin: 0.25rem 0 0; }
+  .published-figures dd:not(.source-line) { font-family: var(--font-display); font-weight: 600; font-size: 1.7rem; line-height: 1.15; }
+  .needs-script { margin: 1.5rem 0 0; }
+  :global(html.js) .needs-script { display: none; }
+  :global(html:not(.js)) .burnley-game { display: none; }
+  .burnley-game { margin-top: 1.5rem; }
+</style>

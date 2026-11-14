@@ -22,7 +22,7 @@ export function pageTypeLabel(type: string | undefined): string | null {
 /** Classify the canonical path each page already passes to BaseLayout. */
 export function pageTypeFor(path: string): PageType {
   if (/^\/(?:councils|scotland|wales)\/[^/]+\/$/.test(path)) return "council";
-  if (/^\/tools\/budget\/[^/]+\/$/.test(path)) return "budget";
+  if (/^\/tools\/budget\/[^/]+\/$/.test(path) || /^\/councils\/[^/]+\/budget-game\/$/.test(path)) return "budget";
   if (/^\/precepts\/parishes\/[^/]+\/$/.test(path)) return "parish";
   if (path.startsWith('/council-tax/ranked/')) return "ranking";
   if (/^\/council-tax\/band-[a-i]\/$/.test(path)) return "band";

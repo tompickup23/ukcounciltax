@@ -14,6 +14,8 @@ England MHCLG data is a versioned copy of the UK Councils contract. `npm run dat
 
 `npm run data:devolved` uses Python 3 plus openpyxl and verifies pinned workbook hashes. `npm run data:local-bills` uses Python 3 plus Poppler pdftotext; its current Burnley importer reconciles all component sums to published locality totals. Raw downloads are ignored; normalized data and source provenance are versioned.
 
+`scripts/sync-burnley-game.sh /absolute/path/to/Burnley_Budget_Model_work/game/dist YYYY-MM-DD` copies the Burnley budget scenario game (`/councils/burnley/budget-game/`) from a Reports build: its script, its stylesheet scoped to the game wrapper, its markup and its model run id. It refuses a build with an inline script, handler or style, or a reference outside its own folder. Rerun the full verification afterwards.
+
 The local bill tool currently has complete Burnley coverage only. Scotland excludes water; Wales contains rounded Band D averages only. Future scenarios are illustrations, never forecasts. See docs/RELEASE.md for exact coverage and pending verification.
 
 No credentials belong in this repository. No analytics token is enabled. Hosting: Cloudflare Pages project `ukcounciltax`. GitHub Actions verifies pushes to main before publishing; the repository is private. See docs/DEPLOYMENT.md for operation and rollback.

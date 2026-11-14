@@ -484,3 +484,70 @@ registry file is unchanged; the correction belongs in UK Places.
 `tests/reorganisation-held.test.ts` fails if any file under `src` reads the
 field. Only the 14 Lancashire profiles differ. The candidate awaits review;
 publication is separate.
+
+## Burnley budget scenario game, 14 November 2026
+
+One new route, `/councils/burnley/budget-game/`: a budget scenario game for
+Burnley Borough Council inside this site's own layout. It starts from the
+council's own published budget gap and lets a visitor set council tax,
+spending and reserves. It is a scenario the visitor asks for, kept apart from
+observed figures: no council tax charge, band, source or figure in this site's
+own data is added or changed by it, and the game's figures are sourced on the
+page itself.
+
+Provenance. The game is built and checked in the Reports repository, in
+`Burnley_Budget_Model_work/game/`, from the Burnley budget model. This edition
+is model run `run-a81dd5ae34f2b6d2`, built 14 November 2026, copied by
+`scripts/sync-burnley-game.sh` from its `game/dist/` folder. The SHA-256 of
+each copied file, before and after adaptation, is in
+`src/components/burnley-game/meta.json`. `game.js`, which carries the data,
+is served byte for byte (SHA-256 beginning `3430d65a8c37`). `game.css` is
+served with every selector scoped to the `.burnley-game` wrapper and the site
+skin `src/components/burnley-game/skin.css` appended: estate faces, the
+stepper below the site header, the edition line. The markup is the game's
+body with the working banner replaced by the edition line and the game's h1
+made an h2.
+
+Static figures. Four published figures are printed as HTML above the game,
+each with its source, from `src/components/burnley-game/published.json`:
+
+- Budget gap for 2027/28 at a 1.99% council tax rise, 0.594 million pounds,
+  and at 2.99%, 0.507 million pounds: Burnley Borough Council, Revenue Budget
+  2027-30, Latest Position and Savings Proposals, report to the Executive,
+  16 September 2026, Tables 4 and 5, pages 5 and 6. Held file SHA-256
+  `a25b4b6189736958b714558cb2ba197535e09edaf2394a76999e5f6de4577635`.
+- Net Budget Requirement for 2026/27, 22,428,686 pounds: Revenue Budget
+  2026/27, report to the Executive, 25 February 2026, page 1. Held file
+  SHA-256 `9e70cd3b1e443a16644c8ea32c6f536838dbfb431bf4d6f2ae49a86003d19de3`.
+- Band D for 2026/27, the borough council's own part, 351.44 pounds: Council
+  Tax Resolution 2026/27, Appendix A, Full Council, 3 March 2026. Held file
+  SHA-256 `35e4fd2b1279e01ab07aaf88325032a67c9fde9f66091b0f7d8c1d52fcf988c2`.
+
+The held files and their hashes are recorded in the Reports repository
+(`Burnley_Budget_Model_work/sources/MANIFEST.csv`); they are not copied here.
+A unit test holds each printed figure equal to the one `game.js` carries.
+
+Limits. The base year is 2026/27. The council's 2027/28 budget, its council
+tax decision, the 2027/28 settlement and the referendum principles are not
+yet published. Only the two gaps at 1.99% and 2.99% are the council's printed
+figures; every other result is the page's own sum from the visitor's
+settings, and the game says so beside each. The council tax dial stops at
+2.99%. Cuts are limited to 10% a line as a rule of the game, not a statement
+of what could be cut. When the 2027/28 papers arrive the model is rerun in
+Reports, the run id changes and the game is copied again.
+
+Site changes. The route is programmatic (`SCENARIO_GAME_SLUGS` in
+`src/lib/paths.ts`), not a hub: it is in the sitemap and the search index and
+is linked from the Burnley council page only, not from the header or footer.
+Its sitemap date is the edition date. The page is self canonical. Built pages
+rise from 909 to 910 and sitemap entries from 908 to 909. The security
+headers are unchanged: the script and stylesheet are this site's own static
+files under `/budget-game/burnley/`, the page adds no inline script, and the
+game applies its bar widths through the style object. Without JavaScript the
+page shows the published figures, the scenario statement and the model
+version, and hides the game.
+
+Rebuild: `scripts/sync-burnley-game.sh /path/to/game/dist YYYY-MM-DD`, then
+the full verification. The candidate awaits review; publication is separate.
+An independent second read of the page's figures is carried out in the
+Reports repository before any merge.

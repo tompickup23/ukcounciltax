@@ -143,3 +143,19 @@ PR 78 (NV8 England map) merged as `c20533b`; estate-kit PR 26 (compact RankedBar
 | Now, in parallel | Next | Then |
 |---|---|---|
 | PR 80 fix pass (Codex); UK Places names (Codex); kit 0.6.3 and PR 81 review (Opus) | Session B after PR 80; registry refresh after UK Places deploys; gates pack after PR 80 | C6 levels day staging in January; NV11 once decided |
+
+## 8. Update, 15 November 2026, afternoon
+
+Written in Claude Code after every Codex session on both sites finished. Where this differs from section 7, this section is the later record.
+
+### 8.1 Landed and live
+
+UK Council Tax PRs 80, 82, 83 and 81 merged and published (main `584968e`); UK Councils PR 58 merged and published (main `f4311a8`), with PR 57 folded in. The one session that ran outside a worktree was the main UK Councils checkout on `data/registry-refresh-2026-11`; its tree is identical to `f4311a8`, so nothing was lost.
+
+### 8.2 Sequence
+
+| Now, in tandem | Next | Then |
+|---|---|---|
+| PR 84 review and merge on Tom's yes, measurement note (Opus); dossier source pass (Codex, ukcouncils); Folkestone and Hythe short name (Codex, ukplaces) | Gates pack after PR 84 and X3; registry refresh after UK Places deploys; composition build after Tom picks a source | Council links rerun in December; C6 levels day staged by mid January; NV11 once decided |
+
+The prompts are in `docs/PROMPTS-2026-11-15-NEXT.md`, with the decisions for Tom and the X4 list of worktrees that are safe to remove.

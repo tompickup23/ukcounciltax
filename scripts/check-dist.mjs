@@ -257,7 +257,8 @@ for (const council of c2.councils) {
     const card = `/og/budget-set/${council.slug}.png`;
     if (!setHtml.includes(card) || (requireImages(DIST) && !existsSync(join(DIST, card)))) failures.push(`C2 share card: ${council.slug}`);
   } else {
-    const escaped = council.reason.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    // Astro escapes text as html-escaper does, quotes included.
+    const escaped = council.reason.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
     if (entry !== escaped) failures.push(`C2 exclusion wording: ${council.slug}`);
     if (existsSync(join(DIST, 'tools/budget', council.slug, 'set/index.html'))) failures.push(`excluded C2 route: ${council.slug}`);
   }

@@ -87,6 +87,9 @@ export function publishedText(html) {
 }
 
 // Include the complete static page, with executable and inert template content removed.
+let manifestCache;
+const c2Manifest = () => manifestCache ??= JSON.parse(readFileSync(join(process.cwd(), 'data/pilots/budget-freeze-eligibility.json'), 'utf8'));
+
 export function staticGameNumbers(html) {
   const doc=new JSDOM(html).window.document;
   doc.querySelectorAll('script,style,template').forEach(node=>node.remove());
@@ -96,8 +99,7 @@ export function staticGameNumbers(html) {
   if (entries.length === 1) {
     const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') ?? '';
     const slug = /\/tools\/budget\/([^/]+)\/$/.exec(canonical)?.[1];
-    const manifest = JSON.parse(readFileSync(join(process.cwd(), 'data/pilots/budget-freeze-eligibility.json'), 'utf8'));
-    const council = manifest.councils.find(row => row.slug === slug);
+    const council = c2Manifest().councils.find(row => row.slug === slug);
     const expected = council?.eligible ? 'Set the budget yourself' : council?.reason;
     if (expected && entries[0].textContent === expected) entries[0].remove();
   }

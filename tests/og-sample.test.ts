@@ -32,3 +32,10 @@ it('rasterises the three downloadable Burnley profile charts at twice their widt
     await png(profile, {props: {name: `councils/burnley/${name}`, theme: 'light'}});
   }
 }, 60000);
+
+it('renders the C6 ranking card through its real route, ready for the first levels day page', async () => {
+  // The route lists no paths before 2027-28 (tests/c6-switch.test.ts); its renderer is checked on today's data.
+  const {GET: ranking, getStaticPaths} = await import('../src/pages/og/ranking/[slug].png');
+  expect(getStaticPaths()).toEqual([]);
+  await png(ranking, {params: {slug: 'burnley'}, url: new URL('https://ukcounciltax.co.uk/og/ranking/burnley.png')}, 1200, 630);
+}, 60000);

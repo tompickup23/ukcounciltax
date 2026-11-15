@@ -3,17 +3,19 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Fact from '../../../components/Fact.astro';
 import SourceLine from '../../../components/SourceLine.astro';
-import {CURRENT_YEAR, PREVIOUS_YEAR, loadYear, pounds, yearLabel} from '../../../lib/council-tax';
+import {loadYear, pounds, precedingYear, yearLabel} from '../../../lib/council-tax';
 import {parishPages, parishPath, councilPath} from '../../../lib/paths';
-import {parishesFor, parishChange, type ParishYear} from '../../../lib/national-data';
+import {parishesFor, parishChange, PARISH_YEAR, type ParishYear} from '../../../lib/national-data';
 import {parishRange, parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
 import {moneyPence} from '../../../lib/tax-view';
 import {councilTaxSource} from '../../../lib/sources';
 export function getStaticPaths() { return parishPages().map(council => ({params:{slug:council.slug},props:{council}})); }
 const {council} = Astro.props;
 const gss = council.gss;
+// The whole page is on the parish return's year, which can lag the levels tables.
+const CURRENT_YEAR = PARISH_YEAR;
 const tax = loadYear(CURRENT_YEAR).authorities[gss];
-const name = tax.name, year = CURRENT_YEAR, earlier = PREVIOUS_YEAR;
+const name = tax.name, year = CURRENT_YEAR, earlier = precedingYear(CURRENT_YEAR);
 const parishes = [...parishesFor(gss)].sort((a,b) => a.name.localeCompare(b.name,'en-GB'));
 const summary = parishSummary(parishes);
 const title = `Parish precepts in ${name} ${yearLabel(year)}`;

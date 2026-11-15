@@ -1,0 +1,1051 @@
+[
+  {
+    "gss": "E06000055",
+    "slug": "bedford",
+    "name": "Bedford",
+    "publisher": "Bedford Borough Council",
+    "parishCount": 48,
+    "sources": [
+      {
+        "url": "https://www.bedford.gov.uk/files/council-tax-resolution-2026-2027.pdf/download",
+        "landingUrl": "https://www.bedford.gov.uk/files/council-tax-resolution-2026-2027.pdf/download",
+        "publisher": "Bedford Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "3f77279d4836e91c4555aadfb518f5245b0facdf2a27c1c48f70f913be178137",
+        "file": "data/raw/schedules/bedford-2026-27.pdf",
+        "finalUrl": "https://www.bedford.gov.uk/files/council-tax-resolution-2026-2027.pdf/download"
+      }
+    ],
+    "candidateUrl": "https://www.bedford.gov.uk/files/council-tax-resolution-2026-2027.pdf/download",
+    "supplements": []
+  },
+  {
+    "gss": "E07000136",
+    "slug": "boston",
+    "name": "Boston",
+    "publisher": "Boston Borough Council",
+    "parishCount": 18,
+    "sources": [
+      {
+        "url": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+        "landingUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+        "publisher": "Boston Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "71ce0581e263e821f1665af30fe767bc178349a7051bf35dafa960a86760b5da",
+        "file": "data/raw/schedules/boston-2026-27.pdf",
+        "finalUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf"
+      }
+    ],
+    "candidateUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+    "supplements": [
+      {
+        "url": "https://democracy.boston.gov.uk/mgAi.aspx?ID=10401",
+        "landingUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+        "publisher": "Boston Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "67baf09473b9b07bd58dc78a8658eddb95cd4f5ce75ade425c7bbc3637d4b572",
+        "file": "data/raw/schedules/boston-2026-27-decision.html"
+      }
+    ]
+  },
+  {
+    "gss": "E07000143",
+    "slug": "breckland",
+    "name": "Breckland",
+    "publisher": "Breckland Council",
+    "parishCount": 110,
+    "sources": [],
+    "candidateUrl": "https://www.breckland.gov.uk/media/23318/2026-27-Council-Tax-Charges/pdf/2026-27_Council_Tax_Charges.pdf?m=1773245472397",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.breckland.gov.uk/media/23318/2026-27-Council-Tax-Charges/pdf/2026-27_Council_Tax_Charges.pdf?m=1773245472397']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E06000043",
+    "slug": "brighton-and-hove",
+    "name": "Brighton and Hove",
+    "publisher": "Brighton and Hove City Council",
+    "parishCount": 1,
+    "sources": [
+      {
+        "url": "https://democracy.brighton-hove.gov.uk/documents/g11988/Printed%20minutes%2026th-Feb-2026%2016.30%20Council.htm?CT=2&T=1",
+        "landingUrl": "https://democracy.brighton-hove.gov.uk/documents/g11988/Printed%20minutes%2026th-Feb-2026%2016.30%20Council.htm?CT=2&T=1",
+        "publisher": "Brighton and Hove City Council",
+        "retrieved": "2026-11-15",
+        "sha256": "51108da3d561619a40547c50bc787be175425e0c6fc5dad1a5e84bb6eab2491c",
+        "file": "data/raw/schedules/brighton-and-hove-2026-27.html",
+        "finalUrl": "https://democracy.brighton-hove.gov.uk/documents/g11988/Printed%20minutes%2026th-Feb-2026%2016.30%20Council.htm?CT=2&T=1"
+      }
+    ],
+    "candidateUrl": "https://democracy.brighton-hove.gov.uk/documents/g11988/Printed%20minutes%2026th-Feb-2026%2016.30%20Council.htm?CT=2&T=1",
+    "supplements": []
+  },
+  {
+    "gss": "E07000144",
+    "slug": "broadland",
+    "name": "Broadland",
+    "publisher": "Broadland District Council",
+    "parishCount": 65,
+    "candidateUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/broadland-district-council-tax-26-27-charges1.pdf",
+    "sources": [
+      {
+        "url": "https://www.southnorfolkandbroadland.gov.uk/asset-library/broadland-district-council-tax-26-27-charges1.pdf",
+        "landingUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/broadland-district-council-tax-26-27-charges1.pdf",
+        "publisher": "Broadland District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "d53b781aa4fa72c8bb861a1ee55334148eea0c0da86f2e29087fceca002e98c2",
+        "file": "data/raw/schedules/broadland-2026-27.pdf",
+        "finalUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/broadland-district-council-tax-26-27-charges1.pdf"
+      }
+    ],
+    "landingUrl": "https://www.southnorfolkandbroadland.gov.uk/council-tax/council-tax-downloads",
+    "supplements": []
+  },
+  {
+    "gss": "E07000172",
+    "slug": "broxtowe",
+    "name": "Broxtowe",
+    "publisher": "Broxtowe Borough Council",
+    "parishCount": 10,
+    "sources": [
+      {
+        "url": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+        "landingUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+        "publisher": "Broxtowe Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "ebfb062b869f6841fb9720076c101defa9c34defebc54043a1a6a6252c51d654",
+        "file": "data/raw/schedules/broxtowe-2026-27.pdf",
+        "finalUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf"
+      }
+    ],
+    "candidateUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+    "supplements": [
+      {
+        "url": "https://democracy.broxtowe.gov.uk/ieDecisionDetails.aspx?ID=2306",
+        "landingUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+        "publisher": "Broxtowe Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "2e60252e5449d1b1d6811c5664de61a43ae5e9a017abb71005872038513a1c2e",
+        "file": "data/raw/schedules/broxtowe-2026-27-decision.html"
+      }
+    ]
+  },
+  {
+    "gss": "E06000060",
+    "slug": "buckinghamshire",
+    "name": "Buckinghamshire",
+    "publisher": "Buckinghamshire Council",
+    "parishCount": 172,
+    "candidateUrl": "https://www.buckinghamshire.gov.uk/documents/40665/Resolution_26-27.pdf",
+    "sources": [
+      {
+        "url": "https://www.buckinghamshire.gov.uk/documents/40665/Resolution_26-27.pdf",
+        "landingUrl": "https://www.buckinghamshire.gov.uk/documents/40665/Resolution_26-27.pdf",
+        "publisher": "Buckinghamshire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "35db279ebfc0d419ae1ffcfeb47ee30527018fc421942da33822a620885d29d2",
+        "file": "data/raw/schedules/buckinghamshire-2026-27.pdf",
+        "finalUrl": "https://media.buckinghamshire.gov.uk/documents/Resolution_26-27.pdf"
+      }
+    ],
+    "landingUrl": "https://www.buckinghamshire.gov.uk/council-tax-benefits-housing/council-tax/council-tax-bands-and-charges/",
+    "supplements": []
+  },
+  {
+    "gss": "E07000130",
+    "slug": "charnwood",
+    "name": "Charnwood",
+    "publisher": "Charnwood Borough Council",
+    "parishCount": 36,
+    "sources": [],
+    "landingUrl": "https://www.charnwood.gov.uk/pages/council_tax_charges",
+    "candidateUrl": "https://www.charnwood.gov.uk/pages/council_tax_charges",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.charnwood.gov.uk/pages/council_tax_charges']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E07000070",
+    "slug": "chelmsford",
+    "name": "Chelmsford",
+    "publisher": "Chelmsford City Council",
+    "parishCount": 29,
+    "candidateUrl": "https://www.chelmsford.gov.uk/media/k4cc5oop/council-tax-charges-for-2026-27-accessible-document-v3-final.pdf",
+    "sources": [
+      {
+        "url": "https://www.chelmsford.gov.uk/media/k4cc5oop/council-tax-charges-for-2026-27-accessible-document-v3-final.pdf",
+        "landingUrl": "https://www.chelmsford.gov.uk/media/k4cc5oop/council-tax-charges-for-2026-27-accessible-document-v3-final.pdf",
+        "publisher": "Chelmsford City Council",
+        "retrieved": "2026-11-15",
+        "sha256": "6fa0345a58f9e978b70359563e6f2b917204e5a7cce0604b313973934542102b",
+        "file": "data/raw/schedules/chelmsford-2026-27.pdf",
+        "finalUrl": "https://www.chelmsford.gov.uk/media/k4cc5oop/council-tax-charges-for-2026-27-accessible-document-v3-final.pdf"
+      }
+    ],
+    "landingUrl": "https://www.chelmsford.gov.uk/council-tax/bands-and-amounts/",
+    "supplements": []
+  },
+  {
+    "gss": "E06000050",
+    "slug": "cheshire-west-and-chester",
+    "name": "Cheshire West and Chester",
+    "publisher": "Cheshire West and Chester Council",
+    "parishCount": 116,
+    "sources": [
+      {
+        "url": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/council-tax-bands",
+        "landingUrl": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/council-tax-bands",
+        "publisher": "Cheshire West and Chester Council",
+        "retrieved": "2026-11-15",
+        "sha256": "a0fb0cce199b5aac810840a6c294518f05d19761fc6c89995d8e100d17f1a96c",
+        "file": "data/raw/schedules/cheshire-west-and-chester-2026-27.evidence.html",
+        "finalUrl": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/council-tax-bands",
+        "originalFile": "data/raw/schedules/cheshire-west-and-chester-2026-27.html",
+        "originalSha256": "10e44a20c2e930ad80afcbc4a0183da518d6e9640eb8c56b565ed9e4e07e63b0",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ],
+    "candidateUrl": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/council-tax-bands",
+    "supplements": [
+      {
+        "url": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/your-council-tax-explained",
+        "landingUrl": "https://www.cheshirewestandchester.gov.uk/residents/council-tax/council-tax-bands",
+        "publisher": "Cheshire West and Chester Council",
+        "retrieved": "2026-11-15",
+        "sha256": "d7ede2a87017eed69640f4b67f6598a9d4b848a43633835fc2217f34b3da1727",
+        "file": "data/raw/schedules/cheshire-west-and-chester-2026-27-explained.evidence.html",
+        "originalFile": "data/raw/schedules/cheshire-west-and-chester-2026-27-explained.html",
+        "originalSha256": "3b88cb83a9d02c67c99a717c1e5f85c5af0cd284a39065ecc2ade1a065b87c10",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ]
+  },
+  {
+    "gss": "E07000118",
+    "slug": "chorley",
+    "name": "Chorley",
+    "publisher": "Chorley Council",
+    "parishCount": 23,
+    "sources": [
+      {
+        "url": "https://chorley.gov.uk/council-tax/council-tax-charges-2026-2027",
+        "landingUrl": "https://chorley.gov.uk/council-tax/council-tax-charges-2026-2027",
+        "publisher": "Chorley Council",
+        "retrieved": "2026-11-15",
+        "sha256": "e5bd6ef94ad40af4d5e826400584b5802cde926ba496c492ba9bb2ba60483b1b",
+        "file": "data/raw/schedules/chorley-2026-27.html",
+        "finalUrl": "https://chorley.gov.uk/council-tax/council-tax-charges-2026-2027"
+      }
+    ],
+    "candidateUrl": "https://chorley.gov.uk/council-tax/council-tax-charges-2026-2027",
+    "supplements": []
+  },
+  {
+    "gss": "E06000011",
+    "slug": "east-riding-of-yorkshire",
+    "name": "East Riding of Yorkshire",
+    "publisher": "East Riding of Yorkshire Council",
+    "parishCount": 172,
+    "sources": [
+      {
+        "url": "https://www.eastriding.gov.uk/housing/council-tax/about-council-tax-and-your-bill/council-tax-banding-and-charges/",
+        "landingUrl": "https://www.eastriding.gov.uk/housing/council-tax/about-council-tax-and-your-bill/council-tax-banding-and-charges/",
+        "publisher": "East Riding of Yorkshire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "c6f95816e879370b7f8deaff3d61d879961bffc705303b62b88d1806921035f0",
+        "file": "data/raw/schedules/east-riding-of-yorkshire-2026-27.html",
+        "finalUrl": "https://www.eastriding.gov.uk/housing/council-tax/about-council-tax-and-your-bill/council-tax-banding-and-charges/"
+      }
+    ],
+    "candidateUrl": "https://www.eastriding.gov.uk/housing/council-tax/about-council-tax-and-your-bill/council-tax-banding-and-charges/",
+    "supplements": []
+  },
+  {
+    "gss": "E07000193",
+    "slug": "east-staffordshire",
+    "name": "East Staffordshire",
+    "publisher": "East Staffordshire Borough Council",
+    "parishCount": 38,
+    "candidateUrl": "https://www.eaststaffsbc.gov.uk/sites/default/files/docs/counciltax/Council%20Tax%20Charges%202026-27_0.pdf",
+    "sources": [
+      {
+        "url": "https://www.eaststaffsbc.gov.uk/sites/default/files/docs/counciltax/Council%20Tax%20Charges%202026-27_0.pdf",
+        "landingUrl": "https://www.eaststaffsbc.gov.uk/sites/default/files/docs/counciltax/Council%20Tax%20Charges%202026-27_0.pdf",
+        "publisher": "East Staffordshire Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "96d82ad2ce5d1af3352fd9ec8d7739a22f82f38377be120a5a2ca5904a64d864",
+        "file": "data/raw/schedules/east-staffordshire-2026-27.pdf",
+        "finalUrl": "https://www.eaststaffsbc.gov.uk/sites/default/files/docs/counciltax/Council%20Tax%20Charges%202026-27_0.pdf"
+      }
+    ],
+    "landingUrl": "https://www.eaststaffsbc.gov.uk/council-tax/council-tax-bands-charges-disputes-appeals",
+    "supplements": []
+  },
+  {
+    "gss": "E07000086",
+    "slug": "eastleigh",
+    "name": "Eastleigh",
+    "publisher": "Eastleigh Borough Council",
+    "parishCount": 12,
+    "sources": [],
+    "landingUrl": "https://www.eastleigh.gov.uk/council-tax/council-tax-bands-and-charges",
+    "candidateUrl": "https://www.eastleigh.gov.uk/council-tax/council-tax-bands-and-charges",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.eastleigh.gov.uk/council-tax/council-tax-bands-and-charges']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E07000112",
+    "slug": "shepway",
+    "name": "Folkestone and Hythe",
+    "publisher": "Folkestone and Hythe District Council",
+    "parishCount": 30,
+    "sources": [
+      {
+        "url": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band",
+        "landingUrl": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band",
+        "publisher": "Folkestone and Hythe District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "c52bce98afdf9bf5d0c6e6273f6d46faadea2c1082326f31bffa4453be15f0bd",
+        "file": "data/raw/schedules/shepway-2026-27.pdf",
+        "finalUrl": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band"
+      }
+    ],
+    "candidateUrl": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band",
+    "supplements": [
+      {
+        "url": "https://www.folkestone-hythe.gov.uk/council-tax/council-tax-financial-information-2026-2027/7",
+        "landingUrl": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band",
+        "publisher": "Folkestone and Hythe District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "7aadca6dfd6fac56bcf22b2db74aa9a433f090ac3f1bb352e8e5e55487af0dc6",
+        "file": "data/raw/schedules/shepway-2026-27-expenses.html"
+      },
+      {
+        "url": "https://www.folkestone-hythe.gov.uk/council-tax/council-tax-financial-information-2026-2027/1",
+        "landingUrl": "https://www.folkestone-hythe.gov.uk/downloads/file/6385/council-tax-charges-by-band",
+        "publisher": "Folkestone and Hythe District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "31ebe246a7070673bd8df254f0411725ffe595a13b91833c1bcf4fc085f35133",
+        "file": "data/raw/schedules/shepway-2026-27-budget.html"
+      }
+    ]
+  },
+  {
+    "gss": "E07000080",
+    "slug": "forest-of-dean",
+    "name": "Forest of Dean",
+    "publisher": "Forest of Dean District Council",
+    "parishCount": 41,
+    "sources": [
+      {
+        "url": "https://fdean.gov.uk/media/p42nrm0c/council-tax-bands-and-charges-2026-to-2027.pdf",
+        "landingUrl": "https://fdean.gov.uk/media/p42nrm0c/council-tax-bands-and-charges-2026-to-2027.pdf",
+        "publisher": "Forest of Dean District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "134ab45265f9acaae0d8bac821b30df376f11d12def0d94dfc2239b18d9ec549",
+        "file": "data/raw/schedules/forest-of-dean-2026-27.pdf",
+        "finalUrl": "https://fdean.gov.uk/media/p42nrm0c/council-tax-bands-and-charges-2026-to-2027.pdf"
+      }
+    ],
+    "candidateUrl": "https://fdean.gov.uk/media/p42nrm0c/council-tax-bands-and-charges-2026-to-2027.pdf",
+    "supplements": [
+      {
+        "url": "https://www.fdean.gov.uk/about-the-council/our-budget/",
+        "landingUrl": "https://fdean.gov.uk/media/p42nrm0c/council-tax-bands-and-charges-2026-to-2027.pdf",
+        "publisher": "Forest of Dean District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "83e64c5304886fcb63e046d6b8884a55e62a495a1e75e4fbc701d9f2e4f1f879",
+        "file": "data/raw/schedules/forest-of-dean-2026-27-budget.evidence.html",
+        "originalFile": "data/raw/schedules/forest-of-dean-2026-27-budget.html",
+        "originalSha256": "77161a993f9528303331b83b9368552754a28b3971ab5c07432ac813473e87a3",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ]
+  },
+  {
+    "gss": "E07000119",
+    "slug": "fylde",
+    "name": "Fylde",
+    "publisher": "Fylde Borough Council",
+    "parishCount": 17,
+    "sources": [
+      {
+        "url": "https://new.fylde.gov.uk/council-tax-faqs-2026-27/",
+        "landingUrl": "https://new.fylde.gov.uk/council-tax-faqs-2026-27/",
+        "publisher": "Fylde Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "ca1931164b7e5c5d2939f286870b1e6ad308912cbb025ab2a3836c2fdbe59c72",
+        "file": "data/raw/schedules/fylde-2026-27.html",
+        "finalUrl": "https://new.fylde.gov.uk/council-tax-faqs-2026-27/"
+      }
+    ],
+    "candidateUrl": "https://new.fylde.gov.uk/council-tax-faqs-2026-27/",
+    "supplements": []
+  },
+  {
+    "gss": "E07000131",
+    "slug": "harborough",
+    "name": "Harborough",
+    "publisher": "Harborough District Council",
+    "parishCount": 91,
+    "candidateUrl": "https://www.harborough.gov.uk/download/downloads/id/9350/council_tax_charges_2026-2027.pdf",
+    "sources": [
+      {
+        "url": "https://www.harborough.gov.uk/download/downloads/id/9350/council_tax_charges_2026-2027.pdf",
+        "landingUrl": "https://www.harborough.gov.uk/download/downloads/id/9350/council_tax_charges_2026-2027.pdf",
+        "publisher": "Harborough District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "5eafe4d83f43cc54ea9e71fcadd560f8a0b0234e3a40c18d7208ca772311e389",
+        "file": "data/raw/schedules/harborough-2026-27.pdf",
+        "finalUrl": "https://www.harborough.gov.uk/download/downloads/id/9350/council_tax_charges_2026-2027.pdf"
+      }
+    ],
+    "landingUrl": "https://www.harborough.gov.uk/downloads/file/9350/council_tax_charges_2026-2027",
+    "supplements": [
+      {
+        "url": "https://www.harborough.gov.uk/download/downloads/id/8953/council_tax_guide_2026-2027.pdf",
+        "landingUrl": "https://www.harborough.gov.uk/downloads/file/9350/council_tax_charges_2026-2027",
+        "publisher": "Harborough District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "0dde6453cd4629abc97f1ee533173cfb82c4b5b75105751e93cee597101f286c",
+        "file": "data/raw/schedules/harborough-2026-27-guide.pdf"
+      },
+      {
+        "url": "https://cmis.harborough.gov.uk/cmis5/Document.ashx?FgPlIEJYlotS%2BYGoBi5olA%3D%3D=NHdURQburHA%3D&WGewmoAfeNQ16B2MHuCpMRKZMwaG1PaO=ctNJFf55vVA%3D&WGewmoAfeNR9xqBux0r1Q8Za60lavYmz=ctNJFf55vVA%3D&czJKcaeAi5tUFL1DTL2UE4zNRBcoShgo=iBJwwUn5cGRiWEpzCkm4V%2FMRX6hyhvtihsbV2MAcW6Tc5vlR6Pqjtg%3D%3D&d9Qjj0ag1Pd993jsyOJqFvmyB7X0CSQK=ctNJFf55vVA%3D&kCx1AnS9%2FpWZQ40DXFvdEw%3D%3D=hFflUdN3100%3D&mCTIbCubSFfXsDGW9IXnlg%3D%3D=hFflUdN3100%3D&rUzwRPf%2BZ3zd4E7Ikn8Lyw%3D%3D=pwRE6AGJFLDNlh225F5QMaQWCtPHwdhUfCZ%2FLUQzgA2uL5jNRG4jdQ%3D%3D&uJovDxwdjMPoYv%2BAJvYtyA%3D%3D=ctNJFf55vVA%3D",
+        "landingUrl": "https://www.harborough.gov.uk/downloads/file/9350/council_tax_charges_2026-2027",
+        "publisher": "Harborough District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "a6e0485bb9ca7bb1ddc0adc40a61b1ca2e1af35ea0880125106ff096f1eb0e3c",
+        "file": "data/raw/schedules/harborough-2026-27-resolution.pdf"
+      }
+    ]
+  },
+  {
+    "gss": "E07000098",
+    "slug": "hertsmere",
+    "name": "Hertsmere",
+    "publisher": "Hertsmere Borough Council",
+    "parishCount": 4,
+    "sources": [
+      {
+        "url": "https://www.hertsmere.gov.uk/council-tax/bands-and-charges/council-tax-charges",
+        "landingUrl": "https://www.hertsmere.gov.uk/council-tax/bands-and-charges/council-tax-charges",
+        "publisher": "Hertsmere Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "bc18c4b41a9abd13ab57fc7d05af114c5ab1153588ac41a1e26e069fca9d9632",
+        "file": "data/raw/schedules/hertsmere-2026-27.html",
+        "finalUrl": "https://www.hertsmere.gov.uk/council-tax/bands-and-charges/council-tax-charges"
+      }
+    ],
+    "landingUrl": "https://www.hertsmere.gov.uk/council-tax/bands-and-charges/council-tax-charges",
+    "candidateUrl": "https://www.hertsmere.gov.uk/council-tax/bands-and-charges/council-tax-charges",
+    "supplements": []
+  },
+  {
+    "gss": "E07000227",
+    "slug": "horsham",
+    "name": "Horsham",
+    "publisher": "Horsham District Council",
+    "parishCount": 33,
+    "sources": [],
+    "candidateUrl": "https://www.horsham.gov.uk/__data/assets/pdf_file/0007/161782/Council-Tax-Public-Notice-Bands-and-Charges-2026.27.pdf",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.horsham.gov.uk/__data/assets/pdf_file/0007/161782/Council-Tax-Public-Notice-Bands-and-Charges-2026.27.pdf']' returned non-zero exit status 56.",
+    "landingUrl": "https://www.horsham.gov.uk/council-tax-and-benefits/council-tax/council-tax-bands-and-charges",
+    "supplements": []
+  },
+  {
+    "gss": "E07000146",
+    "slug": "king-s-lynn-and-west-norfolk",
+    "name": "King's Lynn and West Norfolk",
+    "publisher": "Borough Council of Kings Lynn and West Norfolk",
+    "parishCount": 101,
+    "sources": [
+      {
+        "url": "https://democracy.west-norfolk.gov.uk/documents/s83771/Appendix%206%20-%20Council%20Tax%202026-2027.pdf",
+        "landingUrl": "https://www.west-norfolk.gov.uk/info/20002/council_tax/1124/second_homes_premium_and_parish_council_tax_precepts",
+        "publisher": "Borough Council of Kings Lynn and West Norfolk",
+        "retrieved": "2026-11-15",
+        "sha256": "cfcb8aef54f59bbeaf5604e5d72bd983d02a38033581e042f5baf1cf231a19a6",
+        "file": "data/raw/schedules/king-s-lynn-and-west-norfolk-2026-27.pdf"
+      }
+    ],
+    "candidateUrl": "https://www.west-norfolk.gov.uk/info/20002/council_tax/1124/second_homes_premium_and_parish_council_tax_precepts",
+    "supplements": [
+      {
+        "url": "https://democracy.west-norfolk.gov.uk/documents/s83770/Appendix%205%20-%20Parish%20and%20Special%20Expenses%202026-2027.pdf",
+        "landingUrl": "https://www.west-norfolk.gov.uk/info/20002/council_tax/1124/second_homes_premium_and_parish_council_tax_precepts",
+        "publisher": "Borough Council of Kings Lynn and West Norfolk",
+        "retrieved": "2026-11-15",
+        "sha256": "d183cb8dfacd6543637e0da64c6e234f4a75576fe58d7429a2b6eaf7eb5cca09",
+        "file": "data/raw/schedules/king-s-lynn-and-west-norfolk-2026-27-expenses.pdf"
+      }
+    ]
+  },
+  {
+    "gss": "E07000063",
+    "slug": "lewes",
+    "name": "Lewes",
+    "publisher": "Lewes District Council",
+    "parishCount": 28,
+    "sources": [],
+    "landingUrl": "https://democracy.lewes-eastbourne.gov.uk/mgAi.aspx?ID=20670",
+    "candidateUrl": "https://democracy.lewes-eastbourne.gov.uk/documents/s39118/Revised%20Setting%20of%20the%202026-27%20Council%20Tax%20for%20Lewes%20Town%20Council%20Area%20-%20Appendix%201.pdf",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://democracy.lewes-eastbourne.gov.uk/documents/s39118/Revised%20Setting%20of%20the%202026-27%20Council%20Tax%20for%20Lewes%20Town%20Council%20Area%20-%20Appendix%201.pdf']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E07000133",
+    "slug": "melton",
+    "name": "Melton",
+    "publisher": "Melton Borough Council",
+    "parishCount": 26,
+    "sources": [
+      {
+        "url": "https://www.melton.gov.uk/council-tax/your-council-tax/council-tax-charges/",
+        "landingUrl": "https://www.melton.gov.uk/council-tax/your-council-tax/council-tax-charges/",
+        "publisher": "Melton Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "d1682fe7d0bd9e96eb508239fc148ebc3d16dd7ed6eebc4e0f053927210e8aa2",
+        "file": "data/raw/schedules/melton-2026-27.html",
+        "finalUrl": "https://www.melton.gov.uk/council-tax/your-council-tax/council-tax-charges/"
+      }
+    ],
+    "candidateUrl": "https://www.melton.gov.uk/council-tax/your-council-tax/council-tax-charges/",
+    "supplements": []
+  },
+  {
+    "gss": "E06000012",
+    "slug": "north-east-lincolnshire",
+    "name": "North East Lincolnshire",
+    "publisher": "North East Lincolnshire Council",
+    "parishCount": 23,
+    "sources": [
+      {
+        "url": "https://www.nelincs.gov.uk/assets/uploads/2026/03/Council-Tax-charges-by-band-and-area-for-2026-to-2027.pdf",
+        "landingUrl": "https://www.nelincs.gov.uk/assets/uploads/2026/03/Council-Tax-charges-by-band-and-area-for-2026-to-2027.pdf",
+        "publisher": "North East Lincolnshire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "209dc7164daf3155e59ddadfb99d7c869037d51a4bbff7c29406ac03a80706b9",
+        "file": "data/raw/schedules/north-east-lincolnshire-2026-27.pdf",
+        "finalUrl": "https://www.nelincs.gov.uk/assets/uploads/2026/03/Council-Tax-charges-by-band-and-area-for-2026-to-2027.pdf"
+      }
+    ],
+    "candidateUrl": "https://www.nelincs.gov.uk/assets/uploads/2026/03/Council-Tax-charges-by-band-and-area-for-2026-to-2027.pdf",
+    "supplements": []
+  },
+  {
+    "gss": "E07000139",
+    "slug": "north-kesteven",
+    "name": "North Kesteven",
+    "publisher": "North Kesteven District Council",
+    "parishCount": 71,
+    "candidateUrl": "https://www.n-kesteven.gov.uk/sites/default/files/2026-03/NKDC%20Council%20Tax%20guide%202026%20to%202027.pdf",
+    "sources": [
+      {
+        "url": "https://www.n-kesteven.gov.uk/sites/default/files/2026-03/NKDC%20Council%20Tax%20guide%202026%20to%202027.pdf",
+        "landingUrl": "https://www.n-kesteven.gov.uk/sites/default/files/2026-03/NKDC%20Council%20Tax%20guide%202026%20to%202027.pdf",
+        "publisher": "North Kesteven District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "7a33a3e0e0e99cdedfbef3e26198f2b6d8504941569a7902879b8a01884f3290",
+        "file": "data/raw/schedules/north-kesteven-2026-27.pdf",
+        "finalUrl": "https://www.n-kesteven.gov.uk/sites/default/files/2026-03/NKDC%20Council%20Tax%20guide%202026%20to%202027.pdf"
+      }
+    ],
+    "landingUrl": "https://www.n-kesteven.gov.uk/council-tax/information-about-council-tax/council-tax-guide-2026-2027-0",
+    "supplements": []
+  },
+  {
+    "gss": "E06000013",
+    "slug": "north-lincolnshire",
+    "name": "North Lincolnshire",
+    "publisher": "North Lincolnshire Council",
+    "parishCount": 56,
+    "sources": [
+      {
+        "url": "https://www.northlincs.gov.uk/wp-content/uploads/2026/03/2026-27-NL-Council-tax-band-per-parish.pdf",
+        "landingUrl": "https://www.northlincs.gov.uk/council-tax-benefits-and-housing/council-tax-charges/",
+        "publisher": "North Lincolnshire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "9aa4b81aa0419108649e79a10e39210321750bc7ecda13858dc3e2f74fbec4a7",
+        "file": "data/raw/schedules/north-lincolnshire-2026-27.evidence.html",
+        "finalUrl": "https://www.northlincs.gov.uk/wp-content/uploads/2026/03/2026-27-NL-Council-tax-band-per-parish.pdf",
+        "originalFile": "data/raw/schedules/north-lincolnshire-2026-27.html",
+        "originalSha256": "da2ad4fed6e88769bba54750a5db81d7befe46d91ccd9f011e7700f813655d6a",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ],
+    "candidateUrl": "https://www.northlincs.gov.uk/wp-content/uploads/2026/03/2026-27-NL-Council-tax-band-per-parish.pdf",
+    "landingUrl": "https://www.northlincs.gov.uk/council-tax-benefits-and-housing/council-tax-charges/",
+    "supplements": []
+  },
+  {
+    "gss": "E06000024",
+    "slug": "north-somerset",
+    "name": "North Somerset",
+    "publisher": "North Somerset Council",
+    "parishCount": 39,
+    "sources": [
+      {
+        "url": "https://n-somerset.gov.uk/sites/default/files/2026-03/council%20tax%202026-27%20%E2%80%93%20how%20much%20you%20will%20pay.pdf",
+        "landingUrl": "https://n-somerset.gov.uk/sites/default/files/2026-03/council%20tax%202026-27%20%E2%80%93%20how%20much%20you%20will%20pay.pdf",
+        "publisher": "North Somerset Council",
+        "retrieved": "2026-11-15",
+        "sha256": "c4475dabd39cd01cade829c63ea3416cff803344fe3eb379e451c77a35575420",
+        "file": "data/raw/schedules/north-somerset-2026-27.pdf",
+        "finalUrl": "https://n-somerset.gov.uk/sites/default/files/2026-03/council%20tax%202026-27%20%E2%80%93%20how%20much%20you%20will%20pay.pdf"
+      }
+    ],
+    "candidateUrl": "https://n-somerset.gov.uk/sites/default/files/2026-03/council%20tax%202026-27%20%E2%80%93%20how%20much%20you%20will%20pay.pdf",
+    "supplements": []
+  },
+  {
+    "gss": "E06000057",
+    "slug": "northumberland",
+    "name": "Northumberland",
+    "publisher": "Northumberland County Council",
+    "parishCount": 156,
+    "sources": [
+      {
+        "url": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Council-Tax/Council%20Tax%20Band%20Charges%202026%20to%202027.pdf",
+        "landingUrl": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Council-Tax/Council%20Tax%20Band%20Charges%202026%20to%202027.pdf",
+        "publisher": "Northumberland County Council",
+        "retrieved": "2026-11-15",
+        "sha256": "5a548b73fa9c7f35c8f2f742a4bd06a9c1a86a4f042d7ca04700991bba9de81a",
+        "file": "data/raw/schedules/northumberland-2026-27.pdf",
+        "finalUrl": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Council-Tax/Council%20Tax%20Band%20Charges%202026%20to%202027.pdf"
+      }
+    ],
+    "candidateUrl": "https://www.northumberland.gov.uk/NorthumberlandCountyCouncil/media/Council-Tax/Council%20Tax%20Band%20Charges%202026%20to%202027.pdf",
+    "supplements": []
+  },
+  {
+    "gss": "E07000178",
+    "slug": "oxford",
+    "name": "Oxford",
+    "publisher": "Oxford City Council",
+    "parishCount": 4,
+    "sources": [
+      {
+        "url": "https://www.oxford.gov.uk/council-tax-information/council-tax-charges",
+        "landingUrl": "https://www.oxford.gov.uk/council-tax-information/council-tax-charges",
+        "publisher": "Oxford City Council",
+        "retrieved": "2026-11-15",
+        "sha256": "e87a38c8b3a88565ae863a9511ece0cd4c7d0902416dda648919fd7e3a7f6ee2",
+        "file": "data/raw/schedules/oxford-2026-27.html",
+        "finalUrl": "https://www.oxford.gov.uk/council-tax-information/council-tax-charges"
+      }
+    ],
+    "candidateUrl": "https://www.oxford.gov.uk/council-tax-information/council-tax-charges",
+    "supplements": []
+  },
+  {
+    "gss": "E07000064",
+    "slug": "rother",
+    "name": "Rother",
+    "publisher": "Rother District Council",
+    "parishCount": 33,
+    "sources": [
+      {
+        "url": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-banding/",
+        "landingUrl": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-banding/",
+        "publisher": "Rother District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "6793aee8fe75a2e16ee44a15b26080c07fe7ddc8f3899c566a19804e65764853",
+        "file": "data/raw/schedules/rother-2026-27.html",
+        "finalUrl": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-banding/"
+      }
+    ],
+    "landingUrl": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-banding/",
+    "candidateUrl": "https://www.rother.gov.uk/council-tax/council-tax-details/council-tax-banding/",
+    "supplements": []
+  },
+  {
+    "gss": "E07000220",
+    "slug": "rugby",
+    "name": "Rugby",
+    "publisher": "Rugby Borough Council",
+    "parishCount": 40,
+    "landingUrl": "https://www.rugby.gov.uk/w/about-your-council-tax-bill",
+    "candidateUrl": "https://www.rugby.gov.uk/how-much-is-my-council-tax-",
+    "sources": [
+      {
+        "url": "https://www.rugby.gov.uk/how-much-is-my-council-tax-",
+        "landingUrl": "https://www.rugby.gov.uk/w/about-your-council-tax-bill",
+        "publisher": "Rugby Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "491a913b9427f6e02d57797c779db3b669510a2d1d34d0426d2e4506a87daafb",
+        "file": "data/raw/schedules/rugby-2026-27.evidence.html",
+        "finalUrl": "https://www.rugby.gov.uk/how-much-is-my-council-tax-",
+        "originalFile": "data/raw/schedules/rugby-2026-27.html",
+        "originalSha256": "61686b8e572338248810b5fd54540ade54ba743f0036093a56d8bf3a7c7a619d",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ],
+    "supplements": []
+  },
+  {
+    "gss": "E07000176",
+    "slug": "rushcliffe",
+    "name": "Rushcliffe",
+    "publisher": "Rushcliffe Borough Council",
+    "parishCount": 57,
+    "sources": [
+      {
+        "url": "https://www.rushcliffe.gov.uk/council-tax/how-much-will-i-pay/council-tax-band-charges-202627",
+        "landingUrl": "https://www.rushcliffe.gov.uk/council-tax/how-much-will-i-pay/council-tax-band-charges-202627",
+        "publisher": "Rushcliffe Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "1ab222fa819a5cdf6e407eb7c4b1f34bc14afcde8d0ce01a8a5d9085b26f3114",
+        "file": "data/raw/schedules/rushcliffe-2026-27.html",
+        "finalUrl": "https://www.rushcliffe.gov.uk/council-tax/how-much-will-i-pay/council-tax-band-charges-202627"
+      }
+    ],
+    "candidateUrl": "https://www.rushcliffe.gov.uk/council-tax/how-much-will-i-pay/council-tax-band-charges-202627",
+    "supplements": []
+  },
+  {
+    "gss": "E06000066",
+    "slug": "somerset",
+    "name": "Somerset",
+    "publisher": "Somerset Council",
+    "parishCount": 328,
+    "landingUrl": "https://democracy.somerset.gov.uk/ieDecisionDetails.aspx?ID=2233",
+    "candidateUrl": "https://democracy.somerset.gov.uk/documents/s63334/Appendix%20Y%20-%20Calculation%20of%20Council%20Tax%20Requirement%202026-27.pdf",
+    "sources": [],
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://democracy.somerset.gov.uk/documents/s63334/Appendix%20Y%20-%20Calculation%20of%20Council%20Tax%20Requirement%202026-27.pdf']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E06000025",
+    "slug": "south-gloucestershire",
+    "name": "South Gloucestershire",
+    "publisher": "South Gloucestershire Council",
+    "parishCount": 50,
+    "landingUrl": "https://beta.southglos.gov.uk/council-tax-charges-and-bands/",
+    "candidateUrl": "https://beta.southglos.gov.uk/static/1d3c54deb1e21620f250da9e4090d1bb/Council-tax-charges-2026-27.pdf",
+    "sources": [
+      {
+        "url": "https://beta.southglos.gov.uk/static/1d3c54deb1e21620f250da9e4090d1bb/Council-tax-charges-2026-27.pdf",
+        "landingUrl": "https://beta.southglos.gov.uk/council-tax-charges-and-bands/",
+        "publisher": "South Gloucestershire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "60b35d646501742742b4f9ed62d626754ca27ac97dda9b429624ce27deefd8ad",
+        "file": "data/raw/schedules/south-gloucestershire-2026-27.pdf",
+        "finalUrl": "https://beta.southglos.gov.uk/static/1d3c54deb1e21620f250da9e4090d1bb/Council-tax-charges-2026-27.pdf"
+      }
+    ],
+    "supplements": []
+  },
+  {
+    "gss": "E07000140",
+    "slug": "south-holland",
+    "name": "South Holland",
+    "publisher": "South Holland District Council",
+    "parishCount": 22,
+    "sources": [],
+    "landingUrl": "https://www.sholland.gov.uk/article/5652/How-is-Council-Tax-charged",
+    "candidateUrl": "https://www.sholland.gov.uk/media/28751/Council-Tax-Charges-by-Parish-2026-27/pdf/SHDC_Council_Tax_Charges_2026-27.pdf?m=1787755597987",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.sholland.gov.uk/media/28751/Council-Tax-Charges-by-Parish-2026-27/pdf/SHDC_Council_Tax_Charges_2026-27.pdf?m=1787755597987']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E07000141",
+    "slug": "south-kesteven",
+    "name": "South Kesteven",
+    "publisher": "South Kesteven District Council",
+    "parishCount": 84,
+    "sources": [
+      {
+        "url": "https://www.southkesteven.gov.uk/sites/default/files/2026-03/Council%20Tax%20Precept%20Advert%20-%202026-27.pdf",
+        "landingUrl": "https://www.southkesteven.gov.uk/sites/default/files/2026-03/Council%20Tax%20Precept%20Advert%20-%202026-27.pdf",
+        "publisher": "South Kesteven District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "b1e3005c8e64bf536b91f980273889c763bead104e2c9ab7854fa19a592e59fc",
+        "file": "data/raw/schedules/south-kesteven-2026-27.pdf",
+        "finalUrl": "https://www.southkesteven.gov.uk/sites/default/files/2026-03/Council%20Tax%20Precept%20Advert%20-%202026-27.pdf"
+      }
+    ],
+    "landingUrl": "https://www.southkesteven.gov.uk/sites/default/files/2026-03/Council%20Tax%20Precept%20Advert%20-%202026-27.pdf",
+    "candidateUrl": "https://www.southkesteven.gov.uk/sites/default/files/2026-03/Council%20Tax%20Precept%20Advert%20-%202026-27.pdf",
+    "supplements": []
+  },
+  {
+    "gss": "E07000149",
+    "slug": "south-norfolk",
+    "name": "South Norfolk",
+    "publisher": "South Norfolk District Council",
+    "parishCount": 118,
+    "sources": [
+      {
+        "url": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf",
+        "landingUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf",
+        "publisher": "South Norfolk District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "71294a0d50ff3399480808428171ab42d6980c36b3d9a62aa55bd81569d36a8c",
+        "file": "data/raw/schedules/south-norfolk-2026-27.pdf",
+        "finalUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf"
+      }
+    ],
+    "candidateUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf",
+    "supplements": [
+      {
+        "url": "https://www.southnorfolkandbroadland.gov.uk/asset-library/2627-budget-book-snc.pdf",
+        "landingUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf",
+        "publisher": "South Norfolk District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "b8929c58466bf5c04e14d20f9d59927977815afc4ad5d98376964aa382239097",
+        "file": "data/raw/schedules/south-norfolk-2026-27-budget.pdf"
+      },
+      {
+        "url": "https://www.southnorfolkandbroadland.gov.uk/council-tax/bands-charges/south-norfolk-council-tax-bill",
+        "landingUrl": "https://www.southnorfolkandbroadland.gov.uk/asset-library/south-norfolk-council-tax-26-27-charges.pdf",
+        "publisher": "South Norfolk District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "3a7c24b27242feffdb4de6a50800044a11304090c9ab725242214a7e56c21e3d",
+        "file": "data/raw/schedules/south-norfolk-2026-27-expenses.html"
+      }
+    ]
+  },
+  {
+    "gss": "E07000240",
+    "slug": "st-albans",
+    "name": "St Albans",
+    "publisher": "St Albans City and District Council",
+    "parishCount": 9,
+    "landingUrl": "https://www.stalbans.gov.uk/where-your-council-tax-goes",
+    "candidateUrl": "https://www.stalbans.gov.uk/sites/default/files/attachments/council-tax-information-2026-27-pdf-451kb.pdf",
+    "sources": [
+      {
+        "url": "https://www.stalbans.gov.uk/bands-and-charges",
+        "landingUrl": "https://www.stalbans.gov.uk/where-your-council-tax-goes",
+        "publisher": "St Albans City and District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "bb176486d0c35f37838358dd4472d6f508049440f87b227809e7ea1241bea76a",
+        "file": "data/raw/schedules/st-albans-2026-27.evidence.html",
+        "originalFile": "data/raw/schedules/st-albans-2026-27.html",
+        "originalSha256": "137ee6dcbcabfb396555f0a1c9bd913b3a089f5d0bcb9946dfaeae45c0f4281b",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ],
+    "supplements": [
+      {
+        "url": "https://www.stalbans.gov.uk/sites/default/files/attachments/CalculationofCouncilTax202627.pdf",
+        "landingUrl": "https://www.stalbans.gov.uk/where-your-council-tax-goes",
+        "publisher": "St Albans City and District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "48f515a5d4f22972b4d92559a42f7705aabac0462113ef9f9af7638947bfb9b3",
+        "file": "data/raw/schedules/st-albans-2026-27-calculation.pdf"
+      }
+    ]
+  },
+  {
+    "gss": "E06000020",
+    "slug": "telford-and-wrekin",
+    "name": "Telford and Wrekin",
+    "publisher": "Telford & Wrekin Council",
+    "parishCount": 29,
+    "landingUrl": "https://www.telford.gov.uk/council-tax/introduction-to-council-tax/council-tax-banding/",
+    "candidateUrl": "https://www.telford.gov.uk/media/sraho04w/council-tax-bandings-202627.pdf",
+    "sources": [
+      {
+        "url": "https://www.telford.gov.uk/media/sraho04w/council-tax-bandings-202627.pdf",
+        "landingUrl": "https://www.telford.gov.uk/council-tax/introduction-to-council-tax/council-tax-banding/",
+        "publisher": "Telford & Wrekin Council",
+        "retrieved": "2026-11-15",
+        "sha256": "ac9f0fe407a33f4e8bb4e0d957779882de73c20851005e82ea7bdfde615ad27d",
+        "file": "data/raw/schedules/telford-and-wrekin-2026-27.pdf",
+        "finalUrl": "https://www.telford.gov.uk/media/sraho04w/council-tax-bandings-202627.pdf"
+      }
+    ],
+    "supplements": []
+  },
+  {
+    "gss": "E07000076",
+    "slug": "tendring",
+    "name": "Tendring",
+    "publisher": "Tendring District Council",
+    "parishCount": 27,
+    "sources": [
+      {
+        "url": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+        "landingUrl": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+        "publisher": "Tendring District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "103000ca13045192b493622623a408319e03ea045690ec2fb7095723bb9e468d",
+        "file": "data/raw/schedules/tendring-2026-27.pdf",
+        "finalUrl": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf"
+      }
+    ],
+    "landingUrl": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+    "candidateUrl": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+    "supplements": [
+      {
+        "url": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80562/A.1%20Appendix%20B%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+        "landingUrl": "https://tdcdemocracy.tendringdc.gov.uk/documents/s80563/A.1%20Appendix%20C%20-%20Collection%20Fund%20Appendices%202026-27.pdf",
+        "publisher": "Tendring District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "a5bc7375015114bb348ad74fa4d61ef7fc6802217fa8914ca709d2b48b200c0a",
+        "file": "data/raw/schedules/tendring-2026-27-district.pdf"
+      }
+    ]
+  },
+  {
+    "gss": "E07000093",
+    "slug": "test-valley",
+    "name": "Test Valley",
+    "publisher": "Test Valley Borough Council",
+    "parishCount": 56,
+    "sources": [
+      {
+        "url": "https://testvalley.gov.uk/assets/attach/25014/Council-Tax-Charges-for-2026-27.pdf",
+        "landingUrl": "https://testvalley.gov.uk/assets/attach/25014/Council-Tax-Charges-for-2026-27.pdf",
+        "publisher": "Test Valley Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "f0763c605954ce8872bd2a96161d67f87bdafe8a08c0f7a086002b52a4f2df8b",
+        "file": "data/raw/schedules/test-valley-2026-27.pdf",
+        "finalUrl": "https://testvalley.gov.uk/assets/attach/25014/Council-Tax-Charges-for-2026-27.pdf"
+      }
+    ],
+    "landingUrl": "https://testvalley.gov.uk/assets/attach/25014/Council-Tax-Charges-for-2026-27.pdf",
+    "candidateUrl": "https://testvalley.gov.uk/assets/attach/25014/Council-Tax-Charges-for-2026-27.pdf",
+    "supplements": []
+  },
+  {
+    "gss": "E07000102",
+    "slug": "three-rivers",
+    "name": "Three Rivers",
+    "publisher": "Three Rivers District Council",
+    "parishCount": 6,
+    "landingUrl": "https://www.threerivers.gov.uk/services/counciltax/how-council-tax-is-spent",
+    "candidateUrl": "https://cdn.threerivers.gov.uk/files/2026/03/edfadf00-1c87-11f1-9487-ddd84f0d24be-COUNCIL%20TAX%202026_27.pdf?v=2026-03-10T13:49:16.710Z",
+    "sources": [
+      {
+        "url": "https://cdn.threerivers.gov.uk/files/2026/03/edfadf00-1c87-11f1-9487-ddd84f0d24be-COUNCIL%20TAX%202026_27.pdf?v=2026-03-10T13:49:16.710Z",
+        "landingUrl": "https://www.threerivers.gov.uk/services/counciltax/how-council-tax-is-spent",
+        "publisher": "Three Rivers District Council",
+        "retrieved": "2026-11-15",
+        "sha256": "181ddc2ef7591b0450ac0373114f07fb934b3db3210d043a67f98a3f9eaa73ad",
+        "file": "data/raw/schedules/three-rivers-2026-27.pdf",
+        "finalUrl": "https://cdn.threerivers.gov.uk/files/2026/03/edfadf00-1c87-11f1-9487-ddd84f0d24be-COUNCIL%20TAX%202026_27.pdf?v=2026-03-10T13:49:16.710Z"
+      }
+    ],
+    "supplements": []
+  },
+  {
+    "gss": "E07000115",
+    "slug": "tonbridge-and-malling",
+    "name": "Tonbridge and Malling",
+    "publisher": "Tonbridge and Malling Borough Council",
+    "parishCount": 27,
+    "sources": [
+      {
+        "url": "https://www.tmbc.gov.uk/council-tax-5/council-tax-charges/1",
+        "landingUrl": "https://www.tmbc.gov.uk/council-tax-5/council-tax-charges/1",
+        "publisher": "Tonbridge and Malling Borough Council",
+        "retrieved": "2026-11-15",
+        "sha256": "81cf0b8bc07551f5753a1a4c061929fd82957eee00493f2742b6bd19465e30e2",
+        "file": "data/raw/schedules/tonbridge-and-malling-2026-27.evidence.html",
+        "finalUrl": "https://www.tmbc.gov.uk/council-tax-5/council-tax-charges/1",
+        "originalFile": "data/raw/schedules/tonbridge-and-malling-2026-27.html",
+        "originalSha256": "eed558fb08f6e4b660c0540ddbf01534c6c5d3ff565e70116a15c28b09683977",
+        "archiveTreatment": "Executable script elements removed after the pre-commit secret scanner flagged embedded keys. All bytes outside script elements retained. Original download remains local and is not committed. Both hashes are recorded. Extracted locality rows were compared before and after and are identical."
+      }
+    ],
+    "landingUrl": "https://www.tmbc.gov.uk/council-tax-5/council-tax-charges/1",
+    "candidateUrl": "https://www.tmbc.gov.uk/council-tax-5/council-tax-charges/1",
+    "supplements": []
+  },
+  {
+    "gss": "E07000116",
+    "slug": "tunbridge-wells",
+    "name": "Tunbridge Wells",
+    "publisher": "Tunbridge Wells Borough Council",
+    "parishCount": 16,
+    "sources": [],
+    "landingUrl": "https://tunbridgewells.gov.uk/council-tax/banding-and-amounts-to-pay",
+    "candidateUrl": "https://tunbridgewells.gov.uk/council-tax/banding-and-amounts-to-pay",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://tunbridgewells.gov.uk/council-tax/banding-and-amounts-to-pay']' returned non-zero exit status 56.",
+    "supplements": []
+  },
+  {
+    "gss": "E06000062",
+    "slug": "west-northamptonshire",
+    "name": "West Northamptonshire",
+    "publisher": "West Northamptonshire Council",
+    "parishCount": 165,
+    "sources": [
+      {
+        "url": "https://www.westnorthants.gov.uk/council-tax-bands-and-charges/council-tax-charges",
+        "landingUrl": "https://www.westnorthants.gov.uk/council-tax-bands-and-charges/council-tax-charges",
+        "publisher": "West Northamptonshire Council",
+        "retrieved": "2026-11-15",
+        "sha256": "df322de9573e4c41a23e56e7db9590a9d47113af787f347e80e56c3945afdb91",
+        "file": "data/raw/schedules/west-northamptonshire-2026-27.html",
+        "finalUrl": "https://www.westnorthants.gov.uk/council-tax-bands-and-charges/council-tax-charges"
+      }
+    ],
+    "landingUrl": "https://www.westnorthants.gov.uk/council-tax-bands-and-charges/council-tax-charges",
+    "candidateUrl": "https://www.westnorthants.gov.uk/council-tax-bands-and-charges/council-tax-charges",
+    "supplements": []
+  },
+  {
+    "gss": "E09000033",
+    "slug": "westminster",
+    "name": "Westminster",
+    "publisher": "City of Westminster",
+    "parishCount": 1,
+    "sources": [
+      {
+        "url": "https://www.westminster.gov.uk/council-tax/council-tax-bands-and-charges",
+        "landingUrl": "https://www.westminster.gov.uk/council-tax/council-tax-bands-and-charges",
+        "publisher": "City of Westminster",
+        "retrieved": "2026-11-15",
+        "sha256": "d04862ab9050cdd4ae6a946aa633d38738bbdb193de9c01fc7bc2fb469e1a6d5",
+        "file": "data/raw/schedules/westminster-2026-27.html",
+        "finalUrl": "https://www.westminster.gov.uk/council-tax/council-tax-bands-and-charges"
+      }
+    ],
+    "candidateUrl": "https://www.westminster.gov.uk/council-tax/council-tax-bands-and-charges",
+    "supplements": []
+  },
+  {
+    "gss": "E07000094",
+    "slug": "winchester",
+    "name": "Winchester",
+    "publisher": "Winchester City Council",
+    "parishCount": 48,
+    "sources": [
+      {
+        "url": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf",
+        "landingUrl": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf",
+        "publisher": "Winchester City Council",
+        "retrieved": "2026-11-15",
+        "sha256": "c9e884bb432147a45da16d44cf105a5becb86ad678e9149bc5805ad740eec3c7",
+        "file": "data/raw/schedules/winchester-2026-27.pdf",
+        "finalUrl": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf"
+      }
+    ],
+    "landingUrl": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf",
+    "candidateUrl": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf",
+    "supplements": [
+      {
+        "url": "https://www.winchester.gov.uk/elections/community-governance-reviews/cgr-winchester-town-area",
+        "landingUrl": "https://www.winchester.gov.uk/assets/attach/46563/Council-Tax-Charges-2026-27.pdf",
+        "publisher": "Winchester City Council",
+        "retrieved": "2026-11-15",
+        "sha256": "83f2bd5389537cf6eb3f72ab7c685142645736703ce4ebaed33974faab2c807f",
+        "file": "data/raw/schedules/winchester-2026-27-expenses.html"
+      }
+    ]
+  },
+  {
+    "gss": "E06000040",
+    "slug": "windsor-and-maidenhead",
+    "name": "Windsor and Maidenhead",
+    "publisher": "Royal Borough of Windsor and Maidenhead",
+    "parishCount": 15,
+    "sources": [],
+    "landingUrl": "https://www.rbwm.gov.uk/home/council-tax-and-benefits/council-tax/council-tax-charges",
+    "candidateUrl": "https://www.rbwm.gov.uk/home/council-tax-and-benefits/council-tax/council-tax-charges",
+    "retrievalError": "Command '['curl', '--fail', '--location', '--silent', '--show-error', '--max-time', '40', '--user-agent', 'Mozilla/5.0', 'https://www.rbwm.gov.uk/home/council-tax-and-benefits/council-tax/council-tax-charges']' returned non-zero exit status 56.",
+    "supplements": []
+  }
+]

@@ -1,9 +1,10 @@
 import {test,expect} from '@playwright/test';
+import {YEARS, glaDecision, part} from './helpers/current';
 import AxeBuilder from '@axe-core/playwright';
 test('national precept search leads to council components and a filterable parish table',async({page})=>{
  await page.goto('/precepts/');await page.getByLabel('Find your council by name').fill('Burnley');await page.locator('[data-council-finder] a').filter({hasText:'Burnley'}).click();
  await expect(page).toHaveURL(/\/councils\/burnley\/#precept-breakdown/);
- const breakdown=page.locator('#precept-breakdown');await expect(breakdown).toContainText('Lancashire PCC');await expect(breakdown).toContainText('£292.40');await expect(breakdown).toContainText('already included');
+ const breakdown=page.locator('#precept-breakdown');await expect(breakdown).toContainText('Lancashire PCC');await expect(breakdown).toContainText(part('E07000117','police'));await expect(breakdown).toContainText('already included');
  await page.locator('#history details.data-drawer summary').click();await expect(page.locator('#history details')).toContainText('1993/94');await expect(page.locator('#history details')).toContainText('£628');
  await page.locator('#parish-precepts a[href="/precepts/parishes/burnley/"]').click();await expect(page).toHaveURL(/\/precepts\/parishes\/burnley\//);
  await page.getByLabel('Filter parish or local body').fill('Padiham');
@@ -12,8 +13,9 @@ test('national precept search leads to council components and a filterable paris
  await page.getByLabel('Filter parish or local body').fill('no such parish');await expect(page.locator('[data-parish-count]')).toContainText('0 of 8');
  });
 test('bundled mayoral services and the City of London exception remain visible',async({page})=>{
- await page.goto('/councils/manchester/');const parts=page.locator('#precept-breakdown');await expect(parts).toContainText('General functions');await expect(parts).toContainText('PCC functions');await expect(parts).toContainText('£153.95');
- await page.goto('/councils/city-of-london/');await expect(page.locator('#precept-breakdown')).toContainText('£176.38');await expect(page.locator('#precept-breakdown th[scope="row"]').filter({hasText:/^Police$/})).toHaveCount(0);await expect(page.getByText('The City of London is outside the Metropolitan Police District.',{exact:false})).toBeVisible();
+ await page.goto('/councils/manchester/');const parts=page.locator('#precept-breakdown');await expect(parts).toContainText('General functions');await expect(parts).toContainText('PCC functions');await expect(parts).toContainText(part('E08000003','combined'));
+ await page.goto('/councils/city-of-london/');await expect(page.locator('#precept-breakdown')).toContainText(part('E09000001','county'));await expect(page.locator('#precept-breakdown th[scope="row"]').filter({hasText:/^Police$/})).toHaveCount(0);// The GLA section shows only for a year whose GLA decision is held (C6).
+ if(glaDecision())await expect(page.getByText('The City of London is outside the Metropolitan Police District.',{exact:false})).toBeVisible();
 });
 test('negative parish precepts are shown as published',async({page})=>{
  await page.goto('/precepts/parishes/east-lindsey/');await page.getByLabel('Filter parish or local body').fill('Beesby');await expect(page.locator('[data-parish-name]:visible')).toContainText('-£2.64');
@@ -28,8 +30,8 @@ test('Sources links to official publications without serving datasets',async({pa
  await page.goto('/data/');
  await expect(page.getByRole('heading',{name:'Sources',exact:true})).toBeVisible();
  await expect(page.locator('a[href^="/downloads/"]')).toHaveCount(0);
- // Thirteen existing publications, three RA files and one ONS population workbook.
- await expect(page.locator('[data-source-publication]')).toHaveCount(17);
+ // Thirteen existing publications (one per levels year held), three RA files and one ONS population workbook.
+ await expect(page.locator('[data-source-publication]')).toHaveCount(14 + YEARS.length);
  for (const file of ['RA_2026-27_data_Part_1.ods', 'RA_2026-27_data_Part_2.ods', 'SG_2026-27.ods', 'mye25tablesuk.xlsx']) await expect(page.locator(`[data-source-publication] a[href$="${file}"]`)).toHaveCount(1);
  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);

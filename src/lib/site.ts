@@ -1,4 +1,5 @@
 import { CURRENT_YEAR, NEXT_YEAR, NEXT_YEAR_PATH, increasesYearPath, yearLabel } from "./council-tax";
+import { levelsDayRoutes } from "./levels-day";
 
 export const SITE_NAME = "UK Council Tax";
 
@@ -47,6 +48,7 @@ export const STATIC_PATHS = [
   "/council-tax/",
   "/council-tax/ranked/",
   NEXT_YEAR_PATH,
+  ...levelsDayRoutes(),
   "/about/",
   "/methodology/",
   "/sources/",

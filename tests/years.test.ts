@@ -15,9 +15,10 @@ import {
   yearWords,
 } from "../src/lib/council-tax";
 import { NEXT_EDITION_STATUS } from "../src/lib/council-metadata";
-import { RELEASES, SETTING_DEADLINE, releaseSentence, settingDeadline, statedReleaseDate } from "../src/lib/next-year";
+import { RELEASES, RELEASE_SETS, SETTING_DEADLINE, releaseSentence, settingDeadline, statedReleaseDate } from "../src/lib/next-year";
 import { NAV_GROUPS, STATIC_PATHS } from "../src/lib/site";
 import { sitemapPaths } from "../src/pages/sitemap.xml";
+import { yearPagePaths } from "../src/lib/levels-day";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const rel = (path: string) => path.replace(`${ROOT}/`, "");
@@ -70,11 +71,13 @@ describe("the year variable", () => {
     const ALLOWED: { file: string; text: string; why: string }[] = [
       { file: "src/lib/next-year.ts", text: '"Council Tax Assumptions, 2027-28"', why: "verbatim Scottish Government title, checked against NEXT_YEAR below" },
       { file: "src/lib/next-year.ts", text: '"Report Forthcoming Publications 2026-27.xlsx"', why: "verbatim file name with its checksum" },
+      { file: "src/lib/next-year.ts", text: "(Forthcoming Publications 2026-27.xlsx, SHA-256", why: "verbatim file name of the workbook read for the staged records, with its checksum" },
       { file: "src/pages/data.astro", text: "year === '2024-25'", why: "data reader: the 2024-25 file names its tables differently" },
       { file: "src/pages/data.astro", text: "series from 1993/94", why: "historic series start, a property of the source" },
       { file: "src/pages/data.astro", text: "'MD3472: approval of 2026/27 council tax and precepts'", why: "verbatim GLA decision title" },
       { file: "src/pages/data.astro", text: "'2026/27; approved 26 February 2026'", why: "the edition of one fixed GLA decision" },
       { file: "src/pages/coverage.astro", text: "series from 1993/94", why: "historic series start, a property of the source" },
+      { file: "src/lib/edition.mjs", text: 'FIRST_LEVELS_PAGE_YEAR = "2027-28"', why: "C6: the first year with a levels day page, read by the build and the dist check" },
     ];
     // Owned by a parallel change and outside this one; listed so the test
     // names them rather than skipping them silently.
@@ -121,10 +124,13 @@ describe("the evergreen increases page", () => {
 });
 
 describe("the next year page", () => {
-  const file = join(ROOT, "src", "pages", `council-tax-${NEXT_YEAR}.astro`);
+  // One dynamic route serves NEXT_YEAR, so the page moves with the data (C6).
+  const file = join(ROOT, "src", "pages", "council-tax-[year].astro");
 
   it("exists under NEXT_YEAR and is listed in STATIC_PATHS and the sitemap", () => {
-    expect(existsSync(file), `rename the page to council-tax-${NEXT_YEAR}.astro`).toBe(true);
+    expect(existsSync(file)).toBe(true);
+    expect(yearPagePaths()).toContainEqual({ params: { year: NEXT_YEAR }, props: { mode: "next" } });
+    expect(readdirSync(join(ROOT, "src", "pages")).filter((name) => /^council-tax-\d{4}-\d{2}\.astro$/.test(name))).toEqual([]);
     expect(STATIC_PATHS as readonly string[]).toContain(NEXT_YEAR_PATH);
     expect(sitemapPaths()).toContain(NEXT_YEAR_PATH);
     expect(sitemapPaths().some((p) => p.includes("rises-"))).toBe(false);
@@ -158,9 +164,17 @@ describe("the next year page", () => {
   it("holds release records for the next year only, each with its access date", () => {
     expect(RELEASES.map((r) => r.nation)).toEqual(["England", "Scotland", "Wales"]);
     const england = RELEASES[0];
-    expect(england.page?.title).toBe(`Council Tax levels set by local authorities in England ${yearWords(NEXT_YEAR)}`);
-    expect(england.page?.url).toContain(yearWords(NEXT_YEAR).replace(/ /g, "-"));
-    expect(RELEASES[1].publication).toContain(NEXT_YEAR);
+    // A staged set may hold no page yet (page null, with a note); a page it holds must name NEXT_YEAR.
+    if (england.page) {
+      expect(england.page.title).toBe(`Council Tax levels set by local authorities in England ${yearWords(NEXT_YEAR)}`);
+      expect(england.page.url).toContain(yearWords(NEXT_YEAR).replace(/ /g, "-"));
+    }
+    if (RELEASES[1].publication) expect(RELEASES[1].publication).toContain(NEXT_YEAR);
+    for (const set of Object.values(RELEASE_SETS)) expect(set.releases.map((r) => r.nation)).toEqual(["England", "Scotland", "Wales"]);
+    for (const set of Object.values(RELEASE_SETS)) {
+      expect(set.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      for (const release of set.releases.filter((r) => !r.page)) expect(releaseSentence(release)).toContain("not yet announced");
+    }
     for (const release of RELEASES) {
       if (release.page) expect(release.page.accessed).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       if (!release.page) expect(releaseSentence(release)).toContain("not yet announced");

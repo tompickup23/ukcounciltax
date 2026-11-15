@@ -6,8 +6,11 @@ import {budgetSetPages, budgetSetPath} from '../../../../lib/paths';
 import { type FreezePilot } from '../../../../lib/budget-freeze-data';
 import { FREEZE_YEAR, FREEZE_YEAR_TEXT, FREEZE_MODEL, FREEZE_ASSUMPTIONS, referendumExplanation, calculateFreeze, initialFreezeInputs, inputPounds, money } from '../../../../lib/budget-freeze';
 import snapshot from '../../../../../data/pilots/budget-freeze.json';
+import {pinnedBudgetLine} from '../../../../lib/budget-pin';
 export function getStaticPaths() { return budgetSetPages().map(pilot => ({ params:{slug:pilot.slug}, props:{pilot} })); }
 const {pilot} = Astro.props as {pilot:FreezePilot};
+// C6: one line once the council tax pages have moved past this exercise's year.
+const pinnedLine = pinnedBudgetLine(FREEZE_YEAR);
 const initial = calculateFreeze(pilot, initialFreezeInputs(pilot));
 const taxSource = pilot.sources[1];
 const budgetSource = pilot.sources[0];
@@ -31,6 +34,7 @@ const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: str
         <h1>Set {pilot.name}'s budget</h1>
         <p class="lede">Start with last year's own-council charge. Explore how changes to tax and net service spending affect the remaining difference.</p>
         <p class="source-line">User requested scenario | {FREEZE_MODEL}. A calculation exercise, not the council's actual deficit.</p>
+        {pinnedLine && <p class="source-line" data-budget-pinned>{pinnedLine}</p>}
       </div>
       <section class="baseline" aria-labelledby="baseline-title">
         <h2 id="baseline-title">The published starting point</h2>

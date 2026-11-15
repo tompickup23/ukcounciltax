@@ -93,6 +93,9 @@ const c2Manifest = () => manifestCache ??= JSON.parse(readFileSync(join(process.
 export function staticGameNumbers(html) {
   const doc=new JSDOM(html).window.document;
   doc.querySelectorAll('script,style,template').forEach(node=>node.remove());
+  // The site header and its navigation are chrome, not the game: their year labels
+  // ("Rises", "Council tax <next year>") move with the year switch (C6).
+  doc.querySelectorAll('header.site-header,.site-nav-mega,.mobile-drawer-panel').forEach(node=>node.remove());
   // C2 adds one audited entry after the C1b fixture. Remove only its exact
   // manifest text; any extra figure still reaches the unchanged number check.
   const entries = doc.querySelectorAll('[data-budget-set-entry]');

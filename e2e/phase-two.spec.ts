@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import {band} from './helpers/current';
 import AxeBuilder from '@axe-core/playwright';
 
 test.beforeEach(async ({page}) => {
@@ -71,7 +72,7 @@ test('table and comparison views retain figures without CSV controls', async ({p
   await page.locator('[data-table-filter]').fill('Burnley');
   await page.locator('[data-table-band]').selectOption('H');
   await expect(page.locator('tbody tr:visible')).toHaveCount(1);
-  await expect(page.locator('tbody tr:visible')).toContainText('£5,098.84');
+  await expect(page.locator('tbody tr:visible')).toContainText(band('E07000117', 'H'));
   await expect(page.locator('[data-table-export]')).toHaveCount(0);
   await page.goto('/compare/?a=burnley&b=pendle&band=B&year=2024-25');
   await page.getByRole('button',{name:'Swap councils'}).click();

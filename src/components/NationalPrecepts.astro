@@ -4,7 +4,7 @@ import ChartActions from './kit/ChartActions.astro';
 import {profileChartOptions, billShareRounding} from '../lib/kit-charts';
 import {profilePrecepts} from '../lib/profile-precepts';
 import type {Authority} from '../lib/council-tax';
-import {national,parishesFor} from '../lib/national-data';
+import {national,parishesFor,PARISH_YEAR} from '../lib/national-data';
 import {parishRange, parishSource as parishRef} from '../lib/parish-pages';
 import {parishPath} from '../lib/paths';
 import {councilByGss} from '../lib/registry';
@@ -21,7 +21,9 @@ const parishes=parishesFor(gss);
 const money=(n:number|null)=>n===null?'Unavailable':moneyPence(n);
 const labels={county:['ILB','OLB'].includes(classCode)?'Greater London Authority':'County council',police:'Police',fire:'Fire',combined:'Combined authority'};
 const source=national.sources.components;
-const year=national.year, earlier=precedingYear(national.year);
+const year=national.year;
+// The parish return can lag the levels tables; its change is on the year before its own.
+const earlier=precedingYear(PARISH_YEAR);
 ---
 {data && view !== "parishes" && <section class="section" id="precept-breakdown" aria-labelledby="precept-heading">
   <p class="eyebrow">Who receives your council tax</p>

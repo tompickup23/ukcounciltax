@@ -196,6 +196,24 @@ export async function chartCard(name: keyof typeof KIT_CHARTS): Promise<Buffer> 
   return card(kit.billAnatomy, { ...KIT_CHARTS[name].options(), site: "ukcounciltax" }, "og").png;
 }
 
+/**
+ * The ranking card (C6, I028): one council's area Band D within its class, as the
+ * kit's 1200 by 630 card with the council's point as the card's focus. The class
+ * and basis are the profile's position strip; only the format differs.
+ */
+export async function rankingCard(slug: string): Promise<Buffer> {
+  const at = (rel: string) => pathToFileURL(join(process.cwd(), "src", "vendor", "estate-kit", "dist", "src", rel)).href;
+  const { card } = (await import(/* @vite-ignore */ at("output/card.js"))) as typeof import("../vendor/estate-kit/dist/src/output/card.js");
+  const kit = (await import(/* @vite-ignore */ at("index.js"))) as typeof import("../vendor/estate-kit/dist/src/index.js");
+  const position = profileChartOptions(slug).position;
+  return card(kit.positionStrip, { ...position, site: "ukcounciltax" }, "og", { focus: position.place, year: Number(CURRENT_YEAR.slice(0, 4)) }).png;
+}
+
+/** The ranking card's alt text: the strip's own alt, which names no person. */
+export function rankingCardAlt(slug: string): string {
+  return positionStrip(profileChartOptions(slug).position).alt;
+}
+
 /** The public path of a chart's PNG in one theme. */
 export function chartPngPath(name: KitChartName, theme: Theme): string {
   return `/og/charts/${name}-${theme}.png`;

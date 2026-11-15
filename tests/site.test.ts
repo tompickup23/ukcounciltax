@@ -35,7 +35,8 @@ describe("sitemap parity", () => {
     const found = new Set<string>(["/"]);
     const visit = (dir: string, prefix: string) => {
       for (const entry of readdirSync(dir, { withFileTypes: true })) {
-        if (entry.name.startsWith("[") || entry.name.startsWith("_")) continue;
+        // A dynamic segment anywhere in a name ([slug], council-tax-[year]) is programmatic.
+        if (entry.name.includes("[") || entry.name.startsWith("_")) continue;
         if (entry.isFile() && entry.name.endsWith(".astro") && !NOT_A_HUB.has(entry.name)) {
           found.add(`${prefix}${entry.name.replace(/\.astro$/, "")}/`);
         }

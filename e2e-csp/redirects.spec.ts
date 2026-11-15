@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import {edition} from '../src/lib/edition.mjs';
 
 // _redirects is read by `wrangler pages dev`, the same rules Cloudflare Pages applies.
 for (const path of ['/council-tax/rises-2026-27/', '/council-tax/rises-2026-27']) {
@@ -32,7 +33,8 @@ test('the redirect lands on the 2026/27 section', async ({page}) => {
 });
 
 test('the next year page carries no pound sign', async ({page}) => {
-  const response = await page.goto('/council-tax-2027-28/');
+  // C6: the not yet set page is the year after the current one, from the data present.
+  const response = await page.goto(`/council-tax-${edition().next}/`);
   expect(response?.status()).toBe(200);
   expect(await page.content()).not.toContain('£');
 });

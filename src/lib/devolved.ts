@@ -8,7 +8,18 @@ export interface Edition {nation:string;year:string;basis:string;precision:strin
 export const devolved = JSON.parse(readFileSync(join(process.cwd(),'data/devolved/council-tax.json'),'utf8')) as {retrieved:string;licence:string;editions:Edition[]};
 export const nationEditions = (nation:string) => devolved.editions.filter(e=>e.nation===nation).sort((a,b)=>a.year.localeCompare(b.year));
 export const nationPath = (nation:string,slug?:string) => `/${nation.toLowerCase()}/${slug ? slug+'/' : ''}`;
-export function devolvedPaths() {return devolved.editions.filter(e=>e.year===CURRENT_YEAR).flatMap(e=>[nationPath(e.nation),...e.records.map(r=>nationPath(e.nation,r.slug))]);}
+/**
+ * Each nation's latest edition. Scotland and Wales publish on their own dates,
+ * so their pages follow their own latest year, not England's CURRENT_YEAR: on
+ * England's levels day the Welsh and Scottish pages stay until their own
+ * figures are imported. None may be newer than CURRENT_YEAR.
+ */
+export function latestEditions(): Edition[] {
+  const latest = [...new Set(devolved.editions.map(e=>e.nation))].map(nation=>nationEditions(nation).at(-1)!);
+  for (const e of latest) if (e.year > CURRENT_YEAR) throw new Error(`${e.nation} ${e.year} is newer than England's ${CURRENT_YEAR}`);
+  return latest;
+}
+export function devolvedPaths() {return latestEditions().flatMap(e=>[nationPath(e.nation),...e.records.map(r=>nationPath(e.nation,r.slug))]);}
 
 export function devolvedSource(edition: Edition): SourceRef {
   return {publisher: edition.nation === 'Scotland' ? 'Scottish Government' : 'Welsh Government', title: cleanTitle(edition.source.title), url: edition.source.url, table: edition.table, retrieved: devolved.retrieved};

@@ -10,6 +10,7 @@ Written 15 November 2026 in Claude Code (prompt 8), on branch `feat/c6-levels-da
 - **Importers.** The levels importer refuses a missing band, a short row, an authority without own figures, and any authority or county that appears or disappears without a reviewed succession record. It reproduces all three held year files exactly, except their `generated` date. Table 10 is found on the statistics page by title, its hash is staged for review, and the import writes a year named file.
 - **Rehearsal.** The real run treats 2026/27 as incoming against a 2025/26 baseline, and the shape run checks release day itself. Results and every difference are in section 5.
 - **Pages that wait**: the levels day page, precept day, the ranking card with its embed snippet, the 2028/29 not yet set page and the set the budget pages' line. With today's data none of them renders, and each is tested in both states.
+- **The tests follow the data too.** The dist check, the year tests and the browser specs read years, counts and current-year figures from the data, so the release pull request needs no test edits. On a copy built as release day, the dist check and the browser specs pass.
 
 ## 2. What changes on release day
 
@@ -101,7 +102,62 @@ node scripts/rehearse-levels-day.mjs --scenario shape
 
 The script refuses a folder inside the repository. Nothing it builds is published, and the shape run's data carries a "SHAPE ONLY" marker.
 
-REHEARSAL-RESULTS
+### 5.1 Real run: 2026/27 incoming against a 2025/26 baseline
+
+All 13 checks passed (15 November 2026).
+
+| Step | Result |
+|---|---|
+| Baseline: no 2026/27 levels file, the launch Table 10 import set aside, Table 10 for 2025/26 staged and imported | The switch resolves to 2025/26, years 2024/25 and 2025/26. The stage step found "Table 10 Local Authority Level Data" on the 2025/26 page by title |
+| Levels import, `--year 2026-27` | Accepted against 2025/26 (no authority or county appeared or disappeared). The switch stays on 2025/26 with 2026/27 held. The file equals the held one except its `generated` date |
+| Table 10 stage, `--stage 2026-27` | The hash found on the statistics page equals the pinned `b5b83457...38feb0`, and so does the file URL |
+| Table 10 import, `--year 2026-27 --as-incoming` | The switch moves to 2026/27, previous 2025/26, next 2027/28. Components, parishes, history and their notes equal the held import |
+| Build and number diff against main | 298 pages differ, 0 added, 0 removed; every difference is listed below |
+| Main against live, five pages (`/`, `/councils/burnley/`, `/increases/`, `/council-tax-2027-28/`, `/precepts/`) | 0 pages differing, so main stands in for live |
+
+Every difference, and its cause:
+
+| Where | What | Cause |
+|---|---|---|
+| 296 council pages (bill breakdown source line, in the table and in the chart's SVG), `/data/` and `/changes/` | "retrieved 5 October 2026" becomes "retrieved 15 November 2026"; `/changes/` lists the precept components item under its new access date | The staged Table 10 record carries the day it was retrieved. On release day that is right: the new edition's date |
+| `/council-tax-2027-28/` | Bytes only: the scoped style attribute | The page moved to a dynamic route; the same difference is in today's build (section 1) |
+| `data/council-tax/england-2026-27.json` | Equal to the held file except its `generated` date; the build used the held bytes | The set the budget pages pin that file's SHA-256, `generated` included. A real release adds a new year's file, which nothing pins |
+| Table 10 source record | The staged record adds `attachmentTitle`, and its `retrieved` date is the day of the run | By design: the attachment title is recorded as GOV.UK prints it |
+| The baseline build | Not built | The repository holds no 2025/26 edition of the budget, Burnley's schedule, the GLA decision or Scotland and Wales. The switch refuses a dataset newer than the current year (budget, Scotland, Wales) or finds none (Burnley), so only the after state is built. On a real release every such dataset is older than the incoming year, and the shape run covers that |
+| First attempt | The build failed: the set the budget pages could not read `data/national/england.json` | The first version of the script deleted the launch file. The pages pin its hash, so the release must never remove or rewrite it (section 2) |
+
+### 5.2 Shape run: release day, with every other dataset still on 2026/27
+
+All 15 checks passed on the final run (15 November 2026). In a copy, the 2026/27 levels file and Table 10 import were relabelled 2027-28; the figures are unchanged, so they are wrong for that year and the run is for shape only. Everything else stayed on 2026/27.
+
+| Check | Result |
+|---|---|
+| The switch | resolves to 2027-28, previous 2026-27, next 2028-29 |
+| `/council-tax-2027-28/` | the levels day page, linking precept day and every class ranking; no horizontal overflow at 375 px |
+| `/council-tax-2027-28/adult-social-care/` | 153 authorities; "142 of the 153 authorities show an adult social care change of 2.0%, the maximum the principles state; 11 show less" (on the relabelled 2026/27 tables) |
+| `/council-tax-2028-29/` | not yet set, reading the staged 2028/29 records, with no trace of the 2027/28 announcement |
+| Council pages | lead with 2027/28 and carry the embed snippet, which wraps at 375 px |
+| Set the budget pages | carry the line in section 7 |
+| Parish pages, Scotland, Wales, `/precepts/` | stay on their own 2026/27 editions and say so |
+| Westminster | no mayoral precept section and no contents link to it, since no 2027/28 GLA decision is held |
+| Sitemap | lists the levels day, precept day and 2028/29 pages |
+| `scripts/check-dist.mjs` on the shape build | passes |
+
+**Browser suite on the shape build** (desktop, against the shape build's preview). The first full run gave 263 passed and 5 failed: the tables on `/increases/`, which grow with the extra year (two tests), the sitemap count, the `/data/` source count, and the City of London GLA text, which is withheld by design. The second gave 265 passed and 3 failed: the rows on `/increases/` (two tests) and a timeout under load. The shape run cannot see one class of problem, because its figures are 2026/27's: 14 assertions typed 2026/27 figures (Burnley's bands, three precept parts, a ranking cell and two future cost results) that would fail on release day. All now read the data through `e2e/helpers/current.ts`, which reproduces every old literal on today's data. After the fixes, the affected spec files pass on the shape build (46 of 46), and the full suite passes on today's build (528 of 528). Figures from editions that do not move with the switch (the budget, the Burnley scenario game, parish returns, history) stay typed.
+
+The shape run's first passes found these, all fixed on this branch:
+
+| Found | Would have happened after the switch | Fix |
+|---|---|---|
+| `[nation]/[slug].astro`, the Scotland and Wales OG route, `PostcodeDoor` and the picker filtered devolved editions by England's year | Every Scottish and Welsh council page, its card and its picker and postcode links disappear (the dist check listed each missing search destination) | `latestEditions()`: each nation's own latest edition |
+| `council-metadata.ts` used England's year for Scottish and Welsh titles, descriptions and the next edition line | Welsh 2026/27 figures titled "Band D 2027/28" | The page passes its edition's year |
+| `src/lib/figures.ts` labelled every council's figures with the Burnley schedule's year | Every council's bands, area Band D and bill parts labelled 2026/27 beside 2027/28 figures | The levels year |
+| The budget page's band selector read England's year | 2027/28 bands on a page pinned to 2026/27 | `BandSelector` takes the budget year |
+| London pages listed "The mayoral precept" in their contents when the section was withheld | 33 pages with a contents link to nothing | One GLA lookup (`src/lib/gla.ts`) for both |
+| The C1b number snapshot included the site navigation | The release pull request fails the dist check on "Rises 2027/28" | The snapshot drops the header; the fixture loses exactly those ten nav tokens per page |
+| The dist check expected 1,107 pages, one year page and no pound sign on any `/council-tax-<year>/` | The release pull request fails the dist check | Counts and the year page rule follow the switch |
+| The not yet set page read the 2027/28 release records whatever `NEXT_YEAR` was | The 2028/29 page quotes the 2027/28 announcement | `RELEASE_SETS` by year |
+| The new pages' descriptions ran to 176 and 170 characters, and figures sat outside a sourced fact | Dist check failures | Shortened and restructured |
 
 ## 6. Pages that wait for 2027/28
 
@@ -136,4 +192,20 @@ Shown only when the budget edition is older than `CURRENT_YEAR`, under the sourc
 
 ## 9. Verification
 
-VERIFICATION-RESULTS
+All run on 15 November 2026 on the final branch, Node 22.23.4.
+
+| Check | Result |
+|---|---|
+| `npm test` | 68 files, 876 tests passed |
+| `npm run check` | 0 errors, 0 warnings, 0 hints |
+| `BUILD_OG=1 npm run build` | 1,107 pages built; no ranking card routes (correct before 2027/28) |
+| `npm run test:dist` | 1,107 pages, 1,106 sitemap URLs, all passed |
+| `npm run test:text` | 1,115 files, no dashes or pseudo dashes |
+| `npm run test:csp` | 138 passed |
+| `npm run test:e2e` (phone and desktop, against the built site's preview) | 528 passed |
+| Number diff against main (`scripts/diff-numbers.mjs`) | 0 pages differing, 0 added, 0 removed |
+| Byte compare of HTML against main | 1 page differs: `/council-tax-2027-28/`, scoped style attribute only |
+| Rehearsal, real | 13 of 13 checks |
+| Rehearsal, shape | 15 of 15 checks, including the dist check on the release day build |
+
+The main build used as the baseline is a plain build (no OG images), so images were not compared byte for byte. The only image route changed is the Scotland and Wales card route, which now lists each nation's latest edition: today that is the same set.

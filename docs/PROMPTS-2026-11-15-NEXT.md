@@ -4,25 +4,18 @@ Written in Claude Code on 15 November 2026 after every Codex session on both sit
 
 ## Status, 15 November evening (read this first)
 
-Prompts 2 and 3 have run. Prompt 1 is part done. The tables further down are the afternoon record.
-
-- **Prompt 1:** PR 84 reviewed in Claude Code. Four fix commits are pushed (`b41fe65`, `63be887`, `46925ec`, `6a947a3`), and the PR body carries the review and a design check override. The number diff and design check pass in CI. **Waiting:** CI's site job, then Tom's merge yes, then the live check. The measurement note (step 5) starts on Monday 17 November.
-- **Prompt 2:** ukcouncils draft PR 60, commit `3e708ae`. Validate fails on two guards that are doing their job, so prompt 7 below fixes it.
-- **Prompt 3:** ukplaces PR 53, commit `d5a68b7`, green and ready. It changes `E07000112.name` only; the slug stays `shepway`. UK Places still displays and searches "Shepway", so prompt 3b below fixes that. The Codex snapshot ref equals the PR commit, so nothing was lost.
+Done on 15 November evening: PR 84 merged and live (`4625f53`); UK Councils PRs 59 and 60 merged (prompts 2 and 7); UK Places PRs 53 and 54 merged and deployed (prompts 3 and 3b). Prompt 5 is running in Codex. The tables below this one are the afternoon record.
 
 Order of work from here:
 
 | Step | Session | Starts when |
 |---|---|---|
-| Merge UKC PR 59, then UKCT PR 85 (docs; each deploys) | Tom's yes | Now |
-| Merge PR 84, then the live check | This Claude Code session | CI green and Tom's yes |
-| Prompt 7, PR 60 fix | Codex, ukcouncils | Now (rebases after PR 59 merges) |
-| Merge UKP PR 53 | Tom's yes | Now |
-| Prompt 3b, UK Places display and search names | Codex, ukplaces | After PR 53 merges |
-| Prompt 5, registry refresh on both sites | Codex | After prompt 3b merges and UK Places deploys, so one refresh carries both |
+| Prompt 5 review and merge, both sites | Claude Code | When its two PRs are green |
 | Measurement note, weekly | Claude Code | Monday 17 November |
-| Prompt 4, gates pack | Codex | After PR 84 merges and X3 is settled |
+| Prompt 4, gates pack | Codex | After X3 is settled |
 | Prompt 6, council links rerun | Codex | Any day in December |
+| Composition build | Not written | After Tom picks a seats source |
+| Audit status build | Not written | After Tom accepts an identity method (exact name join measured in UK Councils PR 60) |
 
 Merge order matters for `docs/STATE.md`: PR 59 before PR 60 on UK Councils; PR 85 before any later docs PR here.
 

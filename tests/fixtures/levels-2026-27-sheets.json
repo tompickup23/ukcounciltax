@@ -1,0 +1,687 @@
+{
+ "source": "MHCLG, Council Tax levels set by local authorities in England 2026 to 2027: Tables 1 to 9 (Tables_1-9_2026-27.ods), cells as displayed, trimmed by tests to four authorities. Open Government Licence v3.0.",
+ "sha256": "66b7c20f70c804038c0a392ff2b7249fd09e83f4e88ac87d0278ce7e19da5537",
+ "sheets": [
+  {
+   "name": "Notes",
+   "rows": [
+    [
+     "Notes"
+    ],
+    [
+     "This worksheet contains 1 table."
+    ],
+    [
+     "Note",
+     "Table Reference",
+     "Note Text"
+    ],
+    [
+     "[note a]",
+     "Table_1\nTable_3\nTable_5",
+     "Since 2016-17 social care authorities have been able to increase council tax under the adult social care precept flexibility, as well as under the core council tax referendum principle. For 2021-22 and 2022-23, the increase was originally announced as 3 per cent over the two years, with no limitation as to how this was split. In 2022-23, this was updated to a 1 per cent increase plus any amount of the 3 per cent that had not been used in 2021-22. From 2023-24, the increase has been set to 2 per cent in each year."
+    ],
+    [
+     "[note b]",
+     "Table_2\nTable_8a",
+     "This includes core GLA, Transport for London (TfL), The London Legacy Development Corporation, the London Fire and Emergency Planning Authority (LFEPA); and The Mayor’s Office for Policing and Crime."
+    ],
+    [
+     "[note c]",
+     "Table_2",
+     "Four (Cambridgeshire and Peterborough, Liverpool City Region, Greater Manchester, and York and North Yorkshire) out of the twelve combined authorities set a precept in 2026-27. For Greater Manchester Combined Authority and York and North Yorkshire Combined Authority, this reflects only the precept for their general functions which includes their responsibility for fire and rescue services. It does not include the precept for police functions, which are included in the Police and Crime Commissioners figures."
+    ],
+    [
+     "[note d]",
+     "Table_2\nTable_8d",
+     "Does not include the Mayor’s Office for Policing and Crime element from GLA and excludes City of London Police (as this element is not distinguishable from the council tax charged by the City of London). Greater Manchester Combined Authority’s, South Yorkshire Mayoral Combined Authority's, West Yorkshire Combined Authority’s, and York and North Yorkshire Combined Authority's police function are included."
+    ],
+    [
+     "[note e]",
+     "Table_2\nTable_8e",
+     "Covers both metropolitan and shire and fire rescue authorities. It excludes fire and rescue services provided by counties, unitaries, GLA, Greater Manchester Combined Authority and York and North Yorkshire Combined Authority."
+    ],
+    [
+     "[note f]",
+     "Table_3",
+     "Referendum principles vary year to year which will affect the annual change. Please see the introduction section of the statistical release for further information."
+    ],
+    [
+     "[note g]",
+     "Table_3",
+     "Freeze grant was paid to local authorities that froze or reduced council tax between 2011-12 to 2015-16."
+    ],
+    [
+     "[note h]",
+     "Table_3",
+     "In 2022-23, the Government provided a £150 one-off Energy Bills Rebate for most households in council tax bands A-D. This did not affect these figures."
+    ],
+    [
+     "[note i]",
+     "Table_4",
+     "A \"maximum increase\" is defined by reference to the relevant statutory limit. For adult social care authorities (London boroughs, metropolitan district councils, unitary authorities and shire county councils), this includes increases of 4.985% or above. For shire district councils, it includes increases of 2.985% or above, or £5. A maximum increase is £15 for police and crime commissioners and £5 for fire and rescue authorities. A corresponding approach has been applied for authorities in receipt of exceptional financial support."
+    ],
+    [
+     "[note j]",
+     "Table_4",
+     "An \"increase close to the maximum\" applies where the increase falls just below the maximum threshold. For authorities without exceptional financial support, this includes increases between 4.90% and 4.984% for adult social care authorities; between 2.90% and 2.984% or £4.90 and £4.99 (whichever is higher) for shire districts; between £14.90 and £14.99 for police and crime commissioners; and between £4.90 and £4.99 for fire and rescue authorities. A corresponding approach has been applied for authorities in receipt of exceptional financial support."
+    ],
+    [
+     "[note k]",
+     "Table_4",
+     "An \"other increase\" covers all other increases. This includes increases below 4.90% for adult social care authorities, below 2.90% or £4.90 for shire districts, below £14.90 for police and crime commissioners, and below £4.90 for fire and rescue authorities."
+    ],
+    [
+     "[note l]",
+     "Table_4",
+     "Includes the police element set by Greater Manchester Combined Authority, South Yorkshire Mayoral Combined Authority, West Yorkshire Combined Authority and York and North Yorkshire Combined Authority."
+    ],
+    [
+     "[note m]",
+     "Table_5",
+     "All increases to council tax, whether or not attributable to the adult social care precept, become the new baseline for increases for the following year. As a result, these figures do not reflect the full amounts in 2026-27 that follow from increases to council tax levels as a result of the adult social care precept. This is because full extent of the element within both i) council tax bills and ii) council tax receipts in 2026-27 that is attributable to the adult social care precept requires a cumulative calculation of each local authority’s decisions on the use of the adult social care precept in each year since its inception in 2016-17."
+    ],
+    [
+     "[note n]",
+     "Table_6",
+     "Council tax payers in the Charter Trustees for the City of Durham have only been included once here, although they are actually spread across multiple parishes in Durham."
+    ],
+    [
+     "[note o]",
+     "Table_6",
+     "The aggregate of local precepts presented here may be different to the Local Authority total due to rounding."
+    ],
+    [
+     "[note p]",
+     "Table_7\nTable_9",
+     "Figures include parish precepts and adult social care precepts."
+    ],
+    [
+     "[note q]",
+     "Table_7",
+     "The year-on-year percentage change has been calculated to reflect local government restructuring to allow for like-for-like comparisons at class level in 2023-24."
+    ],
+    [
+     "[note r]",
+     "Table_8a",
+     "For 2026-27, Trafford Council, Warrington Borough Council and the Royal Borough of Windsor and Maidenhead Council could increase their council tax by up to 7.5% (5.5% core and 2% adult social care) without the need for a referendum."
+    ],
+    [
+     "[note s]",
+     "Table_8a\nTable_8b",
+     "The increase in average council tax including adult social care and excluding parish precepts for this authority is showing as 5% due to rounding to 2 decimal places. It is not exceeding referendum principles as the actual percentage change is below the threshold."
+    ],
+    [
+     "[note t]",
+     "Table_8a",
+     "For 2026-27, Bournemouth, Christchurch and Poole Council could increase their council tax by up to 6.75% (4.75% core and 2% adult social care) without the need for a referendum."
+    ],
+    [
+     "[note u]",
+     "Table_8a",
+     "For 2026-27, North Somerset Council and Shropshire Council could increase their council tax by up to 9% (7% core and 2% adult social care) without the need for a referendum."
+    ],
+    [
+     "[note v]",
+     "Table_8b",
+     "For 2026-27, Worcestershire County Council could increase their council tax by up to 9% (7% core and 2% adult social care) without the need for a referendum."
+    ],
+    [
+     "[note w]",
+     "Table_8c",
+     "The increase in average council tax including adult social care and excluding parish precepts for this authority is showing as 3% due to rounding to 2 decimal places. It is not exceeding referendum principles as the actual percentage change is below the threshold."
+    ],
+    [
+     "[note x]",
+     "Table_8c",
+     "The average (band D 2 adult equivalent) council tax including local precepts for one authority (Lewes District Council) for 2026-27 is pending approval subject to a full council decision on 26 March 2026."
+    ],
+    [
+     "[note y]",
+     "Table_8d",
+     "For 2026-27, the Police and Crime Commissioners for Bedfordshire, Cheshire, Durham, Gloucestershire, Humberside and Northumbria could increase their council tax by £18.50 without the need for a referendum."
+    ],
+    [
+     "[note z]",
+     "Table_8e",
+     "For 2026-27, Northamptonshire Commissioner Fire and Rescue Authority could increase their council tax by £10 without the need for a referendum."
+    ],
+    [
+     "[note aa]",
+     "Table_8f",
+     "Greater Manchester Combined Authority's, South Yorkshire Mayoral Combined Authority's, West Yorkshire Combined Authority's and York and North Yorkshire Combined Authority's police function can be found in Table 8d, but are included in the overall total shown for the authority."
+    ],
+    [
+     "[note ab]",
+     "Table_8f",
+     "Fire and Rescue functions are part of Greater Manchester Mayoral Combined Authority general functions and all of York and North Yorkshire Combined Authority general functions."
+    ],
+    [
+     "[note ac]",
+     "Table_9",
+     "The ratios of other bands to Band D are: A 6/9; B 7/9; C 8/9; E 11/9; F 13/9; G 15/9; H 18/9."
+    ],
+    [
+     "[note ad]",
+     "Table_9",
+     "The area council tax for a dwelling occupied by two adults by band for one authority (Lewes District Council) for 2026-27 is pending approval subject to a full council decision on 26 March 2026."
+    ],
+    [
+     "[r]",
+     "Table_1\nTable_3\nTable_4\nTable_6\nTable_7",
+     "The 2025-26 figures have been revised since the previous publication as a result of corrected data from Medway Council and North Kesteven District Council, and the 2022-23, 2023-24, and 2024-25 figures have been revised since the previous publication as a result of corrected data from North Kesteven District Council."
+    ]
+   ]
+  },
+  {
+   "name": "Table_2",
+   "rows": [
+    [
+     "Table 2: Council tax (average Band D) in England 2026 to 2027, and percentage change from 2025 to 2026: by class of authority"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with adjacent columns showing percentage change from the previous year."
+    ],
+    [
+     "Class of Authority",
+     "Average council tax for the authority including adult social care precept, excluding parish precepts (Band D)\n£",
+     "Percentage change of average council tax for the authority including adult social care precept, excluding parish precepts (Band D)\n%",
+     "Average council tax for the authority including adult social care and including parish precepts (Band D)\n£",
+     "Percentage change of average council tax for the authority including adult social care and including parish precepts (Band D)\n%"
+    ],
+    [
+     "England",
+     "2,343",
+     "4.8",
+     "2,392",
+     "4.9"
+    ],
+    [
+     "Inner London Boroughs including City",
+     "1,239",
+     "4.0",
+     "1,240",
+     "4.0"
+    ],
+    [
+     "Outer London Boroughs",
+     "1,769",
+     "4.8",
+     "1,769",
+     "4.8"
+    ],
+    [
+     "London Boroughs",
+     "1,559",
+     "4.5",
+     "1,559",
+     "4.5"
+    ],
+    [
+     "Greater London Authority [note b]",
+     "511",
+     "4.1",
+     "511",
+     "4.1"
+    ],
+    [
+     "of which The Mayor's Office for Policing and Crime",
+     "334",
+     "4.7",
+     "334",
+     "4.7"
+    ],
+    [
+     "of which Other Services",
+     "176",
+     "3.0",
+     "176",
+     "3.0"
+    ],
+    [
+     "Combined Authorities [note c]",
+     "89",
+     "3.8",
+     "89",
+     "3.8"
+    ],
+    [
+     "Metropolitan Districts",
+     "2,020",
+     "4.9",
+     "2,030",
+     "4.9"
+    ],
+    [
+     "Metropolitan Fire and Rescue Authorities",
+     "93",
+     "5.7",
+     "93",
+     "5.7"
+    ],
+    [
+     "Shire Unitary Authorities",
+     "2,010",
+     "5.1",
+     "2,087",
+     "5.2"
+    ],
+    [
+     "Shire Counties",
+     "1,802",
+     "4.6",
+     "1,802",
+     "4.6"
+    ],
+    [
+     "Shire Districts",
+     "222",
+     "2.5",
+     "286",
+     "3.7"
+    ],
+    [
+     "Shire Fire and Rescue Authorities",
+     "100",
+     "5.4",
+     "100",
+     "5.4"
+    ],
+    [
+     "Police and Crime Commissioners [note d]",
+     "297",
+     "5.5",
+     "297",
+     "5.5"
+    ],
+    [
+     "Fire and Rescue Authorities [note e]",
+     "98",
+     "5.5",
+     "98",
+     "5.5"
+    ]
+   ]
+  },
+  {
+   "name": "Table_3",
+   "rows": [
+    [
+     "Table 3: Average Band D council tax (including parish and adult social care precepts) in England and the annual percentage change, 2012 to 2013 to 2026 to 2027 [note a] [note f]"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with an adjacent column showing percentage change from the previous year."
+    ],
+    [
+     "Year",
+     "Pounds £",
+     "Percentage Change %"
+    ],
+    [
+     "2012 to 2013 [note g]",
+     "1,444",
+     "0.3"
+    ],
+    [
+     "2013 to 2014 [note g]",
+     "1,456",
+     "0.8"
+    ],
+    [
+     "2014 to 2015 [note g]",
+     "1,468",
+     "0.8"
+    ],
+    [
+     "2015 to 2016 [note g]",
+     "1,484",
+     "1.1"
+    ],
+    [
+     "2016 to 2017",
+     "1,530",
+     "3.1"
+    ],
+    [
+     "2017 to 2018",
+     "1,591",
+     "4.0"
+    ],
+    [
+     "2018 to 2019",
+     "1,671",
+     "5.1"
+    ],
+    [
+     "2019 to 2020",
+     "1,750",
+     "4.7"
+    ],
+    [
+     "2020 to 2021",
+     "1,818",
+     "3.9"
+    ],
+    [
+     "2021 to 2022",
+     "1,898",
+     "4.4"
+    ],
+    [
+     "2022 to 2023 [note h]",
+     "1,966",
+     "3.5"
+    ],
+    [
+     "2023 to 2024",
+     "2,065",
+     "5.1"
+    ],
+    [
+     "2024 to 2025",
+     "2,171",
+     "5.1"
+    ],
+    [
+     "2025 to 2026 [r]",
+     "2,280",
+     "5.0"
+    ],
+    [
+     "2026 to 2027",
+     "2,392",
+     "4.9"
+    ]
+   ]
+  },
+  {
+   "name": "Table_7",
+   "rows": [
+    [
+     "Table 7: Average area Band D council tax and the annual percentage change by area of authority, 2022 to 2023 to 2026 to 2027 [note p] [note q]"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with adjacent columns showing percentage change from the previous year."
+    ],
+    [
+     "Year",
+     "England £",
+     "England change %",
+     "London area £",
+     "London area change %",
+     "Metropolitan areas £",
+     "Metropolitan areas change %",
+     "Unitary areas £",
+     "Unitary areas change %",
+     "Shire areas £",
+     "Shire areas change %"
+    ],
+    [
+     "2022 to 2023",
+     "1,966",
+     "3.5",
+     "1,684",
+     "3.8",
+     "1,960",
+     "3.6",
+     "2,034",
+     "3.3",
+     "2,041",
+     "3.6"
+    ],
+    [
+     "2023 to 2024",
+     "2,065",
+     "5.1",
+     "1,789",
+     "6.2",
+     "2,059",
+     "5.1",
+     "2,139",
+     "5.0",
+     "2,134",
+     "5.0"
+    ],
+    [
+     "2024 to 2025",
+     "2,171",
+     "5.1",
+     "1,893",
+     "5.8",
+     "2,169",
+     "5.3",
+     "2,248",
+     "5.1",
+     "2,237",
+     "4.8"
+    ],
+    [
+     "2025 to 2026 [r]",
+     "2,280",
+     "5.0",
+     "1,982",
+     "4.7",
+     "2,289",
+     "5.6",
+     "2,366",
+     "5.2",
+     "2,344",
+     "4.8"
+    ],
+    [
+     "2026 to 2027",
+     "2,392",
+     "4.9",
+     "2,068",
+     "4.4",
+     "2,409",
+     "5.2",
+     "2,490",
+     "5.3",
+     "2,452",
+     "4.6"
+    ]
+   ]
+  },
+  {
+   "name": "Table_8a",
+   "rows": [
+    [
+     "Table 8a: 2026 to 2027 Council tax (average Band D) and percent change on 2025 to 2026: London boroughs, metropolitan districts and unitary authorities"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with adjacent column comparing the previous year figure in percentages. Referendum principles for these authorities are outlined in the statistical release."
+    ],
+    [
+     "E-code",
+     "ONS Code",
+     "Authority",
+     "Class",
+     "Region",
+     "Area",
+     "Average council tax for the authority including adult social care, excluding parish precepts (Band D)\n\n£",
+     "Percentage change of average council tax for the authority including adult social care, excluding parish precepts (Band D) %",
+     "Average council tax for the authority including adult social care and parish precepts (Band D)\n\n£",
+     "Percentage change of Average council tax for the authority including adult social care and parish precepts (Band D) \n%",
+     "Adult social care element of Average Band D council tax\n\n\n£",
+     "Percentage change of adult social care element of Average Band D council tax\n\n%",
+     "Notes"
+    ],
+    [
+     "E5022",
+     "E09000033",
+     "Westminster",
+     "ILB",
+     "L",
+     "Inner London",
+     "537.74",
+     "1.99",
+     "539.04",
+     "1.97",
+     "10.54",
+     "2.00"
+    ],
+    [
+     "E4601",
+     "E08000025",
+     "Birmingham",
+     "MD",
+     "WM",
+     "West Midlands",
+     "2,023.48",
+     "4.99",
+     "2,033.21",
+     "5.04",
+     "38.55",
+     "2.00"
+    ]
+   ]
+  },
+  {
+   "name": "Table_8b",
+   "rows": [
+    [
+     "Table 8b: 2026 to 2027 Council tax (average Band D) and percent change on 2025 to 2026: shire counties"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with adjacent column comparing the previous year figure in percentages. Referendum principles for these authorities are outlined in the statistical release."
+    ],
+    [
+     "E-code",
+     "ONS Code",
+     "Authority",
+     "Region",
+     "Average council tax for the authority including adult social care precept (Band D)\n\n£",
+     "Percentage change for average council tax for the authority including adult social care precept (Band D)\n%",
+     "Adult social care element of average (Band D) council tax\n\n£",
+     "Percentage change of adult social care element of average (Band D) council tax \n%",
+     "Notes"
+    ],
+    [
+     "E2321",
+     "E10000017",
+     "Lancashire",
+     "NW",
+     "1,801.75",
+     "3.80",
+     "34.72",
+     "2.00"
+    ]
+   ]
+  },
+  {
+   "name": "Table_8c",
+   "rows": [
+    [
+     "Table 8c: 2026 to 2027 Council tax (average Band D), percent change and amount change on 2025 to 2026: shire districts"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£) with adjacent columns comparing the previous year figure in percentages and pounds. Referendum principles for these authorities are outlined in the statistical release."
+    ],
+    [
+     "E-code",
+     "ONS Code",
+     "Authority",
+     "Region",
+     "Area",
+     "Average council tax for the authority excluding parish precepts (Band D) \n\n£",
+     "Average council tax for the authority excluding parish precepts (Band D) \n\n£ change on 2025-26",
+     "Average council tax for the authority excluding parish precepts (Band D) \n\n% change on 2025-26",
+     "Average council tax for the authority including parish precepts (Band D) \n\n£",
+     "Average council tax for the authority including parish precepts (Band D) \n\n£ change on 2025-26",
+     "Average council tax for the authority including parish precepts (Band D) \n\n% change on 2025-26",
+     "Notes"
+    ],
+    [
+     "E2333",
+     "E07000117",
+     "Burnley",
+     "NW",
+     "Lancashire",
+     "351.44",
+     "6.86",
+     "1.99",
+     "360.54",
+     "7.63",
+     "2.16"
+    ]
+   ]
+  },
+  {
+   "name": "Table_9",
+   "rows": [
+    [
+     "Table 9: Area council tax for a dwelling occupied by two adults by band 2026 to 2027 [note p] [note ac]"
+    ],
+    [
+     "This worksheet contains 1 table. The data in this table are reported in pounds (£)."
+    ],
+    [
+     "E Code",
+     "ONS Code",
+     "Authority",
+     "Region",
+     "Class",
+     "Area",
+     "Band A",
+     "Band B",
+     "Band C",
+     "Band D",
+     "Band E",
+     "Band F",
+     "Band G",
+     "Band H",
+     "Notes"
+    ],
+    [
+     "E5022",
+     "E09000033",
+     "Westminster",
+     "L",
+     "ILB",
+     "Inner London",
+     "699.70",
+     "816.32",
+     "932.93",
+     "1,049.55",
+     "1,282.78",
+     "1,516.02",
+     "1,749.25",
+     "2,099.10"
+    ],
+    [
+     "E4601",
+     "E08000025",
+     "Birmingham",
+     "WM",
+     "MD",
+     "West Midlands",
+     "1,575.27",
+     "1,837.81",
+     "2,100.36",
+     "2,362.90",
+     "2,887.99",
+     "3,413.08",
+     "3,938.17",
+     "4,725.80"
+    ],
+    [
+     "E2333",
+     "E07000117",
+     "Burnley",
+     "NW",
+     "SD",
+     "Lancashire",
+     "1,699.61",
+     "1,982.88",
+     "2,266.15",
+     "2,549.42",
+     "3,115.96",
+     "3,682.50",
+     "4,249.03",
+     "5,098.84"
+    ]
+   ]
+  }
+ ]
+}

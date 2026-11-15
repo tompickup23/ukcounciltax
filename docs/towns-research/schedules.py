@@ -26,6 +26,7 @@ ROOT = Path.cwd()
 RESEARCH = ROOT / "docs/towns-research"
 YEAR = "2026-27"
 MONEY = re.compile(r"(?<![\d.,])[\d,]+\.\d{2}(?!\d)")
+WELL_FORMED = re.compile(r"£?\s*\d{1,3}(?:,\d{3})*\.\d{2}")
 
 
 def read(path):
@@ -45,7 +46,7 @@ def encode_verbatim(value):
         result = {}
         for key, item in value.items():
             if isinstance(item, str) and forbidden.search(item):
-                assert key in ("name", "quote"), (key, item)
+                assert key in ("name", "quote", "quoted"), (key, item)
                 result[key+"Fragments"] = forbidden.split(item)
                 result[key+"SeparatorCodePoints"] = [[ord(c) for c in m.group()] for m in forbidden.finditer(item)]
             else:
@@ -185,14 +186,23 @@ def extract(council, review):
                         nums = list(map(pence, cells[1 + offset:]))
                     except Exception:
                         continue
-                    if nums[0] < 50000:
+                    # A cell that decodes but is not well formed money (for example "£1,727,88")
+                    # is kept as printed and flagged, never read as a number.
+                    malformed = {band: cell for band, cell in zip("ABCDEFGH" if kind != "html-split" else ("ABCD" if ti == review["tables"][0] else "EFGH"), cells[1 + offset:]) if not WELL_FORMED.fullmatch(cell)}
+                    nums = [None if not WELL_FORMED.fullmatch(cell) else n for cell, n in zip(cells[1 + offset:], nums)]
+                    if nums[0] is not None and nums[0] < 50000:
                         continue
                     if kind == "html-split" and ti == review["tables"][1]:
                         existing = next(r for r in rows if r["name"] == cells[0])
-                        existing["bandsPence"].update(dict(zip("EFGH", nums)))
+                        existing["bandsPence"].update({b: n for b, n in zip("EFGH", nums) if n is not None})
+                        if malformed:
+                            existing.setdefault("malformedPrinted", {}).update(malformed)
                         existing["quote"] += " | " + " | ".join(cells)
                         continue
-                    rows.append(area(cells[0], dict(zip("ABCDEFGH", nums)), " | ".join(cells), {"table": ti, "row": ri}))
+                    row = area(cells[0], {b: n for b, n in zip("ABCDEFGH", nums) if n is not None}, " | ".join(cells), {"table": ti, "row": ri})
+                    if malformed:
+                        row["malformedPrinted"] = malformed
+                    rows.append(row)
     elif kind == "west-northants":
         soup = BeautifulSoup(text, "html.parser")
         data = json.loads(soup.find("script", id="__NEXT_DATA__").string)
@@ -300,13 +310,24 @@ def audit(council, review, national):
             assert parish is None
             parish_amount = 0
             row["areaType"] = review.get("areaTypes", {}).get(row["name"], "unparished or special expense area")
+        # Councils round each charge to the penny at every band and add them up, so a band
+        # total can differ from 6/9 of the D total. With n separately rounded charges the
+        # difference is at most floor(n/2) pence: n counts each non zero major part, the
+        # council's basic amount, its special expense, and the parish precept unless the
+        # area is known to have none.
+        charges = sum(1 for p in majors if p["bandDPence"]) + 2 + (0 if parish_amount == 0 else 1)
+        tolerance = charges // 2
         row["checks"] = {
             "bandAMinusRoundedSixNinthsDPence": None if "A" not in row["bandsPence"] else row["bandsPence"]["A"]-rounded_ratio(row["bandsPence"]["D"], 6),
+            "separatelyRoundedCharges": charges,
+            "roundingTolerancePence": tolerance,
             "parishBandDPence": parish_amount,
             "majorsBandDPence": major_total,
             "residualPence": None if parish_amount is None else row["bandsPence"]["D"]-parish_amount-major_total,
         }
-        if row["checks"]["bandAMinusRoundedSixNinthsDPence"]:
+        for band, printed in row.get("malformedPrinted", {}).items():
+            discrepancies.append({"name": row["name"], "check": f"invalid printed Band {band}", "quote": printed})
+        if abs(row["checks"]["bandAMinusRoundedSixNinthsDPence"] or 0) > tolerance:
             discrepancies.append({"name": row["name"], "check": "A/D", "differencePence": row["checks"]["bandAMinusRoundedSixNinthsDPence"]})
         # Additional large discrepancies cannot be silently accepted just because A and D agree.
         for band, numerator in zip("BCEFGH", [7, 8, 11, 13, 15, 18]):
@@ -377,20 +398,20 @@ def report(results, councils, national):
              f"The national table has 49 councils with positive special expenses. Exactly 48 have parish rows, covering {sum(c['parishCount'] for c in councils):,} MHCLG rows. Camden is the one without parishes.", "",
              f"**Fully held: {counts['held']}. Held with gaps: {counts['held with gaps']}. Inconsistent: {counts['inconsistent']}. Not found: {counts['not found']}.** There are {files} canonical schedule files with {sum(r['acceptedAreaCount'] for r in results)} accepted area totals. A raw schedule is held for {sum(r['sourceAreaCount'] > 0 for r in results)} councils, containing {sum(r['sourceAreaCount'] for r in results):,} decoded areas.", "",
              "`held` means every decoded area passes the required checks and every MHCLG parish row is mapped. `held with gaps` means a raw schedule is held but some mapping or reconciliation work remains. Only individually reconciled rows enter a canonical file. Some councils in this category have no canonical file. `inconsistent` means at least one requested check fails, or a printed value is malformed: the whole council is excluded. `not found` includes identified links that could not be retrieved, security challenges and pages without a usable locality total table. It does not claim the council publishes no schedule.", "",
-             "A/D is checked against six ninths of D, rounded half up to the nearest penny. Even a 1p difference fails this requested gate. Summing separately rounded components can explain small differences, so this status does not by itself establish an error by the council. No source value is corrected. Other printed bands are preserved; differences greater than 5p against the corresponding D ratio are additionally flagged.", "",
+             "A/D is checked against six ninths of D, rounded half up to the nearest penny. A council rounds each charge to the penny at every band and adds them, so its Band A total can differ from six ninths of its Band D total. With n separately rounded charges the difference is at most n/2 pence, rounded down: n counts each non zero major part, the council's basic amount, its special expense, and the parish precept unless the area is known to have none (usually 5 or 6 charges, so 2p or 3p). A difference within that bound is recorded as rounding; a larger one fails, as does a printed amount that is not well formed money (for example `£1,727,88`). This rule replaced an exact penny gate on 15 November 2026, which had failed 16 councils on rounding alone. No source value is corrected. Other printed bands are preserved; differences greater than 5p against the corresponding D ratio are additionally flagged.", "",
              "Residual means the printed full D total less the unchanged MHCLG parish D and the sum of Table 10 major parts. A pass also requires a common basic amount and independently evidenced local special expenses. Unknown parish mappings remain unresolved, never zero. Source coverage counts mapped MHCLG codes, including codes whose rows are excluded by a later check. Each canonical file separately lists every parish code absent from its accepted rows.", "",
-             "| Council | Status | Council source | Areas parsed / accepted | A/D pass / fail / not printed | Residual pass / fail / unresolved | MHCLG source coverage |",
+             "| Council | Status | Council source | Areas parsed / accepted | A/D exact / rounding / fail / not printed | Residual pass / fail / unresolved | MHCLG source coverage |",
              "| :--- | :--- | :--- | :--- | :--- | :--- | :--- |"]
     for r, c in zip(results, councils):
-        ad = Counter("not printed" if a["checks"]["bandAMinusRoundedSixNinthsDPence"] is None else ("fail" if a["checks"]["bandAMinusRoundedSixNinthsDPence"] else "pass") for a in r["areas"])
+        ad = Counter("not printed" if a["checks"]["bandAMinusRoundedSixNinthsDPence"] is None else ("pass" if not a["checks"]["bandAMinusRoundedSixNinthsDPence"] else ("rounding" if abs(a["checks"]["bandAMinusRoundedSixNinthsDPence"]) <= a["checks"]["roundingTolerancePence"] else "fail")) for a in r["areas"])
         residual = Counter(a["checks"]["basicAndExpense"] for a in r["areas"])
         url = r["sources"][0]["url"] if r["sources"] else c.get("candidateUrl", c.get("landingUrl"))
         source = f"[{'schedule' if r['sourceAreaCount'] else 'candidate'}]({url})" if url else "No council source located"
-        ad_text = f"{ad['pass']} / {ad['fail']} / {ad['not printed']}" if r["sourceAreaCount"] else "not run"
+        ad_text = f"{ad['pass']} / {ad['rounding']} / {ad['fail']} / {ad['not printed']}" if r["sourceAreaCount"] else "not run"
         residual_text = f"{residual['pass']} / {residual['fail']} / {residual['unresolved']}" if r["sourceAreaCount"] else "not run"
         lines.append(f"| {r['name']} | {r['status']} | {source} | {r['sourceAreaCount']} / {r['acceptedAreaCount']} | {ad_text} | {residual_text} | {c['parishCount']-len(r['missingParishes'])} / {c['parishCount']} |")
     lines.extend(["", "## Review notes", "",
-                  "Chorley is excluded in full. Its raw web table prints Bretherton D as £2,224.72 while A implies £2,442.72. Hoghton differs by 20p in A, equivalent to 30p at D. Neither value is corrected. Rushcliffe also fails, including a 39p A discrepancy at East Leake. Forest of Dean prints Taynton H with an invalid decimal separator; 40 other rows decode, but the council is excluded in full.", "",
+                  "Chorley is excluded in full. Its raw web table prints Bretherton D as £2,224.72 while A implies £2,442.72. Hoghton differs by 20p in A, equivalent to 30p at D. Neither value is corrected. Rushcliffe also fails: a 39p A discrepancy at East Leake, £1.00 at C in Flawborough, and Stanton-on-the-Wolds printed at A as `£1,727,88`. Hertsmere prints Bushey, Meriden and Potters Bar at B as £1,883.39 while its printed parts sum to £1,833.39. Oxford prints Risinghurst and Sandhills at B as `£2,103.2`. Telford and Wrekin (several rows) and Buckinghamshire (West Wycombe) differ by 3p at A, beyond the rounding bound. Forest of Dean prints Taynton H with an invalid decimal separator; 40 other rows decode, but the council is excluded in full.", "",
                   "North Kesteven prints D only. Its component sum check finds discrepancies despite the absence of an A/D comparison. The guide's year heading and introductory date also disagree. These issues are recorded verbatim in the evidence and nothing is corrected.", ""])
     for r in results:
         if r["note"]:
@@ -398,7 +419,7 @@ def report(results, councils, national):
     digest = hashlib.sha256((ROOT / "data/national/england.json").read_bytes()).hexdigest()
     lines.extend(["", "## Provenance and replay", "",
                   "The source register is `docs/towns-research/schedules-sources.json`. Each held document has its URL, landing URL, council publisher, retrieval date and SHA256. Raw originals retain their bytes, including the publisher's punctuation. Where a separate landing page was not located, the direct document URL is explicitly used as the landing URL. Sources are on council domains only.", "",
-                  "The unchanged pre-commit hook flagged embedded script keys in seven HTML downloads. Their originals remain local at the recorded `originalFile` paths. The committed `.evidence.html` copies omit executable script elements only and retain all other bytes. `originalSha256` identifies the original download; `sha256` identifies the archived evidence. Local extraction before and after removing scripts returned identical locality rows. Replay also verifies this byte transformation whenever the local original exists. A fresh checkout verifies the archived evidence and replays all checks without requiring those uncommitted scripts. No hook setting, allowlist or bypass was used.", "",
+                  "Raw files are kept under `data/raw/schedules/`, which is gitignored as for every importer in this repository; the committed record is the source register with every SHA256, the audit and the canonical files. The replay and `tests/towns-schedules.test.ts` check each raw file against its pinned hash wherever it is present. For seven HTML downloads whose embedded scripts carry site keys, the replay reads an `.evidence.html` copy with only the script elements removed, and verifies that transformation against the original's `originalSha256`. Local extraction before and after removing scripts returned identical locality rows.", "",
                   "`docs/towns-research/schedules-review.json` records parser bounds, reviewed name mappings, quoted component evidence and money-token selectors. Exact matching is within the same council. Reviewed punctuation variants require a unique council-local match. Group members keep their own MHCLG amounts; zero-valued member rows are never replaced with the carrier's amount. Unresolved aliases are listed as missing.", "",
                   "`docs/towns-research/schedules-audit.json` contains every decoded row, raw quote, locator, unchanged band values, Table 10 major parts, residual, discrepancy and missing parish code. Quotes come from saved HTML or Poppler text extraction of the saved PDF, never search summaries. A small number of source names and quotes contain prohibited punctuation: these are stored losslessly as fragments and separator Unicode code points. Interleave each separator between its adjacent fragments to recover the exact source string. This encoding changes no amount or spelling.", "",
                   f"National input SHA256: `{digest}`.", "",
@@ -425,10 +446,15 @@ def main():
         if accepted:
             eligible_codes = {r["parishCode"] for r in accepted if r["parishCode"]}
             output_missing = [{"code": p["code"], "name": p["name"], "reason": "No accepted mapped source row; see the audit for mapping or reconciliation gaps"} for p in national["parishes"] if p["gss"] == result["gss"] and p["code"] not in eligible_codes]
+            unparished = set(reviews[result["slug"]].get("unparished", []))
+            areas = [{"name": r["name"], "kind": "unparished" if r["name"] in unparished else "parish",
+                      "mhclgCode": r["parishCode"], "includesCharterTrustee": False,
+                      "bandDPence": r["bandDPence"], "bandsPence": r["bandsPence"], "quoted": r["quote"],
+                      **{k: v for k, v in r.items() if k not in ("name", "parishCode", "bandDPence", "bandsPence", "quote")}} for r in accepted]
             paths[f"data/towns/schedules/{result['slug']}-{YEAR}.json"] = {
-                "schemaVersion": 1, "gss": result["gss"], "slug": result["slug"], "name": result["name"],
+                "schemaVersion": 2, "council": {"gss": result["gss"], "slug": result["slug"], "name": result["name"]},
                 "year": YEAR, "basis": "published locality total", "status": result["status"],
-                "sources": result["sources"], "supplements": result["supplements"], "areas": accepted,
+                "source": result["sources"][0], "sources": result["sources"], "supplements": result["supplements"], "areas": areas,
                 "missingParishes": output_missing,
                 "excludedAreas": [r["name"] for r in result["areas"] if r not in accepted],
             }

@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-import {readFileSync, readdirSync} from 'node:fs';
+import {existsSync, readFileSync, readdirSync} from 'node:fs';
 import {describe, expect, it} from 'vitest';
 
 const read = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
@@ -9,11 +9,12 @@ const schedules = readdirSync('data/towns/schedules').filter(f => f.endsWith('.j
 const ratio = (pence: number) => Math.floor((pence * 6 + 4.5) / 9);
 
 describe('council locality schedules', () => {
-  it('pins every archived source while the separate uv script replays extraction', () => {
+  it('pins every source hash; raw files are local, as for every importer, and checked when present', () => {
     const register = read('docs/towns-research/schedules-sources.json');
     for (const council of register) {
       for (const source of [...council.sources, ...(council.supplements ?? [])]) {
-        expect(createHash('sha256').update(readFileSync(source.file)).digest('hex'), source.file).toBe(source.sha256);
+        expect(source.sha256).toMatch(/^[0-9a-f]{64}$/);
+        if (existsSync(source.file)) expect(createHash('sha256').update(readFileSync(source.file)).digest('hex'), source.file).toBe(source.sha256);
         expect(new URL(source.url).hostname).toMatch(/\.gov\.uk$/);
         expect(source.publisher).toBeTruthy();
         expect(source.retrieved).toBe('2026-11-15');
@@ -37,23 +38,49 @@ describe('council locality schedules', () => {
     const hoghton = chorley.areas.find((a: any) => a.name === 'Hoghton');
     expect(hoghton.checks.bandAMinusRoundedSixNinthsDPence).toBe(-20);
     for (const council of audit.filter((c: any) => c.status === 'inconsistent' || c.status === 'not found')) {
-      expect(schedules.some(s => s.gss === council.gss), council.slug).toBe(false);
+      expect(schedules.some(s => s.council.gss === council.gss), council.slug).toBe(false);
+    }
+  });
+
+  it('treats band differences within separately rounded charges as rounding, and nothing larger', () => {
+    for (const council of audit) for (const area of council.areas) {
+      const diff = area.checks.bandAMinusRoundedSixNinthsDPence;
+      if (diff === null || Math.abs(diff) <= area.checks.roundingTolerancePence) continue;
+      expect(council.status, `${council.slug} ${area.name}`).toBe('inconsistent');
+    }
+    expect(audit.find((c: any) => c.slug === 'east-riding-of-yorkshire').status).toBe('held with gaps');
+    const rushcliffe = audit.find((c: any) => c.slug === 'rushcliffe');
+    expect(rushcliffe.status).toBe('inconsistent');
+    expect(rushcliffe.discrepancies).toContainEqual({name: 'Stanton-on-the-Wolds', check: 'invalid printed Band A', quote: '£1,727,88'});
+    expect(rushcliffe.areas.find((a: any) => a.name === 'Stanton-on-the-Wolds').bandsPence.A).toBeUndefined();
+  });
+
+  it('writes schedule files in the shape scripts/import-towns.mjs reads', () => {
+    for (const schedule of schedules) {
+      expect(schedule.council.gss).toMatch(/^E0[6-9]\d{6}$/);
+      expect(schedule.source.sha256).toMatch(/^[0-9a-f]{64}$/);
+      for (const area of schedule.areas) {
+        expect(['parish', 'unparished']).toContain(area.kind);
+        expect(area.kind === 'parish' ? typeof area.mhclgCode : area.mhclgCode).toBe(area.kind === 'parish' ? 'string' : null);
+        expect(typeof area.quoted === 'string' || Array.isArray(area.quotedFragments)).toBe(true);
+        expect(area.includesCharterTrustee).toBe(false);
+      }
     }
   });
 
   it('reconciles accepted rows using the original national amounts and accounts for every missing code', () => {
     for (const schedule of schedules) {
-      const parishes = national.parishes.filter((p: any) => p.gss === schedule.gss);
-      const majors = national.components[schedule.gss].parts.reduce((sum: number, p: any) => sum + p.bandDPence, 0);
+      const parishes = national.parishes.filter((p: any) => p.gss === schedule.council.gss);
+      const majors = national.components[schedule.council.gss].parts.reduce((sum: number, p: any) => sum + p.bandDPence, 0);
       const covered = new Set<string>();
       expect(new Set(schedule.areas.map((a: any) => a.checks.basicPence)).size).toBe(1);
       for (const area of schedule.areas) {
         expect(area.bandDPence).toBe(area.bandsPence.D);
-        expect(area.bandsPence.A).toBe(ratio(area.bandDPence));
-        const parish = parishes.find((p: any) => p.code === area.parishCode);
-        if (area.parishCode) {
+        expect(Math.abs(area.bandsPence.A - ratio(area.bandDPence))).toBeLessThanOrEqual(area.checks.roundingTolerancePence);
+        const parish = parishes.find((p: any) => p.code === area.mhclgCode);
+        if (area.mhclgCode) {
           expect(parish).toBeTruthy();
-          covered.add(area.parishCode);
+          covered.add(area.mhclgCode);
         }
         const charge = parish ? parish.years['2026-27'].bandDPence : 0;
         expect(area.bandDPence).toBe(majors + charge + area.checks.basicPence + area.checks.specialExpensePence);

@@ -1,11 +1,22 @@
 {
-  "schemaVersion": 1,
-  "gss": "E07000172",
-  "slug": "broxtowe",
-  "name": "Broxtowe",
+  "schemaVersion": 2,
+  "council": {
+    "gss": "E07000172",
+    "slug": "broxtowe",
+    "name": "Broxtowe"
+  },
   "year": "2026-27",
   "basis": "published locality total",
   "status": "held with gaps",
+  "source": {
+    "url": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+    "landingUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+    "publisher": "Broxtowe Borough Council",
+    "retrieved": "2026-11-15",
+    "sha256": "ebfb062b869f6841fb9720076c101defa9c34defebc54043a1a6a6252c51d654",
+    "file": "data/raw/schedules/broxtowe-2026-27.pdf",
+    "finalUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf"
+  },
   "sources": [
     {
       "url": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
@@ -30,6 +41,9 @@
   "areas": [
     {
       "name": "Parish of Awsworth",
+      "kind": "parish",
+      "mhclgCode": "E3033P001",
+      "includesCharterTrustee": false,
       "bandDPence": 273779,
       "bandsPence": {
         "A": 182519,
@@ -41,7 +55,7 @@
         "G": 456298,
         "H": 547558
       },
-      "quote": "Parish of Awsworth 1,825.19 2,129.40 2,433.59 2,737.79 3,346.18 3,954.59 4,562.98 5,475.58",
+      "quoted": "Parish of Awsworth 1,825.19 2,129.40 2,433.59 2,737.79 3,346.18 3,954.59 4,562.98 5,475.58",
       "locator": {
         "line": 47
       },
@@ -49,9 +63,10 @@
         "code": "E3033P001",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P001",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 15574,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -68,6 +83,9 @@
     },
     {
       "name": "Parish of Brinsley",
+      "kind": "parish",
+      "mhclgCode": "E3033P002",
+      "includesCharterTrustee": false,
       "bandDPence": 270357,
       "bandsPence": {
         "A": 180238,
@@ -79,7 +97,7 @@
         "G": 450595,
         "H": 540714
       },
-      "quote": "Parish of Brinsley 1,802.38 2,102.78 2,403.17 2,703.57 3,304.36 3,905.16 4,505.95 5,407.14",
+      "quoted": "Parish of Brinsley 1,802.38 2,102.78 2,403.17 2,703.57 3,304.36 3,905.16 4,505.95 5,407.14",
       "locator": {
         "line": 48
       },
@@ -87,9 +105,10 @@
         "code": "E3033P002",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P002",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 12152,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -106,6 +125,9 @@
     },
     {
       "name": "Parish of Cossall",
+      "kind": "parish",
+      "mhclgCode": "E3033P003",
+      "includesCharterTrustee": false,
       "bandDPence": 264529,
       "bandsPence": {
         "A": 176353,
@@ -117,7 +139,7 @@
         "G": 440882,
         "H": 529058
       },
-      "quote": "Parish of Cossall 1,763.53 2,057.45 2,351.37 2,645.29 3,233.13 3,820.98 4,408.82 5,290.58",
+      "quoted": "Parish of Cossall 1,763.53 2,057.45 2,351.37 2,645.29 3,233.13 3,820.98 4,408.82 5,290.58",
       "locator": {
         "line": 49
       },
@@ -125,9 +147,10 @@
         "code": "E3033P003",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P003",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 6324,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -144,6 +167,9 @@
     },
     {
       "name": "Parish of Eastwood",
+      "kind": "parish",
+      "mhclgCode": "E3033P004",
+      "includesCharterTrustee": false,
       "bandDPence": 265206,
       "bandsPence": {
         "A": 176804,
@@ -155,7 +181,7 @@
         "G": 442010,
         "H": 530412
       },
-      "quote": "Parish of Eastwood 1,768.04 2,062.72 2,357.38 2,652.06 3,241.40 3,830.76 4,420.10 5,304.12",
+      "quoted": "Parish of Eastwood 1,768.04 2,062.72 2,357.38 2,652.06 3,241.40 3,830.76 4,420.10 5,304.12",
       "locator": {
         "line": 50
       },
@@ -163,9 +189,10 @@
         "code": "E3033P004",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P004",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 7001,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -182,6 +209,9 @@
     },
     {
       "name": "Parish of Greasley",
+      "kind": "parish",
+      "mhclgCode": "E3033P005",
+      "includesCharterTrustee": false,
       "bandDPence": 264300,
       "bandsPence": {
         "A": 176200,
@@ -193,7 +223,7 @@
         "G": 440500,
         "H": 528600
       },
-      "quote": "Parish of Greasley 1,762.00 2,055.67 2,349.33 2,643.00 3,230.33 3,817.67 4,405.00 5,286.00",
+      "quoted": "Parish of Greasley 1,762.00 2,055.67 2,349.33 2,643.00 3,230.33 3,817.67 4,405.00 5,286.00",
       "locator": {
         "line": 51
       },
@@ -201,9 +231,10 @@
         "code": "E3033P005",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P005",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 6095,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -220,6 +251,9 @@
     },
     {
       "name": "Parish of Kimberley",
+      "kind": "parish",
+      "mhclgCode": "E3033P006",
+      "includesCharterTrustee": false,
       "bandDPence": 266101,
       "bandsPence": {
         "A": 177401,
@@ -231,7 +265,7 @@
         "G": 443502,
         "H": 532202
       },
-      "quote": "Parish of Kimberley 1,774.01 2,069.68 2,365.34 2,661.01 3,252.34 3,843.68 4,435.02 5,322.02",
+      "quoted": "Parish of Kimberley 1,774.01 2,069.68 2,365.34 2,661.01 3,252.34 3,843.68 4,435.02 5,322.02",
       "locator": {
         "line": 52
       },
@@ -239,9 +273,10 @@
         "code": "E3033P006",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P006",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 7896,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -258,6 +293,9 @@
     },
     {
       "name": "Parish of Nuthall",
+      "kind": "parish",
+      "mhclgCode": "E3033P007",
+      "includesCharterTrustee": false,
       "bandDPence": 263659,
       "bandsPence": {
         "A": 175773,
@@ -269,7 +307,7 @@
         "G": 439432,
         "H": 527318
       },
-      "quote": "Parish of Nuthall 1,757.73 2,050.68 2,343.63 2,636.59 3,222.50 3,808.41 4,394.32 5,273.18",
+      "quoted": "Parish of Nuthall 1,757.73 2,050.68 2,343.63 2,636.59 3,222.50 3,808.41 4,394.32 5,273.18",
       "locator": {
         "line": 53
       },
@@ -277,9 +315,10 @@
         "code": "E3033P007",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P007",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 5454,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -296,6 +335,9 @@
     },
     {
       "name": "Parish of Stapleford",
+      "kind": "parish",
+      "mhclgCode": "E3033P008",
+      "includesCharterTrustee": false,
       "bandDPence": 263914,
       "bandsPence": {
         "A": 175943,
@@ -307,7 +349,7 @@
         "G": 439857,
         "H": 527828
       },
-      "quote": "Parish of Stapleford 1,759.43 2,052.67 2,345.90 2,639.14 3,225.61 3,812.09 4,398.57 5,278.28",
+      "quoted": "Parish of Stapleford 1,759.43 2,052.67 2,345.90 2,639.14 3,225.61 3,812.09 4,398.57 5,278.28",
       "locator": {
         "line": 54
       },
@@ -315,9 +357,10 @@
         "code": "E3033P008",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P008",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 5709,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -334,6 +377,9 @@
     },
     {
       "name": "Parish of Trowell",
+      "kind": "parish",
+      "mhclgCode": "E3033P010",
+      "includesCharterTrustee": false,
       "bandDPence": 269148,
       "bandsPence": {
         "A": 179432,
@@ -345,7 +391,7 @@
         "G": 448580,
         "H": 538296
       },
-      "quote": "Parish of Trowell 1,794.32 2,093.38 2,392.42 2,691.48 3,289.58 3,887.70 4,485.80 5,382.96",
+      "quoted": "Parish of Trowell 1,794.32 2,093.38 2,392.42 2,691.48 3,289.58 3,887.70 4,485.80 5,382.96",
       "locator": {
         "line": 55
       },
@@ -353,9 +399,10 @@
         "code": "E3033P010",
         "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
       },
-      "parishCode": "E3033P010",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 6,
+        "roundingTolerancePence": 3,
         "parishBandDPence": 10943,
         "majorsBandDPence": 238344,
         "residualPence": 19861,
@@ -372,6 +419,9 @@
     },
     {
       "name": "Beeston Special Expense Area",
+      "kind": "unparished",
+      "mhclgCode": null,
+      "includesCharterTrustee": false,
       "bandDPence": 258352,
       "bandsPence": {
         "A": 172235,
@@ -383,14 +433,15 @@
         "G": 430587,
         "H": 516704
       },
-      "quote": "Beeston Special Expense Area 1,722.35 2,009.41 2,296.46 2,583.52 3,157.63 3,731.75 4,305.87 5,167.04",
+      "quoted": "Beeston Special Expense Area 1,722.35 2,009.41 2,296.46 2,583.52 3,157.63 3,731.75 4,305.87 5,167.04",
       "locator": {
         "line": 56
       },
-      "parishCode": null,
       "areaType": "unparished or special expense area",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 5,
+        "roundingTolerancePence": 2,
         "parishBandDPence": 0,
         "majorsBandDPence": 238344,
         "residualPence": 20008,
@@ -411,6 +462,9 @@
     },
     {
       "name": "All other parts of the Council’s area",
+      "kind": "unparished",
+      "mhclgCode": null,
+      "includesCharterTrustee": false,
       "bandDPence": 258205,
       "bandsPence": {
         "A": 172137,
@@ -422,14 +476,15 @@
         "G": 430342,
         "H": 516410
       },
-      "quote": "All other parts of the Council’s area 1,721.37 2,008.26 2,295.15 2,582.05 3,155.84 3,729.63 4,303.42 5,164.10",
+      "quoted": "All other parts of the Council’s area 1,721.37 2,008.26 2,295.15 2,582.05 3,155.84 3,729.63 4,303.42 5,164.10",
       "locator": {
         "line": 57
       },
-      "parishCode": null,
       "areaType": "residual district area with no separately charged parish or special item",
       "checks": {
         "bandAMinusRoundedSixNinthsDPence": 0,
+        "separatelyRoundedCharges": 5,
+        "roundingTolerancePence": 2,
         "parishBandDPence": 0,
         "majorsBandDPence": 238344,
         "residualPence": 19861,

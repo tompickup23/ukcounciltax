@@ -1,4 +1,5 @@
 import {expect, test} from '@playwright/test';
+import {band, levelsDayRoutes} from './helpers/current';
 
 test.beforeEach(async ({page}) => {
   await page.route('https://static.cloudflareinsights.com/**', route => route.abort());
@@ -54,10 +55,11 @@ test('pickers restrict the second council and support filtered selection', async
   await page.locator('[data-chooser-matches="b"] [data-compare-choice="pendle"]').click();
   await page.getByLabel('Band', {exact:true}).selectOption('A');
   await page.getByRole('button', {name: 'Compare', exact:true}).click();
-  await expect(page.locator('[data-result-side="a"]')).toContainText('£1,699.61');
+  // No year chosen: the comparison opens on the current year.
+  await expect(page.locator('[data-result-side="a"]')).toContainText(band('E07000117', 'A'));
   await expect(page.locator('[data-comparison-link]')).toHaveAttribute('href', /band=A/);
   await page.reload();
-  await expect(page.locator('[data-result-side="a"]')).toContainText('£1,699.61');
+  await expect(page.locator('[data-result-side="a"]')).toContainText(band('E07000117', 'A'));
 });
 
 for (const query of ['a=burnley&b=manchester', 'a=burnley&b=burnley', 'a=unknown&b=pendle', 'a=burnley&b=pendle&year=2030-31', 'a=burnley&b=pendle&band=Z']) {
@@ -138,7 +140,8 @@ test('metadata separates publisher from the council and retains dated sitemap en
   const sitemap = await (await request.get('/sitemap.xml')).text();
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)];
   // The 197 public set pages join the existing 909 sitemap entries.
-  expect(entries).toHaveLength(1106);
+  // C6 adds the levels day page and precept day from 2027-28.
+  expect(entries).toHaveLength(1106 + levelsDayRoutes().length);
   for (const entry of entries) expect(entry[1]).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   expect(sitemap).toContain('/compare/</loc>');
   expect(sitemap).not.toContain('?a=');

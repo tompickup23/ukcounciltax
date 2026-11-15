@@ -1,5 +1,4 @@
 import {readFileSync} from 'node:fs';
-import {join} from 'node:path';
 import {CURRENT_YEAR,precedingYear} from './council-tax';
 import {nationalPath} from './edition.mjs';
 export interface NationalSource {publisher:string;title:string;url:string;fileUrl:string;sha256:string;retrieved:string;tables:string[];precision:string;licence:string}

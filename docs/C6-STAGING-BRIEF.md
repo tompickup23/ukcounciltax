@@ -181,14 +181,16 @@ Shown only when the budget edition is older than `CURRENT_YEAR`, under the sourc
 
 "Expected" is there because MHCLG has not announced the RA 2027/28 date. RA 2026/27 is recorded in `sources.json` (`raPart1`) as published on 11 June 2026.
 
-## 8. Decisions for Tom
+## 8. Decisions taken by Tom, 15 November 2026
 
-1. **The line's wording** (section 7), and whether the budget game pages (`/tools/budget/<slug>/`) should carry it too. Default: set pages only, as plan 10.2 item 7 says.
-2. **`YEARS` after the switch** holds four years, 2024/25 to 2027/28, because it lists every year held. `/compare/` and `/increases/` gain a year. Default: keep every year held; the alternative is a three year window.
-3. **The authorities for 2027/28** (section 2, release risks). Establish before the freeze whether any council is created, abolished or recoded on 1 April 2027, with two sources. If any is, a short code pull request is needed for the places that assume 296, before release day.
-4. **The levels day page at the old not yet set address**, rather than a 301 to `/increases/#2027-28`. Default: the page, as built.
-5. **The embed.** K3 said "not now" to framed embeds with `/embed/` routes. This snippet is an image inside a link and needs no frame and no header change; the assessment's C6 row asks for it. Default: keep it.
-6. **Burnley's schedule before its 2027/28 file lands**: shown under its own year (as built), or hidden. Default: shown.
+Tom took all six on 15 November 2026, with decision D11 option (a): merge this PR before the budget redesign (W1 to W3). Every choice is the default as built, so no code or copy changed for them.
+
+1. **The line's wording** (section 7): as written, on the set pages (`/tools/budget/<slug>/set/`) only. The budget game pages do not carry it.
+2. **`YEARS` after the switch** keeps every year held: four years, 2024/25 to 2027/28. `/compare/` and `/increases/` gain a year.
+3. **The authorities for 1 April 2027** are settled before the freeze in a separate pull request, with two sources. This PR makes no statement about them. If any council is created, abolished or recoded, that PR also covers the places that assume 296.
+4. **The levels day page** stays at `/council-tax-2027-28/`, not a 301 to `/increases/#2027-28`.
+5. **The embed snippet** (an image inside a link, no frame, no header change) is kept.
+6. **Burnley's schedule** before its 2027/28 file lands is shown under its own year.
 
 ## 9. Verification
 

@@ -117,3 +117,29 @@ Thirty four worktrees for merged branches were removed across the two sites, whi
 
 A session that writes code commits and pushes it to a branch, as a draft pull request if it is not for review, before any archive step. The C2 pilot survived an archive only as a tool's snapshot (`refs/codex/snapshots` in the local repository). When work seems to be missing, look there and in Codex's archived session logs before concluding it was never done.
 
+
+## 7. Update, 15 November 2026
+
+Written after the review of the three Codex sessions of 14 November. Where this differs from section 6, this section is the later record.
+
+### 7.1 Landed
+
+PR 78 (NV8 England map) merged as `c20533b`; estate-kit PR 26 (compact RankedBars) merged as `8b04278` and tagged `v0.6.3`.
+
+### 7.2 Decisions from the review
+
+1. **C2 own share.** Kept, with its bound derived from printed precision: half a thousand pounds each on total and parish, their sum on own share. The earlier half a thousand bound on own share excluded 22 councils by combining two passing checks.
+2. **Official names.** Fixed at source in UK Places from GOV.UK Local Links Manager (D1, 9 November), not patched on either site and not replaced by an interim label. UK Councils PR 57 lands with the registry refresh.
+
+### 7.3 Efficiency changes to the order of work
+
+- The tax site's kit adoption no longer waits for C2: it shares no file with PR 80 and runs now, beside the fix pass.
+- Session B's prompt is written now, so it can start the day PR 80 merges.
+- Items 1b and 1c of the reorganisation brief run as one prompt, and PR 57 folds into 1b: one number diff instead of two on UK Councils.
+- The fix pass writes year and referendum text from data, so session B inherits no hard coded year before levels day.
+
+### 7.4 Sequence
+
+| Now, in parallel | Next | Then |
+|---|---|---|
+| PR 80 fix pass (Codex); UK Places names (Codex); kit 0.6.3 and PR 81 review (Opus) | Session B after PR 80; registry refresh after UK Places deploys; gates pack after PR 80 | C6 levels day staging in January; NV11 once decided |

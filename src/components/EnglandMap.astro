@@ -22,6 +22,17 @@ const source = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.band
     </ChartActions>
   </div>
 </details>
+<script>
+  // A link to /council-tax/#map opens the map rather than landing on its closed summary. Without script the summary is still the target.
+  const openMap = () => {
+    if (window.location.hash !== "#map") return;
+    const map = document.getElementById("map");
+    if (map instanceof HTMLDetailsElement) map.open = true;
+  };
+  openMap();
+  window.addEventListener("hashchange", openMap);
+</script>
+
 <style>
   .boundary-credit { margin: 0.35rem 0 0; font-size: 0.82rem; color: var(--text-faint); line-height: 1.45; }
   .boundary-credit a { color: var(--text-faint); }

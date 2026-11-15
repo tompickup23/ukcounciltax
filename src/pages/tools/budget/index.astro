@@ -21,7 +21,7 @@ const setCount = Object.values(setLinks).filter(Boolean).length;
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
   <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Find your council and play its budget game, or follow <strong>Set the budget</strong> in its row to set the budget yourself.</p></header>
   <div id="set-the-budget" class="hub-start">
-  <CouncilPicker id="budget-picker" action={{heading: 'Set mode', links: setLinks, missing: 'Not available'}} rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+  <CouncilPicker id="budget-picker" action={{heading: 'Set mode', links: setLinks, missing: 'Not available'}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
   </div>
   <section class="section" aria-labelledby="about-budgets">
     <h2 id="about-budgets">About these budgets</h2>

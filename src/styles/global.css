@@ -420,7 +420,7 @@ table.data { border-collapse: separate; border-spacing: 0; }
 table.data thead th { position: sticky; top: 0; z-index: 2; }
 table.data tbody th:first-child { position: sticky; left: 0; background: var(--bg-card); z-index: 1; min-width: 8rem; max-width: 13rem; }
 /* The sticky row header is opaque so scrolled cells pass under it; on a striped row it takes the same stripe, mixed onto the card, so the stripe runs the full width (W0). */
-table.data tbody tr:nth-child(even) th:first-child { background: color-mix(in srgb, var(--bg-subtle) 55%, var(--bg-card)); }
+table.data:not(.picker-table) tbody tr:nth-child(even) th:first-child { background: color-mix(in srgb, var(--bg-subtle) 55%, var(--bg-card)); }
 /* A table of 30 rows or fewer sits in the page in full: the scroll box is for long tables only (W0). */
 .table-wrap:not(:has(tbody tr:nth-child(31))) { max-height: none; }
 table.data thead th:first-child { left: 0; z-index: 3; }

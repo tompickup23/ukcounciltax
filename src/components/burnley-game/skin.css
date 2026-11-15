@@ -12,3 +12,4 @@ body > .tip{font-family:var(--font-sans);font-size:.82rem;font-weight:600;line-h
 body:has(.burnley-game .meter:not([hidden])){padding-bottom:110px}
 /* The site's h1, h2 and h3 colour would otherwise beat the hero ink the headline inherits, leaving it near black on the dark hero. */
 .burnley-game .hero h1,.burnley-game .hero h2,.burnley-game .hero h3{color:var(--hero-ink)}
+@media print{.burnley-game .hero h1,.burnley-game .hero h2,.burnley-game .hero h3{color:inherit}}

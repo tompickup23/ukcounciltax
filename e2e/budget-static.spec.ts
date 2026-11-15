@@ -153,4 +153,14 @@ test('the homepage, tools hub and budget hub show both ways into a council budge
   }
   await page.goto('/tools/budget/#set-the-budget');
   await expect(page.locator('#set-the-budget [data-picker-input]')).toBeInViewport();
+  // From the set door, a name answer focuses the council's set mode link, not its game.
+  await page.locator('[data-picker-input]').fill('Leeds');
+  await page.locator('[data-picker-submit]').click();
+  await expect(page.locator(':focus')).toHaveAttribute('href', '/tools/budget/leeds/set/');
+  await page.goto('/tools/budget/');
+  await page.locator('[data-picker-input]').fill('Leeds');
+  await page.locator('[data-picker-submit]').click();
+  await expect(page.locator(':focus')).toHaveAttribute('href', '/tools/budget/leeds/');
+  await page.goto('/council-tax/#map');
+  await expect(page.locator('details#map')).toHaveAttribute('open', '');
 });

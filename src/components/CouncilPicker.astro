@@ -50,6 +50,8 @@ interface Props {
   figure?: Figure;
   /** A second link per row. Leave it out to print none. */
   action?: Action;
+  /** When the page is opened at this fragment, a postcode or name answer opens the row's action link where it has one. */
+  actionHash?: string;
   /** The heading over the rows that sort to the end, when any are marked. */
   tailHeading?: string;
   /** What the box says about a postcode outside the rows. */
@@ -63,6 +65,7 @@ const {
   label = "Postcode or council name",
   figure,
   action,
+  actionHash,
   tailHeading,
   outside = "That postcode is not in a council listed here.",
 } = Astro.props;
@@ -74,7 +77,7 @@ const extraTypes = [...new Set(rows.map((row) => row.type))].filter((type) => ty
 const types = [...pickerTypes(rows), ...extraTypes.map((type) => ({ label: type, value: slugify(type) }))];
 const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
 ---
-<section class="council-picker" data-council-picker data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
+<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
   <form class="picker-controls" role="search" data-picker-form novalidate>
     <div class="picker-box">
       <label class="picker-label" for={`${id}-q`}>{label}</label>
@@ -121,7 +124,7 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
                   <td class="wide-only" data-cell="region">{row.region}</td>
                   <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>
                   {figure && <td class="num">{value ? <span data-figure>{value.text}</span> : <span class="muted">{figure.missing}</span>}</td>}
-                  {action && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} data-picker-action>{action.links[row.gss]!.text}<span class="visually-hidden">: {row.name}</span></a> : <span class="muted">{action.missing}</span>}</td>}
+                  {action && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.links[row.gss]!.text}</a> : <span class="muted">{action.missing}</span>}</td>}
                 </tr>
               );
             })}
@@ -159,6 +162,10 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
     let direction = 1;
 
     const name = (row: HTMLTableRowElement) => row.querySelector("th a")?.textContent ?? "";
+    // Arriving at the action fragment (the set door on the budget hub), an answer opens the row's action link; a row without one opens its name link.
+    const target = (row: HTMLTableRowElement | null | undefined) =>
+      (picker.dataset.actionHash && window.location.hash === picker.dataset.actionHash ? row?.querySelector<HTMLAnchorElement>("[data-picker-action]") : null) ??
+      row?.querySelector<HTMLAnchorElement>("th a") ?? null;
     const text = (row: HTMLTableRowElement, key: string) =>
       key === "name" ? name(row) : row.querySelector(`[data-cell="${key}"]`)?.firstChild?.textContent ?? "";
 
@@ -261,7 +268,7 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
       event.preventDefault();
       const postcode = input.value.toUpperCase().replace(/\s+/g, " ").trim();
       if (!POSTCODE.test(postcode)) {
-        const first = table.querySelector<HTMLAnchorElement>("tr[data-row]:not([hidden]) a");
+        const first = target(table.querySelector<HTMLTableRowElement>("tr[data-row]:not([hidden])"));
         if (first) first.focus();
         return;
       }
@@ -281,7 +288,7 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
         return;
       }
       const row = rows.find((candidate) => candidate.dataset.gss === code);
-      const link = row?.querySelector<HTMLAnchorElement>("a");
+      const link = target(row);
       if (!row || !link) {
         count.textContent = picker.dataset.outside ?? "That postcode is not in a council listed here.";
         return;

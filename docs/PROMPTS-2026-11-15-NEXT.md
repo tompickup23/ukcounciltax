@@ -2,6 +2,30 @@
 
 Written in Claude Code on 15 November 2026 after every Codex session on both sites finished. This file replaces `docs/CODEX-PROMPTS-2026-11-15.md` for everything not yet run. Each block is pasted alone. None authorises a merge, tag or deployment unless the block says Tom has given that yes.
 
+## Status, 15 November evening (read this first)
+
+Prompts 2 and 3 have run. Prompt 1 is part done. The tables further down are the afternoon record.
+
+- **Prompt 1:** PR 84 reviewed in Claude Code. Four fix commits are pushed (`b41fe65`, `63be887`, `46925ec`, `6a947a3`), and the PR body carries the review and a design check override. The number diff and design check pass in CI. **Waiting:** CI's site job, then Tom's merge yes, then the live check. The measurement note (step 5) starts on Monday 17 November.
+- **Prompt 2:** ukcouncils draft PR 60, commit `3e708ae`. Validate fails on two guards that are doing their job, so prompt 7 below fixes it.
+- **Prompt 3:** ukplaces PR 53, commit `d5a68b7`, green and ready. It changes `E07000112.name` only; the slug stays `shepway`. UK Places still displays and searches "Shepway", so prompt 3b below fixes that. The Codex snapshot ref equals the PR commit, so nothing was lost.
+
+Order of work from here:
+
+| Step | Session | Starts when |
+|---|---|---|
+| Merge UKC PR 59, then UKCT PR 85 (docs; each deploys) | Tom's yes | Now |
+| Merge PR 84, then the live check | This Claude Code session | CI green and Tom's yes |
+| Prompt 7, PR 60 fix | Codex, ukcouncils | Now (rebases after PR 59 merges) |
+| Merge UKP PR 53 | Tom's yes | Now |
+| Prompt 3b, UK Places display and search names | Codex, ukplaces | After PR 53 merges |
+| Prompt 5, registry refresh on both sites | Codex | After prompt 3b merges and UK Places deploys, so one refresh carries both |
+| Measurement note, weekly | Claude Code | Monday 17 November |
+| Prompt 4, gates pack | Codex | After PR 84 merges and X3 is settled |
+| Prompt 6, council links rerun | Codex | Any day in December |
+
+Merge order matters for `docs/STATE.md`: PR 59 before PR 60 on UK Councils; PR 85 before any later docs PR here.
+
 ## Where things stand
 
 - **Live:** UK Councils main `f4311a8` (PR 58, registry refresh) and UK Council Tax main `584968e` (PR 81, the bill explained; `/bill` returns 302 to `/precepts/#find-your-bill`). Both publishes and IndexNow runs succeeded.
@@ -111,4 +135,30 @@ Refresh data/registry/councils.json from UK Places through the existing build ro
 
 ```text
 Repositories tompickup23/ukplaces, then tompickup23/ukcouncils and tompickup23/ukcounciltax. Read src/lib/council-links.ts on both sites: the build fails from 4 January 2027 unless the UK Places link check is rerun. Rerun the check in UK Places from a fresh GOV.UK Local Links Manager export, list every link whose destination changed or failed, and refresh both sites through the existing route with the new check date. No hand edit of a link. Same branch, staging, hook and no merge rules as prompt 5.
+```
+
+## 7. ukcouncils: PR 60 fix, keep the seats hold and pass both guards (Codex)
+
+```text
+Repository tompickup23/ukcouncils, draft PR 60 (branch docs/dossier-sources-2026-11, worktree ~/wt/ukc-dossier-sources). Node 22.23.4 first on PATH. British English; no em dash, en dash or spaced hyphen anywhere, including JSON. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Push to the same branch and keep the PR a draft. Do not merge, tag or deploy.
+
+Why: PR 60 fails validate on two guards that are doing their job. Do not change either test. tests/council-profile.test.ts holds seats by party: no committed file under data/ may carry seat, control or councillor in its name, and the hold means no committed copy of composition data until Tom chooses a source. tests/sources-coverage.test.ts requires every directory under data/ to be in the sources catalogue; research is not a site dataset.
+
+1. Composition: remove from the branch every composition file and dry-run-seats.json (the option A copy, the option B sample, the 2026 baseline, by-elections, party changes, official change evidence and publisher metadata). They stay recoverable from commit 3e708ae; say so in the PR body. Keep in docs/DOSSIER-SOURCES-2026-11.md each URL, retrieval date, original hash, licence, count and reconciliation finding, so Tom can decide from the document alone.
+2. Audit and section 114: move the remaining source files and dry runs from data/sources/dossier-2026-11/ to docs/dossier-sources-2026-11/. Update the manifest paths and docs/dossier-sources-dry-run.mjs, and confirm every hash still verifies.
+3. Audit join: add a second dry run that joins the MHCLG backstop lists and the PSAA workbook to the 296 profiles by exact match on the registry officialName (the pinned GOV.UK Local Links Manager names in data/registry/councils.json). Allow only a stated normalisation: case, "and" for "&", and a trailing "Council". Nothing fuzzier. Report the matched, unmatched and ambiguous counts, list every unmatched and ambiguous body, and keep the exact code join result (0 of 296) beside it. Adopt no crosswalk; it is a decision for Tom.
+4. After ukcouncils PR 59 merges, rebase on origin/main. Keep main's docs/STATE.md and add at most three lines to it.
+Verification: npm test (both guards pass with no test changed), npm run check, the hash check in docs/dossier-sources-dry-run.mjs, and the dash and personal name scans. The PR body gives the test counts before and after, and the matched counts from step 3.
+```
+
+## 3b. ukplaces: Folkestone and Hythe display and search names (Codex, after PR 53 merges)
+
+```text
+Repository tompickup23/ukplaces. One PR, branch fix/folkestone-hythe-display-name from origin/main after PR 53 has merged, in a worktree, never the main checkout ~/ukplaces (it holds unrelated uncommitted work on feat/local-links). British English; no em dash, en dash or spaced hyphen anywhere. Stage named paths only. Never bypass the pre-commit hook. The repository is public. When done: commit, push and open the PR. Do not merge, tag or deploy.
+
+Why: PR 53 corrected only the exported name of E07000112. UK Places still shows "Shepway" and its finder does not find "Folkestone" or "Hythe".
+1. Through the same evidenced correction in scripts/place-names.mjs, give E07000112 displayName "Folkestone and Hythe" and searchNames ["Folkestone and Hythe", "Shepway"], so the old name still finds it. The slug stays shepway.
+2. Tests: "Folkestone", "Hythe" and "Shepway" each find E07000112 and nothing else new; no other record changes.
+3. List every built page whose text changes as pages allowed to differ in the PR body.
+Verification: the repository's test, build and check commands. The export diff shows two changed fields on one record.
 ```

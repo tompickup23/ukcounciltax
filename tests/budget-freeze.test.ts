@@ -1,29 +1,37 @@
-import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { calculateFreeze, initialFreezeInputs, parsePence, referendumTriggered, money, freezeSummary } from '../src/lib/budget-freeze';
-import { freezePilots } from '../src/lib/budget-freeze-data';
+import {describe,expect,it} from 'vitest';
+import {existsSync,readFileSync} from 'node:fs';
+import {calculateFreeze,initialFreezeInputs,parsePence,referendumTriggered,money,freezeSummary,inputPounds,FREEZE_MODEL} from '../src/lib/budget-freeze';
+import {freezePilots} from '../src/lib/budget-freeze-data';
 import snapshot from '../data/pilots/budget-freeze.json';
+import manifest from '../data/pilots/budget-freeze-eligibility.json';
+import referendum from '../data/pilots/budget-freeze-referendum.json';
+const pilots=freezePilots();
+const district=pilots.find(p=>p.gss==='E07000011')!;
+const blackburn=pilots.find(p=>p.gss==='E06000008')!;
 
-const [burnley, blackburn] = freezePilots();
 describe('C2 exact arithmetic and refusal cases',()=>{
-  it('reproduces independently calculated freeze differences at full precision',()=>{
-    expect(calculateFreeze(burnley,initialFreezeInputs(burnley)).remaining).toBe(1680494200n);
+  it('reproduces independent freeze calculations at full precision',()=>{
     expect(calculateFreeze(blackburn,initialFreezeInputs(blackburn)).remaining).toBe(37492583209n);
+    expect(calculateFreeze(district,initialFreezeInputs(district)).remaining).toBe(3374223030n);
   });
-  it.each([burnley,blackburn])('$name restores exactly to zero and preserves the source',pilot=>{
+  it.each(pilots)('$name restores exactly to zero without changing the source',pilot=>{
     const before=JSON.stringify(pilot);
-    const inputs=initialFreezeInputs(pilot,false);
-    expect(calculateFreeze(pilot,inputs).remaining).toBe(0n);
+    expect(calculateFreeze(pilot,initialFreezeInputs(pilot,false)).remaining).toBe(0n);
+    expect(calculateFreeze(pilot,initialFreezeInputs(pilot)).remaining.toString()).toBe(pilot.reconciliation.freezeDifferenceUnits);
     expect(JSON.stringify(pilot)).toBe(before);
   });
-  it('closes the Burnley freeze using a matching spending change',()=>{
-    const inputs=initialFreezeInputs(burnley);
-    inputs.servicePounds.envtot='5512950.58';
-    expect(calculateFreeze(burnley,inputs).remaining).toBe(0n);
-    inputs.servicePounds.envtot='5512950.57';
-    expect(calculateFreeze(burnley,inputs).remaining).toBe(-100n);
+  it('can balance a whole-penny freeze with an equal spending change',()=>{
+    const pilot=pilots.find(p=>p.gss==='E09000007')!;
+    const inputs=initialFreezeInputs(pilot);
+    const gap=calculateFreeze(pilot,inputs).remaining;
+    const service=pilot.services.find(s=>s.editable && BigInt(s.pence)*100n>gap)!;
+    expect(gap%100n).toBe(0n);
+    inputs.servicePounds[service.id]=inputPounds(BigInt(service.pence)-gap/100n);
+    expect(calculateFreeze(pilot,inputs).remaining).toBe(0n);
+    inputs.servicePounds[service.id]=inputPounds(BigInt(service.pence)-gap/100n-1n);
+    expect(calculateFreeze(pilot,inputs).remaining).toBe(-100n);
   });
-  it('applies symmetric tax and spending changes without rounding or score',()=>{
+  it('applies symmetric tax and spending changes without rounding',()=>{
     const up=initialFreezeInputs(blackburn,false);up.ownPounds='2063.96';
     const down=initialFreezeInputs(blackburn,false);down.ownPounds='2061.96';
     expect(calculateFreeze(blackburn,up).remaining).toBe(-382460300n);
@@ -33,78 +41,107 @@ describe('C2 exact arithmetic and refusal cases',()=>{
   });
   it.each(['',' ','NaN','Infinity','1e3','-1','1.001','1,000','100000000000000'])('refuses malformed currency %j',value=>{
     expect(()=>parsePence(value)).toThrow();
-    const inputs=initialFreezeInputs(burnley);inputs.ownPounds=value;
-    expect(()=>calculateFreeze(burnley,inputs)).toThrow();
+    const inputs=initialFreezeInputs(district);inputs.ownPounds=value;
+    expect(()=>calculateFreeze(district,inputs)).toThrow();
   });
   it('refuses missing, added, duplicated and held inputs and excessive values',()=>{
-    const inputs=initialFreezeInputs(burnley);
-    delete inputs.servicePounds.envtot;
-    expect(()=>calculateFreeze(burnley,inputs)).toThrow();
-    const held=initialFreezeInputs(burnley);held.servicePounds.transtot='0';
-    expect(()=>calculateFreeze(burnley,held)).toThrow();
-    const tooMuch=initialFreezeInputs(burnley);tooMuch.servicePounds.envtot='11362000.01';
-    expect(()=>calculateFreeze(burnley,tooMuch)).toThrow();
-    const changed=structuredClone(burnley);changed.services.push(changed.services[0]);
-    expect(()=>calculateFreeze(changed,initialFreezeInputs(changed))).toThrow();
-    expect(()=>calculateFreeze({...burnley,taxBaseHundredths:''},initialFreezeInputs(burnley))).toThrow();
-    expect(()=>calculateFreeze({...burnley,year:'2027-28'},initialFreezeInputs(burnley))).toThrow();
+    const service=district.services.find(s=>s.editable)!;
+    const missing=initialFreezeInputs(district);delete missing.servicePounds[service.id];
+    expect(()=>calculateFreeze(district,missing)).toThrow();
+    const held=initialFreezeInputs(district);held.servicePounds.edutot='0';
+    expect(()=>calculateFreeze(district,held)).toThrow();
+    const excessive=initialFreezeInputs(district);excessive.servicePounds[service.id]=inputPounds(BigInt(service.pence)*2n+1n);
+    expect(()=>calculateFreeze(district,excessive)).toThrow();
+    const tax=initialFreezeInputs(district);tax.ownPounds=inputPounds(BigInt(district.ownPence)*2n+1n);
+    expect(()=>calculateFreeze(district,tax)).toThrow();
+    const duplicate=structuredClone(district);duplicate.services.push(duplicate.services[0]);
+    expect(()=>calculateFreeze(duplicate,initialFreezeInputs(duplicate))).toThrow();
+    expect(()=>calculateFreeze({...district,taxBaseHundredths:''},initialFreezeInputs(district))).toThrow();
+    expect(()=>calculateFreeze({...district,year:'2027-28'},initialFreezeInputs(district))).toThrow();
   });
-  it('holds negative, zero, education and public health groups fixed',()=>{
-    for (const pilot of [burnley,blackburn]) for (const s of pilot.services) {
-      if (BigInt(s.pence)<=0n || ['edutot','phtot'].includes(s.id)) expect(s.editable).toBe(false);
+  it('holds negative, zero, education and public health groups fixed throughout the cohort',()=>{
+    for(const pilot of pilots)for(const s of pilot.services) {
+      if(BigInt(s.pence)<=0n || ['edutot','phtot'].includes(s.id))expect(s.editable).toBe(false);
     }
-    expect(burnley.services.find(s=>s.id==='transtot')?.pence).toBe('-34300000');
   });
-  it('does not call a sub-penny difference balanced',()=>{
-    const pilot={...burnley,taxBaseHundredths:'1'};
-    const inputs=initialFreezeInputs(pilot,false);inputs.ownPounds='351.45';
+  it('keeps exact balance distinct from displayed pennies',()=>{
+    const pilot={...district,taxBaseHundredths:'1'};
+    const inputs=initialFreezeInputs(pilot,false);inputs.ownPounds=inputPounds(BigInt(pilot.ownPence)+1n);
     const result=calculateFreeze(pilot,inputs);
     expect(result.remaining).toBe(-1n);expect(result.status).toBe('surplus');
     expect(money(result.remaining)).toContain('less than £0.01');
   });
-  it('exports exact differences with every assumption, source and version',()=>{
+  it('exports full precision, assumptions, sources and model version',()=>{
     const text=freezeSummary(blackburn,initialFreezeInputs(blackburn),blackburn.sources.map(s=>s.url));
     expect(text).toContain('3749258.3209');expect(text).toContain('User requested scenario');
-    expect(text).toContain('budget-freeze 0.1');expect(text).toContain('tax base stays fixed');
-    for (const s of blackburn.sources) expect(text).toContain(s.url);
+    expect(text).toContain(FREEZE_MODEL);expect(text).toContain('tax base stays fixed');
+    for(const s of blackburn.sources)expect(text).toContain(s.url);
     expect(text).toContain('38246.03 Band D equivalents');
-    expect(freezeSummary(burnley,initialFreezeInputs(burnley),[])).toContain('not cleared for public release');
   });
 });
 
-describe('year-specific referendum boundaries',()=>{
-  it('requires both district conditions, preserving strict pounds and inclusive percent',()=>{
+describe('edition-specific referendum boundaries in exact pence',()=>{
+  for(const [key,rule] of Object.entries(referendum.principles)) {
+    const id=key as keyof typeof referendum.principles;
+    it(`${key} checks one penny under, equal and one penny over the percentage threshold`,()=>{
+      const prior=200000n, trigger=prior+prior*BigInt(rule.percentageBasisPoints)/10000n;
+      expect(referendumTriggered(id,prior,trigger-1n)).toBe(false);
+      expect(referendumTriggered(id,prior,trigger)).toBe(true);
+      expect(referendumTriggered(id,prior,trigger+1n)).toBe(true);
+    });
+  }
+  it('district pound threshold is strict and both conditions are required',()=>{
+    expect(referendumTriggered('district',10000n,10499n)).toBe(false);
     expect(referendumTriggered('district',10000n,10500n)).toBe(false);
     expect(referendumTriggered('district',10000n,10501n)).toBe(true);
+    expect(referendumTriggered('district',10000n,10300n)).toBe(false);
+    expect(referendumTriggered('district',20000n,20501n)).toBe(false);
     expect(referendumTriggered('district',20000n,20599n)).toBe(false);
     expect(referendumTriggered('district',20000n,20600n)).toBe(true);
-    expect(referendumTriggered('district',34458n,35491n)).toBe(false);
-    expect(referendumTriggered('district',34458n,35492n)).toBe(true);
+    expect(referendumTriggered('district',20000n,20601n)).toBe(true);
   });
-  it('preserves the inclusive social-care percentage and handles penny thresholds',()=>{
-    expect(referendumTriggered('ordinary-social-care',200000n,209999n)).toBe(false);
-    expect(referendumTriggered('ordinary-social-care',200000n,210000n)).toBe(true);
-    expect(referendumTriggered('ordinary-social-care',196493n,206317n)).toBe(false);
-    expect(referendumTriggered('ordinary-social-care',196493n,206318n)).toBe(true);
+  it('refuses an unmapped rule and invalid baselines',()=>{
+    expect(()=>referendumTriggered('unknown' as never,100n,200n)).toThrow();
+    expect(()=>referendumTriggered('district',0n,200n)).toThrow();
+    expect(()=>referendumTriggered('district',100n,-1n)).toThrow();
   });
 });
 
-describe('pilot source and isolation gates',()=>{
-  it('pins only the two reviewed GSS mappings and source bytes',()=>{
-    expect(snapshot.pilots.map(p=>p.gss)).toEqual(['E07000117','E06000008']);
+describe('cohort source and isolation gates',()=>{
+  it('includes exactly the eligible authorities and their individual GSS mappings',()=>{
+    expect(manifest.total).toBe(296);expect(manifest.eligible).toBe(170);
+    expect(pilots.map(p=>p.gss)).toEqual(manifest.councils.filter(c=>c.eligible).map(c=>c.gss));
+    expect(Object.keys(referendum.byEdition['2026-27']).sort()).toEqual(pilots.map(p=>p.gss).sort());
     expect(snapshot.rawSources).toHaveLength(7);
-    expect(snapshot.referendum.sha256).toHaveLength(64);
-    expect(burnley.reconciliation.componentReviewRequired).toBe(true);
-    expect(burnley.reconciliation.parishDifferencePence).toBe('-80000');
-    expect(blackburn.reconciliation.componentReviewRequired).toBe(false);
-    for(const pilot of freezePilots()) {
-      expect(pilot.ledger.find(r=>r.id==='ctrtot')!.thousands).toBe(pilot.ledger.find(r=>r.id==='revenuetot')!.thousands + pilot.ledger.filter(r=>['grantinaef','trnsreorg','appressch','appresdsg','appresph','appresoth','appresunall','grantrsg','grantpol','retainnndr','colfunct','othinc'].includes(r.id)).reduce((sum,r)=>sum+r.thousands,0));
+    expect(snapshot.model).toBe(FREEZE_MODEL);
+    for(const pilot of pilots) {
+      const entry=manifest.councils.find(c=>c.gss===pilot.gss)!;
+      expect(entry.principle?.principle).toBe(pilot.rule);
+      expect(entry.reviewedNotes.every(n=>n.decision==='reviewed')).toBe(true);
+      for(const key of ['totalDifferencePence','parishDifferencePence','ownDifferencePence'] as const)expect(Math.abs(Number(entry.comparisons[key]))).toBeLessThanOrEqual(50000);
+      expect(pilot.ledger.find(r=>r.id==='ctrtot')!.thousands).toBe(pilot.ledger.find(r=>r.id==='revenuetot')!.thousands+pilot.ledger.filter(r=>['grantinaef','trnsreorg','appressch','appresdsg','appresph','appresoth','appresunall','grantrsg','grantpol','retainnndr','colfunct','othinc'].includes(r.id)).reduce((s,r)=>s+r.thousands,0));
     }
+  });
+  it('retains explicit exclusions, including Burnley and the two special geography checks',()=>{
+    expect(manifest.exclusionCounts['missing-return']).toBe(9);
+    expect(manifest.exclusionCounts['ra-note-4']).toBe(7);
+    const burnley=manifest.councils.find(c=>c.gss==='E07000117')!;
+    expect(burnley.eligible).toBe(false);
+    expect(burnley.comparisons.parishDifferencePence).toBe('-80000');
+    expect(burnley.comparisons.ownDifferencePence).toBe('77400');
+    for(const gss of ['E09000001','E06000053'])expect(manifest.councils.find(c=>c.gss===gss)?.comparability.specialCheck).toBeTruthy();
+    for(const c of manifest.councils.filter(c=>!c.eligible)){expect(c.reason.length).toBeGreaterThan(20);expect(c.principle).toBeNull();}
+  });
+  it('maps the eligible named exception and preserves its whole-pound source difference',()=>{
+    const bcp=pilots.find(p=>p.gss==='E06000058')!;
+    expect(bcp.rule).toBe('exception-6.75');
+    expect(bcp.reconciliation.table10IdentityDifferencePence).toBe('-100');
+    expect(bcp.ruleLocation).toContain('paragraph 13, printed page 9');
   });
   it('keeps pilot pages out of the normal source tree and public sitemap',()=>{
     expect(readFileSync('astro.config.mjs','utf8')).not.toContain('./pilot');
     expect(readFileSync('astro.pilot.config.mjs','utf8')).toContain("srcDir: './pilot'");
     expect(existsSync('src/pages/pilot')).toBe(false);
-    if(existsSync('dist/sitemap.xml')) expect(readFileSync('dist/sitemap.xml','utf8')).not.toContain('freeze');
+    if(existsSync('dist/sitemap.xml'))expect(readFileSync('dist/sitemap.xml','utf8')).not.toContain('freeze');
   });
 });

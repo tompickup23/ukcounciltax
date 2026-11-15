@@ -20,7 +20,7 @@ for gss in sorted(tax['authorities']):
     available = authority['status'] == 'available'
     balance = None
     if available and all(values.get(k) is not None for k in financing + ['revenuetot', 'ctrtot']):
-        balance = values['ctrtot'] - values['revenuetot'] - sum(values[k] for k in financing)
+        balance = values['ctrtot']-values['revenuetot']-sum(values[k] for k in financing)
     base = component['taxBase']
     own = component['ownExcludingParishPence']
     # Analytical stress case only: a user selected 1% change to the current year's
@@ -29,7 +29,7 @@ for gss in sorted(tax['authorities']):
     own_row = tax['authorities'][gss].get('own')
     prior_own = prior['authorities'].get(gss, {}).get('own')
     table8_matches = own_row is not None and Decimal(str(own_row['bandD'])) * 100 == own
-    freeze = ((Decimal(str(own_row['bandD'])) - Decimal(str(prior_own['bandD']))) * Decimal(str(base))) if table8_matches and prior_own and base is not None else None
+    freeze = ((Decimal(str(own_row['bandD']))-Decimal(str(prior_own['bandD']))) * Decimal(str(base))) if table8_matches and prior_own and base is not None else None
     note = ' '.join(authority['notes'].values())
     rows.append({
         'gss': gss, 'name': authority['name'], 'status': authority['status'],
@@ -54,10 +54,10 @@ for row in rows:
         now = Decimal(row['ownExcludingParishPence']) / 100
         before = Decimal(str(row['priorTable8OwnPounds']))
         base = Decimal(str(row['taxBase']))
-        assert now * base - before * base == Decimal(row['freezeCounterfactualLossPounds'])
+        assert now * base-before * base == Decimal(row['freezeCounterfactualLossPounds'])
         if row['publishedOwnPoundChange'] is not None:
             # Both columns are displayed to pennies; preserve any disagreement.
-            row['publishedChangeResidualPounds'] = str(now - before - Decimal(str(row['publishedOwnPoundChange'])))
+            row['publishedChangeResidualPounds'] = str(now-before-Decimal(str(row['publishedOwnPoundChange'])))
 summary = {
     'profiles': len(rows), 'availableRA': sum(r['status'] == 'available' for r in rows),
     'missingRA': [r['gss'] for r in rows if r['status'] != 'available'],

@@ -1,8 +1,9 @@
 import edition from '../../data/pilots/budget-freeze-model.json';
+import {principles} from '../../data/pilots/budget-freeze-referendum.json';
 /** Exact arithmetic for the opt-in C2 pilot. One unit is GBP 0.0001. */
 export const FREEZE_YEAR = edition.year;
 const yearText = FREEZE_YEAR.replace('-', '/');
-export const FREEZE_MODEL = 'budget-freeze 0.1';
+export const FREEZE_MODEL = 'budget-freeze 0.2';
 export const FREEZE_ASSUMPTIONS = [
   `This is a user requested scenario for ${yearText}, not an actual council deficit or an adopted budget.`,
   'Only this council\'s own Band D charge changes. Parish and other charging bodies stay outside the exercise.',
@@ -28,7 +29,7 @@ export interface FreezeBaseline {
   ownPence: string;
   priorOwnPence: string;
   taxBaseHundredths: string;
-  rule: 'district' | 'ordinary-social-care';
+  rule: keyof typeof principles;
   services: FreezeService[];
   sourceWarnings?: string[];
 }
@@ -64,13 +65,22 @@ export function exactPounds(units: bigint): string {
   return `${units < 0n ? '-' : ''}${absolute / 10000n}.${String(absolute % 10000n).padStart(4, '0')}`;
 }
 
-/** Guidance for the two explicitly mapped pilot authorities and this edition only. */
+/** Only rules reconstructed from the pinned report are executable. */
 export function referendumTriggered(rule: FreezeBaseline['rule'], prior: bigint, selected: bigint): boolean {
   if (prior <= 0n || selected < 0n) throw new Error('Invalid referendum comparison.');
-  const rise = selected - prior;
-  if (rule === 'district') return rise * 100n >= prior * 3n && rise > 500n;
-  if (rule === 'ordinary-social-care') return rise * 100n >= prior * 5n;
-  throw new Error('Unmapped referendum rule.');
+  const principle = principles[rule];
+  if (!principle) throw new Error('Unmapped referendum rule.');
+  if (principle.percentageComparison !== 'greater-than-or-equal') throw new Error('Unsupported percentage comparison.');
+  const rise = selected-prior;
+  const percentage = rise * 10000n >= prior * BigInt(principle.percentageBasisPoints);
+  if (principle.join === 'single') return percentage;
+  if (principle.join === 'AND' && principle.poundComparison === 'greater-than' && principle.poundPence !== null) return percentage && rise > BigInt(principle.poundPence);
+  throw new Error('Unsupported referendum comparison.');
+}
+export function referendumExplanation(rule: FreezeBaseline['rule']): string {
+  const principle = principles[rule];
+  if (principle.join === 'AND') return `The mapped ${yearText} referendum trigger requires both an increase of at least 3% and an increase of more than £5 over the previous own charge.`;
+  return `The mapped ${yearText} referendum trigger is an increase of at least ${principle.percentageBasisPoints / 100}% over the previous own charge, comprising ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
 }
 
 export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): FreezeInputs {
@@ -99,11 +109,11 @@ export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) 
     if (published <= 0n || ['edutot', 'phtot'].includes(service.id)) throw new Error('This service group must stay fixed.');
     const chosen = parsePence(inputs.servicePounds[service.id]);
     if (chosen > published * 2n) throw new Error(`${service.label}: the amount exceeds this prototype's range.`);
-    return { id: service.id, selectedPence: chosen, deltaUnits: (chosen - published) * 100n };
+    return { id: service.id, selectedPence: chosen, deltaUnits: (chosen-published) * 100n };
   });
   const spendingChange = changes.reduce((sum, s) => sum + s.deltaUnits, 0n);
-  const financingChange = (selected - current) * base;
-  const remaining = spendingChange - financingChange;
+  const financingChange = (selected-current) * base;
+  const remaining = spendingChange-financingChange;
   return {
     changes, spendingChange, financingChange, remaining,
     status: remaining === 0n ? 'balanced' : remaining > 0n ? 'shortfall' : 'surplus',

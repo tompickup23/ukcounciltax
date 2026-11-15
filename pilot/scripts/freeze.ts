@@ -42,7 +42,7 @@ if (root) {
       get<HTMLElement>('[data-spending]').textContent = money(calculated.spendingChange);
       get<HTMLElement>('[data-financing]').textContent = money(calculated.financingChange);
       ruleResult.textContent = calculated.referendum
-        ? 'This choice reaches the mapped referendum trigger for 2026/27.'
+        ? 'A referendum would be required for this choice under the mapped 2026/27 principle.'
         : 'This choice is below the mapped referendum trigger for 2026/27. This does not establish legal feasibility.';
       for (const change of calculated.changes) {
         const row = root!.querySelector<HTMLElement>(`[data-service-delta="${change.id}"]`);

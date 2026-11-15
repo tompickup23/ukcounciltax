@@ -2,6 +2,9 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { readOds } from './lib/ods.mjs';
+import { buildCohort } from './lib/c2-cohort.mjs';
+const books = new Map();
+const readBook = path => {if (!books.has(path)) books.set(path, readOds(path)); return books.get(path);};
 
 const load = path => JSON.parse(readFileSync(path, 'utf8'));
 const sha = path => createHash('sha256').update(readFileSync(path)).digest('hex');
@@ -24,7 +27,7 @@ const rawSources = [
 ];
 for (const source of rawSources) check(sha(`data/raw/${source.file}`) === source.sha256, `Source hash differs: ${source.file}`);
 check(budget.year === current.year && national.year === current.year && prior.year === '2025-26', 'Editions differ');
-const table10 = readOds(`data/raw/${national.sources.components.file}`).find(s => s.name === 'Data_Billing');
+const table10 = readBook(`data/raw/${national.sources.components.file}`).find(s => s.name === 'Data_Billing');
 check(table10, 'Missing Table 10 Data_Billing');
 const header = table10.rows.find(r => r.includes('ONS Code'));
 const column = pattern => {
@@ -49,27 +52,23 @@ function decimal(value, digits = 2) {
 }
 const absolute = n => n < 0n ? -n : n;
 const financing = ['grantinaef','trnsreorg','appressch','appresdsg','appresph','appresoth','appresunall','grantrsg','grantpol','retainnndr','colfunct','othinc'];
-const pilots = [
-  { gss: 'E07000117', slug: 'burnley', rule: 'district', classCode: 'SD', ruleLocation: 'Annex A, paragraphs 1, 2(e) and 7, printed pages 6 to 8' },
-  { gss: 'E06000008', slug: 'blackburn-with-darwen', rule: 'ordinary-social-care', classCode: 'UA', ruleLocation: 'Annex A, paragraphs 1, 2(a) and 3; Annex B, printed page 13 names Blackburn with Darwen' },
-];
 const sourceHashes = Object.fromEntries(['data/national/budget.json','data/national/england.json','data/council-tax/england-2026-27.json','data/council-tax/england-2025-26.json'].map(path => [path, sha(path)]));
-const raSheet = readOds(`data/raw/${budget.sources.raPart1.file}`).find(s=>s.name==='RA_LA_Data_2026-27');
+const {manifest,rules,pilots} = buildCohort({budget,current,prior,national,rawSources,referendum,sourceHashes});
+const raSheet = readBook(`data/raw/${budget.sources.raPart1.file}`).find(s=>s.name==='RA_LA_Data_2026-27');
 const raIds = raSheet.rows.find(r=>r.includes('parishaggprecept'));
 const output = pilots.map(pilot => {
   const b = budget.councils[pilot.gss], c = national.components[pilot.gss];
   const now = current.authorities[pilot.gss], before = prior.authorities[pilot.gss];
   check(b?.status === 'available' && c && now && before, `Missing pilot: ${pilot.gss}`);
-  check(b.class === pilot.classCode && now.classCode === pilot.classCode, 'Rule category does not match');
-  check(Object.values(b.notes).every(note => !note.trim()) && !c.notes.length && !now.own.notes.length && !before.own.notes.length, 'Unreviewed authority note');
+  check((b.class === pilot.classCode || (b.class === 'LB' && ['ILB','OLB'].includes(pilot.classCode))) && now.classCode === pilot.classCode, 'Rule category does not match');
   const rows = table10.rows.filter(row => row[columns.gss] === pilot.gss);
   check(rows.length === 1, 'Ambiguous Table 10 authority');
-  const raw = rows[0]; check(!raw[columns.notes]?.trim(), 'Unreviewed Table 10 note');
+  const raw = rows[0];
   const own = decimal(now.own.bandD), old = decimal(before.own.bandD), base = decimal(c.taxBase);
   check(own === BigInt(c.ownExcludingParishPence) && own === decimal(raw[columns.ownBand]) && old === decimal(raw[columns.priorOwnBand]) && base === decimal(raw[columns.base]), 'Tax input disagreement');
   // Independently match each annual printed Table 8 row, including the table basis.
   for (const [edition, row] of [[current, now], [prior, before]]) {
-    const sheet = readOds(`data/raw/${edition.source.files[0].file}`).find(s => s.name === row.own.table);
+    const sheet = readBook(`data/raw/${edition.source.files[0].file}`).find(s => s.name === row.own.table);
     check(sheet, 'Missing annual table');
     const h = sheet.rows.find(r => r.includes('ONS Code'));
     const ownColumns = h.map((label, i) => /excluding parish precepts/.test(label) && /£\s*$/.test(label) ? i : -1).filter(i => i >= 0);
@@ -88,7 +87,7 @@ const output = pilots.map(pilot => {
   check(v.servicetot === budget.groups.reduce((sum,g)=>sum+v[g.id],0), 'Service identity fails');
   for (const group of budget.groups.filter(g=>g.subLines.length)) check(group.subLines.every(id=>Number.isSafeInteger(v[id])) && group.subLines.reduce((sum,id)=>sum+v[id],0) === v[group.id], 'Service sublines fail');
   const totalPence = decimal(raw[columns.total]), parishPence = decimal(raw[columns.parish]), ownRequirementPence = decimal(raw[columns.own]);
-  check(totalPence === parishPence + ownRequirementPence, 'Table 10 own plus parish fails');
+  check(absolute(totalPence-parishPence-ownRequirementPence) <= 100n, 'Table 10 sum exceeds whole-pound printed precision');
   const raDifference = BigInt(v.ctrtot)*100000n-totalPence;
   const parishDifference = BigInt(v.parishaggprecept)*100000n-parishPence;
   const componentReviewRequired = absolute(parishDifference)>50000n;
@@ -106,7 +105,7 @@ const output = pilots.map(pilot => {
     sourceWarnings:componentReviewRequired ? ['Source review outstanding: the RA parish component differs from Table 10 by more than half a printed thousand pounds. This pilot is not cleared for public release.'] : [],
     grantDsgThousands:v.grantindsg,
     ledger:[...budget.groups.map(g=>g.id),'servicetot','revenuetot',...financing,'ctrtot','parishaggprecept'].map(id=>({id,line:budget.fields[id].line,label:budget.fields[id].label,thousands:v[id]})),
-    reconciliation:{table10TotalPence:String(totalPence),table10OwnPence:String(ownRequirementPence),table10ParishPence:String(parishPence),raTotalDifferencePence:String(raDifference),parishDifferencePence:String(parishDifference),componentReviewRequired,ownYieldDifferenceUnits:String(bandYieldDifference),freezeDifferenceUnits:String((own-old)*base)},
+    reconciliation:{table10IdentityDifferencePence:String(totalPence-parishPence-ownRequirementPence),table10TotalPence:String(totalPence),table10OwnPence:String(ownRequirementPence),table10ParishPence:String(parishPence),raTotalDifferencePence:String(raDifference),parishDifferencePence:String(parishDifference),ownDifferencePence:String((BigInt(v.ctrtot)-BigInt(v.parishaggprecept))*100000n-ownRequirementPence),componentReviewRequired,ownYieldDifferenceUnits:String(bandYieldDifference),freezeDifferenceUnits:String((own-old)*base)},
     sources:[
       {title:'RA Part 1, service lines, 799, 900 to 990 and 821, 11 June 2026',url:budget.sources.raPart1.fileUrl},
       {title:`Annual Table ${now.own.table.replace('Table_','')}, own Band D excluding parish, 2026/27`,url:current.source.files[0].url},
@@ -116,7 +115,7 @@ const output = pilots.map(pilot => {
     ],
   };
 });
-const result = {model:'budget-freeze 0.1',sourceHashes,rawSources:rawSources.map(s=>({file:s.file,url:s.fileUrl||s.url,sha256:s.sha256})),referendum,reviewedOn:'2026-11-13',pilots:output};
+const result = {model:'budget-freeze 0.2',sourceHashes,rawSources:rawSources.map(s=>({file:s.file,url:s.fileUrl||s.url,sha256:s.sha256})),referendum,reviewedOn:'2026-11-15',pilots:output};
 const coverage = Object.keys(current.authorities).sort().map(gss=>{
   const b=budget.councils[gss], c=national.components[gss];
   const rows=table10.rows.filter(row=>row[columns.gss]===gss);
@@ -143,4 +142,10 @@ const coveragePath='docs/C2-COVERAGE-2026-11-13.json';
 const coverageText=JSON.stringify(coverageResult,null,2)+'\n';
 if(process.argv.includes('--check'))check(readFileSync(coveragePath,'utf8')===coverageText,'Coverage audit drift');
 else writeFileSync(coveragePath,coverageText);
-console.log(`Verified ${output.length} local pilots and seven raw hashes. ${output.filter(p=>p.reconciliation.componentReviewRequired).length} pilot component review remains. National arithmetic/component screen: ${coverageResult.screenPassed} of ${coverageResult.total}; none cleared for national release.`);
+for (const [path, value] of [['data/pilots/budget-freeze-eligibility.json',manifest],['data/pilots/budget-freeze-referendum.json',rules]]) {
+  const text=JSON.stringify(value,null,2)+'\n';
+  if(process.argv.includes('--check'))check(readFileSync(path,'utf8')===text,`Cohort audit drift: ${path}`);
+  else writeFileSync(path,text);
+}
+console.log(`Verified ${output.length} eligible local pilots of ${manifest.total}, seven raw hashes, eligibility manifest and referendum mapping. No public release is authorised.`);
+console.log(JSON.stringify({byClass:manifest.byClass,exclusions:manifest.exclusionCounts,principles:manifest.principleCounts}));

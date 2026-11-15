@@ -1,4 +1,4 @@
-export declare const VERSION = "0.6.0";
+export declare const VERSION = "0.6.3";
 export declare const tokens: {
     readonly color: {
         readonly light: {
@@ -116,6 +116,14 @@ export declare const tokens: {
             readonly darkWash: "#2a3f45";
             readonly name: "Council Intel";
             readonly domain: "councilintel.co.uk";
+        };
+        readonly careatlas: {
+            readonly deep: "#2f5fd6";
+            readonly bright: "#7b9bff";
+            readonly wash: "#e9effc";
+            readonly darkWash: "#172240";
+            readonly name: "Lancashire care atlas";
+            readonly domain: "lancs-care-atlas.pages.dev";
         };
     };
     readonly skins: {
@@ -279,6 +287,9 @@ export declare const tokens: {
                         readonly "critical-bg": "#5a1f19";
                     };
                 };
+            };
+            readonly careatlas: {
+                readonly register: "record";
             };
             readonly ukai: {
                 readonly register: "editorial";
@@ -886,6 +897,6 @@ export declare function skin(key: SkinKey): Skin;
 /** Every colour for one theme and skin, as plain hex: the kit's colours with the skin's paper as bg, bg-subtle and border, and the skin's accent where it has one. */
 export declare function skinPalette(theme: Theme, key: SkinKey): Record<string, string>;
 /** The skins that have a desk. */
-export declare const DESK_KEYS: ("ukdemographics" | "ukelections" | "ukfoodhygiene" | "ukschoolholidaydates" | "asylumstats" | "aidoge" | "ukcounciltax" | "councilintel" | "ukai" | "lancashireai" | "tourdefrancelancashire")[];
+export declare const DESK_KEYS: ("ukdemographics" | "ukelections" | "ukfoodhygiene" | "ukschoolholidaydates" | "asylumstats" | "aidoge" | "ukcounciltax" | "councilintel" | "careatlas" | "ukai" | "lancashireai" | "tourdefrancelancashire")[];
 /** Every colour on a skin's desk, as plain hex: the skin palette with the kit's names pointed at the desk, as the [data-ground="desk"] rule does. */
 export declare function deskPalette(theme: Theme, key: SkinKey): Record<string, string>;

@@ -51,6 +51,17 @@ describe('the published own share increases', () => {
     }
   });
 
+  it('draws the 164 district rows compact and the other groups regular, at kit 0.6.3', () => {
+    expect(increaseChartNames().map(name => [name, increaseChartOptions(name).density ?? 'regular'])).toEqual([
+      ['increases-unitary', 'regular'], ['increases-county', 'regular'], ['increases-district', 'compact'],
+    ]);
+    const compact = rankedBars({...increaseChartOptions('increases-district'), mode: {kind: 'hex', theme: 'light', site: 'ukcounciltax'}});
+    const regular = rankedBars({...increaseChartOptions('increases-district'), density: 'regular', mode: {kind: 'hex', theme: 'light', site: 'ukcounciltax'}});
+    expect(compact.height).toBeLessThan(regular.height / 2);
+    expect(compact.svg.match(/data-ek-row=/g)).toHaveLength(164);
+    for (const name of groups[2].rows.map(row => row.name)) expect(compact.svg).toContain(`>${name.replace(/&/g, '&amp;')}<`);
+  });
+
   it('registers only current group downloads in the light theme', async () => {
     vi.stubEnv('BUILD_OG', '1');
     vi.resetModules();

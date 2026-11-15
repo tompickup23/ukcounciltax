@@ -9,6 +9,8 @@ import { tableTwin } from "./table.js";
 export function rankedBars(o) {
     if (o.template && o.template !== "inline")
         throw new Error("RankedBars draws the inline template only");
+    if (o.density !== undefined && o.density !== "regular" && o.density !== "compact")
+        throw new Error("RankedBars density must be regular or compact");
     const set = currentFigures(o.set);
     if (!o.rows?.length)
         throw new Error("RankedBars needs rows in caller order");
@@ -39,50 +41,106 @@ export function rankedBars(o) {
     const changeText = (r) => !r.c ? "" : r.c.value === null ? "Change unknown" : `${r.c.value > 0 ? "Rise" : r.c.value < 0 ? "Fall" : "No change"}: ${set.show(r.change)} (${r.c.label})`;
     const shown = rows.map(r => set.show(r.figure));
     canvas.allow(...shown, ...rows.filter(r => r.change).map(r => set.show(r.change)));
-    // Names and numbers sit above the bar. Measure the remaining label column before wrapping.
-    const valueW = Math.max(...shown.map(s => textWidth(s, tpl.font.value, "sans", 600)));
-    const labelW = P.w - valueW - 24;
-    if (labelW < size * 5)
-        throw new Error("RankedBars value leaves no room for its label");
-    const scale = zeroScale(zeroDomain(rows.flatMap(r => r.f.value === null ? [] : [r.f.value])), P.x, P.w, "right");
-    canvas.mark("bars", "series-1", [bg]);
-    const tableRows = [];
-    for (const [i, r] of rows.entries()) {
-        const name = r.f.name ?? r.f.label;
-        const labelEnd = canvas.para(P.x, y, name, labelW, { size, fill: "text", bg });
-        canvas.text(P.x + P.w, y + tpl.font.value, shown[i], { size: tpl.font.value, weight: 600, fill: "text", bg, anchor: "end", role: "value", tabular: true });
-        y = Math.max(labelEnd, y + tpl.font.value * 1.25) + 8;
-        const h = size * 0.55;
-        canvas.add(`<g data-ek-row="${esc(r.figure)}" data-ek-zero="${scale.zero}">`);
-        if (r.f.value === null) {
-            // A crossed box is a missing observation, deliberately unrelated to the value scale.
-            canvas.rect(P.x, y, h, h, "none", `${canvas.paint({ stroke: "text-muted" })} stroke-width="1.5" data-ek-unknown=""`);
-            canvas.line(P.x, y, P.x + h, y + h, "text-muted", 1.5);
-            canvas.line(P.x + h, y, P.x, y + h, "text-muted", 1.5);
-            canvas.obstacle("unknown marker", { x: P.x, y, w: h, h });
-            canvas.mark("unknown marker", "text-muted", [bg]);
-        }
-        else {
-            const length = scale.extent(r.f.value);
-            openBar(canvas, { orientation: "horizontal", base: scale.zero, end: scale.zero + Math.sign(r.f.value) * length, length, cross: y, thickness: h, r: 0, fill: "series-1", title: `${name}: ${shown[i]}`, what: `bar for ${name}` });
-            canvas.add("</g>");
-            canvas.line(scale.zero, y - 2, scale.zero, y + h + 2, "text-muted", 1);
-            canvas.obstacle("zero tick", { x: scale.zero - 0.5, y: y - 2, w: 1, h: h + 4 });
-        }
-        canvas.add("</g>");
-        y += h + 10;
-        if (r.c) {
-            // Direction in words survives greyscale, colour vision differences and text extraction.
+    if (o.density === "compact") {
+        const gap = 12, valueSize = size, rowHeight = size * 1.6, h = size * 0.55;
+        const sharedChangeLabel = changes.length && changes.every(c => c.label === changes[0].label) ? changes[0].label : undefined;
+        if (sharedChangeLabel)
+            y = canvas.para(P.x, y, `Change: ${sharedChangeLabel}`, P.w, { size: tpl.font.axis, fill: "text-muted", bg }) + 10;
+        const pieces = rows.map(r => {
+            if (!r.c)
+                return [];
             const direction = r.c.value === null ? "Change unknown" : r.c.value > 0 ? "Rise:" : r.c.value < 0 ? "Fall:" : "No change:";
-            const pieces = [{ text: direction, size: tpl.font.axis, fill: "text-muted" }, ...(r.c.value === null ? [] : [{ text: set.show(r.change), size: tpl.font.axis, fill: "text-muted", role: "value", tabular: true }, { text: `(${r.c.label})`, size: tpl.font.axis, fill: "text-muted" }])];
-            if (pieces.reduce((sum, p) => sum + textWidth(p.text, p.size), 6 * (pieces.length - 1)) > P.w)
-                throw new Error("change marker exceeds the plot width");
-            annotate(canvas, { pieces, gap: 6, x: P.x, y: y + tpl.font.axis, within: { min: P.x, max: P.x + P.w }, bg });
-            y += tpl.font.axis * 1.3 + 5;
+            return [{ text: direction, size: tpl.font.axis, fill: "text-muted" }, ...(r.c.value === null ? [] : [
+                    { text: set.show(r.change), size: tpl.font.axis, fill: "text-muted", role: "value", tabular: true },
+                    ...(!sharedChangeLabel ? [{ text: `(${r.c.label})`, size: tpl.font.axis, fill: "text-muted" }] : [])
+                ])];
+        });
+        const valueW = Math.max(...shown.map(s => textWidth(s, valueSize, "sans", 600)));
+        const changeW = Math.max(0, ...pieces.map(ps => ps.reduce((w, p) => w + textWidth(p.text, p.size), Math.max(0, ps.length - 1) * 6)));
+        const changeX = P.x + P.w - changeW;
+        const valueX = changeX - (changes.length ? gap : 0);
+        // Keep a visible plot even with long names. Never shrink text or shorten a name.
+        const minBarW = size * 3;
+        const labelLimit = P.w - valueW - changeW - gap * (changes.length ? 3 : 2) - minBarW;
+        const nameWidths = rows.map(r => textWidth(r.f.name ?? r.f.label, size));
+        rows.forEach((r, i) => {
+            if (nameWidths[i] > labelLimit)
+                throw new Error(`RankedBars compact row "${r.f.name ?? r.f.label}" leaves no room for its label, bar, value and change`);
+        });
+        const barX = P.x + Math.max(...nameWidths) + gap;
+        const barW = valueX - valueW - gap - barX;
+        const scale = zeroScale(zeroDomain(rows.flatMap(r => r.f.value === null ? [] : [r.f.value])), barX, barW, "right");
+        canvas.mark("bars", "series-1", [bg]);
+        for (const [i, r] of rows.entries()) {
+            const name = r.f.name ?? r.f.label, baseline = y + size, barY = baseline - size * 0.29 - h / 2;
+            canvas.add(`<g data-ek-row="${esc(r.figure)}" data-ek-zero="${scale.zero}">`);
+            canvas.text(P.x, baseline, name, { size, fill: "text", bg });
+            canvas.text(valueX, baseline, shown[i], { size: valueSize, weight: 600, fill: "text", bg, anchor: "end", role: "value", tabular: true });
+            if (r.f.value === null) {
+                canvas.rect(barX, barY, h, h, "none", `${canvas.paint({ stroke: "text-muted" })} stroke-width="1.5" data-ek-unknown=""`);
+                canvas.line(barX, barY, barX + h, barY + h, "text-muted", 1.5);
+                canvas.line(barX + h, barY, barX, barY + h, "text-muted", 1.5);
+                canvas.obstacle("unknown marker", { x: barX, y: barY, w: h, h });
+                canvas.mark("unknown marker", "text-muted", [bg]);
+            }
+            else {
+                const length = scale.extent(r.f.value);
+                openBar(canvas, { orientation: "horizontal", base: scale.zero, end: scale.zero + Math.sign(r.f.value) * length, length, cross: barY, thickness: h, r: 0, fill: "series-1", title: `${name}: ${shown[i]}`, what: `bar for ${name}` });
+                canvas.add("</g>");
+                canvas.line(scale.zero, barY - 2, scale.zero, barY + h + 2, "text-muted", 1);
+                canvas.obstacle("zero tick", { x: scale.zero - 0.5, y: barY - 2, w: 1, h: h + 4 });
+            }
+            if (r.c)
+                annotate(canvas, { pieces: pieces[i], gap: 6, x: changeX, y: baseline, within: { min: changeX, max: P.x + P.w }, bg });
+            canvas.add("</g>");
+            y += rowHeight;
         }
-        y += 12;
-        tableRows.push([name, shown[i], ...(changes.length ? [changeText(r) || "Not supplied"] : [])]);
     }
+    else {
+        // Names and numbers sit above the bar. Measure the remaining label column before wrapping.
+        const valueW = Math.max(...shown.map(s => textWidth(s, tpl.font.value, "sans", 600)));
+        const labelW = P.w - valueW - 24;
+        if (labelW < size * 5)
+            throw new Error("RankedBars value leaves no room for its label");
+        const scale = zeroScale(zeroDomain(rows.flatMap(r => r.f.value === null ? [] : [r.f.value])), P.x, P.w, "right");
+        canvas.mark("bars", "series-1", [bg]);
+        for (const [i, r] of rows.entries()) {
+            const name = r.f.name ?? r.f.label;
+            const labelEnd = canvas.para(P.x, y, name, labelW, { size, fill: "text", bg });
+            canvas.text(P.x + P.w, y + tpl.font.value, shown[i], { size: tpl.font.value, weight: 600, fill: "text", bg, anchor: "end", role: "value", tabular: true });
+            y = Math.max(labelEnd, y + tpl.font.value * 1.25) + 8;
+            const h = size * 0.55;
+            canvas.add(`<g data-ek-row="${esc(r.figure)}" data-ek-zero="${scale.zero}">`);
+            if (r.f.value === null) {
+                // A crossed box is a missing observation, deliberately unrelated to the value scale.
+                canvas.rect(P.x, y, h, h, "none", `${canvas.paint({ stroke: "text-muted" })} stroke-width="1.5" data-ek-unknown=""`);
+                canvas.line(P.x, y, P.x + h, y + h, "text-muted", 1.5);
+                canvas.line(P.x + h, y, P.x, y + h, "text-muted", 1.5);
+                canvas.obstacle("unknown marker", { x: P.x, y, w: h, h });
+                canvas.mark("unknown marker", "text-muted", [bg]);
+            }
+            else {
+                const length = scale.extent(r.f.value);
+                openBar(canvas, { orientation: "horizontal", base: scale.zero, end: scale.zero + Math.sign(r.f.value) * length, length, cross: y, thickness: h, r: 0, fill: "series-1", title: `${name}: ${shown[i]}`, what: `bar for ${name}` });
+                canvas.add("</g>");
+                canvas.line(scale.zero, y - 2, scale.zero, y + h + 2, "text-muted", 1);
+                canvas.obstacle("zero tick", { x: scale.zero - 0.5, y: y - 2, w: 1, h: h + 4 });
+            }
+            canvas.add("</g>");
+            y += h + 10;
+            if (r.c) {
+                // Direction in words survives greyscale, colour vision differences and text extraction.
+                const direction = r.c.value === null ? "Change unknown" : r.c.value > 0 ? "Rise:" : r.c.value < 0 ? "Fall:" : "No change:";
+                const pieces = [{ text: direction, size: tpl.font.axis, fill: "text-muted" }, ...(r.c.value === null ? [] : [{ text: set.show(r.change), size: tpl.font.axis, fill: "text-muted", role: "value", tabular: true }, { text: `(${r.c.label})`, size: tpl.font.axis, fill: "text-muted" }])];
+                if (pieces.reduce((sum, p) => sum + textWidth(p.text, p.size), 6 * (pieces.length - 1)) > P.w)
+                    throw new Error("change marker exceeds the plot width");
+                annotate(canvas, { pieces, gap: 6, x: P.x, y: y + tpl.font.axis, within: { min: P.x, max: P.x + P.w }, bg });
+                y += tpl.font.axis * 1.3 + 5;
+            }
+            y += 12;
+        }
+    }
+    const tableRows = rows.map((r, i) => [r.f.name ?? r.f.label, shown[i], ...(changes.length ? [changeText(r) || "Not supplied"] : [])]);
     if (tpl.H && y > P.y + P.h)
         throw new Error("RankedBars rows exceed this template; use inline or fewer rows");
     fr.close(y);

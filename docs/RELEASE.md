@@ -1,5 +1,24 @@
 # UK Council Tax specialist build, 5 October 2026
 
+## Local C2 experiment, 13 November 2026
+
+The local C2 tax and service spending pilot now covers 197 eligible councils
+of 296, built separately in `.ops/c2-dist`. Burnley remains excluded on parish.
+Published inputs and production routes are unchanged. Evidence and the printed
+precision derivation are in `docs/C2-COHORT-2026-11-15.md`. No release is authorised.
+
+### Limitations
+
+The production data tripwire in `src/lib/budget-freeze-data.ts` deliberately
+fails `npm test` when any pinned production input changes: `data/national/budget.json`,
+`data/national/england.json`, `data/council-tax/england-2026-27.json` or
+`data/council-tax/england-2025-26.json`. The error names the changed file and
+prints the exact rebuild command: `node scripts/audit-c2-pilot.mjs`.
+After an authorised source refresh, run that command and review the generated
+fixture, eligibility manifest and referendum mapping before committing.
+A raw hash mismatch remains a separate stop; rebuilding is not permission to
+replace a pinned source or approve public C2 integration.
+
 ## Scope and provenance
 
 New standalone Astro project, copied selectively from UK Councils commit 779dec32274f39d9d84bb311c49e8476d3b1e2a9. The source project and its live deployment are not migrated by this release. UK Council Tax remains the specialist tax product; broad council, elections, demographics and spending context is linked to public ecosystem routes.

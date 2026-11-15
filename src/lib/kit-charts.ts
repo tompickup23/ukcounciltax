@@ -67,6 +67,8 @@ export function increaseChartOptions(name: IncreaseChartName): RankedBarsOptions
     classLabel: group.label,
     basis: `Published percentage change in the council's own Band D share, England, ${year}. Excludes parish precepts and other bodies' shares`,
     title: `Own share percentage change, ${year}`,
+    // Kit 0.6.3: the 164 district rows take one measured line each (name, bar and value).
+    ...(group.id === "district" ? {density: "compact" as const} : {}),
   };
 }
 const isClassChart = (name: string): name is ClassChartName => name.startsWith("ranked-");

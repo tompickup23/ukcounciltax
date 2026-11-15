@@ -203,8 +203,9 @@ for (const path of files(DIST)) {
   // A gate that checks the CSP would allow the beacon is not a gate that checks
   // the beacon is there. Exactly one, carrying this site's token.
   const beacons = [...text.matchAll(/<script[^>]*static\.cloudflareinsights\.com\/beacon\.min\.js[^>]*>/g)];
-  if (beacons.length !== (BEACON_TOKEN ? 1 : 0)) failures.push(`${beacons.length} analytics beacons on ${rel(path)}`);
-  else if (BEACON_TOKEN && !beacons[0][0].includes(BEACON_TOKEN)) failures.push(`beacon on ${rel(path)} carries another token`);
+  const isBudgetSet = /^\/tools\/budget\/[^/]+\/set\/index.html$/.test(rel(path));
+  if (beacons.length !== (BEACON_TOKEN && !isBudgetSet ? 1 : 0)) failures.push(`${beacons.length} analytics beacons on ${rel(path)}`);
+  else if (BEACON_TOKEN && !isBudgetSet && !beacons[0][0].includes(BEACON_TOKEN)) failures.push(`beacon on ${rel(path)} carries another token`);
 
   const pagePath = rel(path) === "/404.html" ? "/404/" : rel(path).replace(/index\.html$/, "");
   const ownUrl = new URL(pagePath, SITE_URL).href;
@@ -234,7 +235,8 @@ if (seenMapped.size !== 318) failures.push(`expected 318 built mapped canonicals
 if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pages, found ${seenUnique.size}`);
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 // The Burnley budget scenario game adds one route, /councils/burnley/budget-game/.
-if (pages !== 910) failures.push(`expected 910 HTML pages, found ${pages}`);
+// C2 adds exactly 197 audited set pages to the existing 910 HTML pages.
+if (pages !== 1107) failures.push(`expected 1107 HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
@@ -242,6 +244,25 @@ const helpHtml = readFileSync(join(DIST, 'help/index.html'), 'utf8');
 for (const id of ['check-discounts-and-reductions','check-the-payment-schedule','if-paying-is-difficult']) if ((helpHtml.match(new RegExp(`id="${id}"`, 'g')) ?? []).length !== 1) failures.push(`help anchor ${id} must appear once`);
 if (profiles !== 296) failures.push(`expected 296 English council profiles, found ${profiles}`);
 console.log(`dist check: ${seenMapped.size} mapped canonicals and ${seenUnique.size} unique self canonicals checked`);
+
+// Every budget page exposes its audited decision, including missing returns.
+const c2 = JSON.parse(readFileSync('data/pilots/budget-freeze-eligibility.json', 'utf8'));
+for (const council of c2.councils) {
+  const budgetHtml = readFileSync(join(DIST, 'tools/budget', council.slug, 'index.html'), 'utf8');
+  const entry = /<p[^>]*data-budget-set-entry[^>]*>([\s\S]*?)<\/p>/.exec(budgetHtml)?.[1];
+  if (council.eligible) {
+    if (!entry?.includes(`/tools/budget/${council.slug}/set/`)) failures.push(`missing C2 entry: ${council.slug}`);
+    const setHtml = readFileSync(join(DIST, 'tools/budget', council.slug, 'set/index.html'), 'utf8');
+    if (!setHtml.includes('data-pagefind-body') || /<meta name="robots" content="noindex/.test(setHtml)) failures.push(`C2 indexing: ${council.slug}`);
+    const card = `/og/budget-set/${council.slug}.png`;
+    if (!setHtml.includes(card) || (requireImages(DIST) && !existsSync(join(DIST, card)))) failures.push(`C2 share card: ${council.slug}`);
+  } else {
+    // Astro escapes text as html-escaper does, quotes included.
+    const escaped = council.reason.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+    if (entry !== escaped) failures.push(`C2 exclusion wording: ${council.slug}`);
+    if (existsSync(join(DIST, 'tools/budget', council.slug, 'set/index.html'))) failures.push(`excluded C2 route: ${council.slug}`);
+  }
+}
 
 // A top-level 404 prevents Cloudflare Pages from treating this static site as an SPA.
 const notFound = join(DIST, '404.html');
@@ -283,7 +304,7 @@ const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
 const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
 const today = new Date().toISOString().slice(0, 10);
-if (sitemapEntries.length !== 909 || locs.length !== 909) failures.push(`expected all 909 sitemap entries, found ${sitemapEntries.length}`);
+if (sitemapEntries.length !== 1106 || locs.length !== 1106) failures.push(`expected all 1106 sitemap entries, found ${sitemapEntries.length}`);
 for (const entry of sitemapEntries) {
   const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
   if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);

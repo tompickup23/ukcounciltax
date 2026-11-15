@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import snapshot from '../../data/pilots/budget-freeze.json';
-import rules from '../../data/pilots/budget-freeze-referendum.json';
+import snapshot from '../../data/pilots/budget-freeze.json' with {type:'json'};
+import rules from '../../data/pilots/budget-freeze-referendum.json' with {type:'json'};
 import {FREEZE_MODEL, FREEZE_YEAR} from './budget-freeze';
 import type { FreezeBaseline } from './budget-freeze';
 

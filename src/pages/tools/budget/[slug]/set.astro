@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
+import raColumns from '../../../../../data/pilots/budget-freeze-columns.json';
+import {budgetSetPages, budgetSetPath} from '../../../../lib/paths';
+import { type FreezePilot } from '../../../../lib/budget-freeze-data';
+import { FREEZE_YEAR, FREEZE_YEAR_TEXT, FREEZE_MODEL, FREEZE_ASSUMPTIONS, referendumExplanation, calculateFreeze, initialFreezeInputs, inputPounds, money } from '../../../../lib/budget-freeze';
+import snapshot from '../../../../../data/pilots/budget-freeze.json';
+export function getStaticPaths() { return budgetSetPages().map(pilot => ({ params:{slug:pilot.slug}, props:{pilot} })); }
+const {pilot} = Astro.props as {pilot:FreezePilot};
+const initial = calculateFreeze(pilot, initialFreezeInputs(pilot));
+const taxSource = pilot.sources[1];
+const budgetSource = pilot.sources[0];
+const baseText = (Number(pilot.taxBaseHundredths)/100).toLocaleString('en-GB',{maximumFractionDigits:2});
+const cell = (key: keyof typeof pilot.evidence) => { const c = pilot.evidence[key]; return `${c.sheet}, ${c.column}${c.row}`; };
+const raCell = (id: string) => `${pilot.evidence.raTotal.sheet}, ${raColumns[id as keyof typeof raColumns]}${pilot.evidence.raTotal.row}`;
+const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
+// The same note printed in two MHCLG files is shown once, with both cells cited.
+const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: string; explanation: string; citations: (typeof pilot.reviewedNotes)[number]['citation'][]}>>((groups, note) => {
+  const key = `${note.text}\n${note.explanation}`;
+  (groups[key] ??= {text: note.text, explanation: note.explanation, citations: []}).citations.push(note.citation);
+  return groups;
+}, {}));
+---
+<BaseLayout title={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}`} description={`Set ${pilot.name}'s budget using the published ${FREEZE_YEAR_TEXT} ledger. Explore tax and spending with explicit assumptions.`} path={budgetSetPath(pilot.slug)} ephemeral ogImage={`/og/budget-set/${pilot.slug}.png`} ogImageAlt={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}. An exploration, not a forecast.`}>
+  <Breadcrumbs items={[{label:'Tools',href:'/tools/'},{label:'Council budgets',href:'/tools/budget/'},{label:pilot.name,href:`/tools/budget/${pilot.slug}/`},{label:'Set the budget'}]} />
+  <div class="budget-set" data-freeze-pilot data-pilot={JSON.stringify(pilot)}>
+      <nav class="pilot-nav" aria-label="Budget exercise"><a href="/tools/budget/">Choose another council</a><button type="button" data-theme-toggle hidden>Change colour theme</button></nav>
+      <div class="page-head">
+        <p class="eyebrow">{FREEZE_YEAR_TEXT} · Tax and spending</p>
+        <h1>Set {pilot.name}'s budget</h1>
+        <p class="lede">Start with last year's own-council charge. Explore how changes to tax and net service spending affect the remaining difference.</p>
+        <p class="source-line">User requested scenario | {FREEZE_MODEL}. A calculation exercise, not the council's actual deficit.</p>
+      </div>
+      <section class="baseline" aria-labelledby="baseline-title">
+        <h2 id="baseline-title">The published starting point</h2>
+        <div class="baseline-grid">
+          <div><p class="fact-label">Own Band D, {`${Number(FREEZE_YEAR.slice(0,4))-1}/${FREEZE_YEAR.slice(2,4)}`}</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><p class="source-line">MHCLG, <a href={pilot.sources[2].url}>{pilot.sources[2].title}</a>, {cell('annualPrior')}; Table 10 {cell('table10Prior')}.</p></div>
+          <div><p class="fact-label">Own Band D, {FREEZE_YEAR_TEXT}</p><strong>{publishedMoney(pilot.ownPence)}</strong><p class="source-line">MHCLG, <a href={taxSource.url}>{taxSource.title}</a>, {cell('annualCurrent')}; Table 10 {cell('table10Current')}.</p></div>
+          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><p class="source-line">Band D equivalents. MHCLG, <a href={pilot.sources[3].url}>Table 10, {cell('table10Base')}</a>.</p></div>
+        </div>
+        <p>These are this council's own charges excluding parish precepts, not the full household bill.{pilot.rule === 'district' && ' County council, police, fire and parish charges are outside this exercise.'}</p>
+      </section>
+      <section class="assumptions" aria-labelledby="assumptions-title">
+        <h2 id="assumptions-title">Model assumptions | {FREEZE_MODEL}</h2>
+        <ul>{FREEZE_ASSUMPTIONS.map(text => <li>{text}</li>)}</ul>
+        {pilot.grantDsgThousands > 0 && <p>Dedicated Schools Grant is included in the published education and financing figures. Education stays fixed here. Reserve accounting also varies with High Needs Stability Grant treatment; reserves are not a spending control. Source: MHCLG RA and specific grants, notes 1, 2 and 6.</p>}
+      </section>
+      <section class="referendum-rule" aria-labelledby="rule-title"><h2 id="rule-title">The referendum rule</h2><p>{referendumExplanation(pilot.rule)} A referendum would be required when this trigger is reached. It is not a cap.</p><p class="source-line">MHCLG, <a href={pilot.sources[4].url}>{pilot.sources[4].title}</a>.</p></section>
+      <noscript><p class="notice">The scenario controls need JavaScript. The published ledger and the freeze calculation below remain available.</p></noscript>
+      <div class="scenario-layout">
+        <section class="controls" data-controls hidden aria-labelledby="controls-title">
+          <h2 id="controls-title">Your choices</h2>
+          <div class="actions"><button type="button" data-freeze-reset>Start again with a freeze</button><button type="button" data-published-reset>Restore published baseline</button></div>
+          <div class="control-card tax-control">
+            <h3>Own-council Band D</h3>
+            <label for="own">Your annual charge, pounds</label>
+            <input id="own" data-own type="number" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} aria-describedby="tax-note control-limits" />
+            <input data-own-range type="range" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} aria-label="Own-council Band D slider, pounds" />
+            <p class="source-line">User requested scenario. Published reference: {publishedMoney(pilot.ownPence)}. MHCLG, <a href={taxSource.url}>{taxSource.title}</a>, {cell('annualCurrent')}; Table 10 {cell('table10Current')}.</p>
+            <p id="tax-note">{referendumExplanation(pilot.rule)} This is a trigger, not a hard cap. The exercise does not assess the process for a higher charge or compliance with spending duties.</p>
+            <p class="source-line">MHCLG, <a href={pilot.sources[4].url}>{pilot.sources[4].title}</a>.</p>
+            <p data-rule-result></p>
+          </div>
+          <p id="control-limits">Exploration range: zero to twice each published amount. This is not a forecast, a legal limit or a deliverable budget.</p>
+          <h3>Net service spending</h3>
+          <p>Enter the total you choose for each service. Lower amounts reduce the scenario difference; higher amounts increase it. No service consequences are inferred.</p>
+          {pilot.services.filter(s=>s.editable).map(service => <div class="control-card">
+            <h4>{service.label}</h4>
+            <label for={`service-${service.id}`}>Your net spending, pounds</label>
+            <input id={`service-${service.id}`} data-service={service.id} type="number" min="0" max={inputPounds(BigInt(service.pence)*2n)} step="0.01" value={inputPounds(service.pence)} aria-describedby="control-limits" />
+            <input data-service-range={service.id} type="range" min="0" max={inputPounds(BigInt(service.pence)*2n)} step="0.01" value={inputPounds(service.pence)} aria-label={`${service.label} slider, pounds`} />
+            <p class="source-line">User requested scenario. Published reference: {publishedMoney(service.pence)}. MHCLG, <a href={budgetSource.url}>RA Part 1, {FREEZE_YEAR_TEXT}, {raCell(service.id)}, line {service.line}</a>.</p>
+            <p data-service-delta={service.id}></p>
+          </div>)}
+        </section>
+        <aside class="scenario-result" aria-labelledby="result-title">
+          <p class="eyebrow">User requested scenario | {FREEZE_MODEL}</p>
+          <h2 id="result-title">The remaining difference</h2>
+          <div role="status" aria-live="polite" aria-atomic="true" data-result-status>
+            <p class="result-amount" data-remaining>{money(initial.remaining)}</p>
+            <p data-state>{initial.status === 'balanced' ? 'The arithmetic balances under these assumptions. This does not establish a deliverable or legally compliant budget.' : initial.status === 'shortfall' ? 'Additional financing or lower net spending needed under these assumptions.' : 'Financing exceeds spending under these assumptions.'}</p>
+          </div>
+          <p data-error role="alert" hidden></p>
+          <dl data-result-details>
+            <div><dt>Change in net service spending</dt><dd data-spending>{money(initial.spendingChange)}</dd></div>
+            <div><dt>Change in own-tax financing</dt><dd data-financing>{money(initial.financingChange)}</dd></div>
+          </dl>
+          <p class="source-line">Calculated as changes in net spending minus changes in own-tax financing. Financing change is your charge minus the published current charge, multiplied by the fixed tax base.</p>
+          <p class="source-line">Freeze starting calculation: ({publishedMoney(pilot.ownPence)} minus {publishedMoney(pilot.priorOwnPence)}) × {baseText}. Inputs: MHCLG <a href={taxSource.url}>current Table 8</a>, <a href={pilot.sources[2].url}>prior Table 8</a> and <a href={pilot.sources[3].url}>current Table 10</a>.</p>
+          <p>Money is displayed to pennies. The calculation keeps four decimal places and tests for an exact zero before rounding. A zero difference means the arithmetic balances under the stated assumptions.</p>
+        </aside>
+      </div>
+      <section class="section ledger" aria-labelledby="ledger-title">
+        <h2 id="ledger-title">The published ledger stays unchanged</h2>
+        <p>All service groups, including net income and published zeros, remain in the reference below. The rows after total service expenditure show revenue expenditure and its signed financing entries; they are not additional service totals.</p>
+        <p class="source-line">MHCLG, <a href={budgetSource.url}>{budgetSource.title}</a>. Published unit: £ thousand. Display below preserves that unit.</p>
+        <details open><summary>Read the signed ledger and held service groups</summary>
+          <div class="table-wrap"><table class="data"><caption>{pilot.name}, published RA {FREEZE_YEAR_TEXT}, £ thousand</caption><thead><tr><th scope="col">RA line</th><th scope="col">Item</th><th scope="col">Published</th><th scope="col">Treatment and source</th></tr></thead><tbody>{pilot.ledger.map(row=><tr><td data-label="RA line">{row.line}</td><th scope="row">{row.label}</th><td data-label="Published £ thousand">{row.thousands.toLocaleString('en-GB')}</td><td data-label="Treatment and source">{pilot.services.find(s=>s.id===row.id)?.heldReason ?? (pilot.services.find(s=>s.id===row.id)?.editable ? 'Scenario control above' : ['servicetot','revenuetot','ctrtot'].includes(row.id) ? 'Published reference total, not an additional control' : 'Held fixed because financing and non-service adjustments are not modelled')}<span class="source-line">RA Part 1, {raCell(row.id)}</span></td></tr>)}</tbody></table></div>
+        </details>
+        <details id="reconciliation"><summary>Source reconciliation and precision</summary>
+          <p>The signed RA financing identity and service totals reconcile. The RA council-tax requirement is printed in thousands; Table 10 prints whole pounds. Their difference is {publishedMoney(pilot.reconciliation.raTotalDifferencePence)}, within half a printed thousand. Compatibility with that precision does not prove why the sources differ. This difference is kept separate from the scenario and is not a deficit.</p>
+          <p>Table 10, Data_Billing: total ({pilot.evidence.table10Total.column}{pilot.evidence.table10Total.row}) including parish: {publishedMoney(pilot.reconciliation.table10TotalPence)}; own requirement ({pilot.evidence.table10Own.column}{pilot.evidence.table10Own.row}): {publishedMoney(pilot.reconciliation.table10OwnPence)}; parish requirement ({pilot.evidence.table10Parish.column}{pilot.evidence.table10Parish.row}): {publishedMoney(pilot.reconciliation.table10ParishPence)}.</p>
+          {pilot.reconciliation.table10IdentityDifferencePence !== '0' && <p>Table 10 total minus its printed own and parish amounts is {publishedMoney(pilot.reconciliation.table10IdentityDifferencePence)}. Each is printed in whole pounds; this difference is compatible with that precision. All three printed figures remain unchanged.</p>}
+          <p>The printed own Band D multiplied by the tax base differs from the published own requirement by {money(BigInt(pilot.reconciliation.ownYieldDifferenceUnits))}. Printed Band D is rounded to pennies. The model calculates changes from the published baseline; it does not replace the published requirement with this product.</p>
+          <p>The RA total less its parish line, minus the Table 10 own requirement, is {publishedMoney(pilot.reconciliation.ownDifferencePence)}. This derived component is within the sum of the two half thousand pound bounds plus half a pound for its whole pound printing.</p>
+          <p>The RA parish line minus the Table 10 parish requirement is {publishedMoney(pilot.reconciliation.parishDifferencePence)}. This is within half a printed thousand.</p>
+          <p class="source-line">MHCLG, <a href={pilot.sources[3].url}>Table 10, Data_Billing, items 1, 2, 3, 7 and 9</a>, and <a href={budgetSource.url}>RA Part 1, {cell('raParish')} and {cell('raTotal')}, lines 821 and 990</a>.</p>
+        </details>
+      </section>
+      {notes.length > 0 && <section class="section"><h2>Reviewed source notes</h2><ul>{notes.map(note=><li><p>{note.text}</p><p>{note.explanation}</p><p class="source-line">{note.citations.map(c=>`${c.file}, ${c.sheet}, ${c.column}${c.row}`).join('; ')}.</p></li>)}</ul></section>}
+      <section class="section"><h2>Sources and next steps</h2><ul>{pilot.sources.map(source=><li><a href={source.url}>{source.title}</a></li>)}</ul><p>Sources checked on {snapshot.reviewedOn}. This exercise is not a consultation and sends no choices to a council. No storage, saved choices, scenario network requests or analytics events. Choices reset on reload.</p><p><a href={`/tools/budget/${pilot.slug}/`}>Open the published budget game</a></p></section>
+      <div class="mobile-result" data-mobile-result hidden aria-hidden="true"><span>User requested scenario</span><strong data-mobile-amount></strong><span data-mobile-state></span></div>
+  </div>
+  <script src="../../../../scripts/budget-freeze.ts"></script>
+</BaseLayout>
+<style>
+  .eyebrow{font-size:var(--text-sm);color:var(--text-muted)}
+  .pilot-nav{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;padding-block:1.25rem}
+  .page-head{padding-block:1.5rem}h1{max-width:24ch}.baseline,.assumptions,.control-card,.scenario-result{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--bg-card)}
+  .baseline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}.baseline-grid strong{font-size:var(--text-xl);font-variant-numeric:tabular-nums}
+  .assumptions{margin-block:1.5rem}.assumptions li{margin-block:0.5rem}.scenario-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:start;gap:2rem}
+  .control-card{margin-block:1rem}.control-card h3,.control-card h4{margin-top:0}.control-card label{display:block;margin-block:0.75rem 0.35rem}
+  input[type=number]{font-size:1.15rem;width:100%;min-height:48px;padding:0.6rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:0.3rem;box-sizing:border-box}
+  input[type=range]{width:100%;min-height:44px;accent-color:var(--accent)}button{min-height:44px;padding:0.65rem 0.85rem;border:1px solid var(--border);border-radius:0.35rem;background:var(--bg-subtle);color:var(--text);font:inherit;cursor:pointer}
+  .actions{display:flex;flex-wrap:wrap;gap:0.6rem}.scenario-result{position:sticky;top:6rem;border-top:4px solid var(--accent)}.result-amount{font-size:var(--text-2xl);font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;margin-block:1rem}
+  dl div{padding-block:0.65rem;border-top:1px solid var(--border)}dd{margin:0.35rem 0 0;font-weight:600}summary{cursor:pointer;min-height:44px;align-content:center}details{margin-block:1rem}td,th{overflow-wrap:anywhere}table{min-width:0;width:100%}
+  [data-error]{color:var(--text);border-inline-start:4px solid var(--accent);padding:0.75rem}[hidden]{display:none!important}
+  .mobile-result{display:none}
+  input,button{scroll-margin-block:8rem}
+  @media(max-width:760px){.budget-set{padding-bottom:7rem}.baseline-grid,.scenario-layout{grid-template-columns:1fr}.scenario-result{position:static;grid-row:1}.control-card,.scenario-result,.baseline{padding:1rem}.baseline-grid{gap:0.5rem}th,td{padding:0.5rem;font-size:0.85rem}.mobile-result{display:flex;flex-wrap:wrap;gap:0.2rem 0.75rem;position:fixed;bottom:0;left:0;right:0;padding:0.65rem 1rem;background:var(--bg-card);border-top:2px solid var(--accent);z-index:5;font-size:0.85rem}.mobile-result>span:first-child{width:100%}.mobile-result strong{font-size:1.25rem}}
+  .assumptions{background:var(--accent-wash)}.source-line{overflow-wrap:anywhere}.ledger .source-line{display:block}.table-wrap{overflow:visible;max-height:none}table{table-layout:fixed}th,td{white-space:normal}th:first-child,td:first-child{width:4rem}
+  @media(max-width:760px){.ledger table,.ledger tbody,.ledger tr,.ledger td,.ledger th{display:block;width:auto}.ledger thead{display:none}.ledger tr{padding-block:0.75rem;border-bottom:1px solid var(--border)}.ledger td,.ledger th{border:0;padding:0.25rem 0;text-align:left}.ledger td::before{content:attr(data-label) ': ';font-weight:600}.ledger caption{display:block;text-align:left}.ledger th{font-size:1rem}.ledger td:first-child{width:auto}}
+</style>

@@ -8,7 +8,7 @@ import {CURRENT_YEAR, loadYear} from '../src/lib/council-tax';
 describe('sitemap edition dates', () => {
   it('covers every indexed route without falling back to the clock', () => {
     const routes = [...STATIC_PATHS, ...programmaticPaths()];
-    expect(routes).toHaveLength(909);
+    expect(routes).toHaveLength(1106);
     for (const route of routes) expect(sitemapLastmod(route), route).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(() => sitemapLastmod('/unrecorded/')).toThrow('No recorded sitemap date');
   });

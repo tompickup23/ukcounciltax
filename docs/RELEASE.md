@@ -635,3 +635,83 @@ counts or missing identities. The whole-build comparison permits 234 changed
 HTML pages, with 225 profile JSON-LD name changes and four finder or picker
 pages. Its only numeric changes are two registry edition day tokens on the
 changes page. The PR lists every permitted page and the full field comparison.
+
+
+## C2 public route review candidate, 15 November 2026
+
+This candidate adds exactly 197 indexable `/tools/budget/<slug>/set/` pages,
+selected from `data/pilots/budget-freeze.json`. The 296 existing budget pages
+add one entry: a set link for an eligible council or its exact stored exclusion
+reason. All 99 exclusions remain. Burnley's separate scenario link stays beside
+its exclusion reason. No published figure is removed or replaced.
+
+The strict closed GBP 500 total and parish precision screens remain unchanged.
+Model `budget-freeze 0.2` uses the model edition and mapped referendum rules,
+including Trafford's 7.5% rule. The controls explore zero to twice each published
+positive amount. This is not a forecast, a legal limit or a deliverable budget.
+Crossing a trigger is permitted and says a referendum would be required.
+Education, public health, net income, zeros, grants, reserves and other financing
+stay fixed. Every held service displays its audited reason. Other fixed entries
+explain that financing and non-service adjustments are not modelled.
+
+Provenance remains the seven pinned MHCLG files, with no new source or estimated
+input. Annual own charges cite Tables 8a or 8c with cells, tax bases and
+requirements cite Table 10 Data_Billing cells, and the signed ledger cites
+RA Part 1 sheet and column. The audit now also generates the RA column map from
+its raw identifier row, checked by `node scripts/audit-c2-pilot.mjs --check`.
+Referendum text cites the mapped report page and paragraph. Raw SHA256 hashes:
+
+- `RA_2026-27_data_Part_1.ods`: `3ea4d4c2218bc9f49bbf59a6fc82481acb6a3494d5b0f4e114cdb945730653db`.
+- `RA_2026-27_data_Part_2.ods`: `55c34505c69513fcba446f3484061d2bd115c4ce06bb5bafba7b36e330be4d65`.
+- `SG_2026-27.ods`: `6150792dcea97ca58b912a5fbf9fdc99562ba782fb7d6f5c8885e6ca1a17e3b5`.
+- `table-10-2026-27.ods`: `b5b8345743fb722e48699243d1654a3e35b96c89a14c6eb26888035c3e38feb0`.
+- `Tables_1-9_2026-27.ods`: `66b7c20f70c804038c0a392ff2b7249fd09e83f4e88ac87d0278ce7e19da5537`.
+- `Tables_1-9_2025-26.ods`: `7d9f98b6c152d276d7fb672db0a7cec866df24e175bb28ebb55cbe845a8afbc3`.
+- `Council_Tax_Referendum_Principles_Report_2026-27.pdf`: `128ea9300b33124e88474412be96e050ed210dddcc17cf4b7620bade53df3ac3`.
+
+The production data tripwire in `src/lib/budget-freeze-data.ts` checks the four
+hashed data files in `sourceHashes`. Any refresh fails `npm test` until
+`node scripts/audit-c2-pilot.mjs` is rerun and its regenerated fixture is reviewed.
+Unknown values never become zero. Compatibility with printed precision does
+not explain a discrepancy. The fixed tax base sensitivity is not actual cash
+receipts or the council's deficit. Fractional pennies remain exact internally;
+displayed zero is not treated as an exact balance.
+
+The production layout gives these routes canonical URLs, structured data,
+sitemap entries and Pagefind indexing. Each has a figure-free share card.
+The set pages omit the analytics beacon, saved theme loader and footer theme
+selector. Their theme button changes only the current document. Scenario inputs
+make no network requests, create no storage or URL state and reset on reload. The local pilot copy action
+is omitted from the public page; there is no clipboard write.
+Other pages retain their existing analytics and robots behaviour. The security
+policy template is unchanged; postbuild supplies exact executable script hashes.
+
+Without JavaScript, the published ledger, freeze figure, assumptions and mapped
+rule remain visible while controls are hidden. Phone ledgers stack each row
+vertically, preserving headings and cell references without horizontal scrolling.
+The remaining difference is separate from the published ledger and assumptions
+have their own panel. Invalid inputs withdraw the result and leave the ledger
+unchanged. This candidate does not merge, tag, deploy or authorise publication.
+
+Final verification uses Node 22.23.4 after merging main `584968e` with a merge
+commit. All 842 unit tests in 66 files pass with one worker and no skips. Astro
+checks 330 files with no errors, warnings or hints. The full `BUILD_OG=1` build
+and distribution audit pass: 1,107 HTML pages, 1,106 sitemap and Pagefind entries,
+197 set pages and dedicated cards, and 2,207 resolved chart PNG links. The text
+sweep passes all 1,115 files. The raw audit confirms 197 eligible councils and
+all seven hashes; the independent Decimal replay passes its ten raw-cell rows.
+
+All 138 production CSP tests and 28 focused preview browser cases pass. The
+three-class matrix covers Huntingdonshire, Trafford and Camden at 375 and 1440
+in both themes, with exact penny crossings, reset, invalid input, no-script
+content and zero axe violations. Screenshots of Trafford and excluded Burnley
+were reviewed at both widths in both themes, with extra control and ledger
+views. Storage access and scenario requests are absent on the tested set pages.
+
+Against a fresh independent build of main `584968e`, the number comparison
+reports nine existing pages with an added `2026/27` exclusion token, 197 added
+pages, no removed pages and no changes outside the permitted routes. No old
+number is removed. A full HTML comparison confirms 614 existing pages are byte
+identical; all 296 parent budget pages differ only by their one entry after
+normalising inter-tag whitespace. The header policy, four hashed production
+inputs, cohort, referendum mapping and model edition remain unchanged.

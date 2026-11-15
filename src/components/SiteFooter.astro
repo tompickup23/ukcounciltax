@@ -6,6 +6,9 @@
 import { FOOTER_LINKS, SITE_NAME } from "../lib/site";
 import ThemeSelect from "./ThemeSelect.astro";
 
+interface Props { ephemeral?: boolean }
+const {ephemeral = false} = Astro.props;
+
 const SISTERS = [
   {name: "UK Councils", url: "https://ukcouncils.co.uk/", blurb: "The wider picture of your local council"},
   {name: "UK Places", url: "https://ukplaces.co.uk/", blurb: "Explore places and their local context"},
@@ -34,7 +37,7 @@ const year = new Date().getUTCFullYear();
     <nav class="footer-links" aria-label="About this site">
       <ul>{FOOTER_LINKS.map((link) => <li><a href={link.href}>{link.label}</a></li>)}</ul>
     </nav>
-    <div class="footer-theme"><ThemeSelect label="Theme" /></div>
+    {!ephemeral && <div class="footer-theme"><ThemeSelect label="Theme" /></div>}
   </div>
 </footer>
 

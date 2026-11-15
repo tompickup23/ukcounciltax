@@ -1,3 +1,4 @@
+import {freezePilots} from './budget-freeze-data';
 import { national } from './national-data';
 import { RANK_CLASSES, COUNTY_CLASS } from './rankings';
 import {devolvedPaths} from './devolved';
@@ -74,9 +75,24 @@ export function councilPages(): CouncilPage[] {
     .sort((a, b) => a.tax.name.localeCompare(b.tax.name, "en-GB"));
 }
 
+export const budgetSetPath = (slug: string) => `/tools/budget/${slug}/set/`;
+let setPages: ReturnType<typeof freezePilots> | undefined;
+/** The public set pages. Hashing the inputs once per build is enough. A pilot whose
+ * parish figures still need source review is never published: the build stops. */
+export function budgetSetPages() {
+  if (!setPages) {
+    const pilots = freezePilots();
+    const held = pilots.filter(pilot => pilot.reconciliation.componentReviewRequired).map(pilot => pilot.slug);
+    if (held.length) throw new Error(`C2 set pages need source review first: ${held.join(', ')}`);
+    setPages = pilots;
+  }
+  return setPages;
+}
+
 export function programmaticPaths(): string[] {
   return [
     ...devolvedPaths(),
+    ...budgetSetPages().map(pilot => budgetSetPath(pilot.slug)),
     ...rankingPaths(),
     ...parishPages().map(parishPath),
     ...BANDS.map(bandPath),

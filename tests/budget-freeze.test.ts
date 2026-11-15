@@ -5,6 +5,7 @@ import {freezePilots} from '../src/lib/budget-freeze-data';
 import snapshot from '../data/pilots/budget-freeze.json';
 import manifest from '../data/pilots/budget-freeze-eligibility.json';
 import referendum from '../data/pilots/budget-freeze-referendum.json';
+import browserPrinciples from '../data/pilots/budget-freeze-principles.json';
 const pilots=freezePilots();
 const district=pilots.find(p=>p.gss==='E07000011')!;
 const blackburn=pilots.find(p=>p.gss==='E06000008')!;
@@ -81,6 +82,9 @@ describe('C2 exact arithmetic and refusal cases',()=>{
 });
 
 describe('edition-specific referendum boundaries in exact pence',()=>{
+  it('gives the page script the same principles as the full referendum file and no mapping',()=>{
+    expect(browserPrinciples).toEqual({edition:referendum.edition,principles:referendum.principles});
+  });
   for(const [key,rule] of Object.entries(referendum.principles)) {
     const id=key as keyof typeof referendum.principles;
     it(`${key} checks one penny under, equal and one penny over the percentage threshold`,()=>{

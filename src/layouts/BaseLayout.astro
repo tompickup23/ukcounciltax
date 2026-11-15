@@ -30,6 +30,8 @@ interface Props {
   /** Path of this page, for the canonical tag. */
   path: string;
   noindex?: boolean;
+  /** Omit analytics and persisted theme reads or controls for an unsaved exercise. */
+  ephemeral?: boolean;
   /** Extra JSON-LD nodes for this page. They name no person. */
   structuredData?: object[];
   /** The share card path. Defaults to the home card. */
@@ -44,6 +46,7 @@ const {
   description = DEFAULT_DESCRIPTION,
   path,
   noindex = false,
+  ephemeral = false,
   structuredData = [],
   about,
   ogImage = hubCardPath("home"),
@@ -114,7 +117,7 @@ const nodes = [
     <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href="/rss.xml" />
-    <script is:inline src="/theme-init.js"></script>
+    {!ephemeral && <script is:inline src="/theme-init.js"></script>}
     {nodes.map((node) => <script type="application/ld+json" set:html={jsonLd(node)} />)}
   </head>
   <body>
@@ -123,7 +126,7 @@ const nodes = [
     <main id="main" class="shell" data-pagefind-body data-pagefind-meta={`type:${pageTypeFor(path)}`}>
       <slot />
     </main>
-    <SiteFooter />
-    {CF_BEACON_TOKEN && <script is:inline defer src={BEACON_SCRIPT} data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}></script>}
+    <SiteFooter ephemeral={ephemeral} />
+    {!ephemeral && CF_BEACON_TOKEN && <script is:inline defer src={BEACON_SCRIPT} data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}></script>}
   </body>
 </html>

@@ -21,10 +21,10 @@ export const DEFAULT_DESCRIPTION =
 
 /**
  * Cloudflare Web Analytics. The site token is public: it is printed in every
- * page. The beacon script loads from BEACON_SCRIPT and posts page loads to
+ * ordinary page. The C2 set pages opt out through BaseLayout. The beacon script loads from BEACON_SCRIPT and posts page loads to
  * BEACON_ENDPOINT, which is why the CSP allows the one in script-src and the
  * other in connect-src. scripts/check-dist.mjs fails a page that does not
- * carry exactly one beacon with this token.
+ * carry exactly one beacon with this token, except C2 set pages which carry none.
  */
 export const CF_BEACON_TOKEN = "11f6f11ed6cf428d9dd7e1d688f8a64b";
 export const BEACON_SCRIPT = "https://static.cloudflareinsights.com/beacon.min.js";

@@ -1,5 +1,5 @@
 // Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
-export const VERSION = "0.6.0";
+export const VERSION = "0.6.3";
 export const tokens = {
     "color": {
         "light": {
@@ -117,6 +117,14 @@ export const tokens = {
             "darkWash": "#2a3f45",
             "name": "Council Intel",
             "domain": "councilintel.co.uk"
+        },
+        "careatlas": {
+            "deep": "#2f5fd6",
+            "bright": "#7b9bff",
+            "wash": "#e9effc",
+            "darkWash": "#172240",
+            "name": "Lancashire care atlas",
+            "domain": "lancs-care-atlas.pages.dev"
         }
     },
     "skins": {
@@ -282,6 +290,9 @@ export const tokens = {
                         "critical-bg": "#5a1f19"
                     }
                 }
+            },
+            "careatlas": {
+                "register": "record"
             },
             "ukai": {
                 "register": "editorial",

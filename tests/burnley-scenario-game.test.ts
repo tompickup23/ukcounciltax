@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync} from 'node:fs';
 import {describe, expect, it} from 'vitest';
-import {gameMarkup, longDate, scopeCss, scopeSelector, strictProblems} from '../scripts/lib/burnley-game-sync.mjs';
+import {gameMarkup, longDate, scopeCss, scopeSelector, servedCss, strictProblems} from '../scripts/lib/burnley-game-sync.mjs';
 import {programmaticPaths, scenarioGamePath, SCENARIO_GAME_SLUGS} from '../src/lib/paths';
 import {canonicalUrl} from '../src/lib/canonical';
 import {sitemapLastmod} from '../src/lib/releases';
@@ -39,6 +39,13 @@ describe('the copied game files', () => {
     expect(meta.runId).toMatch(/^run-[0-9a-f]{16}$/);
     expect([...new Set(js.match(/run-[0-9a-f]{16}/g))]).toEqual([meta.runId]);
     expect(longDate(meta.edition)).toBe(meta.editionText);
+  });
+
+  it('end with the current site skin, including the hero headline colour', () => {
+    const skin = read('src/components/burnley-game/skin.css');
+    expect(css.endsWith(skin)).toBe(true);
+    expect(skin).toContain('.burnley-game .hero h1,.burnley-game .hero h2,.burnley-game .hero h3{color:var(--hero-ink)}');
+    expect(servedCss('.a{color:red}', meta.runId, skin)).toBe(`/* Burnley budget game, model run ${meta.runId}. Written by scripts/sync-burnley-game.sh: do not edit by hand. */\n.burnley-game .a{color:red}\n${skin}`);
   });
 
   it('ask for nothing outside this site and carry no inline script, handler or style', () => {

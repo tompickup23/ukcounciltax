@@ -32,6 +32,14 @@ interface Figure {
   source: SourceRef;
 }
 
+/** A second link per row, after the figure: the budget hub's set mode link (W0). */
+interface Action {
+  heading: string;
+  /** The link for each row, by GSS code. Null prints the missing label. */
+  links: Record<string, { href: string; text: string } | null>;
+  missing: string;
+}
+
 interface Props {
   id: string;
   rows: PickerRow[];
@@ -40,6 +48,10 @@ interface Props {
   label?: string;
   /** One figure per row, with its source line. Leave it out to print none. */
   figure?: Figure;
+  /** A second link per row. Leave it out to print none. */
+  action?: Action;
+  /** When the page is opened at this fragment, a postcode or name answer opens the row's action link where it has one. */
+  actionHash?: string;
   /** The heading over the rows that sort to the end, when any are marked. */
   tailHeading?: string;
   /** What the box says about a postcode outside the rows. */
@@ -52,6 +64,8 @@ const {
   caption,
   label = "Postcode or council name",
   figure,
+  action,
+  actionHash,
   tailHeading,
   outside = "That postcode is not in a council listed here.",
 } = Astro.props;
@@ -61,9 +75,9 @@ const regionOrder: string[] = [...REGIONS, "Scotland", "Wales"];
 const regions = regionOrder.filter((region) => rows.some((row) => row.region === region));
 const extraTypes = [...new Set(rows.map((row) => row.type))].filter((type) => type.endsWith(" council"));
 const types = [...pickerTypes(rows), ...extraTypes.map((type) => ({ label: type, value: slugify(type) }))];
-const columns = 3 + (figure ? 1 : 0);
+const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
 ---
-<section class="council-picker" data-council-picker data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
+<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
   <form class="picker-controls" role="search" data-picker-form novalidate>
     <div class="picker-box">
       <label class="picker-label" for={`${id}-q`}>{label}</label>
@@ -96,6 +110,7 @@ const columns = 3 + (figure ? 1 : 0);
             <th scope="col" class="wide-only" data-sort-key="region"><span class="nojs-only">Region</span><button type="button" class="sort-button js-only" data-sort="region">Region</button></th>
             <th scope="col" class="wide-only" data-sort-key="type"><span class="nojs-only">Type</span><button type="button" class="sort-button js-only" data-sort="type">Type</button></th>
             {figure && <th scope="col" class="num" data-sort-key="figure"><span class="nojs-only">{figure.heading}</span><button type="button" class="sort-button js-only" data-sort="figure">{figure.heading}</button></th>}
+            {action && <th scope="col" class="picker-action">{action.heading}</th>}
           </tr>
         </thead>
         {[head, tail].map((group, index) => group.length > 0 && (
@@ -109,6 +124,7 @@ const columns = 3 + (figure ? 1 : 0);
                   <td class="wide-only" data-cell="region">{row.region}</td>
                   <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>
                   {figure && <td class="num">{value ? <span data-figure>{value.text}</span> : <span class="muted">{figure.missing}</span>}</td>}
+                  {action && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.links[row.gss]!.text}</a> : <span class="muted">{action.missing}</span>}</td>}
                 </tr>
               );
             })}
@@ -145,7 +161,11 @@ const columns = 3 + (figure ? 1 : 0);
     let sortKey = "name";
     let direction = 1;
 
-    const name = (row: HTMLTableRowElement) => row.querySelector("a")?.textContent ?? "";
+    const name = (row: HTMLTableRowElement) => row.querySelector("th a")?.textContent ?? "";
+    // Arriving at the action fragment (the set door on the budget hub), an answer opens the row's action link; a row without one opens its name link.
+    const target = (row: HTMLTableRowElement | null | undefined) =>
+      (picker.dataset.actionHash && window.location.hash === picker.dataset.actionHash ? row?.querySelector<HTMLAnchorElement>("[data-picker-action]") : null) ??
+      row?.querySelector<HTMLAnchorElement>("th a") ?? null;
     const text = (row: HTMLTableRowElement, key: string) =>
       key === "name" ? name(row) : row.querySelector(`[data-cell="${key}"]`)?.firstChild?.textContent ?? "";
 
@@ -248,7 +268,7 @@ const columns = 3 + (figure ? 1 : 0);
       event.preventDefault();
       const postcode = input.value.toUpperCase().replace(/\s+/g, " ").trim();
       if (!POSTCODE.test(postcode)) {
-        const first = table.querySelector<HTMLAnchorElement>("tr[data-row]:not([hidden]) a");
+        const first = target(table.querySelector<HTMLTableRowElement>("tr[data-row]:not([hidden])"));
         if (first) first.focus();
         return;
       }
@@ -268,7 +288,7 @@ const columns = 3 + (figure ? 1 : 0);
         return;
       }
       const row = rows.find((candidate) => candidate.dataset.gss === code);
-      const link = row?.querySelector<HTMLAnchorElement>("a");
+      const link = target(row);
       if (!row || !link) {
         count.textContent = picker.dataset.outside ?? "That postcode is not in a council listed here.";
         return;
@@ -313,6 +333,9 @@ const columns = 3 + (figure ? 1 : 0);
   /* The table fits its box at every width, so the name column need not stick, and the row stripes run across it. */
   .council-picker .picker-table tbody th[scope="row"] { position: static; background: transparent; min-width: 0; max-width: none; }
   .council-picker .picker-meta, .council-picker .picker-county { display: block; font-size: 0.82rem; font-weight: 400; color: var(--text-muted); }
+  .council-picker .picker-action { white-space: nowrap; }
+  .council-picker td.picker-action a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+  .council-picker td.picker-action .muted { font-size: 0.88rem; }
   .council-picker .picker-tail-head th { background: var(--bg-subtle); font-weight: 600; }
   .council-picker .sort-button {
     font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 0.15em;

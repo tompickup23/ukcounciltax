@@ -25,6 +25,22 @@ for (const theme of ['light', 'dark'] as const) test(`Burnley scenario game fram
   expect(result.violations.map(v => ({id: v.id, nodes: v.nodes.map(n => n.target)}))).toEqual([]);
 });
 
+for (const theme of ['light', 'dark'] as const) test(`Burnley scenario game headline reads on its dark hero: ${theme}`, async ({page}) => {
+  await page.emulateMedia({colorScheme: theme});
+  await page.goto(SCENARIO_GAME_PATH);
+  const ratio = await page.locator('[data-burnley-game] .hero .game-title').evaluate(title => {
+    const rgb = (value: string) => (value.match(/[\d.]+/g) ?? []).slice(0, 3).map(Number);
+    const luminance = ([r, g, b]: number[]) => {
+      const [R, G, B] = [r, g, b].map(c => (c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+      return 0.2126 * R + 0.7152 * G + 0.0722 * B;
+    };
+    const hero = title.closest('.hero') as HTMLElement;
+    const [a, b] = [luminance(rgb(getComputedStyle(title).color)), luminance(rgb(getComputedStyle(hero).backgroundColor))];
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+  });
+  expect(ratio).toBeGreaterThanOrEqual(4.5);
+});
+
 test('Burnley scenario game page is useful without JavaScript', async ({browser, baseURL}) => {
   const context = await browser.newContext({javaScriptEnabled: false, viewport: {width: 375, height: 812}});
   const page = await context.newPage();

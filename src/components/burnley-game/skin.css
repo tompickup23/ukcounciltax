@@ -10,3 +10,6 @@ body > .tip{font-family:var(--font-sans);font-size:.82rem;font-weight:600;line-h
 .burnley-game section.step{margin-top:-65px;padding-top:95px}
 /* The gap meter is fixed to the foot of the window from step 4, so the page leaves room for it above the site footer's last line. */
 body:has(.burnley-game .meter:not([hidden])){padding-bottom:110px}
+/* The site's h1, h2 and h3 colour would otherwise beat the hero ink the headline inherits, leaving it near black on the dark hero. */
+.burnley-game .hero h1,.burnley-game .hero h2,.burnley-game .hero h3{color:var(--hero-ink)}
+@media print{.burnley-game .hero h1,.burnley-game .hero h2,.burnley-game .hero h3{color:inherit}}

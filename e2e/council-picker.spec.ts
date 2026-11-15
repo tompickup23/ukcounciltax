@@ -174,7 +174,7 @@ for (const { path, destination, tail } of PAGES) {
       await page.goto(`${baseURL}${path}`);
       await expect(page.locator("[data-picker-form]")).toBeHidden();
       await expect(page.locator("[data-sort]").first()).toBeHidden();
-      await expect(page.locator("[data-council-picker] tbody a")).toHaveCount(296);
+      await expect(page.locator("[data-council-picker] tbody th a")).toHaveCount(296);
       for (const group of await page.locator("tbody[data-picker-group]").all()) {
         const names = await group.locator("tr[data-row] th a").allTextContents();
         expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en-GB")));
@@ -228,10 +228,10 @@ for (const { path, destination, tail } of PAGES) {
       await page.locator('[data-sort="name"]').click();
       await expect(page.locator('th[data-sort-key="name"]')).toHaveAttribute("aria-sort", "descending");
       await expect(visibleRows(page)).toHaveCount(12);
-      await expect(visibleRows(page).first().locator("a")).toHaveText("York");
+      await expect(visibleRows(page).first().locator("th a")).toHaveText("York");
       await page.locator('[data-sort="name"]').click();
 
-      const thirteenth = page.locator("tr[data-row]").nth(12).locator("a");
+      const thirteenth = page.locator("tr[data-row]").nth(12).locator("th a");
       await more.click();
       await expect(visibleRows(page)).toHaveCount(296);
       await expect(count(page)).toHaveText("296 of 296 shown");

@@ -3,11 +3,16 @@ import CouncilFinder from "../components/CouncilFinder.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 <BaseLayout title="Page not found" path="/404/" noindex>
-  <section class="wrap" style="padding-top: 2.5rem;">
+  <section class="not-found">
     <h1>Page not found</h1>
-    <p>There is no page at this address. <a href="/">Go to the home page</a>.</p>
+    <p>There is no page at this address. <a href="/">Go to the home page</a>, or find your council below.</p>
     <CouncilFinder id="not-found-council" />
-    <ul>
+    <h2 class="not-found-tools">Or start with a tool</h2>
+    <ul class="not-found-links">
+      <li><a href="/tools/budget/">Play your council's budget game</a></li>
+      <li><a href="/tools/budget/#set-the-budget">Set the budget yourself</a></li>
+      <li><a href="/compare/">Compare two councils</a></li>
+      <li><a href="/council-tax/#map">Council tax across England on a map</a></li>
       <li><a href="/council-tax/">Council tax in England</a></li>
       <li><a href="/help/">Help with your bill</a></li>
       <li><a href="/scotland/">Council tax in Scotland</a></li>
@@ -15,3 +20,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     </ul>
   </section>
 </BaseLayout>
+
+<style is:global>
+.not-found{padding-top:var(--space-xl);max-width:44rem}
+.not-found-tools{font-size:var(--text-lg);margin-top:var(--space-xl)}
+.not-found-links{display:grid;gap:var(--space-xs);padding-left:1.1rem}
+</style>

@@ -29,7 +29,12 @@ describe('towns dataset anchors (docs/TOWNS-RESEARCH-2026-11-15.md, part 1)', ()
     }
     const special = Object.entries(national.components).filter(([gss, c]) => (c.specialExpensesPounds ?? 0) > 0).map(([gss]) => gss);
     expect(special).toHaveLength(49);
-    expect(towns.filter(t => special.includes(t.councilGss)).every(t => t.fullBandDPence === null)).toBe(true);
+    // A special expense council's row has a figure only from the council's own schedule (PR 91), never calculated.
+    expect(towns.filter(t => special.includes(t.councilGss)).every(t => t.parts === null && (t.fullBandDPence === null || t.status === 'council-schedule'))).toBe(true);
+    // Boston, Algarkirk: "Algarkirk 1,552.78 1,811.58 2,070.37 2,329.17 ..." (Boston Borough Council, Appendix E, 2026/27).
+    const algarkirk = townByCode.get('E2531P001')!;
+    expect(algarkirk.status).toBe('council-schedule');
+    expect(algarkirk.fullBandDPence).toBe(232917);
   });
   it('shows the negative precept as published', () => {
     const t = townByCode.get('E2532P011')!;
@@ -145,7 +150,7 @@ describe('positions and filters', () => {
 
 describe('text rules', () => {
   it('has no dash characters in the dataset or its inputs', () => {
-    for (const path of ['data/towns/england-2026-27.json', 'data/towns/overrides.json', 'data/towns/sources.json', 'data/towns/constituencies.json', 'data/towns/schedules/durham-2026-27.json', 'data/towns/schedules/city-of-london-2026-27.json']) {
+    for (const path of ['data/towns/england-2026-27.json', 'data/towns/overrides.json', 'data/towns/sources.json', 'data/towns/constituencies.json', 'data/towns/schedules/durham-2026-27.json', 'data/towns/schedules/city-of-london-2026-27.json', 'data/towns/schedules/boston-2026-27.json', 'data/towns/schedules/broxtowe-2026-27.json', 'data/towns/schedules/south-norfolk-2026-27.json']) {
       const text = readFileSync(path, 'utf8');
       expect(text, path).not.toMatch(/[–—]| - |&ndash;|&mdash;/);
     }

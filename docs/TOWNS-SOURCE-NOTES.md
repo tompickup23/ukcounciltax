@@ -43,27 +43,27 @@ The ONS files are the portal's own CSV downloads (`/api/download/v1/items/<id>/c
 - **Durham** (rule 3 said: no figure). Durham County Council publishes every area's total, starring those that include the City of Durham charter trustees. All 126 printed areas equal line 9 + parish + majors, plus the trustees' £2.70 exactly where starred: no difference of even 1p. The page prints no year; its Band D county precept (£2,071.11) equals Table 10 2026/27 line 9, so it is the 2026/27 schedule. Durham's rows use the council's figures; Peterlee is £2,948.01 either way. The unparished area has two rows: "Unparished Areas" £2,499.97 and "Unparished Areas in the former City of Durham Area" £2,502.67; their tax bases are not published separately.
 - **City of London** (rule 3 said: Temples no figure; the formula gives the rest of the City £1,288.76). The City prints £1,329.56 at Band D for the Inner Temple, the Middle Temple and the City excluding the Temples, equal to its Table 9 area Band D. So the plain formula is wrong in the City by £40.80, the Temple precepts spread over the whole City tax base. All three rows use the council's figure.
 
-Both schedules are written by `scripts/import-towns-schedules.mjs`, which checks the arithmetic and year. Session 3 adds the special expense councils in the same shape.
+Both schedules are written by `scripts/import-towns-schedules.mjs`, which checks the arithmetic and year. Three special expense councils' schedules are held from PR 91 (`docs/TOWNS-SCHEDULES-2026-11.md`): Boston (all 19 areas), Broxtowe (11 areas; Strelley is not in its schedule and stays "published by the council only") and South Norfolk (111 areas; its seven unresolved group members stay under their groups). Broxtowe's two unparished areas (the Beeston special expense area and the rest of the borough) are separate rows with no tax base by area. Unparished area names are as the council prints them, so the pages should tidy their labels.
 
 ## 5. Counts (data/towns/england-2026-27.json)
 
-10,439 rows: 10,241 published parish return rows plus 198 unparished areas. 7,539 have a figure; 2,900 do not.
+10,440 rows: 10,241 published parish return rows plus 199 unparished areas. 7,680 have a figure; 2,760 do not.
 
 | Status | Rows | Figure |
 |---|---|---|
 | Calculated from published MHCLG figures | 7,244 | yes |
 | Calculated, group member | 161 | yes |
-| Published by the council (Durham, City of London) | 134 | yes |
-| Published by the council only (special expenses) | 2,721 | no |
+| Published by the council (Durham, City of London, Boston, Broxtowe, South Norfolk) | 275 | yes |
+| Published by the council only (special expenses) | 2,581 | no |
 | Listed under its group | 170 | no |
 | Charter trustees included in the areas they cover | 4 | no |
 | Partial charter trustee cover | 5 | no |
 
-Kinds: 9,572 parish, 654 group, 198 unparished, 13 charter trustees, 2 Temples. Special expense rows by kind: 2,616 parish, 70 group, 29 unparished, 6 charter trustees. Larger places (T3): 1,389, of which 1,009 have a figure. 247 councils have at least one row with a figure; 9 regions; 91 county values.
+Kinds: 9,572 parish, 654 group, 199 unparished, 13 charter trustees, 2 Temples. Special expense rows by kind: 2,485 parish, 63 group, 27 unparished, 6 charter trustees. Larger places (T3): 1,388, of which 1,021 have a figure. 250 councils have at least one row with a figure; 9 regions; 91 county values.
 
 **Name matching** (published rows, 10,241): exact 9,208; exact after removing brackets 575; combined unit 78; reviewed override 181 (`data/towns/overrides.json`, each with its evidence); unmatched 184; charter trustees 13 and Temples 2 have no ONS parish code. So 9,861 match automatically (96.3%) and 10,042 (98.1%) with the reviewed overrides. Melmerby (North Yorkshire) is rejected: one return row, two ONS parishes, no held source says which.
 
-**Constituency**: 10,042 parish rows and 195 of 198 unparished rows have at least one constituency; 541 English constituencies appear. 869 parish rows touch wards in more than one constituency and list all of them (`constituencySplit`). Unparished rows take the constituencies of the council's wards that contain no parish; partly parished wards are not counted, so their lists may be incomplete (note `constituencyUnparished`).
+**Constituency**: 10,042 parish rows and 196 of 199 unparished rows have at least one constituency; 541 English constituencies appear. 869 parish rows touch wards in more than one constituency and list all of them (`constituencySplit`). Unparished rows take the constituencies of the council's wards that contain no parish; partly parished wards are not counted, so their lists may be incomplete (note `constituencyUnparished`).
 
 ## 6. Anchors (tests/towns.test.ts)
 
@@ -82,7 +82,7 @@ Lowest parish rows: Inner and Middle Temple £1,329.56 (City of London), then Do
 ## 7. Left out, and why
 
 - Ceased rows (4, status not existing in 2026/27).
-- 2,721 special expense rows until session 3's schedules: national tables cannot give their bills.
+- 2,581 special expense rows, in 46 of the 48 special expense councils with parishes (all but Boston and South Norfolk) plus Camden's unparished area: their own schedules are not held or not fully reconciled (PR 91), and national tables cannot give their bills.
 - 170 group members whose group cannot be resolved to one carrying row.
 - Mansfield and Bassetlaw unparished areas and their 3 trustee rows: partial charter trustee cover.
 - 184 rows have no constituency because the name does not match an ONS parish (for example Quorndon, Haworth with Stanbury, the 2026 Bournemouth, Broadstone and Poole town councils, which postdate the December 2025 lookup). They keep their figure and appear on region, county and council lists.

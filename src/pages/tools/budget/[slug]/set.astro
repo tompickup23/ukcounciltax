@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
+import BudgetModes from '../../../../components/BudgetModes.astro';
 import raColumns from '../../../../../data/pilots/budget-freeze-columns.json';
 import {budgetSetPages, budgetSetPath} from '../../../../lib/paths';
 import { type FreezePilot } from '../../../../lib/budget-freeze-data';
@@ -28,6 +29,7 @@ const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: str
 <BaseLayout title={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}`} description={`Set ${pilot.name}'s budget using the published ${FREEZE_YEAR_TEXT} ledger. Explore tax and spending with explicit assumptions.`} path={budgetSetPath(pilot.slug)} ephemeral ogImage={`/og/budget-set/${pilot.slug}.png`} ogImageAlt={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}. An exploration, not a forecast.`}>
   <Breadcrumbs items={[{label:'Tools',href:'/tools/'},{label:'Council budgets',href:'/tools/budget/'},{label:pilot.name,href:`/tools/budget/${pilot.slug}/`},{label:'Set the budget'}]} />
   <div class="budget-set" data-freeze-pilot data-pilot={JSON.stringify(pilot)}>
+      <BudgetModes gss={pilot.gss} slug={pilot.slug} current="set" />
       <nav class="pilot-nav" aria-label="Budget exercise"><a href="/tools/budget/">Choose another council</a><button type="button" data-theme-toggle hidden>Change colour theme</button></nav>
       <div class="page-head">
         <p class="eyebrow">{FREEZE_YEAR_TEXT} · Tax and spending</p>

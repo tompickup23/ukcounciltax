@@ -1,0 +1,17 @@
+---
+import {budgetSetEntry} from '../lib/budget-set-entry';
+interface Props {gss: string; slug: string; current: 'guess' | 'set'}
+const {gss, slug, current} = Astro.props;
+const entry = budgetSetEntry(gss);
+const eligible = !!entry?.href?.endsWith('/set/');
+---
+{entry && (eligible || slug === 'burnley') && <nav class="budget-modes" aria-label="Budget modes" data-budget-modes data-pagefind-ignore>
+  <a href={`/tools/budget/${slug}/`} aria-current={current === 'guess' ? 'page' : undefined}>Guess</a>
+  {eligible && <a href={entry.href} aria-current={current === 'set' ? 'page' : undefined}>Set</a>}
+  {slug === 'burnley' && entry.href && <a href={entry.href}>The council's own gap</a>}
+</nav>}
+<style>
+.budget-modes{display:flex;flex-wrap:wrap;gap:var(--space-lg);margin-block:var(--space-md)}
+.budget-modes a{display:inline-flex;align-items:center;min-height:44px;font-weight:600;text-underline-offset:.25em}
+.budget-modes [aria-current]{text-decoration-thickness:3px}
+</style>

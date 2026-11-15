@@ -24,7 +24,8 @@
     "data:devolved": "python3 scripts/import-devolved.py",
     "data:local-bills": "python3 scripts/import-local-bills.py",
     "data:national": "node scripts/import-national.mjs && node scripts/import-band-stock.mjs && node scripts/import-collection-rates.mjs && node scripts/import-ra-budget.mjs && node scripts/import-population.mjs",
-    "diff:numbers": "node scripts/diff-numbers.mjs"
+    "diff:numbers": "node scripts/diff-numbers.mjs",
+    "data:local-bill-changes": "node scripts/import-local-bill-changes.mjs"
   },
   "dependencies": {
     "@fontsource/source-sans-3": "^5.3.1",

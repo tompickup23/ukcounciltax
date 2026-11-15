@@ -8,7 +8,7 @@ import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { Resvg } from "@resvg/resvg-js";
-import { rankedBars, type RankedBarsOptions, billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
+import { areaMap, type AreaMapOptions, rankedBars, type RankedBarsOptions, billAnatomy, formatValue, zeroBar, positionStrip, locatorMap, tokens, type BillAnatomyOptions, type ZeroBarOptions, type PositionStripOptions, type LocatorMapOptions, type ChartOutput, type Theme } from "../vendor/estate-kit/dist/src/index.js";
 import {palettePng} from "../vendor/estate-kit/dist/src/output/pngPalette.js";
 import {increaseGroups, increaseFigureKey, INCREASE_GROUP_IDS, type IncreaseGroupId} from "./increase-groups";
 import { AREA_TYPE_LABEL, CURRENT_YEAR, loadYear, yearLabel } from "./council-tax";
@@ -18,6 +18,7 @@ import {profilePrecepts} from "./profile-precepts";
 import { national } from "./national-data";
 import { neighbourAreas, boundarySource } from "./boundaries";
 import { BURNLEY_PARTS, siteFigures } from "./figures";
+import {AREA_BAND_D_REGISTRY, englandMapData} from "./england-map";
 
 export const CHART_THEMES = ["light"] as const satisfies readonly Theme[];
 
@@ -38,7 +39,18 @@ export type ProfileChart = typeof PROFILE_CHARTS[number];
 export type ProfileChartName = `councils/${string}/${ProfileChart}`;
 export type ClassChartName = `ranked-${string}`;
 export type IncreaseChartName = `increases-${IncreaseGroupId}`;
-export type KitChartName = keyof typeof KIT_CHARTS | ProfileChartName | ClassChartName | IncreaseChartName;
+export type KitChartName = "england-area-band-d" | keyof typeof KIT_CHARTS | ProfileChartName | ClassChartName | IncreaseChartName;
+export function englandMapOptions(): Extract<AreaMapOptions, {modeData: "fixed"}> {
+  return {
+    ...englandMapData(), set: siteFigures(), id: "england-area-band-d", modeData: "fixed",
+    registry: AREA_BAND_D_REGISTRY, indicator: "areaBandD",
+    title: `Area Band D council tax in England, ${yearLabel(CURRENT_YEAR)}`,
+    description: "Area Band D, including adult social care and average parish precepts. Select an area to open its council page.",
+    boundaryCredit: `Boundaries: ${boundarySource.publisher}, ${boundarySource.title}, simplified for drawing. ${boundarySource.attribution} Licensed under OGL v3.0.`,
+    notDrawn: "Scotland and Wales because their council tax systems differ; Northern Ireland uses domestic rates.",
+  };
+}
+
 const isIncreaseChart = (name: string): name is IncreaseChartName => name.startsWith("increases-");
 
 export function increaseChartNames(): IncreaseChartName[] {
@@ -143,6 +155,7 @@ export function drawProfileChart(name: ProfileChartName, theme?: Theme): ChartOu
 
 /** The figure keys a chart draws, for its source line. */
 export function chartKeys(name: KitChartName): string[] {
+  if (name === "england-area-band-d") return Object.values(englandMapData().values);
   if (isIncreaseChart(name)) return increaseChartOptions(name).rows.map(row => row.figure);
   if (isClassChart(name)) { const o = classChartOptions(name); return [o.figure, o.distribution]; }
   if (name !== "home-bill") {
@@ -187,6 +200,7 @@ export function chartPngPath(name: KitChartName, theme: Theme): string {
 }
 
 function draw(name: KitChartName, theme: Theme): ChartOutput {
+  if (name === "england-area-band-d") return areaMap({...englandMapOptions(), mode: {kind: "hex", theme, site: "ukcounciltax"}});
   if (isIncreaseChart(name)) return rankedBars({...increaseChartOptions(name), mode: {kind: "hex", theme, site: "ukcounciltax"}});
   if (isClassChart(name)) return positionStrip({ ...classChartOptions(name), mode: { kind: "hex", theme, site: "ukcounciltax" } });
   if (name !== "home-bill") return drawProfileChart(name, theme);
@@ -206,8 +220,8 @@ export function chartPng(name: KitChartName, theme: Theme): Buffer {
     font: { fontFiles, loadSystemFonts: false, defaultFontFamily: tokens.font.sans.family },
   });
   const rendered = svg.render();
-  // W4: new increase downloads are light, 2x and palette compressed.
-  return isIncreaseChart(name)
+  // W4: new increase and England map downloads are light, 2x and palette compressed.
+  return (isIncreaseChart(name) || name === "england-area-band-d")
     ? palettePng(rendered.pixels, rendered.width, rendered.height, {colours: 256})
     : rendered.asPng();
 }

@@ -7,9 +7,10 @@
  */
 import { BURNLEY_PARTS, siteFigures } from "../lib/figures";
 import { budgetFor, services } from "../lib/budget";
+import { CURRENT_YEAR, loadYear } from "../lib/council-tax";
 
 interface Props {
-  kind: "stack" | "line" | "bands" | "strip" | "game";
+  kind: "stack" | "line" | "bands" | "strip" | "game" | "map";
 }
 
 /** The budget game card's council: Burnley, the same published example the other cards draw. */
@@ -61,6 +62,23 @@ if (kind === "stack") {
   const band = 56 / rows.length;
   body = rows
     .map((v, i) => `<rect x="${LEFT}" y="${f(4 + i * band)}" width="${f((v / max) * SPAN)}" height="${f(band - 4)}" rx="2" style="fill:var(${i === 0 ? "--accent" : "--series-neutral-soft"})"/>`)
+    .join("");
+} else if (kind === "map") {
+  // Every English billing authority's area Band D this year, lowest to highest,
+  // as thin columns from zero, shaded in four steps as the map is: the spread
+  // the England map draws by place.
+  const values = Object.values(loadYear(CURRENT_YEAR).authorities)
+    .map((row) => row.bands.D)
+    .filter((v) => Number.isFinite(v) && v > 0)
+    .sort((a, b) => a - b);
+  const max = values[values.length - 1];
+  const step = SPAN / values.length;
+  const tone = ["--series-neutral-soft", "--series-neutral", "--accent-bright", "--accent"];
+  body = values
+    .map((v, i) => {
+      const h = (v / max) * 56;
+      return `<rect x="${f(LEFT + i * step)}" y="${f(BASE - h)}" width="${f(Math.max(step - 0.15, 0.2))}" height="${f(h)}" style="fill:var(${tone[Math.min(3, Math.floor((i / values.length) * 4))]})"/>`;
+    })
     .join("");
 } else {
   const place = set.value("burnley.area_bandd.current").value;

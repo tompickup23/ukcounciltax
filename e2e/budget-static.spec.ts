@@ -16,7 +16,10 @@ for (const theme of ['light', 'dark'] as const) {
 }
 test('budget index links all billing authorities', async ({page}) => {
   await page.goto('/tools/budget/');
-  await expect(page.locator('[data-council-picker] tbody a')).toHaveCount(296);
+  await expect(page.locator('[data-council-picker] tbody th a')).toHaveCount(296);
+  // Set mode has its own link in each eligible council's row (W0).
+  await expect(page.locator('[data-council-picker] [data-picker-action]')).toHaveCount(197);
+  await expect(page.locator('tr[data-gss="E07000117"] [data-picker-action]')).toHaveCount(0);
   const result = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
   expect(result.violations).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
@@ -137,4 +140,17 @@ test('Isle of Wight offers no neighbour and prints no empty heading', async ({pa
   await expect(page.locator('[data-play-neighbour]')).toHaveCount(0);
   await expect(page.getByRole('heading', {name: 'Play a neighbour'})).toHaveCount(0);
   await expect(page.locator('[data-choose-another] a')).toHaveAttribute('href', '/tools/budget/');
+});
+
+test('the homepage, tools hub and budget hub show both ways into a council budget', async ({page}) => {
+  for (const path of ['/', '/tools/']) {
+    await page.goto(path);
+    const band = page.locator('[data-play-band]');
+    await expect(band.locator('[data-play-door="guess"]')).toHaveAttribute('href', '/tools/budget/');
+    await expect(band.locator('[data-play-door="set"]')).toHaveAttribute('href', '/tools/budget/#set-the-budget');
+    await expect(page.locator('a.task-card[href="/council-tax/#map"]')).toHaveCount(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
+  }
+  await page.goto('/tools/budget/#set-the-budget');
+  await expect(page.locator('#set-the-budget [data-picker-input]')).toBeInViewport();
 });

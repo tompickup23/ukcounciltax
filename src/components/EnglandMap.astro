@@ -9,7 +9,7 @@ import {boundarySource} from '../lib/boundaries';
 // At 375px the open map adds more than one screen before the existing table.
 const source = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.bandTable);
 ---
-<details class="england-map" data-england-map>
+<details class="england-map" id="map" data-england-map>
   <summary>Show England on a map: area Band D council tax, {yearLabel(CURRENT_YEAR)}</summary>
   <a class="map-skip" href="#table-heading">Skip the map</a>
   <div class="fact" data-fact id="england-map-drawing" data-pagefind-ignore>

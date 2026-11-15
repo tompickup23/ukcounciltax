@@ -17,6 +17,10 @@
  *   3. meta.json: the model run id and the three years read from game.js, the
  *      edition date and the hashes of what was copied.
  *
+ * With --reskin, only the served game.css and its hash in meta.json are
+ * rewritten from the recorded game.css and the current skin.css, for a change
+ * to the skin that needs no new model run.
+ *
  * The run stops, writing nothing, if the build is not the strict one this site
  * can serve: an inline script, an inline handler, a style attribute or block,
  * or a reference outside its own folder.
@@ -143,7 +147,32 @@ export function longDate(iso) {
   return `${Number(match[3])} ${month} ${match[1]}`;
 }
 
+/** The served stylesheet: the game's sheet scoped to the wrapper, then the site skin. */
+export function servedCss(css, runId, skin = readFileSync(join(COMPONENT_DIR, "skin.css"), "utf8")) {
+  return `/* Burnley budget game, model run ${runId}. Written by scripts/sync-burnley-game.sh: do not edit by hand. */\n${scopeCss(css)}\n${skin}`;
+}
+
+/**
+ * Rewrites only the served game.css after a change to skin.css, with no new model run.
+ * The game's own game.css must be byte for byte the one recorded in meta.json, so the
+ * run, the edition, game.js and the markup all stay as they are.
+ */
+function reskin(distArg) {
+  const meta = JSON.parse(readFileSync(join(COMPONENT_DIR, "meta.json"), "utf8"));
+  const css = readFileSync(join(resolve(distArg), "game.css"), "utf8");
+  if (sha256(css) !== meta.sourceSha256["game.css"]) {
+    console.error(`Not reskinned: ${join(resolve(distArg), "game.css")} is not the game.css of model run ${meta.runId} (SHA-256 ${meta.sourceSha256["game.css"]}).`);
+    process.exit(1);
+  }
+  const siteCss = servedCss(css, meta.runId);
+  writeFileSync(join(PUBLIC_DIR, "game.css"), siteCss);
+  meta.servedSha256["game.css"] = sha256(siteCss);
+  writeFileSync(join(COMPONENT_DIR, "meta.json"), `${JSON.stringify(meta, null, 2)}\n`);
+  console.log(`Burnley budget game skin reapplied: model run ${meta.runId}, edition of ${meta.editionText}, game.js and markup unchanged.`);
+}
+
 function main() {
+  if (process.argv[2] === "--reskin") return reskin(process.argv[3]);
   const [distArg, edition] = process.argv.slice(2);
   if (!distArg || !edition) {
     console.error("usage: scripts/sync-burnley-game.sh /path/to/Burnley_Budget_Model_work/game/dist YYYY-MM-DD");
@@ -177,8 +206,7 @@ function main() {
     process.exit(1);
   }
   const editionText = longDate(edition);
-  const skin = readFileSync(join(COMPONENT_DIR, "skin.css"), "utf8");
-  const siteCss = `/* Burnley budget game, model run ${runId}. Written by scripts/sync-burnley-game.sh: do not edit by hand. */\n${scopeCss(css)}\n${skin}`;
+  const siteCss = servedCss(css, runId);
   const markup = gameMarkup(html, runId, editionText);
 
   mkdirSync(PUBLIC_DIR, { recursive: true });

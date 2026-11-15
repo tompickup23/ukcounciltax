@@ -151,7 +151,8 @@ const raColumns = Object.fromEntries(output[0].ledger.map(row => {
   while (n > 0) { n--; column = String.fromCharCode(65+n%26)+column; n = Math.floor(n/26); }
   return [row.id, column];
 }));
-for (const [path, value] of [['data/pilots/budget-freeze-columns.json',raColumns],['data/pilots/budget-freeze-eligibility.json',manifest],['data/pilots/budget-freeze-referendum.json',rules]]) {
+// The browser imports only the principles, so the per authority mapping stays out of the page script.
+for (const [path, value] of [['data/pilots/budget-freeze-columns.json',raColumns],['data/pilots/budget-freeze-principles.json',{edition:rules.edition,principles:rules.principles}],['data/pilots/budget-freeze-eligibility.json',manifest],['data/pilots/budget-freeze-referendum.json',rules]]) {
   const text=JSON.stringify(value,null,2)+'\n';
   if(process.argv.includes('--check'))check(readFileSync(path,'utf8')===text,`Cohort audit drift: ${path}`);
   else writeFileSync(path,text);

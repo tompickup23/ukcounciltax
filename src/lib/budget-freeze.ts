@@ -1,5 +1,6 @@
 import edition from '../../data/pilots/budget-freeze-model.json' with {type:'json'};
-import referendum from '../../data/pilots/budget-freeze-referendum.json' with {type:'json'};
+// Only the principles: the full referendum file carries every authority's mapping and would bloat the page script.
+import referendum from '../../data/pilots/budget-freeze-principles.json' with {type:'json'};
 const {principles} = referendum;
 /** Exact arithmetic for the C2 budget exercise. One unit is GBP 0.0001. */
 export const FREEZE_YEAR = edition.year;

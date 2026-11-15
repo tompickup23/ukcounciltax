@@ -1,0 +1,116 @@
+{
+  "edition": "2026-27",
+  "principles": {
+    "ordinary-social-care": {
+      "category": "2(a)",
+      "percentageBasisPoints": 500,
+      "percentageComparison": "greater-than-or-equal",
+      "poundPence": null,
+      "poundComparison": null,
+      "join": "single",
+      "ascBasisPoints": 200,
+      "otherBasisPoints": 300,
+      "citation": {
+        "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "page": 7,
+        "annex": "A",
+        "paragraph": "3",
+        "categoryPage": 7,
+        "categoryParagraph": "2(a)"
+      },
+      "quotes": [
+        "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+      ]
+    },
+    "district": {
+      "category": "2(e)",
+      "percentageBasisPoints": 300,
+      "percentageComparison": "greater-than-or-equal",
+      "poundPence": "500",
+      "poundComparison": "greater-than",
+      "join": "AND",
+      "ascBasisPoints": 0,
+      "otherBasisPoints": 300,
+      "citation": {
+        "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "page": 8,
+        "annex": "A",
+        "paragraph": "7",
+        "categoryPage": 7,
+        "categoryParagraph": "2(e)"
+      },
+      "quotes": [
+        "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+        "more than £5.00 greater than its relevant basic amount of council tax"
+      ]
+    },
+    "exception-7.5": {
+      "category": "2(i)",
+      "percentageBasisPoints": 750,
+      "percentageComparison": "greater-than-or-equal",
+      "poundPence": null,
+      "poundComparison": null,
+      "join": "single",
+      "ascBasisPoints": 200,
+      "otherBasisPoints": 550,
+      "citation": {
+        "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "page": 9,
+        "annex": "A",
+        "paragraph": "11",
+        "categoryPage": 7,
+        "categoryParagraph": "2(i)"
+      },
+      "quotes": [
+        "is 7.5% (comprising 2% for expenditure on adult social care, and 5.5% for other expenditure), or more than 7.5%"
+      ]
+    },
+    "exception-9": {
+      "category": "2(j)",
+      "percentageBasisPoints": 900,
+      "percentageComparison": "greater-than-or-equal",
+      "poundPence": null,
+      "poundComparison": null,
+      "join": "single",
+      "ascBasisPoints": 200,
+      "otherBasisPoints": 700,
+      "citation": {
+        "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "page": 9,
+        "annex": "A",
+        "paragraph": "12",
+        "categoryPage": 7,
+        "categoryParagraph": "2(j)"
+      },
+      "quotes": [
+        "is 9% (comprising 2% for expenditure on adult social care, and 7% for other expenditure), or more than 9%"
+      ]
+    },
+    "exception-6.75": {
+      "category": "2(k)",
+      "percentageBasisPoints": 675,
+      "percentageComparison": "greater-than-or-equal",
+      "poundPence": null,
+      "poundComparison": null,
+      "join": "single",
+      "ascBasisPoints": 200,
+      "otherBasisPoints": 475,
+      "citation": {
+        "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+        "page": 9,
+        "annex": "A",
+        "paragraph": "13",
+        "categoryPage": 7,
+        "categoryParagraph": "2(k)"
+      },
+      "quotes": [
+        "is 6.75% (comprising 2% for expenditure on adult social care, and 4.75% for other expenditure), or more than 6.75%"
+      ]
+    }
+  }
+}

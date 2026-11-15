@@ -27,7 +27,7 @@ Written 8 November 2026 in Claude Code for Tom. It decides what register row I00
 1. **I005 scope:** C only, or C plus the B1 tracker? (Recommended: C only, unless February traffic matters more than the sessions it costs.)
 2. **If B1:** where does it live? Recommended: a section on `/increases/2027-28/`, labelled "Set so far, from councils' adopted resolutions", rather than on each council page, so it is one dated list.
 3. **Political control.** I005's original wording states control "as a fact". ukcounciltax is a neutral specialist site and shows no party anywhere today. Recommended: keep control off ukcounciltax; if wanted, it belongs on UK Councils or UK Elections, which already carry seats by party.
-4. **Freeze window.** Recommended: no other ukcounciltax PR merges from 22 March 2027 (or the confirmed release week) until the release PR has merged, so the release branch rebases cleanly.
+4. **Freeze window.** Recommended: no other ukcounciltax PR merges from 22 March 2027 (or the confirmed release week) until the release PR has merged, so the release branch rebases cleanly. Plan section 10.1 later set the freeze from 20 March 2027.
 
 ## 4. What C6 must stage in advance, so release day is data only
 
@@ -38,27 +38,39 @@ The year switch is not just data. `src/lib/council-tax.ts` holds `CURRENT_YEAR =
 - the Table 10 2027/28 import path in `scripts/import-national.mjs`, ready for a new pinned hash;
 - the levels day page, ranking card and precept day page rendering nothing until 2027/28 data exists.
 
+**Staged by C6 on 15 November 2026** (branch `feat/c6-levels-day-staging`; design, rehearsal and decisions in `docs/C6-STAGING-BRIEF.md`). The paragraph above describes the code before C6 and is kept as the record.
+
+- **The switch is data presence, not a flag.** `CURRENT_YEAR`, `PREVIOUS_YEAR`, `YEARS` and `NEXT_YEAR` come from `src/lib/edition.mjs`: the latest year with both `data/council-tax/england-<year>.json` and `data/national/england-<year>.json` carrying a reviewed Table 10 SHA-256. Nothing is renamed on the day. The not yet set page is the dynamic route `src/pages/council-tax-[year].astro`, and from 2027-28 the same address becomes the levels day page.
+- **The 2028/29 release records** are staged in `RELEASE_SETS["2028 to 2029"]` with `page: null` and a note (read 15 November 2026). Refetch them the week before release.
+- **The levels importer** takes `--year 2027-28` and refuses on a missing band, a short row, an authority without own figures, or any authority or county that appears or disappears without a reviewed succession record.
+- **The Table 10 path** is `import-national.mjs --stage 2027-28` (find by title, download, write the hash for review), then `--year 2027-28`.
+- **The waiting pages** (levels day, precept day, the ranking card and its embed snippet, the set the budget pages' line) render nothing until the 2027/28 data exists, and are tested in both states.
+
 ## 5. Release day runbook (R8, Claude with Tom on hand to merge)
 
 **The week before**
-1. Check the announcement through the content API. When `state` turns "confirmed" and `display_date` gives a day, note it, and refetch the `RELEASES` records.
-2. Cut the release worktree from main, run `npm ci`, and run every check on C6's staged switch with 2026/27 data only. Start the freeze.
+1. Check the announcement through the content API. When `state` turns "confirmed" and `display_date` gives a day, note it, and refetch the `RELEASES` records. That means `RELEASE_SETS["2027 to 2028"]` for the current not yet set page, and `RELEASE_SETS["2028 to 2029"]` for the page that replaces it on the day. Land the refetch before the freeze; it is the only code edit in the release.
+2. Cut the release worktree from main and run `npm ci`. Run every check with 2026/27 data only, then `node scripts/rehearse-levels-day.mjs --scenario shape` outside the repository, which builds release day's shape and checks every waiting page. Start the freeze.
 3. Confirm Tom can merge between 10:30 and 12:00 on the day.
+4. Settle any change in the set of billing authorities for 1 April 2027 (C6 brief, section 2). The levels import refuses a changed set without a reviewed `data/council-tax/succession-2027-28.json` listing each change with two sources, and some code assumes 296.
 
 **Release morning (09:30)**
 1. Confirm the statistics page is live through the content API. Record the title, publication time and attachment titles.
-2. Run `node scripts/fetch-council-tax.mjs`, which pins and hashes the files it downloads. It refuses to write if any authority lacks a band or rows fall short. If it refuses, stop: no partial publication.
-3. Run `npm run data:national` for the 2027/28 Table 10, with the new hash reviewed and recorded in `data/national/sources.json`.
+2. Run `node scripts/fetch-council-tax.mjs --year 2027-28`. It pins and hashes the files it downloads, and writes `data/council-tax/england-2027-28.json`. It refuses to write if any authority lacks a band, a row is short, an authority has no own figures row, or the set of authorities differs from 2026/27 without a succession record. If it refuses, stop: no partial publication. The levels file alone does not switch the site.
+3. Run `node scripts/import-national.mjs --stage 2027-28`. Review the hash and title it writes to `data/national/table-10-2027-28.source.json` and record them in the PR. Then run `node scripts/import-national.mjs --year 2027-28`, which writes `data/national/england-2027-28.json`; this is what switches the site. Do not run `npm run data:national`, and do not rewrite `data/national/england.json` or the 2026/27 and 2025/26 levels files: the set the budget pages pin their SHA-256 hashes.
 4. Checks, each recorded in the PR:
-   - 296 billing authorities, all eight bands;
+   - every billing authority, all eight bands, against 2026/27 and any succession record;
+   - the switch resolves to 2027-28 (`node -e "import('./src/lib/edition.mjs').then(m=>console.log(m.resolveEdition()))"`);
    - the England average Band D and its change match MHCLG's headline text;
    - Burnley, Birmingham and Westminster checked cell by cell against the workbook;
    - Table 10 area totals reconcile as in the 2026/27 import;
    - every 2026/27 to 2027/28 change recomputes from the two published editions;
    - if the B1 tracker ran, its differences listed.
-5. `npm test`, `npm run check`, `npm run build`, `npm run test:dist`, `npm run test:text`, `npm run test:e2e`, `npm run test:csp`, then `BUILD_OG=1 npm run build`.
-6. Open the PR "Council tax 2027/28 levels" with the evidence. Target: open by 11:00, Tom merges by 12:00. Merging deploys.
-7. After the deploy: spot-check five live pages, run `npm run indexnow`, and record the release in `docs/RELEASE.md`.
+5. `npm test`, `npm run check`, `npm run build`, `npm run test:dist`, `npm run test:text`, `npm run test:e2e`, `npm run test:csp`, then `BUILD_OG=1 npm run build`. The dist check expects the levels day page and precept day from 2027-28. Almost every page changes, so the number diff allowance is `**`.
+6. Open the PR "Council tax 2027/28 levels" with the evidence. It adds three data files, four with a succession record, and nothing else. Target: open by 11:00, Tom merges by 12:00. Merging deploys.
+7. After the deploy: spot-check five live pages, including `/council-tax-2027-28/`, its adult social care page and `/council-tax-2028-29/`. Run `npm run indexnow`, and record the release in `docs/RELEASE.md`.
+
+**After the day, as each lagging source lands** (each its own small data PR, outside the freeze): the GLA decision for 2027/28 (`data/precepts/gla-2027-28.json`), Burnley's 2027/28 schedule, the 2027/28 parish return and Band D history, Scotland and Wales, and RA 2027/28 in June, which ends the set the budget pages' line.
 
 **If something goes wrong**
 - The release slips: nothing changes on the site. The not-yet-set page already says "March 2027 (provisional)".
@@ -70,7 +82,7 @@ The year switch is not just data. `src/lib/council-tax.ts` holds `CURRENT_YEAR =
 | When | What |
 |---|---|
 | December 2026 to February 2027 | 2027-28 referendum principles report (draft and final), by last year's pattern; triggers P6 |
-| Early January 2027 | P6 prep and the C6 build (staged year switch, levels day page, precept day) |
+| Early January 2027 | P6 prep; C6 was staged on 15 November 2026 (brief: `docs/C6-STAGING-BRIEF.md`); C6b refreshes the 2028/29 release records and the 2027/28 referendum principles |
 | Late January to 10 March 2027 | Councils set 2027/28 council tax; B1 sweeps if chosen |
 | Week before release | Runbook "the week before" |
 | March 2027 (25 March last year) | R8 release morning |

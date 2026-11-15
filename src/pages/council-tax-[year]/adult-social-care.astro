@@ -12,7 +12,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import SourceLine from '../../components/SourceLine.astro';
 import {CURRENT_YEAR, PREVIOUS_YEAR, LEVELS_PAGE_PATH, loadYear, percent, pounds, yearLabel} from '../../lib/council-tax';
 import {ascMaximum, ascRows, ascSplit, preceptDayPath, preceptDayPaths, type AscRow} from '../../lib/levels-day';
-import {councilTaxSource} from '../../lib/sources';
+import {councilTaxSource, tableName} from '../../lib/sources';
 import {loadRegistry} from '../../lib/registry';
 import {councilPath} from '../../lib/paths';
 
@@ -30,9 +30,9 @@ const split = ascSplit(rows, maximum);
 const registry = loadRegistry();
 const link = (row: AscRow) => registry.councils[row.gss] ? councilPath(registry.councils[row.gss]) : null;
 const title = `Adult social care precept ${label}: what each council set`;
-const tables = [...new Set(rows.map(row => row.table))].sort().join(' and ');
+const tables = [...new Set(rows.map(row => tableName(row.table)))].sort().join(' and ');
 ---
-<BaseLayout title={title} description={`The adult social care precept each of the ${rows.length} authorities that charge it set for ${label}, from MHCLG's published tables, with the rest of each council's change alongside.`} path={preceptDayPath(CURRENT_YEAR)}>
+<BaseLayout title={title} description={`What each of the ${rows.length} authorities that charge the adult social care precept set for ${label}, from MHCLG's tables, with the rest of each change.`} path={preceptDayPath(CURRENT_YEAR)}>
 <Breadcrumbs items={[{label: `Council tax ${label}`, href: LEVELS_PAGE_PATH}, {label: 'Adult social care precept'}]} />
 <header class="page-head"><p class="eyebrow">Council tax {label}</p><h1>{title}</h1><p class="lede">County councils, unitary authorities, metropolitan districts and London boroughs may add an adult social care precept to their own share. This page lists what each of the {rows.length} set for {label}, as MHCLG publishes it.</p></header>
 
@@ -43,17 +43,22 @@ const tables = [...new Set(rows.map(row => row.table))].sort().join(' and ');
 
 {split && <section class="section" aria-labelledby="count-heading">
 <h2 id="count-heading">How many used the maximum</h2>
-<p class="fact" data-fact><span data-figure>{split.atMaximum.length}</span> of the {rows.length} authorities show an adult social care change of {percent(maximum)}, the maximum the principles state; <span data-figure>{split.below.length}</span> show less{split.above.length ? <>, and <span data-figure>{split.above.length}</span> show more</> : ''}{split.unpublished.length ? <>; for <span data-figure>{split.unpublished.length}</span> the table holds no figure</> : ''}. Counted from the published column, to the precision MHCLG prints.</p>
+<div class="fact" data-fact>
+<p><span data-figure>{split.atMaximum.length}</span> of the {rows.length} authorities show an adult social care change of {percent(maximum)}, the maximum the principles state; <span data-figure>{split.below.length}</span> show less{split.above.length ? <>, and <span data-figure>{split.above.length}</span> show more</> : ''}{split.unpublished.length ? <>; for <span data-figure>{split.unpublished.length}</span> the table holds no figure</> : ''}. Counted from the published column, to the precision MHCLG prints.</p>
+<SourceLine source={councilTaxSource(CURRENT_YEAR, tables, 'Counted from the published adult social care change')} />
+</div>
 </section>}
 
 <section class="section" aria-labelledby="table-heading">
 <h2 id="table-heading">Each authority's adult social care precept, {label}</h2>
+<div class="fact" data-fact>
 <div class="table-wrap" tabindex="0" role="region" aria-label={`Adult social care precept by authority, ${label}`}><table class="data">
 <caption>Own Band D change on {previous}, the adult social care part of it, and the rest, {label}</caption>
 <thead><tr><th scope="col">Authority</th><th scope="col" class="num">Own change</th><th scope="col" class="num">Adult social care part</th><th scope="col" class="num">Rest of the change (calculated)</th><th scope="col" class="num">Adult social care element of Band D</th></tr></thead>
 <tbody>{rows.map(row => { const href = link(row); return <tr><th scope="row">{href ? <a href={href}>{row.name}</a> : row.name}</th><td class="num" data-figure>{percent(row.changePct, 2)}</td><td class="num" data-figure>{percent(row.ascChangePct, 2)}</td><td class="num" data-figure>{percent(row.otherPct, 2)}</td><td class="num" data-figure>{pounds(row.ascBandD)}</td></tr>; })}</tbody>
 </table></div>
 <SourceLine source={councilTaxSource(CURRENT_YEAR, tables, 'The rest of the change is the published own change less the published adult social care part, calculated')} />
+</div>
 <p class="caveat">"n/a" means the table holds no figure for that authority; it is not zero. Shire districts do not charge the adult social care precept.</p>
 </section>
 </BaseLayout>

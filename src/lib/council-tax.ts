@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { edition } from "./edition.mjs";
+import { edition, FIRST_LEVELS_PAGE_YEAR as FIRST_LEVELS } from "./edition.mjs";
 
 /**
  * Council tax for England, read from the JSON scripts/fetch-council-tax.mjs
@@ -26,10 +26,10 @@ export type Year = string;
 
 /**
  * The first year whose figures get a levels day page at /council-tax-<year>/,
- * the address that said "not yet set" before them. Earlier years never had
- * that page, so their figures stay on /increases/ and the council pages only.
+ * the address that said "not yet set" before them (src/lib/edition.mjs). Earlier
+ * years never had that page; their figures stay on /increases/ and council pages.
  */
-export const FIRST_LEVELS_PAGE_YEAR = "2027-28";
+export const FIRST_LEVELS_PAGE_YEAR: string = FIRST_LEVELS;
 
 /** Whether the current year's figures have a levels day page. */
 export const LEVELS_PAGE = CURRENT_YEAR >= FIRST_LEVELS_PAGE_YEAR;

@@ -90,7 +90,7 @@ const twoPlaces = (value: number) => Math.round((value + Number.EPSILON) * 100) 
 
 function ascRow(gss: string, own: OwnFigures, county: boolean): AscRow {
   const otherPct = typeof own.changePct === "number" && typeof own.ascChangePct === "number"
-    ? twoPlaces(own.changePct - own.ascChangePct) : null;
+    ? twoPlaces(own.changePct-own.ascChangePct) : null;
   return { gss, name: own.name, table: own.table, changePct: own.changePct, ascChangePct: own.ascChangePct, ascBandD: own.ascBandD, otherPct, county };
 }
 

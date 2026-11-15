@@ -16,12 +16,15 @@ import SourceLine from '../../../components/SourceLine.astro';
 import PageContents from '../../../components/PageContents.astro';
 import {gameNeighbours} from '../../../lib/game-neighbours';
 import {councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
-import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
+import {budget, budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
+import {loadYear} from '../../../lib/council-tax';
 export function getStaticPaths() {
   return councilPages().map(({council, tax}) => ({params: {slug: council.slug}, props: {council, tax}}));
 }
 interface Props extends CouncilPage {}
 const {council, tax} = Astro.props;
+// The budget page stays on its own edition after the year switch, bands included (C6).
+const budgetTax = loadYear(budget.year).authorities[council.gss] ?? tax;
 const data = budgetFor(council.gss);
 const available = data.council.status === 'available';
 const game = available ? gameData(council.gss, council.slug, tax.name) : null;
@@ -51,7 +54,7 @@ const description = available
   {!available && <BudgetSetEntry gss={council.gss} />}
   <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />
-  <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={tax} showChange={false} /></section>
+  <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} /></section>
   <section class="section game-onward" aria-labelledby="onward-heading" data-game-onward>
     <h2 id="onward-heading">Play another council</h2>
     {nearby.neighbours.length > 0 && <div class="neighbour-row" data-play-neighbour>

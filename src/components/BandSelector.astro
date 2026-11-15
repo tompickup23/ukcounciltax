@@ -14,6 +14,7 @@ import {
   CURRENT_YEAR,
   PREVIOUS_YEAR,
   bandChange,
+  precedingYear,
   changePhrase,
   loadYear,
   pounds,
@@ -29,14 +30,17 @@ interface Props {
   idPrefix?: string;
   showChange?: boolean;
   compact?: boolean;
+  /** The year whose bands are shown; the budget pages pass their own edition's (C6). */
+  year?: string;
 }
 
-const { ons, authority, idPrefix = "band", showChange = true, compact = false } = Astro.props;
-const bandTable = loadYear(CURRENT_YEAR).source.bandTable;
-const source = councilTaxSource(CURRENT_YEAR, bandTable);
-const changeRef = changeSource(PREVIOUS_YEAR, CURRENT_YEAR);
-const year = yearLabel(CURRENT_YEAR);
-const previous = yearLabel(PREVIOUS_YEAR);
+const { ons, authority, idPrefix = "band", showChange = true, compact = false, year: shownYear = CURRENT_YEAR } = Astro.props;
+const shownPrevious = shownYear === CURRENT_YEAR ? PREVIOUS_YEAR : precedingYear(shownYear);
+const bandTable = loadYear(shownYear).source.bandTable;
+const source = councilTaxSource(shownYear, bandTable);
+const changeRef = changeSource(shownPrevious, shownYear);
+const year = yearLabel(shownYear);
+const previous = yearLabel(shownPrevious);
 ---
 <div class="band-selector" style={`--bands:${BANDS.length}`}>
   {BANDS.map((band) => (
@@ -59,7 +63,7 @@ const previous = yearLabel(PREVIOUS_YEAR);
   <div class="band-panels">
     {BANDS.map((band) => {
       const annual = authority.bands[band];
-      const change = showChange ? bandChange(ons, band) : null;
+      const change = showChange ? bandChange(ons, band, shownPrevious, shownYear) : null;
       return (
         <div class="band-panel card" data-band-panel={band}>
           <Fact

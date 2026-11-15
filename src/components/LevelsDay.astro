@@ -26,13 +26,14 @@ const byClass = data.england.byClass;
 const count = Object.keys(data.authorities).length;
 const title = `Council tax ${label} in England: the published figures`;
 ---
-<BaseLayout title={title} description={`MHCLG's ${label} council tax levels for all ${count} billing authorities in England: the average Band D, its change from ${previous}, and where to find each council, ranking and precept.`} path={LEVELS_PAGE_PATH}>
+<BaseLayout title={title} description={`MHCLG's ${label} council tax for all ${count} billing authorities in England: the average Band D, its change from ${previous}, and each council and ranking.`} path={LEVELS_PAGE_PATH}>
 <Breadcrumbs items={[{label: `Council tax ${label}`}]} />
 <header class="page-head"><p class="eyebrow">Council tax, the year's figures</p><h1>{title}</h1><p class="lede">MHCLG published {label} council tax for every billing authority in England{published ? ` on ${published}` : ''}. Every page on this site now leads with these figures; {previous} stays alongside for the change.</p></header>
 
 {area && <section class="section" aria-labelledby="average-heading">
 <h2 id="average-heading">The average area Band D in England</h2>
-<p class="fact" data-fact>The average area Band D in England for {label} is <strong data-figure>{wholePounds(area.england.pounds)}</strong>, a change of <span data-figure>{percent(area.england.changePct)}</span> on {previous}, as MHCLG publishes it. It is an average across all areas and includes adult social care, county, police, fire and average parish precepts; it is not any one household's bill.</p>
+<div class="fact" data-fact>
+<p>The average area Band D in England for {label} is <strong data-figure>{wholePounds(area.england.pounds)}</strong>, a change of <span data-figure>{percent(area.england.changePct)}</span> on {previous}, as MHCLG publishes it. It is an average across all areas and includes adult social care, county, police, fire and average parish precepts; it is not any one household's bill.</p>
 <div class="table-wrap" tabindex="0" role="region" aria-label={`Average area Band D by type of area, ${label}`}><table class="data">
 <caption>Average area Band D by type of area, {label}</caption>
 <thead><tr><th scope="col">Area</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {previous}</th></tr></thead>
@@ -41,17 +42,20 @@ const title = `Council tax ${label} in England: the published figures`;
 {(Object.keys(AREA_TYPE_LABEL) as (keyof typeof AREA_TYPE_LABEL)[]).map(key => <tr><th scope="row">{sentenceCase(AREA_TYPE_LABEL[key])}</th><td class="num" data-figure>{wholePounds(area.byAreaType[key].pounds)}</td><td class="num" data-figure>{percent(area.byAreaType[key].changePct)}</td></tr>)}
 </tbody></table></div>
 <SourceLine source={councilTaxSource(CURRENT_YEAR, area.table)} />
+</div>
 </section>}
 
 {byClass && <section class="section" aria-labelledby="class-heading">
 <h2 id="class-heading">Each type of authority's own share</h2>
 <p>The part of Band D each type of authority sets for itself, before the other precepts on the bill, as MHCLG averages it.</p>
+<div class="fact" data-fact>
 <div class="table-wrap" tabindex="0" role="region" aria-label={`Average own Band D by class of authority, ${label}`}><table class="data">
 <caption>Average own Band D by class of authority, {label}, excluding parish precepts</caption>
 <thead><tr><th scope="col">Class of authority</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {previous}</th></tr></thead>
 <tbody>{byClass.rows.map(row => <tr><th scope="row">{row.class}</th><td class="num" data-figure>{wholePounds(row.bandD)}</td><td class="num" data-figure>{percent(row.changePct)}</td></tr>)}</tbody>
 </table></div>
 <SourceLine source={councilTaxSource(CURRENT_YEAR, byClass.table)} />
+</div>
 </section>}
 
 <section class="section" aria-labelledby="next-heading">

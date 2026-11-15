@@ -22,6 +22,7 @@ import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
 import ChartActions from '../../components/kit/ChartActions.astro';
 import {profileChartOptions, rankingCardAlt} from '../../lib/kit-charts';
 import {embedSnippet, hasLevelsPage, rankingCardPath} from '../../lib/levels-day';
+import {glaDecision} from '../../lib/gla';
 import {profileBandCells} from '../../lib/profile-bands';
 import LocatorMap from '../../vendor/estate-kit/src/components/LocatorMap.astro';
 import {boundarySource} from '../../lib/boundaries';
@@ -135,7 +136,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     {label: 'Paying and precepts', items: [
       {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
       ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-      ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+      ...(tax.region === 'London' && glaDecision() ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
       {id: 'parish-precepts', label: 'Parish charges'},
     ]},
     {label: 'Council and local context', items: [

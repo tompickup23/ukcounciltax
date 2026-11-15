@@ -22,6 +22,13 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
+/**
+ * The first year whose figures get a levels day page at /council-tax-<year>/,
+ * the address that said "not yet set" before them. Earlier years never had that
+ * page. Read by src/lib/council-tax.ts and scripts/check-dist.mjs.
+ */
+export const FIRST_LEVELS_PAGE_YEAR = "2027-28";
+
 const LEVELS = /^england-(\d{4}-\d{2})\.json$/;
 const SHA256 = /^[0-9a-f]{64}$/;
 

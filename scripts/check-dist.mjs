@@ -21,7 +21,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { requireImages } from "./lib/og-policy.mjs";
-import { edition } from "../src/lib/edition.mjs";
+import { edition, FIRST_LEVELS_PAGE_YEAR } from "../src/lib/edition.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
@@ -34,7 +34,18 @@ const YEAR_STATE = edition();
 const slash = (year) => year.replace("-", "/");
 const CURRENT_LABEL = slash(YEAR_STATE.current);
 const NEXT_LABEL = slash(YEAR_STATE.next);
-const WALES_LABEL = slash(JSON.parse(readFileSync("data/devolved/council-tax.json", "utf-8")).editions.filter((e) => e.nation === "Wales").map((e) => e.year).sort().at(-1));
+const DEVOLVED = JSON.parse(readFileSync("data/devolved/council-tax.json", "utf-8")).editions;
+const nationYear = (nation) => DEVOLVED.filter((e) => e.nation === nation).map((e) => e.year).sort().at(-1);
+const followingYear = (year) => { const start = Number(year.slice(0, 4)) + 1; return `${start}-${String((start + 1) % 100).padStart(2, "0")}`; };
+// Scottish and Welsh pages carry their own edition's year, which can lag England's after the switch.
+const PAGE_YEARS = {
+  england: { year: CURRENT_LABEL, next: NEXT_LABEL },
+  scotland: { year: slash(nationYear("Scotland")), next: slash(followingYear(nationYear("Scotland"))) },
+  wales: { year: slash(nationYear("Wales")), next: slash(followingYear(nationYear("Wales"))) },
+};
+const WALES_LABEL = PAGE_YEARS.wales.year;
+// C6: the levels day page and precept day are the two pages the switch adds from 2027-28.
+const LEVELS_EXTRA = YEAR_STATE.current >= FIRST_LEVELS_PAGE_YEAR ? 2 : 0;
 const beforeGameText=JSON.parse(readFileSync('tests/fixtures/a6-published-text.json','utf8'));
 const DIST = resolve(process.cwd(), "dist");
 const SITE_NAME = "UK Council Tax";
@@ -128,6 +139,7 @@ for (const path of files(DIST)) {
 
   if (/\/(?:councils|scotland|wales)\/[^/]+\/index\.html$/.test(rel(path))) {
     const pagePath = rel(path);
+    const own = PAGE_YEARS[pagePath.includes('/scotland/') ? 'scotland' : pagePath.includes('/wales/') ? 'wales' : 'england'];
     if (pagePath.includes('/scotland/')) {
       if (!title?.includes('council tax only, water and sewerage excluded')) failures.push(`Scottish basis absent from title on ${pagePath}`);
     } else if (pagePath.includes('/wales/')) {
@@ -137,12 +149,12 @@ for (const path of files(DIST)) {
     }
     const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
     if (!description.startsWith('Band D is ')) failures.push(`council description must lead with the figure sentence on ${pagePath}`);
-    for (const phrase of [CURRENT_LABEL]) {
+    for (const phrase of [own.year]) {
       if (!description.includes(phrase)) failures.push(`${phrase} missing from council description on ${pagePath}`);
     }
     if (description.includes('Source extract checked')) failures.push(`internal check date still in council description on ${pagePath}`);
     if (description.length > 160) failures.push(`council description over 160 characters on ${pagePath} (${description.length})`);
-    if (!text.includes('data-next-edition') || !text.includes(`${NEXT_LABEL} charges: not yet published`)) failures.push(`next edition status missing on ${pagePath}`);
+    if (!text.includes('data-next-edition') || !text.includes(`${own.next} charges: not yet published`)) failures.push(`next edition status missing on ${pagePath}`);
   }
 
   if (path.endsWith('.html')) {
@@ -243,7 +255,8 @@ if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pag
 // A4 adds exactly 221 routes: six ranking pages and 215 parish pages.
 // The Burnley budget scenario game adds one route, /councils/burnley/budget-game/.
 // C2 adds exactly 197 audited set pages to the existing 910 HTML pages.
-if (pages !== 1107) failures.push(`expected 1107 HTML pages, found ${pages}`);
+// C6 adds two from 2027-28: the levels day page and precept day.
+if (pages !== 1107 + LEVELS_EXTRA) failures.push(`expected ${1107 + LEVELS_EXTRA} HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
@@ -285,6 +298,23 @@ if (existsSync(redirects)) for (const line of readFileSync(redirects, 'utf8').sp
   if (from?.includes('*') && status === '200') failures.push('wildcard 200 rewrite masks unknown routes');
 }
 
+// C6: the pages that wait for the first levels day page exist exactly when the
+// data has one, and the not yet set page always exists for the year after.
+{
+  const levelsPage = YEAR_STATE.current >= FIRST_LEVELS_PAGE_YEAR;
+  for (const path of [`council-tax-${YEAR_STATE.current}`, `council-tax-${YEAR_STATE.current}/adult-social-care`]) {
+    if (existsSync(join(DIST, path, 'index.html')) !== levelsPage) failures.push(`C6: /${path}/ ${levelsPage ? 'missing after the switch' : 'built before its data'}`);
+  }
+  const nextPage = join(DIST, `council-tax-${YEAR_STATE.next}`, 'index.html');
+  if (!existsSync(nextPage) || !readFileSync(nextPage, 'utf-8').includes(`Council tax ${NEXT_LABEL}: not yet set`)) failures.push(`C6: /council-tax-${YEAR_STATE.next}/ not yet set page missing`);
+  const burnley = join(DIST, 'councils', 'burnley', 'index.html');
+  if (existsSync(burnley) && readFileSync(burnley, 'utf-8').includes('data-ranking-embed') !== levelsPage) failures.push(`C6: ranking embed ${levelsPage ? 'missing' : 'shown before its data'} on /councils/burnley/`);
+  const budgetYear = JSON.parse(readFileSync('data/national/budget.json', 'utf-8')).year;
+  const setRoot = join(DIST, 'tools', 'budget');
+  const setPage = existsSync(setRoot) ? readdirSync(setRoot).map((slug) => join(setRoot, slug, 'set', 'index.html')).find((path) => existsSync(path)) : null;
+  if (setPage && readFileSync(setPage, 'utf-8').includes('data-budget-pinned') !== (budgetYear < YEAR_STATE.current)) failures.push(`C6: the pinned budget line is wrong for budget ${budgetYear} against council tax ${YEAR_STATE.current} on ${rel(setPage)}`);
+}
+
 // The 2026/27 rises page moved into /increases/; its address stays a 301.
 const moved = existsSync(redirects) ? readFileSync(redirects, 'utf8') : '';
 if (!/^\/council-tax\/rises-2026-27\/ \/increases\/#2026-27 301$/m.test(moved)) failures.push('rises-2026-27 redirect missing from _redirects');
@@ -294,7 +324,10 @@ if (!/^\/bill\/ \/precepts\/#find-your-bill 302$/m.test(moved)) failures.push('b
 if (existsSync(join(DIST, 'bill', 'index.html'))) failures.push('a /bill/ page would shadow its redirect');
 
 // The next year's page holds no charge before one is published: no pound sign.
-const nextYearPages = readdirSync(DIST).filter((name) => /^council-tax-\d{4}-\d{2}$/.test(name));
+// From 2027-28 the levels day page shares the address pattern and carries figures.
+const yearPages = readdirSync(DIST).filter((name) => /^council-tax-\d{4}-\d{2}$/.test(name));
+if (yearPages.length !== 1 + LEVELS_EXTRA / 2) failures.push(`expected ${1 + LEVELS_EXTRA / 2} council tax year pages, found ${yearPages.length}`);
+const nextYearPages = yearPages.filter((name) => name === `council-tax-${YEAR_STATE.next}`);
 if (nextYearPages.length !== 1) failures.push(`expected one next-year page, found ${nextYearPages.length}`);
 for (const name of nextYearPages) {
   const html = readFileSync(join(DIST, name, 'index.html'), 'utf8');
@@ -311,7 +344,7 @@ const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
 const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
 const today = new Date().toISOString().slice(0, 10);
-if (sitemapEntries.length !== 1106 || locs.length !== 1106) failures.push(`expected all 1106 sitemap entries, found ${sitemapEntries.length}`);
+if (sitemapEntries.length !== 1106 + LEVELS_EXTRA || locs.length !== 1106 + LEVELS_EXTRA) failures.push(`expected all ${1106 + LEVELS_EXTRA} sitemap entries, found ${sitemapEntries.length}`);
 for (const entry of sitemapEntries) {
   const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
   if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);

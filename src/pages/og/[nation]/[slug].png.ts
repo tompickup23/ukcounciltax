@@ -1,15 +1,15 @@
 import {cachedImageRoute} from "../../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from 'astro';
 import { buildOg, renderOgCard } from '../../../lib/og';
-import { CURRENT_YEAR, yearLabel } from '../../../lib/council-tax';
-import { devolved, type Edition, type DevolvedRow } from '../../../lib/devolved';
+import { yearLabel } from '../../../lib/council-tax';
+import {devolved, type Edition, type DevolvedRow, latestEditions} from '../../../lib/devolved';
 import { moneyPence } from '../../../lib/tax-view';
 import { longDate } from '../../../lib/sources';
 
 export const prerender = true;
 export function getStaticPaths() {
   if (!buildOg) return [];
-  return devolved.editions.filter(edition => edition.year === CURRENT_YEAR).flatMap(edition => edition.records.map(row => ({params: {nation: edition.nation.toLowerCase(), slug: row.slug}, props: {edition, row}})));
+  return latestEditions().flatMap(edition => edition.records.map(row => ({params: {nation: edition.nation.toLowerCase(), slug: row.slug}, props: {edition, row}})));
 }
 export const GET: APIRoute = cachedImageRoute(async ({props}) => {
   const {edition, row} = props as {edition: Edition; row: DevolvedRow};

@@ -53,7 +53,7 @@ const england=release('England'), scotland=release('Scotland'), wales=release('W
 {scotland.page ? (<>
 <p>The Scottish Government lists the publication <strong>{scotland.publication}</strong>. {releaseSentence(scotland)} {scotland.detail}</p>
 <p class="source-line">Source: <a href={scotland.page.url}>{scotland.publisher}, {scotland.page.title}</a>, accessed {accessed(scotland.page.accessed)}.</p>
-</>) : <p>{releaseSentence(scotland)}</p>}
+</>) : <p>{releaseSentence(scotland)}{scotland.detail && ` ${scotland.detail}`}</p>}
 {scotland.file && <details><summary>File provenance</summary><p>{scotland.file.title}. SHA-256 <code>{scotland.file.sha256}</code>.</p></details>}
 </section>
 
@@ -62,7 +62,7 @@ const england=release('England'), scotland=release('Scotland'), wales=release('W
 {wales.page ? (<>
 <p>{releaseSentence(wales)} {wales.detail}</p>
 <p class="source-line">Source: <a href={wales.page.url}>{wales.publisher}, {wales.page.title}</a>, accessed {accessed(wales.page.accessed)}.</p>
-</>) : <p>{releaseSentence(wales)}</p>}
+</>) : <p>{releaseSentence(wales)}{wales.detail && ` ${wales.detail}`}</p>}
 </section>
 
 <section class="section" aria-labelledby="lands-heading">

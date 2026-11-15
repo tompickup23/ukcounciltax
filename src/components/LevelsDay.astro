@@ -1,0 +1,74 @@
+---
+/**
+ * The levels day page: what MHCLG's levels release for CURRENT_YEAR says for
+ * England as a whole, with a route to every council, class ranking and the
+ * adult social care precept page. It exists only from FIRST_LEVELS_PAGE_YEAR on (see
+ * src/lib/levels-day.ts); before that, no route renders it. Every figure is
+ * one MHCLG publishes, with its table under it; nothing is projected.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import SourceLine from './SourceLine.astro';
+import {AREA_TYPE_LABEL, CURRENT_YEAR, PREVIOUS_YEAR, LEVELS_PAGE_PATH, increasesYearPath, loadYear, percent, wholePounds, yearLabel} from '../lib/council-tax';
+import {councilTaxSource, longDate, tableName} from '../lib/sources';
+import {rankingClasses} from '../lib/ranking-page';
+import {rankingPath} from '../lib/paths';
+import {sentenceCase} from '../lib/rankings';
+import {preceptDayPath} from '../lib/levels-day';
+
+if (!LEVELS_PAGE_PATH) throw new Error('C6: the levels day page renders only from FIRST_LEVELS_PAGE_YEAR on');
+const data = loadYear(CURRENT_YEAR);
+const label = yearLabel(CURRENT_YEAR);
+const previous = yearLabel(PREVIOUS_YEAR);
+const published = longDate(data.source.published);
+const area = data.england.areaBandD;
+const byClass = data.england.byClass;
+const count = Object.keys(data.authorities).length;
+const title = `Council tax ${label} in England: the published figures`;
+---
+<BaseLayout title={title} description={`MHCLG's ${label} council tax levels for all ${count} billing authorities in England: the average Band D, its change from ${previous}, and where to find each council, ranking and precept.`} path={LEVELS_PAGE_PATH}>
+<Breadcrumbs items={[{label: `Council tax ${label}`}]} />
+<header class="page-head"><p class="eyebrow">Council tax, the year's figures</p><h1>{title}</h1><p class="lede">MHCLG published {label} council tax for every billing authority in England{published ? ` on ${published}` : ''}. Every page on this site now leads with these figures; {previous} stays alongside for the change.</p></header>
+
+{area && <section class="section" aria-labelledby="average-heading">
+<h2 id="average-heading">The average area Band D in England</h2>
+<p class="fact" data-fact>The average area Band D in England for {label} is <strong data-figure>{wholePounds(area.england.pounds)}</strong>, a change of <span data-figure>{percent(area.england.changePct)}</span> on {previous}, as MHCLG publishes it. It is an average across all areas and includes adult social care, county, police, fire and average parish precepts; it is not any one household's bill.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label={`Average area Band D by type of area, ${label}`}><table class="data">
+<caption>Average area Band D by type of area, {label}</caption>
+<thead><tr><th scope="col">Area</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {previous}</th></tr></thead>
+<tbody>
+<tr><th scope="row">England</th><td class="num" data-figure>{wholePounds(area.england.pounds)}</td><td class="num" data-figure>{percent(area.england.changePct)}</td></tr>
+{(Object.keys(AREA_TYPE_LABEL) as (keyof typeof AREA_TYPE_LABEL)[]).map(key => <tr><th scope="row">{sentenceCase(AREA_TYPE_LABEL[key])}</th><td class="num" data-figure>{wholePounds(area.byAreaType[key].pounds)}</td><td class="num" data-figure>{percent(area.byAreaType[key].changePct)}</td></tr>)}
+</tbody></table></div>
+<SourceLine source={councilTaxSource(CURRENT_YEAR, area.table)} />
+</section>}
+
+{byClass && <section class="section" aria-labelledby="class-heading">
+<h2 id="class-heading">Each type of authority's own share</h2>
+<p>The part of Band D each type of authority sets for itself, before the other precepts on the bill, as MHCLG averages it.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label={`Average own Band D by class of authority, ${label}`}><table class="data">
+<caption>Average own Band D by class of authority, {label}, excluding parish precepts</caption>
+<thead><tr><th scope="col">Class of authority</th><th scope="col" class="num">Band D</th><th scope="col" class="num">Change on {previous}</th></tr></thead>
+<tbody>{byClass.rows.map(row => <tr><th scope="row">{row.class}</th><td class="num" data-figure>{wholePounds(row.bandD)}</td><td class="num" data-figure>{percent(row.changePct)}</td></tr>)}</tbody>
+</table></div>
+<SourceLine source={councilTaxSource(CURRENT_YEAR, byClass.table)} />
+</section>}
+
+<section class="section" aria-labelledby="next-heading">
+<h2 id="next-heading">Find a council, a ranking or a precept</h2>
+<ul>
+<li><a href="/councils/">Every council in England</a>: bands A to H for {label}, its own share and the change from {previous}.</li>
+<li><a href={increasesYearPath(CURRENT_YEAR)}>Council tax increases in {label}</a>: each council's published change in its own share.</li>
+{rankingClasses.map(cls => <li><a href={rankingPath(cls.slug)}>{sentenceCase(cls.label)} ranked by Band D</a>, within the class only.</li>)}
+<li><a href={preceptDayPath(CURRENT_YEAR)}>The adult social care precept in {label}</a>: what each of the authorities that charge it set.</li>
+<li><a href="/scotland/">Scotland</a> and <a href="/wales/">Wales</a>: each government publishes its own figures on its own date, shown here once published.</li>
+</ul>
+</section>
+
+<section class="section" aria-labelledby="files-heading">
+<h2 id="files-heading">The files these figures come from</h2>
+<ul class="prose">{data.source.files.map(file => <li><a href={file.url}>{file.title}</a>. SHA-256 <code>{file.sha256}</code>.</li>)}</ul>
+<p class="source-line">Source: <a href={data.source.url}>{data.source.publisher}, {data.source.title}</a>{published ? `, published ${published}` : ''}. Band table {tableName(data.source.bandTable)}. {data.source.licence}.</p>
+</section>
+</BaseLayout>
+

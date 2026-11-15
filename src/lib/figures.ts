@@ -26,9 +26,21 @@ export const BURNLEY_PARTS = ["billing", "county", "police", "fire"] as const;
 
 const pounds = (pence: number) => Math.round(pence) / 100;
 
+/**
+ * Burnley's own all band schedule for CURRENT_YEAR, or, until the council's
+ * schedule for that year is imported, its latest earlier one. Burnley publishes
+ * its schedule on its own date, so on levels day the schedule can lag MHCLG's
+ * tables; it is always printed with its own year, never CURRENT_YEAR (C6).
+ */
+export function burnleyBill() {
+  const bills = localBills.filter((b) => b.slug === "burnley" && b.year <= CURRENT_YEAR).sort((a, b) => a.year.localeCompare(b.year));
+  const bill = bills.at(-1);
+  if (!bill) throw new Error(`figures: no Burnley schedule for ${CURRENT_YEAR} or earlier in data/local-bills`);
+  return bill;
+}
+
 function build(): Record<string, unknown> {
-  const bill = localBills.find((b) => b.slug === "burnley" && b.year === CURRENT_YEAR);
-  if (!bill) throw new Error(`figures: no Burnley schedule for ${CURRENT_YEAR} in data/local-bills`);
+  const bill = burnleyBill();
   const read = SCHEDULE_PAGES[bill.source.sha256];
   if (!read) throw new Error(`figures: the Burnley schedule hash ${bill.source.sha256} has no page reading; read the PDF again`);
   const unparished = bill.localities.find((l) => l.id === "unparished");
@@ -82,6 +94,8 @@ function build(): Record<string, unknown> {
   };
 
   const data = loadYear(CURRENT_YEAR);
+  // From here on every label is the levels year; `year` above is the Burnley schedule's own.
+  const levelsYear = yearLabel(CURRENT_YEAR);
   const mhclg = (table: string) => ({
     publisher: "MHCLG",
     title: data.source.title,
@@ -136,12 +150,12 @@ function build(): Record<string, unknown> {
     const slug = registry.councils[gss].slug;
     const key = `council.${slug}`;
     records[`${key}.bands`] = {
-      kind: "series", axis: "category", label: `Bands A to H in ${authority.name}, ${year}`,
+      kind: "series", axis: "category", label: `Bands A to H in ${authority.name}, ${levelsYear}`,
       unit: "gbp", dp: 2, source: bandsSource,
       points: BANDS.map(band => ({label: band, value: authority.bands[band]})),
     };
     records[`${key}.area_bandd`] = {
-      kind: "value", label: `Area Band D in ${authority.name}, ${year}`,
+      kind: "value", label: `Area Band D in ${authority.name}, ${levelsYear}`,
       name: authority.name, value: authority.bands.D, unit: "gbp", dp: 2, source: bandsSource,
     };
     const components = national.components[gss];
@@ -154,7 +168,7 @@ function build(): Record<string, unknown> {
     ]) {
       if (part.bandDPence === null) throw new Error(`A3: missing component ${gss}/${part.kind}`);
       records[`${key}.bill.${part.kind}`] = {
-        kind: "value", label: `${part.name}, ${year}`, name: part.name,
+        kind: "value", label: `${part.name}, ${levelsYear}`, name: part.name,
         value: part.bandDPence / 100, unit: "gbp", dp: 2, source: componentSource,
       };
     }
@@ -163,13 +177,13 @@ function build(): Record<string, unknown> {
     const rows = rankClass(data, cls);
     if (!rows) throw new Error(`A3: incomplete class ${cls.slug}`);
     records[`class.${cls.slug}.area_bandd`] = {
-      kind: "series", axis: "category", label: `Area Band D within ${cls.label}, ${year}`,
+      kind: "series", axis: "category", label: `Area Band D within ${cls.label}, ${levelsYear}`,
       unit: "gbp", dp: 2, source: bandsSource,
       points: rows.map(row => ({label: row.name, value: row.area})),
     };
     // The published average for the class's area type, for the strip on /council-tax/ranked/.
     records[`class.${cls.slug}.average`] = {
-      kind: "value", label: `Average area Band D for ${AREA_TYPE_LABEL[cls.areaType]}, ${year}`,
+      kind: "value", label: `Average area Band D for ${AREA_TYPE_LABEL[cls.areaType]}, ${levelsYear}`,
       name: `Average for ${AREA_TYPE_LABEL[cls.areaType]}`, value: area.byAreaType[cls.areaType].pounds, unit: "gbp", source: mhclg(area.table),
     };
   }
@@ -177,12 +191,12 @@ function build(): Record<string, unknown> {
   const countyAverage = data.england.byClass?.rows.find(row => row.class === COUNTY_CLASS.table2);
   if (!counties || !data.england.byClass || typeof countyAverage?.bandD !== "number") throw new Error("D6: the county precepts or their published average are incomplete");
   records[`class.${COUNTY_CLASS.slug}.own_bandd`] = {
-    kind: "series", axis: "category", label: `Own Band D within ${COUNTY_CLASS.label}, ${year}`,
+    kind: "series", axis: "category", label: `Own Band D within ${COUNTY_CLASS.label}, ${levelsYear}`,
     unit: "gbp", dp: 2, source: mhclg(COUNTY_CLASS.ownTable),
     points: counties.map(row => ({label: row.name, value: row.own})),
   };
   records[`class.${COUNTY_CLASS.slug}.average`] = {
-    kind: "value", label: `Average Band D for ${COUNTY_CLASS.label}, ${year}`,
+    kind: "value", label: `Average Band D for ${COUNTY_CLASS.label}, ${levelsYear}`,
     name: `Average for ${COUNTY_CLASS.label}`, value: countyAverage.bandD, unit: "gbp", source: mhclg(data.england.byClass.table),
   };
   return records;

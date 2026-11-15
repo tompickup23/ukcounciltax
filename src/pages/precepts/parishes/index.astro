@@ -2,12 +2,13 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
-import {CURRENT_YEAR, loadYear, yearLabel} from '../../../lib/council-tax';
-import {national, parishesFor} from '../../../lib/national-data';
+import {loadYear, yearLabel} from '../../../lib/council-tax';
+import {national, parishesFor, PARISH_YEAR} from '../../../lib/national-data';
 import {parishPages, parishPath, REGIONS} from '../../../lib/paths';
 import {parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
 const pages = parishPages();
-const year = yearLabel(CURRENT_YEAR), tax = loadYear(CURRENT_YEAR);
+// On the parish return's year, which can lag the levels tables.
+const year = yearLabel(PARISH_YEAR), tax = loadYear(PARISH_YEAR);
 const title = `Parish precepts by council in England ${year}`;
 const description = `${national.parishes.length.toLocaleString('en-GB')} local precepting authority records across ${pages.length} English councils in ${year}, with published Band D precepts and changes on the previous year.`;
 ---

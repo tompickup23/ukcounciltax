@@ -21,6 +21,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { requireImages } from "./lib/og-policy.mjs";
+import { edition } from "../src/lib/edition.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
@@ -28,6 +29,12 @@ import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./l
 
 import {budgetGameProblems,gameHeaderProblem,publishedText} from './lib/budget-game.mjs';
 const gameCounts={available:0,absent:0};
+// C6: the years the built pages must carry come from the data present, as the build's do.
+const YEAR_STATE = edition();
+const slash = (year) => year.replace("-", "/");
+const CURRENT_LABEL = slash(YEAR_STATE.current);
+const NEXT_LABEL = slash(YEAR_STATE.next);
+const WALES_LABEL = slash(JSON.parse(readFileSync("data/devolved/council-tax.json", "utf-8")).editions.filter((e) => e.nation === "Wales").map((e) => e.year).sort().at(-1));
 const beforeGameText=JSON.parse(readFileSync('tests/fixtures/a6-published-text.json','utf8'));
 const DIST = resolve(process.cwd(), "dist");
 const SITE_NAME = "UK Council Tax";
@@ -124,18 +131,18 @@ for (const path of files(DIST)) {
     if (pagePath.includes('/scotland/')) {
       if (!title?.includes('council tax only, water and sewerage excluded')) failures.push(`Scottish basis absent from title on ${pagePath}`);
     } else if (pagePath.includes('/wales/')) {
-      if (!title?.includes('council tax Band D 2026/27, Wales')) failures.push(`Welsh Band D nation title absent on ${pagePath}`);
-    } else if (!title?.includes('council tax bands and charges 2026/27')) {
+      if (!title?.includes(`council tax Band D ${WALES_LABEL}, Wales`)) failures.push(`Welsh Band D nation title absent on ${pagePath}`);
+    } else if (!title?.includes(`council tax bands and charges ${CURRENT_LABEL}`)) {
       failures.push(`council task/year absent from title on ${pagePath}`);
     }
     const description = /<meta name="description" content="([^"]+)"/.exec(text)?.[1] ?? '';
     if (!description.startsWith('Band D is ')) failures.push(`council description must lead with the figure sentence on ${pagePath}`);
-    for (const phrase of ['2026/27']) {
+    for (const phrase of [CURRENT_LABEL]) {
       if (!description.includes(phrase)) failures.push(`${phrase} missing from council description on ${pagePath}`);
     }
     if (description.includes('Source extract checked')) failures.push(`internal check date still in council description on ${pagePath}`);
     if (description.length > 160) failures.push(`council description over 160 characters on ${pagePath} (${description.length})`);
-    if (!text.includes('data-next-edition') || !text.includes('2027/28 charges: not yet published')) failures.push(`next edition status missing on ${pagePath}`);
+    if (!text.includes('data-next-edition') || !text.includes(`${NEXT_LABEL} charges: not yet published`)) failures.push(`next edition status missing on ${pagePath}`);
   }
 
   if (path.endsWith('.html')) {
@@ -145,7 +152,7 @@ for (const path of files(DIST)) {
 
   if (rel(path) === '/council-tax/index.html') {
     const body = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(text)?.[1] ?? '';
-    for (const href of ['/help/', '/increases/', '/precepts/', '/scotland/', '/wales/', '/council-tax-2027-28/']) {
+    for (const href of ['/help/', '/increases/', '/precepts/', '/scotland/', '/wales/', `/council-tax-${YEAR_STATE.next}/`]) {
       if (!body.includes(`href="${href}"`)) failures.push(`England hub lacks body link ${href}`);
     }
   }
@@ -322,7 +329,7 @@ for (const loc of locs) {
 
 // Every English billing authority in the band table appears on every band
 // page and in the national table, and every council page names its source.
-const bandFile = join(process.cwd(), "data", "council-tax", "england-2026-27.json");
+const bandFile = join(process.cwd(), "data", "council-tax", `england-${YEAR_STATE.current}.json`);
 if (existsSync(bandFile)) {
   const onsCodes = Object.keys(JSON.parse(readFileSync(bandFile, "utf-8")).authorities);
   const listed = (page) => new Set([...readFileSync(page, "utf-8").matchAll(/data-ons="([^"]+)"/g)].map((m) => m[1]));

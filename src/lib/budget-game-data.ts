@@ -1,5 +1,4 @@
-import {budget, budgetFor, budgetYear, budgetSource, billSource, budgetMoney, funding, nonRingfencedReserves, observation, services, RESERVES_CAVEAT, REVENUE_RELEASE} from './budget';
-import {national} from './national-data';
+import {budget, budgetFor, budgetNational, budgetYear, budgetSource, billSource, budgetMoney, funding, nonRingfencedReserves, observation, services, RESERVES_CAVEAT, REVENUE_RELEASE} from './budget';
 import {moneyPence} from './tax-view';
 import type {GameData, GameRound} from './budget-game';
 
@@ -19,7 +18,7 @@ export function gameData(gss: string, slug: string, name: string): GameData | nu
       notes: rows.filter(row => row.value !== null && row.value < 0).map(row => `${row.label}: ${budgetMoney(row.value)} net income, RA line ${row.line}. Left out of the guess round.`),
     };
   });
-  const bill = national.components[gss];
+  const bill = budgetNational.components[gss];
   const parts = [{label: `${name}, including average local precepts`, value: bill.ownWithParishPence}, ...bill.parts.map(part => ({label: `${part.kind === 'county' ? 'County or GLA' : part.kind === 'combined' ? 'Combined authority' : part.kind === 'police' ? 'Police' : 'Fire'}: ${part.name ?? 'No separate precept reported'}`, value: part.bandDPence}))];
   if (bill.areaPence === null || parts.some(part => part.value === null)) throw new Error(`Missing printed Band D component: ${gss}`);
   rounds.push({kind: 'bill', title: 'Your bill: Band D only',

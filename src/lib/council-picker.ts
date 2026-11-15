@@ -1,5 +1,4 @@
-import { CURRENT_YEAR } from "./council-tax";
-import { devolved, nationPath } from "./devolved";
+import { latestEditions, nationPath } from "./devolved";
 import { councilPages, councilPath, slugify } from "./paths";
 import { budgetFor } from "./budget";
 
@@ -53,8 +52,7 @@ export function englishRows(destination: Destination): PickerRow[] {
  * has pages for them: the budget game covers England alone.
  */
 export function devolvedRows(): PickerRow[] {
-  return devolved.editions
-    .filter((edition) => edition.year === CURRENT_YEAR)
+  return latestEditions()
     .flatMap((edition) =>
       edition.records.map((row) => ({
         gss: row.gss,

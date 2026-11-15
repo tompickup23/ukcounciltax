@@ -4,15 +4,15 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CouncilFinder from '../components/CouncilFinder.astro';
 import {national} from '../lib/national-data';
 import LocalBillTool from '../components/LocalBillTool.astro';
-import {localBills} from '../lib/local-bill-data';
 import {moneyPence} from '../lib/tax-view';
 import BillSplit from '../components/BillSplit.astro';
 import {CURRENT_YEAR,yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
+import {burnleyBill} from '../lib/figures';
 import BillChanges from '../components/BillChanges.astro';
-const bill=localBills[0];
-// The bar under "Where your council tax goes" is the homepage's Burnley drawing, so the page must be showing that schedule.
-if(bill.slug!=='burnley'||bill.year!==CURRENT_YEAR)throw new Error('NV10: the bill bar on /precepts/ draws the current Burnley schedule');
+// The bar under "Where your council tax goes" is the homepage's Burnley drawing, so the page shows that schedule:
+// Burnley's for CURRENT_YEAR, or its latest earlier one with its own year until the new one is imported (C6).
+const bill=burnleyBill();
 const year=yearLabel(CURRENT_YEAR);
 const billYear=yearLabel(bill.year);
 const retrieved=longDate(bill.source.retrieved);

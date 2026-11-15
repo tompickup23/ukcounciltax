@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { edition } from "./edition.mjs";
 
 /**
  * Council tax for England, read from the JSON scripts/fetch-council-tax.mjs
@@ -10,11 +11,31 @@ import { join } from "node:path";
 export const BANDS = ["A", "B", "C", "D", "E", "F", "G", "H"] as const;
 export type Band = (typeof BANDS)[number];
 
-/** The year every page leads with, and the one before it for the change. */
-export const CURRENT_YEAR = "2026-27";
-export const PREVIOUS_YEAR = "2025-26";
-export const YEARS = ["2024-25", "2025-26", "2026-27"] as const;
-export type Year = (typeof YEARS)[number];
+/**
+ * The year every page leads with, the one before it for the change, and every
+ * year shown. They move together, set by the data present and not typed here:
+ * see src/lib/edition.mjs. With the files held on 15 November 2026 they are
+ * 2026-27, 2025-26 and 2024-25 to 2026-27. When the 2027-28 levels file and
+ * its Table 10 import both land, all three move on one year in the same build.
+ */
+const EDITION = edition();
+export const CURRENT_YEAR: string = EDITION.current;
+export const PREVIOUS_YEAR: string = EDITION.previous;
+export const YEARS: readonly string[] = EDITION.years;
+export type Year = string;
+
+/**
+ * The first year whose figures get a levels day page at /council-tax-<year>/,
+ * the address that said "not yet set" before them. Earlier years never had
+ * that page, so their figures stay on /increases/ and the council pages only.
+ */
+export const FIRST_LEVELS_PAGE_YEAR = "2027-28";
+
+/** Whether the current year's figures have a levels day page. */
+export const LEVELS_PAGE = CURRENT_YEAR >= FIRST_LEVELS_PAGE_YEAR;
+
+/** The levels day page for the current year, or null before 2027-28. */
+export const LEVELS_PAGE_PATH: string | null = LEVELS_PAGE ? `/council-tax-${CURRENT_YEAR}/` : null;
 
 /**
  * The financial year after a year label: "2026-27" to "2027-28". Every year

@@ -1,6 +1,6 @@
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
-import {national} from './national-data';
+import {nationalFor} from './national-data';
 import {CURRENT_YEAR, yearLabel} from './council-tax';
 import {councilTaxSource, type SourceRef} from './sources';
 
@@ -29,7 +29,15 @@ interface BudgetData {
   sourceNotes: Record<BudgetField['source'], Record<string, string>>;
 }
 export const budget = JSON.parse(readFileSync(join(process.cwd(), 'data/national/budget.json'), 'utf8')) as BudgetData;
-if (budget.year !== national.year || budget.year !== CURRENT_YEAR) throw new Error('Budget and council tax editions differ');
+/**
+ * The budget pages stay on their own edition: MHCLG's RA return and the Table 10
+ * import for the same year. When the levels for the following year land, the
+ * council tax pages move on and these do not, until the next RA release
+ * (June, for the year that starts that April) is imported (C6, docs/C6-STAGING-BRIEF.md).
+ */
+export const budgetNational = nationalFor(budget.year);
+if (budget.year !== budgetNational.year) throw new Error('Budget and council tax editions differ');
+if (budget.year > CURRENT_YEAR) throw new Error('The budget edition is newer than the council tax edition');
 export const budgetYear = yearLabel(budget.year);
 export const RESERVES_CAVEAT = 'It is not possible to identify usable revenue reserves in the current release.';
 export const REVENUE_RELEASE = 'https://www.gov.uk/government/statistics/local-authority-revenue-expenditure-and-financing-england-2026-to-2027-budget';
@@ -39,9 +47,9 @@ export function budgetSource(key: BudgetField['source'] = 'raPart1', method?: st
   return {publisher: source.publisher, title: source.title, url: source.fileUrl, table: source.tables[0], date: source.published, method};
 }
 export const billSource: SourceRef = {
-  ...councilTaxSource(CURRENT_YEAR, 'Table 10, Data_Billing and Precepting_Bodies'),
-  title: national.sources.components.title,
-  url: national.sources.components.fileUrl,
+  ...councilTaxSource(budget.year, 'Table 10, Data_Billing and Precepting_Bodies'),
+  title: budgetNational.sources.components.title,
+  url: budgetNational.sources.components.fileUrl,
 };
 
 /** Unit conversion only: preserve each printed integer and its source unit. */

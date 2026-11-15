@@ -18,6 +18,7 @@ import { NEXT_EDITION_STATUS } from "../src/lib/council-metadata";
 import { RELEASES, SETTING_DEADLINE, releaseSentence, settingDeadline, statedReleaseDate } from "../src/lib/next-year";
 import { NAV_GROUPS, STATIC_PATHS } from "../src/lib/site";
 import { sitemapPaths } from "../src/pages/sitemap.xml";
+import { yearPagePaths } from "../src/lib/levels-day";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const rel = (path: string) => path.replace(`${ROOT}/`, "");
@@ -121,10 +122,13 @@ describe("the evergreen increases page", () => {
 });
 
 describe("the next year page", () => {
-  const file = join(ROOT, "src", "pages", `council-tax-${NEXT_YEAR}.astro`);
+  // One dynamic route serves NEXT_YEAR, so the page moves with the data (C6).
+  const file = join(ROOT, "src", "pages", "council-tax-[year].astro");
 
   it("exists under NEXT_YEAR and is listed in STATIC_PATHS and the sitemap", () => {
-    expect(existsSync(file), `rename the page to council-tax-${NEXT_YEAR}.astro`).toBe(true);
+    expect(existsSync(file)).toBe(true);
+    expect(yearPagePaths()).toContainEqual({ params: { year: NEXT_YEAR }, props: { mode: "next" } });
+    expect(readdirSync(join(ROOT, "src", "pages")).filter((name) => /^council-tax-\d{4}-\d{2}\.astro$/.test(name))).toEqual([]);
     expect(STATIC_PATHS as readonly string[]).toContain(NEXT_YEAR_PATH);
     expect(sitemapPaths()).toContain(NEXT_YEAR_PATH);
     expect(sitemapPaths().some((p) => p.includes("rises-"))).toBe(false);

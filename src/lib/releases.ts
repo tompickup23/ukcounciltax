@@ -1,7 +1,9 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { CURRENT_YEAR, YEARS, councilTaxPath, loadYear, yearLabel, type Year } from "./council-tax";
-import { national, type Parish } from "./national-data";
+import { CURRENT_YEAR, NEXT_YEAR_PATH, YEARS, councilTaxPath, loadYear, yearLabel, type Year } from "./council-tax";
+import { NEXT_YEAR_ACCESSED } from "./next-year";
+import { levelsDayRoutes } from "./levels-day";
+import { national, PARISH_YEAR, type Parish } from "./national-data";
 
 /**
  * Dataset editions and the two findings notes.
@@ -398,7 +400,7 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
   items.push({
     id: "ukcounciltax-national-parishes",
     dataset: "parishes",
-    title: `Parish and town precepts in England, ${yearLabel(national.year)}`,
+    title: `Parish and town precepts in England, ${yearLabel(PARISH_YEAR)}`,
     date: s.parishes.retrieved,
     dateKind: "accessed",
     description: `MHCLG, ${s.parishes.title}, ${national.parishes.length.toLocaleString("en-GB")} rows. Accessed ${longDate(s.parishes.retrieved)}; the publication date is not recorded in the source manifest.`,
@@ -500,7 +502,8 @@ export const STATIC_PAGE_DATES: Record<string, string> = {
   '/tools/future-cost/': '2026-10-05',
   '/help/': '2026-10-05',
   '/coverage/': '2026-10-05',
-  '/council-tax-2027-28/': '2026-11-05',
+  // The not yet set page moves with NEXT_YEAR; its date is the day its release records were read.
+  [NEXT_YEAR_PATH]: NEXT_YEAR_ACCESSED,
   '/findings/': FINDINGS_DATED,
   '/changes/': FINDINGS_DATED,
 };
@@ -518,7 +521,13 @@ export function sitemapLastmod(path: string): string {
   if (path.startsWith('/tools/budget/')) return nationalSources.raPart1.retrieved;
   // A scenario game carries the edition date of the model build it was copied from.
   if (/^\/councils\/[^/]+\/budget-game\/$/.test(path)) return readJson<{edition: string}>('src/components/burnley-game/meta.json').edition;
-  if (path === '/precepts/') return nationalSources.components.retrieved;
+  // The Table 10 edition the page draws, which moves with the year switch.
+  if (path === '/precepts/') return national.sources.components.retrieved;
+  // C6: the levels day page and precept day page carry the levels release date.
+  if (levelsDayRoutes().includes(path)) {
+    const edition = loadYear(CURRENT_YEAR);
+    return edition.source.published || edition.generated;
+  }
   if (path === '/data/') return Object.values(nationalSources).map(source => source.retrieved).sort().at(-1)!;
   if (/^\/(scotland|wales)\//.test(path)) {
     // The manifest identifies the files but has no dates; the joined extract records retrieval.

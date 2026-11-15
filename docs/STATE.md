@@ -1,5 +1,6 @@
-# State | UK Council Tax | 14 November 2026
+# State | UK Council Tax | 15 November 2026
 
+- **This PR (feat/burnley-bill-explained):** on /precepts/, what each part of the bill pays for (GOV.UK types of council), what changed at Band D since 2025/26 by body and parish (MHCLG Table 10 2025/26 and the parish return, the schedule for 2026/27; `npm run data:local-bill-changes`), the same in the bill tool result, and the `#find-your-bill` anchor for the Burnley films, linked from /councils/burnley/ and /tools/budget/burnley/. Not deployed.
 - **Live:** last recorded deployment is main `daf599d` on 14 November. This session did not deploy.
 - **Main at this session's start:** `e77c048`. The reorganisation field stays held.
 - **Session 7, this PR:** Estate Kit 0.6.0 and NV9 current year own share increases at `/increases/`, on `feat/increases-bars-nv9`.

@@ -1,0 +1,44 @@
+---
+/** What each part of a local bill pays for, and what changed at Band D since the previous year. Static HTML, no script. */
+import type {LocalBill} from '../lib/local-bill';
+import {billChanges} from '../lib/local-bill-changes-data';
+import {localityChanges,change} from '../lib/local-bill-changes';
+import {bodyRole,BODY_ROLES_SOURCE} from '../lib/body-roles';
+import {moneyPence} from '../lib/tax-view';
+import {yearLabel} from '../lib/council-tax';
+import {longDate} from '../lib/sources';
+interface Props {bill:LocalBill}
+const {bill}=Astro.props;
+const changes=billChanges.find(c=>c.gss===bill.gss&&c.currentYear===bill.year);
+const signed=(p:number)=>p===0?'no change':`${p>0?'up':'down'} ${moneyPence(Math.abs(p))}`;
+const pct=(n:number)=>`${n>0?'up ':n<0?'down ':''}${Math.abs(n).toFixed(2)}%`;
+const unparished=changes?localityChanges(changes,'unparished'):null;
+const prevYear=changes?yearLabel(changes.previousYear):'';
+const curYear=yearLabel(bill.year);
+---
+<section class="section" aria-labelledby="what-each-part-pays-for">
+ <h2 id="what-each-part-pays-for">What each part of the bill pays for</h2>
+ <p>One bill pays for several public bodies. Each part goes to the body that set it.</p>
+ <dl class="body-roles">
+  {bill.components.map(c=><><dt>{c.name}</dt><dd>{bodyRole(c.kind)}</dd></>)}
+  <dt>Your parish or town council, if you have one</dt><dd>{bodyRole('parish')}</dd>
+ </dl>
+ <p class="source-line">Source for the council services: <a href={BODY_ROLES_SOURCE.url}>{BODY_ROLES_SOURCE.publisher}, {BODY_ROLES_SOURCE.title}</a>, updated {longDate(BODY_ROLES_SOURCE.updated)}. Police and fire are the bodies named on <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>.</p>
+</section>
+{changes&&unparished&&<section class="section" aria-labelledby="what-changed">
+ <h2 id="what-changed">What changed since {prevYear}</h2>
+ <p>Each part of a Band D bill in {prevYear} and {curYear}. For a home with no parish, the bill went {signed(unparished.total.pence)}, {pct(unparished.total.percent)}, from {moneyPence(unparished.total.previousPence)} to {moneyPence(unparished.total.currentPence)}.</p>
+ <div class="table-wrap" tabindex="0" role="region" aria-label={`Band D change by body, ${prevYear} to ${curYear}`}><table class="data"><caption>Band D annual charge by body, before discounts and premiums</caption>
+  <thead><tr><th scope="col">Body</th><th scope="col" class="num">{prevYear}</th><th scope="col" class="num">{curYear}</th><th scope="col" class="num">Change</th><th scope="col" class="num">Per cent</th></tr></thead>
+  <tbody>{unparished.rows.map(r=><tr><th scope="row">{r.name}</th><td class="num">{moneyPence(r.previousPence)}</td><td class="num">{moneyPence(r.currentPence)}</td><td class="num">{signed(r.pence)}</td><td class="num">{pct(r.percent)}</td></tr>)}
+  <tr><th scope="row">Total, no parish</th><td class="num">{moneyPence(unparished.total.previousPence)}</td><td class="num">{moneyPence(unparished.total.currentPence)}</td><td class="num">{signed(unparished.total.pence)}</td><td class="num">{pct(unparished.total.percent)}</td></tr></tbody>
+ </table></div>
+ <h3>Parish and town councils</h3>
+ <div class="table-wrap" tabindex="0" role="region" aria-label={`Band D parish change, ${prevYear} to ${curYear}`}><table class="data"><caption>Band D parish charge, added to the total above for homes in that parish</caption>
+  <thead><tr><th scope="col">Parish or town</th><th scope="col" class="num">{prevYear}</th><th scope="col" class="num">{curYear}</th><th scope="col" class="num">Change</th><th scope="col" class="num">Per cent</th></tr></thead>
+  <tbody>{changes.parishes.map(p=>{const c=change(p);return <tr><th scope="row">{p.name}</th><td class="num">{moneyPence(p.previousPence)}</td><td class="num">{moneyPence(p.currentPence)}</td><td class="num">{signed(c.pence)}</td><td class="num">{pct(c.percent)}</td></tr>;})}</tbody>
+ </table></div>
+ <p class="caveat">Band D figures only. Every other band is a fixed fraction of Band D, so each part changed by close to the same percentage in your band; the pounds differ. A parish's charge depends on its own precept and its number of homes, so a small parish can move by a large percentage on a small sum.</p>
+ <p class="source-line">Sources: {prevYear} bodies from <a href={changes.sources.previousBodies.url}>{changes.sources.previousBodies.publisher}, {changes.sources.previousBodies.title}</a>; {curYear} bodies from <a href={changes.sources.currentBodies.url}>{changes.sources.currentBodies.publisher}, {changes.sources.currentBodies.title}</a>; parishes from <a href={changes.sources.parishes.url}>{changes.sources.parishes.publisher}, {changes.sources.parishes.title}</a>. Change is {curYear} less {prevYear}; per cent is the change divided by the {prevYear} figure, to two decimal places.</p>
+</section>}
+<style>.body-roles{display:grid;grid-template-columns:minmax(10rem,16rem) 1fr;gap:.5rem 1.25rem;margin:1rem 0;} .body-roles dt{font-weight:600;} .body-roles dd{margin:0;} @media (max-width:40rem){.body-roles{grid-template-columns:1fr;} .body-roles dd{margin-bottom:.5rem;}}</style>

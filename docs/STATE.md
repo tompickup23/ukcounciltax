@@ -1,19 +1,14 @@
 # State | UK Council Tax | 15 November 2026
 
-- Live: last recorded deployment remains main `daf599d`; this session does not deploy.
-- PR 80 is ready for review on `feat/budget-c2-cohort`, superseding draft PR 68.
-- Main including PR 78 was merged as `5636d02`, without rebase or force push.
-- C2: 197 eligible authorities of 296; 99 excluded with raw cell evidence.
-- Eligible by class: UA 41/63, MD 28/36, inner London 4/13, outer London 10/20, districts 114/164.
-- Total and parish use closed GBP 500 bounds; no tie rounding rule was found in the pinned RA files.
-- Own uses the derived GBP 1,000.50 bound as a fixture assertion, not an exclusion.
-- All 27 former own-only exclusions are admitted; Burnley still fails parish.
-- Hull and West Northamptonshire remain eligible at the closed total boundary.
-- Trafford and Warrington use 7.5%; North Somerset uses 9%; joins change no decisions.
-- Year and rule text come from model edition and referendum data for session B.
-- Production refresh tripwire names the file and `node scripts/audit-c2-pilot.mjs` rebuild command.
-- Output only: `.ops/c2-dist`, 197 noindex pages. No public C2 route.
-- Saved handoff and limitations: `docs/C2-COHORT-2026-11-15.md`, `docs/RELEASE.md` and PR 80.
-- Next: session B interface and release review. Public integration is not authorised.
-- Registry reorganisation stays held; county budget interaction stays outside scope.
-- No merge of PR 80, tag or deployment. All verification results are in the PR body.
+- **Live:** main `c20533b` (NV8 England map, PR 78), deploying 15 November by Verify and publish. NV10, NV9 and kit 0.5.1 are live before it.
+- **Estate Kit:** PR 26 merged, `v0.6.3` tagged (compact RankedBars). The tax site is still on 0.6.0; adoption is prompt 3.
+- **PR 80 (C2 cohort):** fix pass done and ready for review; 197 of 296 eligible (closed GBP 500 bounds on total and parish, own share GBP 1,000.50 as an assertion, Burnley out on parish). Output only in `.ops/c2-dist`. Close PR 68 when 80 merges; session B (prompt 4) follows.
+- **PR 81 (Burnley bill explained):** allowance for `precepts/index.html` added 15 November, number diff rerun. Review in prompt 3, part 1. The `/bill` address goes live only with Tom's yes.
+- **UK Councils PR 57:** parked. Registry officialName is a display name at source; fixed in UK Places (prompt 2, decision D1), then refreshed into both sites with 57 folded in (prompt 5).
+- **Prompts:** `docs/CODEX-PROMPTS-2026-11-15.md`. Prompts 1 to 3 have run. Queued: 4 (session B) after PR 80; 5 after UK Places deploys; gates pack after PR 80.
+- **Session B defaults for Tom:** public range zero to twice each amount, labelled as exploration; the mode sits beside the Burnley scenario link.
+- **Decisions waiting:** NV11 compare drawing, X3 Actions billing, X4 worktree removal (merged branch worktrees: uct-bill-bar, uct-increases-bars, uct-docs-1114, uct-england-map; uct-c2-pilot after PR 80).
+- **Held data:** the registry reorganisation field stays held.
+- **Weekly from 17 November:** the measurement note.
+- **Binding dates:** levels day staged by mid January 2027; links check before 10 February; freeze 20 March; reversal May to June 2027.
+- **Plan:** `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md`, section 7 is the latest. Session detail belongs in PR bodies.

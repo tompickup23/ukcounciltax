@@ -2,6 +2,7 @@
 /** Published charges, histories, precept context and links for one billing authority. */
 import {councilTaxLink, councilLinksSource} from '../../lib/council-links';
 import {national} from '../../lib/national-data';
+import {localBills} from '../../lib/local-bill-data';
 import {bandStockFor} from '../../lib/band-stock';
 import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
@@ -182,6 +183,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
     <a href={`/tools/budget/${council.slug}/`}>Explore {name}'s budget and play the budget game</a>
   </div>
+  {localBills.some(b=>b.gss===council.gss)&&<p data-find-your-bill>The full published schedule is held for this council: <a href="/precepts/#find-your-bill">find your own bill, by band and parish</a>, see what each part pays for and what changed since last year.</p>}
   <CouncilActions slug={council.slug} />
 
 

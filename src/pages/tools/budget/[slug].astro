@@ -5,6 +5,7 @@ import BandSelector from '../../../components/BandSelector.astro';
 import DataDrawer from '../../../components/DataDrawer.astro';
 import BudgetPublishedChart from '../../../components/BudgetPublishedChart.astro';
 import {gameData} from '../../../lib/budget-game-data';
+import {localBills} from '../../../lib/local-bill-data';
 import {services} from '../../../lib/budget';
 import BudgetTables from '../../../components/BudgetTables.astro';
 import PerResident from '../../../components/PerResident.astro';
@@ -36,6 +37,7 @@ const description = available
   {!available && <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>{tax.name} budget</h1><p class="lede">The published budget, with service spending and council tax kept as separate measures.</p></header>}
   {available ? <>
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
+    {localBills.some(b=>b.gss===council.gss) && <p data-find-your-bill>To see your own bill, by band and parish, and what each part pays for, <a href="/precepts/#find-your-bill">find your own bill</a>.</p>}
     {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
     <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>

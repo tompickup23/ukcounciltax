@@ -261,6 +261,9 @@ if (existsSync(redirects)) for (const line of readFileSync(redirects, 'utf8').sp
 const moved = existsSync(redirects) ? readFileSync(redirects, 'utf8') : '';
 if (!/^\/council-tax\/rises-2026-27\/ \/increases\/#2026-27 301$/m.test(moved)) failures.push('rises-2026-27 redirect missing from _redirects');
 if (existsSync(join(DIST, 'council-tax', 'rises-2026-27', 'index.html'))) failures.push('rises-2026-27 page would shadow its redirect');
+// The films show ukcounciltax.co.uk/bill on screen; it must keep reaching the bill tool.
+if (!/^\/bill\/ \/precepts\/#find-your-bill 302$/m.test(moved)) failures.push('bill redirect missing from _redirects');
+if (existsSync(join(DIST, 'bill', 'index.html'))) failures.push('a /bill/ page would shadow its redirect');
 
 // The next year's page holds no charge before one is published: no pound sign.
 const nextYearPages = readdirSync(DIST).filter((name) => /^council-tax-\d{4}-\d{2}$/.test(name));

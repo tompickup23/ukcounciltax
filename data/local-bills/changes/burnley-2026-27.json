@@ -1,0 +1,135 @@
+{
+ "schemaVersion": 1,
+ "gss": "E07000117",
+ "slug": "burnley",
+ "band": "D",
+ "previousYear": "2025-26",
+ "currentYear": "2026-27",
+ "sources": {
+  "previousBodies": {
+   "year": "2025-26",
+   "publisher": "Ministry of Housing, Communities and Local Government",
+   "title": "Council Tax levels set by local authorities in England 2025 to 2026: Table 10 Local Authority Level Data (revised)",
+   "url": "https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2025-to-2026",
+   "fileUrl": "https://assets.publishing.service.gov.uk/media/6a02f143e71c4cdf4026ba48/Table_10_2025-26.ods",
+   "file": "table-10-2025-26.ods",
+   "sha256": "79766eb7b591a4f49e1e9f95cb6b0a232c7a9165945de9acb076769c002e6e5c",
+   "retrieved": "2026-11-14",
+   "tables": [
+    "Data_Billing"
+   ],
+   "licence": "Open Government Licence v3.0"
+  },
+  "currentBodies": {
+   "publisher": "Burnley Borough Council",
+   "title": "Council Tax Charges 2026/27",
+   "url": "https://burnley.gov.uk/wp-content/uploads/2026/03/Council-Tax-Charges-2026-27.pdf",
+   "sha256": "b9e24c31c2ccb3285b60135ec41fb4d1f5765e629321e5c5fff92773a7726cd9",
+   "retrieved": "2026-10-05"
+  },
+  "parishes": {
+   "publisher": "Ministry of Housing, Communities and Local Government",
+   "title": "Council Tax statistics for town and parish councils in England: 2026 to 2027",
+   "url": "https://www.gov.uk/government/statistical-data-sets/live-tables-on-council-tax",
+   "fileUrl": "https://assets.publishing.service.gov.uk/media/69f3415cab602a88957eef37/2026-27_Local_precepting_authorities_in_England.ods",
+   "file": "parishes-2026-27.ods",
+   "sha256": "abd04daef51e2e6f469046cdcf8ecd92d6015bfe3e893231ae3e9ea21b278f51",
+   "retrieved": "2026-10-05",
+   "tables": [
+    "Parish_Level_Data",
+    "Notes",
+    "Ceased_New_Renamed_Parishes"
+   ],
+   "precision": "Band D as displayed to pennies; precept in displayed whole pounds; tax base in Band D equivalents",
+   "licence": "Open Government Licence v3.0"
+  }
+ },
+ "bodies": [
+  {
+   "componentId": "billing",
+   "kind": "billing",
+   "name": "Burnley Borough Council",
+   "previousPence": 34458,
+   "currentPence": 35144
+  },
+  {
+   "componentId": "county",
+   "kind": "county",
+   "name": "Lancashire County Council",
+   "previousPence": 173579,
+   "currentPence": 180175
+  },
+  {
+   "componentId": "police",
+   "kind": "police",
+   "name": "Lancashire Police Authority",
+   "previousPence": 27740,
+   "currentPence": 29240
+  },
+  {
+   "componentId": "fire",
+   "kind": "fire",
+   "name": "Lancashire Combined Fire Authority",
+   "previousPence": 8973,
+   "currentPence": 9473
+  }
+ ],
+ "parishes": [
+  {
+   "localityId": "worsthorne-with-hurstwood",
+   "name": "Worsthorne with Hurstwood",
+   "code": "E2333P008",
+   "previousPence": 2434,
+   "currentPence": 2605
+  },
+  {
+   "localityId": "cliviger",
+   "name": "Cliviger",
+   "code": "E2333P002",
+   "previousPence": 983,
+   "currentPence": 943
+  },
+  {
+   "localityId": "padiham",
+   "name": "Padiham",
+   "code": "E2333P007",
+   "previousPence": 3864,
+   "currentPence": 4406
+  },
+  {
+   "localityId": "habergham-eaves",
+   "name": "Habergham Eaves",
+   "code": "E2333P004",
+   "previousPence": 1648,
+   "currentPence": 1652
+  },
+  {
+   "localityId": "briercliffe",
+   "name": "Briercliffe",
+   "code": "E2333P001",
+   "previousPence": 1840,
+   "currentPence": 1998
+  },
+  {
+   "localityId": "hapton",
+   "name": "Hapton",
+   "code": "E2333P005",
+   "previousPence": 2642,
+   "currentPence": 2781
+  },
+  {
+   "localityId": "ightenhill",
+   "name": "Ightenhill",
+   "code": "E2333P006",
+   "previousPence": 692,
+   "currentPence": 736
+  },
+  {
+   "localityId": "dunnockshaw",
+   "name": "Dunnockshaw",
+   "code": "E2333P003",
+   "previousPence": 3030,
+   "currentPence": 3077
+  }
+ ]
+}

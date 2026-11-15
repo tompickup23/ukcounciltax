@@ -1,6 +1,5 @@
 /** The scenario takes the same source arrays as the observed game, never a second selection. */
-import {budget, budgetFor, budgetSource} from './budget';
-import {national} from './national-data';
+import {budget, budgetFor, budgetSource, budgetNational} from './budget';
 import {BUDGET_SCENARIO_MODEL} from './budget-scenario';
 import type {GameData, GameRound, GameSource} from './budget-game';
 
@@ -26,7 +25,7 @@ export interface ScenarioData {
 export function scenarioData(game: GameData | null, gss: string, name: string): ScenarioData | null {
   if (!game) return null;
   const {council,county} = budgetFor(gss);
-  const countyPart = national.components[gss].parts.find(part=>part.kind==='county' && part.code===council.countyCode);
+  const countyPart = budgetNational.components[gss].parts.find(part=>part.kind==='county' && part.code===council.countyCode);
   let splitIndex=0;
   const screens: ScenarioScreen[] = game.rounds.flatMap((round,roundIndex)=>{
     if (round.kind !== 'split' && round.kind !== 'bill') return [];
@@ -45,7 +44,7 @@ export function scenarioData(game: GameData | null, gss: string, name: string): 
   const note4 = council.notes.raPart1.includes('[note 4]');
   const note8 = council.notes.raPart1.includes('[note 8]');
   return {model:BUDGET_SCENARIO_MODEL,name,year:game.year,screens,
-    sources:[...(['raPart1','raPart2','raGrants'] as const).map(key=>({key,source:budgetSource(key),sha256:budget.sources[key].sha256})),{key:'components',source:game.rounds.find(round=>round.kind==='bill')!.source,sha256:national.sources.components.sha256}],
+    sources:[...(['raPart1','raPart2','raGrants'] as const).map(key=>({key,source:budgetSource(key),sha256:budget.sources[key].sha256})),{key:'components',source:game.rounds.find(round=>round.kind==='bill')!.source,sha256:budgetNational.sources.components.sha256}],
     fundingContext:note4 || note8 ? {items:funding.items.filter(item=>note8 || item.label==='Council tax requirement'),notes:funding.notes.filter(note=>note.includes('MHCLG [note 8]')),source:funding.source} : null,
   };
 }

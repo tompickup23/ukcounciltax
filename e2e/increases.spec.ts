@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { INCREASES_ROWS, INCREASES_TABLES } from './helpers/current';
 import AxeBuilder from '@axe-core/playwright';
 import { CURRENT_YEAR, YEARS, yearLabel } from '../src/lib/council-tax';
 
@@ -23,8 +24,8 @@ test('current figures lead, earlier years close, and the finder covers every pub
   const rows = await page.locator('[data-own-change]').evaluateAll(all => all.map(el => el.getAttribute('data-own-change')).sort());
   const choices = await page.locator('[data-increase-choice]').evaluateAll(all => all.map(el => el.getAttribute('data-increase-choice')).sort());
   expect(choices).toEqual(rows);
-  await expect(page.locator('main table:not(.ek-table)')).toHaveCount(12);
-  await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(1291);
+  await expect(page.locator('main table:not(.ek-table)')).toHaveCount(INCREASES_TABLES);
+  await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(INCREASES_ROWS);
 });
 
 for (const theme of ['light', 'dark'] as const) {
@@ -117,8 +118,8 @@ test('without scripts the finder is hidden and every table remains reachable', a
       await section.locator('summary').click();
       await expect(section.locator('table').first()).toBeVisible();
     }
-    await expect(page.locator('main table:not(.ek-table)')).toHaveCount(12);
-    await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(1291);
+    await expect(page.locator('main table:not(.ek-table)')).toHaveCount(INCREASES_TABLES);
+    await expect(page.locator('main table:not(.ek-table) tr')).toHaveCount(INCREASES_ROWS);
     expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
   } finally { await context.close(); }
 });

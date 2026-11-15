@@ -1,8 +1,13 @@
 import {test,expect} from '@playwright/test';
+import {band} from './helpers/current';
 import AxeBuilder from '@axe-core/playwright';
+import {edition, FIRST_LEVELS_PAGE_YEAR} from '../src/lib/edition.mjs';
+// C6: the years come from the data present, as the build's do.
+const E=edition();const slash=(y:string)=>y.replace('-','/');
+const yearPages=[`/council-tax-${E.next}/`,...(E.current>=FIRST_LEVELS_PAGE_YEAR?[`/council-tax-${E.current}/`,`/council-tax-${E.current}/adult-social-care/`]:[])];
 test('future scenario preserves assumptions and rejects invalid source choices',async({page})=>{
  await page.goto('/tools/future-cost/?council=burnley&band=D&rate=0&years=5');
- await expect(page.locator('[data-final]')).toHaveText('£2,549.42');
+ await expect(page.locator('[data-final]')).toHaveText(band('E07000117','D'));
  await expect(page.locator('[data-extra]')).toHaveText('£0.00');
  await page.goto('/tools/future-cost/?council=missing&band=D&rate=5&years=5');
  await expect(page.locator('[data-share-scenario]')).toBeDisabled();
@@ -24,9 +29,9 @@ test('postcode without local schedule never becomes a zero precept bill',async({
  await page.goto('/precepts/');await page.getByLabel('Your postcode',{exact:true}).fill('M1 1AA');await page.getByRole('button',{name:'Find charging area'}).click();await expect(page.locator('[data-postcode-status]')).toContainText('not yet imported');await expect(page.locator('[data-bill-result]')).toBeHidden();await expect(page.locator('[name=council]')).toHaveValue('');
 });
 test('increase explorer changes band and time period without losing source context',async({page})=>{
- await page.goto('/increases/');await page.getByLabel('Find a council').fill('Burnley');await page.getByLabel('Band',{exact:true}).selectOption('A');await expect(page.locator('[data-count]')).toContainText('1 councils shown. Band A');await expect(page.locator('[data-increases] tbody tr:visible')).toHaveCount(1);await page.getByLabel('Compare years').selectOption('2024-25');await expect(page.locator('[data-count]')).toContainText('2024/25 to 2026/27');
+ await page.goto('/increases/');await page.getByLabel('Find a council').fill('Burnley');await page.getByLabel('Band',{exact:true}).selectOption('A');await expect(page.locator('[data-count]')).toContainText('1 councils shown. Band A');await expect(page.locator('[data-increases] tbody tr:visible')).toHaveCount(1);await page.getByLabel('Compare years').selectOption('2024-25');await expect(page.locator('[data-count]')).toContainText(`${slash(E.years[0])} to ${slash(E.current)}`);
 });
-for(const path of ['/','/precepts/','/tools/future-cost/','/increases/','/council-tax-2027-28/','/scotland/city-of-edinburgh/','/wales/cardiff/'])test(`specialist accessibility and layout: ${path}`,async({page})=>{
+for(const path of ['/','/precepts/','/tools/future-cost/','/increases/',...yearPages,'/scotland/city-of-edinburgh/','/wales/cardiff/'])test(`specialist accessibility and layout: ${path}`,async({page})=>{
  await page.goto(path);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });
 test('no-JavaScript local lookup cannot send a postcode in a URL',async({browser,baseURL})=>{const context=await browser.newContext({javaScriptEnabled:false,baseURL});const page=await context.newPage();await page.goto('/precepts/');await expect(page.getByRole('button',{name:'Find charging area'})).toBeDisabled();await context.close();});

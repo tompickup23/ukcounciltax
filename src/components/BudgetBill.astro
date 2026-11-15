@@ -1,11 +1,10 @@
 ---
 import SourceLine from './SourceLine.astro';
-import {budgetYear, billSource} from '../lib/budget';
-import {national} from '../lib/national-data';
+import {budgetYear, billSource, budgetNational} from '../lib/budget';
 import {moneyPence} from '../lib/tax-view';
 interface Props {gss: string; name: string}
 const {gss, name} = Astro.props;
-const bill = national.components[gss];
+const bill = budgetNational.components[gss];
 const money = (value: number | null) => value === null ? 'Unavailable' : moneyPence(value);
 const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combined: 'Combined authority'};
 ---

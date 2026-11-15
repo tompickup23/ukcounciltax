@@ -1,5 +1,9 @@
-import {CURRENT_YEAR, PREVIOUS_YEAR, yearLabel} from './council-tax';
-import {national, type Parish} from './national-data';
+import {precedingYear, yearLabel} from './council-tax';
+import {national, PARISH_YEAR, type Parish} from './national-data';
+
+// Parish figures carry the parish return's own year, which can lag the levels tables.
+const CURRENT_YEAR = PARISH_YEAR;
+const PREVIOUS_YEAR = precedingYear(PARISH_YEAR);
 import {moneyPence} from './tax-view';
 import type {SourceRef} from './sources';
 

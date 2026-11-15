@@ -1,4 +1,5 @@
 import {test, expect} from '@playwright/test';
+import {ownShareCell} from './helpers/current';
 test('the chosen band marks its bar and the compare link', async ({page}) => {
   await page.goto('/councils/burnley/');
   const rgb = (colour: string) => colour.startsWith('#') ? `rgb(${colour.slice(1).match(/../g)!.map(x => parseInt(x,16)).join(', ')})` : colour;
@@ -38,6 +39,6 @@ test('ranking own shares stay readable on phones', async ({page}) => {
     await page.goto(`/council-tax/ranked/${slug}/`);
     const region = page.locator('.table-wrap').first();
     expect(await region.evaluate(node => node.scrollWidth === node.clientWidth)).toBe(true);
-    if (slug === 'shire-districts') await expect(page.locator('tbody tr').filter({has:page.getByRole('link',{name:'Havant',exact:true})})).toContainText('Own share: 116=, £246.87');
+    if (slug === 'shire-districts') await expect(page.locator('tbody tr').filter({has:page.getByRole('link',{name:'Havant',exact:true})})).toContainText(ownShareCell('Havant', 'shire-districts'));
   }
 });

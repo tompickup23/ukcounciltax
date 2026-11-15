@@ -20,7 +20,9 @@ import CouncilActions from "../../components/CouncilActions.astro";
 import PositionStrip from '../../vendor/estate-kit/src/components/PositionStrip.astro';
 import ZeroBar from '../../vendor/estate-kit/src/components/ZeroBar.astro';
 import ChartActions from '../../components/kit/ChartActions.astro';
-import {profileChartOptions} from '../../lib/kit-charts';
+import {profileChartOptions, rankingCardAlt} from '../../lib/kit-charts';
+import {embedSnippet, hasLevelsPage, rankingCardPath} from '../../lib/levels-day';
+import {glaDecision} from '../../lib/gla';
 import {profileBandCells} from '../../lib/profile-bands';
 import LocatorMap from '../../vendor/estate-kit/src/components/LocatorMap.astro';
 import {boundarySource} from '../../lib/boundaries';
@@ -47,7 +49,7 @@ import {
 } from "../../lib/council-tax";
 import { councilPages, councilPath, regionPath, scenarioGamePath, SCENARIO_GAME_SLUGS } from "../../lib/paths";
 import { type Council } from "../../lib/registry";
-import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP } from "../../lib/site";
+import { OFFICIAL_BAND_CHECK, OFFICIAL_COUNCIL_LOOKUP, SITE_URL } from "../../lib/site";
 import { councilCardPath } from "../../lib/og";
 import { councilTaxSource, longDate } from "../../lib/sources";
 
@@ -134,7 +136,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     {label: 'Paying and precepts', items: [
       {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
       ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-      ...(tax.region === 'London' ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+      ...(tax.region === 'London' && glaDecision() ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
       {id: 'parish-precepts', label: 'Parish charges'},
     ]},
     {label: 'Council and local context', items: [
@@ -221,6 +223,12 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         <PositionStrip {...charts.position} />
         <ChartActions chart={`councils/${council.slug}/position`} target="class-position-chart" />
       </div>
+      {hasLevelsPage() && <details class="ranking-embed" data-ranking-embed>
+        <summary>Share this ranking as an image</summary>
+        <p>The strip above as a 1200 by 630 image, with its source and edition on the card. To show it on another web page with a link back here, paste:</p>
+        <p class="prose"><code>{embedSnippet(SITE_URL, council.slug, rankingCardAlt(council.slug), councilPath(council))}</code></p>
+        <p><a href={rankingCardPath(council.slug)}>Open the image</a>.</p>
+      </details>}
       <p class="muted">
         Both averages include parish and adult social care precepts, the same basis as the {name} figure.
         <a href={`${regionPath(tax.region)}?type=${tax.classCode}`}>Band D in {tax.region}, starting with {rankType.label}</a>.

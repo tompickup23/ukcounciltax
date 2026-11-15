@@ -1,0 +1,375 @@
+unmatched	E07000032	Non-precepting parish	Riddings	
+prefix-REVIEW	E07000105	Precepting parish	Aldington & Bonnigton	E04004824 Aldington
+prefix-REVIEW	E07000105	Precepting parish	Sevington	E04013235 Sevington with Finberry
+prefix-REVIEW	E07000084	Precepting parish	Wootton St. Lawrence	E04004488 Wootton St. Lawrence with Ramsdell
+unmatched	E07000171	Charter Trustee	East Retford Charter Trustees	
+unmatched	E07000171	Precepting parish	Markham Clinton	
+prefix-REVIEW	E07000171	Precepting parish	Rampton	E04007830 Rampton and Woodbeck
+unmatched	E07000171	Charter Trustee	Worksop Charter Trustees	
+unmatched	E06000022	Charter Trustee	Bath Charter Trustees	
+unmatched	E06000022	Precepting parish	Cameley	
+prefix-REVIEW	E06000022	Precepting parish	Publow & Pensford	E04000986 Publow
+spelling-REVIEW	E06000022	Precepting parish	South Stoke	E04000990 Southstoke
+prefix-REVIEW	E06000055	Precepting parish	Felmersham and Radwell	E04011890 Felmersham
+spelling-REVIEW	E06000055	Precepting parish	Melchbourne and Yelden	E04011899 Melchbourne and Yielden
+prefix-REVIEW	E06000055	Precepting parish	Stewartby and Kempston Hardwick	E04011914 Stewartby
+spelling-REVIEW	E07000129	Precepting parish	Glenfield	E04005349 Glenfields
+prefix-REVIEW	E07000033	Precepting parish	Elmton	E04012401 Elmton with Creswell
+prefix-REVIEW	E06000058	Precepting parish	Burton	E04003360 Burton and Winkton
+spelling-REVIEW	E06000058	Precepting parish	Highcliffeand Walkford Neighbourhood Council	E04012815 Highcliffe and Walkford
+unmatched	E08000032	Non-precepting parish	Bradford Trident	
+unmatched	E08000032	Precepting parish	Haworth with Stanbury	
+prefix-REVIEW	E07000143	Precepting parish	Little Cressingham & Threxton	E04006138 Little Cressingham
+prefix-REVIEW	E07000144	Precepting parish	Cantley	E04006212 Cantley, Limpenhoe and Southwood
+unmatched	E07000172	Non-precepting parish	Strelley	
+unmatched	E06000060	Charter Trustee	High Wycombe Charter Trustees	
+unmatched	E07000106	Non-precepting parish	Canterbury	
+unmatched	E07000106	Non-precepting parish	Elliot College	
+unmatched	E07000106	Non-precepting parish	Fransiscan Study Centre	
+unmatched	E07000106	Non-precepting parish	Herne Bay	
+unmatched	E07000106	Non-precepting parish	Howe Barracks	
+prefix-REVIEW	E07000106	Precepting parish	Ickham	E04012945 Ickham and Well
+prefix-REVIEW	E07000106	Precepting parish	Lower Hardres	E04012946 Lower Hardres and Nackington
+unmatched	E07000106	Non-precepting parish	Park Wood Courts	
+unmatched	E07000106	Precepting parish	St. Cosmus and St. Damian in the Blean	
+unmatched	E07000106	Precepting parish	Thanington Without	
+unmatched	E07000106	Non-precepting parish	Whitstable	
+spelling-REVIEW	E06000056	Precepting parish	Hockcliffe	E04011957 Hockliffe
+spelling-REVIEW	E06000056	Precepting parish	Marston Moretaine	E04011967 Marston Moreteyne
+unmatched	E07000130	Precepting parish	Quorndon	
+spelling-REVIEW	E07000070	Precepting parish	Chignal	E04003953 Chignall
+unmatched	E07000078	Precepting parish	Swindon Village	
+unmatched	E06000049	Precepting parish	Chorley (Wilmslow West and Chorley)	
+prefix-REVIEW	E06000049	Precepting parish	Doddington	E04013183 Doddington and District
+prefix-REVIEW	E06000049	Precepting parish	Hough	E04013188 Hough and Chorlton
+unmatched	E06000049	Precepting parish	Marbury cum Quoisley	
+prefix-REVIEW	E06000049	Precepting parish	Stapeley	E04013205 Stapeley and District
+prefix-REVIEW	E06000049	Precepting parish	Stoke	E04013206 Stoke and Hurleston
+unmatched	E06000049	Precepting parish	Weston & Basford Parish Council	
+unmatched	E06000050	Charter Trustee	City of Chester Charter Trustee	
+spelling-REVIEW	E06000050	Non-precepting parish	Cuddington (Malpas)	E04012589 Puddington
+spelling-REVIEW	E06000050	Precepting parish	Cuddington (Weaver and Cuddington)	E04012589 Puddington
+prefix-REVIEW	E06000050	Precepting parish	Duddon	E04012575 Duddon and Burton
+unmatched	E06000050	Charter Trustee	Ellesmere Port Charter Trustee	
+prefix-REVIEW	E06000050	Precepting parish	Lach Dennis	E04012546 Lach Dennis and Lostock Green
+prefix-REVIEW	E06000050	Precepting parish	Mickle Trafford	E04012572 Mickle Trafford and District
+prefix-REVIEW	E06000050	Precepting parish	No Mans Heath	E04012570 No Man's Heath and District
+spelling-REVIEW	E06000050	Non-precepting parish	Tushingham cum Gridley Macefen & Bradley	E04012573 Tushingham-cum-Grindley, Macefen and Bradley
+prefix-REVIEW	E06000050	Precepting parish	Utkinton	E04012988 Utkinton and Cotebrook
+lad-not-in-ons-list	E09000001	Temple	Inner Temple	
+lad-not-in-ons-list	E09000001	Temple	Middle Temple	
+unmatched	E06000052	Non-precepting parish	Treneglos	
+prefix-REVIEW	E07000079	Precepting parish	Kemble	E04004238 Kemble and Ewen
+unmatched	E07000079	Precepting parish	Meysey Hampton	
+spelling-REVIEW	E07000079	Precepting parish	Wyck Rissington	E04004286 Wick Rissington
+unmatched	E06000063	Precepting parish	Beckermet with Thornhill	
+unmatched	E06000063	Charter Trustee	Charter Trustee for Carlisle	
+prefix-REVIEW	E06000063	Precepting parish	Haile and Wilton	E04012139 Haile
+prefix-REVIEW	E06000063	Precepting parish	Waberthwaite and Corney	E04002507 Waberthwaite
+unmatched	E07000035	Non-precepting parish	Biggin by Hulland	
+prefix-REVIEW	E07000035	Precepting parish	Clifton	E04002740 Clifton and Compton
+unmatched	E07000035	Precepting parish	Eaton Alsop and Newton Grange	
+prefix-REVIEW	E07000035	Precepting parish	Hathersage & Outseats	E04012408 Hathersage
+unmatched	E07000035	Precepting parish	HucklowGt and Lt and Grindlow	
+unmatched	E07000035	Precepting parish	Middleton by Wirksworth	
+spelling-REVIEW	E07000035	Precepting parish	Youlgrave	E04002823 Youlgreave
+prefix-REVIEW	E06000059	Group	Athelhampton (Puddletown Area)	E04013368 Athelhampton and Puddletown
+spelling-REVIEW	E06000059	Group	Beerhacket (Thornhackett)	E04003499 Beer Hackett
+prefix-REVIEW	E06000059	Group	Burleston (Puddletown Area)	E04013372 Burleston and Tolpuddle
+unmatched	E06000059	Group	Kingston Russell (Kingston Russell and Long Bredy)	
+spelling-REVIEW	E06000059	Group	Lagton Herring (Chesil Bank)	E04003551 Langton Herring
+prefix-REVIEW	E06000059	Group	Long Bredy (Kingston Russell and Long Bredy)	E04013382 Long Bredy and Kingston Russell
+spelling-REVIEW	E06000059	Non-precepting parish	North Wooton	E04003574 North Wootton
+unmatched	E06000059	Group	Puddletown (Puddletown Area)	
+spelling-REVIEW	E06000059	Group	Sanford Orcas (Queen Thorne)	E04003591 Sandford Orcas
+prefix-REVIEW	E06000059	Non-precepting parish	Steeple	E04012325 Steeple with Tyneham
+spelling-REVIEW	E06000059	Group	Stoke Abbot (Upper Marshwood Vale)	E04003599 Stoke Abbott
+unmatched	E06000059	Group	Tolpuddle (Puddletown Area)	
+spelling-REVIEW	E06000059	Group	Winterbourne Came (Winterbourne Farringdon)	E04003619 Winterborne Came
+spelling-REVIEW	E06000059	Group	Winterbourne Herringston (Nonbu (Winterbourne Farringdon)	E04003620 Winterborne Herringston
+spelling-REVIEW	E06000059	Group	Winterbourne Monkton (Winterbourne Farringdon)	E04013394 Winterborne Monkton
+spelling-REVIEW	E06000059	Group	Withchampton (Grouped with Crichel)	E04013396 Witchampton
+unmatched	E06000047	Charter Trustee	Charter Trustees for the City of Durham	
+prefix-REVIEW	E06000047	Precepting parish	Hutton Henry	E04010650 Hutton Henry and Station Town
+prefix-REVIEW	E06000047	Precepting parish	West Rainton	E04010710 West Rainton and Leamside
+unmatched	E07000040	Precepting parish	Bishops Clyst	
+prefix-REVIEW	E07000085	Precepting parish	Froxfield	E04004503 Froxfield and Privett
+prefix-REVIEW	E07000242	Precepting parish	Buckland	E04004725 Buckland and Chipping
+prefix-REVIEW	E07000242	Precepting parish	Stapleford	E04004750 Stapleford and Waterford
+prefix-REVIEW	E07000137	Precepting parish	Carrington	E04005614 Carrington and New Bolingbroke
+unmatched	E07000137	Precepting parish	Covenham	
+unmatched	E07000137	Precepting parish	Eastville Midville and New Leak	
+unmatched	E07000137	Non-precepting parish	Langton by Horncastle	
+unmatched	E07000137	Non-precepting parish	Langton/Sutterby	
+unmatched	E07000137	Precepting parish	Tattershall with Thorpe	
+unmatched	E07000137	Precepting parish	Thedldlethorpe	
+unmatched	E07000137	Non-precepting parish	Woodhall/Stixwould	
+prefix-REVIEW	E06000011	Precepting parish	Barmston and Fraisthorpe	E04000351 Barmston
+prefix-REVIEW	E06000011	Precepting parish	Coniston and Thirtleby	E04000376 Coniston
+unmatched	E06000011	Group	Cowick (grouped with Snaith)	
+unmatched	E06000011	Precepting parish	East Cottingwith	
+prefix-REVIEW	E06000011	Precepting parish	Ellerton and Aughton	E04000386 Ellerton
+prefix-REVIEW	E06000011	Precepting parish	Everingham and Harswell	E04000390 Everingham
+unmatched	E06000011	Precepting parish	Fangfoss with Bolton	
+unmatched	E06000011	Precepting parish	Garton on the Wolds	
+prefix-REVIEW	E06000011	Precepting parish	Hayton and Burnby	E04000408 Hayton
+spelling-REVIEW	E06000011	Precepting parish	Holme on Spalding Moor	E04000412 Holme upon Spalding Moor
+prefix-REVIEW	E06000011	Precepting parish	Kirk Ella and West Ella	E04000512 Kirk Ella
+unmatched	E06000011	Precepting parish	Lissett and Ulrome	
+unmatched	E06000011	Precepting parish	Middleton on the Wolds	
+unmatched	E06000011	Precepting parish	North and South Cliffe	
+spelling-REVIEW	E06000011	Precepting parish	Shiptonthorpe	E04000467 Shipton Thorpe
+prefix-REVIEW	E06000011	Precepting parish	Sledmere and Croome	E04000475 Sledmere
+prefix-REVIEW	E06000011	Group	Snaith (grouped with Cowick)	E04000476 Snaith and Cowick
+prefix-REVIEW	E06000011	Precepting parish	Thwing and Octon	E04000489 Thwing
+unmatched	E06000011	Precepting parish	Yapham cum Meltonby	
+spelling-REVIEW	E07000244	Precepting parish	Campsey Ashe	E04009384 Campsey Ash
+unmatched	E07000244	Group	Flixton (Lothingland Ward) (Group: Blundeston and Flixton)	
+unmatched	E07000244	Group	Flixton (The Saints Ward) (Group: Flixton St. Cross and St. Margaret)	
+spelling-REVIEW	E07000244	Precepting parish	Sweffling	E04009461 Swefling
+prefix-REVIEW	E07000086	Precepting parish	Allbrook and North Boyatt	E04012048 Allbrook
+unmatched	E07000072	Precepting parish	Abbess, Berners & Beauchamp Roding	
+unmatched	E07000072	Precepting parish	Moreton, Bobbingworth and the Lavers	
+prefix-REVIEW	E07000010	Precepting parish	Newton	E04001662 Newton-in-the-Isle
+spelling-REVIEW	E07000112	Precepting parish	Burmash	E04005015 Burmarsh
+unmatched	E07000173	Precepting parish	Deer Park	
+prefix-REVIEW	E07000131	Precepting parish	Tilton	E04005480 Tilton on the Hill and Halstead
+unmatched	E06000019	Group	Border Group (grouped: Adforton Brampton Bryan Buckton & Coxhall Lingen Letton & Newton Paytoe & Gra	
+spelling-REVIEW	E06000019	Group	Brampton Abbots (grouped with Foy)	E04000703 Brampton Abbotts
+prefix-REVIEW	E06000019	Group	Bredenbury & District Group (grouped with Bredenbury Grendon Bishop Wacton)	E04000705 Bredenbury
+spelling-REVIEW	E06000019	Group	Bridge Sollars (grouped with BISHOPSTONE Byford Kenchester Mansell Gamage)	E04000708 Bridge Sollers
+unmatched	E06000019	Group	Brockhampton (Bringsty) (grouped as BROCKHAMPTON GROUP with Linton (Bringsty) and Norton)	
+unmatched	E06000019	Precepting parish	Brockhampton (Old Gore)	
+spelling-REVIEW	E06000019	Group	Buckton & Coxhall (grouped as BORDER GROUP with: Adforton Brampton Bryan Lingen Letton & Newton Payt	E04000717 Buckton and Coxall
+prefix-REVIEW	E06000019	Precepting parish	Colwall and Malvern Hills Conservators (Colwall)	E04000730 Colwall
+spelling-REVIEW	E06000019	Group	Coombe (forms STAPLETON GROUP with Byton Stapleton and Kinsham)	E04000731 Combe
+prefix-REVIEW	E06000019	Group	Cradley (grouped with Storridge)	E04000732 Cradley and Storridge
+unmatched	E06000019	Group	Hatfield & District Group (grouped: Docklow & Hampton Wafer Hatfield & Newhampton Pudleston)	
+unmatched	E06000019	Group	Kenderchurch (forms KILPECK GROUP with Kilpeck St Devereux Treville Wormbridge)	
+unmatched	E06000019	Group	Linton (Bringsty) (grouped as BROCKHAMPTON GROUP with Brockhampton (Bringsty) and Norton)	
+unmatched	E06000019	Precepting parish	Linton (Penyard)	
+unmatched	E06000019	Group	Newton (Golden Valley South) (forms VOWCHURCH & DISTRICT with Turnastone Michaelchurch Escley St Mar	
+unmatched	E06000019	Group	Newton (Hampton Court) grouped with Hope under Dinmore)	
+unmatched	E06000019	Group	North Bromyard Group (grouped from Edvin Loach and Saltmarshe Tedstone Delamere Tedstone Wafer Upper	
+spelling-REVIEW	E06000019	Group	Norton Cannon (grouped as KINNERSLEY AND DISTRICT GROUP with Letton Kinnersley and Sarnesfield)	E04000844 Norton Canon
+unmatched	E06000019	Group	Paytoe & Grange (grouped as BORDER GROUP with Adforton Brampton Bryan Buckton & Coxhall Lingen Walfo	
+spelling-REVIEW	E06000019	Group	Pudleston (forms Hatfield & District Group with Hatfield & Newhampton Docklow & Hampton Wafer)	E04000858 Pudlestone
+unmatched	E06000019	Group	Pyons Group (group of Canon's Pyon and King's Pyon)	
+spelling-REVIEW	E06000019	Group	Rowlestone (group as EWYAS HAROLD GROUP with Dulas. Llancillo & Ewyas Harold)	E04000864 Rowlstone
+unmatched	E06000019	Group	St Devereux (forms KILPECK GROUP with Kenderchurch Kilpeck Treville Wormbridge)	
+unmatched	E06000019	Group	Stanway (grouped as BORDER GROUP with Adforton Brampton Bryan Buckton & Coxhall Lingen Walford Letto	
+unmatched	E06000019	Group	Storridge (grouped with Cradley)	
+unmatched	E06000019	Group	Treville (forms KILPECK GROUP with Kenderchurch St Devereux Kilpeck Wormbridge)	
+unmatched	E06000019	Group	Wormbridge (forms KILPECK GROUP with Kenderchurch St Devereux Treville Kilpeck)	
+unmatched	E06000019	Group	WYESIDE GROUP (formed of Tyberton Blakemere Bredwardine Moccas & Preston on Wye)	
+unmatched	E06000019	Group	YARPOLE GROUP (Croft and Yarpole grouped with Lucton)	
+unmatched	E07000037	Non-precepting parish	Buxton Glossop & Hadfield	
+prefix-REVIEW	E07000011	Precepting parish	Kimbolton & Stonely	E04012031 Kimbolton
+unmatched	E07000011	Precepting parish	Leighton Bromswold	
+spelling-REVIEW	E07000011	Precepting parish	Woodwalton	E04012045 Wood Walton
+prefix-REVIEW	E06000046	Precepting parish	Calbourne	E04001298 Calbourne, Newtown and Porchfield
+prefix-REVIEW	E06000046	Precepting parish	Newport	E04001323 Newport and Carisbrooke
+unmatched	E08000035	Precepting parish	Collingham with Linton	
+unmatched	E08000035	Precepting parish	Pool in Wharfedale	
+unmatched	E07000235	Precepting parish	Broadheath	
+unmatched	E07000235	Group	Longdon Holdfast and Queenhill	
+unmatched	E07000235	Group	Shelsley (Beauchamp Kings Walsh)	
+unmatched	E07000235	Group	Stoke Bliss Kyre and Bockleton	
+unmatched	E07000174	Charter Trustee	Mansfield Charter Trustees	
+prefix-REVIEW	E06000035	Precepting parish	Hoo St. Werburgh & Chattenden	E04001136 Hoo St. Werburgh
+spelling-REVIEW	E07000203	Non-precepting parish	Damsden	E04012277 Darmsden
+unmatched	E07000203	Precepting parish	Stonham Earl	
+prefix-REVIEW	E06000042	Precepting parish	Broughton	E04013489 Broughton and Milton Keynes
+unmatched	E06000042	Precepting parish	Kents Hill Monkston and Brinklow	
+unmatched	E06000042	Precepting parish	Two Mile Ash	
+unmatched	E07000195	Precepting parish	Betley, Balterley and Wrinehill	
+unmatched	E07000043	Precepting parish	Chittlehamolt Satterleigh & Warkleigh	
+spelling-REVIEW	E07000038	Precepting parish	Grassmoor Hasland and Winswick	E04002869 Grassmoor, Hasland and Winsick
+unmatched	E06000012	Charter Trustee	Cleethorpes	
+unmatched	E06000012	Charter Trustee	Grimsby	
+unmatched	E07000139	Precepting parish	Ashby Bloxholm Temple Bruer with Temple High Grange	
+unmatched	E07000139	Non-precepting parish	Newton Haceby and Walcot	
+unmatched	E07000139	Precepting parish	Rauceby	
+spelling-REVIEW	E06000013	Precepting parish	Barton upon Humber	E04000539 Barrow upon Humber
+unmatched	E06000013	Charter Trustee	Scunthorpe Charter Trustees	
+unmatched	E07000147	Precepting parish	Beckham East/West	
+spelling-REVIEW	E07000147	Precepting parish	Matlaske	E04006448 Matlask
+unmatched	E06000061	Precepting parish	Geddington Newton and Little Oakley	
+unmatched	E07000134	Precepting parish	Oakthorpe and Donisthorpe	
+prefix-REVIEW	E07000134	Precepting parish	Swepstone	E04005567 Swepstone and Newton Burgoland
+prefix-REVIEW	E06000065	Precepting parish	Aiskew	E04007130 Aiskew and Leeming Bar
+ambiguous-same-name	E06000065	Precepting parish	Aislaby	E04007543 Aislaby; E04007657 Aislaby
+unmatched	E06000065	Precepting parish	Aislaby with Middleton & Wrelton	
+ambiguous-same-name	E06000065	Non-precepting parish	Barden (Craven)	E04007059 Barden; E04007451 Barden
+ambiguous-same-name	E06000065	Precepting parish	Barden (Richmondshire)	E04007059 Barden; E04007451 Barden
+unmatched	E06000065	Precepting parish	Bishop Thornton & Warsill	
+ambiguous-same-name	E06000065	Precepting parish	Borrowby	E04007143 Borrowby; E04007659 Borrowby
+ambiguous-same-name	E06000065	Group	Borrowby (grouped with Newton Mulgrave and Roxby)	E04007143 Borrowby; E04007659 Borrowby
+prefix-REVIEW	E06000065	Precepting parish	Brafferton	E04012963 Brafferton and Helperby
+ambiguous-same-name	E06000065	Precepting parish	Brompton (Hambleton)	E04007146 Brompton; E04007660 Brompton
+ambiguous-same-name	E06000065	Precepting parish	Brompton (Scarborough)	E04007146 Brompton; E04007660 Brompton
+ambiguous-same-name	E06000065	Non-precepting parish	Broughton (Craven)	E04007065 Broughton; E04007556 Broughton
+ambiguous-same-name	E06000065	Precepting parish	Broughton (Ryedale)	E04007065 Broughton; E04007556 Broughton
+prefix-REVIEW	E06000065	Precepting parish	Byland with Wass & Oldstead	E04007560 Byland with Wass
+ambiguous-same-name	E06000065	Precepting parish	Carlton (Hambleton)	E04007149 Carlton; E04007462 Carlton Town; E04007727 Carlton
+ambiguous-same-name	E06000065	Precepting parish	Carlton (Richmondshire)	E04007149 Carlton; E04007462 Carlton Town; E04007727 Carlton
+ambiguous-same-name	E06000065	Precepting parish	Carlton (Selby)	E04007149 Carlton; E04007462 Carlton Town; E04007727 Carlton
+unmatched	E06000065	Precepting parish	Cattall Hunsingore & Walshford	
+unmatched	E06000065	Precepting parish	Cawton Coulton & Grimstone	
+ambiguous-same-name	E06000065	Precepting parish	Cliffe (Richmondshire)	E04007467 Cliffe; E04007732 Cliffe
+ambiguous-same-name	E06000065	Precepting parish	Cliffe (Selby)	E04007467 Cliffe; E04007732 Cliffe
+unmatched	E06000065	Precepting parish	Cundall and Norton le clay	
+ambiguous-same-name	E06000065	Precepting parish	Dalton (Hambleton)	E04007163 Dalton; E04007472 Dalton
+ambiguous-same-name	E06000065	Non-precepting parish	Dalton (Richmondshire)	E04007163 Dalton; E04007472 Dalton
+ambiguous-same-name	E06000065	Precepting parish	Easby (Hambleton)	E04007165 Easby; E04007475 Easby
+ambiguous-same-name	E06000065	Non-precepting parish	Easby (Richmondshire)	E04007165 Easby; E04007475 Easby
+unmatched	E06000065	Precepting parish	Exelby Leeming and Newton	
+unmatched	E06000065	Precepting parish	Fearby Healey & District	
+unmatched	E06000065	Precepting parish	Fountains Abbey	
+unmatched	E06000065	Precepting parish	Golsborough & Flaxby	
+unmatched	E06000065	Precepting parish	Helperby	
+unmatched	E06000065	Precepting parish	Hewick & Hutton	
+ambiguous-same-name	E06000065	Precepting parish	Hornby (Hambleton)	E04007192 Hornby; E04007492 Hornby
+ambiguous-same-name	E06000065	Non-precepting parish	Hornby (Richmondshire)	E04007192 Hornby; E04007492 Hornby
+ambiguous-same-name	E06000065	Precepting parish	Kirby Hill (Harrogate)	E04007367 Kirby Hill; E04007496 Kirby Hill
+ambiguous-same-name	E06000065	Non-precepting parish	Kirby Hill (Richmondshire)	E04007367 Kirby Hill; E04007496 Kirby Hill
+unmatched	E06000065	Precepting parish	Lazenby	
+ambiguous-same-name	E06000065	Precepting parish	Little Smeaton (Hambleton)	E04007221 Little Smeaton; E04007755 Little Smeaton
+ambiguous-same-name	E06000065	Precepting parish	Little Smeaton (Selby)	E04007221 Little Smeaton; E04007755 Little Smeaton
+unmatched	E06000065	Precepting parish	Lower Washburn	
+ambiguous-same-name	E06000065	Non-precepting parish	Melmerby	E04007388 Melmerby; E04007503 Melmerby
+unmatched	E06000065	Precepting parish	Mid Wharfedale	
+unmatched	E06000065	Precepting parish	Newton on Rawcliffe & Stape	
+unmatched	E06000065	Precepting parish	Pannal with Burn Bridge	
+unmatched	E06000065	Precepting parish	Rosedale East & West	
+ambiguous-same-name	E06000065	Precepting parish	Scotton (Harrogate)	E04007412 Scotton; E04007523 Scotton
+ambiguous-same-name	E06000065	Precepting parish	Scotton (Richmondshire)	E04007412 Scotton; E04007523 Scotton
+ambiguous-same-name	E06000065	Precepting parish	Seamer (Hambleton)	E04007252 Seamer; E04007697 Seamer
+ambiguous-same-name	E06000065	Precepting parish	Seamer (Scarborough)	E04007252 Seamer; E04007697 Seamer
+prefix-REVIEW	E06000065	Precepting parish	Skelton	E04007417 Skelton-on-Ure
+spelling-REVIEW	E06000065	Precepting parish	Stainton Dale	E04007701 Staintondale
+ambiguous-same-name	E06000065	Precepting parish	Stapleton (Richmondshire)	E04007528 Stapleton; E04007769 Stapleton
+ambiguous-same-name	E06000065	Non-precepting parish	Stapleton (Selby)	E04007528 Stapleton; E04007769 Stapleton
+unmatched	E06000065	Precepting parish	Upper Nidderdale	
+unmatched	E06000065	Non-precepting parish	Walden Stubbs	
+unmatched	E06000065	Group	Washburn grouped Parish Council	
+unmatched	E06000065	Precepting parish	Welburn (Amotherby Ward)	
+unmatched	E06000065	Non-precepting parish	Welburn (Kirkbymoorside Ward)	
+unmatched	E06000057	Non-precepting parish	Cheviotside	
+unmatched	E06000057	Precepting parish	Tillside	
+unmatched	E06000057	Precepting parish	Whittingham Callaly & Alnham	
+unmatched	E06000031	Non-precepting parish	City	
+prefix-REVIEW	E07000064	Precepting parish	Ashburnham & Penshurst	E04003795 Ashburnham
+unmatched	E07000176	Non-precepting parish	Wiverton & Tithby	
+prefix-REVIEW	E06000051	Group	Abdon (grouped with Heath)	E04012659 Abdon and Heath
+unmatched	E06000051	Precepting parish	Acton Burnell Frodesley Pitchford & Ruckley & Langley	
+unmatched	E06000051	Precepting parish	All Stretton Smethcott & Woolstaston	
+spelling-REVIEW	E06000051	Group	Billinglsey (grouped with Deuxhill Glazeley & Middleton Scriven)	E04011222 Billingsley
+unmatched	E06000051	Precepting parish	Church Preen Kenley & Hughley	
+prefix-REVIEW	E06000051	Precepting parish	Clun & Chapel Lawn	E04011250 Clun
+unmatched	E06000051	Precepting parish	Cockshutt cum Petton	
+unmatched	E06000051	Group	Cressage Harley & Sheinton	
+unmatched	E06000051	Group	Heath (grouped with Abdon)	
+prefix-REVIEW	E06000051	Precepting parish	Ightfield & Calverhall	E04011293 Ightfield
+spelling-REVIEW	E06000051	Precepting parish	Llanfairwaterdine	E04011302 Llanfair Waterdine
+unmatched	E06000051	Precepting parish	Myddle and Broughton	
+prefix-REVIEW	E06000051	Precepting parish	Ryton & Grindle	E04011351 Ryton
+prefix-REVIEW	E06000066	Precepting parish	Barwick	E04008665 Barwick and Stoford
+unmatched	E06000066	Group	Cary Moor (grouped with Alford, Lovington, North Barrow and South Barrow)	
+unmatched	E06000066	Precepting parish	Charltons (The)	
+spelling-REVIEW	E06000066	Non-precepting parish	Lamyat	E04008566 Lamyatt
+prefix-REVIEW	E06000066	Precepting parish	South Cadbury	E04008754 South Cadbury and Sutton Montis
+unmatched	E06000066	Precepting parish	Westbury Sub Mendip	
+prefix-REVIEW	E07000012	Precepting parish	Thriplow	E04001846 Thriplow and Heathfield
+prefix-REVIEW	E07000039	Precepting parish	Stenson	E04012727 Stenson Fields
+unmatched	E06000025	Precepting parish	Great Badminton	
+prefix-REVIEW	E06000025	Precepting parish	Tytherington	E04001076 Tytherington and Itchington
+prefix-REVIEW	E06000025	Precepting parish	Westerleigh	E04012635 Westerleigh and Coalpit Heath
+unmatched	E07000140	Precepting parish	Moulton	
+unmatched	E07000141	Group	Ropsley Humby (grouped with Braceby & Sapperton)	
+unmatched	E07000149	Precepting parish	Caistor and Bixley	
+prefix-REVIEW	E07000149	Precepting parish	Kimberley	E04006565 Kimberley and Carleton Forehoe
+prefix-REVIEW	E07000179	Precepting parish	Aston Tirrold & Upthorpe	E04008102 Aston Tirrold
+unmatched	E07000179	Precepting parish	Goring	
+prefix-REVIEW	E07000196	Precepting parish	Acton Trussell and Bednall & Teddesley Hay	E04008954 Acton Trussell and Bednall
+unmatched	E07000198	Precepting parish	Whiston	
+spelling-REVIEW	E06000004	Group	Castleleavington (grouped with Kirklevington)	E04012066 Castlelevington
+prefix-REVIEW	E07000221	Non-precepting parish	Barcheston & Willington	E04009707 Barcheston
+unmatched	E07000221	Precepting parish	Marston Sicca	
+unmatched	E07000221	Non-precepting parish	Morton Bagot Oldberrow & Spernal	
+spelling-REVIEW	E07000221	Non-precepting parish	Radbourne	E04009773 Radbourn
+unmatched	E07000221	Precepting parish	The Wolfords Joint Parish Council	
+prefix-REVIEW	E07000221	Precepting parish	Wellesbourne	E04009801 Wellesbourne and Walton
+prefix-REVIEW	E07000082	Precepting parish	Randwick	E04004374 Randwick and Westrip
+unmatched	E07000113	Group	Buckland (grouped with Norton and Stone Parishes)	
+prefix-REVIEW	E07000113	Group	Norton (grouped with Buckland and Stone Parishes)	E04005065 Norton, Buckland and Stone
+unmatched	E07000113	Group	Stone (grouped with Buckland and Norton Parishes)	
+spelling-REVIEW	E06000030	Precepting parish	Central Swindon South	E04012663 Central Swindon North
+unmatched	E07000215	Precepting parish	Caterham Hill	
+unmatched	E07000215	Precepting parish	Chaldon Village	
+unmatched	E07000215	Precepting parish	Whyteleafe Village	
+spelling-REVIEW	E07000093	Precepting parish	Vernham Dean	E04004643 Vernhams Dean
+unmatched	E07000093	Precepting parish	West Tytherley Frenchmoor and Buckholt	
+unmatched	E07000114	Charter Trustee	Margate Charter Trustees	
+unmatched	E07000114	Precepting parish	St Nicolas at Wade and Sarre	
+prefix-REVIEW	E07000114	Precepting parish	Westgate	E04012472 Westgate-on-Sea
+spelling-REVIEW	E07000115	Precepting parish	E. Malling & Larkfield	E04012797 East Malling and Larkfield
+prefix-REVIEW	E07000116	Precepting parish	Brenchley	E04005118 Brenchley and Matfield
+prefix-REVIEW	E07000116	Precepting parish	Cranbrook	E04005120 Cranbrook & Sissinghurst
+unmatched	E07000077	Precepting parish	Elmdon, Duddenhoe End and Wenden Lofts	
+unmatched	E07000077	Precepting parish	The Sampfords	
+prefix-REVIEW	E07000180	Precepting parish	Abingdon	E04012866 Abingdon on Thames
+unmatched	E07000180	Precepting parish	Faringdon	
+prefix-REVIEW	E08000036	Precepting parish	Normanton	E04013429 Normanton and Altofts
+unmatched	E08000036	Precepting parish	Nostell with Huntwick & Foulby	
+unmatched	E08000036	Non-precepting parish	Wintersett	
+unmatched	E07000222	Group	Barford Sherbourne & Wasperton	
+prefix-REVIEW	E07000222	Group	Beausale (grouped with Haseley Honiley and Wroxall)	E04009845 Beausale, Haseley, Honiley and Wroxall
+unmatched	E07000222	Group	Eathorpe Hunningham Offchurch Wappenbury	
+unmatched	E07000222	Group	Haseley (grouped with Beausale Honiley and Wroxall)	
+unmatched	E07000222	Group	Honiley (grouped with Beausale Haseley and Wroxall)	
+unmatched	E07000222	Group	Wroxall (grouped with Beausale Haseley and Honiley)	
+unmatched	E07000142	Group	Langworth (grouped with Barlings and Newball)	
+prefix-REVIEW	E07000142	Precepting parish	Owmby	E04006032 Owmby-by-Spital
+prefix-REVIEW	E06000062	Precepting parish	Far Cotton	E04013031 Far Cotton and Delapre
+prefix-REVIEW	E06000062	Precepting parish	Greatworth	E04006828 Greatworth and Halse
+spelling-REVIEW	E06000062	Precepting parish	Hunsbury Meadow	E04013524 Hunsbury Meadows
+spelling-REVIEW	E07000181	Precepting parish	Asthal	E04012208 Asthall
+prefix-REVIEW	E07000181	Precepting parish	South Leigh	E04008323 South Leigh and High Cogges
+unmatched	E07000245	Non-precepting parish	Ampton Timworth & Little Livermere	
+unmatched	E07000245	Precepting parish	Barrow cum Denham	
+unmatched	E07000245	Precepting parish	Culford West Stove and Wordwell	
+unmatched	E07000245	Precepting parish	Flempton cum Hengrave	
+unmatched	E07000245	Precepting parish	Fornham St Martin cum St Genevieve	
+unmatched	E07000245	Precepting parish	Honington cum Sapiston	
+unmatched	E07000245	Precepting parish	Hopton cum Knettishall	
+unmatched	E07000245	Precepting parish	Ixworth cum Ixworth Thorpe	
+prefix-REVIEW	E07000245	Precepting parish	Mildenhall	E04012952 Mildenhall High
+unmatched	E06000064	Precepting parish	Allithwaite and Cartmel	
+unmatched	E06000064	Precepting parish	Bandleyside (Colby Hoff & Ormside)	
+prefix-REVIEW	E06000064	Precepting parish	Barton	E04002516 Barton and Pooley Bridge
+unmatched	E06000064	Precepting parish	Burneside	
+unmatched	E06000064	Precepting parish	Dalton with Newton	
+unmatched	E06000064	Precepting parish	Duddon	
+unmatched	E06000064	Precepting parish	Staveley with Ings	
+unmatched	E06000064	Precepting parish	Urswick Bardsea and Stainton	
+unmatched	E06000064	Non-precepting parish	Whitwell and Selside	
+prefix-REVIEW	E06000054	Precepting parish	Biddestone	E04013446 Biddestone & Slaughterford
+prefix-REVIEW	E06000054	Precepting parish	Burcombe	E04011658 Burcombe Without
+prefix-REVIEW	E06000054	Precepting parish	Charlton St Peter & Wiltsford	E04011665 Charlton St Peter
+unmatched	E06000054	Precepting parish	Easton Royal	
+prefix-REVIEW	E06000054	Precepting parish	Fittleton	E04013459 Fittleton cum Haxton
+unmatched	E06000054	Precepting parish	Kennet Valley Joint Parish Council	
+prefix-REVIEW	E06000054	Precepting parish	Langley Burrell	E04013464 Langley Burrell Without
+prefix-REVIEW	E06000054	Precepting parish	Laverstock & Ford	E04012692 Laverstock
+prefix-REVIEW	E06000054	Precepting parish	Maiden Bradley	E04011764 Maiden Bradley with Yarnfield
+unmatched	E06000054	Precepting parish	Marston Meysey	
+spelling-REVIEW	E06000054	Precepting parish	Newton Toney	E04011783 Newton Tony
+prefix-REVIEW	E06000054	Non-precepting parish	Norton & Foxley	E04011787 Norton
+unmatched	E06000054	Precepting parish	St Paul Without	
+prefix-REVIEW	E06000054	Precepting parish	Stourton	E04011829 Stourton with Gasper
+unmatched	E06000054	Precepting parish	Upper Deverills	
+unmatched	E06000054	Precepting parish	Wilcot & Huish	
+prefix-REVIEW	E07000094	Precepting parish	Wickham	E04004693 Wickham and Knowle
+unmatched	E07000238	Precepting parish	Drakes Broughton Ward	
+unmatched	E07000238	Precepting parish	Wadborough Ward	

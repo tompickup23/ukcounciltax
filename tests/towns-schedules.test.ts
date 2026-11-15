@@ -5,7 +5,9 @@ import {describe, expect, it} from 'vitest';
 const read = (path: string) => JSON.parse(readFileSync(path, 'utf8'));
 const national = read('data/national/england.json');
 const audit = read('docs/towns-research/schedules-audit.json');
-const schedules = readdirSync('data/towns/schedules').filter(f => f.endsWith('.json')).map(f => read(`data/towns/schedules/${f}`));
+// Only the special expense councils audited here; Durham and the City of London are written by scripts/import-towns-schedules.mjs.
+const audited = new Set(audit.map((c: any) => c.gss));
+const schedules = readdirSync('data/towns/schedules').filter(f => f.endsWith('.json')).map(f => read(`data/towns/schedules/${f}`)).filter((s: any) => audited.has(s.council.gss));
 const ratio = (pence: number) => Math.floor((pence * 6 + 4.5) / 9);
 
 describe('council locality schedules', () => {
@@ -56,6 +58,7 @@ describe('council locality schedules', () => {
   });
 
   it('writes schedule files in the shape scripts/import-towns.mjs reads', () => {
+    expect(schedules.map((s: any) => s.council.slug).sort()).toEqual(['boston', 'broxtowe', 'south-norfolk']);
     for (const schedule of schedules) {
       expect(schedule.council.gss).toMatch(/^E0[6-9]\d{6}$/);
       expect(schedule.source.sha256).toMatch(/^[0-9a-f]{64}$/);

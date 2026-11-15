@@ -1,0 +1,2402 @@
+{
+ "about": "Reviewed name matches of MHCLG parish rows to ONS parish codes (Parish to Ward to LAD, December 2025), checked row by row on 15 November 2026 in Claude Code. Automatic prefix and spelling candidates are never accepted without an entry here. Each entry states its evidence.",
+ "accepted": [
+  {
+   "mhclgCode": "E0101P037",
+   "councilGss": "E06000022",
+   "name": "Publow & Pensford",
+   "ons": [
+    {
+     "code": "E04000986",
+     "name": "Publow"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Pensford\" to \"Publow\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0101P041",
+   "councilGss": "E06000022",
+   "name": "South Stoke",
+   "ons": [
+    {
+     "code": "E04000990",
+     "name": "Southstoke"
+    }
+   ],
+   "evidence": "Spelling: \"Southstoke\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0103P041",
+   "councilGss": "E06000025",
+   "name": "Tytherington",
+   "ons": [
+    {
+     "code": "E04001076",
+     "name": "Tytherington and Itchington"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Tytherington and Itchington\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0103P042",
+   "councilGss": "E06000025",
+   "name": "Westerleigh",
+   "ons": [
+    {
+     "code": "E04012635",
+     "name": "Westerleigh and Coalpit Heath"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Westerleigh and Coalpit Heath\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0202P014",
+   "councilGss": "E06000055",
+   "name": "Felmersham and Radwell",
+   "ons": [
+    {
+     "code": "E04011890",
+     "name": "Felmersham"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Radwell\" to \"Felmersham\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0202P023",
+   "councilGss": "E06000055",
+   "name": "Melchbourne and Yelden",
+   "ons": [
+    {
+     "code": "E04011899",
+     "name": "Melchbourne and Yielden"
+    }
+   ],
+   "evidence": "Spelling: \"Melchbourne and Yielden\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0202P039",
+   "councilGss": "E06000055",
+   "name": "Stewartby and Kempston Hardwick",
+   "ons": [
+    {
+     "code": "E04011914",
+     "name": "Stewartby"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Kempston Hardwick\" to \"Stewartby\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0203P034",
+   "councilGss": "E06000056",
+   "name": "Hockcliffe",
+   "ons": [
+    {
+     "code": "E04011957",
+     "name": "Hockliffe"
+    }
+   ],
+   "evidence": "Spelling: \"Hockliffe\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0203P044",
+   "councilGss": "E06000056",
+   "name": "Marston Moretaine",
+   "ons": [
+    {
+     "code": "E04011967",
+     "name": "Marston Moreteyne"
+    }
+   ],
+   "evidence": "Spelling: \"Marston Moreteyne\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0401P006",
+   "councilGss": "E06000042",
+   "name": "Broughton",
+   "ons": [
+    {
+     "code": "E04013489",
+     "name": "Broughton and Milton Keynes"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Broughton and Milton Keynes\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0533P010",
+   "councilGss": "E07000010",
+   "name": "Newton",
+   "ons": [
+    {
+     "code": "E04001662",
+     "name": "Newton-in-the-Isle"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Newton-in-the-Isle\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0536P093",
+   "councilGss": "E07000012",
+   "name": "Thriplow",
+   "ons": [
+    {
+     "code": "E04001846",
+     "name": "Thriplow and Heathfield"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Thriplow and Heathfield\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0551P046",
+   "councilGss": "E07000011",
+   "name": "Kimbolton & Stonely",
+   "ons": [
+    {
+     "code": "E04012031",
+     "name": "Kimbolton"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Stonely\" to \"Kimbolton\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0551P077",
+   "councilGss": "E07000011",
+   "name": "Woodwalton",
+   "ons": [
+    {
+     "code": "E04012045",
+     "name": "Wood Walton"
+    }
+   ],
+   "evidence": "Spelling: \"Wood Walton\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0603P049",
+   "councilGss": "E06000049",
+   "name": "Doddington",
+   "ons": [
+    {
+     "code": "E04013183",
+     "name": "Doddington and District"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Doddington and District\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0603P068",
+   "councilGss": "E06000049",
+   "name": "Hough",
+   "ons": [
+    {
+     "code": "E04013188",
+     "name": "Hough and Chorlton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Hough and Chorlton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0603P123",
+   "councilGss": "E06000049",
+   "name": "Stapeley",
+   "ons": [
+    {
+     "code": "E04013205",
+     "name": "Stapeley and District"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Stapeley and District\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0603P124",
+   "councilGss": "E06000049",
+   "name": "Stoke",
+   "ons": [
+    {
+     "code": "E04013206",
+     "name": "Stoke and Hurleston"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Stoke and Hurleston\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P051",
+   "councilGss": "E06000050",
+   "name": "Cuddington (Malpas)",
+   "ons": [
+    {
+     "code": "E04011082",
+     "name": "Cuddington (Malpas Ward)"
+    }
+   ],
+   "evidence": "The ONS names this parish \"Cuddington (Malpas Ward)\", matching the return's bracket; the automatic suggestion (Puddington) is wrong and rejected.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P052",
+   "councilGss": "E06000050",
+   "name": "Cuddington (Weaver and Cuddington)",
+   "ons": [
+    {
+     "code": "E04012535",
+     "name": "Cuddington (Weaver and Cuddington Ward)"
+    }
+   ],
+   "evidence": "The ONS names this parish \"Cuddington (Weaver and Cuddington Ward)\", matching the return's bracket; the automatic suggestion (Puddington) is wrong and rejected.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P058",
+   "councilGss": "E06000050",
+   "name": "Duddon",
+   "ons": [
+    {
+     "code": "E04012575",
+     "name": "Duddon and Burton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Duddon and Burton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P094",
+   "councilGss": "E06000050",
+   "name": "Lach Dennis",
+   "ons": [
+    {
+     "code": "E04012546",
+     "name": "Lach Dennis and Lostock Green"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Lach Dennis and Lostock Green\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P153",
+   "councilGss": "E06000050",
+   "name": "Utkinton",
+   "ons": [
+    {
+     "code": "E04012988",
+     "name": "Utkinton and Cotebrook"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Utkinton and Cotebrook\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P186",
+   "councilGss": "E06000050",
+   "name": "Mickle Trafford",
+   "ons": [
+    {
+     "code": "E04012572",
+     "name": "Mickle Trafford and District"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Mickle Trafford and District\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P187",
+   "councilGss": "E06000050",
+   "name": "No Mans Heath",
+   "ons": [
+    {
+     "code": "E04012570",
+     "name": "No Man's Heath and District"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"No Man's Heath and District\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0604P196",
+   "councilGss": "E06000050",
+   "name": "Tushingham cum Gridley Macefen & Bradley",
+   "ons": [
+    {
+     "code": "E04012573",
+     "name": "Tushingham-cum-Grindley, Macefen and Bradley"
+    }
+   ],
+   "evidence": "Spelling: \"Tushingham-cum-Grindley, Macefen and Bradley\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0704P004",
+   "councilGss": "E06000004",
+   "name": "Castleleavington (grouped with Kirklevington)",
+   "ons": [
+    {
+     "code": "E04012066",
+     "name": "Castlelevington"
+    }
+   ],
+   "evidence": "Spelling: \"Castlelevington\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0901P055",
+   "councilGss": "E06000063",
+   "name": "Haile and Wilton",
+   "ons": [
+    {
+     "code": "E04012139",
+     "name": "Haile"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Wilton\" to \"Haile\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0901P108",
+   "councilGss": "E06000063",
+   "name": "Waberthwaite and Corney",
+   "ons": [
+    {
+     "code": "E04002507",
+     "name": "Waberthwaite"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Corney\" to \"Waberthwaite\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E0902P014",
+   "councilGss": "E06000064",
+   "name": "Barton",
+   "ons": [
+    {
+     "code": "E04002516",
+     "name": "Barton and Pooley Bridge"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Barton and Pooley Bridge\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1032P005",
+   "councilGss": "E07000033",
+   "name": "Elmton",
+   "ons": [
+    {
+     "code": "E04012401",
+     "name": "Elmton with Creswell"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Elmton with Creswell\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1035P027",
+   "councilGss": "E07000035",
+   "name": "Clifton",
+   "ons": [
+    {
+     "code": "E04002740",
+     "name": "Clifton and Compton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Clifton and Compton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1035P110",
+   "councilGss": "E07000035",
+   "name": "Youlgrave",
+   "ons": [
+    {
+     "code": "E04002823",
+     "name": "Youlgreave"
+    }
+   ],
+   "evidence": "Spelling: \"Youlgreave\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1035P111",
+   "councilGss": "E07000035",
+   "name": "Hathersage & Outseats",
+   "ons": [
+    {
+     "code": "E04012408",
+     "name": "Hathersage"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Outseats\" to \"Hathersage\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1038P009",
+   "councilGss": "E07000038",
+   "name": "Grassmoor Hasland and Winswick",
+   "ons": [
+    {
+     "code": "E04002869",
+     "name": "Grassmoor, Hasland and Winsick"
+    }
+   ],
+   "evidence": "Spelling: \"Grassmoor, Hasland and Winsick\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1039P051",
+   "councilGss": "E07000039",
+   "name": "Stenson",
+   "ons": [
+    {
+     "code": "E04012727",
+     "name": "Stenson Fields"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Stenson Fields\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P010",
+   "councilGss": "E06000059",
+   "name": "Athelhampton (Puddletown Area)",
+   "ons": [
+    {
+     "code": "E04013368",
+     "name": "Athelhampton and Puddletown"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Athelhampton and Puddletown\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P013",
+   "councilGss": "E06000059",
+   "name": "Beerhacket (Thornhackett)",
+   "ons": [
+    {
+     "code": "E04003499",
+     "name": "Beer Hackett"
+    }
+   ],
+   "evidence": "Spelling: \"Beer Hackett\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P032",
+   "councilGss": "E06000059",
+   "name": "Burleston (Puddletown Area)",
+   "ons": [
+    {
+     "code": "E04013372",
+     "name": "Burleston and Tolpuddle"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Burleston and Tolpuddle\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P116",
+   "councilGss": "E06000059",
+   "name": "Lagton Herring (Chesil Bank)",
+   "ons": [
+    {
+     "code": "E04003551",
+     "name": "Langton Herring"
+    }
+   ],
+   "evidence": "Spelling: \"Langton Herring\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P125",
+   "councilGss": "E06000059",
+   "name": "Long Bredy (Kingston Russell and Long Bredy)",
+   "ons": [
+    {
+     "code": "E04013382",
+     "name": "Long Bredy and Kingston Russell"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Long Bredy and Kingston Russell\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P154",
+   "councilGss": "E06000059",
+   "name": "North Wooton",
+   "ons": [
+    {
+     "code": "E04003574",
+     "name": "North Wootton"
+    }
+   ],
+   "evidence": "Spelling: \"North Wootton\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P176",
+   "councilGss": "E06000059",
+   "name": "Sanford Orcas (Queen Thorne)",
+   "ons": [
+    {
+     "code": "E04003591",
+     "name": "Sandford Orcas"
+    }
+   ],
+   "evidence": "Spelling: \"Sandford Orcas\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P190",
+   "councilGss": "E06000059",
+   "name": "Steeple",
+   "ons": [
+    {
+     "code": "E04012325",
+     "name": "Steeple with Tyneham"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Steeple with Tyneham\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P193",
+   "councilGss": "E06000059",
+   "name": "Stoke Abbot (Upper Marshwood Vale)",
+   "ons": [
+    {
+     "code": "E04003599",
+     "name": "Stoke Abbott"
+    }
+   ],
+   "evidence": "Spelling: \"Stoke Abbott\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P252",
+   "councilGss": "E06000059",
+   "name": "Winterbourne Came (Winterbourne Farringdon)",
+   "ons": [
+    {
+     "code": "E04003619",
+     "name": "Winterborne Came"
+    }
+   ],
+   "evidence": "Spelling: \"Winterborne Came\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P253",
+   "councilGss": "E06000059",
+   "name": "Winterbourne Herringston (Nonbu (Winterbourne Farringdon)",
+   "ons": [
+    {
+     "code": "E04003620",
+     "name": "Winterborne Herringston"
+    }
+   ],
+   "evidence": "Spelling: \"Winterborne Herringston\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P254",
+   "councilGss": "E06000059",
+   "name": "Winterbourne Monkton (Winterbourne Farringdon)",
+   "ons": [
+    {
+     "code": "E04013394",
+     "name": "Winterborne Monkton"
+    }
+   ],
+   "evidence": "Spelling: \"Winterborne Monkton\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1203P256",
+   "councilGss": "E06000059",
+   "name": "Withchampton (Grouped with Crichel)",
+   "ons": [
+    {
+     "code": "E04013396",
+     "name": "Witchampton"
+    }
+   ],
+   "evidence": "Spelling: \"Witchampton\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1204P001",
+   "councilGss": "E06000058",
+   "name": "Burton",
+   "ons": [
+    {
+     "code": "E04003360",
+     "name": "Burton and Winkton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Burton and Winkton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1204P004",
+   "councilGss": "E06000058",
+   "name": "Highcliffeand Walkford Neighbourhood Council",
+   "ons": [
+    {
+     "code": "E04012815",
+     "name": "Highcliffe and Walkford"
+    }
+   ],
+   "evidence": "Spelling: \"Highcliffe and Walkford\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1302P061",
+   "councilGss": "E06000047",
+   "name": "Hutton Henry",
+   "ons": [
+    {
+     "code": "E04010650",
+     "name": "Hutton Henry and Station Town"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Hutton Henry and Station Town\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1302P123",
+   "councilGss": "E06000047",
+   "name": "West Rainton",
+   "ons": [
+    {
+     "code": "E04010710",
+     "name": "West Rainton and Leamside"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"West Rainton and Leamside\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1436P001",
+   "councilGss": "E07000064",
+   "name": "Ashburnham & Penshurst",
+   "ons": [
+    {
+     "code": "E04003795",
+     "name": "Ashburnham"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Penshurst\" to \"Ashburnham\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1535P003",
+   "councilGss": "E07000070",
+   "name": "Chignal",
+   "ons": [
+    {
+     "code": "E04003953",
+     "name": "Chignall"
+    }
+   ],
+   "evidence": "Spelling: \"Chignall\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1632P060",
+   "councilGss": "E07000079",
+   "name": "Kemble",
+   "ons": [
+    {
+     "code": "E04004238",
+     "name": "Kemble and Ewen"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Kemble and Ewen\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1632P109",
+   "councilGss": "E07000079",
+   "name": "Wyck Rissington",
+   "ons": [
+    {
+     "code": "E04004286",
+     "name": "Wick Rissington"
+    }
+   ],
+   "evidence": "Spelling: \"Wick Rissington\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1635P040",
+   "councilGss": "E07000082",
+   "name": "Randwick",
+   "ons": [
+    {
+     "code": "E04004374",
+     "name": "Randwick and Westrip"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Randwick and Westrip\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1731P052",
+   "councilGss": "E07000084",
+   "name": "Wootton St. Lawrence",
+   "ons": [
+    {
+     "code": "E04004488",
+     "name": "Wootton St. Lawrence with Ramsdell"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Wootton St. Lawrence with Ramsdell\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1732P015",
+   "councilGss": "E07000085",
+   "name": "Froxfield",
+   "ons": [
+    {
+     "code": "E04004503",
+     "name": "Froxfield and Privett"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Froxfield and Privett\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1733P001",
+   "councilGss": "E07000086",
+   "name": "Allbrook and North Boyatt",
+   "ons": [
+    {
+     "code": "E04012048",
+     "name": "Allbrook"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"North Boyatt\" to \"Allbrook\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1742P056",
+   "councilGss": "E07000093",
+   "name": "Vernham Dean",
+   "ons": [
+    {
+     "code": "E04004643",
+     "name": "Vernhams Dean"
+    }
+   ],
+   "evidence": "Spelling: \"Vernhams Dean\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1743P047",
+   "councilGss": "E07000094",
+   "name": "Wickham",
+   "ons": [
+    {
+     "code": "E04004693",
+     "name": "Wickham and Knowle"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Wickham and Knowle\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P023",
+   "councilGss": "E06000019",
+   "name": "Brampton Abbots (grouped with Foy)",
+   "ons": [
+    {
+     "code": "E04000703",
+     "name": "Brampton Abbotts"
+    }
+   ],
+   "evidence": "Spelling: \"Brampton Abbotts\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P025",
+   "councilGss": "E06000019",
+   "name": "Bredenbury & District Group (grouped with Bredenbury Grendon Bishop Wacton)",
+   "ons": [
+    {
+     "code": "E04000705",
+     "name": "Bredenbury"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Grendon Bishop and Wacton (which the return also lists as group members)\" to \"Bredenbury\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P028",
+   "councilGss": "E06000019",
+   "name": "Bridge Sollars (grouped with BISHOPSTONE Byford Kenchester Mansell Gamage)",
+   "ons": [
+    {
+     "code": "E04000708",
+     "name": "Bridge Sollers"
+    }
+   ],
+   "evidence": "Spelling: \"Bridge Sollers\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P037",
+   "councilGss": "E06000019",
+   "name": "Buckton & Coxhall (grouped as BORDER GROUP with: Adforton Brampton Bryan Lingen Letton & Newton Payt",
+   "ons": [
+    {
+     "code": "E04000717",
+     "name": "Buckton and Coxall"
+    }
+   ],
+   "evidence": "Spelling: \"Buckton and Coxall\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P050",
+   "councilGss": "E06000019",
+   "name": "Colwall and Malvern Hills Conservators (Colwall)",
+   "ons": [
+    {
+     "code": "E04000730",
+     "name": "Colwall"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Malvern Hills Conservators (a body, not a place)\" to \"Colwall\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P051",
+   "councilGss": "E06000019",
+   "name": "Coombe (forms STAPLETON GROUP with Byton Stapleton and Kinsham)",
+   "ons": [
+    {
+     "code": "E04000731",
+     "name": "Combe"
+    }
+   ],
+   "evidence": "Spelling: \"Combe\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P052",
+   "councilGss": "E06000019",
+   "name": "Cradley (grouped with Storridge)",
+   "ons": [
+    {
+     "code": "E04000732",
+     "name": "Cradley and Storridge"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Cradley and Storridge\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P165",
+   "councilGss": "E06000019",
+   "name": "Norton Cannon (grouped as KINNERSLEY AND DISTRICT GROUP with Letton Kinnersley and Sarnesfield)",
+   "ons": [
+    {
+     "code": "E04000844",
+     "name": "Norton Canon"
+    }
+   ],
+   "evidence": "Spelling: \"Norton Canon\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P179",
+   "councilGss": "E06000019",
+   "name": "Pudleston (forms Hatfield & District Group with Hatfield & Newhampton Docklow & Hampton Wafer)",
+   "ons": [
+    {
+     "code": "E04000858",
+     "name": "Pudlestone"
+    }
+   ],
+   "evidence": "Spelling: \"Pudlestone\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E1801P185",
+   "councilGss": "E06000019",
+   "name": "Rowlestone (group as EWYAS HAROLD GROUP with Dulas. Llancillo & Ewyas Harold)",
+   "ons": [
+    {
+     "code": "E04000864",
+     "name": "Rowlstone"
+    }
+   ],
+   "evidence": "Spelling: \"Rowlstone\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P010",
+   "councilGss": "E06000011",
+   "name": "Barmston and Fraisthorpe",
+   "ons": [
+    {
+     "code": "E04000351",
+     "name": "Barmston"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Fraisthorpe\" to \"Barmston\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P037",
+   "councilGss": "E06000011",
+   "name": "Coniston and Thirtleby",
+   "ons": [
+    {
+     "code": "E04000376",
+     "name": "Coniston"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Thirtleby\" to \"Coniston\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P048",
+   "councilGss": "E06000011",
+   "name": "Ellerton and Aughton",
+   "ons": [
+    {
+     "code": "E04000386",
+     "name": "Ellerton"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Aughton\" to \"Ellerton\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P052",
+   "councilGss": "E06000011",
+   "name": "Everingham and Harswell",
+   "ons": [
+    {
+     "code": "E04000390",
+     "name": "Everingham"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Harswell\" to \"Everingham\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P070",
+   "councilGss": "E06000011",
+   "name": "Hayton and Burnby",
+   "ons": [
+    {
+     "code": "E04000408",
+     "name": "Hayton"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Burnby\" to \"Hayton\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P074",
+   "councilGss": "E06000011",
+   "name": "Holme on Spalding Moor",
+   "ons": [
+    {
+     "code": "E04000412",
+     "name": "Holme upon Spalding Moor"
+    }
+   ],
+   "evidence": "Spelling: \"Holme upon Spalding Moor\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P088",
+   "councilGss": "E06000011",
+   "name": "Kirk Ella and West Ella",
+   "ons": [
+    {
+     "code": "E04000512",
+     "name": "Kirk Ella"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"West Ella\" to \"Kirk Ella\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P130",
+   "councilGss": "E06000011",
+   "name": "Shiptonthorpe",
+   "ons": [
+    {
+     "code": "E04000467",
+     "name": "Shipton Thorpe"
+    }
+   ],
+   "evidence": "Spelling: \"Shipton Thorpe\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P138",
+   "councilGss": "E06000011",
+   "name": "Sledmere and Croome",
+   "ons": [
+    {
+     "code": "E04000475",
+     "name": "Sledmere"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Croome\" to \"Sledmere\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P139",
+   "councilGss": "E06000011",
+   "name": "Snaith (grouped with Cowick)",
+   "ons": [
+    {
+     "code": "E04000476",
+     "name": "Snaith and Cowick"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Snaith and Cowick\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2001P152",
+   "councilGss": "E06000011",
+   "name": "Thwing and Octon",
+   "ons": [
+    {
+     "code": "E04000489",
+     "name": "Thwing"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Octon\" to \"Thwing\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2004P007",
+   "councilGss": "E06000013",
+   "name": "Barton upon Humber",
+   "ons": [
+    {
+     "code": "E04000540",
+     "name": "Barton"
+    }
+   ],
+   "evidence": "The ONS names the parish of Barton upon Humber \"Barton\"; it is the only unmatched Barton in North Lincolnshire. The automatic suggestion (Barrow upon Humber, already matched to its own row) is wrong and rejected.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2101P005",
+   "councilGss": "E06000046",
+   "name": "Calbourne",
+   "ons": [
+    {
+     "code": "E04001298",
+     "name": "Calbourne, Newtown and Porchfield"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Calbourne, Newtown and Porchfield\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2101P018",
+   "councilGss": "E06000046",
+   "name": "Newport",
+   "ons": [
+    {
+     "code": "E04001323",
+     "name": "Newport and Carisbrooke"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Newport and Carisbrooke\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2201P008",
+   "councilGss": "E06000035",
+   "name": "Hoo St. Werburgh & Chattenden",
+   "ons": [
+    {
+     "code": "E04001136",
+     "name": "Hoo St. Werburgh"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Chattenden\" to \"Hoo St. Werburgh\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2231P001",
+   "councilGss": "E07000105",
+   "name": "Aldington & Bonnigton",
+   "ons": [
+    {
+     "code": "E04004824",
+     "name": "Aldington"
+    },
+    {
+     "code": "E04004829",
+     "name": "Bonnington"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row. The return spells Bonnington \"Bonnigton\".",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2231P043",
+   "councilGss": "E07000105",
+   "name": "Sevington",
+   "ons": [
+    {
+     "code": "E04013235",
+     "name": "Sevington with Finberry"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Sevington with Finberry\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2232P015",
+   "councilGss": "E07000106",
+   "name": "Ickham",
+   "ons": [
+    {
+     "code": "E04012945",
+     "name": "Ickham and Well"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Ickham and Well\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2232P018",
+   "councilGss": "E07000106",
+   "name": "Lower Hardres",
+   "ons": [
+    {
+     "code": "E04012946",
+     "name": "Lower Hardres and Nackington"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Lower Hardres and Nackington\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2240P004",
+   "councilGss": "E07000112",
+   "name": "Burmash",
+   "ons": [
+    {
+     "code": "E04005015",
+     "name": "Burmarsh"
+    }
+   ],
+   "evidence": "Spelling: \"Burmarsh\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2241P025",
+   "councilGss": "E07000113",
+   "name": "Norton (grouped with Buckland and Stone Parishes)",
+   "ons": [
+    {
+     "code": "E04005065",
+     "name": "Norton, Buckland and Stone"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Norton, Buckland and Stone\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2242P011",
+   "councilGss": "E07000114",
+   "name": "Westgate",
+   "ons": [
+    {
+     "code": "E04012472",
+     "name": "Westgate-on-Sea"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Westgate-on-Sea\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2243P007",
+   "councilGss": "E07000115",
+   "name": "E. Malling & Larkfield",
+   "ons": [
+    {
+     "code": "E04012797",
+     "name": "East Malling and Larkfield"
+    }
+   ],
+   "evidence": "Spelling: \"East Malling and Larkfield\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2244P003",
+   "councilGss": "E07000116",
+   "name": "Brenchley",
+   "ons": [
+    {
+     "code": "E04005118",
+     "name": "Brenchley and Matfield"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Brenchley and Matfield\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2244P005",
+   "councilGss": "E07000116",
+   "name": "Cranbrook",
+   "ons": [
+    {
+     "code": "E04005120",
+     "name": "Cranbrook & Sissinghurst"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Cranbrook & Sissinghurst\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2431P010",
+   "councilGss": "E07000129",
+   "name": "Glenfield",
+   "ons": [
+    {
+     "code": "E04005349",
+     "name": "Glenfields"
+    }
+   ],
+   "evidence": "Spelling: \"Glenfields\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2433P083",
+   "councilGss": "E07000131",
+   "name": "Tilton",
+   "ons": [
+    {
+     "code": "E04005480",
+     "name": "Tilton on the Hill and Halstead"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Tilton on the Hill and Halstead\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2437P029",
+   "councilGss": "E07000134",
+   "name": "Swepstone",
+   "ons": [
+    {
+     "code": "E04005567",
+     "name": "Swepstone and Newton Burgoland"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Swepstone and Newton Burgoland\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2532P027",
+   "councilGss": "E07000137",
+   "name": "Carrington",
+   "ons": [
+    {
+     "code": "E04005614",
+     "name": "Carrington and New Bolingbroke"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Carrington and New Bolingbroke\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2537P080",
+   "councilGss": "E07000142",
+   "name": "Owmby",
+   "ons": [
+    {
+     "code": "E04006032",
+     "name": "Owmby-by-Spital"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Owmby-by-Spital\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2631P055",
+   "councilGss": "E07000143",
+   "name": "Little Cressingham & Threxton",
+   "ons": [
+    {
+     "code": "E04006138",
+     "name": "Little Cressingham"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Threxton\" to \"Little Cressingham\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2632P016",
+   "councilGss": "E07000144",
+   "name": "Cantley",
+   "ons": [
+    {
+     "code": "E04006212",
+     "name": "Cantley, Limpenhoe and Southwood"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Cantley, Limpenhoe and Southwood\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2635P065",
+   "councilGss": "E07000147",
+   "name": "Matlaske",
+   "ons": [
+    {
+     "code": "E04006448",
+     "name": "Matlask"
+    }
+   ],
+   "evidence": "Spelling: \"Matlask\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2637P061",
+   "councilGss": "E07000149",
+   "name": "Kimberley",
+   "ons": [
+    {
+     "code": "E04006565",
+     "name": "Kimberley and Carleton Forehoe"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Kimberley and Carleton Forehoe\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P007",
+   "councilGss": "E06000065",
+   "name": "Aiskew",
+   "ons": [
+    {
+     "code": "E04007130",
+     "name": "Aiskew and Leeming Bar"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Aiskew and Leeming Bar\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P008",
+   "councilGss": "E06000065",
+   "name": "Aislaby",
+   "ons": [
+    {
+     "code": "E04007657",
+     "name": "Aislaby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire, with no district in the return. The other ONS Aislaby (E04007543) lies in Kirkbymoorside & Dales ward with Middleton and Wrelton, the partners named in row E2702P009 \"Aislaby with Middleton & Wrelton\". This row is therefore the Aislaby in Esk Valley & Coast ward, former Scarborough district.",
+   "formerDistrict": "Scarborough",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P009",
+   "councilGss": "E06000065",
+   "name": "Aislaby with Middleton & Wrelton",
+   "ons": [
+    {
+     "code": "E04007543",
+     "name": "Aislaby"
+    },
+    {
+     "code": "E04007607",
+     "name": "Middleton"
+    },
+    {
+     "code": "E04007655",
+     "name": "Wrelton"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row. All three lie in Kirkbymoorside & Dales ward (former Ryedale district); the other ONS Aislaby is near Whitby.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P041",
+   "councilGss": "E06000065",
+   "name": "Barden (Craven)",
+   "ons": [
+    {
+     "code": "E04007059",
+     "name": "Barden"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Craven district; the ONS parish lies in Wharfedale ward, which is in the former Craven district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P042",
+   "councilGss": "E06000065",
+   "name": "Barden (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007451",
+     "name": "Barden"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in Scotton & Lower Wensleydale ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P076",
+   "councilGss": "E06000065",
+   "name": "Borrowby",
+   "ons": [
+    {
+     "code": "E04007143",
+     "name": "Borrowby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire. Row E2702P077 is the Borrowby grouped with Newton Mulgrave and Roxby (former Scarborough district), so this row is the other ONS Borrowby, in Hillside & Raskelf ward, former Hambleton district.",
+   "formerDistrict": "Hambleton",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P077",
+   "councilGss": "E06000065",
+   "name": "Borrowby (grouped with Newton Mulgrave and Roxby)",
+   "ons": [
+    {
+     "code": "E04007659",
+     "name": "Borrowby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire. This row is grouped with Newton Mulgrave and Roxby, which lie with ONS Borrowby E04007659 in Danby & Mulgrave ward, former Scarborough district.",
+   "formerDistrict": "Scarborough",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P079",
+   "councilGss": "E06000065",
+   "name": "Brafferton",
+   "ons": [
+    {
+     "code": "E04012963",
+     "name": "Brafferton and Helperby"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Brafferton and Helperby\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P085",
+   "councilGss": "E06000065",
+   "name": "Brompton (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007146",
+     "name": "Brompton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Northallerton North & Brompton ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P086",
+   "councilGss": "E06000065",
+   "name": "Brompton (Scarborough)",
+   "ons": [
+    {
+     "code": "E04007660",
+     "name": "Brompton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Scarborough district; the ONS parish lies in Derwent Valley & Moor ward, which is in the former Scarborough district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P090",
+   "councilGss": "E06000065",
+   "name": "Broughton (Craven)",
+   "ons": [
+    {
+     "code": "E04007065",
+     "name": "Broughton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Craven district; the ONS parish lies in Skipton West & West Craven ward, which is in the former Craven district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P091",
+   "councilGss": "E06000065",
+   "name": "Broughton (Ryedale)",
+   "ons": [
+    {
+     "code": "E04007556",
+     "name": "Broughton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Ryedale district; the ONS parish lies in Amotherby & Ampleforth ward, which is in the former Ryedale district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P106",
+   "councilGss": "E06000065",
+   "name": "Byland with Wass & Oldstead",
+   "ons": [
+    {
+     "code": "E04007560",
+     "name": "Byland with Wass"
+    },
+    {
+     "code": "E04007614",
+     "name": "Oldstead"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P113",
+   "councilGss": "E06000065",
+   "name": "Carlton (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007149",
+     "name": "Carlton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Hutton Rudby & Osmotherley ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P114",
+   "councilGss": "E06000065",
+   "name": "Carlton (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007462",
+     "name": "Carlton Town"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in Leyburn & Middleham ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district). The ONS names it \"Carlton Town\".",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P115",
+   "councilGss": "E06000065",
+   "name": "Carlton (Selby)",
+   "ons": [
+    {
+     "code": "E04007727",
+     "name": "Carlton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Selby district; the ONS parish lies in Camblesforth & Carlton ward, which is in the former Selby district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P134",
+   "councilGss": "E06000065",
+   "name": "Cliffe (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007467",
+     "name": "Cliffe"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in North Richmondshire ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P135",
+   "councilGss": "E06000065",
+   "name": "Cliffe (Selby)",
+   "ons": [
+    {
+     "code": "E04007732",
+     "name": "Cliffe"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Selby district; the ONS parish lies in Cliffe & North Duffield ward, which is in the former Selby district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P164",
+   "councilGss": "E06000065",
+   "name": "Dalton (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007163",
+     "name": "Dalton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Sowerby & Topcliffe ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P165",
+   "councilGss": "E06000065",
+   "name": "Dalton (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007472",
+     "name": "Dalton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in North Richmondshire ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P177",
+   "councilGss": "E06000065",
+   "name": "Easby (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007165",
+     "name": "Easby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Great Ayton ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P178",
+   "councilGss": "E06000065",
+   "name": "Easby (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007475",
+     "name": "Easby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in Catterick Village & Brompton-on-Swale ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P304",
+   "councilGss": "E06000065",
+   "name": "Hornby (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007192",
+     "name": "Hornby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Morton-on-Swale & Appleton Wiske ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P305",
+   "councilGss": "E06000065",
+   "name": "Hornby (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007492",
+     "name": "Hornby"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in Scotton & Lower Wensleydale ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P341",
+   "councilGss": "E06000065",
+   "name": "Kirby Hill (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007496",
+     "name": "Kirby Hill"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in North Richmondshire ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P342",
+   "councilGss": "E06000065",
+   "name": "Kirby Hill (Harrogate)",
+   "ons": [
+    {
+     "code": "E04007367",
+     "name": "Kirby Hill"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Harrogate district; the ONS parish lies in Wathvale & Bishop Monkton ward, which is in the former Harrogate district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P384",
+   "councilGss": "E06000065",
+   "name": "Little Smeaton (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007221",
+     "name": "Little Smeaton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Morton-on-Swale & Appleton Wiske ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P385",
+   "councilGss": "E06000065",
+   "name": "Little Smeaton (Selby)",
+   "ons": [
+    {
+     "code": "E04007755",
+     "name": "Little Smeaton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Selby district; the ONS parish lies in Osgoldcross ward, which is in the former Selby district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P511",
+   "councilGss": "E06000065",
+   "name": "Scotton (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007523",
+     "name": "Scotton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in Scotton & Lower Wensleydale ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P512",
+   "councilGss": "E06000065",
+   "name": "Scotton (Harrogate)",
+   "ons": [
+    {
+     "code": "E04007412",
+     "name": "Scotton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Harrogate district; the ONS parish lies in Boroughbridge & Claro ward, which is in the former Harrogate district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P516",
+   "councilGss": "E06000065",
+   "name": "Seamer (Hambleton)",
+   "ons": [
+    {
+     "code": "E04007252",
+     "name": "Seamer"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Hambleton district; the ONS parish lies in Hutton Rudby & Osmotherley ward, which is in the former Hambleton district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P517",
+   "councilGss": "E06000065",
+   "name": "Seamer (Scarborough)",
+   "ons": [
+    {
+     "code": "E04007697",
+     "name": "Seamer"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Scarborough district; the ONS parish lies in Seamer ward, which is in the former Scarborough district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P532",
+   "councilGss": "E06000065",
+   "name": "Skelton",
+   "ons": [
+    {
+     "code": "E04007417",
+     "name": "Skelton-on-Ure"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Skelton-on-Ure\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P556",
+   "councilGss": "E06000065",
+   "name": "Stainton Dale",
+   "ons": [
+    {
+     "code": "E04007701",
+     "name": "Staintondale"
+    }
+   ],
+   "evidence": "Spelling: \"Staintondale\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P558",
+   "councilGss": "E06000065",
+   "name": "Stapleton (Richmondshire)",
+   "ons": [
+    {
+     "code": "E04007528",
+     "name": "Stapleton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Richmondshire district; the ONS parish lies in North Richmondshire ward, which is in the former Richmondshire district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2702P559",
+   "councilGss": "E06000065",
+   "name": "Stapleton (Selby)",
+   "ons": [
+    {
+     "code": "E04007769",
+     "name": "Stapleton"
+    }
+   ],
+   "evidence": "Same name twice in North Yorkshire: the return names the former Selby district; the ONS parish lies in Osgoldcross ward, which is in the former Selby district (ONS parish codes run in blocks by former district).",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2802P068",
+   "councilGss": "E06000062",
+   "name": "Greatworth",
+   "ons": [
+    {
+     "code": "E04006828",
+     "name": "Greatworth and Halse"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Greatworth and Halse\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2802P085",
+   "councilGss": "E06000062",
+   "name": "Hunsbury Meadow",
+   "ons": [
+    {
+     "code": "E04013524",
+     "name": "Hunsbury Meadows"
+    }
+   ],
+   "evidence": "Spelling: \"Hunsbury Meadows\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E2802P163",
+   "councilGss": "E06000062",
+   "name": "Far Cotton",
+   "ons": [
+    {
+     "code": "E04013031",
+     "name": "Far Cotton and Delapre"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Far Cotton and Delapre\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3032P045",
+   "councilGss": "E07000171",
+   "name": "Rampton",
+   "ons": [
+    {
+     "code": "E04007830",
+     "name": "Rampton and Woodbeck"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Rampton and Woodbeck\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3133P088",
+   "councilGss": "E07000179",
+   "name": "Aston Tirrold & Upthorpe",
+   "ons": [
+    {
+     "code": "E04008102",
+     "name": "Aston Tirrold"
+    },
+    {
+     "code": "E04008103",
+     "name": "Aston Upthorpe"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3134P001",
+   "councilGss": "E07000180",
+   "name": "Abingdon",
+   "ons": [
+    {
+     "code": "E04012866",
+     "name": "Abingdon on Thames"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Abingdon on Thames\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3135P003",
+   "councilGss": "E07000181",
+   "name": "Asthal",
+   "ons": [
+    {
+     "code": "E04012208",
+     "name": "Asthall"
+    }
+   ],
+   "evidence": "Spelling: \"Asthall\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3135P068",
+   "councilGss": "E07000181",
+   "name": "South Leigh",
+   "ons": [
+    {
+     "code": "E04008323",
+     "name": "South Leigh and High Cogges"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"South Leigh and High Cogges\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P001",
+   "councilGss": "E06000051",
+   "name": "Abdon (grouped with Heath)",
+   "ons": [
+    {
+     "code": "E04012659",
+     "name": "Abdon and Heath"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Abdon and Heath\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P026",
+   "councilGss": "E06000051",
+   "name": "Billinglsey (grouped with Deuxhill Glazeley & Middleton Scriven)",
+   "ons": [
+    {
+     "code": "E04011222",
+     "name": "Billingsley"
+    }
+   ],
+   "evidence": "Spelling: \"Billingsley\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P054",
+   "councilGss": "E06000051",
+   "name": "Clun & Chapel Lawn",
+   "ons": [
+    {
+     "code": "E04011250",
+     "name": "Clun"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Chapel Lawn\" to \"Clun\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P097",
+   "councilGss": "E06000051",
+   "name": "Ightfield & Calverhall",
+   "ons": [
+    {
+     "code": "E04011293",
+     "name": "Ightfield"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Calverhall\" to \"Ightfield\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P106",
+   "councilGss": "E06000051",
+   "name": "Llanfairwaterdine",
+   "ons": [
+    {
+     "code": "E04011302",
+     "name": "Llanfair Waterdine"
+    }
+   ],
+   "evidence": "Spelling: \"Llanfair Waterdine\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3202P155",
+   "councilGss": "E06000051",
+   "name": "Ryton & Grindle",
+   "ons": [
+    {
+     "code": "E04011351",
+     "name": "Ryton"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Grindle\" to \"Ryton\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3301P017",
+   "councilGss": "E06000066",
+   "name": "Barwick",
+   "ons": [
+    {
+     "code": "E04008665",
+     "name": "Barwick and Stoford"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Barwick and Stoford\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3301P164",
+   "councilGss": "E06000066",
+   "name": "Lamyat",
+   "ons": [
+    {
+     "code": "E04008566",
+     "name": "Lamyatt"
+    }
+   ],
+   "evidence": "Spelling: \"Lamyatt\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3301P253",
+   "councilGss": "E06000066",
+   "name": "South Cadbury",
+   "ons": [
+    {
+     "code": "E04008754",
+     "name": "South Cadbury and Sutton Montis"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"South Cadbury and Sutton Montis\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3435P001",
+   "councilGss": "E07000196",
+   "name": "Acton Trussell and Bednall & Teddesley Hay",
+   "ons": [
+    {
+     "code": "E04008954",
+     "name": "Acton Trussell and Bednall"
+    },
+    {
+     "code": "E04008980",
+     "name": "Teddesley Hay"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3534P123",
+   "councilGss": "E07000203",
+   "name": "Damsden",
+   "ons": [
+    {
+     "code": "E04012277",
+     "name": "Darmsden"
+    }
+   ],
+   "evidence": "Spelling: \"Darmsden\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3538149",
+   "councilGss": "E07000244",
+   "name": "Sweffling",
+   "ons": [
+    {
+     "code": "E04009461",
+     "name": "Swefling"
+    }
+   ],
+   "evidence": "Spelling: \"Swefling\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E353829",
+   "councilGss": "E07000244",
+   "name": "Campsey Ashe",
+   "ons": [
+    {
+     "code": "E04009384",
+     "name": "Campsey Ash"
+    }
+   ],
+   "evidence": "Spelling: \"Campsey Ash\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3539P066",
+   "councilGss": "E07000245",
+   "name": "Mildenhall",
+   "ons": [
+    {
+     "code": "E04012952",
+     "name": "Mildenhall High"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Mildenhall High\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3734P008",
+   "councilGss": "E07000221",
+   "name": "Barcheston & Willington",
+   "ons": [
+    {
+     "code": "E04009707",
+     "name": "Barcheston"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Willington\" to \"Barcheston\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3734P075",
+   "councilGss": "E07000221",
+   "name": "Radbourne",
+   "ons": [
+    {
+     "code": "E04009773",
+     "name": "Radbourn"
+    }
+   ],
+   "evidence": "Spelling: \"Radbourn\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3734P101",
+   "councilGss": "E07000221",
+   "name": "Wellesbourne",
+   "ons": [
+    {
+     "code": "E04009801",
+     "name": "Wellesbourne and Walton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Wellesbourne and Walton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3735P005",
+   "councilGss": "E07000222",
+   "name": "Beausale (grouped with Haseley Honiley and Wroxall)",
+   "ons": [
+    {
+     "code": "E04009845",
+     "name": "Beausale, Haseley, Honiley and Wroxall"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Beausale, Haseley, Honiley and Wroxall\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3901P019",
+   "councilGss": "E06000030",
+   "name": "Central Swindon South",
+   "ons": [
+    {
+     "code": "E04012664",
+     "name": "South Swindon"
+    }
+   ],
+   "evidence": "The ONS names this parish \"South Swindon\"; it is the only unmatched Swindon parish in the council. The automatic suggestion (Central Swindon North, already matched to its own row) is wrong and rejected.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P019",
+   "councilGss": "E06000054",
+   "name": "Biddestone",
+   "ons": [
+    {
+     "code": "E04013446",
+     "name": "Biddestone & Slaughterford"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Biddestone & Slaughterford\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P042",
+   "councilGss": "E06000054",
+   "name": "Burcombe",
+   "ons": [
+    {
+     "code": "E04011658",
+     "name": "Burcombe Without"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Burcombe Without\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P049",
+   "councilGss": "E06000054",
+   "name": "Charlton St Peter & Wiltsford",
+   "ons": [
+    {
+     "code": "E04011665",
+     "name": "Charlton St Peter"
+    },
+    {
+     "code": "E04011858",
+     "name": "Wilsford"
+    }
+   ],
+   "evidence": "Combined name: each place in the return's name is a separate ONS parish in this council, neither matched by another row. The return spells Wilsford \"Wiltsford\".",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P100",
+   "councilGss": "E06000054",
+   "name": "Fittleton",
+   "ons": [
+    {
+     "code": "E04013459",
+     "name": "Fittleton cum Haxton"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Fittleton cum Haxton\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P135",
+   "councilGss": "E06000054",
+   "name": "Langley Burrell",
+   "ons": [
+    {
+     "code": "E04013464",
+     "name": "Langley Burrell Without"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Langley Burrell Without\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P137",
+   "councilGss": "E06000054",
+   "name": "Laverstock & Ford",
+   "ons": [
+    {
+     "code": "E04012692",
+     "name": "Laverstock"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Ford\" to \"Laverstock\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P149",
+   "councilGss": "E06000054",
+   "name": "Maiden Bradley",
+   "ons": [
+    {
+     "code": "E04011764",
+     "name": "Maiden Bradley with Yarnfield"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Maiden Bradley with Yarnfield\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P168",
+   "councilGss": "E06000054",
+   "name": "Newton Toney",
+   "ons": [
+    {
+     "code": "E04011783",
+     "name": "Newton Tony"
+    }
+   ],
+   "evidence": "Spelling: \"Newton Tony\" differs from the ONS name by a letter or a space; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish of a similar name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P172",
+   "councilGss": "E06000054",
+   "name": "Norton & Foxley",
+   "ons": [
+    {
+     "code": "E04011787",
+     "name": "Norton"
+    }
+   ],
+   "evidence": "Combined name: the return adds \"Foxley\" to \"Norton\"; the council has no ONS parish of that name, so it lies within the ONS parish; the ONS parish is not matched by any other row of the return in this council.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E3902P215",
+   "councilGss": "E06000054",
+   "name": "Stourton",
+   "ons": [
+    {
+     "code": "E04011829",
+     "name": "Stourton with Gasper"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Stourton with Gasper\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  },
+  {
+   "mhclgCode": "E4705P014",
+   "councilGss": "E08000036",
+   "name": "Normanton",
+   "ons": [
+    {
+     "code": "E04013429",
+     "name": "Normanton and Altofts"
+    }
+   ],
+   "evidence": "Shortened name: the ONS parish \"Normanton and Altofts\" is the same name with a further place added; the ONS parish is not matched by any other row of the return in this council, and the council has no other ONS parish beginning with this name.",
+   "reviewed": "2026-11-15"
+  }
+ ],
+ "rejected": [
+  {
+   "mhclgCode": "E2702P415",
+   "councilGss": "E06000065",
+   "name": "Melmerby",
+   "suggestion": [
+    "E04007388 Melmerby (Wathvale & Bishop Monkton ward)",
+    "E04007503 Melmerby (Leyburn & Middleham ward)"
+   ],
+   "reason": "Two ONS parishes are named Melmerby in North Yorkshire and the return has one Melmerby row with no former district. No held source says which it is, so it has no constituency.",
+   "reviewed": "2026-11-15"
+  }
+ ]
+}

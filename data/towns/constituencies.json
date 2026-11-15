@@ -1,0 +1,2187 @@
+{
+ "source": {
+  "publisher": "UK Places (estate registry)",
+  "repository": "tompickup23/ukplaces",
+  "path": "src/data/registry/constituencies.json",
+  "commit": "5204fb82c8e59f95d94c74c6715f7b64ec80995b",
+  "committed": "2026-09-27",
+  "sha256": "5267eea73b233cfc84a84aee71dd790a39b8ae6988aced2bf8a7c9dfba48355b",
+  "copied": "2026-11-15",
+  "fields": "pcon24cd, slug and name only; the same slugs as UK Places /constituencies/<slug>/ and UK Elections /seats/parliament/<slug>/",
+  "note": "Copied, not imported across repositories. Names are checked against the ONS ward to constituency file by scripts/import-towns.mjs."
+ },
+ "constituencies": {
+  "E14001063": {
+   "slug": "aldershot",
+   "name": "Aldershot"
+  },
+  "E14001064": {
+   "slug": "aldridge-brownhills",
+   "name": "Aldridge-Brownhills"
+  },
+  "E14001065": {
+   "slug": "altrincham-and-sale-west",
+   "name": "Altrincham and Sale West"
+  },
+  "E14001066": {
+   "slug": "amber-valley",
+   "name": "Amber Valley"
+  },
+  "E14001067": {
+   "slug": "arundel-and-south-downs",
+   "name": "Arundel and South Downs"
+  },
+  "E14001068": {
+   "slug": "ashfield",
+   "name": "Ashfield"
+  },
+  "E14001069": {
+   "slug": "ashford",
+   "name": "Ashford"
+  },
+  "E14001070": {
+   "slug": "ashton-under-lyne",
+   "name": "Ashton-under-Lyne"
+  },
+  "E14001071": {
+   "slug": "aylesbury",
+   "name": "Aylesbury"
+  },
+  "E14001072": {
+   "slug": "banbury",
+   "name": "Banbury"
+  },
+  "E14001073": {
+   "slug": "barking",
+   "name": "Barking"
+  },
+  "E14001074": {
+   "slug": "barnsley-north",
+   "name": "Barnsley North"
+  },
+  "E14001075": {
+   "slug": "barnsley-south",
+   "name": "Barnsley South"
+  },
+  "E14001076": {
+   "slug": "barrow-and-furness",
+   "name": "Barrow and Furness"
+  },
+  "E14001077": {
+   "slug": "basildon-and-billericay",
+   "name": "Basildon and Billericay"
+  },
+  "E14001078": {
+   "slug": "basingstoke",
+   "name": "Basingstoke"
+  },
+  "E14001079": {
+   "slug": "bassetlaw",
+   "name": "Bassetlaw"
+  },
+  "E14001080": {
+   "slug": "bath",
+   "name": "Bath"
+  },
+  "E14001081": {
+   "slug": "battersea",
+   "name": "Battersea"
+  },
+  "E14001082": {
+   "slug": "beaconsfield",
+   "name": "Beaconsfield"
+  },
+  "E14001083": {
+   "slug": "beckenham-and-penge",
+   "name": "Beckenham and Penge"
+  },
+  "E14001084": {
+   "slug": "bedford",
+   "name": "Bedford"
+  },
+  "E14001085": {
+   "slug": "bermondsey-and-old-southwark",
+   "name": "Bermondsey and Old Southwark"
+  },
+  "E14001086": {
+   "slug": "bethnal-green-and-stepney",
+   "name": "Bethnal Green and Stepney"
+  },
+  "E14001087": {
+   "slug": "beverley-and-holderness",
+   "name": "Beverley and Holderness"
+  },
+  "E14001088": {
+   "slug": "bexhill-and-battle",
+   "name": "Bexhill and Battle"
+  },
+  "E14001089": {
+   "slug": "bexleyheath-and-crayford",
+   "name": "Bexleyheath and Crayford"
+  },
+  "E14001090": {
+   "slug": "bicester-and-woodstock",
+   "name": "Bicester and Woodstock"
+  },
+  "E14001091": {
+   "slug": "birkenhead",
+   "name": "Birkenhead"
+  },
+  "E14001092": {
+   "slug": "birmingham-edgbaston",
+   "name": "Birmingham Edgbaston"
+  },
+  "E14001093": {
+   "slug": "birmingham-erdington",
+   "name": "Birmingham Erdington"
+  },
+  "E14001094": {
+   "slug": "birmingham-hall-green-and-moseley",
+   "name": "Birmingham Hall Green and Moseley"
+  },
+  "E14001095": {
+   "slug": "birmingham-hodge-hill-and-solihull-north",
+   "name": "Birmingham Hodge Hill and Solihull North"
+  },
+  "E14001096": {
+   "slug": "birmingham-ladywood",
+   "name": "Birmingham Ladywood"
+  },
+  "E14001097": {
+   "slug": "birmingham-northfield",
+   "name": "Birmingham Northfield"
+  },
+  "E14001098": {
+   "slug": "birmingham-perry-barr",
+   "name": "Birmingham Perry Barr"
+  },
+  "E14001099": {
+   "slug": "birmingham-selly-oak",
+   "name": "Birmingham Selly Oak"
+  },
+  "E14001100": {
+   "slug": "birmingham-yardley",
+   "name": "Birmingham Yardley"
+  },
+  "E14001101": {
+   "slug": "bishop-auckland",
+   "name": "Bishop Auckland"
+  },
+  "E14001102": {
+   "slug": "blackburn",
+   "name": "Blackburn"
+  },
+  "E14001103": {
+   "slug": "blackley-and-middleton-south",
+   "name": "Blackley and Middleton South"
+  },
+  "E14001104": {
+   "slug": "blackpool-north-and-fleetwood",
+   "name": "Blackpool North and Fleetwood"
+  },
+  "E14001105": {
+   "slug": "blackpool-south",
+   "name": "Blackpool South"
+  },
+  "E14001106": {
+   "slug": "blaydon-and-consett",
+   "name": "Blaydon and Consett"
+  },
+  "E14001107": {
+   "slug": "blyth-and-ashington",
+   "name": "Blyth and Ashington"
+  },
+  "E14001108": {
+   "slug": "bognor-regis-and-littlehampton",
+   "name": "Bognor Regis and Littlehampton"
+  },
+  "E14001109": {
+   "slug": "bolsover",
+   "name": "Bolsover"
+  },
+  "E14001110": {
+   "slug": "bolton-north-east",
+   "name": "Bolton North East"
+  },
+  "E14001111": {
+   "slug": "bolton-south-and-walkden",
+   "name": "Bolton South and Walkden"
+  },
+  "E14001112": {
+   "slug": "bolton-west",
+   "name": "Bolton West"
+  },
+  "E14001113": {
+   "slug": "bootle",
+   "name": "Bootle"
+  },
+  "E14001114": {
+   "slug": "boston-and-skegness",
+   "name": "Boston and Skegness"
+  },
+  "E14001115": {
+   "slug": "bournemouth-east",
+   "name": "Bournemouth East"
+  },
+  "E14001116": {
+   "slug": "bournemouth-west",
+   "name": "Bournemouth West"
+  },
+  "E14001117": {
+   "slug": "bracknell",
+   "name": "Bracknell"
+  },
+  "E14001118": {
+   "slug": "bradford-east",
+   "name": "Bradford East"
+  },
+  "E14001119": {
+   "slug": "bradford-south",
+   "name": "Bradford South"
+  },
+  "E14001120": {
+   "slug": "bradford-west",
+   "name": "Bradford West"
+  },
+  "E14001121": {
+   "slug": "braintree",
+   "name": "Braintree"
+  },
+  "E14001122": {
+   "slug": "brent-east",
+   "name": "Brent East"
+  },
+  "E14001123": {
+   "slug": "brent-west",
+   "name": "Brent West"
+  },
+  "E14001124": {
+   "slug": "brentford-and-isleworth",
+   "name": "Brentford and Isleworth"
+  },
+  "E14001125": {
+   "slug": "brentwood-and-ongar",
+   "name": "Brentwood and Ongar"
+  },
+  "E14001126": {
+   "slug": "bridgwater",
+   "name": "Bridgwater"
+  },
+  "E14001127": {
+   "slug": "bridlington-and-the-wolds",
+   "name": "Bridlington and The Wolds"
+  },
+  "E14001128": {
+   "slug": "brigg-and-immingham",
+   "name": "Brigg and Immingham"
+  },
+  "E14001129": {
+   "slug": "brighton-kemptown-and-peacehaven",
+   "name": "Brighton Kemptown and Peacehaven"
+  },
+  "E14001130": {
+   "slug": "brighton-pavilion",
+   "name": "Brighton Pavilion"
+  },
+  "E14001131": {
+   "slug": "bristol-central",
+   "name": "Bristol Central"
+  },
+  "E14001132": {
+   "slug": "bristol-east",
+   "name": "Bristol East"
+  },
+  "E14001133": {
+   "slug": "bristol-north-east",
+   "name": "Bristol North East"
+  },
+  "E14001134": {
+   "slug": "bristol-north-west",
+   "name": "Bristol North West"
+  },
+  "E14001135": {
+   "slug": "bristol-south",
+   "name": "Bristol South"
+  },
+  "E14001136": {
+   "slug": "broadland-and-fakenham",
+   "name": "Broadland and Fakenham"
+  },
+  "E14001137": {
+   "slug": "bromley-and-biggin-hill",
+   "name": "Bromley and Biggin Hill"
+  },
+  "E14001138": {
+   "slug": "bromsgrove",
+   "name": "Bromsgrove"
+  },
+  "E14001139": {
+   "slug": "broxbourne",
+   "name": "Broxbourne"
+  },
+  "E14001140": {
+   "slug": "broxtowe",
+   "name": "Broxtowe"
+  },
+  "E14001141": {
+   "slug": "buckingham-and-bletchley",
+   "name": "Buckingham and Bletchley"
+  },
+  "E14001142": {
+   "slug": "burnley",
+   "name": "Burnley"
+  },
+  "E14001143": {
+   "slug": "burton-and-uttoxeter",
+   "name": "Burton and Uttoxeter"
+  },
+  "E14001144": {
+   "slug": "bury-north",
+   "name": "Bury North"
+  },
+  "E14001145": {
+   "slug": "bury-south",
+   "name": "Bury South"
+  },
+  "E14001146": {
+   "slug": "bury-st-edmunds-and-stowmarket",
+   "name": "Bury St Edmunds and Stowmarket"
+  },
+  "E14001147": {
+   "slug": "calder-valley",
+   "name": "Calder Valley"
+  },
+  "E14001148": {
+   "slug": "camborne-and-redruth",
+   "name": "Camborne and Redruth"
+  },
+  "E14001149": {
+   "slug": "cambridge",
+   "name": "Cambridge"
+  },
+  "E14001150": {
+   "slug": "cannock-chase",
+   "name": "Cannock Chase"
+  },
+  "E14001151": {
+   "slug": "canterbury",
+   "name": "Canterbury"
+  },
+  "E14001152": {
+   "slug": "carlisle",
+   "name": "Carlisle"
+  },
+  "E14001153": {
+   "slug": "carshalton-and-wallington",
+   "name": "Carshalton and Wallington"
+  },
+  "E14001154": {
+   "slug": "castle-point",
+   "name": "Castle Point"
+  },
+  "E14001155": {
+   "slug": "central-devon",
+   "name": "Central Devon"
+  },
+  "E14001156": {
+   "slug": "central-suffolk-and-north-ipswich",
+   "name": "Central Suffolk and North Ipswich"
+  },
+  "E14001157": {
+   "slug": "chatham-and-aylesford",
+   "name": "Chatham and Aylesford"
+  },
+  "E14001158": {
+   "slug": "cheadle",
+   "name": "Cheadle"
+  },
+  "E14001159": {
+   "slug": "chelmsford",
+   "name": "Chelmsford"
+  },
+  "E14001160": {
+   "slug": "chelsea-and-fulham",
+   "name": "Chelsea and Fulham"
+  },
+  "E14001161": {
+   "slug": "cheltenham",
+   "name": "Cheltenham"
+  },
+  "E14001162": {
+   "slug": "chesham-and-amersham",
+   "name": "Chesham and Amersham"
+  },
+  "E14001163": {
+   "slug": "chester-north-and-neston",
+   "name": "Chester North and Neston"
+  },
+  "E14001164": {
+   "slug": "chester-south-and-eddisbury",
+   "name": "Chester South and Eddisbury"
+  },
+  "E14001165": {
+   "slug": "chesterfield",
+   "name": "Chesterfield"
+  },
+  "E14001166": {
+   "slug": "chichester",
+   "name": "Chichester"
+  },
+  "E14001167": {
+   "slug": "chingford-and-woodford-green",
+   "name": "Chingford and Woodford Green"
+  },
+  "E14001168": {
+   "slug": "chippenham",
+   "name": "Chippenham"
+  },
+  "E14001169": {
+   "slug": "chipping-barnet",
+   "name": "Chipping Barnet"
+  },
+  "E14001170": {
+   "slug": "chorley",
+   "name": "Chorley"
+  },
+  "E14001171": {
+   "slug": "christchurch",
+   "name": "Christchurch"
+  },
+  "E14001172": {
+   "slug": "cities-of-london-and-westminster",
+   "name": "Cities of London and Westminster"
+  },
+  "E14001173": {
+   "slug": "city-of-durham",
+   "name": "City of Durham"
+  },
+  "E14001174": {
+   "slug": "clacton",
+   "name": "Clacton"
+  },
+  "E14001175": {
+   "slug": "clapham-and-brixton-hill",
+   "name": "Clapham and Brixton Hill"
+  },
+  "E14001176": {
+   "slug": "colchester",
+   "name": "Colchester"
+  },
+  "E14001177": {
+   "slug": "colne-valley",
+   "name": "Colne Valley"
+  },
+  "E14001178": {
+   "slug": "congleton",
+   "name": "Congleton"
+  },
+  "E14001179": {
+   "slug": "corby-and-east-northamptonshire",
+   "name": "Corby and East Northamptonshire"
+  },
+  "E14001180": {
+   "slug": "coventry-east",
+   "name": "Coventry East"
+  },
+  "E14001181": {
+   "slug": "coventry-north-west",
+   "name": "Coventry North West"
+  },
+  "E14001182": {
+   "slug": "coventry-south",
+   "name": "Coventry South"
+  },
+  "E14001183": {
+   "slug": "cramlington-and-killingworth",
+   "name": "Cramlington and Killingworth"
+  },
+  "E14001184": {
+   "slug": "crawley",
+   "name": "Crawley"
+  },
+  "E14001185": {
+   "slug": "crewe-and-nantwich",
+   "name": "Crewe and Nantwich"
+  },
+  "E14001186": {
+   "slug": "croydon-east",
+   "name": "Croydon East"
+  },
+  "E14001187": {
+   "slug": "croydon-south",
+   "name": "Croydon South"
+  },
+  "E14001188": {
+   "slug": "croydon-west",
+   "name": "Croydon West"
+  },
+  "E14001189": {
+   "slug": "dagenham-and-rainham",
+   "name": "Dagenham and Rainham"
+  },
+  "E14001190": {
+   "slug": "darlington",
+   "name": "Darlington"
+  },
+  "E14001191": {
+   "slug": "dartford",
+   "name": "Dartford"
+  },
+  "E14001192": {
+   "slug": "daventry",
+   "name": "Daventry"
+  },
+  "E14001193": {
+   "slug": "derby-north",
+   "name": "Derby North"
+  },
+  "E14001194": {
+   "slug": "derby-south",
+   "name": "Derby South"
+  },
+  "E14001195": {
+   "slug": "derbyshire-dales",
+   "name": "Derbyshire Dales"
+  },
+  "E14001196": {
+   "slug": "dewsbury-and-batley",
+   "name": "Dewsbury and Batley"
+  },
+  "E14001197": {
+   "slug": "didcot-and-wantage",
+   "name": "Didcot and Wantage"
+  },
+  "E14001198": {
+   "slug": "doncaster-central",
+   "name": "Doncaster Central"
+  },
+  "E14001199": {
+   "slug": "doncaster-east-and-the-isle-of-axholme",
+   "name": "Doncaster East and the Isle of Axholme"
+  },
+  "E14001200": {
+   "slug": "doncaster-north",
+   "name": "Doncaster North"
+  },
+  "E14001201": {
+   "slug": "dorking-and-horley",
+   "name": "Dorking and Horley"
+  },
+  "E14001202": {
+   "slug": "dover-and-deal",
+   "name": "Dover and Deal"
+  },
+  "E14001203": {
+   "slug": "droitwich-and-evesham",
+   "name": "Droitwich and Evesham"
+  },
+  "E14001204": {
+   "slug": "dudley",
+   "name": "Dudley"
+  },
+  "E14001205": {
+   "slug": "dulwich-and-west-norwood",
+   "name": "Dulwich and West Norwood"
+  },
+  "E14001206": {
+   "slug": "dunstable-and-leighton-buzzard",
+   "name": "Dunstable and Leighton Buzzard"
+  },
+  "E14001207": {
+   "slug": "ealing-central-and-acton",
+   "name": "Ealing Central and Acton"
+  },
+  "E14001208": {
+   "slug": "ealing-north",
+   "name": "Ealing North"
+  },
+  "E14001209": {
+   "slug": "ealing-southall",
+   "name": "Ealing Southall"
+  },
+  "E14001210": {
+   "slug": "earley-and-woodley",
+   "name": "Earley and Woodley"
+  },
+  "E14001211": {
+   "slug": "easington",
+   "name": "Easington"
+  },
+  "E14001212": {
+   "slug": "east-grinstead-and-uckfield",
+   "name": "East Grinstead and Uckfield"
+  },
+  "E14001213": {
+   "slug": "east-ham",
+   "name": "East Ham"
+  },
+  "E14001214": {
+   "slug": "east-hampshire",
+   "name": "East Hampshire"
+  },
+  "E14001215": {
+   "slug": "east-surrey",
+   "name": "East Surrey"
+  },
+  "E14001216": {
+   "slug": "east-thanet",
+   "name": "East Thanet"
+  },
+  "E14001217": {
+   "slug": "east-wiltshire",
+   "name": "East Wiltshire"
+  },
+  "E14001218": {
+   "slug": "east-worthing-and-shoreham",
+   "name": "East Worthing and Shoreham"
+  },
+  "E14001219": {
+   "slug": "eastbourne",
+   "name": "Eastbourne"
+  },
+  "E14001220": {
+   "slug": "eastleigh",
+   "name": "Eastleigh"
+  },
+  "E14001221": {
+   "slug": "edmonton-and-winchmore-hill",
+   "name": "Edmonton and Winchmore Hill"
+  },
+  "E14001222": {
+   "slug": "ellesmere-port-and-bromborough",
+   "name": "Ellesmere Port and Bromborough"
+  },
+  "E14001223": {
+   "slug": "eltham-and-chislehurst",
+   "name": "Eltham and Chislehurst"
+  },
+  "E14001224": {
+   "slug": "ely-and-east-cambridgeshire",
+   "name": "Ely and East Cambridgeshire"
+  },
+  "E14001225": {
+   "slug": "enfield-north",
+   "name": "Enfield North"
+  },
+  "E14001226": {
+   "slug": "epping-forest",
+   "name": "Epping Forest"
+  },
+  "E14001227": {
+   "slug": "epsom-and-ewell",
+   "name": "Epsom and Ewell"
+  },
+  "E14001228": {
+   "slug": "erewash",
+   "name": "Erewash"
+  },
+  "E14001229": {
+   "slug": "erith-and-thamesmead",
+   "name": "Erith and Thamesmead"
+  },
+  "E14001230": {
+   "slug": "esher-and-walton",
+   "name": "Esher and Walton"
+  },
+  "E14001231": {
+   "slug": "exeter",
+   "name": "Exeter"
+  },
+  "E14001232": {
+   "slug": "exmouth-and-exeter-east",
+   "name": "Exmouth and Exeter East"
+  },
+  "E14001233": {
+   "slug": "fareham-and-waterlooville",
+   "name": "Fareham and Waterlooville"
+  },
+  "E14001234": {
+   "slug": "farnham-and-bordon",
+   "name": "Farnham and Bordon"
+  },
+  "E14001235": {
+   "slug": "faversham-and-mid-kent",
+   "name": "Faversham and Mid Kent"
+  },
+  "E14001236": {
+   "slug": "feltham-and-heston",
+   "name": "Feltham and Heston"
+  },
+  "E14001237": {
+   "slug": "filton-and-bradley-stoke",
+   "name": "Filton and Bradley Stoke"
+  },
+  "E14001238": {
+   "slug": "finchley-and-golders-green",
+   "name": "Finchley and Golders Green"
+  },
+  "E14001239": {
+   "slug": "folkestone-and-hythe",
+   "name": "Folkestone and Hythe"
+  },
+  "E14001240": {
+   "slug": "forest-of-dean",
+   "name": "Forest of Dean"
+  },
+  "E14001241": {
+   "slug": "frome-and-east-somerset",
+   "name": "Frome and East Somerset"
+  },
+  "E14001242": {
+   "slug": "fylde",
+   "name": "Fylde"
+  },
+  "E14001243": {
+   "slug": "gainsborough",
+   "name": "Gainsborough"
+  },
+  "E14001244": {
+   "slug": "gateshead-central-and-whickham",
+   "name": "Gateshead Central and Whickham"
+  },
+  "E14001245": {
+   "slug": "gedling",
+   "name": "Gedling"
+  },
+  "E14001246": {
+   "slug": "gillingham-and-rainham",
+   "name": "Gillingham and Rainham"
+  },
+  "E14001247": {
+   "slug": "glastonbury-and-somerton",
+   "name": "Glastonbury and Somerton"
+  },
+  "E14001248": {
+   "slug": "gloucester",
+   "name": "Gloucester"
+  },
+  "E14001249": {
+   "slug": "godalming-and-ash",
+   "name": "Godalming and Ash"
+  },
+  "E14001250": {
+   "slug": "goole-and-pocklington",
+   "name": "Goole and Pocklington"
+  },
+  "E14001251": {
+   "slug": "gorton-and-denton",
+   "name": "Gorton and Denton"
+  },
+  "E14001252": {
+   "slug": "gosport",
+   "name": "Gosport"
+  },
+  "E14001253": {
+   "slug": "grantham-and-bourne",
+   "name": "Grantham and Bourne"
+  },
+  "E14001254": {
+   "slug": "gravesham",
+   "name": "Gravesham"
+  },
+  "E14001255": {
+   "slug": "great-grimsby-and-cleethorpes",
+   "name": "Great Grimsby and Cleethorpes"
+  },
+  "E14001256": {
+   "slug": "great-yarmouth",
+   "name": "Great Yarmouth"
+  },
+  "E14001257": {
+   "slug": "greenwich-and-woolwich",
+   "name": "Greenwich and Woolwich"
+  },
+  "E14001258": {
+   "slug": "guildford",
+   "name": "Guildford"
+  },
+  "E14001259": {
+   "slug": "hackney-north-and-stoke-newington",
+   "name": "Hackney North and Stoke Newington"
+  },
+  "E14001260": {
+   "slug": "hackney-south-and-shoreditch",
+   "name": "Hackney South and Shoreditch"
+  },
+  "E14001261": {
+   "slug": "halesowen",
+   "name": "Halesowen"
+  },
+  "E14001262": {
+   "slug": "halifax",
+   "name": "Halifax"
+  },
+  "E14001263": {
+   "slug": "hamble-valley",
+   "name": "Hamble Valley"
+  },
+  "E14001264": {
+   "slug": "hammersmith-and-chiswick",
+   "name": "Hammersmith and Chiswick"
+  },
+  "E14001265": {
+   "slug": "hampstead-and-highgate",
+   "name": "Hampstead and Highgate"
+  },
+  "E14001266": {
+   "slug": "harborough-oadby-and-wigston",
+   "name": "Harborough, Oadby and Wigston"
+  },
+  "E14001267": {
+   "slug": "harlow",
+   "name": "Harlow"
+  },
+  "E14001268": {
+   "slug": "harpenden-and-berkhamsted",
+   "name": "Harpenden and Berkhamsted"
+  },
+  "E14001269": {
+   "slug": "harrogate-and-knaresborough",
+   "name": "Harrogate and Knaresborough"
+  },
+  "E14001270": {
+   "slug": "harrow-east",
+   "name": "Harrow East"
+  },
+  "E14001271": {
+   "slug": "harrow-west",
+   "name": "Harrow West"
+  },
+  "E14001272": {
+   "slug": "hartlepool",
+   "name": "Hartlepool"
+  },
+  "E14001273": {
+   "slug": "harwich-and-north-essex",
+   "name": "Harwich and North Essex"
+  },
+  "E14001274": {
+   "slug": "hastings-and-rye",
+   "name": "Hastings and Rye"
+  },
+  "E14001275": {
+   "slug": "havant",
+   "name": "Havant"
+  },
+  "E14001276": {
+   "slug": "hayes-and-harlington",
+   "name": "Hayes and Harlington"
+  },
+  "E14001277": {
+   "slug": "hazel-grove",
+   "name": "Hazel Grove"
+  },
+  "E14001278": {
+   "slug": "hemel-hempstead",
+   "name": "Hemel Hempstead"
+  },
+  "E14001279": {
+   "slug": "hendon",
+   "name": "Hendon"
+  },
+  "E14001280": {
+   "slug": "henley-and-thame",
+   "name": "Henley and Thame"
+  },
+  "E14001281": {
+   "slug": "hereford-and-south-herefordshire",
+   "name": "Hereford and South Herefordshire"
+  },
+  "E14001282": {
+   "slug": "herne-bay-and-sandwich",
+   "name": "Herne Bay and Sandwich"
+  },
+  "E14001283": {
+   "slug": "hertford-and-stortford",
+   "name": "Hertford and Stortford"
+  },
+  "E14001284": {
+   "slug": "hertsmere",
+   "name": "Hertsmere"
+  },
+  "E14001285": {
+   "slug": "hexham",
+   "name": "Hexham"
+  },
+  "E14001286": {
+   "slug": "heywood-and-middleton-north",
+   "name": "Heywood and Middleton North"
+  },
+  "E14001287": {
+   "slug": "high-peak",
+   "name": "High Peak"
+  },
+  "E14001288": {
+   "slug": "hinckley-and-bosworth",
+   "name": "Hinckley and Bosworth"
+  },
+  "E14001289": {
+   "slug": "hitchin",
+   "name": "Hitchin"
+  },
+  "E14001290": {
+   "slug": "holborn-and-st-pancras",
+   "name": "Holborn and St Pancras"
+  },
+  "E14001291": {
+   "slug": "honiton-and-sidmouth",
+   "name": "Honiton and Sidmouth"
+  },
+  "E14001292": {
+   "slug": "hornchurch-and-upminster",
+   "name": "Hornchurch and Upminster"
+  },
+  "E14001293": {
+   "slug": "hornsey-and-friern-barnet",
+   "name": "Hornsey and Friern Barnet"
+  },
+  "E14001294": {
+   "slug": "horsham",
+   "name": "Horsham"
+  },
+  "E14001295": {
+   "slug": "houghton-and-sunderland-south",
+   "name": "Houghton and Sunderland South"
+  },
+  "E14001296": {
+   "slug": "hove-and-portslade",
+   "name": "Hove and Portslade"
+  },
+  "E14001297": {
+   "slug": "huddersfield",
+   "name": "Huddersfield"
+  },
+  "E14001298": {
+   "slug": "huntingdon",
+   "name": "Huntingdon"
+  },
+  "E14001299": {
+   "slug": "hyndburn",
+   "name": "Hyndburn"
+  },
+  "E14001300": {
+   "slug": "ilford-north",
+   "name": "Ilford North"
+  },
+  "E14001301": {
+   "slug": "ilford-south",
+   "name": "Ilford South"
+  },
+  "E14001302": {
+   "slug": "ipswich",
+   "name": "Ipswich"
+  },
+  "E14001303": {
+   "slug": "isle-of-wight-east",
+   "name": "Isle of Wight East"
+  },
+  "E14001304": {
+   "slug": "isle-of-wight-west",
+   "name": "Isle of Wight West"
+  },
+  "E14001305": {
+   "slug": "islington-north",
+   "name": "Islington North"
+  },
+  "E14001306": {
+   "slug": "islington-south-and-finsbury",
+   "name": "Islington South and Finsbury"
+  },
+  "E14001307": {
+   "slug": "jarrow-and-gateshead-east",
+   "name": "Jarrow and Gateshead East"
+  },
+  "E14001308": {
+   "slug": "keighley-and-ilkley",
+   "name": "Keighley and Ilkley"
+  },
+  "E14001309": {
+   "slug": "kenilworth-and-southam",
+   "name": "Kenilworth and Southam"
+  },
+  "E14001310": {
+   "slug": "kensington-and-bayswater",
+   "name": "Kensington and Bayswater"
+  },
+  "E14001311": {
+   "slug": "kettering",
+   "name": "Kettering"
+  },
+  "E14001312": {
+   "slug": "kingston-and-surbiton",
+   "name": "Kingston and Surbiton"
+  },
+  "E14001313": {
+   "slug": "kingston-upon-hull-east",
+   "name": "Kingston upon Hull East"
+  },
+  "E14001314": {
+   "slug": "kingston-upon-hull-north-and-cottingham",
+   "name": "Kingston upon Hull North and Cottingham"
+  },
+  "E14001315": {
+   "slug": "kingston-upon-hull-west-and-haltemprice",
+   "name": "Kingston upon Hull West and Haltemprice"
+  },
+  "E14001316": {
+   "slug": "kingswinford-and-south-staffordshire",
+   "name": "Kingswinford and South Staffordshire"
+  },
+  "E14001317": {
+   "slug": "knowsley",
+   "name": "Knowsley"
+  },
+  "E14001318": {
+   "slug": "lancaster-and-wyre",
+   "name": "Lancaster and Wyre"
+  },
+  "E14001319": {
+   "slug": "leeds-central-and-headingley",
+   "name": "Leeds Central and Headingley"
+  },
+  "E14001320": {
+   "slug": "leeds-east",
+   "name": "Leeds East"
+  },
+  "E14001321": {
+   "slug": "leeds-north-east",
+   "name": "Leeds North East"
+  },
+  "E14001322": {
+   "slug": "leeds-north-west",
+   "name": "Leeds North West"
+  },
+  "E14001323": {
+   "slug": "leeds-south",
+   "name": "Leeds South"
+  },
+  "E14001324": {
+   "slug": "leeds-south-west-and-morley",
+   "name": "Leeds South West and Morley"
+  },
+  "E14001325": {
+   "slug": "leeds-west-and-pudsey",
+   "name": "Leeds West and Pudsey"
+  },
+  "E14001326": {
+   "slug": "leicester-east",
+   "name": "Leicester East"
+  },
+  "E14001327": {
+   "slug": "leicester-south",
+   "name": "Leicester South"
+  },
+  "E14001328": {
+   "slug": "leicester-west",
+   "name": "Leicester West"
+  },
+  "E14001329": {
+   "slug": "leigh-and-atherton",
+   "name": "Leigh and Atherton"
+  },
+  "E14001330": {
+   "slug": "lewes",
+   "name": "Lewes"
+  },
+  "E14001331": {
+   "slug": "lewisham-east",
+   "name": "Lewisham East"
+  },
+  "E14001332": {
+   "slug": "lewisham-north",
+   "name": "Lewisham North"
+  },
+  "E14001333": {
+   "slug": "lewisham-west-and-east-dulwich",
+   "name": "Lewisham West and East Dulwich"
+  },
+  "E14001334": {
+   "slug": "leyton-and-wanstead",
+   "name": "Leyton and Wanstead"
+  },
+  "E14001335": {
+   "slug": "lichfield",
+   "name": "Lichfield"
+  },
+  "E14001336": {
+   "slug": "lincoln",
+   "name": "Lincoln"
+  },
+  "E14001337": {
+   "slug": "liverpool-garston",
+   "name": "Liverpool Garston"
+  },
+  "E14001338": {
+   "slug": "liverpool-riverside",
+   "name": "Liverpool Riverside"
+  },
+  "E14001339": {
+   "slug": "liverpool-walton",
+   "name": "Liverpool Walton"
+  },
+  "E14001340": {
+   "slug": "liverpool-wavertree",
+   "name": "Liverpool Wavertree"
+  },
+  "E14001341": {
+   "slug": "liverpool-west-derby",
+   "name": "Liverpool West Derby"
+  },
+  "E14001342": {
+   "slug": "loughborough",
+   "name": "Loughborough"
+  },
+  "E14001343": {
+   "slug": "louth-and-horncastle",
+   "name": "Louth and Horncastle"
+  },
+  "E14001344": {
+   "slug": "lowestoft",
+   "name": "Lowestoft"
+  },
+  "E14001345": {
+   "slug": "luton-north",
+   "name": "Luton North"
+  },
+  "E14001346": {
+   "slug": "luton-south-and-south-bedfordshire",
+   "name": "Luton South and South Bedfordshire"
+  },
+  "E14001347": {
+   "slug": "macclesfield",
+   "name": "Macclesfield"
+  },
+  "E14001348": {
+   "slug": "maidenhead",
+   "name": "Maidenhead"
+  },
+  "E14001349": {
+   "slug": "maidstone-and-malling",
+   "name": "Maidstone and Malling"
+  },
+  "E14001350": {
+   "slug": "makerfield",
+   "name": "Makerfield"
+  },
+  "E14001351": {
+   "slug": "maldon",
+   "name": "Maldon"
+  },
+  "E14001352": {
+   "slug": "manchester-central",
+   "name": "Manchester Central"
+  },
+  "E14001353": {
+   "slug": "manchester-rusholme",
+   "name": "Manchester Rusholme"
+  },
+  "E14001354": {
+   "slug": "manchester-withington",
+   "name": "Manchester Withington"
+  },
+  "E14001355": {
+   "slug": "mansfield",
+   "name": "Mansfield"
+  },
+  "E14001356": {
+   "slug": "melksham-and-devizes",
+   "name": "Melksham and Devizes"
+  },
+  "E14001357": {
+   "slug": "melton-and-syston",
+   "name": "Melton and Syston"
+  },
+  "E14001358": {
+   "slug": "meriden-and-solihull-east",
+   "name": "Meriden and Solihull East"
+  },
+  "E14001359": {
+   "slug": "mid-bedfordshire",
+   "name": "Mid Bedfordshire"
+  },
+  "E14001360": {
+   "slug": "mid-buckinghamshire",
+   "name": "Mid Buckinghamshire"
+  },
+  "E14001361": {
+   "slug": "mid-cheshire",
+   "name": "Mid Cheshire"
+  },
+  "E14001362": {
+   "slug": "mid-derbyshire",
+   "name": "Mid Derbyshire"
+  },
+  "E14001363": {
+   "slug": "mid-dorset-and-north-poole",
+   "name": "Mid Dorset and North Poole"
+  },
+  "E14001364": {
+   "slug": "mid-leicestershire",
+   "name": "Mid Leicestershire"
+  },
+  "E14001365": {
+   "slug": "mid-norfolk",
+   "name": "Mid Norfolk"
+  },
+  "E14001366": {
+   "slug": "mid-sussex",
+   "name": "Mid Sussex"
+  },
+  "E14001367": {
+   "slug": "middlesbrough-and-thornaby-east",
+   "name": "Middlesbrough and Thornaby East"
+  },
+  "E14001368": {
+   "slug": "middlesbrough-south-and-east-cleveland",
+   "name": "Middlesbrough South and East Cleveland"
+  },
+  "E14001369": {
+   "slug": "milton-keynes-central",
+   "name": "Milton Keynes Central"
+  },
+  "E14001370": {
+   "slug": "milton-keynes-north",
+   "name": "Milton Keynes North"
+  },
+  "E14001371": {
+   "slug": "mitcham-and-morden",
+   "name": "Mitcham and Morden"
+  },
+  "E14001372": {
+   "slug": "morecambe-and-lunesdale",
+   "name": "Morecambe and Lunesdale"
+  },
+  "E14001373": {
+   "slug": "new-forest-east",
+   "name": "New Forest East"
+  },
+  "E14001374": {
+   "slug": "new-forest-west",
+   "name": "New Forest West"
+  },
+  "E14001375": {
+   "slug": "newark",
+   "name": "Newark"
+  },
+  "E14001376": {
+   "slug": "newbury",
+   "name": "Newbury"
+  },
+  "E14001377": {
+   "slug": "newcastle-upon-tyne-central-and-west",
+   "name": "Newcastle upon Tyne Central and West"
+  },
+  "E14001378": {
+   "slug": "newcastle-upon-tyne-east-and-wallsend",
+   "name": "Newcastle upon Tyne East and Wallsend"
+  },
+  "E14001379": {
+   "slug": "newcastle-upon-tyne-north",
+   "name": "Newcastle upon Tyne North"
+  },
+  "E14001380": {
+   "slug": "newcastle-under-lyme",
+   "name": "Newcastle-under-Lyme"
+  },
+  "E14001381": {
+   "slug": "newton-abbot",
+   "name": "Newton Abbot"
+  },
+  "E14001382": {
+   "slug": "newton-aycliffe-and-spennymoor",
+   "name": "Newton Aycliffe and Spennymoor"
+  },
+  "E14001383": {
+   "slug": "normanton-and-hemsworth",
+   "name": "Normanton and Hemsworth"
+  },
+  "E14001384": {
+   "slug": "north-bedfordshire",
+   "name": "North Bedfordshire"
+  },
+  "E14001385": {
+   "slug": "north-cornwall",
+   "name": "North Cornwall"
+  },
+  "E14001386": {
+   "slug": "north-cotswolds",
+   "name": "North Cotswolds"
+  },
+  "E14001387": {
+   "slug": "north-devon",
+   "name": "North Devon"
+  },
+  "E14001388": {
+   "slug": "north-dorset",
+   "name": "North Dorset"
+  },
+  "E14001389": {
+   "slug": "north-durham",
+   "name": "North Durham"
+  },
+  "E14001390": {
+   "slug": "north-east-cambridgeshire",
+   "name": "North East Cambridgeshire"
+  },
+  "E14001391": {
+   "slug": "north-east-derbyshire",
+   "name": "North East Derbyshire"
+  },
+  "E14001392": {
+   "slug": "north-east-hampshire",
+   "name": "North East Hampshire"
+  },
+  "E14001393": {
+   "slug": "north-east-hertfordshire",
+   "name": "North East Hertfordshire"
+  },
+  "E14001394": {
+   "slug": "north-east-somerset-and-hanham",
+   "name": "North East Somerset and Hanham"
+  },
+  "E14001395": {
+   "slug": "north-herefordshire",
+   "name": "North Herefordshire"
+  },
+  "E14001396": {
+   "slug": "north-norfolk",
+   "name": "North Norfolk"
+  },
+  "E14001397": {
+   "slug": "north-northumberland",
+   "name": "North Northumberland"
+  },
+  "E14001398": {
+   "slug": "north-shropshire",
+   "name": "North Shropshire"
+  },
+  "E14001399": {
+   "slug": "north-somerset",
+   "name": "North Somerset"
+  },
+  "E14001400": {
+   "slug": "north-warwickshire-and-bedworth",
+   "name": "North Warwickshire and Bedworth"
+  },
+  "E14001401": {
+   "slug": "north-west-cambridgeshire",
+   "name": "North West Cambridgeshire"
+  },
+  "E14001402": {
+   "slug": "north-west-essex",
+   "name": "North West Essex"
+  },
+  "E14001403": {
+   "slug": "north-west-hampshire",
+   "name": "North West Hampshire"
+  },
+  "E14001404": {
+   "slug": "north-west-leicestershire",
+   "name": "North West Leicestershire"
+  },
+  "E14001405": {
+   "slug": "north-west-norfolk",
+   "name": "North West Norfolk"
+  },
+  "E14001406": {
+   "slug": "northampton-north",
+   "name": "Northampton North"
+  },
+  "E14001407": {
+   "slug": "northampton-south",
+   "name": "Northampton South"
+  },
+  "E14001408": {
+   "slug": "norwich-north",
+   "name": "Norwich North"
+  },
+  "E14001409": {
+   "slug": "norwich-south",
+   "name": "Norwich South"
+  },
+  "E14001410": {
+   "slug": "nottingham-east",
+   "name": "Nottingham East"
+  },
+  "E14001411": {
+   "slug": "nottingham-north-and-kimberley",
+   "name": "Nottingham North and Kimberley"
+  },
+  "E14001412": {
+   "slug": "nottingham-south",
+   "name": "Nottingham South"
+  },
+  "E14001413": {
+   "slug": "nuneaton",
+   "name": "Nuneaton"
+  },
+  "E14001414": {
+   "slug": "old-bexley-and-sidcup",
+   "name": "Old Bexley and Sidcup"
+  },
+  "E14001415": {
+   "slug": "oldham-east-and-saddleworth",
+   "name": "Oldham East and Saddleworth"
+  },
+  "E14001416": {
+   "slug": "oldham-west-chadderton-and-royton",
+   "name": "Oldham West, Chadderton and Royton"
+  },
+  "E14001417": {
+   "slug": "orpington",
+   "name": "Orpington"
+  },
+  "E14001418": {
+   "slug": "ossett-and-denby-dale",
+   "name": "Ossett and Denby Dale"
+  },
+  "E14001419": {
+   "slug": "oxford-east",
+   "name": "Oxford East"
+  },
+  "E14001420": {
+   "slug": "oxford-west-and-abingdon",
+   "name": "Oxford West and Abingdon"
+  },
+  "E14001421": {
+   "slug": "peckham",
+   "name": "Peckham"
+  },
+  "E14001422": {
+   "slug": "pendle-and-clitheroe",
+   "name": "Pendle and Clitheroe"
+  },
+  "E14001423": {
+   "slug": "penistone-and-stocksbridge",
+   "name": "Penistone and Stocksbridge"
+  },
+  "E14001424": {
+   "slug": "penrith-and-solway",
+   "name": "Penrith and Solway"
+  },
+  "E14001425": {
+   "slug": "peterborough",
+   "name": "Peterborough"
+  },
+  "E14001426": {
+   "slug": "plymouth-moor-view",
+   "name": "Plymouth Moor View"
+  },
+  "E14001427": {
+   "slug": "plymouth-sutton-and-devonport",
+   "name": "Plymouth Sutton and Devonport"
+  },
+  "E14001428": {
+   "slug": "pontefract-castleford-and-knottingley",
+   "name": "Pontefract, Castleford and Knottingley"
+  },
+  "E14001429": {
+   "slug": "poole",
+   "name": "Poole"
+  },
+  "E14001430": {
+   "slug": "poplar-and-limehouse",
+   "name": "Poplar and Limehouse"
+  },
+  "E14001431": {
+   "slug": "portsmouth-north",
+   "name": "Portsmouth North"
+  },
+  "E14001432": {
+   "slug": "portsmouth-south",
+   "name": "Portsmouth South"
+  },
+  "E14001433": {
+   "slug": "preston",
+   "name": "Preston"
+  },
+  "E14001434": {
+   "slug": "putney",
+   "name": "Putney"
+  },
+  "E14001435": {
+   "slug": "queens-park-and-maida-vale",
+   "name": "Queen's Park and Maida Vale"
+  },
+  "E14001436": {
+   "slug": "rawmarsh-and-conisbrough",
+   "name": "Rawmarsh and Conisbrough"
+  },
+  "E14001437": {
+   "slug": "rayleigh-and-wickford",
+   "name": "Rayleigh and Wickford"
+  },
+  "E14001438": {
+   "slug": "reading-central",
+   "name": "Reading Central"
+  },
+  "E14001439": {
+   "slug": "reading-west-and-mid-berkshire",
+   "name": "Reading West and Mid Berkshire"
+  },
+  "E14001440": {
+   "slug": "redcar",
+   "name": "Redcar"
+  },
+  "E14001441": {
+   "slug": "redditch",
+   "name": "Redditch"
+  },
+  "E14001442": {
+   "slug": "reigate",
+   "name": "Reigate"
+  },
+  "E14001443": {
+   "slug": "ribble-valley",
+   "name": "Ribble Valley"
+  },
+  "E14001444": {
+   "slug": "richmond-and-northallerton",
+   "name": "Richmond and Northallerton"
+  },
+  "E14001445": {
+   "slug": "richmond-park",
+   "name": "Richmond Park"
+  },
+  "E14001446": {
+   "slug": "rochdale",
+   "name": "Rochdale"
+  },
+  "E14001447": {
+   "slug": "rochester-and-strood",
+   "name": "Rochester and Strood"
+  },
+  "E14001448": {
+   "slug": "romford",
+   "name": "Romford"
+  },
+  "E14001449": {
+   "slug": "romsey-and-southampton-north",
+   "name": "Romsey and Southampton North"
+  },
+  "E14001450": {
+   "slug": "rossendale-and-darwen",
+   "name": "Rossendale and Darwen"
+  },
+  "E14001451": {
+   "slug": "rother-valley",
+   "name": "Rother Valley"
+  },
+  "E14001452": {
+   "slug": "rotherham",
+   "name": "Rotherham"
+  },
+  "E14001453": {
+   "slug": "rugby",
+   "name": "Rugby"
+  },
+  "E14001454": {
+   "slug": "ruislip-northwood-and-pinner",
+   "name": "Ruislip, Northwood and Pinner"
+  },
+  "E14001455": {
+   "slug": "runcorn-and-helsby",
+   "name": "Runcorn and Helsby"
+  },
+  "E14001456": {
+   "slug": "runnymede-and-weybridge",
+   "name": "Runnymede and Weybridge"
+  },
+  "E14001457": {
+   "slug": "rushcliffe",
+   "name": "Rushcliffe"
+  },
+  "E14001458": {
+   "slug": "rutland-and-stamford",
+   "name": "Rutland and Stamford"
+  },
+  "E14001459": {
+   "slug": "salford",
+   "name": "Salford"
+  },
+  "E14001460": {
+   "slug": "salisbury",
+   "name": "Salisbury"
+  },
+  "E14001461": {
+   "slug": "scarborough-and-whitby",
+   "name": "Scarborough and Whitby"
+  },
+  "E14001462": {
+   "slug": "scunthorpe",
+   "name": "Scunthorpe"
+  },
+  "E14001463": {
+   "slug": "sefton-central",
+   "name": "Sefton Central"
+  },
+  "E14001464": {
+   "slug": "selby",
+   "name": "Selby"
+  },
+  "E14001465": {
+   "slug": "sevenoaks",
+   "name": "Sevenoaks"
+  },
+  "E14001466": {
+   "slug": "sheffield-brightside-and-hillsborough",
+   "name": "Sheffield Brightside and Hillsborough"
+  },
+  "E14001467": {
+   "slug": "sheffield-central",
+   "name": "Sheffield Central"
+  },
+  "E14001468": {
+   "slug": "sheffield-hallam",
+   "name": "Sheffield Hallam"
+  },
+  "E14001469": {
+   "slug": "sheffield-heeley",
+   "name": "Sheffield Heeley"
+  },
+  "E14001470": {
+   "slug": "sheffield-south-east",
+   "name": "Sheffield South East"
+  },
+  "E14001471": {
+   "slug": "sherwood-forest",
+   "name": "Sherwood Forest"
+  },
+  "E14001472": {
+   "slug": "shipley",
+   "name": "Shipley"
+  },
+  "E14001473": {
+   "slug": "shrewsbury",
+   "name": "Shrewsbury"
+  },
+  "E14001474": {
+   "slug": "sittingbourne-and-sheppey",
+   "name": "Sittingbourne and Sheppey"
+  },
+  "E14001475": {
+   "slug": "skipton-and-ripon",
+   "name": "Skipton and Ripon"
+  },
+  "E14001476": {
+   "slug": "sleaford-and-north-hykeham",
+   "name": "Sleaford and North Hykeham"
+  },
+  "E14001477": {
+   "slug": "slough",
+   "name": "Slough"
+  },
+  "E14001478": {
+   "slug": "smethwick",
+   "name": "Smethwick"
+  },
+  "E14001479": {
+   "slug": "solihull-west-and-shirley",
+   "name": "Solihull West and Shirley"
+  },
+  "E14001480": {
+   "slug": "south-basildon-and-east-thurrock",
+   "name": "South Basildon and East Thurrock"
+  },
+  "E14001481": {
+   "slug": "south-cambridgeshire",
+   "name": "South Cambridgeshire"
+  },
+  "E14001482": {
+   "slug": "south-cotswolds",
+   "name": "South Cotswolds"
+  },
+  "E14001483": {
+   "slug": "south-derbyshire",
+   "name": "South Derbyshire"
+  },
+  "E14001484": {
+   "slug": "south-devon",
+   "name": "South Devon"
+  },
+  "E14001485": {
+   "slug": "south-dorset",
+   "name": "South Dorset"
+  },
+  "E14001486": {
+   "slug": "south-east-cornwall",
+   "name": "South East Cornwall"
+  },
+  "E14001487": {
+   "slug": "south-holland-and-the-deepings",
+   "name": "South Holland and The Deepings"
+  },
+  "E14001488": {
+   "slug": "south-leicestershire",
+   "name": "South Leicestershire"
+  },
+  "E14001489": {
+   "slug": "south-norfolk",
+   "name": "South Norfolk"
+  },
+  "E14001490": {
+   "slug": "south-northamptonshire",
+   "name": "South Northamptonshire"
+  },
+  "E14001491": {
+   "slug": "south-ribble",
+   "name": "South Ribble"
+  },
+  "E14001492": {
+   "slug": "south-shields",
+   "name": "South Shields"
+  },
+  "E14001493": {
+   "slug": "south-shropshire",
+   "name": "South Shropshire"
+  },
+  "E14001494": {
+   "slug": "south-suffolk",
+   "name": "South Suffolk"
+  },
+  "E14001495": {
+   "slug": "south-west-devon",
+   "name": "South West Devon"
+  },
+  "E14001496": {
+   "slug": "south-west-hertfordshire",
+   "name": "South West Hertfordshire"
+  },
+  "E14001497": {
+   "slug": "south-west-norfolk",
+   "name": "South West Norfolk"
+  },
+  "E14001498": {
+   "slug": "south-west-wiltshire",
+   "name": "South West Wiltshire"
+  },
+  "E14001499": {
+   "slug": "southampton-itchen",
+   "name": "Southampton Itchen"
+  },
+  "E14001500": {
+   "slug": "southampton-test",
+   "name": "Southampton Test"
+  },
+  "E14001501": {
+   "slug": "southend-east-and-rochford",
+   "name": "Southend East and Rochford"
+  },
+  "E14001502": {
+   "slug": "southend-west-and-leigh",
+   "name": "Southend West and Leigh"
+  },
+  "E14001503": {
+   "slug": "southgate-and-wood-green",
+   "name": "Southgate and Wood Green"
+  },
+  "E14001504": {
+   "slug": "southport",
+   "name": "Southport"
+  },
+  "E14001505": {
+   "slug": "spelthorne",
+   "name": "Spelthorne"
+  },
+  "E14001506": {
+   "slug": "spen-valley",
+   "name": "Spen Valley"
+  },
+  "E14001507": {
+   "slug": "st-albans",
+   "name": "St Albans"
+  },
+  "E14001508": {
+   "slug": "st-austell-and-newquay",
+   "name": "St Austell and Newquay"
+  },
+  "E14001509": {
+   "slug": "st-helens-north",
+   "name": "St Helens North"
+  },
+  "E14001510": {
+   "slug": "st-helens-south-and-whiston",
+   "name": "St Helens South and Whiston"
+  },
+  "E14001511": {
+   "slug": "st-ives",
+   "name": "St Ives"
+  },
+  "E14001512": {
+   "slug": "st-neots-and-mid-cambridgeshire",
+   "name": "St Neots and Mid Cambridgeshire"
+  },
+  "E14001513": {
+   "slug": "stafford",
+   "name": "Stafford"
+  },
+  "E14001514": {
+   "slug": "staffordshire-moorlands",
+   "name": "Staffordshire Moorlands"
+  },
+  "E14001515": {
+   "slug": "stalybridge-and-hyde",
+   "name": "Stalybridge and Hyde"
+  },
+  "E14001516": {
+   "slug": "stevenage",
+   "name": "Stevenage"
+  },
+  "E14001517": {
+   "slug": "stockport",
+   "name": "Stockport"
+  },
+  "E14001518": {
+   "slug": "stockton-north",
+   "name": "Stockton North"
+  },
+  "E14001519": {
+   "slug": "stockton-west",
+   "name": "Stockton West"
+  },
+  "E14001520": {
+   "slug": "stoke-on-trent-central",
+   "name": "Stoke-on-Trent Central"
+  },
+  "E14001521": {
+   "slug": "stoke-on-trent-north",
+   "name": "Stoke-on-Trent North"
+  },
+  "E14001522": {
+   "slug": "stoke-on-trent-south",
+   "name": "Stoke-on-Trent South"
+  },
+  "E14001523": {
+   "slug": "stone-great-wyrley-and-penkridge",
+   "name": "Stone, Great Wyrley and Penkridge"
+  },
+  "E14001524": {
+   "slug": "stourbridge",
+   "name": "Stourbridge"
+  },
+  "E14001525": {
+   "slug": "stratford-and-bow",
+   "name": "Stratford and Bow"
+  },
+  "E14001526": {
+   "slug": "stratford-on-avon",
+   "name": "Stratford-on-Avon"
+  },
+  "E14001527": {
+   "slug": "streatham-and-croydon-north",
+   "name": "Streatham and Croydon North"
+  },
+  "E14001528": {
+   "slug": "stretford-and-urmston",
+   "name": "Stretford and Urmston"
+  },
+  "E14001529": {
+   "slug": "stroud",
+   "name": "Stroud"
+  },
+  "E14001530": {
+   "slug": "suffolk-coastal",
+   "name": "Suffolk Coastal"
+  },
+  "E14001531": {
+   "slug": "sunderland-central",
+   "name": "Sunderland Central"
+  },
+  "E14001532": {
+   "slug": "surrey-heath",
+   "name": "Surrey Heath"
+  },
+  "E14001533": {
+   "slug": "sussex-weald",
+   "name": "Sussex Weald"
+  },
+  "E14001534": {
+   "slug": "sutton-and-cheam",
+   "name": "Sutton and Cheam"
+  },
+  "E14001535": {
+   "slug": "sutton-coldfield",
+   "name": "Sutton Coldfield"
+  },
+  "E14001536": {
+   "slug": "swindon-north",
+   "name": "Swindon North"
+  },
+  "E14001537": {
+   "slug": "swindon-south",
+   "name": "Swindon South"
+  },
+  "E14001538": {
+   "slug": "tamworth",
+   "name": "Tamworth"
+  },
+  "E14001539": {
+   "slug": "tatton",
+   "name": "Tatton"
+  },
+  "E14001540": {
+   "slug": "taunton-and-wellington",
+   "name": "Taunton and Wellington"
+  },
+  "E14001541": {
+   "slug": "telford",
+   "name": "Telford"
+  },
+  "E14001542": {
+   "slug": "tewkesbury",
+   "name": "Tewkesbury"
+  },
+  "E14001543": {
+   "slug": "the-wrekin",
+   "name": "The Wrekin"
+  },
+  "E14001544": {
+   "slug": "thirsk-and-malton",
+   "name": "Thirsk and Malton"
+  },
+  "E14001545": {
+   "slug": "thornbury-and-yate",
+   "name": "Thornbury and Yate"
+  },
+  "E14001546": {
+   "slug": "thurrock",
+   "name": "Thurrock"
+  },
+  "E14001547": {
+   "slug": "tipton-and-wednesbury",
+   "name": "Tipton and Wednesbury"
+  },
+  "E14001548": {
+   "slug": "tiverton-and-minehead",
+   "name": "Tiverton and Minehead"
+  },
+  "E14001549": {
+   "slug": "tonbridge",
+   "name": "Tonbridge"
+  },
+  "E14001550": {
+   "slug": "tooting",
+   "name": "Tooting"
+  },
+  "E14001551": {
+   "slug": "torbay",
+   "name": "Torbay"
+  },
+  "E14001552": {
+   "slug": "torridge-and-tavistock",
+   "name": "Torridge and Tavistock"
+  },
+  "E14001553": {
+   "slug": "tottenham",
+   "name": "Tottenham"
+  },
+  "E14001554": {
+   "slug": "truro-and-falmouth",
+   "name": "Truro and Falmouth"
+  },
+  "E14001555": {
+   "slug": "tunbridge-wells",
+   "name": "Tunbridge Wells"
+  },
+  "E14001556": {
+   "slug": "twickenham",
+   "name": "Twickenham"
+  },
+  "E14001557": {
+   "slug": "tynemouth",
+   "name": "Tynemouth"
+  },
+  "E14001558": {
+   "slug": "uxbridge-and-south-ruislip",
+   "name": "Uxbridge and South Ruislip"
+  },
+  "E14001559": {
+   "slug": "vauxhall-and-camberwell-green",
+   "name": "Vauxhall and Camberwell Green"
+  },
+  "E14001560": {
+   "slug": "wakefield-and-rothwell",
+   "name": "Wakefield and Rothwell"
+  },
+  "E14001561": {
+   "slug": "wallasey",
+   "name": "Wallasey"
+  },
+  "E14001562": {
+   "slug": "walsall-and-bloxwich",
+   "name": "Walsall and Bloxwich"
+  },
+  "E14001563": {
+   "slug": "walthamstow",
+   "name": "Walthamstow"
+  },
+  "E14001564": {
+   "slug": "warrington-north",
+   "name": "Warrington North"
+  },
+  "E14001565": {
+   "slug": "warrington-south",
+   "name": "Warrington South"
+  },
+  "E14001566": {
+   "slug": "warwick-and-leamington",
+   "name": "Warwick and Leamington"
+  },
+  "E14001567": {
+   "slug": "washington-and-gateshead-south",
+   "name": "Washington and Gateshead South"
+  },
+  "E14001568": {
+   "slug": "watford",
+   "name": "Watford"
+  },
+  "E14001569": {
+   "slug": "waveney-valley",
+   "name": "Waveney Valley"
+  },
+  "E14001570": {
+   "slug": "weald-of-kent",
+   "name": "Weald of Kent"
+  },
+  "E14001571": {
+   "slug": "wellingborough-and-rushden",
+   "name": "Wellingborough and Rushden"
+  },
+  "E14001572": {
+   "slug": "wells-and-mendip-hills",
+   "name": "Wells and Mendip Hills"
+  },
+  "E14001573": {
+   "slug": "welwyn-hatfield",
+   "name": "Welwyn Hatfield"
+  },
+  "E14001574": {
+   "slug": "west-bromwich",
+   "name": "West Bromwich"
+  },
+  "E14001575": {
+   "slug": "west-dorset",
+   "name": "West Dorset"
+  },
+  "E14001576": {
+   "slug": "west-ham-and-beckton",
+   "name": "West Ham and Beckton"
+  },
+  "E14001577": {
+   "slug": "west-lancashire",
+   "name": "West Lancashire"
+  },
+  "E14001578": {
+   "slug": "west-suffolk",
+   "name": "West Suffolk"
+  },
+  "E14001579": {
+   "slug": "west-worcestershire",
+   "name": "West Worcestershire"
+  },
+  "E14001580": {
+   "slug": "westmorland-and-lonsdale",
+   "name": "Westmorland and Lonsdale"
+  },
+  "E14001581": {
+   "slug": "weston-super-mare",
+   "name": "Weston-super-Mare"
+  },
+  "E14001582": {
+   "slug": "wetherby-and-easingwold",
+   "name": "Wetherby and Easingwold"
+  },
+  "E14001583": {
+   "slug": "whitehaven-and-workington",
+   "name": "Whitehaven and Workington"
+  },
+  "E14001584": {
+   "slug": "widnes-and-halewood",
+   "name": "Widnes and Halewood"
+  },
+  "E14001585": {
+   "slug": "wigan",
+   "name": "Wigan"
+  },
+  "E14001586": {
+   "slug": "wimbledon",
+   "name": "Wimbledon"
+  },
+  "E14001587": {
+   "slug": "winchester",
+   "name": "Winchester"
+  },
+  "E14001588": {
+   "slug": "windsor",
+   "name": "Windsor"
+  },
+  "E14001589": {
+   "slug": "wirral-west",
+   "name": "Wirral West"
+  },
+  "E14001590": {
+   "slug": "witham",
+   "name": "Witham"
+  },
+  "E14001591": {
+   "slug": "witney",
+   "name": "Witney"
+  },
+  "E14001592": {
+   "slug": "woking",
+   "name": "Woking"
+  },
+  "E14001593": {
+   "slug": "wokingham",
+   "name": "Wokingham"
+  },
+  "E14001594": {
+   "slug": "wolverhampton-north-east",
+   "name": "Wolverhampton North East"
+  },
+  "E14001595": {
+   "slug": "wolverhampton-south-east",
+   "name": "Wolverhampton South East"
+  },
+  "E14001596": {
+   "slug": "wolverhampton-west",
+   "name": "Wolverhampton West"
+  },
+  "E14001597": {
+   "slug": "worcester",
+   "name": "Worcester"
+  },
+  "E14001598": {
+   "slug": "worsley-and-eccles",
+   "name": "Worsley and Eccles"
+  },
+  "E14001599": {
+   "slug": "worthing-west",
+   "name": "Worthing West"
+  },
+  "E14001600": {
+   "slug": "wycombe",
+   "name": "Wycombe"
+  },
+  "E14001601": {
+   "slug": "wyre-forest",
+   "name": "Wyre Forest"
+  },
+  "E14001602": {
+   "slug": "wythenshawe-and-sale-east",
+   "name": "Wythenshawe and Sale East"
+  },
+  "E14001603": {
+   "slug": "yeovil",
+   "name": "Yeovil"
+  },
+  "E14001604": {
+   "slug": "york-central",
+   "name": "York Central"
+  },
+  "E14001605": {
+   "slug": "york-outer",
+   "name": "York Outer"
+  }
+ }
+}

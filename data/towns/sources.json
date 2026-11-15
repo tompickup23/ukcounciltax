@@ -1,0 +1,41 @@
+{
+ "parishWard": {
+  "publisher": "Office for National Statistics, Open Geography Portal",
+  "title": "Parish to Ward to Local Authority District (December 2025) Lookup in EW",
+  "itemUrl": "https://geoportal.statistics.gov.uk/datasets/477863005ec54371aa300966fbc5943e",
+  "downloadUrl": "https://geoportal.statistics.gov.uk/api/download/v1/items/477863005ec54371aa300966fbc5943e/csv?layers=0",
+  "download": "The portal's own CSV download for the item (layer 0), not a REST query export",
+  "edition": "December 2025",
+  "itemModified": "2026-02-03",
+  "file": "ons/PAR25_WD25_LAD25_EW_LU.csv",
+  "sha256": "723c7c67fc60866a0281dce06179152a2f20c5221f353b4d9bec0b6677260d2d",
+  "retrieved": "2026-11-15",
+  "licence": "Open Government Licence v3.0. Source: Office for National Statistics licensed under the Open Government Licence v3.0. Contains OS data © Crown copyright and database right 2025."
+ },
+ "wardConstituency": {
+  "publisher": "Office for National Statistics, Open Geography Portal",
+  "title": "Ward to Westminster Parliamentary Constituency to LAD to CTYUA (May 2025) Lookup in the UK",
+  "itemUrl": "https://geoportal.statistics.gov.uk/datasets/ac27c7721e664440adcc9e862505c8bc",
+  "downloadUrl": "https://geoportal.statistics.gov.uk/api/download/v1/items/ac27c7721e664440adcc9e862505c8bc/csv?layers=0",
+  "download": "The portal's own CSV download for the item (layer 0), not a REST query export",
+  "edition": "May 2025 wards, July 2024 constituencies",
+  "itemModified": "2025-12-04",
+  "file": "ons/WD25_PCON24_LAD25_CTYUA25_UK_LU.csv",
+  "sha256": "0e67328dc8b77295d5042dfbdc82f598550454455db6b02a398a70a5b7da72c4",
+  "retrieved": "2026-11-15",
+  "licence": "Open Government Licence v3.0. Source: Office for National Statistics licensed under the Open Government Licence v3.0. Contains OS data © Crown copyright and database right 2025."
+ },
+ "ladCounty": {
+  "publisher": "Office for National Statistics, Open Geography Portal",
+  "title": "Local Authority District to County (December 2024) Lookup in EN",
+  "itemUrl": "https://geoportal.statistics.gov.uk/datasets/7b21cc353fe940e9b0e05442830939ab",
+  "downloadUrl": "https://geoportal.statistics.gov.uk/api/download/v1/items/7b21cc353fe940e9b0e05442830939ab/csv?layers=0",
+  "download": "The portal's own CSV download for the item (layer 0), not a REST query export",
+  "edition": "December 2024",
+  "itemModified": "2025-08-11",
+  "file": "ons/LAD24_CTY24_EN_LU.csv",
+  "sha256": "4c78c9a95f2bcb08dc5a54c97c955360dbffd1530f2a4a047cc9feeca497f63b",
+  "retrieved": "2026-11-15",
+  "licence": "Open Government Licence v3.0. Source: Office for National Statistics licensed under the Open Government Licence v3.0. Contains OS data © Crown copyright and database right 2025."
+ }
+}

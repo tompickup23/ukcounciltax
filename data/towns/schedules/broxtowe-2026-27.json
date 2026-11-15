@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "gss": "E07000172",
+  "slug": "broxtowe",
+  "name": "Broxtowe",
+  "year": "2026-27",
+  "basis": "published locality total",
+  "status": "held with gaps",
+  "sources": [
+    {
+      "url": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+      "landingUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+      "publisher": "Broxtowe Borough Council",
+      "retrieved": "2026-11-15",
+      "sha256": "ebfb062b869f6841fb9720076c101defa9c34defebc54043a1a6a6252c51d654",
+      "file": "data/raw/schedules/broxtowe-2026-27.pdf",
+      "finalUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf"
+    }
+  ],
+  "supplements": [
+    {
+      "url": "https://democracy.broxtowe.gov.uk/ieDecisionDetails.aspx?ID=2306",
+      "landingUrl": "https://www.broxtowe.gov.uk/media/df0c2lms/your-council-tax-useful-information-2026-2027.pdf",
+      "publisher": "Broxtowe Borough Council",
+      "retrieved": "2026-11-15",
+      "sha256": "2e60252e5449d1b1d6811c5664de61a43ae5e9a017abb71005872038513a1c2e",
+      "file": "data/raw/schedules/broxtowe-2026-27-decision.html"
+    }
+  ],
+  "areas": [
+    {
+      "name": "Parish of Awsworth",
+      "bandDPence": 273779,
+      "bandsPence": {
+        "A": 182519,
+        "B": 212940,
+        "C": 243359,
+        "D": 273779,
+        "E": 334618,
+        "F": 395459,
+        "G": 456298,
+        "H": 547558
+      },
+      "quote": "Parish of Awsworth 1,825.19 2,129.40 2,433.59 2,737.79 3,346.18 3,954.59 4,562.98 5,475.58",
+      "locator": {
+        "line": 47
+      },
+      "mapping": {
+        "code": "E3033P001",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P001",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 15574,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Brinsley",
+      "bandDPence": 270357,
+      "bandsPence": {
+        "A": 180238,
+        "B": 210278,
+        "C": 240317,
+        "D": 270357,
+        "E": 330436,
+        "F": 390516,
+        "G": 450595,
+        "H": 540714
+      },
+      "quote": "Parish of Brinsley 1,802.38 2,102.78 2,403.17 2,703.57 3,304.36 3,905.16 4,505.95 5,407.14",
+      "locator": {
+        "line": 48
+      },
+      "mapping": {
+        "code": "E3033P002",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P002",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 12152,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Cossall",
+      "bandDPence": 264529,
+      "bandsPence": {
+        "A": 176353,
+        "B": 205745,
+        "C": 235137,
+        "D": 264529,
+        "E": 323313,
+        "F": 382098,
+        "G": 440882,
+        "H": 529058
+      },
+      "quote": "Parish of Cossall 1,763.53 2,057.45 2,351.37 2,645.29 3,233.13 3,820.98 4,408.82 5,290.58",
+      "locator": {
+        "line": 49
+      },
+      "mapping": {
+        "code": "E3033P003",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P003",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 6324,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Eastwood",
+      "bandDPence": 265206,
+      "bandsPence": {
+        "A": 176804,
+        "B": 206272,
+        "C": 235738,
+        "D": 265206,
+        "E": 324140,
+        "F": 383076,
+        "G": 442010,
+        "H": 530412
+      },
+      "quote": "Parish of Eastwood 1,768.04 2,062.72 2,357.38 2,652.06 3,241.40 3,830.76 4,420.10 5,304.12",
+      "locator": {
+        "line": 50
+      },
+      "mapping": {
+        "code": "E3033P004",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P004",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 7001,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Greasley",
+      "bandDPence": 264300,
+      "bandsPence": {
+        "A": 176200,
+        "B": 205567,
+        "C": 234933,
+        "D": 264300,
+        "E": 323033,
+        "F": 381767,
+        "G": 440500,
+        "H": 528600
+      },
+      "quote": "Parish of Greasley 1,762.00 2,055.67 2,349.33 2,643.00 3,230.33 3,817.67 4,405.00 5,286.00",
+      "locator": {
+        "line": 51
+      },
+      "mapping": {
+        "code": "E3033P005",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P005",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 6095,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Kimberley",
+      "bandDPence": 266101,
+      "bandsPence": {
+        "A": 177401,
+        "B": 206968,
+        "C": 236534,
+        "D": 266101,
+        "E": 325234,
+        "F": 384368,
+        "G": 443502,
+        "H": 532202
+      },
+      "quote": "Parish of Kimberley 1,774.01 2,069.68 2,365.34 2,661.01 3,252.34 3,843.68 4,435.02 5,322.02",
+      "locator": {
+        "line": 52
+      },
+      "mapping": {
+        "code": "E3033P006",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P006",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 7896,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Nuthall",
+      "bandDPence": 263659,
+      "bandsPence": {
+        "A": 175773,
+        "B": 205068,
+        "C": 234363,
+        "D": 263659,
+        "E": 322250,
+        "F": 380841,
+        "G": 439432,
+        "H": 527318
+      },
+      "quote": "Parish of Nuthall 1,757.73 2,050.68 2,343.63 2,636.59 3,222.50 3,808.41 4,394.32 5,273.18",
+      "locator": {
+        "line": 53
+      },
+      "mapping": {
+        "code": "E3033P007",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P007",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 5454,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Stapleford",
+      "bandDPence": 263914,
+      "bandsPence": {
+        "A": 175943,
+        "B": 205267,
+        "C": 234590,
+        "D": 263914,
+        "E": 322561,
+        "F": 381209,
+        "G": 439857,
+        "H": 527828
+      },
+      "quote": "Parish of Stapleford 1,759.43 2,052.67 2,345.90 2,639.14 3,225.61 3,812.09 4,398.57 5,278.28",
+      "locator": {
+        "line": 54
+      },
+      "mapping": {
+        "code": "E3033P008",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P008",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 5709,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Parish of Trowell",
+      "bandDPence": 269148,
+      "bandsPence": {
+        "A": 179432,
+        "B": 209338,
+        "C": 239242,
+        "D": 269148,
+        "E": 328958,
+        "F": 388770,
+        "G": 448580,
+        "H": 538296
+      },
+      "quote": "Parish of Trowell 1,794.32 2,093.38 2,392.42 2,691.48 3,289.58 3,887.70 4,485.80 5,382.96",
+      "locator": {
+        "line": 55
+      },
+      "mapping": {
+        "code": "E3033P010",
+        "evidence": "Reviewed removal of the explicit source label Parish of. The remaining parish name is an exact, unique MHCLG name within Broxtowe."
+      },
+      "parishCode": "E3033P010",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 10943,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    },
+    {
+      "name": "Beeston Special Expense Area",
+      "bandDPence": 258352,
+      "bandsPence": {
+        "A": 172235,
+        "B": 200941,
+        "C": 229646,
+        "D": 258352,
+        "E": 315763,
+        "F": 373175,
+        "G": 430587,
+        "H": 516704
+      },
+      "quote": "Beeston Special Expense Area 1,722.35 2,009.41 2,296.46 2,583.52 3,157.63 3,731.75 4,305.87 5,167.04",
+      "locator": {
+        "line": 56
+      },
+      "parishCode": null,
+      "areaType": "unparished or special expense area",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 0,
+        "majorsBandDPence": 238344,
+        "residualPence": 20008,
+        "basicPence": 19861,
+        "specialExpensePence": 147,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        },
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "Beeston Special Expense Area £200.08 being the amounts given by adding to the amount at 3(f) above the amounts of the special item or items relating to dwellings"
+        }
+      ]
+    },
+    {
+      "name": "All other parts of the Council’s area",
+      "bandDPence": 258205,
+      "bandsPence": {
+        "A": 172137,
+        "B": 200826,
+        "C": 229515,
+        "D": 258205,
+        "E": 315584,
+        "F": 372963,
+        "G": 430342,
+        "H": 516410
+      },
+      "quote": "All other parts of the Council’s area 1,721.37 2,008.26 2,295.15 2,582.05 3,155.84 3,729.63 4,303.42 5,164.10",
+      "locator": {
+        "line": 57
+      },
+      "parishCode": null,
+      "areaType": "residual district area with no separately charged parish or special item",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 0,
+        "majorsBandDPence": 238344,
+        "residualPence": 19861,
+        "basicPence": 19861,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/broxtowe-2026-27-decision.html",
+          "quote": "(f) £198.61 being the amount at 3(d) above less the result given by dividing the amount at 3(e) above by the amount at 2(a) above"
+        }
+      ]
+    }
+  ],
+  "missingParishes": [
+    {
+      "code": "E3033P009",
+      "name": "Strelley",
+      "reason": "No accepted mapped source row; see the audit for mapping or reconciliation gaps"
+    }
+  ],
+  "excludedAreas": []
+}

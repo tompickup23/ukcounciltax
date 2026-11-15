@@ -1,0 +1,689 @@
+{
+  "schemaVersion": 1,
+  "gss": "E07000136",
+  "slug": "boston",
+  "name": "Boston",
+  "year": "2026-27",
+  "basis": "published locality total",
+  "status": "held",
+  "sources": [
+    {
+      "url": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+      "landingUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+      "publisher": "Boston Borough Council",
+      "retrieved": "2026-11-15",
+      "sha256": "71ce0581e263e821f1665af30fe767bc178349a7051bf35dafa960a86760b5da",
+      "file": "data/raw/schedules/boston-2026-27.pdf",
+      "finalUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf"
+    }
+  ],
+  "supplements": [
+    {
+      "url": "https://democracy.boston.gov.uk/mgAi.aspx?ID=10401",
+      "landingUrl": "https://democracy.boston.gov.uk/documents/s25294/Appendix%20E%20-%20Council%20Tax%20including%20LCC%20and%20PCC%20for%20all%20valuation%20bands.pdf",
+      "publisher": "Boston Borough Council",
+      "retrieved": "2026-11-15",
+      "sha256": "67baf09473b9b07bd58dc78a8658eddb95cd4f5ce75ade425c7bbc3637d4b572",
+      "file": "data/raw/schedules/boston-2026-27-decision.html"
+    }
+  ],
+  "areas": [
+    {
+      "name": "Algarkirk",
+      "bandDPence": 232917,
+      "bandsPence": {
+        "A": 155278,
+        "B": 181158,
+        "C": 207037,
+        "D": 232917,
+        "E": 284676,
+        "F": 336436,
+        "G": 388195,
+        "H": 465834
+      },
+      "quote": "Algarkirk 1,552.78 1,811.58 2,070.37 2,329.17 2,846.76 3,364.36 3,881.95 4,658.34",
+      "locator": {
+        "line": 8
+      },
+      "parishCode": "E2531P001",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 9159,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Amber Hill",
+      "bandDPence": 228378,
+      "bandsPence": {
+        "A": 152252,
+        "B": 177627,
+        "C": 203003,
+        "D": 228378,
+        "E": 279129,
+        "F": 329879,
+        "G": 380630,
+        "H": 456756
+      },
+      "quote": "Amber Hill 1,522.52 1,776.27 2,030.03 2,283.78 2,791.29 3,298.79 3,806.30 4,567.56",
+      "locator": {
+        "line": 9
+      },
+      "parishCode": "E2531P002",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 4620,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Benington",
+      "bandDPence": 234409,
+      "bandsPence": {
+        "A": 156273,
+        "B": 182318,
+        "C": 208364,
+        "D": 234409,
+        "E": 286500,
+        "F": 338591,
+        "G": 390682,
+        "H": 468818
+      },
+      "quote": "Benington 1,562.73 1,823.18 2,083.64 2,344.09 2,865.00 3,385.91 3,906.82 4,688.18",
+      "locator": {
+        "line": 10
+      },
+      "parishCode": "E2531P003",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 10651,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Bicker",
+      "bandDPence": 238096,
+      "bandsPence": {
+        "A": 158731,
+        "B": 185186,
+        "C": 211641,
+        "D": 238096,
+        "E": 291006,
+        "F": 343916,
+        "G": 396827,
+        "H": 476192
+      },
+      "quote": "Bicker 1,587.31 1,851.86 2,116.41 2,380.96 2,910.06 3,439.16 3,968.27 4,761.92",
+      "locator": {
+        "line": 11
+      },
+      "parishCode": "E2531P004",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 14338,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Butterwick",
+      "bandDPence": 230735,
+      "bandsPence": {
+        "A": 153823,
+        "B": 179461,
+        "C": 205098,
+        "D": 230735,
+        "E": 282009,
+        "F": 333284,
+        "G": 384558,
+        "H": 461470
+      },
+      "quote": "Butterwick 1,538.23 1,794.61 2,050.98 2,307.35 2,820.09 3,332.84 3,845.58 4,614.70",
+      "locator": {
+        "line": 12
+      },
+      "parishCode": "E2531P005",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 6977,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Fishtoft",
+      "bandDPence": 225967,
+      "bandsPence": {
+        "A": 150645,
+        "B": 175752,
+        "C": 200860,
+        "D": 225967,
+        "E": 276182,
+        "F": 326397,
+        "G": 376612,
+        "H": 451934
+      },
+      "quote": "Fishtoft 1,506.45 1,757.52 2,008.60 2,259.67 2,761.82 3,263.97 3,766.12 4,519.34",
+      "locator": {
+        "line": 13
+      },
+      "parishCode": "E2531P006",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 2209,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Fosdyke",
+      "bandDPence": 233843,
+      "bandsPence": {
+        "A": 155895,
+        "B": 181878,
+        "C": 207860,
+        "D": 233843,
+        "E": 285808,
+        "F": 337773,
+        "G": 389738,
+        "H": 467686
+      },
+      "quote": "Fosdyke 1,558.95 1,818.78 2,078.60 2,338.43 2,858.08 3,377.73 3,897.38 4,676.86",
+      "locator": {
+        "line": 14
+      },
+      "parishCode": "E2531P007",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 10085,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Frampton",
+      "bandDPence": 228365,
+      "bandsPence": {
+        "A": 152243,
+        "B": 177617,
+        "C": 202991,
+        "D": 228365,
+        "E": 279113,
+        "F": 329861,
+        "G": 380608,
+        "H": 456730
+      },
+      "quote": "Frampton 1,522.43 1,776.17 2,029.91 2,283.65 2,791.13 3,298.61 3,806.08 4,567.30",
+      "locator": {
+        "line": 15
+      },
+      "parishCode": "E2531P008",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 4607,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Freiston",
+      "bandDPence": 235592,
+      "bandsPence": {
+        "A": 157061,
+        "B": 183238,
+        "C": 209415,
+        "D": 235592,
+        "E": 287946,
+        "F": 340300,
+        "G": 392653,
+        "H": 471184
+      },
+      "quote": "Freiston 1,570.61 1,832.38 2,094.15 2,355.92 2,879.46 3,403.00 3,926.53 4,711.84",
+      "locator": {
+        "line": 16
+      },
+      "parishCode": "E2531P009",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 11834,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Holland Fen & Brothertoft",
+      "bandDPence": 226234,
+      "bandsPence": {
+        "A": 150823,
+        "B": 175960,
+        "C": 201097,
+        "D": 226234,
+        "E": 276508,
+        "F": 326782,
+        "G": 377057,
+        "H": 452468
+      },
+      "quote": "Holland Fen & 1,508.23 1,759.60 2,010.97 2,262.34 2,765.08 3,267.82 3,770.57 4,524.68 Brothertoft",
+      "locator": {
+        "line": 18
+      },
+      "mapping": {
+        "code": "E2531P010",
+        "evidence": "Reviewed conjunction variant within Boston: both names identify Holland Fen and Brothertoft. The national parish Band D is £24.76 and the raw schedule totals £2,262.34, matching £2,006.10 majors plus £231.48 basic plus that precept. No other Boston parish contains either place name."
+      },
+      "parishCode": "E2531P010",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 2476,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Kirton",
+      "bandDPence": 229494,
+      "bandsPence": {
+        "A": 152996,
+        "B": 178495,
+        "C": 203995,
+        "D": 229494,
+        "E": 280493,
+        "F": 331491,
+        "G": 382490,
+        "H": 458988
+      },
+      "quote": "Kirton 1,529.96 1,784.95 2,039.95 2,294.94 2,804.93 3,314.91 3,824.90 4,589.88",
+      "locator": {
+        "line": 20
+      },
+      "parishCode": "E2531P011",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 5736,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Leverton",
+      "bandDPence": 231793,
+      "bandsPence": {
+        "A": 154529,
+        "B": 180283,
+        "C": 206038,
+        "D": 231793,
+        "E": 283303,
+        "F": 334812,
+        "G": 386322,
+        "H": 463586
+      },
+      "quote": "Leverton 1,545.29 1,802.83 2,060.38 2,317.93 2,833.03 3,348.12 3,863.22 4,635.86",
+      "locator": {
+        "line": 21
+      },
+      "parishCode": "E2531P012",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 8035,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Old Leake",
+      "bandDPence": 234577,
+      "bandsPence": {
+        "A": 156385,
+        "B": 182449,
+        "C": 208513,
+        "D": 234577,
+        "E": 286705,
+        "F": 338833,
+        "G": 390962,
+        "H": 469154
+      },
+      "quote": "Old Leake 1,563.85 1,824.49 2,085.13 2,345.77 2,867.05 3,388.33 3,909.62 4,691.54",
+      "locator": {
+        "line": 22
+      },
+      "parishCode": "E2531P013",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 10819,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Sutterton",
+      "bandDPence": 230015,
+      "bandsPence": {
+        "A": 153343,
+        "B": 178901,
+        "C": 204458,
+        "D": 230015,
+        "E": 281129,
+        "F": 332244,
+        "G": 383358,
+        "H": 460030
+      },
+      "quote": "Sutterton 1,533.43 1,789.01 2,044.58 2,300.15 2,811.29 3,322.44 3,833.58 4,600.30",
+      "locator": {
+        "line": 23
+      },
+      "parishCode": "E2531P014",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 6257,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Swineshead",
+      "bandDPence": 229402,
+      "bandsPence": {
+        "A": 152935,
+        "B": 178424,
+        "C": 203913,
+        "D": 229402,
+        "E": 280380,
+        "F": 331358,
+        "G": 382337,
+        "H": 458804
+      },
+      "quote": "Swineshead 1,529.35 1,784.24 2,039.13 2,294.02 2,803.80 3,313.58 3,823.37 4,588.04",
+      "locator": {
+        "line": 24
+      },
+      "parishCode": "E2531P015",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 5644,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Wigtoft",
+      "bandDPence": 236196,
+      "bandsPence": {
+        "A": 157464,
+        "B": 183708,
+        "C": 209952,
+        "D": 236196,
+        "E": 288684,
+        "F": 341172,
+        "G": 393660,
+        "H": 472392
+      },
+      "quote": "Wigtoft 1,574.64 1,837.08 2,099.52 2,361.96 2,886.84 3,411.72 3,936.60 4,723.92",
+      "locator": {
+        "line": 25
+      },
+      "parishCode": "E2531P016",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 12438,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Wrangle",
+      "bandDPence": 235226,
+      "bandsPence": {
+        "A": 156817,
+        "B": 182954,
+        "C": 209090,
+        "D": 235226,
+        "E": 287498,
+        "F": 339771,
+        "G": 392043,
+        "H": 470452
+      },
+      "quote": "Wrangle 1,568.17 1,829.54 2,090.90 2,352.26 2,874.98 3,397.71 3,920.43 4,704.52",
+      "locator": {
+        "line": 26
+      },
+      "parishCode": "E2531P017",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 11468,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Wyberton",
+      "bandDPence": 229710,
+      "bandsPence": {
+        "A": 153140,
+        "B": 178663,
+        "C": 204187,
+        "D": 229710,
+        "E": 280757,
+        "F": 331803,
+        "G": 382850,
+        "H": 459420
+      },
+      "quote": "Wyberton 1,531.40 1,786.63 2,041.87 2,297.10 2,807.57 3,318.03 3,828.50 4,594.20",
+      "locator": {
+        "line": 27
+      },
+      "parishCode": "E2531P018",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 5952,
+        "majorsBandDPence": 200610,
+        "residualPence": 23148,
+        "basicPence": 23148,
+        "specialExpensePence": 0,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    },
+    {
+      "name": "Boston Special Expenses*",
+      "bandDPence": 232002,
+      "bandsPence": {
+        "A": 154668,
+        "B": 180446,
+        "C": 206224,
+        "D": 232002,
+        "E": 283558,
+        "F": 335114,
+        "G": 386670,
+        "H": 464004
+      },
+      "quote": "Boston Special 1,546.68 1,804.46 2,062.24 2,320.02 2,835.58 3,351.14 3,866.70 4,640.04 Expenses*",
+      "locator": {
+        "line": 29
+      },
+      "parishCode": null,
+      "areaType": "unparished or special expense area",
+      "checks": {
+        "bandAMinusRoundedSixNinthsDPence": 0,
+        "parishBandDPence": 0,
+        "majorsBandDPence": 200610,
+        "residualPence": 31392,
+        "basicPence": 23148,
+        "specialExpensePence": 8244,
+        "basicAndExpense": "pass"
+      },
+      "reconciliationEvidence": [
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        },
+        {
+          "file": "data/raw/schedules/boston-2026-27-decision.html",
+          "quote": "That the Council Tax for a Band D property in 2026/27 be set at £231.48 (£7.83 per annum increase on 2025/26 levels) for Boston Borough Council and £82.44 (£1.35 per annum increase on 2025/26 levels) for Boston Special Expenses;"
+        }
+      ]
+    }
+  ],
+  "missingParishes": [],
+  "excludedAreas": []
+}

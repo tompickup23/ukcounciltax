@@ -1,0 +1,76 @@
+{
+ "council": {
+  "gss": "E09000001",
+  "name": "City of London"
+ },
+ "year": "2026-27",
+ "source": {
+  "publisher": "City of London Corporation",
+  "title": "Council tax bands and charges",
+  "table": "2026/2027 council tax amounts",
+  "url": "https://www.cityoflondon.gov.uk/services/council-tax/council-tax-bands-and-charges",
+  "file": "city-of-london-2026-27.html",
+  "sha256": "5c33197fafd8440d165cb2255ec618180f8e513c3ac0b5d04ef5a913da766c79",
+  "retrieved": "2026-11-15",
+  "licence": "Published by the council; figures quoted as printed"
+ },
+ "yearCheck": "The table is headed \"2026/2027 council tax amounts\". Its Band D in every column equals the City's Table 9 area Band D for 2026/27.",
+ "marker": null,
+ "areas": [
+  {
+   "name": "Inner Temple",
+   "kind": "temple",
+   "includesCharterTrustee": false,
+   "quoted": "D | £1,329.56 (column \"Inner Temple\"; the value range column is omitted)",
+   "bandDPence": 132956,
+   "bandsPence": {
+    "A": 88637,
+    "B": 103410,
+    "C": 118183,
+    "D": 132956,
+    "E": 162502,
+    "F": 192048,
+    "G": 221593,
+    "H": 265912
+   },
+   "mhclgCode": "E5010P001"
+  },
+  {
+   "name": "Middle Temple",
+   "kind": "temple",
+   "includesCharterTrustee": false,
+   "quoted": "D | £1,329.56 (column \"Middle Temple\"; the value range column is omitted)",
+   "bandDPence": 132956,
+   "bandsPence": {
+    "A": 88637,
+    "B": 103410,
+    "C": 118183,
+    "D": 132956,
+    "E": 162502,
+    "F": 192048,
+    "G": 221593,
+    "H": 265912
+   },
+   "mhclgCode": "E5010P002"
+  },
+  {
+   "name": "City excluding Temples",
+   "kind": "unparished",
+   "includesCharterTrustee": false,
+   "quoted": "D | £1,329.56 (column \"City excluding Temples\"; the value range column is omitted)",
+   "bandDPence": 132956,
+   "bandsPence": {
+    "A": 88637,
+    "B": 103410,
+    "C": 118183,
+    "D": 132956,
+    "E": 162502,
+    "F": 192048,
+    "G": 221593,
+    "H": 265912
+   },
+   "mhclgCode": null
+  }
+ ],
+ "mhclgRowsNotInSchedule": []
+}

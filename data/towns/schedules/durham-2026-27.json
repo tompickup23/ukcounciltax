@@ -1,0 +1,2815 @@
+{
+ "council": {
+  "gss": "E06000047",
+  "name": "County Durham"
+ },
+ "year": "2026-27",
+ "source": {
+  "publisher": "Durham County Council",
+  "title": "Council Tax bands and how much you pay",
+  "table": "Total Council Tax by town/parish area",
+  "url": "https://www.durham.gov.uk/counciltaxbands",
+  "file": "durham-2026-27.html",
+  "sha256": "9701bd46b485c22a206b87616b4519204454459a27f4b56dc8ed07b225b8dc9b",
+  "retrieved": "2026-11-15",
+  "licence": "Published by the council; figures quoted as printed"
+ },
+ "yearCheck": "The page prints no year. Its Band D county precept, 2071.11, equals Table 10 2026/27 line 9 for Durham, and its Peterlee total equals the MHCLG 2026/27 calculation, so the page is the 2026/27 schedule.",
+ "marker": "* includes a precept for the Charter Trustees for the City of Durham",
+ "areas": [
+  {
+   "name": "Barforth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Barforth | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P001",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Barnard Castle",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Barnard Castle | 1,744.29 | 2,035.01 | 2,325.72 | 2,616.44 | 3,197.87 | 3,779.29 | 4,360.73 | 5,232.88",
+   "bandDPence": 261644,
+   "bandsPence": {
+    "A": 174429,
+    "B": 203501,
+    "C": 232572,
+    "D": 261644,
+    "E": 319787,
+    "F": 377929,
+    "G": 436073,
+    "H": 523288
+   },
+   "mhclgCode": "E1302P002",
+   "check": {
+    "calculatedPence": 261644,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Barningham",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Barningham | 1,680.01 | 1,960.01 | 2,240.01 | 2,520.02 | 3,080.03 | 3,640.02 | 4,200.03 | 5,040.04",
+   "bandDPence": 252002,
+   "bandsPence": {
+    "A": 168001,
+    "B": 196001,
+    "C": 224001,
+    "D": 252002,
+    "E": 308003,
+    "F": 364002,
+    "G": 420003,
+    "H": 504004
+   },
+   "mhclgCode": "E1302P003",
+   "check": {
+    "calculatedPence": 252002,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bearpark",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Bearpark* | 1,702.14 | 1,985.84 | 2,269.52 | 2,553.22 | 3,120.60 | 3,687.98 | 4,255.36 | 5,106.44",
+   "bandDPence": 255322,
+   "bandsPence": {
+    "A": 170214,
+    "B": 198584,
+    "C": 226952,
+    "D": 255322,
+    "E": 312060,
+    "F": 368798,
+    "G": 425536,
+    "H": 510644
+   },
+   "mhclgCode": "E1302P004",
+   "check": {
+    "calculatedPence": 255322,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Belmont",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Belmont* | 1,693.19 | 1,975.40 | 2,257.59 | 2,539.80 | 3,104.20 | 3,668.59 | 4,232.99 | 5,079.60",
+   "bandDPence": 253980,
+   "bandsPence": {
+    "A": 169319,
+    "B": 197540,
+    "C": 225759,
+    "D": 253980,
+    "E": 310420,
+    "F": 366859,
+    "G": 423299,
+    "H": 507960
+   },
+   "mhclgCode": "E1302P005",
+   "check": {
+    "calculatedPence": 253980,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bishop Auckland",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bishop Auckland | 1,766.03 | 2,060.37 | 2,354.71 | 2,649.05 | 3,237.73 | 3,826.40 | 4,415.08 | 5,298.10",
+   "bandDPence": 264905,
+   "bandsPence": {
+    "A": 176603,
+    "B": 206037,
+    "C": 235471,
+    "D": 264905,
+    "E": 323773,
+    "F": 382640,
+    "G": 441508,
+    "H": 529810
+   },
+   "mhclgCode": "E1302P006",
+   "check": {
+    "calculatedPence": 264905,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bishop Middleham",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bishop Middleham | 1,760.53 | 2,053.95 | 2,347.37 | 2,640.80 | 3,227.65 | 3,814.48 | 4,401.33 | 5,281.60",
+   "bandDPence": 264080,
+   "bandsPence": {
+    "A": 176053,
+    "B": 205395,
+    "C": 234737,
+    "D": 264080,
+    "E": 322765,
+    "F": 381448,
+    "G": 440133,
+    "H": 528160
+   },
+   "mhclgCode": "E1302P007",
+   "check": {
+    "calculatedPence": 264080,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bolam",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bolam | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P008",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Boldron",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Boldron | 1,671.05 | 1,949.57 | 2,228.07 | 2,506.59 | 3,063.61 | 3,620.62 | 4,177.64 | 5,013.18",
+   "bandDPence": 250659,
+   "bandsPence": {
+    "A": 167105,
+    "B": 194957,
+    "C": 222807,
+    "D": 250659,
+    "E": 306361,
+    "F": 362062,
+    "G": 417764,
+    "H": 501318
+   },
+   "mhclgCode": "E1302P009",
+   "check": {
+    "calculatedPence": 250659,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bournmoor",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bournmoor | 1,682.21 | 1,962.59 | 2,242.95 | 2,523.33 | 3,084.07 | 3,644.80 | 4,205.54 | 5,046.66",
+   "bandDPence": 252333,
+   "bandsPence": {
+    "A": 168221,
+    "B": 196259,
+    "C": 224295,
+    "D": 252333,
+    "E": 308407,
+    "F": 364480,
+    "G": 420554,
+    "H": 504666
+   },
+   "mhclgCode": "E1302P010",
+   "check": {
+    "calculatedPence": 252333,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bowes",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bowes | 1,690.78 | 1,972.58 | 2,254.38 | 2,536.18 | 3,099.78 | 3,663.36 | 4,226.96 | 5,072.36",
+   "bandDPence": 253618,
+   "bandsPence": {
+    "A": 169078,
+    "B": 197258,
+    "C": 225438,
+    "D": 253618,
+    "E": 309978,
+    "F": 366336,
+    "G": 422696,
+    "H": 507236
+   },
+   "mhclgCode": "E1302P011",
+   "check": {
+    "calculatedPence": 253618,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Bradbury",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Bradbury | 1,691.41 | 1,973.32 | 2,255.22 | 2,537.13 | 3,100.94 | 3,664.74 | 4,228.54 | 5,074.26",
+   "bandDPence": 253713,
+   "bandsPence": {
+    "A": 169141,
+    "B": 197332,
+    "C": 225522,
+    "D": 253713,
+    "E": 310094,
+    "F": 366474,
+    "G": 422854,
+    "H": 507426
+   },
+   "mhclgCode": "E1302P012",
+   "check": {
+    "calculatedPence": 253713,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Brancepeth",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Brancepeth* | 1,733.29 | 2,022.18 | 2,311.06 | 2,599.95 | 3,177.72 | 3,755.48 | 4,333.24 | 5,199.90",
+   "bandDPence": 259995,
+   "bandsPence": {
+    "A": 173329,
+    "B": 202218,
+    "C": 231106,
+    "D": 259995,
+    "E": 317772,
+    "F": 375548,
+    "G": 433324,
+    "H": 519990
+   },
+   "mhclgCode": "E1302P013",
+   "check": {
+    "calculatedPence": 259995,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Brandon and Byshottles",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Brandon and Byshottles* | 1,704.04 | 1,988.05 | 2,272.06 | 2,556.07 | 3,124.09 | 3,692.09 | 4,260.11 | 5,112.14",
+   "bandDPence": 255607,
+   "bandsPence": {
+    "A": 170404,
+    "B": 198805,
+    "C": 227206,
+    "D": 255607,
+    "E": 312409,
+    "F": 369209,
+    "G": 426011,
+    "H": 511214
+   },
+   "mhclgCode": "E1302P014",
+   "check": {
+    "calculatedPence": 255607,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Burnhope",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Burnhope | 1,685.85 | 1,966.84 | 2,247.81 | 2,528.79 | 3,090.74 | 3,652.69 | 4,214.64 | 5,057.58",
+   "bandDPence": 252879,
+   "bandsPence": {
+    "A": 168585,
+    "B": 196684,
+    "C": 224781,
+    "D": 252879,
+    "E": 309074,
+    "F": 365269,
+    "G": 421464,
+    "H": 505758
+   },
+   "mhclgCode": "E1302P016",
+   "check": {
+    "calculatedPence": 252879,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cassop-cum-Quarrington",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Cassop-cum-Quarrington* | 1,697.09 | 1,979.95 | 2,262.79 | 2,545.65 | 3,111.35 | 3,677.04 | 4,242.74 | 5,091.30",
+   "bandDPence": 254565,
+   "bandsPence": {
+    "A": 169709,
+    "B": 197995,
+    "C": 226279,
+    "D": 254565,
+    "E": 311135,
+    "F": 367704,
+    "G": 424274,
+    "H": 509130
+   },
+   "mhclgCode": "E1302P017",
+   "check": {
+    "calculatedPence": 254565,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Castle Eden",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Castle Eden | 1,687.82 | 1,969.13 | 2,250.43 | 2,531.74 | 3,094.35 | 3,656.95 | 4,219.56 | 5,063.48",
+   "bandDPence": 253174,
+   "bandsPence": {
+    "A": 168782,
+    "B": 196913,
+    "C": 225043,
+    "D": 253174,
+    "E": 309435,
+    "F": 365695,
+    "G": 421956,
+    "H": 506348
+   },
+   "mhclgCode": "E1302P018",
+   "check": {
+    "calculatedPence": 253174,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Chilton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Chilton | 1,833.57 | 2,139.17 | 2,444.76 | 2,750.36 | 3,361.55 | 3,972.73 | 4,583.93 | 5,500.72",
+   "bandDPence": 275036,
+   "bandsPence": {
+    "A": 183357,
+    "B": 213917,
+    "C": 244476,
+    "D": 275036,
+    "E": 336155,
+    "F": 397273,
+    "G": 458393,
+    "H": 550072
+   },
+   "mhclgCode": "E1302P019",
+   "check": {
+    "calculatedPence": 275036,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "City of Durham",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "City of Durham* | 1,712.18 | 1,997.55 | 2,282.91 | 2,568.28 | 3,139.01 | 3,709.73 | 4,280.46 | 5,136.56",
+   "bandDPence": 256828,
+   "bandsPence": {
+    "A": 171218,
+    "B": 199755,
+    "C": 228291,
+    "D": 256828,
+    "E": 313901,
+    "F": 370973,
+    "G": 428046,
+    "H": 513656
+   },
+   "mhclgCode": "E1302P136",
+   "check": {
+    "calculatedPence": 256828,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cleatlam",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Cleatlam | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P020",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cockfield",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Cockfield | 1,708.35 | 1,993.08 | 2,277.80 | 2,562.53 | 3,131.98 | 3,701.42 | 4,270.88 | 5,125.06",
+   "bandDPence": 256253,
+   "bandsPence": {
+    "A": 170835,
+    "B": 199308,
+    "C": 227780,
+    "D": 256253,
+    "E": 313198,
+    "F": 370142,
+    "G": 427088,
+    "H": 512506
+   },
+   "mhclgCode": "E1302P021",
+   "check": {
+    "calculatedPence": 256253,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cornforth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Cornforth | 1,740.19 | 2,030.23 | 2,320.26 | 2,610.30 | 3,190.37 | 3,770.43 | 4,350.49 | 5,220.60",
+   "bandDPence": 261030,
+   "bandsPence": {
+    "A": 174019,
+    "B": 203023,
+    "C": 232026,
+    "D": 261030,
+    "E": 319037,
+    "F": 377043,
+    "G": 435049,
+    "H": 522060
+   },
+   "mhclgCode": "E1302P022",
+   "check": {
+    "calculatedPence": 261030,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cornsay",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Cornsay | 1,713.97 | 1,999.64 | 2,285.30 | 2,570.97 | 3,142.30 | 3,713.62 | 4,284.94 | 5,141.94",
+   "bandDPence": 257097,
+   "bandsPence": {
+    "A": 171397,
+    "B": 199964,
+    "C": 228530,
+    "D": 257097,
+    "E": 314230,
+    "F": 371362,
+    "G": 428494,
+    "H": 514194
+   },
+   "mhclgCode": "E1302P023",
+   "check": {
+    "calculatedPence": 257097,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Cotherstone",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Cotherstone | 1,719.77 | 2,006.40 | 2,293.03 | 2,579.66 | 3,152.92 | 3,726.17 | 4,299.43 | 5,159.32",
+   "bandDPence": 257966,
+   "bandsPence": {
+    "A": 171977,
+    "B": 200640,
+    "C": 229303,
+    "D": 257966,
+    "E": 315292,
+    "F": 372617,
+    "G": 429943,
+    "H": 515932
+   },
+   "mhclgCode": "E1302P024",
+   "check": {
+    "calculatedPence": 257966,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Coxhoe",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Coxhoe* | 1,744.96 | 2,035.79 | 2,326.62 | 2,617.45 | 3,199.11 | 3,780.75 | 4,362.41 | 5,234.90",
+   "bandDPence": 261745,
+   "bandsPence": {
+    "A": 174496,
+    "B": 203579,
+    "C": 232662,
+    "D": 261745,
+    "E": 319911,
+    "F": 378075,
+    "G": 436241,
+    "H": 523490
+   },
+   "mhclgCode": "E1302P025",
+   "check": {
+    "calculatedPence": 261745,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Croxdale and Hett",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Croxdale and Hett* | 1,706.53 | 1,990.95 | 2,275.37 | 2,559.80 | 3,128.65 | 3,697.48 | 4,266.33 | 5,119.60",
+   "bandDPence": 255980,
+   "bandsPence": {
+    "A": 170653,
+    "B": 199095,
+    "C": 227537,
+    "D": 255980,
+    "E": 312865,
+    "F": 369748,
+    "G": 426633,
+    "H": 511960
+   },
+   "mhclgCode": "E1302P026",
+   "check": {
+    "calculatedPence": 255980,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Dalton-le-Dale",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Dalton-le-Dale | 1,685.26 | 1,966.14 | 2,247.02 | 2,527.90 | 3,089.66 | 3,651.40 | 4,213.16 | 5,055.80",
+   "bandDPence": 252790,
+   "bandsPence": {
+    "A": 168526,
+    "B": 196614,
+    "C": 224702,
+    "D": 252790,
+    "E": 308966,
+    "F": 365140,
+    "G": 421316,
+    "H": 505580
+   },
+   "mhclgCode": "E1302P027",
+   "check": {
+    "calculatedPence": 252790,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Dene Valley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Dene Valley | 1,694.39 | 1,976.79 | 2,259.19 | 2,541.59 | 3,106.39 | 3,671.18 | 4,235.98 | 5,083.18",
+   "bandDPence": 254159,
+   "bandsPence": {
+    "A": 169439,
+    "B": 197679,
+    "C": 225919,
+    "D": 254159,
+    "E": 310639,
+    "F": 367118,
+    "G": 423598,
+    "H": 508318
+   },
+   "mhclgCode": "E1302P028",
+   "check": {
+    "calculatedPence": 254159,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Easington Colliery",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Easington Colliery | 1,926.49 | 2,247.57 | 2,568.65 | 2,889.74 | 3,531.91 | 4,174.06 | 4,816.23 | 5,779.48",
+   "bandDPence": 288974,
+   "bandsPence": {
+    "A": 192649,
+    "B": 224757,
+    "C": 256865,
+    "D": 288974,
+    "E": 353191,
+    "F": 417406,
+    "G": 481623,
+    "H": 577948
+   },
+   "mhclgCode": "E1302P029",
+   "check": {
+    "calculatedPence": 288974,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Easington Village",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Easington Village | 1,813.31 | 2,115.53 | 2,417.75 | 2,719.97 | 3,324.41 | 3,928.84 | 4,533.28 | 5,439.94",
+   "bandDPence": 271997,
+   "bandsPence": {
+    "A": 181331,
+    "B": 211553,
+    "C": 241775,
+    "D": 271997,
+    "E": 332441,
+    "F": 392884,
+    "G": 453328,
+    "H": 543994
+   },
+   "mhclgCode": "E1302P030",
+   "check": {
+    "calculatedPence": 271997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Edmondsley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Edmondsley | 1,720.73 | 2,007.52 | 2,294.31 | 2,581.10 | 3,154.68 | 3,728.25 | 4,301.83 | 5,162.20",
+   "bandDPence": 258110,
+   "bandsPence": {
+    "A": 172073,
+    "B": 200752,
+    "C": 229431,
+    "D": 258110,
+    "E": 315468,
+    "F": 372825,
+    "G": 430183,
+    "H": 516220
+   },
+   "mhclgCode": "E1302P032",
+   "check": {
+    "calculatedPence": 258110,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Eggleston",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Eggleston | 1,702.22 | 1,985.93 | 2,269.63 | 2,553.34 | 3,120.75 | 3,688.15 | 4,255.56 | 5,106.68",
+   "bandDPence": 255334,
+   "bandsPence": {
+    "A": 170222,
+    "B": 198593,
+    "C": 226963,
+    "D": 255334,
+    "E": 312075,
+    "F": 368815,
+    "G": 425556,
+    "H": 510668
+   },
+   "mhclgCode": "E1302P033",
+   "check": {
+    "calculatedPence": 255334,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Eldon",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Eldon | 1,754.33 | 2,046.73 | 2,339.11 | 2,631.51 | 3,216.29 | 3,801.06 | 4,385.84 | 5,263.02",
+   "bandDPence": 263151,
+   "bandsPence": {
+    "A": 175433,
+    "B": 204673,
+    "C": 233911,
+    "D": 263151,
+    "E": 321629,
+    "F": 380106,
+    "G": 438584,
+    "H": 526302
+   },
+   "mhclgCode": "E1302P035",
+   "check": {
+    "calculatedPence": 263151,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Esh",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Esh | 1,716.44 | 2,002.52 | 2,288.59 | 2,574.67 | 3,146.82 | 3,718.96 | 4,291.11 | 5,149.34",
+   "bandDPence": 257467,
+   "bandsPence": {
+    "A": 171644,
+    "B": 200252,
+    "C": 228859,
+    "D": 257467,
+    "E": 314682,
+    "F": 371896,
+    "G": 429111,
+    "H": 514934
+   },
+   "mhclgCode": "E1302P036",
+   "check": {
+    "calculatedPence": 257467,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Etherley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Etherley | 1,698.38 | 1,981.45 | 2,264.51 | 2,547.58 | 3,113.71 | 3,679.83 | 4,245.96 | 5,095.16",
+   "bandDPence": 254758,
+   "bandsPence": {
+    "A": 169838,
+    "B": 198145,
+    "C": 226451,
+    "D": 254758,
+    "E": 311371,
+    "F": 367983,
+    "G": 424596,
+    "H": 509516
+   },
+   "mhclgCode": "E1302P037",
+   "check": {
+    "calculatedPence": 254758,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Evenwood and Barony",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Evenwood and Barony | 1,726.37 | 2,014.11 | 2,301.83 | 2,589.57 | 3,165.03 | 3,740.48 | 4,315.94 | 5,179.14",
+   "bandDPence": 258957,
+   "bandsPence": {
+    "A": 172637,
+    "B": 201411,
+    "C": 230183,
+    "D": 258957,
+    "E": 316503,
+    "F": 374048,
+    "G": 431594,
+    "H": 517914
+   },
+   "mhclgCode": "E1302P038",
+   "check": {
+    "calculatedPence": 258957,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Ferryhill",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Ferryhill | 1,841.21 | 2,148.09 | 2,454.95 | 2,761.83 | 3,375.57 | 3,989.30 | 4,603.04 | 5,523.66",
+   "bandDPence": 276183,
+   "bandsPence": {
+    "A": 184121,
+    "B": 214809,
+    "C": 245495,
+    "D": 276183,
+    "E": 337557,
+    "F": 398930,
+    "G": 460304,
+    "H": 552366
+   },
+   "mhclgCode": "E1302P039",
+   "check": {
+    "calculatedPence": 276183,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Fishburn",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Fishburn | 1,778.27 | 2,074.66 | 2,371.03 | 2,667.42 | 3,260.18 | 3,852.93 | 4,445.69 | 5,334.84",
+   "bandDPence": 266742,
+   "bandsPence": {
+    "A": 177827,
+    "B": 207466,
+    "C": 237103,
+    "D": 266742,
+    "E": 326018,
+    "F": 385293,
+    "G": 444569,
+    "H": 533484
+   },
+   "mhclgCode": "E1302P040",
+   "check": {
+    "calculatedPence": 266742,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Forest and Frith",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Forest and Frith | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P041",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Framwellgate Moor",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Framwellgate Moor* | 1,696.90 | 1,979.72 | 2,262.54 | 2,545.36 | 3,111.00 | 3,676.62 | 4,242.26 | 5,090.72",
+   "bandDPence": 254536,
+   "bandsPence": {
+    "A": 169690,
+    "B": 197972,
+    "C": 226254,
+    "D": 254536,
+    "E": 311100,
+    "F": 367662,
+    "G": 424226,
+    "H": 509072
+   },
+   "mhclgCode": "E1302P042",
+   "check": {
+    "calculatedPence": 254536,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Gainford and Langton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Gainford and Langton | 1,713.00 | 1,998.51 | 2,284.00 | 2,569.51 | 3,140.51 | 3,711.51 | 4,282.51 | 5,139.02",
+   "bandDPence": 256951,
+   "bandsPence": {
+    "A": 171300,
+    "B": 199851,
+    "C": 228400,
+    "D": 256951,
+    "E": 314051,
+    "F": 371151,
+    "G": 428251,
+    "H": 513902
+   },
+   "mhclgCode": "E1302P043",
+   "check": {
+    "calculatedPence": 256951,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Gilmonby",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Gilmonby | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P044",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Great Aycliffe",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Great Aycliffe | 1,874.89 | 2,187.38 | 2,499.86 | 2,812.35 | 3,437.32 | 4,062.28 | 4,687.24 | 5,624.70",
+   "bandDPence": 281235,
+   "bandsPence": {
+    "A": 187489,
+    "B": 218738,
+    "C": 249986,
+    "D": 281235,
+    "E": 343732,
+    "F": 406228,
+    "G": 468724,
+    "H": 562470
+   },
+   "mhclgCode": "E1302P045",
+   "check": {
+    "calculatedPence": 281235,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Great Lumley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Great Lumley | 1,716.69 | 2,002.81 | 2,288.92 | 2,575.04 | 3,147.27 | 3,719.49 | 4,291.73 | 5,150.08",
+   "bandDPence": 257504,
+   "bandsPence": {
+    "A": 171669,
+    "B": 200281,
+    "C": 228892,
+    "D": 257504,
+    "E": 314727,
+    "F": 371949,
+    "G": 429173,
+    "H": 515008
+   },
+   "mhclgCode": "E1302P046",
+   "check": {
+    "calculatedPence": 257504,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Greater Willington",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Greater Willington | 1,711.73 | 1,997.03 | 2,282.31 | 2,567.61 | 3,138.19 | 3,708.76 | 4,279.34 | 5,135.22",
+   "bandDPence": 256761,
+   "bandsPence": {
+    "A": 171173,
+    "B": 199703,
+    "C": 228231,
+    "D": 256761,
+    "E": 313819,
+    "F": 370876,
+    "G": 427934,
+    "H": 513522
+   },
+   "mhclgCode": "E1302P047",
+   "check": {
+    "calculatedPence": 256761,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Greencroft",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Greencroft | 1,695.12 | 1,977.65 | 2,260.16 | 2,542.69 | 3,107.73 | 3,672.77 | 4,237.81 | 5,085.38",
+   "bandDPence": 254269,
+   "bandsPence": {
+    "A": 169512,
+    "B": 197765,
+    "C": 226016,
+    "D": 254269,
+    "E": 310773,
+    "F": 367277,
+    "G": 423781,
+    "H": 508538
+   },
+   "mhclgCode": "E1302P048",
+   "check": {
+    "calculatedPence": 254269,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hamsterley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hamsterley | 1,683.43 | 1,964.00 | 2,244.57 | 2,525.15 | 3,086.30 | 3,647.43 | 4,208.58 | 5,050.30",
+   "bandDPence": 252515,
+   "bandsPence": {
+    "A": 168343,
+    "B": 196400,
+    "C": 224457,
+    "D": 252515,
+    "E": 308630,
+    "F": 364743,
+    "G": 420858,
+    "H": 505030
+   },
+   "mhclgCode": "E1302P049",
+   "check": {
+    "calculatedPence": 252515,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Haswell",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Haswell | 1,755.37 | 2,047.93 | 2,340.49 | 2,633.06 | 3,218.19 | 3,803.30 | 4,388.43 | 5,266.12",
+   "bandDPence": 263306,
+   "bandsPence": {
+    "A": 175537,
+    "B": 204793,
+    "C": 234049,
+    "D": 263306,
+    "E": 321819,
+    "F": 380330,
+    "G": 438843,
+    "H": 526612
+   },
+   "mhclgCode": "E1302P050",
+   "check": {
+    "calculatedPence": 263306,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hawthorn",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hawthorn | 1,701.29 | 1,984.85 | 2,268.39 | 2,551.95 | 3,119.05 | 3,686.14 | 4,253.24 | 5,103.90",
+   "bandDPence": 255195,
+   "bandsPence": {
+    "A": 170129,
+    "B": 198485,
+    "C": 226839,
+    "D": 255195,
+    "E": 311905,
+    "F": 368614,
+    "G": 425324,
+    "H": 510390
+   },
+   "mhclgCode": "E1302P051",
+   "check": {
+    "calculatedPence": 255195,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Headlam",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Headlam | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P052",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Healeyfield",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Healeyfield | 1,687.09 | 1,968.27 | 2,249.45 | 2,530.64 | 3,093.01 | 3,655.36 | 4,217.73 | 5,061.28",
+   "bandDPence": 253064,
+   "bandsPence": {
+    "A": 168709,
+    "B": 196827,
+    "C": 224945,
+    "D": 253064,
+    "E": 309301,
+    "F": 365536,
+    "G": 421773,
+    "H": 506128
+   },
+   "mhclgCode": "E1302P053",
+   "check": {
+    "calculatedPence": 253064,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hedleyhope",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hedleyhope | 1,739.72 | 2,029.68 | 2,319.63 | 2,609.59 | 3,189.50 | 3,769.40 | 4,349.31 | 5,219.18",
+   "bandDPence": 260959,
+   "bandsPence": {
+    "A": 173972,
+    "B": 202968,
+    "C": 231963,
+    "D": 260959,
+    "E": 318950,
+    "F": 376940,
+    "G": 434931,
+    "H": 521918
+   },
+   "mhclgCode": "E1302P054",
+   "check": {
+    "calculatedPence": 260959,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hilton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hilton | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P055",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Holwick",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Holwick | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P056",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hope",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hope | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P057",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Horden",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Horden | 1,941.52 | 2,265.11 | 2,588.70 | 2,912.29 | 3,559.47 | 4,206.63 | 4,853.81 | 5,824.58",
+   "bandDPence": 291229,
+   "bandsPence": {
+    "A": 194152,
+    "B": 226511,
+    "C": 258870,
+    "D": 291229,
+    "E": 355947,
+    "F": 420663,
+    "G": 485381,
+    "H": 582458
+   },
+   "mhclgCode": "E1302P058",
+   "check": {
+    "calculatedPence": 291229,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hunderthwaite",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hunderthwaite | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P059",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hutton Henry and Station Town",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hutton Henry and Station Town | 1,741.73 | 2,032.03 | 2,322.31 | 2,612.61 | 3,193.19 | 3,773.76 | 4,354.34 | 5,225.22",
+   "bandDPence": 261261,
+   "bandsPence": {
+    "A": 174173,
+    "B": 203203,
+    "C": 232231,
+    "D": 261261,
+    "E": 319319,
+    "F": 377376,
+    "G": 435434,
+    "H": 522522
+   },
+   "mhclgCode": "E1302P061",
+   "check": {
+    "calculatedPence": 261261,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Hutton Magna",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Hutton Magna | 1,679.19 | 1,959.07 | 2,238.93 | 2,518.80 | 3,078.53 | 3,638.26 | 4,197.99 | 5,037.60",
+   "bandDPence": 251880,
+   "bandsPence": {
+    "A": 167919,
+    "B": 195907,
+    "C": 223893,
+    "D": 251880,
+    "E": 307853,
+    "F": 363826,
+    "G": 419799,
+    "H": 503760
+   },
+   "mhclgCode": "E1302P062",
+   "check": {
+    "calculatedPence": 251880,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Ingleton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Ingleton | 1,705.79 | 1,990.10 | 2,274.39 | 2,558.70 | 3,127.30 | 3,695.89 | 4,264.49 | 5,117.40",
+   "bandDPence": 255870,
+   "bandsPence": {
+    "A": 170579,
+    "B": 199010,
+    "C": 227439,
+    "D": 255870,
+    "E": 312730,
+    "F": 369589,
+    "G": 426449,
+    "H": 511740
+   },
+   "mhclgCode": "E1302P063",
+   "check": {
+    "calculatedPence": 255870,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Kelloe",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Kelloe* | 1,699.54 | 1,982.80 | 2,266.06 | 2,549.32 | 3,115.84 | 3,682.34 | 4,248.86 | 5,098.64",
+   "bandDPence": 254932,
+   "bandsPence": {
+    "A": 169954,
+    "B": 198280,
+    "C": 226606,
+    "D": 254932,
+    "E": 311584,
+    "F": 368234,
+    "G": 424886,
+    "H": 509864
+   },
+   "mhclgCode": "E1302P064",
+   "check": {
+    "calculatedPence": 254932,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Kimblesworth and Plawsworth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Kimblesworth and Plawsworth | 1,698.33 | 1,981.40 | 2,264.45 | 2,547.51 | 3,113.62 | 3,679.73 | 4,245.84 | 5,095.02",
+   "bandDPence": 254751,
+   "bandsPence": {
+    "A": 169833,
+    "B": 198140,
+    "C": 226445,
+    "D": 254751,
+    "E": 311362,
+    "F": 367973,
+    "G": 424584,
+    "H": 509502
+   },
+   "mhclgCode": "E1302P065",
+   "check": {
+    "calculatedPence": 254751,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Lanchester",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Lanchester | 1,702.83 | 1,986.65 | 2,270.45 | 2,554.26 | 3,121.87 | 3,689.48 | 4,257.09 | 5,108.52",
+   "bandDPence": 255426,
+   "bandsPence": {
+    "A": 170283,
+    "B": 198665,
+    "C": 227045,
+    "D": 255426,
+    "E": 312187,
+    "F": 368948,
+    "G": 425709,
+    "H": 510852
+   },
+   "mhclgCode": "E1302P066",
+   "check": {
+    "calculatedPence": 255426,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Langleydale and Shotton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Langleydale and Shotton | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P069",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Lartington",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Lartington | 1,694.03 | 1,976.37 | 2,258.71 | 2,541.05 | 3,105.73 | 3,670.40 | 4,235.08 | 5,082.10",
+   "bandDPence": 254105,
+   "bandsPence": {
+    "A": 169403,
+    "B": 197637,
+    "C": 225871,
+    "D": 254105,
+    "E": 310573,
+    "F": 367040,
+    "G": 423508,
+    "H": 508210
+   },
+   "mhclgCode": "E1302P071",
+   "check": {
+    "calculatedPence": 254105,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Little Lumley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Little Lumley | 1,684.63 | 1,965.40 | 2,246.17 | 2,526.95 | 3,088.50 | 3,650.03 | 4,211.58 | 5,053.90",
+   "bandDPence": 252695,
+   "bandsPence": {
+    "A": 168463,
+    "B": 196540,
+    "C": 224617,
+    "D": 252695,
+    "E": 308850,
+    "F": 365003,
+    "G": 421158,
+    "H": 505390
+   },
+   "mhclgCode": "E1302P072",
+   "check": {
+    "calculatedPence": 252695,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Lunedale",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Lunedale | 1,671.85 | 1,950.49 | 2,229.13 | 2,507.78 | 3,065.07 | 3,622.34 | 4,179.63 | 5,015.56",
+   "bandDPence": 250778,
+   "bandsPence": {
+    "A": 167185,
+    "B": 195049,
+    "C": 222913,
+    "D": 250778,
+    "E": 306507,
+    "F": 362234,
+    "G": 417963,
+    "H": 501556
+   },
+   "mhclgCode": "E1302P073",
+   "check": {
+    "calculatedPence": 250778,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Lynesack and Softley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Lynesack and Softley | 1,687.14 | 1,968.34 | 2,249.52 | 2,530.72 | 3,093.10 | 3,655.48 | 4,217.86 | 5,061.44",
+   "bandDPence": 253072,
+   "bandsPence": {
+    "A": 168714,
+    "B": 196834,
+    "C": 224952,
+    "D": 253072,
+    "E": 309310,
+    "F": 365548,
+    "G": 421786,
+    "H": 506144
+   },
+   "mhclgCode": "E1302P074",
+   "check": {
+    "calculatedPence": 253072,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Marwood",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Marwood | 1,689.48 | 1,971.07 | 2,252.64 | 2,534.23 | 3,097.39 | 3,660.55 | 4,223.71 | 5,068.46",
+   "bandDPence": 253423,
+   "bandsPence": {
+    "A": 168948,
+    "B": 197107,
+    "C": 225264,
+    "D": 253423,
+    "E": 309739,
+    "F": 366055,
+    "G": 422371,
+    "H": 506846
+   },
+   "mhclgCode": "E1302P075",
+   "check": {
+    "calculatedPence": 253423,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Mickleton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Mickleton | 1,719.97 | 2,006.64 | 2,293.30 | 2,579.97 | 3,153.30 | 3,726.62 | 4,299.94 | 5,159.94",
+   "bandDPence": 257997,
+   "bandsPence": {
+    "A": 171997,
+    "B": 200664,
+    "C": 229330,
+    "D": 257997,
+    "E": 315330,
+    "F": 372662,
+    "G": 429994,
+    "H": 515994
+   },
+   "mhclgCode": "E1302P076",
+   "check": {
+    "calculatedPence": 257997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Middleton-in-Teesdale & Newbiggin-in-Teesdale",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Middleton-in-Teesdale & Newbiggin-in-Teesdale | 1,715.95 | 2,001.94 | 2,287.93 | 2,573.93 | 3,145.92 | 3,717.89 | 4,289.88 | 5,147.86",
+   "bandDPence": 257393,
+   "bandsPence": {
+    "A": 171595,
+    "B": 200194,
+    "C": 228793,
+    "D": 257393,
+    "E": 314592,
+    "F": 371789,
+    "G": 428988,
+    "H": 514786
+   },
+   "mhclgCode": "E1302P077",
+   "check": {
+    "calculatedPence": 257393,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Middridge",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Middridge | 1,712.26 | 1,997.64 | 2,283.02 | 2,568.40 | 3,139.16 | 3,709.90 | 4,280.66 | 5,136.80",
+   "bandDPence": 256840,
+   "bandsPence": {
+    "A": 171226,
+    "B": 199764,
+    "C": 228302,
+    "D": 256840,
+    "E": 313916,
+    "F": 370990,
+    "G": 428066,
+    "H": 513680
+   },
+   "mhclgCode": "E1302P078",
+   "check": {
+    "calculatedPence": 256840,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Monk Hesleden",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Monk Hesleden | 1,812.96 | 2,115.13 | 2,417.28 | 2,719.45 | 3,323.77 | 3,928.09 | 4,532.41 | 5,438.90",
+   "bandDPence": 271945,
+   "bandsPence": {
+    "A": 181296,
+    "B": 211513,
+    "C": 241728,
+    "D": 271945,
+    "E": 332377,
+    "F": 392809,
+    "G": 453241,
+    "H": 543890
+   },
+   "mhclgCode": "E1302P079",
+   "check": {
+    "calculatedPence": 271945,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Mordon",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Mordon | 1,687.53 | 1,968.79 | 2,250.04 | 2,531.30 | 3,093.81 | 3,656.31 | 4,218.83 | 5,062.60",
+   "bandDPence": 253130,
+   "bandsPence": {
+    "A": 168753,
+    "B": 196879,
+    "C": 225004,
+    "D": 253130,
+    "E": 309381,
+    "F": 365631,
+    "G": 421883,
+    "H": 506260
+   },
+   "mhclgCode": "E1302P080",
+   "check": {
+    "calculatedPence": 253130,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Morton Tinmouth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Morton Tinmouth | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P081",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Muggleswick",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Muggleswick | 1,683.37 | 1,963.94 | 2,244.50 | 2,525.07 | 3,086.20 | 3,647.32 | 4,208.44 | 5,050.14",
+   "bandDPence": 252507,
+   "bandsPence": {
+    "A": 168337,
+    "B": 196394,
+    "C": 224450,
+    "D": 252507,
+    "E": 308620,
+    "F": 364732,
+    "G": 420844,
+    "H": 505014
+   },
+   "mhclgCode": "E1302P082",
+   "check": {
+    "calculatedPence": 252507,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Murton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Murton | 1,806.06 | 2,107.08 | 2,408.08 | 2,709.10 | 3,311.12 | 3,913.14 | 4,515.16 | 5,418.20",
+   "bandDPence": 270910,
+   "bandsPence": {
+    "A": 180606,
+    "B": 210708,
+    "C": 240808,
+    "D": 270910,
+    "E": 331112,
+    "F": 391314,
+    "G": 451516,
+    "H": 541820
+   },
+   "mhclgCode": "E1302P083",
+   "check": {
+    "calculatedPence": 270910,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "North Lodge",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "North Lodge | 1,691.16 | 1,973.03 | 2,254.88 | 2,536.75 | 3,100.47 | 3,664.19 | 4,227.91 | 5,073.50",
+   "bandDPence": 253675,
+   "bandsPence": {
+    "A": 169116,
+    "B": 197303,
+    "C": 225488,
+    "D": 253675,
+    "E": 310047,
+    "F": 366419,
+    "G": 422791,
+    "H": 507350
+   },
+   "mhclgCode": "E1302P086",
+   "check": {
+    "calculatedPence": 253675,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Ouston",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Ouston | 1,695.43 | 1,978.00 | 2,260.57 | 2,543.15 | 3,108.30 | 3,673.43 | 4,238.58 | 5,086.30",
+   "bandDPence": 254315,
+   "bandsPence": {
+    "A": 169543,
+    "B": 197800,
+    "C": 226057,
+    "D": 254315,
+    "E": 310830,
+    "F": 367343,
+    "G": 423858,
+    "H": 508630
+   },
+   "mhclgCode": "E1302P087",
+   "check": {
+    "calculatedPence": 254315,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Ovington",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Ovington | 1,694.74 | 1,977.20 | 2,259.66 | 2,542.12 | 3,107.04 | 3,671.94 | 4,236.86 | 5,084.24",
+   "bandDPence": 254212,
+   "bandsPence": {
+    "A": 169474,
+    "B": 197720,
+    "C": 225966,
+    "D": 254212,
+    "E": 310704,
+    "F": 367194,
+    "G": 423686,
+    "H": 508424
+   },
+   "mhclgCode": "E1302P088",
+   "check": {
+    "calculatedPence": 254212,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Pelton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Pelton | 1,755.76 | 2,048.39 | 2,341.02 | 2,633.65 | 3,218.91 | 3,804.15 | 4,389.41 | 5,267.30",
+   "bandDPence": 263365,
+   "bandsPence": {
+    "A": 175576,
+    "B": 204839,
+    "C": 234102,
+    "D": 263365,
+    "E": 321891,
+    "F": 380415,
+    "G": 438941,
+    "H": 526730
+   },
+   "mhclgCode": "E1302P089",
+   "check": {
+    "calculatedPence": 263365,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Peterlee",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Peterlee | 1,965.33 | 2,292.90 | 2,620.45 | 2,948.01 | 3,603.12 | 4,258.23 | 4,913.34 | 5,896.02",
+   "bandDPence": 294801,
+   "bandsPence": {
+    "A": 196533,
+    "B": 229290,
+    "C": 262045,
+    "D": 294801,
+    "E": 360312,
+    "F": 425823,
+    "G": 491334,
+    "H": 589602
+   },
+   "mhclgCode": "E1302P090",
+   "check": {
+    "calculatedPence": 294801,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Pittington",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Pittington* | 1,720.35 | 2,007.09 | 2,293.81 | 2,580.54 | 3,153.99 | 3,727.44 | 4,300.89 | 5,161.08",
+   "bandDPence": 258054,
+   "bandsPence": {
+    "A": 172035,
+    "B": 200709,
+    "C": 229381,
+    "D": 258054,
+    "E": 315399,
+    "F": 372744,
+    "G": 430089,
+    "H": 516108
+   },
+   "mhclgCode": "E1302P091",
+   "check": {
+    "calculatedPence": 258054,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Raby with Keverstone",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Raby with Keverstone | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P092",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Rokeby, Brignall and Eggleston Abbey",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Rokeby, Brignall and Eggleston Abbey | 1,683.91 | 1,964.57 | 2,245.22 | 2,525.88 | 3,087.19 | 3,648.49 | 4,209.79 | 5,051.76",
+   "bandDPence": 252588,
+   "bandsPence": {
+    "A": 168391,
+    "B": 196457,
+    "C": 224522,
+    "D": 252588,
+    "E": 308719,
+    "F": 364849,
+    "G": 420979,
+    "H": 505176
+   },
+   "mhclgCode": "E1302P093",
+   "check": {
+    "calculatedPence": 252588,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Romaldkirk",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Romaldkirk | 1,749.25 | 2,040.79 | 2,332.33 | 2,623.88 | 3,206.97 | 3,790.04 | 4,373.13 | 5,247.76",
+   "bandDPence": 262388,
+   "bandsPence": {
+    "A": 174925,
+    "B": 204079,
+    "C": 233233,
+    "D": 262388,
+    "E": 320697,
+    "F": 379004,
+    "G": 437313,
+    "H": 524776
+   },
+   "mhclgCode": "E1302P094",
+   "check": {
+    "calculatedPence": 262388,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Sacriston",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Sacriston | 1,702.01 | 1,985.69 | 2,269.35 | 2,553.03 | 3,120.37 | 3,687.70 | 4,255.04 | 5,106.06",
+   "bandDPence": 255303,
+   "bandsPence": {
+    "A": 170201,
+    "B": 198569,
+    "C": 226935,
+    "D": 255303,
+    "E": 312037,
+    "F": 368770,
+    "G": 425504,
+    "H": 510606
+   },
+   "mhclgCode": "E1302P095",
+   "check": {
+    "calculatedPence": 255303,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Satley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Satley | 1,697.17 | 1,980.04 | 2,262.90 | 2,545.77 | 3,111.50 | 3,677.22 | 4,242.94 | 5,091.54",
+   "bandDPence": 254577,
+   "bandsPence": {
+    "A": 169717,
+    "B": 198004,
+    "C": 226290,
+    "D": 254577,
+    "E": 311150,
+    "F": 367722,
+    "G": 424294,
+    "H": 509154
+   },
+   "mhclgCode": "E1302P096",
+   "check": {
+    "calculatedPence": 254577,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Scargill",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Scargill | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P097",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Seaham",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Seaham | 1,855.21 | 2,164.41 | 2,473.61 | 2,782.82 | 3,401.23 | 4,019.62 | 4,638.03 | 5,565.64",
+   "bandDPence": 278282,
+   "bandsPence": {
+    "A": 185521,
+    "B": 216441,
+    "C": 247361,
+    "D": 278282,
+    "E": 340123,
+    "F": 401962,
+    "G": 463803,
+    "H": 556564
+   },
+   "mhclgCode": "E1302P098",
+   "check": {
+    "calculatedPence": 278282,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Seaton with Slingley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Seaton with Slingley | 1,690.75 | 1,972.55 | 2,254.34 | 2,536.14 | 3,099.73 | 3,663.31 | 4,226.89 | 5,072.28",
+   "bandDPence": 253614,
+   "bandsPence": {
+    "A": 169075,
+    "B": 197255,
+    "C": 225434,
+    "D": 253614,
+    "E": 309973,
+    "F": 366331,
+    "G": 422689,
+    "H": 507228
+   },
+   "mhclgCode": "E1302P099",
+   "check": {
+    "calculatedPence": 253614,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Sedgefield",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Sedgefield | 1,823.83 | 2,127.80 | 2,431.77 | 2,735.75 | 3,343.70 | 3,951.63 | 4,559.58 | 5,471.50",
+   "bandDPence": 273575,
+   "bandsPence": {
+    "A": 182383,
+    "B": 212780,
+    "C": 243177,
+    "D": 273575,
+    "E": 334370,
+    "F": 395163,
+    "G": 455958,
+    "H": 547150
+   },
+   "mhclgCode": "E1302P100",
+   "check": {
+    "calculatedPence": 273575,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Shadforth",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Shadforth* | 1,695.18 | 1,977.72 | 2,260.24 | 2,542.78 | 3,107.84 | 3,672.90 | 4,237.96 | 5,085.56",
+   "bandDPence": 254278,
+   "bandsPence": {
+    "A": 169518,
+    "B": 197772,
+    "C": 226024,
+    "D": 254278,
+    "E": 310784,
+    "F": 367290,
+    "G": 423796,
+    "H": 508556
+   },
+   "mhclgCode": "E1302P101",
+   "check": {
+    "calculatedPence": 254278,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Sherburn",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Sherburn* | 1,687.35 | 1,968.58 | 2,249.80 | 2,531.03 | 3,093.48 | 3,655.92 | 4,218.38 | 5,062.06",
+   "bandDPence": 253103,
+   "bandsPence": {
+    "A": 168735,
+    "B": 196858,
+    "C": 224980,
+    "D": 253103,
+    "E": 309348,
+    "F": 365592,
+    "G": 421838,
+    "H": 506206
+   },
+   "mhclgCode": "E1302P103",
+   "check": {
+    "calculatedPence": 253103,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Shildon",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Shildon | 1,902.85 | 2,219.99 | 2,537.13 | 2,854.28 | 3,488.57 | 4,122.84 | 4,757.13 | 5,708.56",
+   "bandDPence": 285428,
+   "bandsPence": {
+    "A": 190285,
+    "B": 221999,
+    "C": 253713,
+    "D": 285428,
+    "E": 348857,
+    "F": 412284,
+    "G": 475713,
+    "H": 570856
+   },
+   "mhclgCode": "E1302P104",
+   "check": {
+    "calculatedPence": 285428,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Shincliffe",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Shincliffe* | 1,735.63 | 2,024.91 | 2,314.18 | 2,603.46 | 3,182.01 | 3,760.55 | 4,339.09 | 5,206.92",
+   "bandDPence": 260346,
+   "bandsPence": {
+    "A": 173563,
+    "B": 202491,
+    "C": 231418,
+    "D": 260346,
+    "E": 318201,
+    "F": 376055,
+    "G": 433909,
+    "H": 520692
+   },
+   "mhclgCode": "E1302P105",
+   "check": {
+    "calculatedPence": 260346,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Shotton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Shotton | 1,752.55 | 2,044.64 | 2,336.73 | 2,628.83 | 3,213.02 | 3,797.19 | 4,381.38 | 5,257.66",
+   "bandDPence": 262883,
+   "bandsPence": {
+    "A": 175255,
+    "B": 204464,
+    "C": 233673,
+    "D": 262883,
+    "E": 321302,
+    "F": 379719,
+    "G": 438138,
+    "H": 525766
+   },
+   "mhclgCode": "E1302P106",
+   "check": {
+    "calculatedPence": 262883,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "South Bedburn",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "South Bedburn | 1,678.33 | 1,958.06 | 2,237.78 | 2,517.51 | 3,076.96 | 3,636.40 | 4,195.84 | 5,035.02",
+   "bandDPence": 251751,
+   "bandsPence": {
+    "A": 167833,
+    "B": 195806,
+    "C": 223778,
+    "D": 251751,
+    "E": 307696,
+    "F": 363640,
+    "G": 419584,
+    "H": 503502
+   },
+   "mhclgCode": "E1302P107",
+   "check": {
+    "calculatedPence": 251751,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "South Hetton",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "South Hetton | 1,794.83 | 2,093.97 | 2,393.11 | 2,692.25 | 3,290.53 | 3,888.80 | 4,487.08 | 5,384.50",
+   "bandDPence": 269225,
+   "bandsPence": {
+    "A": 179483,
+    "B": 209397,
+    "C": 239311,
+    "D": 269225,
+    "E": 329053,
+    "F": 388880,
+    "G": 448708,
+    "H": 538450
+   },
+   "mhclgCode": "E1302P108",
+   "check": {
+    "calculatedPence": 269225,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Spennymoor",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Spennymoor | 1,825.27 | 2,129.48 | 2,433.69 | 2,737.91 | 3,346.34 | 3,954.75 | 4,563.18 | 5,475.82",
+   "bandDPence": 273791,
+   "bandsPence": {
+    "A": 182527,
+    "B": 212948,
+    "C": 243369,
+    "D": 273791,
+    "E": 334634,
+    "F": 395475,
+    "G": 456318,
+    "H": 547582
+   },
+   "mhclgCode": "E1302P109",
+   "check": {
+    "calculatedPence": 273791,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Staindrop",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Staindrop | 1,703.81 | 1,987.78 | 2,271.75 | 2,555.72 | 3,123.66 | 3,691.59 | 4,259.53 | 5,111.44",
+   "bandDPence": 255572,
+   "bandsPence": {
+    "A": 170381,
+    "B": 198778,
+    "C": 227175,
+    "D": 255572,
+    "E": 312366,
+    "F": 369159,
+    "G": 425953,
+    "H": 511144
+   },
+   "mhclgCode": "E1302P110",
+   "check": {
+    "calculatedPence": 255572,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Stainton and Streatlam",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Stainton and Streatlam | 1,701.25 | 1,984.79 | 2,268.33 | 2,551.88 | 3,118.97 | 3,686.04 | 4,253.13 | 5,103.76",
+   "bandDPence": 255188,
+   "bandsPence": {
+    "A": 170125,
+    "B": 198479,
+    "C": 226833,
+    "D": 255188,
+    "E": 311897,
+    "F": 368604,
+    "G": 425313,
+    "H": 510376
+   },
+   "mhclgCode": "E1302P114",
+   "check": {
+    "calculatedPence": 255188,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Stanhope",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Stanhope | 1,696.42 | 1,979.16 | 2,261.90 | 2,544.64 | 3,110.12 | 3,675.58 | 4,241.06 | 5,089.28",
+   "bandDPence": 254464,
+   "bandsPence": {
+    "A": 169642,
+    "B": 197916,
+    "C": 226190,
+    "D": 254464,
+    "E": 311012,
+    "F": 367558,
+    "G": 424106,
+    "H": 508928
+   },
+   "mhclgCode": "E1302P111",
+   "check": {
+    "calculatedPence": 254464,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Stanley Town Council",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Stanley Town Council | 1,748.18 | 2,039.55 | 2,330.91 | 2,622.28 | 3,205.01 | 3,787.73 | 4,370.46 | 5,244.56",
+   "bandDPence": 262228,
+   "bandsPence": {
+    "A": 174818,
+    "B": 203955,
+    "C": 233091,
+    "D": 262228,
+    "E": 320501,
+    "F": 378773,
+    "G": 437046,
+    "H": 524456
+   },
+   "mhclgCode": "E1302P112",
+   "check": {
+    "calculatedPence": 262228,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Startforth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Startforth | 1,703.62 | 1,987.56 | 2,271.50 | 2,555.44 | 3,123.32 | 3,691.18 | 4,259.06 | 5,110.88",
+   "bandDPence": 255544,
+   "bandsPence": {
+    "A": 170362,
+    "B": 198756,
+    "C": 227150,
+    "D": 255544,
+    "E": 312332,
+    "F": 369118,
+    "G": 425906,
+    "H": 511088
+   },
+   "mhclgCode": "E1302P113",
+   "check": {
+    "calculatedPence": 255544,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Thornley",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Thornley | 1,860.47 | 2,170.55 | 2,480.63 | 2,790.71 | 3,410.87 | 4,031.02 | 4,651.18 | 5,581.42",
+   "bandDPence": 279071,
+   "bandsPence": {
+    "A": 186047,
+    "B": 217055,
+    "C": 248063,
+    "D": 279071,
+    "E": 341087,
+    "F": 403102,
+    "G": 465118,
+    "H": 558142
+   },
+   "mhclgCode": "E1302P115",
+   "check": {
+    "calculatedPence": 279071,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Tow Law",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Tow Law | 1,725.04 | 2,012.55 | 2,300.06 | 2,587.57 | 3,162.59 | 3,737.59 | 4,312.61 | 5,175.14",
+   "bandDPence": 258757,
+   "bandsPence": {
+    "A": 172504,
+    "B": 201255,
+    "C": 230006,
+    "D": 258757,
+    "E": 316259,
+    "F": 373759,
+    "G": 431261,
+    "H": 517514
+   },
+   "mhclgCode": "E1302P116",
+   "check": {
+    "calculatedPence": 258757,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Trimdon",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Trimdon | 1,786.51 | 2,084.26 | 2,382.01 | 2,679.77 | 3,275.28 | 3,870.77 | 4,466.28 | 5,359.54",
+   "bandDPence": 267977,
+   "bandsPence": {
+    "A": 178651,
+    "B": 208426,
+    "C": 238201,
+    "D": 267977,
+    "E": 327528,
+    "F": 387077,
+    "G": 446628,
+    "H": 535954
+   },
+   "mhclgCode": "E1302P117",
+   "check": {
+    "calculatedPence": 267977,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Trimdon Foundry",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Trimdon Foundry | 1,797.49 | 2,097.08 | 2,396.66 | 2,696.25 | 3,295.42 | 3,894.58 | 4,493.74 | 5,392.50",
+   "bandDPence": 269625,
+   "bandsPence": {
+    "A": 179749,
+    "B": 209708,
+    "C": 239666,
+    "D": 269625,
+    "E": 329542,
+    "F": 389458,
+    "G": 449374,
+    "H": 539250
+   },
+   "mhclgCode": "E1302P118",
+   "check": {
+    "calculatedPence": 269625,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Urpeth",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Urpeth | 1,694.19 | 1,976.57 | 2,258.93 | 2,541.30 | 3,106.03 | 3,670.76 | 4,235.49 | 5,082.60",
+   "bandDPence": 254130,
+   "bandsPence": {
+    "A": 169419,
+    "B": 197657,
+    "C": 225893,
+    "D": 254130,
+    "E": 310603,
+    "F": 367076,
+    "G": 423549,
+    "H": 508260
+   },
+   "mhclgCode": "E1302P119",
+   "check": {
+    "calculatedPence": 254130,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Wackerfield",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Wackerfield | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P120",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Waldridge",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Waldridge | 1,701.56 | 1,985.16 | 2,268.75 | 2,552.35 | 3,119.54 | 3,686.72 | 4,253.91 | 5,104.70",
+   "bandDPence": 255235,
+   "bandsPence": {
+    "A": 170156,
+    "B": 198516,
+    "C": 226875,
+    "D": 255235,
+    "E": 311954,
+    "F": 368672,
+    "G": 425391,
+    "H": 510470
+   },
+   "mhclgCode": "E1302P121",
+   "check": {
+    "calculatedPence": 255235,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "West Auckland",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "West Auckland | 1,694.55 | 1,976.99 | 2,259.41 | 2,541.84 | 3,106.69 | 3,671.54 | 4,236.39 | 5,083.68",
+   "bandDPence": 254184,
+   "bandsPence": {
+    "A": 169455,
+    "B": 197699,
+    "C": 225941,
+    "D": 254184,
+    "E": 310669,
+    "F": 367154,
+    "G": 423639,
+    "H": 508368
+   },
+   "mhclgCode": "E1302P122",
+   "check": {
+    "calculatedPence": 254184,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "West Rainton and Leamside",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "West Rainton and Leamside* | 1,706.51 | 1,990.94 | 2,275.35 | 2,559.78 | 3,128.62 | 3,697.45 | 4,266.29 | 5,119.56",
+   "bandDPence": 255978,
+   "bandsPence": {
+    "A": 170651,
+    "B": 199094,
+    "C": 227535,
+    "D": 255978,
+    "E": 312862,
+    "F": 369745,
+    "G": 426629,
+    "H": 511956
+   },
+   "mhclgCode": "E1302P123",
+   "check": {
+    "calculatedPence": 255978,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Wheatley Hill",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Wheatley Hill | 1,791.91 | 2,090.56 | 2,389.21 | 2,687.87 | 3,285.18 | 3,882.47 | 4,479.78 | 5,375.74",
+   "bandDPence": 268787,
+   "bandsPence": {
+    "A": 179191,
+    "B": 209056,
+    "C": 238921,
+    "D": 268787,
+    "E": 328518,
+    "F": 388247,
+    "G": 447978,
+    "H": 537574
+   },
+   "mhclgCode": "E1302P125",
+   "check": {
+    "calculatedPence": 268787,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Whorlton and Westwick",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Whorlton and Westwick | 1,707.72 | 1,992.35 | 2,276.96 | 2,561.59 | 3,130.83 | 3,700.07 | 4,269.31 | 5,123.18",
+   "bandDPence": 256159,
+   "bandsPence": {
+    "A": 170772,
+    "B": 199235,
+    "C": 227696,
+    "D": 256159,
+    "E": 313083,
+    "F": 370007,
+    "G": 426931,
+    "H": 512318
+   },
+   "mhclgCode": "E1302P126",
+   "check": {
+    "calculatedPence": 256159,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Windlestone",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Windlestone | 1,715.44 | 2,001.35 | 2,287.26 | 2,573.17 | 3,144.99 | 3,716.79 | 4,288.61 | 5,146.34",
+   "bandDPence": 257317,
+   "bandsPence": {
+    "A": 171544,
+    "B": 200135,
+    "C": 228726,
+    "D": 257317,
+    "E": 314499,
+    "F": 371679,
+    "G": 428861,
+    "H": 514634
+   },
+   "mhclgCode": "E1302P127",
+   "check": {
+    "calculatedPence": 257317,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Wingate",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Wingate | 1,767.04 | 2,061.55 | 2,356.06 | 2,650.57 | 3,239.59 | 3,828.59 | 4,417.61 | 5,301.14",
+   "bandDPence": 265057,
+   "bandsPence": {
+    "A": 176704,
+    "B": 206155,
+    "C": 235606,
+    "D": 265057,
+    "E": 323959,
+    "F": 382859,
+    "G": 441761,
+    "H": 530114
+   },
+   "mhclgCode": "E1302P128",
+   "check": {
+    "calculatedPence": 265057,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Winston",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Winston | 1,705.53 | 1,989.79 | 2,274.04 | 2,558.30 | 3,126.81 | 3,695.31 | 4,263.83 | 5,116.60",
+   "bandDPence": 255830,
+   "bandsPence": {
+    "A": 170553,
+    "B": 198979,
+    "C": 227404,
+    "D": 255830,
+    "E": 312681,
+    "F": 369531,
+    "G": 426383,
+    "H": 511660
+   },
+   "mhclgCode": "E1302P129",
+   "check": {
+    "calculatedPence": 255830,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Witton Gilbert",
+   "kind": "parish",
+   "includesCharterTrustee": true,
+   "quoted": "Witton Gilbert* | 1,695.80 | 1,978.44 | 2,261.07 | 2,543.71 | 3,108.98 | 3,674.24 | 4,239.51 | 5,087.42",
+   "bandDPence": 254371,
+   "bandsPence": {
+    "A": 169580,
+    "B": 197844,
+    "C": 226107,
+    "D": 254371,
+    "E": 310898,
+    "F": 367424,
+    "G": 423951,
+    "H": 508742
+   },
+   "mhclgCode": "E1302P130",
+   "check": {
+    "calculatedPence": 254371,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Witton le Wear",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Witton le Wear | 1,685.65 | 1,966.59 | 2,247.53 | 2,528.48 | 3,090.37 | 3,652.24 | 4,214.13 | 5,056.96",
+   "bandDPence": 252848,
+   "bandsPence": {
+    "A": 168565,
+    "B": 196659,
+    "C": 224753,
+    "D": 252848,
+    "E": 309037,
+    "F": 365224,
+    "G": 421413,
+    "H": 505696
+   },
+   "mhclgCode": "E1302P131",
+   "check": {
+    "calculatedPence": 252848,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Wolsingham",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Wolsingham | 1,711.11 | 1,996.30 | 2,281.48 | 2,566.67 | 3,137.04 | 3,707.40 | 4,277.78 | 5,133.34",
+   "bandDPence": 256667,
+   "bandsPence": {
+    "A": 171111,
+    "B": 199630,
+    "C": 228148,
+    "D": 256667,
+    "E": 313704,
+    "F": 370740,
+    "G": 427778,
+    "H": 513334
+   },
+   "mhclgCode": "E1302P132",
+   "check": {
+    "calculatedPence": 256667,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Woodland",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Woodland | 1,703.56 | 1,987.49 | 2,271.42 | 2,555.35 | 3,123.21 | 3,691.05 | 4,258.91 | 5,110.70",
+   "bandDPence": 255535,
+   "bandsPence": {
+    "A": 170356,
+    "B": 198749,
+    "C": 227142,
+    "D": 255535,
+    "E": 312321,
+    "F": 369105,
+    "G": 425891,
+    "H": 511070
+   },
+   "mhclgCode": "E1302P134",
+   "check": {
+    "calculatedPence": 255535,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Wycliffe-with-Thorpe",
+   "kind": "parish",
+   "includesCharterTrustee": false,
+   "quoted": "Wycliffe-with-Thorpe | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": "E1302P135",
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Unparished Areas",
+   "kind": "unparished",
+   "includesCharterTrustee": false,
+   "quoted": "Unparished Areas | 1,666.64 | 1,944.42 | 2,222.19 | 2,499.97 | 3,055.52 | 3,611.06 | 4,166.61 | 4,999.94",
+   "bandDPence": 249997,
+   "bandsPence": {
+    "A": 166664,
+    "B": 194442,
+    "C": 222219,
+    "D": 249997,
+    "E": 305552,
+    "F": 361106,
+    "G": 416661,
+    "H": 499994
+   },
+   "mhclgCode": null,
+   "check": {
+    "calculatedPence": 249997,
+    "differencePence": 0
+   }
+  },
+  {
+   "name": "Unparished Areas in the former City of Durham Area",
+   "kind": "unparished",
+   "includesCharterTrustee": true,
+   "quoted": "Unparished Areas in the former City of Durham Area* | 1,668.44 | 1,946.52 | 2,224.59 | 2,502.67 | 3,058.82 | 3,614.96 | 4,171.11 | 5,005.34",
+   "bandDPence": 250267,
+   "bandsPence": {
+    "A": 166844,
+    "B": 194652,
+    "C": 222459,
+    "D": 250267,
+    "E": 305882,
+    "F": 361496,
+    "G": 417111,
+    "H": 500534
+   },
+   "mhclgCode": null,
+   "check": {
+    "calculatedPence": 250267,
+    "differencePence": 0
+   }
+  }
+ ],
+ "mhclgRowsNotInSchedule": [
+  {
+   "code": "E1302P015",
+   "name": "Brignall (grouped With Rokeby and Egglestone Abbey)"
+  },
+  {
+   "code": "E1302P034",
+   "name": "Egglestone Abbey (grouped With Rokeby and Brignall)"
+  },
+  {
+   "code": "E1302P070",
+   "name": "Langton (grouped with Gainford)"
+  },
+  {
+   "code": "E1302P085",
+   "name": "Newbiggin (grouped with Middleton in Teesdale)"
+  },
+  {
+   "code": "E1302P124",
+   "name": "Westwick (grouped with Whorlton)"
+  }
+ ]
+}

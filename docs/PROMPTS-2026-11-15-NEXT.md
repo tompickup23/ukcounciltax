@@ -2,20 +2,20 @@
 
 Written in Claude Code on 15 November 2026 after every Codex session on both sites finished. This file replaces `docs/CODEX-PROMPTS-2026-11-15.md` for everything not yet run. Each block is pasted alone. None authorises a merge, tag or deployment unless the block says Tom has given that yes.
 
-## Status, 15 November evening (read this first)
+## Status, 15 November late evening (read this first)
 
-Done on 15 November evening: PR 84 merged and live (`4625f53`); UK Councils PRs 59 and 60 merged (prompts 2 and 7); UK Places PRs 53 and 54 merged and deployed (prompts 3 and 3b). Prompt 5 is running in Codex. The tables below this one are the afternoon record.
-
-Order of work from here:
+Done on 15 November: PR 84 merged and live (`4625f53`); UK Councils PRs 59 and 60 merged (prompts 2 and 7); UK Places PRs 53 and 54 merged and deployed (prompts 3 and 3b); PR 85 merged. Prompt 5 is running in Codex. Plan section 10 is the look ahead. The tables below this one are the afternoon record.
 
 | Step | Session | Starts when |
 |---|---|---|
-| Prompt 5 review and merge, both sites | Claude Code | When its two PRs are green |
+| Prompt 5 review and merge, both sites | This Claude Code session | When its two PRs are green |
+| Prompt 8, C6 levels day staging | New Claude Code session, Opus | Now |
+| Prompt 9, dossier gate definition | Codex, ukcouncils | Now |
+| Prompt 10, estate-kit scrub report | Codex, estate-kit | Now |
 | Measurement note, weekly | Claude Code | Monday 17 November |
-| Prompt 4, gates pack | Codex | After X3 is settled |
-| Prompt 6, council links rerun | Codex | Any day in December |
-| Composition build | Not written | After Tom picks a seats source |
-| Audit status build | Not written | After Tom accepts an identity method (exact name join measured in UK Councils PR 60) |
+| Prompt 4, gates pack | Codex | After X3 |
+| Prompt 6, council links rerun | Codex | 1 to 5 December 2026 |
+| Composition, audit status, section 114 builds | Not written | After Tom's decisions in plan section 10.3, by 15 December |
 
 Merge order matters for `docs/STATE.md`: PR 59 before PR 60 on UK Councils; PR 85 before any later docs PR here.
 
@@ -154,4 +154,51 @@ Why: PR 53 corrected only the exported name of E07000112. UK Places still shows 
 2. Tests: "Folkestone", "Hythe" and "Shepway" each find E07000112 and nothing else new; no other record changes.
 3. List every built page whose text changes as pages allowed to differ in the PR body.
 Verification: the repository's test, build and check commands. The export diff shows two changed fields on one record.
+```
+
+## 8. ukcounciltax: C6 levels day staging (Claude Code, Opus, new session)
+
+```text
+Repository tompickup23/ukcounciltax. One draft PR, branch feat/c6-levels-day-staging from origin/main in a new worktree ~/wt/uct-c6-staging. The empty branch feat/c6-year-switch and ~/wt/uct-c6-switch may be removed once you have checked they hold nothing. Node 22: put ~/.nvm/versions/node/v22.23.4/bin first on PATH. British English; no em dash, en dash or spaced hyphen anywhere. Stage named paths only. Never bypass the pre-commit hook. Commit and push before any archive step. Do not merge, tag or deploy.
+
+Why: levels day (MHCLG, "Council Tax levels set by local authorities in England 2027 to 2028", expected late March 2027; 25 March in 2026) must be staged by mid January 2027 so that release day is data only. The freeze starts on 20 March. This is the critical path and nothing blocks it.
+
+Read first: CLAUDE.md, docs/STATE.md, docs/D5-BUDGET-SEASON-2027.md (sections 4 and 5 are the specification), docs/ASSESSMENT-2026-11-09-TAX-SITES.md (the C6 row), docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md section 10 (on branch docs/plan-lookahead-2026-11-15 until it merges), src/lib/council-tax.ts, src/lib/next-year.ts, tests/years.test.ts, scripts/fetch-council-tax.mjs, scripts/import-national.mjs.
+
+A Codex registry refresh PR may be open; it changes data/registry/councils.json only. Do not touch that file. If another open PR touches a file you need, stop and ask Tom.
+
+1. Write docs/C6-STAGING-BRIEF.md first: what changes on release day, what is staged now, and the switch design. Prefer a switch driven by data presence (the 2027/28 levels file and its Table 10 hash), so the release PR adds data and nothing else. If you choose a flag instead, say why.
+2. Build the switch. CURRENT_YEAR, PREVIOUS_YEAR and YEARS move together. The not yet set page moves from 2027/28 to 2028/29. RELEASES carries 2028/29 records with page null and a note where no announcement exists. With today's data the built site must be byte identical to main: the number diff shows zero pages differing.
+3. Importers: the 2027/28 levels import and the Table 10 2027/28 path, tested against the 2026/27 workbook layout and finding tables by title. Refuse to write on any missing authority, band or short row; unknown is never zero.
+4. Rehearsal: a scripted dry run that treats 2026/27 as the incoming year against a 2025/26 baseline, runs the switch and the importers, and compares the result with what is live. Record every difference and its cause in the brief. Never publish rehearsal output.
+5. Pages that wait for data: everything D5 section 4 and the assessment's C6 row list renders nothing until 2027/28 data exists, with a test for both states.
+6. The set the budget pages stay pinned to 2026/27. Behind the same switch, add one line saying their figures are 2026/27 and that 2027/28 budgets follow MHCLG's RA release in June 2027. Put the wording in the PR body for Tom to confirm.
+7. Update the D5 runbook in place wherever the build changes it.
+Verification: npm test, npm run check (grep the "- N errors" line), BUILD_OG=1 npm run build, test:dist, test:text, test:csp, the rehearsal, and the number diff against main (zero pages differing). PR body: the brief's summary, the rehearsal differences and the decisions for Tom, with fenced "## Pages allowed to differ" and "## Pages to capture" blocks. Replace docs/STATE.md in at most 20 lines.
+```
+
+## 9. ukcouncils: what "dossier complete" means, encoded as a gate (Codex)
+
+```text
+Repository tompickup23/ukcouncils. One PR, branch feat/dossier-gate-definition from origin/main in a new worktree ~/wt/ukc-dossier-gate. Node 22.23.4 first on PATH. British English; no em dash, en dash or spaced hyphen anywhere, including JSON. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Commit, push and open the PR. Do not merge, tag or deploy.
+
+Why: the dossier on all 296 English billing profiles must be complete by mid January 2027, and it gates the reversal in May to June 2027. No document says what complete means, so the gate can be neither passed nor failed. A Codex registry refresh PR may be open; it changes data/registry/councils.json only. Do not touch that file.
+
+Read first: CLAUDE.md, docs/STATE.md, docs/DOSSIER-STATE-2026-11-14.md, docs/DOSSIER-SOURCES-2026-11.md, the existing dossier coverage gate in the build checks, and tompickup23/ukcounciltax docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md section 10 (on branch docs/plan-lookahead-2026-11-15 until it merges).
+1. Write docs/DOSSIER-GATE.md. For each item D1, D3 and C1 to C9, give each profile one of three states: built from a pinned source; absent with a stated reason (no source, not published, held); or out of the January scope by Tom's decision. Measure today's counts from a full build. List each open decision (composition source, audit identity method, section 114 register, C7 and C9 scope) with its default if Tom does not decide by 15 December 2026: out of the January gate, with the absence stated on the page as today.
+2. Encode it. Extend the dossier coverage gate so every section on every profile falls into exactly one of those states, and the build fails on any section that is neither built nor carries its reason. No page text changes unless a profile today shows a section with neither; list any.
+3. School holidays. For the nine profiles without a calendar (Barnsley, Blackpool, City of London, Enfield, Halton, Isles of Scilly, Newham, Sheffield, South Tyneside), find each council's own published 2026/27 term dates page. Record the URL, the date it shows and the retrieval date in docs/DOSSIER-GATE.md. Do not build or infer a calendar; how to add them is for Tom.
+Verification: npm test, npm run check, npm run build, npm run test:dist. Number diff: zero pages differing unless step 2 lists a change. Fenced "## Pages allowed to differ" and "## Pages to capture" blocks in the PR body.
+```
+
+## 10. estate-kit: the scrub report that settles X3 (Codex)
+
+```text
+Repository tompickup23/estate-kit (private). One draft PR adding one file, docs/X3-PUBLIC-SCRUB-2026-11.md, on branch docs/x3-public-scrub from origin/main in a worktree. Change nothing else: no code, no settings, no visibility change, no history rewrite. British English; no em dash, en dash or spaced hyphen anywhere. Never print a secret value; refer to a finding by commit, file and line only. Stage the one file by name. Never bypass the pre-commit hook. Do not merge, tag or deploy.
+
+Why: decision X3 (estate-kit's Actions are blocked by billing) holds up the gates pack and the kit's CI. Making the repository public, as both sites were, is the recommended route, but only after a scrub. This report should make the decision a five minute one.
+1. Scan the whole history, not just the tip. Run gitleaks over every commit, using the configuration that ~/.config/git-hooks/gitleaks-staged.sh uses. Search for /Users/ paths, ~/Documents, the Reports and clawd repositories, personal email addresses, the hostnames vps-main and vps-news, IP addresses and tokens, and for anything copied from the private Reports repository or the Council Intel skins.
+2. Classify each finding: a secret (needs rotation and a history rewrite); a private path or name (rewrite or accept); licensed or third party content (state the licence); or harmless.
+3. Recommend one route: public as it is; public after a cleanup at the tip; public only after a history rewrite (say what and how); or stay private and settle billing. Give the cost of each in steps.
+4. List what changes for the two sites that vendor the kit if it goes public.
 ```

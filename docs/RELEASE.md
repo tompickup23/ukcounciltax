@@ -715,3 +715,41 @@ number is removed. A full HTML comparison confirms 614 existing pages are byte
 identical; all 296 parent budget pages differ only by their one entry after
 normalising inter-tag whitespace. The header policy, four hashed production
 inputs, cohort, referendum mapping and model edition remain unchanged.
+
+## Short name registry refresh, 15 November 2026
+
+This review candidate imports the reviewed UK Councils export through
+`scripts/sync-registry.mjs`. UK Councils rebuilt it from the live UK Places
+registry and sister sitemaps using `scripts/build-registry.mjs`. UK Places
+PRs 53 and 54 corrected E07000112; PR 54 merged at `912fe27`.
+
+The only changed field is `councils.E07000112.name`: Shepway becomes
+Folkestone and Hythe. There are no further changes since the morning refresh.
+The slug remains `shepway`, the official name remains Folkestone and Hythe
+District Council, and all 14 registry reorganisation objects remain held.
+All 361 records, generation date, coverage counts and financial data are unchanged.
+
+Both registry files are byte identical with SHA256
+`92aaf1637f58501fdf1bee272d72923e2b49249f428fe53259175ba6727d4f1d`.
+The downloaded UK Places source has SHA256
+`397ec382650b922a64a8a2e5553fe02146b7ea4fc7c359fd47e125035e981ae0`.
+The earlier registry note describing the exported short name as Shepway is
+superseded by this refresh. The separate slug decision remains outstanding.
+
+Profiles, council pickers and search already use the tax dataset's corrected
+short name, while organisation structured data uses the official name.
+Share cards use the tax name and sitemaps retain the existing slug.
+The companion PR bodies record the full build comparison and verification.
+This entry records no merge, tag or deployment.
+
+The completed build comparison finds all 1,107 HTML pages and every shared
+output file byte identical, including the council index, Pagefind and sitemap.
+The number comparison reports zero differences, additions or removals. The
+final build includes all 3,045 generated share images; the profile card name
+was visually checked. The public URLs remain unchanged.
+
+Final verification used Node 22.23.4 first on PATH. All 843 unit tests across
+66 files passed, including the held registry checks. Type checking reported
+zero errors, warnings and hints. Distribution checks passed all 1,107 pages
+and 1,106 sitemap URLs; the text sweep passed 1,115 files. All 138 browser
+cases passed under the production CSP. The normal pre-commit hook is retained.

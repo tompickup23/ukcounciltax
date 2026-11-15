@@ -15,6 +15,12 @@ const baseText = (Number(pilot.taxBaseHundredths)/100).toLocaleString('en-GB',{m
 const cell = (key: keyof typeof pilot.evidence) => { const c = pilot.evidence[key]; return `${c.sheet}, ${c.column}${c.row}`; };
 const raCell = (id: string) => `${pilot.evidence.raTotal.sheet}, ${raColumns[id as keyof typeof raColumns]}${pilot.evidence.raTotal.row}`;
 const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
+// The same note printed in two MHCLG files is shown once, with both cells cited.
+const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: string; explanation: string; citations: (typeof pilot.reviewedNotes)[number]['citation'][]}>>((groups, note) => {
+  const key = `${note.text}\n${note.explanation}`;
+  (groups[key] ??= {text: note.text, explanation: note.explanation, citations: []}).citations.push(note.citation);
+  return groups;
+}, {}));
 ---
 <BaseLayout title={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}`} description={`Set ${pilot.name}'s budget using the published ${FREEZE_YEAR_TEXT} ledger. Explore tax and spending with explicit assumptions.`} path={budgetSetPath(pilot.slug)} ephemeral ogImage={`/og/budget-set/${pilot.slug}.png`} ogImageAlt={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}. An exploration, not a forecast.`}>
   <Breadcrumbs items={[{label:'Tools',href:'/tools/'},{label:'Council budgets',href:'/tools/budget/'},{label:pilot.name,href:`/tools/budget/${pilot.slug}/`},{label:'Set the budget'}]} />
@@ -26,7 +32,6 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
         <p class="lede">Start with last year's own-council charge. Explore how changes to tax and net service spending affect the remaining difference.</p>
         <p class="source-line">User requested scenario | {FREEZE_MODEL}. A calculation exercise, not the council's actual deficit.</p>
       </div>
-      {pilot.reconciliation.componentReviewRequired && <p class="notice">Source review remains open: the RA and Table 10 parish figures differ by {publishedMoney(String(-BigInt(pilot.reconciliation.parishDifferencePence)))}. Parish financing is held fixed here; this local arithmetic pilot is not cleared for public release. <a href="#reconciliation">Read the reconciliation</a>.</p>}
       <section class="baseline" aria-labelledby="baseline-title">
         <h2 id="baseline-title">The published starting point</h2>
         <div class="baseline-grid">
@@ -99,22 +104,19 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
           {pilot.reconciliation.table10IdentityDifferencePence !== '0' && <p>Table 10 total minus its printed own and parish amounts is {publishedMoney(pilot.reconciliation.table10IdentityDifferencePence)}. Each is printed in whole pounds; this difference is compatible with that precision. All three printed figures remain unchanged.</p>}
           <p>The printed own Band D multiplied by the tax base differs from the published own requirement by {money(BigInt(pilot.reconciliation.ownYieldDifferenceUnits))}. Printed Band D is rounded to pennies. The model calculates changes from the published baseline; it does not replace the published requirement with this product.</p>
           <p>The RA total less its parish line, minus the Table 10 own requirement, is {publishedMoney(pilot.reconciliation.ownDifferencePence)}. This derived component is within the sum of the two half thousand pound bounds plus half a pound for its whole pound printing.</p>
-          <p>The RA parish line minus the Table 10 parish requirement is {publishedMoney(pilot.reconciliation.parishDifferencePence)}. {pilot.reconciliation.componentReviewRequired ? 'This exceeds half a printed thousand and requires source review before public release. No adjustment is made to either source.' : 'This is within half a printed thousand.'}</p>
+          <p>The RA parish line minus the Table 10 parish requirement is {publishedMoney(pilot.reconciliation.parishDifferencePence)}. This is within half a printed thousand.</p>
           <p class="source-line">MHCLG, <a href={pilot.sources[3].url}>Table 10, Data_Billing, items 1, 2, 3, 7 and 9</a>, and <a href={budgetSource.url}>RA Part 1, {cell('raParish')} and {cell('raTotal')}, lines 821 and 990</a>.</p>
         </details>
       </section>
-      {pilot.reviewedNotes.length > 0 && <section class="section"><h2>Reviewed source notes</h2><ul>{pilot.reviewedNotes.map(note=><li><p>{note.text}</p><p>{note.explanation}</p><p class="source-line">{note.citation.file}, {note.citation.sheet}, {note.citation.column}{note.citation.row}.</p></li>)}</ul></section>}
+      {notes.length > 0 && <section class="section"><h2>Reviewed source notes</h2><ul>{notes.map(note=><li><p>{note.text}</p><p>{note.explanation}</p><p class="source-line">{note.citations.map(c=>`${c.file}, ${c.sheet}, ${c.column}${c.row}`).join('; ')}.</p></li>)}</ul></section>}
       <section class="section"><h2>Sources and next steps</h2><ul>{pilot.sources.map(source=><li><a href={source.url}>{source.title}</a></li>)}</ul><p>Sources checked on {snapshot.reviewedOn}. This exercise is not a consultation and sends no choices to a council. No storage, saved choices, scenario network requests or analytics events. Choices reset on reload.</p><p><a href={`/tools/budget/${pilot.slug}/`}>Open the published budget game</a></p></section>
       <div class="mobile-result" data-mobile-result hidden aria-hidden="true"><span>User requested scenario</span><strong data-mobile-amount></strong><span data-mobile-state></span></div>
   </div>
   <script src="../../../../scripts/budget-freeze.ts"></script>
 </BaseLayout>
 <style>
-  .pilot-header{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1.25rem;border-bottom:1px solid var(--border)}
-  .brand{font-weight:600;font-size:1.25rem;text-decoration:none}.pilot-label,.eyebrow{font-size:var(--text-sm);color:var(--text-muted)}
-  .pilot-nav{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;padding-block:1.25rem}.pilot-nav [aria-current]{font-weight:600;text-decoration-thickness:3px}
-  .council-list{max-width:100%}.council-list ul{columns:3;list-style:none;padding:0}.council-list li{break-inside:avoid;margin-block:0.5rem}.council-list a{overflow-wrap:anywhere}
-  @media(max-width:760px){.council-list ul{columns:1}}
+  .eyebrow{font-size:var(--text-sm);color:var(--text-muted)}
+  .pilot-nav{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;padding-block:1.25rem}
   .page-head{padding-block:1.5rem}h1{max-width:24ch}.baseline,.assumptions,.control-card,.scenario-result{padding:1.25rem;border:1px solid var(--border);border-radius:var(--radius, 0.5rem);background:var(--bg-card)}
   .baseline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}.baseline-grid strong{font-size:var(--text-xl);font-variant-numeric:tabular-nums}
   .assumptions{margin-block:1.5rem}.assumptions li{margin-block:0.5rem}.scenario-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:start;gap:2rem}
@@ -122,11 +124,11 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
   input[type=number]{font-size:1.15rem;width:100%;min-height:48px;padding:0.6rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:0.3rem;box-sizing:border-box}
   input[type=range]{width:100%;min-height:44px;accent-color:var(--accent)}button{min-height:44px;padding:0.65rem 0.85rem;border:1px solid var(--border);border-radius:0.35rem;background:var(--bg-subtle);color:var(--text);font:inherit;cursor:pointer}
   .actions{display:flex;flex-wrap:wrap;gap:0.6rem}.scenario-result{position:sticky;top:6rem;border-top:4px solid var(--accent)}.result-amount{font-size:var(--text-2xl);font-weight:600;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;margin-block:1rem}
-  dl div{padding-block:0.65rem;border-top:1px solid var(--border)}dd{margin:0.35rem 0 0;font-weight:600}summary{cursor:pointer;min-height:44px;align-content:center}details{margin-block:1rem}td,th{overflow-wrap:anywhere}table{min-width:0;width:100%}textarea{width:100%;min-height:18rem;box-sizing:border-box;color:var(--text);background:var(--bg)}
+  dl div{padding-block:0.65rem;border-top:1px solid var(--border)}dd{margin:0.35rem 0 0;font-weight:600}summary{cursor:pointer;min-height:44px;align-content:center}details{margin-block:1rem}td,th{overflow-wrap:anywhere}table{min-width:0;width:100%}
   [data-error]{color:var(--text);border-inline-start:4px solid var(--accent);padding:0.75rem}[hidden]{display:none!important}
   .mobile-result{display:none}
   input,button{scroll-margin-block:8rem}
-  @media(max-width:760px){.budget-set{padding-bottom:7rem}.baseline-grid,.scenario-layout{grid-template-columns:1fr}.scenario-result{position:static;grid-row:1}.pilot-header{align-items:start}.control-card,.scenario-result,.baseline{padding:1rem}.baseline-grid{gap:0.5rem}.pilot-label{max-width:9rem}th,td{padding:0.5rem;font-size:0.85rem}.mobile-result{display:flex;flex-wrap:wrap;gap:0.2rem 0.75rem;position:fixed;bottom:0;left:0;right:0;padding:0.65rem 1rem;background:var(--bg-card);border-top:2px solid var(--accent);z-index:5;font-size:0.85rem}.mobile-result>span:first-child{width:100%}.mobile-result strong{font-size:1.25rem}}
+  @media(max-width:760px){.budget-set{padding-bottom:7rem}.baseline-grid,.scenario-layout{grid-template-columns:1fr}.scenario-result{position:static;grid-row:1}.control-card,.scenario-result,.baseline{padding:1rem}.baseline-grid{gap:0.5rem}th,td{padding:0.5rem;font-size:0.85rem}.mobile-result{display:flex;flex-wrap:wrap;gap:0.2rem 0.75rem;position:fixed;bottom:0;left:0;right:0;padding:0.65rem 1rem;background:var(--bg-card);border-top:2px solid var(--accent);z-index:5;font-size:0.85rem}.mobile-result>span:first-child{width:100%}.mobile-result strong{font-size:1.25rem}}
   .assumptions{background:var(--accent-wash)}.source-line{overflow-wrap:anywhere}.ledger .source-line{display:block}.table-wrap{overflow:visible;max-height:none}table{table-layout:fixed}th,td{white-space:normal}th:first-child,td:first-child{width:4rem}
   @media(max-width:760px){.ledger table,.ledger tbody,.ledger tr,.ledger td,.ledger th{display:block;width:auto}.ledger thead{display:none}.ledger tr{padding-block:0.75rem;border-bottom:1px solid var(--border)}.ledger td,.ledger th{border:0;padding:0.25rem 0;text-align:left}.ledger td::before{content:attr(data-label) ': ';font-weight:600}.ledger caption{display:block;text-align:left}.ledger th{font-size:1rem}.ledger td:first-child{width:auto}}
 </style>

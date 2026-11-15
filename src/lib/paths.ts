@@ -76,7 +76,18 @@ export function councilPages(): CouncilPage[] {
 }
 
 export const budgetSetPath = (slug: string) => `/tools/budget/${slug}/set/`;
-export const budgetSetPages = () => freezePilots();
+let setPages: ReturnType<typeof freezePilots> | undefined;
+/** The public set pages. Hashing the inputs once per build is enough. A pilot whose
+ * parish figures still need source review is never published: the build stops. */
+export function budgetSetPages() {
+  if (!setPages) {
+    const pilots = freezePilots();
+    const held = pilots.filter(pilot => pilot.reconciliation.componentReviewRequired).map(pilot => pilot.slug);
+    if (held.length) throw new Error(`C2 set pages need source review first: ${held.join(', ')}`);
+    setPages = pilots;
+  }
+  return setPages;
+}
 
 export function programmaticPaths(): string[] {
   return [

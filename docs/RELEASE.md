@@ -2,13 +2,22 @@
 
 ## Local C2 experiment, 13 November 2026
 
-An opt-in, local-only tax-and-spending pilot for Burnley and Blackburn with
-Darwen is built separately from the public site. It preserves published data,
-uses exact money arithmetic and keeps the current game unchanged. No production
-route, sitemap, canonical or deployment changes. Source evidence, coverage
-screening, verification and the production brief are in
-`docs/C2-PILOT-2026-11-13.md`. Burnley's parish component needs review before any
-public release. This entry records local work, not a published feature.
+The local C2 tax and service spending pilot now covers 197 eligible councils
+of 296, built separately in `.ops/c2-dist`. Burnley remains excluded on parish.
+Published inputs and production routes are unchanged. Evidence and the printed
+precision derivation are in `docs/C2-COHORT-2026-11-15.md`. No release is authorised.
+
+### Limitations
+
+The production data tripwire in `src/lib/budget-freeze-data.ts` deliberately
+fails `npm test` when any pinned production input changes: `data/national/budget.json`,
+`data/national/england.json`, `data/council-tax/england-2026-27.json` or
+`data/council-tax/england-2025-26.json`. The error names the changed file and
+prints the exact rebuild command: `node scripts/audit-c2-pilot.mjs`.
+After an authorised source refresh, run that command and review the generated
+fixture, eligibility manifest and referendum mapping before committing.
+A raw hash mismatch remains a separate stop; rebuilding is not permission to
+replace a pinned source or approve public C2 integration.
 
 ## Scope and provenance
 

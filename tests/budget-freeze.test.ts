@@ -100,6 +100,21 @@ describe('edition-specific referendum boundaries in exact pence',()=>{
     expect(referendumTriggered('district',20000n,20600n)).toBe(true);
     expect(referendumTriggered('district',20000n,20601n)).toBe(true);
   });
+  it('uses the first whole penny above a fractional percentage threshold',()=>{
+    // Five per cent of GBP 1731.05 is GBP 86.5525; GBP 1817.61 first triggers.
+    expect(referendumTriggered('ordinary-social-care',173105n,181760n)).toBe(false);
+    expect(referendumTriggered('ordinary-social-care',173105n,181761n)).toBe(true);
+    expect(referendumTriggered('ordinary-social-care',173105n,181762n)).toBe(true);
+  });
+  it('keeps the strict pound condition when the district percentage is fractional',()=>{
+    // Three per cent of GBP 123.45 is GBP 3.7035; the strict GBP 5 condition decides.
+    expect(referendumTriggered('district',12345n,12715n)).toBe(false);
+    expect(referendumTriggered('district',12345n,12716n)).toBe(false);
+    expect(referendumTriggered('district',12345n,12717n)).toBe(false);
+    expect(referendumTriggered('district',12345n,12844n)).toBe(false);
+    expect(referendumTriggered('district',12345n,12845n)).toBe(false);
+    expect(referendumTriggered('district',12345n,12846n)).toBe(true);
+  });
   it('refuses an unmapped rule and invalid baselines',()=>{
     expect(()=>referendumTriggered('unknown' as never,100n,200n)).toThrow();
     expect(()=>referendumTriggered('district',0n,200n)).toThrow();
@@ -109,7 +124,7 @@ describe('edition-specific referendum boundaries in exact pence',()=>{
 
 describe('cohort source and isolation gates',()=>{
   it('includes exactly the eligible authorities and their individual GSS mappings',()=>{
-    expect(manifest.total).toBe(296);expect(manifest.eligible).toBe(170);
+    expect(manifest.total).toBe(296);expect(manifest.eligible).toBe(197);
     expect(pilots.map(p=>p.gss)).toEqual(manifest.councils.filter(c=>c.eligible).map(c=>c.gss));
     expect(Object.keys(referendum.byEdition['2026-27']).sort()).toEqual(pilots.map(p=>p.gss).sort());
     expect(snapshot.rawSources).toHaveLength(7);
@@ -118,7 +133,8 @@ describe('cohort source and isolation gates',()=>{
       const entry=manifest.councils.find(c=>c.gss===pilot.gss)!;
       expect(entry.principle?.principle).toBe(pilot.rule);
       expect(entry.reviewedNotes.every(n=>n.decision==='reviewed')).toBe(true);
-      for(const key of ['totalDifferencePence','parishDifferencePence','ownDifferencePence'] as const)expect(Math.abs(Number(entry.comparisons[key]))).toBeLessThanOrEqual(50000);
+      for(const key of ['totalDifferencePence','parishDifferencePence'] as const)expect(Math.abs(Number(entry.comparisons[key]))).toBeLessThanOrEqual(50000);
+      expect(Math.abs(Number(entry.comparisons.ownDifferencePence))).toBeLessThanOrEqual(100050);
       expect(pilot.ledger.find(r=>r.id==='ctrtot')!.thousands).toBe(pilot.ledger.find(r=>r.id==='revenuetot')!.thousands+pilot.ledger.filter(r=>['grantinaef','trnsreorg','appressch','appresdsg','appresph','appresoth','appresunall','grantrsg','grantpol','retainnndr','colfunct','othinc'].includes(r.id)).reduce((s,r)=>s+r.thousands,0));
     }
   });
@@ -137,6 +153,15 @@ describe('cohort source and isolation gates',()=>{
     expect(bcp.rule).toBe('exception-6.75');
     expect(bcp.reconciliation.table10IdentityDifferencePence).toBe('-100');
     expect(bcp.ruleLocation).toContain('paragraph 13, printed page 9');
+  });
+  it('retains both closed total endpoints and maps Trafford individually',()=>{
+    for(const gss of ['E06000010','E06000062']) {
+      const council=manifest.councils.find(c=>c.gss===gss)!;
+      expect(council.comparisons.totalDifferencePence).toBe('-50000');
+      expect(council.eligible).toBe(true);
+    }
+    expect(pilots.find(p=>p.gss==='E08000009')?.rule).toBe('exception-7.5');
+    expect(manifest.exclusionCounts).not.toHaveProperty('own-difference');
   });
   it('keeps pilot pages out of the normal source tree and public sitemap',()=>{
     expect(readFileSync('astro.config.mjs','utf8')).not.toContain('./pilot');

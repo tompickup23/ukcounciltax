@@ -66,8 +66,9 @@ for gss, sheet, now_row, prior_row, tax_row, ra_row, now_expected, prior_expecte
     assert result == Decimal(expected)
     ra_total = amount(ra_file,'RA_LA_Data_2026-27',ra_row,'HB')*1000
     ra_parish = amount(ra_file,'RA_LA_Data_2026-27',ra_row,'EY')*1000
-    for value, column in [(ra_total,'H'),(ra_parish,'L'),(ra_total-ra_parish,'N')]:
+    for value, column in [(ra_total,'H'),(ra_parish,'L')]:
         assert abs(value-amount(tax_file,'Data_Billing',tax_row,column)) <= 500
+    assert abs(ra_total-ra_parish-amount(tax_file,'Data_Billing',tax_row,'N')) <= Decimal('1000.50')
     pilot = next(p for p in fixture['pilots'] if p['gss']==gss)
     assert result*10000 == Decimal(pilot['reconciliation']['freezeDifferenceUnits'])
     assert now*100 == Decimal(pilot['ownPence'])

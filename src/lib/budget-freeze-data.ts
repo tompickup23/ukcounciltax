@@ -10,7 +10,7 @@ export type FreezePilot = FreezeBaseline & Omit<typeof snapshot.pilots[number], 
 export function freezePilots(): FreezePilot[] {
   for (const [path, expected] of Object.entries(snapshot.sourceHashes)) {
     const actual = createHash('sha256').update(readFileSync(join(process.cwd(), path))).digest('hex');
-    if (actual !== expected) throw new Error(`C2 input edition changed: rerun and review the source audit for ${path}`);
+    if (actual !== expected) throw new Error(`C2 input edition changed: ${path}. Rebuild with node scripts/audit-c2-pilot.mjs and review the generated fixture before committing.`);
   }
   if (snapshot.model !== FREEZE_MODEL || rules.edition !== FREEZE_YEAR) throw new Error('C2 model or rule edition changed.');
   const mappings = rules.byEdition[FREEZE_YEAR as keyof typeof rules.byEdition];

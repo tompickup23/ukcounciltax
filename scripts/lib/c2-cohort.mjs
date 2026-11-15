@@ -2,8 +2,8 @@ import {execFileSync} from 'node:child_process';
 import {readFileSync, mkdirSync} from 'node:fs';
 import {buildBudget} from '../import-ra-budget.mjs';
 import {referendumData} from './c2-referendum.mjs';
+import {withinRaPrecision, withinTable10Precision, withinTaxJoinPrecision, assertOwnPrecision} from './c2-precision.mjs';
 const assert = (ok, text) => {if (!ok) throw new Error(text);};
-const absolute = n => n < 0n ? -n : n;
 const normal = s => s.replace(/\s+/g,' ').trim();
 const decimal = s => {
   const t = s.replaceAll(',','');
@@ -50,7 +50,6 @@ export function buildCohort({budget,current,prior,national,rawSources,referendum
     'ra-note-4':'The source says the council tax figures in the two returns disagree, without an explanation.',
     'total-difference':'The total council tax requirement differs between the budget and tax returns by more than the published precision can explain.',
     'parish-difference':'The parish amounts in the budget and tax returns do not reconcile within the published precision.',
-    'own-difference':'The council’s own tax requirement does not reconcile between the budget and tax returns within half a thousand pounds.',
     'meaning-note':'An official source note changes the meaning or status of a funding figure used by this exercise.',
     'tax-join':'The held own-charge or tax-base cells do not provide matching, comparable inputs for both years.',
     'unmapped-rule':'The held referendum report does not establish a unique category for this council.',
@@ -100,12 +99,13 @@ export function buildCohort({budget,current,prior,national,rawSources,referendum
       const raTotal=decimal(evidence.raTotal.printed),raParish=decimal(evidence.raParish.printed);
       const total=decimal(evidence.table10Total.printed),parish=decimal(evidence.table10Parish.printed), ownRequirement=decimal(evidence.table10Own.printed);
       comparisons.table10IdentityDifferencePence=String(total-parish-ownRequirement);
-      if(absolute(total-parish-ownRequirement)>100n)add('tax-join');
+      if(!withinTable10Precision(total-parish-ownRequirement))add('tax-join');
       comparisons.totalDifferencePence=raTotal===null?null:String(raTotal*1000n-total);
       comparisons.parishDifferencePence=raParish===null?null:String(raParish*1000n-parish);
       comparisons.ownDifferencePence=raTotal===null||raParish===null?null:String((raTotal-raParish)*1000n-ownRequirement);
-      for(const [key,code] of [['totalDifferencePence','total-difference'],['parishDifferencePence','parish-difference'],['ownDifferencePence','own-difference']])if(comparisons[key]===null || absolute(BigInt(comparisons[key]))>50000n)add(code);
-      if(own!==null && base!==null && absolute(own*base-ownRequirement*100n)>base/2n+50n)add('tax-join');
+      for(const [key,code] of [['totalDifferencePence','total-difference'],['parishDifferencePence','parish-difference']])if(comparisons[key]===null || !withinRaPrecision(BigInt(comparisons[key])))add(code);
+      if(raTotal!==null && raParish!==null)assertOwnPrecision(BigInt(comparisons.totalDifferencePence),BigInt(comparisons.parishDifferencePence),BigInt(comparisons.ownDifferencePence),gss);
+      if(own!==null && base!==null && !withinTaxJoinPrecision(own*base-ownRequirement*100n,base))add('tax-join');
     }
     if(!rules.mappings[gss])add('unmapped-rule');
     const specialCheck=gss==='E09000001'?'City of London is explicitly in Annex B, page 11. Its own charge includes its police function; no separate police precept is added. The annual Table 8d note d confirms that the police element is not distinguishable. The same own-charge basis is used in both years.':gss==='E06000053'?'Isles of Scilly is explicitly included by Annex A paragraph 1(1)(b), page 6, and named in Annex B, page 14. Both annual own-charge cells and the Table 10 prior cell are checked.':null;
@@ -114,7 +114,7 @@ export function buildCohort({budget,current,prior,national,rawSources,referendum
       reason:codes.length?codes.map(c=>reasonsText[c]).join(' '):'The held source cells reconcile within their printed precision, the source notes have been reviewed and the referendum category is established.',
       reasons:codes.map(code=>({code,text:reasonsText[code]})),principle:codes.length?null:rules.mappings[gss],reviewedPrinciple:rules.mappings[gss]??null,
       evidence,comparisons,reviewedNotes,comparability:{statement:structureRef,priorMatchesCurrentReturn:priorOwn===decimal(evidence.table10Prior.printed),sameClass:a.classCode===before.classCode,specialCheck},
-      review:{resolution:codes.some(c=>['total-difference','parish-difference','own-difference'].includes(c))?'No cell or note in the held six workbooks explains the out-of-precision component differences. Neither figure is changed.':'Each available component is checked independently against half a printed thousand pounds. Compatibility does not prove rounding caused the difference.',
+      review:{resolution:codes.some(c=>['total-difference','parish-difference'].includes(c))?'No cell or note in the held six workbooks explains the out-of-precision component differences. Neither figure is changed.':'Total and parish use closed half thousand pound bounds; own share is asserted against their sum plus half a pound for its whole pound printing. Compatibility does not prove rounding caused the difference.',
         raPart2:{file:file2,sheet:raName,row:part2.row},specificGrants:{file:fileSg,sheet:sgName,row:sg.row}}};
   });
   const eligible=councils.filter(c=>c.eligible);

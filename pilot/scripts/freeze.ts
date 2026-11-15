@@ -1,4 +1,4 @@
-import { calculateFreeze, initialFreezeInputs, money, freezeSummary, parsePence, type FreezeInputs } from '../../src/lib/budget-freeze';
+import { FREEZE_YEAR_TEXT, calculateFreeze, initialFreezeInputs, money, freezeSummary, parsePence, type FreezeInputs } from '../../src/lib/budget-freeze';
 import type { FreezePilot } from '../../src/lib/budget-freeze-data';
 
 const root = document.querySelector<HTMLElement>('[data-freeze-pilot]');
@@ -42,8 +42,8 @@ if (root) {
       get<HTMLElement>('[data-spending]').textContent = money(calculated.spendingChange);
       get<HTMLElement>('[data-financing]').textContent = money(calculated.financingChange);
       ruleResult.textContent = calculated.referendum
-        ? 'A referendum would be required for this choice under the mapped 2026/27 principle.'
-        : 'This choice is below the mapped referendum trigger for 2026/27. This does not establish legal feasibility.';
+        ? `A referendum would be required for this choice under the mapped ${FREEZE_YEAR_TEXT} principle.`
+        : `This choice is below the mapped referendum trigger for ${FREEZE_YEAR_TEXT}. This does not establish legal feasibility.`;
       for (const change of calculated.changes) {
         const row = root!.querySelector<HTMLElement>(`[data-service-delta="${change.id}"]`);
         if (row) row.textContent = `User requested scenario: change from published spending ${money(change.deltaUnits)}.`;

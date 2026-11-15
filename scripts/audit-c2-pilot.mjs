@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { readOds } from './lib/ods.mjs';
+import {withinRaPrecision, withinTable10Precision, withinTaxJoinPrecision, assertOwnPrecision} from './lib/c2-precision.mjs';
 import { buildCohort } from './lib/c2-cohort.mjs';
 const books = new Map();
 const readBook = path => {if (!books.has(path)) books.set(path, readOds(path)); return books.get(path);};
@@ -87,14 +88,16 @@ const output = pilots.map(pilot => {
   check(v.servicetot === budget.groups.reduce((sum,g)=>sum+v[g.id],0), 'Service identity fails');
   for (const group of budget.groups.filter(g=>g.subLines.length)) check(group.subLines.every(id=>Number.isSafeInteger(v[id])) && group.subLines.reduce((sum,id)=>sum+v[id],0) === v[group.id], 'Service sublines fail');
   const totalPence = decimal(raw[columns.total]), parishPence = decimal(raw[columns.parish]), ownRequirementPence = decimal(raw[columns.own]);
-  check(absolute(totalPence-parishPence-ownRequirementPence) <= 100n, 'Table 10 sum exceeds whole-pound printed precision');
+  check(withinTable10Precision(totalPence-parishPence-ownRequirementPence), 'Table 10 sum exceeds whole-pound printed precision');
   const raDifference = BigInt(v.ctrtot)*100000n-totalPence;
   const parishDifference = BigInt(v.parishaggprecept)*100000n-parishPence;
-  const componentReviewRequired = absolute(parishDifference)>50000n;
-  check(absolute(raDifference) <= 50000n, 'RA and Table 10 differ beyond half a published thousand pounds');
+  const componentReviewRequired = !withinRaPrecision(parishDifference);
+  check(withinRaPrecision(raDifference), 'RA and Table 10 differ beyond half a published thousand pounds');
+  check(!componentReviewRequired, 'RA parish exceeds printed precision');
+  assertOwnPrecision(raDifference,parishDifference,(BigInt(v.ctrtot)-BigInt(v.parishaggprecept))*100000n-ownRequirementPence,pilot.gss);
   // Printed Band D is rounded to pennies. Do not replace the published requirement.
   const bandYieldDifference = own*base-ownRequirementPence*100n;
-  check(absolute(bandYieldDifference) <= base/2n+50n, 'Own Band D times base exceeds penny/whole-pound source rounding');
+  check(withinTaxJoinPrecision(bandYieldDifference,base), 'Own Band D times base exceeds penny/whole-pound source rounding');
   const services = budget.groups.map(g=>({
     id:g.id, label:g.label, line:budget.fields[g.id].line, pence:String(BigInt(v[g.id])*100000n),
     editable:v[g.id]>0 && !['edutot','phtot'].includes(g.id),

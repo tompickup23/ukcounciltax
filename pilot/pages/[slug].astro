@@ -1,7 +1,7 @@
 ---
 import '../../src/styles/global.css';
 import { freezePilots, type FreezePilot } from '../../src/lib/budget-freeze-data';
-import { FREEZE_MODEL, FREEZE_ASSUMPTIONS, referendumExplanation, calculateFreeze, initialFreezeInputs, inputPounds, money } from '../../src/lib/budget-freeze';
+import { FREEZE_YEAR, FREEZE_YEAR_TEXT, FREEZE_MODEL, FREEZE_ASSUMPTIONS, referendumExplanation, calculateFreeze, initialFreezeInputs, inputPounds, money } from '../../src/lib/budget-freeze';
 import { SITE_URL } from '../../src/lib/site';
 export function getStaticPaths() { return freezePilots().map(pilot => ({ params:{slug:pilot.slug}, props:{pilot} })); }
 const {pilot} = Astro.props as {pilot:FreezePilot};
@@ -18,7 +18,7 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,nofollow" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>{pilot.name} budget freeze pilot 2026/27 | UK Council Tax</title>
+    <title>{pilot.name} budget freeze pilot {FREEZE_YEAR_TEXT} | UK Council Tax</title>
     <meta name="description" content="A local, illustrative tax and service spending scenario with explicit assumptions." />
     <script is:inline src="/theme-init.js"></script>
   </head>
@@ -36,7 +36,7 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
         <button type="button" data-theme-toggle hidden>Change colour theme</button>
       </nav>
       <div class="page-head">
-        <p class="eyebrow">2026/27 · Tax and spending</p>
+        <p class="eyebrow">{FREEZE_YEAR_TEXT} · Tax and spending</p>
         <h1>What if {pilot.name} froze its council tax?</h1>
         <p class="lede">Start with last year's own-council charge. Explore how changes to tax and net service spending affect the remaining difference.</p>
         <p class="source-line">User requested scenario | {FREEZE_MODEL}. A calculation exercise, not the council's actual deficit.</p>
@@ -45,9 +45,9 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
       <section class="baseline" aria-labelledby="baseline-title">
         <h2 id="baseline-title">The published starting point</h2>
         <div class="baseline-grid">
-          <div><p class="fact-label">Own Band D, 2025/26</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><p class="source-line">MHCLG, <a href={pilot.sources[2].url}>{pilot.sources[2].title}</a>.</p></div>
-          <div><p class="fact-label">Own Band D, 2026/27</p><strong>{publishedMoney(pilot.ownPence)}</strong><p class="source-line">MHCLG, <a href={taxSource.url}>{taxSource.title}</a>.</p></div>
-          <div><p class="fact-label">Fixed tax base, 2026/27</p><strong>{baseText}</strong><p class="source-line">Band D equivalents. MHCLG, <a href={pilot.sources[3].url}>Table 10, Data_Billing, item 7</a>.</p></div>
+          <div><p class="fact-label">Own Band D, {`${Number(FREEZE_YEAR.slice(0,4))-1}/${FREEZE_YEAR.slice(2,4)}`}</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><p class="source-line">MHCLG, <a href={pilot.sources[2].url}>{pilot.sources[2].title}</a>.</p></div>
+          <div><p class="fact-label">Own Band D, {FREEZE_YEAR_TEXT}</p><strong>{publishedMoney(pilot.ownPence)}</strong><p class="source-line">MHCLG, <a href={taxSource.url}>{taxSource.title}</a>.</p></div>
+          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><p class="source-line">Band D equivalents. MHCLG, <a href={pilot.sources[3].url}>Table 10, Data_Billing, item 7</a>.</p></div>
         </div>
         <p>These are this council's own charges excluding parish precepts, not the full household bill.{pilot.rule === 'district' && ' County council, police, fire and parish charges are outside this exercise.'}</p>
       </section>
@@ -108,14 +108,14 @@ const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
         <p>All service groups, including net income and published zeros, remain in the reference below. The rows after total service expenditure show revenue expenditure and its signed financing entries; they are not additional service totals.</p>
         <p class="source-line">MHCLG, <a href={budgetSource.url}>{budgetSource.title}</a>. Published unit: £ thousand. Display below preserves that unit.</p>
         <details><summary>Read the signed ledger and held service groups</summary>
-          <div class="table-wrap"><table><caption>{pilot.name}, published RA 2026/27, £ thousand</caption><thead><tr><th scope="col">RA line</th><th scope="col">Item</th><th scope="col">Published</th><th scope="col">Pilot treatment</th></tr></thead><tbody>{pilot.ledger.map(row=><tr><td>{row.line}</td><th scope="row">{row.label}</th><td>{row.thousands.toLocaleString('en-GB')}</td><td>{pilot.services.find(s=>s.id===row.id)?.heldReason ?? (pilot.services.find(s=>s.id===row.id)?.editable ? 'Scenario control above' : 'Reference only')}</td></tr>)}</tbody></table></div>
+          <div class="table-wrap"><table><caption>{pilot.name}, published RA {FREEZE_YEAR_TEXT}, £ thousand</caption><thead><tr><th scope="col">RA line</th><th scope="col">Item</th><th scope="col">Published</th><th scope="col">Pilot treatment</th></tr></thead><tbody>{pilot.ledger.map(row=><tr><td>{row.line}</td><th scope="row">{row.label}</th><td>{row.thousands.toLocaleString('en-GB')}</td><td>{pilot.services.find(s=>s.id===row.id)?.heldReason ?? (pilot.services.find(s=>s.id===row.id)?.editable ? 'Scenario control above' : 'Reference only')}</td></tr>)}</tbody></table></div>
         </details>
         <details id="reconciliation"><summary>Source reconciliation and precision</summary>
           <p>The signed RA financing identity and service totals reconcile. The RA council-tax requirement is printed in thousands; Table 10 prints whole pounds. Their difference is {publishedMoney(pilot.reconciliation.raTotalDifferencePence)}, within half a printed thousand. Compatibility with that precision does not prove why the sources differ. This difference is kept separate from the scenario and is not a deficit.</p>
           <p>Table 10 requirement including parish: {publishedMoney(pilot.reconciliation.table10TotalPence)}; own requirement: {publishedMoney(pilot.reconciliation.table10OwnPence)}; parish requirement: {publishedMoney(pilot.reconciliation.table10ParishPence)}.</p>
           {pilot.reconciliation.table10IdentityDifferencePence !== '0' && <p>Table 10 total minus its printed own and parish amounts is {publishedMoney(pilot.reconciliation.table10IdentityDifferencePence)}. Each is printed in whole pounds; this difference is compatible with that precision. All three printed figures remain unchanged.</p>}
           <p>The printed own Band D multiplied by the tax base differs from the published own requirement by {money(BigInt(pilot.reconciliation.ownYieldDifferenceUnits))}. Printed Band D is rounded to pennies. The model calculates changes from the published baseline; it does not replace the published requirement with this product.</p>
-          <p>The RA total less its parish line, minus the Table 10 own requirement, is {publishedMoney(pilot.reconciliation.ownDifferencePence)}. This own component is also within half a printed thousand.</p>
+          <p>The RA total less its parish line, minus the Table 10 own requirement, is {publishedMoney(pilot.reconciliation.ownDifferencePence)}. This derived component is within the sum of the two half thousand pound bounds plus half a pound for its whole pound printing.</p>
           <p>The RA parish line minus the Table 10 parish requirement is {publishedMoney(pilot.reconciliation.parishDifferencePence)}. {pilot.reconciliation.componentReviewRequired ? 'This exceeds half a printed thousand and requires source review before public release. No adjustment is made to either source.' : 'This is within half a printed thousand.'}</p>
           <p class="source-line">MHCLG, <a href={pilot.sources[3].url}>Table 10, Data_Billing, items 1, 2, 3, 7 and 9</a>, and <a href={budgetSource.url}>RA Part 1, lines 821 and 990</a>.</p>
         </details>

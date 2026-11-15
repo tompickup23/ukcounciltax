@@ -241,6 +241,35 @@
           "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
         ]
       },
+      "E06000007": {
+        "principle": "exception-7.5",
+        "membership": {
+          "page": 7,
+          "annex": "A",
+          "paragraph": "2(i)",
+          "name": "Warrington Borough Council"
+        },
+        "category": "2(i)",
+        "percentageBasisPoints": 750,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 550,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 9,
+          "annex": "A",
+          "paragraph": "11",
+          "categoryPage": 7,
+          "categoryParagraph": "2(i)"
+        },
+        "quotes": [
+          "is 7.5% (comprising 2% for expenditure on adult social care, and 5.5% for other expenditure), or more than 7.5%"
+        ]
+      },
       "E06000008": {
         "principle": "ordinary-social-care",
         "membership": {
@@ -560,6 +589,35 @@
           "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
         ]
       },
+      "E06000024": {
+        "principle": "exception-9",
+        "membership": {
+          "page": 7,
+          "annex": "A",
+          "paragraph": "2(j)",
+          "name": "North Somerset Council"
+        },
+        "category": "2(j)",
+        "percentageBasisPoints": 900,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 700,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 9,
+          "annex": "A",
+          "paragraph": "12",
+          "categoryPage": 7,
+          "categoryParagraph": "2(j)"
+        },
+        "quotes": [
+          "is 9% (comprising 2% for expenditure on adult social care, and 7% for other expenditure), or more than 9%"
+        ]
+      },
       "E06000026": {
         "principle": "ordinary-social-care",
         "membership": {
@@ -768,6 +826,35 @@
         "membership": {
           "name": "Bracknell Forest",
           "page": 13,
+          "annex": "B",
+          "paragraph": "Authority list for Annex A 2(a)"
+        },
+        "category": "2(a)",
+        "percentageBasisPoints": 500,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 7,
+          "annex": "A",
+          "paragraph": "3",
+          "categoryPage": 7,
+          "categoryParagraph": "2(a)"
+        },
+        "quotes": [
+          "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+        ]
+      },
+      "E06000037": {
+        "principle": "ordinary-social-care",
+        "membership": {
+          "name": "West Berkshire",
+          "page": 14,
           "annex": "B",
           "paragraph": "Authority list for Annex A 2(a)"
         },
@@ -1227,6 +1314,37 @@
           "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
         ]
       },
+      "E07000009": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000003"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000011": {
         "principle": "district",
         "membership": {
@@ -1351,6 +1469,68 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000034": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000007"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000035": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000007"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000036": {
         "principle": "district",
         "membership": {
@@ -1414,6 +1594,37 @@
         ]
       },
       "E07000038": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000007"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000039": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -1569,6 +1780,37 @@
         ]
       },
       "E07000045": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000008"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000046": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -1909,7 +2151,69 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000076": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000012"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000079": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000013"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000080": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -2405,7 +2709,69 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000105": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000016"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000107": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000016"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000108": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -2530,6 +2896,37 @@
         ]
       },
       "E07000113": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000016"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000115": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -2901,6 +3298,68 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000129": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000018"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000130": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000018"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000134": {
         "principle": "district",
         "membership": {
@@ -2963,6 +3422,37 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000136": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000019"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000138": {
         "principle": "district",
         "membership": {
@@ -2995,6 +3485,37 @@
         ]
       },
       "E07000140": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000019"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000141": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -3088,6 +3609,37 @@
         ]
       },
       "E07000145": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000020"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000147": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -3250,6 +3802,37 @@
           "paragraph": "1(1)",
           "quote": "a shire district council” means a district council for an area for which there is a county council",
           "countyGss": "E10000024"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000178": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000025"
         },
         "category": "2(e)",
         "percentageBasisPoints": 300,
@@ -3676,6 +4259,37 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E07000215": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000030"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
       "E07000217": {
         "principle": "district",
         "membership": {
@@ -3739,6 +4353,37 @@
         ]
       },
       "E07000219": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000031"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000221": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -3863,6 +4508,37 @@
         ]
       },
       "E07000226": {
+        "principle": "district",
+        "membership": {
+          "page": 6,
+          "annex": "A",
+          "paragraph": "1(1)",
+          "quote": "a shire district council” means a district council for an area for which there is a county council",
+          "countyGss": "E10000032"
+        },
+        "category": "2(e)",
+        "percentageBasisPoints": 300,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": "500",
+        "poundComparison": "greater-than",
+        "join": "AND",
+        "ascBasisPoints": 0,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 8,
+          "annex": "A",
+          "paragraph": "7",
+          "categoryPage": 7,
+          "categoryParagraph": "2(e)"
+        },
+        "quotes": [
+          "3%, or more than 3%, greater than its relevant basic amount of council tax for 2025-26, and",
+          "more than £5.00 greater than its relevant basic amount of council tax"
+        ]
+      },
+      "E07000227": {
         "principle": "district",
         "membership": {
           "page": 6,
@@ -4172,10 +4848,68 @@
           "more than £5.00 greater than its relevant basic amount of council tax"
         ]
       },
+      "E08000001": {
+        "principle": "ordinary-social-care",
+        "membership": {
+          "name": "Bolton",
+          "page": 12,
+          "annex": "B",
+          "paragraph": "Authority list for Annex A 2(a)"
+        },
+        "category": "2(a)",
+        "percentageBasisPoints": 500,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 7,
+          "annex": "A",
+          "paragraph": "3",
+          "categoryPage": 7,
+          "categoryParagraph": "2(a)"
+        },
+        "quotes": [
+          "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+        ]
+      },
       "E08000003": {
         "principle": "ordinary-social-care",
         "membership": {
           "name": "Manchester",
+          "page": 12,
+          "annex": "B",
+          "paragraph": "Authority list for Annex A 2(a)"
+        },
+        "category": "2(a)",
+        "percentageBasisPoints": 500,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 7,
+          "annex": "A",
+          "paragraph": "3",
+          "categoryPage": 7,
+          "categoryParagraph": "2(a)"
+        },
+        "quotes": [
+          "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+        ]
+      },
+      "E08000004": {
+        "principle": "ordinary-social-care",
+        "membership": {
+          "name": "Oldham",
           "page": 12,
           "annex": "B",
           "paragraph": "Authority list for Annex A 2(a)"
@@ -4317,6 +5051,35 @@
           "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
         ]
       },
+      "E08000009": {
+        "principle": "exception-7.5",
+        "membership": {
+          "page": 7,
+          "annex": "A",
+          "paragraph": "2(i)",
+          "name": "Trafford Council"
+        },
+        "category": "2(i)",
+        "percentageBasisPoints": 750,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 550,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 9,
+          "annex": "A",
+          "paragraph": "11",
+          "categoryPage": 7,
+          "categoryParagraph": "2(i)"
+        },
+        "quotes": [
+          "is 7.5% (comprising 2% for expenditure on adult social care, and 5.5% for other expenditure), or more than 7.5%"
+        ]
+      },
       "E08000010": {
         "principle": "ordinary-social-care",
         "membership": {
@@ -4379,6 +5142,35 @@
         "principle": "ordinary-social-care",
         "membership": {
           "name": "Liverpool",
+          "page": 12,
+          "annex": "B",
+          "paragraph": "Authority list for Annex A 2(a)"
+        },
+        "category": "2(a)",
+        "percentageBasisPoints": 500,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 7,
+          "annex": "A",
+          "paragraph": "3",
+          "categoryPage": 7,
+          "categoryParagraph": "2(a)"
+        },
+        "quotes": [
+          "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+        ]
+      },
+      "E08000013": {
+        "principle": "ordinary-social-care",
+        "membership": {
+          "name": "St Helens",
           "page": 12,
           "annex": "B",
           "paragraph": "Authority list for Annex A 2(a)"
@@ -4756,6 +5548,35 @@
         "principle": "ordinary-social-care",
         "membership": {
           "name": "Wakefield",
+          "page": 12,
+          "annex": "B",
+          "paragraph": "Authority list for Annex A 2(a)"
+        },
+        "category": "2(a)",
+        "percentageBasisPoints": 500,
+        "percentageComparison": "greater-than-or-equal",
+        "poundPence": null,
+        "poundComparison": null,
+        "join": "single",
+        "ascBasisPoints": 200,
+        "otherBasisPoints": 300,
+        "citation": {
+          "file": "Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "url": "https://assets.publishing.service.gov.uk/media/6989c723d3f57710b50a9bb4/Council_Tax_Referendum_Principles_Report_2026-27.pdf",
+          "page": 7,
+          "annex": "A",
+          "paragraph": "3",
+          "categoryPage": 7,
+          "categoryParagraph": "2(a)"
+        },
+        "quotes": [
+          "is 5% (comprising 2% for expenditure on adult social care, and 3% for other expenditure), or more than 5%"
+        ]
+      },
+      "E08000037": {
+        "principle": "ordinary-social-care",
+        "membership": {
+          "name": "Gateshead",
           "page": 12,
           "annex": "B",
           "paragraph": "Authority list for Annex A 2(a)"

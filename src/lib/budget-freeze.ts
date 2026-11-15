@@ -2,10 +2,10 @@ import edition from '../../data/pilots/budget-freeze-model.json';
 import {principles} from '../../data/pilots/budget-freeze-referendum.json';
 /** Exact arithmetic for the opt-in C2 pilot. One unit is GBP 0.0001. */
 export const FREEZE_YEAR = edition.year;
-const yearText = FREEZE_YEAR.replace('-', '/');
+export const FREEZE_YEAR_TEXT = FREEZE_YEAR.replace('-', '/');
 export const FREEZE_MODEL = 'budget-freeze 0.2';
 export const FREEZE_ASSUMPTIONS = [
-  `This is a user requested scenario for ${yearText}, not an actual council deficit or an adopted budget.`,
+  `This is a user requested scenario for ${FREEZE_YEAR_TEXT}, not an actual council deficit or an adopted budget.`,
   'Only this council\'s own Band D charge changes. Parish and other charging bodies stay outside the exercise.',
   'The current published tax base stays fixed. It is measured in Band D equivalents, not households.',
   'Grants, reserves, other financing and the adjustments between service spending and revenue expenditure stay fixed.',
@@ -79,8 +79,8 @@ export function referendumTriggered(rule: FreezeBaseline['rule'], prior: bigint,
 }
 export function referendumExplanation(rule: FreezeBaseline['rule']): string {
   const principle = principles[rule];
-  if (principle.join === 'AND') return `The mapped ${yearText} referendum trigger requires both an increase of at least 3% and an increase of more than £5 over the previous own charge.`;
-  return `The mapped ${yearText} referendum trigger is an increase of at least ${principle.percentageBasisPoints / 100}% over the previous own charge, comprising ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
+  if (principle.join === 'AND') return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger requires both an increase of at least ${principle.percentageBasisPoints / 100}% and an increase of more than £${inputPounds(principle.poundPence!)} over the previous own charge.`;
+  return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger is an increase of at least ${principle.percentageBasisPoints / 100}% over the previous own charge, comprising ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
 }
 
 export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): FreezeInputs {
@@ -91,7 +91,7 @@ export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): Fr
 }
 
 export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) {
-  if (baseline.year !== FREEZE_YEAR) throw new Error(`The pilot is pinned to ${yearText}.`);
+  if (baseline.year !== FREEZE_YEAR) throw new Error(`The pilot is pinned to ${FREEZE_YEAR_TEXT}.`);
   const current = integer(baseline.ownPence, true);
   const prior = integer(baseline.priorOwnPence, true);
   const base = integer(baseline.taxBaseHundredths, true);
@@ -125,7 +125,7 @@ export function freezeSummary(baseline: FreezeBaseline, inputs: FreezeInputs, so
   const result = calculateFreeze(baseline, inputs);
   return [
     `User requested scenario | ${FREEZE_MODEL}`,
-    `${baseline.name} (${baseline.gss}), ${yearText}`,
+    `${baseline.name} (${baseline.gss}), ${FREEZE_YEAR_TEXT}`,
     `Previous own Band D: £${inputPounds(baseline.priorOwnPence)}; fixed current tax base: ${inputPounds(baseline.taxBaseHundredths)} Band D equivalents`,
     `Own Band D selected: £${inputPounds(parsePence(inputs.ownPounds))}; published: £${inputPounds(baseline.ownPence)}`,
     ...result.changes.filter(s => s.deltaUnits !== 0n).map(change => {
@@ -136,7 +136,7 @@ export function freezeSummary(baseline: FreezeBaseline, inputs: FreezeInputs, so
     `Financing change: £${exactPounds(result.financingChange)}`,
     `Remaining difference: £${exactPounds(result.remaining)} (${result.status})`,
     'Formula: remaining difference = spending change minus (selected own Band D minus published own Band D) times the fixed tax base.',
-    `Referendum trigger under the mapped ${yearText} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
+    `Referendum trigger under the mapped ${FREEZE_YEAR_TEXT} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
     ...FREEZE_ASSUMPTIONS,
     ...(baseline.sourceWarnings ?? []),
     'Displayed money rounds to pennies; this summary preserves four decimal places. Zero is tested before rounding.',

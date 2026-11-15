@@ -145,7 +145,13 @@ const coveragePath='docs/C2-COVERAGE-2026-11-13.json';
 const coverageText=JSON.stringify(coverageResult,null,2)+'\n';
 if(process.argv.includes('--check'))check(readFileSync(coveragePath,'utf8')===coverageText,'Coverage audit drift');
 else writeFileSync(coveragePath,coverageText);
-for (const [path, value] of [['data/pilots/budget-freeze-eligibility.json',manifest],['data/pilots/budget-freeze-referendum.json',rules]]) {
+const raColumns = Object.fromEntries(output[0].ledger.map(row => {
+  let n = raIds.indexOf(row.id)+1, column = '';
+  check(n > 0, `Missing RA column: ${row.id}`);
+  while (n > 0) { n--; column = String.fromCharCode(65+n%26)+column; n = Math.floor(n/26); }
+  return [row.id, column];
+}));
+for (const [path, value] of [['data/pilots/budget-freeze-columns.json',raColumns],['data/pilots/budget-freeze-eligibility.json',manifest],['data/pilots/budget-freeze-referendum.json',rules]]) {
   const text=JSON.stringify(value,null,2)+'\n';
   if(process.argv.includes('--check'))check(readFileSync(path,'utf8')===text,`Cohort audit drift: ${path}`);
   else writeFileSync(path,text);

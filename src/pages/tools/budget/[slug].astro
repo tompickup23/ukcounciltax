@@ -1,4 +1,5 @@
 ---
+import BudgetSetEntry from '../../../components/BudgetSetEntry.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import BandSelector from '../../../components/BandSelector.astro';
@@ -37,6 +38,7 @@ const description = available
   {available ? <>
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
     {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
+    <BudgetSetEntry gss={council.gss} />
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
     <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
     {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}
@@ -44,6 +46,7 @@ const description = available
     {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
     </DataDrawer>
   </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}
+  {!available && <BudgetSetEntry gss={council.gss} />}
   <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />
   <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={tax} showChange={false} /></section>

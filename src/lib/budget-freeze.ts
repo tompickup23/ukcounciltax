@@ -1,6 +1,7 @@
-import edition from '../../data/pilots/budget-freeze-model.json';
-import {principles} from '../../data/pilots/budget-freeze-referendum.json';
-/** Exact arithmetic for the opt-in C2 pilot. One unit is GBP 0.0001. */
+import edition from '../../data/pilots/budget-freeze-model.json' with {type:'json'};
+import referendum from '../../data/pilots/budget-freeze-referendum.json' with {type:'json'};
+const {principles} = referendum;
+/** Exact arithmetic for the C2 budget exercise. One unit is GBP 0.0001. */
 export const FREEZE_YEAR = edition.year;
 export const FREEZE_YEAR_TEXT = FREEZE_YEAR.replace('-', '/');
 export const FREEZE_MODEL = 'budget-freeze 0.2';
@@ -9,9 +10,9 @@ export const FREEZE_ASSUMPTIONS = [
   'Only this council\'s own Band D charge changes. Parish and other charging bodies stay outside the exercise.',
   'The current published tax base stays fixed. It is measured in Band D equivalents, not households.',
   'Grants, reserves, other financing and the adjustments between service spending and revenue expenditure stay fixed.',
-  'Net-income and zero service groups, education and public health stay fixed in this pilot.',
+  'Net-income and zero service groups, education and public health stay fixed in this exercise.',
   'Service figures are net of fees, charges and transfers and exclude NHS-funded expenditure. Changes do not establish achievable savings, service outcomes or compliance with statutory duties.',
-  'The control limits are prototype limits, not legal limits. No future year, fees or demand changes are modelled.',
+  'The control range is for exploration, not a forecast, a legal limit or a deliverable budget. No future year, fees or demand changes are modelled.',
 ] as const;
 
 export interface FreezeService {
@@ -91,12 +92,12 @@ export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): Fr
 }
 
 export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) {
-  if (baseline.year !== FREEZE_YEAR) throw new Error(`The pilot is pinned to ${FREEZE_YEAR_TEXT}.`);
+  if (baseline.year !== FREEZE_YEAR) throw new Error(`The exercise is pinned to ${FREEZE_YEAR_TEXT}.`);
   const current = integer(baseline.ownPence, true);
   const prior = integer(baseline.priorOwnPence, true);
   const base = integer(baseline.taxBaseHundredths, true);
   const selected = parsePence(inputs.ownPounds);
-  if (selected > current * 2n) throw new Error('The tax amount exceeds this prototype\'s range.');
+  if (selected > current * 2n) throw new Error('The tax amount exceeds this exploration range.');
   const ids = baseline.services.map(s => s.id);
   if (new Set(ids).size !== ids.length) throw new Error('Duplicate service input.');
   const editable = baseline.services.filter(s => s.editable);
@@ -108,7 +109,7 @@ export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) 
     if (!service.editable) return { id: service.id, selectedPence: published, deltaUnits: 0n };
     if (published <= 0n || ['edutot', 'phtot'].includes(service.id)) throw new Error('This service group must stay fixed.');
     const chosen = parsePence(inputs.servicePounds[service.id]);
-    if (chosen > published * 2n) throw new Error(`${service.label}: the amount exceeds this prototype's range.`);
+    if (chosen > published * 2n) throw new Error(`${service.label}: the amount exceeds this exploration range.`);
     return { id: service.id, selectedPence: chosen, deltaUnits: (chosen-published) * 100n };
   });
   const spendingChange = changes.reduce((sum, s) => sum + s.deltaUnits, 0n);

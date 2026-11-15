@@ -90,5 +90,16 @@ export function publishedText(html) {
 export function staticGameNumbers(html) {
   const doc=new JSDOM(html).window.document;
   doc.querySelectorAll('script,style,template').forEach(node=>node.remove());
+  // C2 adds one audited entry after the C1b fixture. Remove only its exact
+  // manifest text; any extra figure still reaches the unchanged number check.
+  const entries = doc.querySelectorAll('[data-budget-set-entry]');
+  if (entries.length === 1) {
+    const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') ?? '';
+    const slug = /\/tools\/budget\/([^/]+)\/$/.exec(canonical)?.[1];
+    const manifest = JSON.parse(readFileSync(join(process.cwd(), 'data/pilots/budget-freeze-eligibility.json'), 'utf8'));
+    const council = manifest.councils.find(row => row.slug === slug);
+    const expected = council?.eligible ? 'Set the budget yourself' : council?.reason;
+    if (expected && entries[0].textContent === expected) entries[0].remove();
+  }
   return doc.body.textContent.match(/\d[\d,.]*(?:%|p)?/g)??[];
 }

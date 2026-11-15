@@ -34,9 +34,15 @@ export function chromeProblems(page) {
   const footer = element(html, /<footer\b[^>]*class="site-footer\b/);
   if (!header) problems.push("no site header");
   else if (/<select\b/i.test(header)) problems.push("a select inside the site header");
+  const unsavedBudget = /<link\b[^>]*rel="canonical"[^>]*href="[^" ]*\/tools\/budget\/[^/" ]+\/set\/"/.test(html) && /data-freeze-pilot/.test(html);
   if (!footer) problems.push("no site footer");
-  else if (count(footer, /<select\b[^>]*data-theme-select/gi) !== 1) problems.push("the footer must hold exactly one theme select");
-  if (count(html, /<select\b[^>]*data-theme-select/gi) !== 1) problems.push("the page must hold exactly one theme select");
+  if (unsavedBudget) {
+    if (count(html, /<select\b[^>]*data-theme-select/gi) !== 0) problems.push("an unsaved budget page must have no persisted theme select");
+    if (count(html, /<button\b[^>]*data-theme-toggle/gi) !== 1) problems.push("an unsaved budget page must have one memory only theme button");
+  } else {
+    if (footer && count(footer, /<select\b[^>]*data-theme-select/gi) !== 1) problems.push("the footer must hold exactly one theme select");
+    if (count(html, /<select\b[^>]*data-theme-select/gi) !== 1) problems.push("the page must hold exactly one theme select");
+  }
   return problems;
 }
 

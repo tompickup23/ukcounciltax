@@ -10,7 +10,7 @@ describe('budget page source views', () => {
     const pages = councilPages();
     expect(pages).toHaveLength(296);
     expect(pages.filter(({council}) => budgetFor(council.gss).council.status === 'available')).toHaveLength(287);
-    const routes = programmaticPaths().filter(path => path.startsWith('/tools/budget/'));
+    const routes = programmaticPaths().filter(path => /^\/tools\/budget\/[^/]+\/$/.test(path));
     expect(routes).toHaveLength(296);
     for (const {council} of pages) {
       const path = `/tools/budget/${council.slug}/`;

@@ -1,3 +1,4 @@
+import {freezePilots} from './budget-freeze-data';
 import { national } from './national-data';
 import { RANK_CLASSES, COUNTY_CLASS } from './rankings';
 import {devolvedPaths} from './devolved';
@@ -74,9 +75,13 @@ export function councilPages(): CouncilPage[] {
     .sort((a, b) => a.tax.name.localeCompare(b.tax.name, "en-GB"));
 }
 
+export const budgetSetPath = (slug: string) => `/tools/budget/${slug}/set/`;
+export const budgetSetPages = () => freezePilots();
+
 export function programmaticPaths(): string[] {
   return [
     ...devolvedPaths(),
+    ...budgetSetPages().map(pilot => budgetSetPath(pilot.slug)),
     ...rankingPaths(),
     ...parishPages().map(parishPath),
     ...BANDS.map(bandPath),

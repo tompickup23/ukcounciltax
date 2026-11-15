@@ -514,6 +514,7 @@ export function sitemapLastmod(path: string): string {
     if (!date) throw new Error(`No recorded ranking edition date for ${path}`);
     return date;
   }
+  if (/^\/tools\/budget\/[^/]+\/set\/$/.test(path)) return readJson<{reviewedOn: string}>('data/pilots/budget-freeze.json').reviewedOn;
   if (path.startsWith('/tools/budget/')) return nationalSources.raPart1.retrieved;
   // A scenario game carries the edition date of the model build it was copied from.
   if (/^\/councils\/[^/]+\/budget-game\/$/.test(path)) return readJson<{edition: string}>('src/components/burnley-game/meta.json').edition;

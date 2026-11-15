@@ -182,14 +182,12 @@ for (const { path, destination, tail } of PAGES) {
       await context.close();
     });
 
-    test("on a phone the picker entry shows the box, its button and the first match", async ({ browser, baseURL }) => {
+    test("on a phone the box, its button and the first match are on the first screen", async ({ browser, baseURL }) => {
       const context = await browser.newContext({ viewport: { width: 375, height: 812 } });
       const page = await context.newPage();
       await page.route("https://static.cloudflareinsights.com/**", (route) => route.abort());
       await page.route("https://cloudflareinsights.com/**", (route) => route.abort());
       await page.goto(`${baseURL}${path}`);
-      // W1 gives the budget hub a hero door into its picker; other hubs open directly on it.
-      if (path === "/tools/budget/") await page.locator('[data-play-door="guess"]').click();
       for (const selector of ["[data-picker-input]", "[data-picker-submit]"]) {
         const box = (await page.locator(selector).boundingBox())!;
         expect(box.y).toBeGreaterThanOrEqual(0);

@@ -18,7 +18,9 @@ for (const route of ['', 'leeds/', 'burnley/', 'camden/']) {
       if (route) {
         await expect(page.locator('[data-budget-modes] a').first()).toHaveText('Guess');
         const setDoor = page.locator('[data-budget-door="set"]');
-        await expect(setDoor.locator('[data-budget-set-entry]')).toHaveCount(1);
+        await expect(page.locator('[data-budget-set-entry]')).toHaveCount(1);
+        await expect(setDoor.locator('[data-budget-set-entry]')).toHaveCount(route === 'burnley/' ? 0 : 1);
+        if (route === 'burnley/') await expect(page.locator('[data-budget-modes] a')).toHaveText(['Guess', "The council's own gap"]);
         await expect(page.locator('#game-heading')).toHaveText(`Could you set ${route === 'leeds/' ? 'Leeds' : route === 'burnley/' ? 'Burnley' : 'Camden'}'s budget?`);
       } else {
         await expect(page.locator('th.picker-action')).toHaveText('Set');

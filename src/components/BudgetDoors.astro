@@ -3,6 +3,7 @@ import {budgetSetEntry} from '../lib/budget-set-entry';
 interface Props {gss: string; slug: string}
 const {gss, slug} = Astro.props;
 const entry = budgetSetEntry(gss);
+const eligible = !!entry?.href?.endsWith('/set/');
 ---
 {entry && <div class="budget-doors" data-budget-doors data-pagefind-ignore>
   <a class="budget-door" href="#game-start" data-budget-door="guess">
@@ -13,14 +14,22 @@ const entry = budgetSetEntry(gss);
   </a>
   <a class="budget-door" href={entry.href ?? '#published-budget'} data-budget-door="set">
     <span class="door-kicker">Set</span>
-    {slug === 'burnley' ? <>
+    {eligible ? <>
+      <p data-budget-set-entry class="door-title">{entry.text}</p>
+      <span>Choose tax and service spending, with the assumptions shown.</span>
+    </> : slug === 'burnley' ? <>
       <strong>Explore the council's own gap</strong>
       <span>Choose tax, spending and reserves in the separate budget scenario game.</span>
-    </> : !entry.href && <strong>Read the published budget</strong>}
-    <p data-budget-set-entry class:list={{'door-title': slug !== 'burnley' && !!entry.href}}>{entry.text}</p>
-    {slug !== 'burnley' && entry.href && <span>Choose tax and service spending, with the assumptions shown.</span>}
-    <span class="door-go" aria-hidden="true">{entry.href ? 'Explore your choices' : 'View the figures'} →</span>
+    </> : <>
+      <strong>Read the published budget</strong>
+      <span>Setting the budget is not offered for this council. The reason is below.</span>
+    </>}
+    <span class="door-go" aria-hidden="true">{eligible ? 'Explore your choices' : slug === 'burnley' ? 'Open the scenario game' : 'View the figures'} →</span>
   </a>
+  {!eligible && <div class="door-reason">
+    <p class="door-reason-label">Why setting the budget is not offered here</p>
+    <p data-budget-set-entry>{entry.text}</p>
+  </div>}
 </div>}
 <style>
 .budget-doors{display:flex;flex-wrap:wrap;gap:var(--space-md);margin-top:var(--space-lg)}
@@ -30,6 +39,9 @@ const entry = budgetSetEntry(gss);
 .door-kicker{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--accent)}
 .budget-door strong,.door-title{font-family:var(--font-display);font-size:var(--text-lg);line-height:1.15;font-weight:600}
 .budget-door p{margin:0}
+.door-reason{flex:1 1 100%;font-size:var(--text-sm);color:inherit}
+.door-reason p{margin:0}
+.door-reason-label{font-weight:600}
 .door-go{margin-top:auto;padding-top:var(--space-sm);font-weight:600;color:var(--accent)}
 @media print{.budget-door{background:none;color:inherit}}
 @media(forced-colors:active){.budget-door{border-color:CanvasText}}

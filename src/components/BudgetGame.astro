@@ -63,6 +63,9 @@ function routeStop(kind: string, index: number) {
 </script>
 <style is:global>
   .budget-game{padding-block:var(--space-lg)}
+  /* W1: the mode links open the section; no stacked margin above them. */
+  .budget-game:has(> .budget-modes:first-child){margin-top:var(--space-md);padding-top:0}
+  .budget-game > .budget-modes:first-child{margin-top:0}
   .game-desk{background:var(--ground);color:var(--ground-ink);padding:clamp(1.5rem,1rem + 3vw,3rem);border-radius:var(--radius);border:1px solid var(--border-strong)}
   .game-lead{display:grid;gap:var(--space-lg);align-items:start}
   .game-lead h1{color:var(--ground-ink);font-size:clamp(2.5rem,1.6rem + 4vw,4.5rem);line-height:1.04;letter-spacing:-.025em;text-wrap:balance}

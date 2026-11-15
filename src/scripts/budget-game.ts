@@ -314,6 +314,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     }
   }
   root.querySelector('[data-game-start]')!.addEventListener('click', start);
+  // W1: the Guess door starts the game itself once the script is running; without it, the link still jumps to the game.
+  root.querySelector('[data-budget-door="guess"]')?.addEventListener('click', event => {
+    if (controls.hidden) return;
+    event.preventDefault(); start();
+  });
   const restore = () => {
     const restored = readScores(location.hash, data.rounds.length);
     if (restored) {scores = restored; summary(true);}

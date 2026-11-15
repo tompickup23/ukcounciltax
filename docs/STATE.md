@@ -1,13 +1,13 @@
-# State | UK Council Tax | 15 November 2026, W1
+# State | UK Council Tax | 15 November 2026, late night
 
-- **Base:** `5bc7bed`, PR 88 merged. C6 levels day staging is on main; the W1 to W3 file hold has ended. Main advanced to `95e0d82` with the PR 91 schedules audit during W1 verification.
-- **W1:** branch `feat/w1-budget-doors`, worktree `~/wt/uct-w1`. Game desk heroes, equal Guess and Set doors, mode links, hub PlayBand and featured cards, phone Set column and eligible score-card invitation. PR evidence includes all local gates, number comparison and captures.
-- **Eligibility:** 197 Set routes. Burnley uses its separate council-gap scenario; the other 98 excluded councils retain their exact reasons. Non-England codes render no entry.
-- **Preserved:** published figures, C1b static-number fixture, game titles and H1 text, opening rail, chart sources and downloads, game arithmetic and CSP policy. The C2 distribution assertion follows the entry inside its containing card link.
-- **Next:** W2 set-page workbench, then W3 controls. W1 adds only mode links on set pages; the workbench redesign remains separate.
-- **Other work:** towns data and pages remain separate sessions; the special-expense schedules audit merged as PR 91. See `docs/PROMPTS-2026-11-15-W1-W3-AND-TOWNS.md` and `docs/TOWNS-RESEARCH-2026-11-15.md`.
+- **Live:** main `b5f8ced` (PR 89, W0), published 15 November 18:47: the budget band with Play and Set doors on the homepage and `/tools/`, the England map card, Set links on 197 rows of `/tools/budget/`, the 404 with the tools.
+- **Not yet restyled:** `/tools/budget/`, `/tools/budget/<slug>/` and `/set/`. That is W1 to W3, which wait on PR 88 because it holds those files.
+- **Open:** PR 88 (C6 levels day staging, draft, waits on Tom's six decisions, defaults in the prompts file); this docs PR (plan and towns research); UK Councils PR 62; Estate Kit PRs 27 and 28.
+- **Next:** `docs/PROMPTS-2026-11-15-W1-W3-AND-TOWNS.md`. Wave 1 now: PR 88 decisions and merge (Opus), towns data layer (Opus), special expense council schedules (Codex). Wave 2: W1 (Codex) beside towns pages (Opus). Then W2 (Codex), then W3 (Opus).
+- **Town league table:** asked for by Tom on 15 November. Research in `docs/TOWNS-RESEARCH-2026-11-15.md`: the full Band D formula is exact to the penny where a council has no special expenses (Burnley, Cornwall checked), wrong for the 48 special expense councils with parishes (Rushcliffe, Chorley, Westminster checked). Constituency via the ONS parish to ward to constituency chain, 96.3% clean match. Decisions T1 to T5 for Tom in the prompts file; T1 supersedes the A4 "no ranking of parishes" line for the towns routes.
 - **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites.
-- **Decisions:** D10; T1 to T5; plan section 10.3. Check GitHub for the current position before acting.
+- **Decisions waiting:** PR 88 one to six; D10; T1 to T5; plan section 10.3 (X3, X4, Shepway slug, seats source, audit identity, section 114 register) by 15 December.
+- **Untracked:** `output/town-research/` in the main checkout (45 MB of ONS exports and scratch scripts); session 2 downloads the portal CSVs again, so it can be deleted on Tom's yes.
 - **Binding dates:** levels day staged by mid January 2027; links check before 10 February; freeze 20 March; reversal May to June 2027.
-- **Local trap:** start Astro preview manually on 44321 and use `E2E_BASE_URL`; stop it explicitly afterwards. Copy the ignored raw ODS files before running budget tests in a fresh worktree.
-- **Release:** W1 is for review only. No merge or deployment in this session.
+- **Local trap:** Astro 7 `astro preview` detaches, so Playwright's own webServer fails locally. Start `npx astro preview --host 127.0.0.1 --port 44321`, run with `E2E_BASE_URL=http://127.0.0.1:44321`, then `npx astro preview stop`.
+- **Plan:** `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md` section 10 and `docs/DESIGN-AUDIT-2026-11-15.md`. Session detail belongs in PR bodies.

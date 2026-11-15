@@ -132,7 +132,8 @@ export function budgetSetJourneys() {
       const entry = page.locator('[data-budget-set-entry]');
       await expect(entry).toHaveText('The parish amounts in the budget and tax returns do not reconcile within the published precision.');
       await expect(page.locator('[data-scenario-game-link]')).toHaveAttribute('href','/councils/burnley/budget-game/');
-      expect(await entry.evaluate(e => e.previousElementSibling?.hasAttribute('data-scenario-game-row'))).toBe(true);
+      await expect(page.locator('[data-budget-door="set"]')).toHaveAttribute('href','/councils/burnley/budget-game/');
+      expect(await entry.evaluate(e => e.closest('[data-budget-door]')?.getAttribute('data-budget-door'))).toBe('set');
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
       await entry.scrollIntoViewIfNeeded();
       await page.screenshot({path:`output/playwright/c2-excluded-${width}-${theme}.png`});

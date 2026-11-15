@@ -1,0 +1,36 @@
+---
+import {budgetSetEntry} from '../lib/budget-set-entry';
+interface Props {gss: string; slug: string}
+const {gss, slug} = Astro.props;
+const entry = budgetSetEntry(gss);
+---
+{entry && <div class="budget-doors" data-budget-doors data-pagefind-ignore>
+  <a class="budget-door" href="#game-start" data-budget-door="guess">
+    <span class="door-kicker">Guess</span>
+    <strong>Play the budget game</strong>
+    <span>Make your guesses, then see the published answers and their sources.</span>
+    <span class="door-go" aria-hidden="true">Start guessing →</span>
+  </a>
+  <a class="budget-door" href={entry.href ?? '#published-budget'} data-budget-door="set">
+    <span class="door-kicker">Set</span>
+    {slug === 'burnley' ? <>
+      <strong>Explore the council's own gap</strong>
+      <span>Choose tax, spending and reserves in the separate budget scenario game.</span>
+    </> : !entry.href && <strong>Read the published budget</strong>}
+    <p data-budget-set-entry class:list={{'door-title': slug !== 'burnley' && !!entry.href}}>{entry.text}</p>
+    {slug !== 'burnley' && entry.href && <span>Choose tax and service spending, with the assumptions shown.</span>}
+    <span class="door-go" aria-hidden="true">{entry.href ? 'Explore your choices' : 'View the figures'} →</span>
+  </a>
+</div>}
+<style>
+.budget-doors{display:flex;flex-wrap:wrap;gap:var(--space-md);margin-top:var(--space-lg)}
+.budget-door{display:flex;flex:1 1 17rem;flex-direction:column;gap:var(--space-sm);min-width:0;min-height:44px;padding:var(--space-lg);border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--bg-card);color:var(--text);text-decoration:none}
+.budget-door:hover{border-color:var(--accent)}
+.budget-door:focus-visible{outline:3px solid var(--accent-bright);outline-offset:4px}
+.door-kicker{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--accent)}
+.budget-door strong,.door-title{font-family:var(--font-display);font-size:var(--text-lg);line-height:1.15;font-weight:600}
+.budget-door p{margin:0}
+.door-go{margin-top:auto;padding-top:var(--space-sm);font-weight:600;color:var(--accent)}
+@media print{.budget-door{background:none;color:inherit}}
+@media(forced-colors:active){.budget-door{border-color:CanvasText}}
+</style>

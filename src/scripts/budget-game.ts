@@ -72,6 +72,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const maximum=scores.filter(score=>score!==null).length*100;
     const card=element('div','','game-score-card');card.dataset.gameScoreCard='';
     card.append(element('p',`Your score, ${root.dataset.councilName} budget game`),element('p',`${total} out of ${maximum}`,'game-score'));
+    const next = root.querySelector<HTMLTemplateElement>('[data-game-set-next]');
+    if (next) card.append(next.content.cloneNode(true));
     stage.append(card);
     const list = element('ul','','game-summary-rows');
     data.rounds.forEach((round, i) => {

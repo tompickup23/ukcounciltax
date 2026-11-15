@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import CouncilPicker from '../../../components/CouncilPicker.astro';
+import PlayBand from '../../../components/PlayBand.astro';
 import {councilPages} from '../../../lib/paths';
 import {englishRows} from '../../../lib/council-picker';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
@@ -13,15 +14,25 @@ const missing = pages.filter(({council}) => budgetFor(council.gss).council.statu
 // Set mode for each council, from the C2 eligibility manifest: the link, or none where the council is not eligible.
 const setLinks = Object.fromEntries(pages.map(({council}) => {
   const entry = budgetSetEntry(council.gss);
-  return [council.gss, entry.href ? {href: entry.href, text: 'Set the budget'} : null];
+  return [council.gss, entry?.href?.endsWith('/set/') ? {href: entry.href, text: 'Set the budget'} : null];
 }));
 const setCount = Object.values(setLinks).filter(Boolean).length;
+const featured = ['leeds', 'burnley', 'camden'].map(slug => pages.find(page => page.council.slug === slug)!);
 ---
 <BaseLayout title="Council budget game" description={`Explore published ${budgetYear} council budgets, funding, reserves and Band D bill breakdowns for every English billing authority.`} path="/tools/budget/">
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
   <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Find your council and play its budget game, or follow <strong>Set the budget</strong> in its row to set the budget yourself.</p></header>
+  <PlayBand guessHref="#choose-a-council" />
+  <section class="featured-budgets" aria-labelledby="featured-heading">
+    <h2 id="featured-heading">Try a council</h2>
+    <div class="featured-strip">{featured.map(({council, tax}) => <a href={`/tools/budget/${council.slug}/`}>
+      <img src={`/og/budget/${council.slug}.png`} alt="" width="1200" height="630" loading="lazy" />
+      <strong>{tax.name}</strong><span>Play the budget game →</span>
+    </a>)}</div>
+  </section>
+  <h2 id="choose-a-council">Choose your council</h2>
   <div id="set-the-budget" class="hub-start">
-  <CouncilPicker id="budget-picker" action={{heading: 'Set mode', links: setLinks, missing: 'Not available'}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+  <CouncilPicker id="budget-picker" action={{heading: 'Set', links: setLinks, missing: 'Not available'}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
   </div>
   <section class="section" aria-labelledby="about-budgets">
     <h2 id="about-budgets">About these budgets</h2>
@@ -34,4 +45,18 @@ const setCount = Object.values(setLinks).filter(Boolean).length;
 
 <style>
 .hub-start{scroll-margin-top:5rem}
+#choose-a-council{scroll-margin-top:5rem}
+.featured-budgets{margin-block:var(--space-xl)}
+.featured-strip{display:grid;gap:var(--space-md)}
+.featured-strip a{display:flex;flex-direction:column;min-width:0;min-height:44px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none;background:var(--bg-card)}
+.featured-strip a:hover{border-color:var(--accent)}
+.featured-strip img{width:100%;height:auto}
+.featured-strip strong{padding:var(--space-md) var(--space-md) 0;font-family:var(--font-display);font-size:var(--text-lg)}
+.featured-strip span{padding:var(--space-sm) var(--space-md) var(--space-md)}
+@media(min-width:600px){.featured-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hub-start :global(.picker-table){table-layout:fixed;width:100%}
+.hub-start :global(.picker-action){width:8rem;white-space:normal;border-left:1px solid var(--border)}
+.hub-start :global(td.picker-action a){padding:.4rem .65rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--accent-wash);line-height:1.2}
+.hub-start :global(th[scope="row"] a){display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:599px){.hub-start :global(.picker-action){width:7.25rem}.hub-start :global(th[scope="row"]){overflow-wrap:anywhere}}
 </style>

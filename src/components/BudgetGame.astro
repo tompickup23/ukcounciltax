@@ -6,9 +6,13 @@ import {scenarioData} from '../lib/budget-game-scenario-data';
 import {gameData} from '../lib/budget-game-data';
 import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import {jsonLd} from '../lib/site';
+import BudgetDoors from './BudgetDoors.astro';
+import BudgetModes from './BudgetModes.astro';
+import {budgetSetEntry} from '../lib/budget-set-entry';
 interface Props {gss: string; slug: string; name: string}
 const teaser = waffle({grid: true, size: 'small', site: 'ukcounciltax'});
 const {name} = Astro.props;
+const setEntry = budgetSetEntry(Astro.props.gss);
 const data = gameData(Astro.props.gss, Astro.props.slug, Astro.props.name);
 const scenario = scenarioData(data, Astro.props.gss, name);
 /** The opening rail: what each round asks. The published split is the answer to round one, so no figure is drawn here. */
@@ -22,14 +26,15 @@ function routeStop(kind: string, index: number) {
 }
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
+  <BudgetModes gss={Astro.props.gss} slug={Astro.props.slug} current="guess" />
+  <div class="game-desk">
   <div class="game-lead">
     <div>
       <p class="eyebrow">Explore the published budget | {data.year}</p>
-      <h1 id="game-heading">Could you set {name}'s budget?</h1>
+      <h1 id="game-heading">Could you set <span>{name}'s budget?</span></h1>
       <p class="lede">{data.rounds.length === 5 ? `Five rounds of guessing: how ${name} splits each pound it spends on services, how the county council splits its own, who takes your Band D bill, where the money comes from, and what happens to reserves.` : `Four rounds of guessing: how ${name} splits each pound it spends on services, who takes your Band D bill, where the money comes from, and what happens to reserves.`}</p>
       <noscript><p>The game needs JavaScript. {name}'s published budget, with the same figures, is in the tables below.</p></noscript>
       <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
-      <div data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
     </div>
     <ol class="game-route" data-game-route aria-label={`The ${data.rounds.length} rounds`}>
       {data.rounds.map((round, index) => { const stop = routeStop(round.kind, index); return (
@@ -37,11 +42,15 @@ function routeStop(kind: string, index: number) {
       ); })}
     </ol>
   </div>
+  <BudgetDoors gss={Astro.props.gss} slug={Astro.props.slug} />
+  </div>
+  <div id="game-start" class="game-start" data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
   <ol class="game-rail" data-game-rail aria-label="Game progress" hidden>
     {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
   </ol>
   <div data-game-stage></div>
   <template data-game-score><Fragment set:html={scoreTemplate(data,name)} /></template>
+  {setEntry?.href?.endsWith('/set/') && <template data-game-set-next><a href={setEntry.href}>Now set it yourself</a></template>}
   <template data-game-gap><span set:html={gapRowSvg} /></template>
   {data.rounds.map((round, index) => (round.kind === 'split' || round.kind === 'bill') && <template data-game-grid={index}><div class="game-grid" set:html={teaser.svg.replace('A grid of 100 empty squares.', 'Your split. Each filled square is one penny.')} /></template>)}
   {data.rounds.map((round, index) => <template data-game-published={index}><BudgetPublishedChart round={round} index={index} slug={Astro.props.slug} location="reveal" /></template>)}
@@ -54,12 +63,21 @@ function routeStop(kind: string, index: number) {
 </script>
 <style is:global>
   .budget-game{padding-block:var(--space-lg)}
+  .game-desk{background:var(--ground);color:var(--ground-ink);padding:clamp(1.5rem,1rem + 3vw,3rem);border-radius:var(--radius);border:1px solid var(--border-strong)}
   .game-lead{display:grid;gap:var(--space-lg);align-items:start}
+  .game-lead h1{color:var(--ground-ink);font-size:clamp(2.5rem,1.6rem + 4vw,4.5rem);line-height:1.04;letter-spacing:-.025em;text-wrap:balance}
+  .game-lead h1 span,.game-lead .eyebrow{color:var(--accent-bright)}
+  .game-lead .lede,.game-lead .game-route-text span{color:var(--ground-ink)}
+  .game-lead .game-stop-number{background:transparent;color:var(--ground-ink)}
+  .game-start{margin-block:var(--space-lg);scroll-margin-top:6rem}
+  .game-score-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
+  @media print{.game-desk{background:none;color:inherit}.game-lead *{color:inherit!important}}
+  @media(forced-colors:active){.game-desk{border-color:CanvasText}}
   .game-route{list-style:none;margin:0;padding:0;max-width:343px}
   .game-route li{position:relative;display:grid;grid-template-columns:2.75rem minmax(0,1fr);gap:var(--space-sm);align-items:start;padding-bottom:var(--space-md)}
   .game-route li:last-child{padding-bottom:0}
   .game-route li:not(:last-child)::before{content:"";position:absolute;left:1.3125rem;top:2.75rem;bottom:0;border-left:2px solid var(--border-strong)}
-  .game-route .game-stop-number{background:var(--bg)}
+  .game-route .game-stop-number{background:transparent}
   .game-route-text{display:block;padding-top:.3rem}
   .game-route-text strong{display:block}
   .game-route-text span{display:block;color:var(--text-muted);font-size:var(--text-sm)}

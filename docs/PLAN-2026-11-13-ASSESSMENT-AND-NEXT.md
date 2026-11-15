@@ -143,3 +143,41 @@ PR 78 (NV8 England map) merged as `c20533b`; estate-kit PR 26 (compact RankedBar
 | Now, in parallel | Next | Then |
 |---|---|---|
 | PR 80 fix pass (Codex); UK Places names (Codex); kit 0.6.3 and PR 81 review (Opus) | Session B after PR 80; registry refresh after UK Places deploys; gates pack after PR 80 | C6 levels day staging in January; NV11 once decided |
+
+## 8. Update, 15 November 2026, afternoon
+
+Written in Claude Code after every Codex session on both sites finished. Where this differs from section 7, this section is the later record.
+
+### 8.1 Landed and live
+
+UK Council Tax PRs 80, 82, 83 and 81 merged and published (main `584968e`); UK Councils PR 58 merged and published (main `f4311a8`), with PR 57 folded in. The one session that ran outside a worktree was the main UK Councils checkout on `data/registry-refresh-2026-11`; its tree is identical to `f4311a8`, so nothing was lost.
+
+### 8.2 Sequence
+
+| Now, in tandem | Next | Then |
+|---|---|---|
+| PR 84 review and merge on Tom's yes, measurement note (Opus); dossier source pass (Codex, ukcouncils); Folkestone and Hythe short name (Codex, ukplaces) | Gates pack after PR 84 and X3; registry refresh after UK Places deploys; composition build after Tom picks a source | Council links rerun in December; C6 levels day staged by mid January; NV11 once decided |
+
+The prompts are in `docs/PROMPTS-2026-11-15-NEXT.md`, with the decisions for Tom and the X4 list of worktrees that are safe to remove.
+
+## 9. Update, 15 November 2026, evening
+
+Written in Claude Code after the Codex sessions for prompts 2 and 3 finished and were archived. Where this differs from section 8, this section is the later record.
+
+### 9.1 What changed
+
+- **PR 84 reviewed.** An independent read of the full diff and a code review at high gave ten findings. Eight were fixed in four commits. The set page script was 173 KB because it carried every authority's referendum mapping; it is now 8.5 KB. The public notes no longer call the tool a pilot. A pilot whose parish figures still need source review now stops the build instead of publishing "not cleared for public release". A note printed in two MHCLG files is shown once, citing both cells. The exclusion gate escapes quotes as Astro does, two repeated reads are cached, and unused pilot styles are gone. Two findings wait for the gates pack: set pages are identified by URL in three places, and `theme-init.js` also sets the `js` class. The number diff and design check pass in CI. The only design failure is the share card returning 404 on the live host before deployment, recorded as an override in the PR body.
+- **UK Places PR 53.** Its one changed field reaches both sites, because they read `name`. UK Places itself still displays and searches "Shepway"; prompt 3b fixes that before the registry refresh, so one refresh carries both.
+- **UK Councils PR 60.** The research is useful. Audit status has no code join yet (0 of 296). Section 114 has no official register, and two notices were verified from original documents. For seats by party, Open Council Data joins 295 of 296 profiles exactly, while councils' own pages often show no date. The PR committed composition data under `data/`, which the seats hold forbids, so validate fails. Prompt 7 removes the composition copies, keeps their provenance in the document, moves the other research under `docs/` and adds an exact name join for audit.
+
+### 9.2 Improvements to the sequence
+
+1. **Merge order for STATE.md:** UK Councils PR 59 before PR 60; this repository's PR 85 before any later docs PR.
+2. **One registry refresh, not two:** PR 53, then prompt 3b, then the UK Places deploy, then prompt 5.
+3. **Audit status needs an identity method before any build.** An exact match on the pinned GOV.UK official names is the least risky candidate; prompt 7 measures it. Tom decides whether to accept it.
+4. **Seats by party stays held**, with no composition data committed in either public repository until Tom picks option A or B and accepts its licence or dating rule.
+5. **A design check trap:** a new page's `og:image` is an absolute production URL, so the checker reports a 404 until the page is deployed. Record an override in the PR body and recheck live after the merge.
+
+### 9.3 Decisions for Tom, in order
+
+PR 84 merge; PRs 59 and 85 (docs, each deploys); PR 53 (deploys UK Places); X3; X4 (add `~/wt/ukc-dossier-sources` to the keep list until PR 60 merges); the Shepway slug; the audit identity method and PSAA reuse, after prompt 7; the seats source; NV11.

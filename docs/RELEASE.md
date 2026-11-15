@@ -692,3 +692,26 @@ vertically, preserving headings and cell references without horizontal scrolling
 The remaining difference is separate from the published ledger and assumptions
 have their own panel. Invalid inputs withdraw the result and leave the ledger
 unchanged. This candidate does not merge, tag, deploy or authorise publication.
+
+Final verification uses Node 22.23.4 after merging main `584968e` with a merge
+commit. All 842 unit tests in 66 files pass with one worker and no skips. Astro
+checks 330 files with no errors, warnings or hints. The full `BUILD_OG=1` build
+and distribution audit pass: 1,107 HTML pages, 1,106 sitemap and Pagefind entries,
+197 set pages and dedicated cards, and 2,207 resolved chart PNG links. The text
+sweep passes all 1,115 files. The raw audit confirms 197 eligible councils and
+all seven hashes; the independent Decimal replay passes its ten raw-cell rows.
+
+All 138 production CSP tests and 28 focused preview browser cases pass. The
+three-class matrix covers Huntingdonshire, Trafford and Camden at 375 and 1440
+in both themes, with exact penny crossings, reset, invalid input, no-script
+content and zero axe violations. Screenshots of Trafford and excluded Burnley
+were reviewed at both widths in both themes, with extra control and ledger
+views. Storage access and scenario requests are absent on the tested set pages.
+
+Against a fresh independent build of main `584968e`, the number comparison
+reports nine existing pages with an added `2026/27` exclusion token, 197 added
+pages, no removed pages and no changes outside the permitted routes. No old
+number is removed. A full HTML comparison confirms 614 existing pages are byte
+identical; all 296 parent budget pages differ only by their one entry after
+normalising inter-tag whitespace. The header policy, four hashed production
+inputs, cohort, referendum mapping and model edition remain unchanged.

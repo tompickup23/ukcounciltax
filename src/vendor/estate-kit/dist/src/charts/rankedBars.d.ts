@@ -9,5 +9,7 @@ export interface RankedBarsOptions extends ChartOptions {
     rows: RankedBarRow[];
     classLabel: string;
     basis: string;
+    /** Compact keeps each name, bar, value and change on one measured line. */
+    density?: "regular" | "compact";
 }
 export declare function rankedBars(o: RankedBarsOptions): ChartOutput;

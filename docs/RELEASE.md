@@ -1,5 +1,24 @@
 # UK Council Tax specialist build, 5 October 2026
 
+## Local C2 experiment, 13 November 2026
+
+The local C2 tax and service spending pilot now covers 197 eligible councils
+of 296, built separately in `.ops/c2-dist`. Burnley remains excluded on parish.
+Published inputs and production routes are unchanged. Evidence and the printed
+precision derivation are in `docs/C2-COHORT-2026-11-15.md`. No release is authorised.
+
+### Limitations
+
+The production data tripwire in `src/lib/budget-freeze-data.ts` deliberately
+fails `npm test` when any pinned production input changes: `data/national/budget.json`,
+`data/national/england.json`, `data/council-tax/england-2026-27.json` or
+`data/council-tax/england-2025-26.json`. The error names the changed file and
+prints the exact rebuild command: `node scripts/audit-c2-pilot.mjs`.
+After an authorised source refresh, run that command and review the generated
+fixture, eligibility manifest and referendum mapping before committing.
+A raw hash mismatch remains a separate stop; rebuilding is not permission to
+replace a pinned source or approve public C2 integration.
+
 ## Scope and provenance
 
 New standalone Astro project, copied selectively from UK Councils commit 779dec32274f39d9d84bb311c49e8476d3b1e2a9. The source project and its live deployment are not migrated by this release. UK Council Tax remains the specialist tax product; broad council, elections, demographics and spending context is linked to public ecosystem routes.
@@ -576,3 +595,43 @@ Rebuild: `scripts/sync-burnley-game.sh /path/to/game/dist YYYY-MM-DD`, then
 the full verification. The candidate awaits review; publication is separate.
 An independent second read of the page's figures is carried out in the
 Reports repository before any merge.
+
+
+## Registry refresh review candidate, 15 November 2026
+
+This candidate imports the UK Councils export built on 15 November from live
+UK Places and the sister sites' live sitemaps. The explicitly supplied export
+is copied byte for byte, retaining the 361-authority and identity checks.
+The importer no longer erases UK Food Hygiene data; the existing page policy
+continues to exclude those links.
+
+The two sites' previous registries are identical. The refresh changes 290
+official names, the exact 97 counties listed in the reorganisation brief,
+and seven sister URLs across five councils. All other council fields,
+including all 14 held reorganisation objects, are unchanged. Generated date,
+sitemap totals and link counts reflect the refresh. The companion PR body
+lists every old and new value, source provenance and affected route.
+
+The official names match the brief's 284 direct GOV.UK Local Links Manager
+rows and six recorded predecessor joins in UK Places. North Yorkshire and
+Somerset retain their source names. UK Places still exports short name and
+slug Shepway, with official name Folkestone and Hythe District Council.
+No name or other source value was corrected in this repository by hand.
+
+English profile JSON-LD and payment link wording follow the official names.
+Finder and picker search records follow the same registry; the council index
+is rebuilt with them. Barnsley and Sheffield gain verified UK Demographics
+links. No amount, financial source, comparison basis or rendering hold changes.
+The candidate is for review; this entry records no merge or deployment.
+
+Verification used Node 22.23.4 first on PATH. Type checking passed without
+errors, warnings or hints; all 394 unit tests passed across 60 files. The
+final BUILD_OG=1 build produced 910 HTML pages, 2,849 PNGs and 909 Pagefind
+pages. Distribution and held-data checks passed for all 910 pages and 909
+sitemap routes; text checks passed across 918 files and all 72,900 internal
+link destinations resolved. All 158 selected browser cases and 63 actual-CSP
+cases passed. The importer preserved exact source bytes and rejected wrong
+counts or missing identities. The whole-build comparison permits 234 changed
+HTML pages, with 225 profile JSON-LD name changes and four finder or picker
+pages. Its only numeric changes are two registry edition day tokens on the
+changes page. The PR lists every permitted page and the full field comparison.

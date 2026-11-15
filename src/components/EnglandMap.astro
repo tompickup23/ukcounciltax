@@ -1,0 +1,33 @@
+---
+import AreaMap from '../vendor/estate-kit/src/components/AreaMap.astro';
+import ChartActions from './kit/ChartActions.astro';
+import SourceLine from './SourceLine.astro';
+import {englandMapOptions} from '../lib/kit-charts';
+import {CURRENT_YEAR, loadYear, yearLabel} from '../lib/council-tax';
+import {councilTaxSource} from '../lib/sources';
+import {boundarySource} from '../lib/boundaries';
+// At 375px the open map adds more than one screen before the existing table.
+const source = councilTaxSource(CURRENT_YEAR, loadYear(CURRENT_YEAR).source.bandTable);
+---
+<details class="england-map" data-england-map>
+  <summary>Show England on a map: area Band D council tax, {yearLabel(CURRENT_YEAR)}</summary>
+  <a class="map-skip" href="#table-heading">Skip the map</a>
+  <div class="fact" data-fact id="england-map-drawing" data-pagefind-ignore>
+    <AreaMap {...englandMapOptions()} tableOpen={false} />
+    <p class="caveat">Area Band D includes adult social care and average parish precepts. Your bill can differ by parish. Scotland and Wales are not drawn because their council tax systems differ; Northern Ireland uses domestic rates.</p>
+    <p class="boundary-credit">Boundaries: <a href={boundarySource.url}>{boundarySource.publisher}, {boundarySource.title}</a>, simplified for drawing.</p>
+    <p class="small">{boundarySource.attribution} Licensed under <a href={boundarySource.licenceUrl}>OGL v3.0</a>.</p>
+    <ChartActions chart="england-area-band-d" target="england-map-drawing">
+      <SourceLine slot="source" source={source} />
+    </ChartActions>
+  </div>
+</details>
+<style>
+  .boundary-credit { margin: 0.35rem 0 0; font-size: 0.82rem; color: var(--text-faint); line-height: 1.45; }
+  .boundary-credit a { color: var(--text-faint); }
+  .england-map { margin-block: var(--space-sm); }
+  .england-map > summary { cursor: pointer; color: var(--accent); min-height: 44px; font-weight: 600; }
+  .map-skip { display: inline-flex; align-items: center; min-height: 44px; }
+  #england-map-drawing { max-width: 40rem; }
+  #england-map-drawing :global(.ek-twin) { overflow-x: auto; }
+</style>

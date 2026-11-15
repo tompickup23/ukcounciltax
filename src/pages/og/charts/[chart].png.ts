@@ -17,8 +17,8 @@ export function getStaticPaths() {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
     paths.push({ params: { chart: `${name}-card` }, props: { name, theme: "card" } });
   }
-  // The class strips and own share increases have one light PNG and no share card.
-  for (const name of [...classChartNames(), ...increaseChartNames()]) {
+  // The class strips, own share increases and England map have one light PNG and no share card.
+  for (const name of [...classChartNames(), ...increaseChartNames(), "england-area-band-d" as const]) {
     for (const theme of CHART_THEMES) paths.push({ params: { chart: `${name}-${theme}` }, props: { name, theme } });
   }
   return paths;

@@ -39,36 +39,8 @@ const locator = chart?.startsWith('councils/') && chart.endsWith('/map');
   <p class="chart-actions-status small muted" role="status" aria-live="polite" data-chart-status></p>
 </div>
 
-<script>
-  const initialised = new WeakSet<HTMLElement>();
-  function initialiseChartActions() {
-  for (const actions of document.querySelectorAll<HTMLElement>("[data-chart-actions]")) {
-    if (initialised.has(actions)) continue;
-    initialised.add(actions);
-    const fact = actions.closest<HTMLElement>("[data-fact]");
-    const twin = fact?.querySelector<HTMLDetailsElement>("details.ek-twin");
-    const table = twin?.querySelector<HTMLTableElement>("table");
-    const status = actions.querySelector<HTMLElement>("[data-chart-status]");
-    if (!twin || !table || !status) continue;
-    const copy = actions.querySelector<HTMLButtonElement>("[data-chart-copy]");
-    if (!copy || !navigator.clipboard) continue;
-    copy.hidden = false;
-    copy.addEventListener("click", async () => {
-      const rows = [...table.querySelectorAll("tr")].map((tr) =>
-        [...tr.querySelectorAll("th, td")].map((cell) => (cell.textContent ?? "").trim()).join("\t"),
-      );
-      try {
-        await navigator.clipboard.writeText(rows.join("\n"));
-        status.textContent = "Table copied, with its source in the last row.";
-      } catch {
-        status.textContent = "The browser did not allow copying. Open the table and select it instead.";
-      }
-    });
-  }
-  }
-  initialiseChartActions();
-  document.addEventListener('budget:reveal', initialiseChartActions);
-</script>
+<!-- Kept external so adding chart actions never adds inline JavaScript. -->
+<script is:inline type="module" src="/chart-actions.js"></script>
 
 <style>
   .chart-actions { margin-top: var(--space-xs); }

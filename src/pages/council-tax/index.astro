@@ -1,4 +1,5 @@
 ---
+import EnglandMap from "../../components/EnglandMap.astro";
 import TaxTable from "../../components/TaxTable.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
@@ -123,8 +124,9 @@ const pages = councilPages();
     </ul>
   </section>
 
+  <EnglandMap />
   <section class="section" aria-labelledby="table-heading">
-    <h2 id="table-heading">Compare published council tax charges</h2>
+    <h2 id="table-heading" tabindex="-1">Compare published council tax charges</h2>
     <p class="muted">Choose a band, filter by council name, or select one council type to sort by charge. <a href="/compare/">Compare two councils side by side</a>.</p>
     <TaxTable id="england-charges" caption="England" />
   </section>

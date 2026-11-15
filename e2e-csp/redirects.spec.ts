@@ -10,6 +10,21 @@ for (const path of ['/council-tax/rises-2026-27/', '/council-tax/rises-2026-27']
   });
 }
 
+for (const path of ['/bill/', '/bill']) {
+  test(`short film address is a 302 to the bill tool: ${path}`, async ({request}) => {
+    const response = await request.get(path, {maxRedirects: 0});
+    expect(response.status()).toBe(302);
+    const location = new URL(response.headers()['location'], 'http://localhost');
+    expect(location.pathname + location.hash).toBe('/precepts/#find-your-bill');
+  });
+}
+
+test('the short film address lands on the bill tool', async ({page}) => {
+  await page.goto('/bill/');
+  await expect(page).toHaveURL(/\/precepts\/#find-your-bill$/);
+  await expect(page.locator('h2#find-your-bill')).toBeVisible();
+});
+
 test('the redirect lands on the 2026/27 section', async ({page}) => {
   await page.goto('/council-tax/rises-2026-27/');
   await expect(page).toHaveURL(/\/increases\/#2026-27$/);

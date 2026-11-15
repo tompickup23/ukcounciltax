@@ -595,3 +595,43 @@ Rebuild: `scripts/sync-burnley-game.sh /path/to/game/dist YYYY-MM-DD`, then
 the full verification. The candidate awaits review; publication is separate.
 An independent second read of the page's figures is carried out in the
 Reports repository before any merge.
+
+
+## Registry refresh review candidate, 15 November 2026
+
+This candidate imports the UK Councils export built on 15 November from live
+UK Places and the sister sites' live sitemaps. The explicitly supplied export
+is copied byte for byte, retaining the 361-authority and identity checks.
+The importer no longer erases UK Food Hygiene data; the existing page policy
+continues to exclude those links.
+
+The two sites' previous registries are identical. The refresh changes 290
+official names, the exact 97 counties listed in the reorganisation brief,
+and seven sister URLs across five councils. All other council fields,
+including all 14 held reorganisation objects, are unchanged. Generated date,
+sitemap totals and link counts reflect the refresh. The companion PR body
+lists every old and new value, source provenance and affected route.
+
+The official names match the brief's 284 direct GOV.UK Local Links Manager
+rows and six recorded predecessor joins in UK Places. North Yorkshire and
+Somerset retain their source names. UK Places still exports short name and
+slug Shepway, with official name Folkestone and Hythe District Council.
+No name or other source value was corrected in this repository by hand.
+
+English profile JSON-LD and payment link wording follow the official names.
+Finder and picker search records follow the same registry; the council index
+is rebuilt with them. Barnsley and Sheffield gain verified UK Demographics
+links. No amount, financial source, comparison basis or rendering hold changes.
+The candidate is for review; this entry records no merge or deployment.
+
+Verification used Node 22.23.4 first on PATH. Type checking passed without
+errors, warnings or hints; all 394 unit tests passed across 60 files. The
+final BUILD_OG=1 build produced 910 HTML pages, 2,849 PNGs and 909 Pagefind
+pages. Distribution and held-data checks passed for all 910 pages and 909
+sitemap routes; text checks passed across 918 files and all 72,900 internal
+link destinations resolved. All 158 selected browser cases and 63 actual-CSP
+cases passed. The importer preserved exact source bytes and rejected wrong
+counts or missing identities. The whole-build comparison permits 234 changed
+HTML pages, with 225 profile JSON-LD name changes and four finder or picker
+pages. Its only numeric changes are two registry edition day tokens on the
+changes page. The PR lists every permitted page and the full field comparison.

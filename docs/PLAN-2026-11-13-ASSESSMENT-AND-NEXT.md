@@ -302,7 +302,7 @@ Each workstream so far has restyled its own page well and the site as a whole le
 1. **Foundation first, one PR (F1), before W3.** Build once what every page PR keeps rebuilding: a `DeskBand` component and `.band` classes on the existing `--ground` token; a short record line (publisher, short title, table) that links to one full "Sources" block per page, with `check-dist` and the design check taught to accept the pair; one money formatter with a rule for the source's published unit; the chart title rule fixed for the kit figures it missed; the two column chart grid. About a day. Every later page PR gets smaller, the towns and game bands are swapped onto it in the same PR, and W8 shrinks to a token swap when the kit lands.
 2. **Drop the mockup round (P1) as a gate for the bands.** The live desk band is the mockup. Paper against white (D2) can be decided from one preview capture in F1. Mockups stay only for the two marks (M1).
 3. **Two lanes by repository.** One UK Council Tax page session at a time (plus at most one data session), and one UK Councils session beside it. Sessions on the same repository cost more in collisions, test timeouts and port clashes than they saved on 15 November.
-4. **Three new gates, so review stops finding the same class of fault.** In `check-dist`: no `£0.00` in a table row marked without a figure; a page weight ceiling of 500 KB of HTML; a count ceiling on identical source strings per page once the short record line exists.
+4. **Three new gates, so review stops finding the same class of fault.** In `check-dist`: no amount at all in a row whose status is an unresolved group (a non precepting parish keeps its published nil, which is a real figure, so the gate cannot be "no `£0.00` without a full Band D"); a page weight ceiling of 500 KB of HTML; a count ceiling on identical source strings per page once the short record line exists.
 5. **A contact sheet in every page PR.** The design check already makes one. Posting it in the PR turns Tom's taste check into two minutes and is what the fast track needs.
 6. **UK Councils first job: rebase PR 62.** Then U2 (homepage with the tools band) on its existing tokens.
 
@@ -327,13 +327,20 @@ Grant it narrowly: an Opus session may merge and publish its own PR when all che
 
 Dates in 10.1 stand: links rerun 1 to 5 December, decisions by 15 December, freeze 20 March.
 
-### 11.8 Decisions for Tom
+### 11.8 Decisions
 
-| Decision | Recommendation |
+Tom's instruction on 16 November 2026, after reading this section: "Make best quality decisions". Taken on that instruction, each reversible by Tom:
+
+| Decision | Taken |
 |---|---|
-| Merge PR 96 and PR 95 after their fix passes | Yes, 96 first |
-| Short record line with one full Sources block per page | Yes; it changes how "a nearby source" is met, so it is Tom's call |
-| Set page amounts in £ million to one decimal, exact pounds one click away | Yes |
-| Towns headline pair led by the larger places | Yes; the smallest parishes make the headline in 23 of 63 counties |
-| Fast track | The narrow scope in 11.6 |
-| D2 paper tint | Decide from the F1 capture |
+| Short record line with one full Sources block per page | Yes. Built in F1; every figure keeps a named source beside it and the full reference one link away |
+| Set page amounts in £ million to one decimal, exact pounds one click away | Yes, in W3 |
+| Towns headline pair led by the larger places | Yes, as a follow up PR after PR 95 merges; the full order stays in the tables |
+| D2 paper tint | Decided in F1 from captures of both, against contrast and the charts drawn on top |
+| Towns page weight | Cell classes removed in the PR 95 fix pass (South West 1.38 MB to 1.08 MB). The 500 KB ceiling needs the region pages split or paged, a design choice for the towns follow up |
+
+Still Tom's, in words, because each publishes: the merge of PR 96, the merge of PR 95, and the fast track (recommended in the narrow scope of 11.6).
+
+### 11.9 Fix passes done, 16 November 2026
+
+PR 96: all four items in 11.2, pushed as `3516be5`. PR 95: items 1 to 4 and 6, and the cell classes from item 5. One thing 11.2 did not foresee: the strip's table twin says "Published" in the kit's own words for any value it is given; the kit is vendored and hash checked, so the page now explains the word beside the chart, and the wording goes to the kit as a change request.

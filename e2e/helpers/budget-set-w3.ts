@@ -22,9 +22,12 @@ export function budgetSetW3Journeys() {
       // Tax and every service fit one 900px screen.
       const last = (await page.locator('.service-card').last().boundingBox())!;
       expect(last.y + last.height - tax.y).toBeLessThanOrEqual(900);
-      // The board stays in view while the services scroll.
-      await page.locator('.service-card').last().scrollIntoViewIfNeeded();
-      await page.mouse.wheel(0, 400);
+      // The board stays in view while the workbench scrolls under it (sticky within the layout row).
+      await page.evaluate(() => {
+        const layout = document.querySelector('.set-layout')!.getBoundingClientRect();
+        const desk = document.querySelector('.set-desk')!.getBoundingClientRect();
+        window.scrollTo(0, window.scrollY + layout.top + Math.max(0, (layout.height - desk.height) / 2));
+      });
       await expect.poll(async () => (await page.locator('.set-desk').boundingBox())!.y).toBeLessThan(40);
       await expect.poll(async () => (await page.locator('.set-desk').boundingBox())!.y).toBeGreaterThanOrEqual(0);
       // Compact amounts with exact pounds one click away.

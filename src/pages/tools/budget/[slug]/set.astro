@@ -73,6 +73,7 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
         <button class="theme-icon" type="button" data-theme-toggle hidden aria-label="Change colour theme" title="Change colour theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor"/></svg></button>
       </div>
       {pinnedLine && <p class="source-line" data-budget-pinned>{pinnedLine}</p>}
+      <noscript><p class="notice">The scenario controls need JavaScript. The published baseline, assumptions, ledger and freeze calculation remain available. Open the disclosures to read them.</p></noscript>
       <div class="set-layout">
       <DeskBand id="set-heading" level={1} top layout="stack" class="set-desk" data-scenario-board
         eyebrow={`${FREEZE_YEAR_TEXT} | User requested scenario | ${FREEZE_MODEL}`}
@@ -104,7 +105,6 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
           <p class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-announcement></p>
         </div>
       </DeskBand>
-      <noscript><p class="notice">The scenario controls need JavaScript. The published baseline, assumptions, ledger and freeze calculation remain available. Open the disclosures to read them.</p></noscript>
       <section class="controls" data-controls hidden aria-labelledby="controls-title">
         <h2 id="controls-title" class="sr-only">Your choices</h2>
         <div class="presets">
@@ -265,7 +265,7 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
   .range-row{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:.3rem}.range-row button{font-size:1.3rem;padding:0}
   .chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .5rem}
   .percentage-chips{display:flex;gap:.2rem;flex:1 1 16rem}.percentage-chips button{font-size:.8rem;flex:1 1 auto;padding:.1rem .3rem;min-height:32px;min-width:0}
-  .service-exact{flex:0 0 auto}.service-exact[open]{flex-basis:100%}
+  .service-exact{flex:0 0 auto;min-width:0}.service-exact[open]{flex-basis:100%}.service-exact input{width:13rem}
   .service-card summary{font-size:var(--text-xs);min-height:32px}.service-card label{display:block;font-size:var(--text-sm);margin:.3rem 0}
   input[type=number]{font:inherit;width:100%;min-height:44px;padding:.4rem .6rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:.3rem;box-sizing:border-box;min-width:0}input[type=range]{width:100%;min-width:0;min-height:44px;accent-color:var(--accent);margin:0}
   button{min-height:44px;min-width:44px;padding:.5rem .75rem;border:1px solid var(--border);border-radius:.35rem;background:var(--bg-subtle);color:var(--text);font:inherit;cursor:pointer}button:hover{border-color:var(--accent)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}

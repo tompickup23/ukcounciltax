@@ -1,14 +1,13 @@
 # State | UK Council Tax | 16 November 2026
 
-- **Live:** main `ffc76e7`, published 16 November 03:55. Live on 16 November: PRs 94, 95 (towns pages), 96 (W2 set page). Live on 15 November: PRs 88, 91, 92 and 93.
-- **Open:** F1 foundation PR on `feat/f1-foundation` (plan 11.10): desk band, short record line and Sources block, money formatter, chart title rule, chart grid, five new dist gates. Gates green; needs a separate reviewer, then Tom's yes to merge.
-- **After F1:** W3 set page (amounts as `£366.0m` through `formatMoney` compact, result board on `DeskBand`), then W4 game page and W9 council page through Codex with review. Each page PR moves its own citations to record lines and lowers its row in the `foundation.mjs` ratchet.
+- **Live:** main `d5670a2` with F1 (PR 97, desk band, record line and Sources block, money formatter, chart rule, five dist gates) and the 16 November decisions (PR 98). Earlier on 16 November: PRs 94, 95 (towns pages), 96 (W2 set page).
+- **Open:** W3 set page PR on `claude/w3-set-page-8b8f66`: result board on `DeskBand`, sticky on desktop; amounts as `£366.0m` with exact pounds in a disclosure; tax control larger; services in two dense columns (three for the 44 councils with nine); gap bar, neutral stamp at exact zero, phone meter, Copy your scenario (clipboard only), print view, What next. Merges under the fast track only if every condition in `docs/DECISIONS-2026-11-16.md` section 1 holds.
+- **After W3, in order (Tom, 16 November):** 1) `/tools/budget/` choose a council page (plan 11.4 row: band first with the picker inside, Guess and Set as two small pills per row, featured councils as the round rail instead of share cards), layout only, fast track. 2) Towns league table follow up (larger places lead the headline pair; region pages split or paged under 500 KB), needs Tom's yes. 3) `/council-tax/ranked/` pages pulled forward from W9 Tier 2 (self canonical, built on F1 parts), layout only, fast track. Then W4 game page and W9 council page. Each page PR moves its own citations to record lines and lowers its row in the `foundation.mjs` ratchet.
 - **D2:** decided (a), tinted paper `#f8f7f2` with white cards (plan 11.10). It lands through the kit token route in K1 and W8, not by hand.
-- **Towns follow up, not started:** lead the headline pair with the larger places; bring region pages under 500 KB (South West 1.09 MB, capped in the ratchet).
-- **For Tom:** the fast track, recommended in the narrow scope of plan 11.6; not authorised until Tom says so in words.
+- **Fast track:** granted 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md` section 1; each merge under it adds a line to the day's note for Tom.
 - **Open elsewhere:** UK Councils PR 62 (January dossier gate) has merge conflicts with its main; rebase is the first UKC job.
 - **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites.
-- **Decisions waiting:** plan section 10.3 (X3, X4, Shepway slug, seats source, audit identity, section 114 register) by 15 December; the fast track permission.
+- **Decisions waiting:** none open from plan 10.3; all taken on 16 November (`docs/DECISIONS-2026-11-16.md`). Shepway rename and the seats, audit identity and section 114 data pull requests each still need Tom's yes.
 - **Untracked:** `output/` in the main checkout (45 MB); worktrees under `~/wt/uct-*` for merged branches. Both removable on Tom's yes.
 - **Binding dates:** links check 1 to 5 December; levels day staged by mid January 2027; freeze 20 March; reversal May to June 2027.
 - **Local traps:** copy all of `data/raw/` from the main checkout into a fresh worktree before building or testing; start `npx astro preview --host 127.0.0.1 --port 44321` yourself and run Playwright with `E2E_BASE_URL`, then `npx astro preview stop`; unit tests can need `--testTimeout=120000` beside a build.

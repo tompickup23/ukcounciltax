@@ -53,7 +53,7 @@ One UK Council Tax page session at a time, at most one data session beside it, o
 
 | Order | Work | Who | Waits on |
 |---|---|---|---|
-| 1 | PR 99, W3 set page | Built; Tom's yes | The rerun of its `site` check |
+| 1 | PR 99, W3 set page | Built, checks passed; Tom's yes | Nothing |
 | 2 | `/tools/budget/` hub: band first with the picker inside, Guess and Set pills per row | Claude, fast track | PR 99 merged |
 | 3 | W4 game page, two PRs | Codex, Claude reviews | Prompt owed; D5 and D13 |
 | 4 | W9 council page: ledger row under the H1, one bands chart, short record lines | Codex, Claude reviews | Prompt owed |

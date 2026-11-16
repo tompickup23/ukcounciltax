@@ -1,7 +1,7 @@
 # State | UK Council Tax | 16 November 2026, afternoon
 
 - **Live:** main `d5670a2` (PR 97, F1 foundation), published 16 November. Also live from 16 November: PRs 94, 95 (towns pages), 96 (W2 set page), 98 (decisions). From 15 November: PRs 88, 91, 92, 93.
-- **Open:** PR 99, W3 set page. Layout only, reviewed, local gates green. Its `site` check failed on 16 November on a port clash in the actual CSP run (port 48788 in use), not on a test; rerun started. Needs Tom's yes: a reviewer's data rule finding was fixed in `9cd399c`, which takes it outside the fast track as written (R1 in the plan).
+- **Open:** PR 99, W3 set page. Layout only, reviewed, all three checks passed. Its `site` check first failed on 16 November on a port clash in the actual CSP run (port 48788 in use), not on a test, and passed on the rerun. Needs Tom's yes: a reviewer's data rule finding was fixed in `9cd399c`, which takes it outside the fast track as written (R1 in the plan).
 - **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md` is closed and kept as the record.
 - **Critical path:** the UK Councils dossier builds from the three sources decided on 16 November (seats, audit status, section 114), due by mid January 2027. Prompts A, B and C are in `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md` for Codex, one at a time; each is a data PR needing Tom's yes.
 - **Measurement:** `docs/MEASUREMENT.md` started 16 November, one record for both sites. Week 1 figures are blank and owed by the next session with Chrome, with the read back of the 28 days to 14 November. The set pages carry no beacon.

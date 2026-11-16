@@ -1,0 +1,97 @@
+---
+/**
+ * The pair: the lowest and highest full Band D in a scope, on the page's one desk
+ * band (Ledger and Desk). The H1 sits here, two toned through a span inside the
+ * same text node. One fact holds both figures and the gap, with every source line
+ * under them, so check-dist pairs each figure with its source.
+ */
+import TownsSources from './TownsSources.astro';
+import type {RankedTown} from '../../lib/towns';
+import {money, placeName, POSITION_METHOD, townAnchor, countyPathOf, type TownScope} from '../../lib/towns-pages';
+import {tidy} from '../../lib/towns-pages';
+
+interface Props {
+  scope: TownScope;
+  h1Lead: string; h1Place: string;
+  eyebrow: string; lede: string;
+  lowest: RankedTown | null; highest: RankedTown | null;
+  lowestJoint: RankedTown[]; highestJoint: RankedTown[];
+  lowestParish?: RankedTown | null;
+  gap: number | null;
+}
+const {scope, h1Lead, h1Place, eyebrow, lede, lowest, highest, lowestJoint, highestJoint, lowestParish, gap} = Astro.props;
+// On the hub a row's anchor is on its county page; on a scope page it is in the table below.
+const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : `#${r.town.code}`;
+const meta = (r: RankedTown) => [r.town.kind === 'unparished' ? null : r.town.type, tidy(r.town.councilName), tidy(r.town.county) === tidy(r.town.councilName) ? null : tidy(r.town.county)].filter(Boolean).join(', ');
+const cards = lowest && highest && lowest !== highest ? [
+  {kicker: 'Lowest full Band D', row: lowest, joint: lowestJoint, side: 'lowest'},
+  {kicker: 'Highest full Band D', row: highest, joint: highestJoint, side: 'highest'},
+] : lowest ? [{kicker: 'Full Band D', row: lowest, joint: lowestJoint, side: 'only'}] : [];
+const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTown => Boolean(r)).map(r => r.town);
+---
+<section class="pair-band" aria-labelledby="pair-heading" data-pair-band>
+  <div class="pair-copy">
+    <p class="pair-eyebrow">{eyebrow}</p>
+    <h1 id="pair-heading" class="pair-title">{h1Lead} <span>{h1Place}</span></h1>
+    <p class="pair-lede">{lede}</p>
+  </div>
+  {cards.length > 0 ? (
+    <div class="fact pair-fact" data-fact>
+      <div class="pair-cards">
+        {cards.map(card => (
+          <div class="pair-card" data-pair={card.side}>
+            <span class="pair-kicker">{card.kicker}</span>
+            <a class="pair-place" href={href(card.row)}>{placeName(card.row.town)}</a>
+            <span class="pair-meta">{meta(card.row)}</span>
+            <span class="pair-figure" data-figure>{money(card.row.town.fullBandDPence)}</span>
+            {card.joint.length > 1 && <span class="pair-joint">Joint {card.side === 'only' ? 'figure' : card.side}, with {card.joint.length-1} {card.joint.length === 2 ? 'other' : 'others'}</span>}
+            {card.side === 'lowest' && lowestParish && lowestParish !== card.row && lowestParish.town.fullBandDPence !== card.row.town.fullBandDPence && (
+              <span class="pair-parish">Lowest parish area: <a href={href(lowestParish)}>{placeName(lowestParish.town)}, {tidy(lowestParish.town.councilName)}</a>, <span data-figure>{money(lowestParish.town.fullBandDPence)}</span></span>
+            )}
+          </div>
+        ))}
+      </div>
+      {gap !== null && cards.length === 2 && <p class="pair-gap">Difference <strong data-figure>{money(gap)}</strong> a year at Band D, <span data-figure>{money(Math.round(gap / 12))}</span> a month.</p>}
+      <div class="pair-sources"><TownsSources rows={rowsForSources} method={cards.length === 2 ? POSITION_METHOD : undefined} /></div>
+    </div>
+  ) : (
+    <p class="pair-none">No area here has a full Band D from published tables yet. Each is listed below with its status.</p>
+  )}
+</section>
+
+<style>
+.pair-band{
+  --pair-ground:color-mix(in srgb,var(--accent) 26%,var(--ground));
+  display:grid;gap:var(--space-lg);
+  margin-block:0 var(--space-xl);padding:clamp(1.5rem,1rem + 3vw,3rem);
+  border-radius:18px;background:var(--pair-ground);color:var(--ground-ink);
+  border:1px solid color-mix(in srgb,var(--accent-bright) 30%,transparent);
+}
+@media(min-width:1000px){.pair-band{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;gap:var(--space-2xl)}}
+.pair-eyebrow{display:flex;align-items:center;gap:.6rem;margin:0 0 var(--space-sm);font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
+.pair-eyebrow::before{content:"";width:28px;height:2px;background:currentColor;flex:none}
+.pair-band .pair-title{margin:0;color:var(--ground-ink);font-size:clamp(2rem,1.4rem + 2.6vw,3.4rem);line-height:1.04;letter-spacing:-.02em;text-wrap:balance;overflow-wrap:anywhere}
+.pair-title span{color:var(--accent-bright)}
+.pair-lede{margin:var(--space-md) 0 0;max-width:34rem;font-size:var(--text-md);color:color-mix(in srgb,var(--ground-ink) 88%,transparent)}
+.pair-fact{margin:0}
+.pair-cards{display:grid;gap:var(--space-md)}
+@media(min-width:600px){.pair-cards{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}}
+.pair-card{display:flex;flex-direction:column;gap:var(--space-2xs);min-width:0;padding:var(--space-lg);border-radius:14px;background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
+.pair-kicker{font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
+.pair-band .pair-place{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);line-height:1.15;color:var(--ground-ink);overflow-wrap:anywhere;text-decoration-color:color-mix(in srgb,var(--ground-ink) 45%,transparent)}
+.pair-band .pair-place:hover{color:var(--accent-bright)}
+.pair-meta{font-size:var(--text-sm);color:color-mix(in srgb,var(--ground-ink) 78%,transparent)}
+.pair-figure{margin-top:var(--space-xs);font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:1;font-variant-numeric:tabular-nums lining-nums;color:var(--ground-ink)}
+.pair-joint,.pair-parish{font-size:var(--text-sm);color:color-mix(in srgb,var(--ground-ink) 82%,transparent)}
+.pair-parish{margin-top:var(--space-xs);padding-top:var(--space-xs);border-top:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
+.pair-band .pair-parish a{color:var(--ground-ink)}
+.pair-gap{margin:var(--space-md) 0 0;font-size:var(--text-base);color:var(--ground-ink)}
+.pair-gap strong,.pair-gap span{font-variant-numeric:tabular-nums lining-nums}
+.pair-sources{margin-top:var(--space-sm)}
+.pair-band .pair-sources :global(.source-line){margin:0 0 var(--space-2xs);font-size:var(--text-xs);color:color-mix(in srgb,var(--ground-ink) 75%,transparent)}
+.pair-band .pair-sources :global(.source-line a){color:color-mix(in srgb,var(--ground-ink) 85%,transparent);text-decoration:underline}
+.pair-none{margin:0;color:var(--ground-ink)}
+@media(prefers-reduced-motion:no-preference){.pair-card{transition:transform .15s ease,border-color .15s ease}.pair-card:hover{transform:translateY(-2px);border-color:var(--accent-bright)}}
+@media print{.pair-band{background:none;color:inherit;border:1px solid}.pair-band *{color:inherit!important}}
+@media(forced-colors:active){.pair-band,.pair-card{border:1px solid CanvasText}}
+</style>

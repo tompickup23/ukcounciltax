@@ -1,0 +1,55 @@
+---
+/**
+ * "How this is calculated": the formula, the Burnley Padiham worked example read
+ * from the dataset (never typed), the special expense and charter trustee rules,
+ * the 1p rounding note, positions, the tax base and the constituency rule.
+ */
+import DataDrawer from '../DataDrawer.astro';
+import SourceLine from '../SourceLine.astro';
+import {noteText, townByCode, townsData} from '../../lib/towns';
+import {money, townSources, townsYear} from '../../lib/towns-pages';
+
+const example = townByCode.get('E2333P007');
+if (!example?.parts || example.fullBandDPence === null) throw new Error('towns: the Padiham worked example has no parts');
+const council = townsData.councils[example.councilGss];
+const name = (kind: string) => council.parts.find(p => p.kind === kind)?.name ?? null;
+const lines = [
+  {label: `${example.councilName} council, Band D excluding local precepts (Table 10, line 9)`, pence: example.parts.own},
+  {label: `${example.place} parish Band D (parish return)`, pence: example.parts.parish},
+  {label: `${name('county') ?? 'County council'} (Table 10, line 16)`, pence: example.parts.county},
+  {label: `${name('police') ?? 'Police'} (Table 10, line 16)`, pence: example.parts.police},
+  {label: `${name('fire') ?? 'Fire'} (Table 10, line 16)`, pence: example.parts.fire},
+  ...(example.parts.combined ? [{label: 'Combined authority (Table 10, line 16)', pence: example.parts.combined}] : []),
+  ...(example.parts.trustees ? [{label: 'Charter trustees', pence: example.parts.trustees}] : []),
+];
+const sum = lines.reduce((total, line) => total + line.pence, 0);
+if (sum !== example.fullBandDPence) throw new Error(`towns: the Padiham parts add to ${sum}, not ${example.fullBandDPence}`);
+const threshold = Number(townsData.method.largerPlaceTaxBase).toLocaleString('en-GB');
+---
+<DataDrawer id="how-calculated" title="How this is calculated" tableCount={1} summary="Show the formula, a worked example and the rules">
+  <p>Full Band D is the whole Band D bill in one parish or unparished area for {townsYear}: what a Band D home pays before discounts, reductions and premiums. It adds up the published Band D charge of every body that bills that area.</p>
+  <p><strong>Full Band D</strong> = the billing council's Band D excluding local precepts (MHCLG Table 10, line 9) + the parish Band D (MHCLG parish return) + the Band D precepts of the county council or Greater London Authority, police, fire and combined authority (Table 10, line 16).</p>
+  <div class="fact" data-fact>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Worked example">
+      <table class="data">
+        <caption>Worked example: {example.place}, {example.councilName}, Band D {townsYear}</caption>
+        <thead><tr><th scope="col">Part</th><th scope="col" class="num">Band D</th></tr></thead>
+        <tbody>{lines.map(line => <tr><th scope="row">{line.label}</th><td class="num" data-figure>{money(line.pence)}</td></tr>)}</tbody>
+        <tfoot><tr><th scope="row">Full Band D</th><td class="num" data-figure>{money(example.fullBandDPence)}</td></tr></tfoot>
+      </table>
+    </div>
+    <p class="small muted">Burnley Borough Council's own notice prints the same total for Padiham at Band D.</p>
+    <SourceLine source={{...townSources.components, method: 'The parts and their sum, our calculation from published figures'}} />
+    <SourceLine source={townSources.parishes} />
+  </div>
+  <h3>Councils with special expenses</h3>
+  <p>{noteText('specialExpenses')} These areas are shown as "Published by the council only" and are not in the order, never estimated. Where a council's own schedule of totals by area is held and checks out, its own figure is used and labelled "Published by the council", with its source: Boston, Broxtowe and South Norfolk among the special expense councils, and County Durham and the City of London, where the council's figure includes charges the national tables spread differently.</p>
+  <h3>Charter trustees and grouped parishes</h3>
+  <p>{noteText('unparishedTrustee')} {noteText('partialTrustee')} {noteText('groupMember')} {noteText('groupUnresolved')}</p>
+  <h3>Rounding</h3>
+  <p>{noteText('rounding')}</p>
+  <h3>Positions, tax base and constituencies</h3>
+  <p>Position 1 is the lowest full Band D. Equal figures share a position, written with "=", and the next position skips as many places as share it. Only areas with a figure are placed.</p>
+  <p>The tax base is the number of Band D equivalent properties, as published; for an unparished area it is the council's tax base less its parishes'. Larger places are those with a tax base of {threshold} or more. A tax base is not a population.</p>
+  <p>Constituencies come from the ONS parish to ward and ward to constituency lookups. {noteText('constituencySplit')} {noteText('constituencyUnparished')} A postcode alone cannot establish every charge on a property: check the bill or the council's own schedule.</p>
+</DataDrawer>

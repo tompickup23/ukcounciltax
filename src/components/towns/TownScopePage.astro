@@ -1,0 +1,69 @@
+---
+/**
+ * One region, county or constituency of the town league table: the pair on the
+ * desk band, the region links, the crawlable sentence, the lowest and highest ten,
+ * the spread, the full table and the method. Every route is self canonical.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import PairHero from './PairHero.astro';
+import TownLedgers from './TownLedgers.astro';
+import TownSpread from './TownSpread.astro';
+import TownTable from './TownTable.astro';
+import TownsMethod from './TownsMethod.astro';
+import TownsSources from './TownsSources.astro';
+import TownRegionNav from './TownRegionNav.astro';
+import {
+  councilHref, crawlSentence, scopeStructuredData, scopeSummary, scopeText,
+  townConstituencyPath, townCountyPath, townRegionPath, townsPath, townsYear, type TownScope,
+} from '../../lib/towns-pages';
+import {tidy} from '../../lib/towns-pages';
+import {townOgPath, townOgAlt} from '../../lib/towns-og';
+
+interface Props {scope: TownScope}
+const {scope} = Astro.props;
+const summary = scopeSummary(scope.rows);
+const text = scopeText(scope, summary);
+const n = summary.counts.rows;
+const sentence = crawlSentence(summary, text.where);
+const kindLabel = {england: 'England', region: 'Region', county: 'County', constituency: 'Constituency'}[scope.kind];
+const regions = [...new Set(scope.rows.map(t => t.region))];
+const counties = [...new Set(scope.rows.map(t => tidy(t.county)))].sort((a, b) => a.localeCompare(b, 'en-GB'));
+const councils = [...new Map(scope.rows.map(t => [t.councilGss, tidy(t.councilName)])).entries()].sort((a, b) => a[1].localeCompare(b[1], 'en-GB'));
+const pcons = [...new Map(scope.rows.flatMap(t => t.constituencies.map(c => [c.slug, c.name] as const))).entries()].sort((a, b) => a[1].localeCompare(b[1], 'en-GB'));
+const split = scope.rows.filter(t => t.constituencySplit).length;
+const lede = scope.kind === 'constituency'
+  ? `Full Band D council tax for every parish and unparished area that touches the ${scope.name} constituency, ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} with a figure. An area that crosses into another constituency is listed in full on both pages and never apportioned.`
+  : `Full Band D council tax for every parish and unparished area ${text.where}, ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} with a figure, lowest first. Calculated from published MHCLG figures, or the council's own where it publishes them.`;
+const regionName = scope.kind === 'region' ? scope.name : null;
+---
+<BaseLayout title={text.title} description={text.description} path={scope.path}
+  structuredData={scopeStructuredData(scope, summary, text.description)}
+  about={{'@type': 'AdministrativeArea', name: scope.kind === 'constituency' ? `${scope.name} constituency` : scope.name}}
+  ogImage={townOgPath(scope)} ogImageAlt={townOgAlt(scope)}>
+  <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas', href: townsPath()}, {label: `${kindLabel}: ${scope.name}`}]} />
+  <PairHero scope={scope} h1Lead={text.h1Lead} h1Place={text.h1Place}
+    eyebrow={`Full Band D | ${townsYear} | ${n.toLocaleString('en-GB')} ${n === 1 ? 'area' : 'areas'}`} lede={lede}
+    lowest={summary.lowest} highest={summary.highest} lowestJoint={summary.lowestJoint} highestJoint={summary.highestJoint} gap={summary.gap} />
+  <TownRegionNav current={regionName} />
+  {sentence && <div class="fact" data-fact><p class="towns-sentence">{sentence}</p><TownsSources rows={[...summary.ranked.slice(0, 5), ...summary.ranked.slice(-5)].map(r => r.town)} /></div>}
+  {summary.ranked.length >= 2 && <TownLedgers scope={scope} where={text.where} low={summary.ledgerLow} high={summary.ledgerHigh} of={summary.ranked.length} />}
+  {scope.kind !== 'constituency' && <TownSpread scope={scope} where={text.where} />}
+  {scope.kind === 'constituency' && split > 0 && <p class="caveat">{split} {split === 1 ? 'area here touches' : 'areas here touch'} wards in more than one constituency. {split === 1 ? 'It is' : 'They are'} listed in full here and on each other constituency's page, never apportioned.</p>}
+  <TownTable scope={scope} ranked={summary.ranked} unplaced={summary.unplaced} />
+  <TownsMethod />
+  <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>
+    <h2 id="related-heading">More parish and unparished areas</h2>
+    {scope.kind !== 'region' && <p>{regions.length === 1 ? 'Region' : 'Regions'}: {regions.map((r, i) => <>{i > 0 && ', '}<a href={townRegionPath(r)}>{r}</a></>)}.</p>}
+    {scope.kind !== 'county' && counties.length > 0 && <><h3>{scope.kind === 'region' ? `Counties in ${regionName === 'London' || regionName === 'Yorkshire and the Humber' ? '' : 'the '}${scope.name}` : 'Counties'}</h3><ul class="link-list">{counties.map(c => <li><a href={townCountyPath(c)}>{c}</a></li>)}</ul></>}
+    <h3>Parish precepts by council</h3>
+    <ul class="link-list">{councils.map(([gss, name]) => <li><a href={councilHref(gss)}>{name}</a></li>)}</ul>
+    {scope.kind !== 'constituency' && pcons.length > 0 && <><h3>Constituencies</h3><ul class="link-list">{pcons.map(([slug, name]) => <li><a href={townConstituencyPath(slug)}>{name}</a></li>)}</ul></>}
+    <p><a href={townsPath()}>Every parish and unparished area in England</a> · <a href="/council-tax/ranked/">Band D ranked by type of council</a> · <a href="/precepts/">What makes up a bill</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+.towns-sentence{max-width:48rem;font-size:var(--text-md)}
+.towns-related h3{font-size:var(--text-md);margin:var(--space-lg) 0 var(--space-xs)}
+</style>

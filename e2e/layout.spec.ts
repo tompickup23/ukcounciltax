@@ -24,6 +24,9 @@ const SAMPLES = [
   "/councils/king-s-lynn-and-west-norfolk/",
   "/council-tax/band-d/",
   "/council-tax/yorkshire-and-the-humber/",
+  "/council-tax/towns/region/south-west/",
+  "/council-tax/towns/county/herefordshire/",
+  "/council-tax/towns/constituency/burnley/",
 ];
 
 for (const path of [...STATIC_PATHS, ...SAMPLES]) {

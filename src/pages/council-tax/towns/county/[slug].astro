@@ -1,0 +1,7 @@
+---
+import TownScopePage from '../../../../components/towns/TownScopePage.astro';
+import {countyScopes} from '../../../../lib/towns-pages';
+export function getStaticPaths() { return countyScopes().map(scope => ({params: {slug: scope.slug}, props: {scope}})); }
+const {scope} = Astro.props;
+---
+<TownScopePage scope={scope} />

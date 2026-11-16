@@ -212,7 +212,10 @@ for (const path of files(DIST)) {
     for (const child of Object.values(value)) if (typeof child === 'object') collectTypes(child);
   };
   schemaNodes.forEach(collectTypes);
-  if (schemaTypes.some(type => ['FAQPage', 'Dataset', 'GovernmentService'].includes(type))) failures.push(`unsupported schema type on ${rel(path)}`);
+  // Dataset is allowed on the towns pages only, once each, where the table is the dataset.
+  const townsPage = rel(path).startsWith('/council-tax/towns/');
+  if (schemaTypes.some(type => ['FAQPage', 'GovernmentService', ...(townsPage ? [] : ['Dataset'])].includes(type))) failures.push(`unsupported schema type on ${rel(path)}`);
+  if (townsPage && schemaTypes.filter(type => type === 'Dataset').length !== 1) failures.push(`towns page needs one Dataset on ${rel(path)}`);
   const trail = schemaNodes.find(node => node['@type'] === 'BreadcrumbList')?.itemListElement;
   if (!Array.isArray(trail) || !trail.length || trail.some((item, index) => item.position !== index + 1 || !item.name || !item.item?.startsWith(SITE_URL + '/'))) failures.push(`invalid breadcrumb trail on ${rel(path)}`);
 
@@ -256,7 +259,8 @@ if (seenUnique.size !== 69) failures.push(`expected 69 listed self canonical pag
 // The Burnley budget scenario game adds one route, /councils/burnley/budget-game/.
 // C2 adds exactly 197 audited set pages to the existing 910 HTML pages.
 // C6 adds two from 2027-28: the levels day page and precept day.
-if (pages !== 1107 + LEVELS_EXTRA) failures.push(`expected ${1107 + LEVELS_EXTRA} HTML pages, found ${pages}`);
+// The town league table adds 642: the hub, 9 regions, 91 counties and 541 constituencies.
+if (pages !== 1749 + LEVELS_EXTRA) failures.push(`expected ${1749 + LEVELS_EXTRA} HTML pages, found ${pages}`);
 if (parishPagesChecked !== 214) failures.push(`A3 stop: ${parishPagesChecked} parish pages, expected 214`);
 if (networkPopulation !== 294 || networkElection !== 71) failures.push(`A3 stop: network figure counts ${networkPopulation} and ${networkElection}, expected 294 and 71`);
 if (paymentLinks !== 266 || paymentAbsent !== 30) failures.push(`A3 stop: payment coverage ${paymentLinks} linked and ${paymentAbsent} absent, expected 266 and 30`);
@@ -344,7 +348,7 @@ const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 if (locs.length === 0) failures.push("sitemap.xml lists no URL");
 const sitemapEntries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
 const today = new Date().toISOString().slice(0, 10);
-if (sitemapEntries.length !== 1106 + LEVELS_EXTRA || locs.length !== 1106 + LEVELS_EXTRA) failures.push(`expected all ${1106 + LEVELS_EXTRA} sitemap entries, found ${sitemapEntries.length}`);
+if (sitemapEntries.length !== 1748 + LEVELS_EXTRA || locs.length !== 1748 + LEVELS_EXTRA) failures.push(`expected all ${1748 + LEVELS_EXTRA} sitemap entries, found ${sitemapEntries.length}`);
 for (const entry of sitemapEntries) {
   const dates = [...entry.matchAll(/<lastmod>([^<]*)<\/lastmod>/g)].map(match => match[1]);
   if (dates.length !== 1 || !/^\d{4}-\d{2}-\d{2}$/.test(dates[0]) || Number.isNaN(Date.parse(dates[0])) || dates[0] > today) failures.push(`invalid or future sitemap lastmod: ${entry}`);

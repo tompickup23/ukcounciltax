@@ -84,7 +84,7 @@ export function recordLineProblems(html) {
 
 /** At most one desk band on a page (Ledger and Desk). */
 export function deskProblems(html) {
-  const desks = [...strip(html).matchAll(/<section\b[^>]*class="desk\b/g)].length;
+  const desks = [...strip(html).matchAll(/<(?:section|div)\b[^>]*\bclass="desk(?:\s|")/g)].length;
   return desks > 1 ? [`${desks} desk bands`] : [];
 }
 

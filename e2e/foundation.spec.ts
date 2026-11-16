@@ -32,12 +32,12 @@ for (const path of DESK_PAGES) {
   test(`one desk band, accessible in both themes: ${path}`, async ({page}) => {
     test.setTimeout(120_000);
     await page.goto(path);
-    await expect(page.locator('section.desk')).toHaveCount(1);
+    await expect(page.locator('.desk')).toHaveCount(1);
     for (const theme of ['light', 'dark']) {
       await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
-      expect((await new AxeBuilder({page}).include('section.desk').analyze()).violations).toEqual([]);
+      expect((await new AxeBuilder({page}).include('.desk').analyze()).violations).toEqual([]);
       // In dark themes the band must lift clearly off the page, not sit at the page colour.
-      const [band, body] = await page.evaluate(() => [getComputedStyle(document.querySelector('section.desk')!).backgroundColor, getComputedStyle(document.body).backgroundColor]);
+      const [band, body] = await page.evaluate(() => [getComputedStyle(document.querySelector('.desk')!).backgroundColor, getComputedStyle(document.body).backgroundColor]);
       expect(band).not.toBe(body);
     }
   });

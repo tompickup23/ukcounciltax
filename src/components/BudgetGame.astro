@@ -28,7 +28,7 @@ function routeStop(kind: string, index: number) {
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
   <BudgetModes gss={Astro.props.gss} slug={Astro.props.slug} current="guess" />
-  <DeskBand id="game-heading" level={1} hero top class="game-desk" layout="split"
+  <DeskBand id="game-heading" level={1} hero top as="div" class="game-desk" layout="split"
     eyebrow={`Explore the published budget | ${data.year}`} title="Could you set" accent={`${name}'s budget?`}
     lede={data.rounds.length === 5 ? `Five rounds of guessing: how ${name} splits each pound it spends on services, how the county council splits its own, who takes your Band D bill, where the money comes from, and what happens to reserves.` : `Four rounds of guessing: how ${name} splits each pound it spends on services, who takes your Band D bill, where the money comes from, and what happens to reserves.`}>
     <Fragment slot="copy">

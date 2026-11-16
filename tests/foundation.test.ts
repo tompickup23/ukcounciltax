@@ -29,6 +29,8 @@ describe("the desk gate", () => {
     const desk = `<section class="desk desk--split">x</section>`;
     expect(deskProblems(desk)).toEqual([]);
     expect(deskProblems(desk + desk)).toEqual(["2 desk bands"]);
+    expect(deskProblems(desk + `<div class="desk desk--split">y</div>`)).toEqual(["2 desk bands"]);
+    expect(deskProblems(desk + `<section class="desk-foot">z</section>`)).toEqual([]);
   });
 });
 

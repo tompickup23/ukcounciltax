@@ -14,10 +14,8 @@ interface Props {rows: readonly Town[]; lookups?: boolean; method?: string}
 const {rows, lookups = false, method} = Astro.props;
 const schedules = scheduleSourcesFor(rows);
 const names = schedules.length <= 2 ? schedules.map(s => s.publisher).join(' and ') : `${schedules.length} council schedules`;
-const tail = [
-  schedules.length > 0 ? `or, where a row says so, as printed by ${names}` : null,
-  lookups ? 'county and constituency from ONS lookups' : null,
-].filter(Boolean).join('; ') || undefined;
+const tail = schedules.length > 0 ? `or, where a row says so, as printed by ${names}` : undefined;
 ---
 <RecordLine entry="band-d" method={method ? 'Full Band D, positions and differences calculated from' : 'Full Band D calculated from'}
   sources={[townSources.components, townSources.parishes]} tail={tail} />
+{lookups && <RecordLine entry="lookups" method="County and constituency from" sources={[{...townSources.parishWard, short: 'ward and constituency lookups'}]} />}

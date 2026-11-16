@@ -35,7 +35,7 @@ Restyle so far on UK Council Tax: W0 to W3, F1 and W4 part one are live. UK Coun
 |---|---|---|---|---|
 | Now, then each Monday | `docs/MEASUREMENT.md`: Search Console and Cloudflare Web Analytics, with the read back of the 28 days to 14 November | Both | A Claude session with Chrome, or Tom | Week 1 figures blank |
 | Now | CSP run port fix, with a look at why the `site` check grew from about 20 to about 32 minutes; "Refresh data" restores the pinned RA workbooks (it failed again on 16 November) | UKCT; UKC | Codex or Claude, one small PR each | Not started. The port clash can trip the fast track on any PR |
-| 23 November | C1, the palette, chosen from the colour round sheets (section 4) | UKCT | Claude draws, Tom chooses | Prompt written |
+| Done, 16 November | C1, the palette: B, green and cream, chosen from the colour round sheets | UKCT | Tom | Decided. K2 and W8 follow (section 4) |
 | 1 to 5 December | Council links rerun (prompt 6 of 15 November). Every build fails from 4 January 2027 without it | Both | Codex | Prompt written |
 | 4 December | D3, the two marks, drawn in the chosen palette | Both | Claude draws candidates, Tom chooses | Moved from 1 December so the marks follow the palette |
 | Early December, after the links rerun | Shepway slug to `folkestone-and-hythe`: five URLs, redirects on three sites | Three sites | Codex, one PR per site, Tom's yes each | Decided |

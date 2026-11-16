@@ -56,7 +56,7 @@ Lanes: one UK Council Tax page session at a time; the colour lane beside it (it 
 
 | Step | Work | Who | Output | By |
 |---|---|---|---|---|
-| C0 | Colour round. Three candidate palettes as token overrides, rendered on the eight reference pages in dark and light at 390 and 1440, with a contrast table. No site code changes | Claude, one session | A docs PR with the sheets and the values; Tom picks one (decision C1) | 20 November |
+| C0, done 16 November | Colour round. Three candidate palettes as token overrides, rendered on the eight reference pages in dark and light at 390 and 1440, with a contrast table. No site code changes | Claude, one session | A docs PR with the sheets and the values; Tom picks one (decision C1) | 20 November |
 | K2 | Estate Kit 0.6.5: the chosen values in `skins.sites.ukcounciltax` for both themes (paper, ink and neutrals, accent roles, desk, the bill bar series), through `derive-desk.mjs` and the kit colour gates | Claude, Tom's yes and tag | Kit PR | 25 November |
 | W8 | The swap on UK Council Tax: vendor 0.6.5, extend `apply-brand.py` to splice the skin block, bring `palette.ts` and the share card into line. Values only: no template changes | Claude, Tom's yes | One PR, every page, full browser suite and the reference sheet | Live by 30 November |
 
@@ -101,18 +101,16 @@ Sessions left on the restyle: 3 for colour, 6 pages in the must list, 3 on UK Co
 
 ## 5. Decisions, one register
 
-Taken on 16 November and recorded in `docs/DECISIONS-2026-11-16.md`: the narrow fast track; X3 stay private; X4; Shepway; seats source; audit identity; section 114 register; NV11; D2 paper tint; the reorganisation field stays held; D5, D13 and D14 at option (a); council control in the seats build.
+Taken on 16 November and recorded in `docs/DECISIONS-2026-11-16.md`: the narrow fast track; X3 stay private; X4; Shepway; seats source; audit identity; section 114 register; NV11; D2 paper tint; the reorganisation field stays held; D5, D13 and D14 at option (a); council control in the seats build. Also on 16 November, C1: palette **B, green and cream**, chosen by Tom from the colour round sheets (`docs/design/COLOUR-ROUND-2026-11.md`, pull request 103), taken as drawn, so B's cream paper `#f6f1e4` supersedes the D2 value.
 
 Open, with my recommendation, a date and what happens on silence:
 
 | Ref | Decision | Recommendation | Decide by | Default |
 |---|---|---|---|---|
-| C1 | The UK Council Tax palette, both themes | Choose from the colour round sheets; B before seeing them | 23 November | The current colours stay and W8 lands the K1 paper only |
 | C2 | Which theme leads | Dark is captured and judged first on every sheet; both must pass | With C1 | Dark first |
 | R1 | Fast track when a reviewer's data rule finding has been fixed | Allow the merge once the same reviewer confirms the fix in the pull request and the PR is still layout only | Before the next such PR | Each such PR waits for Tom |
 | D8 | Header structure | (a) four menus plus "Find my bill" | 30 November | W5 waits |
 | D3 | Marks | (a) distinct marks, drawn in the chosen palette. The accent half of D3 is now C1 | 4 December | Shared glyph stays; M1 dropped from this season |
-| D2 | Paper tint, decided 16 November as `#f8f7f2` | Stands unless the chosen candidate sets another light paper; C1 then supersedes it | With C1 | Stands |
 | D10 | Presets on the set page | (a) one or two, labelled as user requested scenarios | 15 December | None |
 | D12 | Canonical status of rebuilt pages | (a) keep canonical to UK Councils until the reversal | 15 December | (a) |
 | E1 | What the reversal needs from the measurement record | No numeric threshold; eight weekly rows, the canonical sample matching, and the 28 days before set beside the 28 days after | 15 December | Rows kept, no conclusion drawn |

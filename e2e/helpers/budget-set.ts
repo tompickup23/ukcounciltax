@@ -55,7 +55,7 @@ export function budgetSetJourneys() {
       const freeze = await page.locator('[data-remaining]').textContent();
       const own = page.locator('[data-own]');
       await own.fill(inputPounds(crossing-1n));
-      await expect(page.locator('[data-rule-result]')).toContainText('below the mapped referendum trigger');
+      await expect(page.locator('[data-rule-result]')).toContainText('below the level that would need a referendum');
       await own.focus(); await own.press('ArrowUp');
       await expect(own).toHaveValue(inputPounds(crossing));
       await expect(page.locator('[data-rule-result]')).toContainText('A referendum would be required');
@@ -66,8 +66,13 @@ export function budgetSetJourneys() {
         expect(await page.locator('.ledger table').textContent()).toBe(ledger);
       }
       await page.locator('[data-published-reset]').click();
-      await expect(page.locator('[data-remaining]')).toHaveText('£0.00');
+      await expect(page.locator('[data-remaining]')).toHaveText('£0');
+      await expect(page.locator('[data-remaining-exact]')).toHaveText('£0.00');
       await expect(page.locator('[data-state]')).toContainText('arithmetic balances');
+      // W3: the neutral stamp shows only at an exact zero, and the gap bar sits on its target line.
+      await expect(page.locator('[data-stamp]')).toBeVisible();
+      await expect(page.locator('[data-state-word]')).toHaveText('Balanced');
+      await expect(page.locator('.set-desk [data-gap-bar]')).toHaveAttribute('data-side', 'none');
       const service = page.locator('[data-service]').first();
       const published = await service.inputValue();
       const slider = page.locator('[data-service-range]').first();
@@ -75,7 +80,10 @@ export function budgetSetJourneys() {
       expect(Number(await service.inputValue())).toBeCloseTo(Number(published) * 0.995, 2);
       await service.locator('xpath=ancestor::details').locator('summary').click();
       await service.fill('0');
-      await expect(page.locator('[data-remaining]')).not.toHaveText('£0.00');
+      await expect(page.locator('[data-remaining]')).not.toHaveText('£0');
+      await expect(page.locator('[data-stamp]')).toBeHidden();
+      await expect(page.locator('[data-state-word]')).toHaveText('Surplus');
+      await expect(page.locator('.set-desk [data-gap-bar]')).toHaveAttribute('data-side', 'surplus');
       await service.fill('0.001');
       await expect(page.locator('[data-error]')).toBeVisible();
       await page.locator('[data-freeze-reset]').click();

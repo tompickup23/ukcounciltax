@@ -1,6 +1,6 @@
 # State | UK Council Tax | 16 November 2026, afternoon
 
-- **Live:** main `bd75d27` (PR 99, W3 set page), merged 16 November on Tom's yes; its publish run was in progress when this was written. Also from 16 November: PRs 94, 95 (towns pages), 96 (W2 set page), 97 (F1 foundation), 98 (decisions). From 15 November: PRs 88, 91, 92, 93.
+- **Live:** main `bd75d27` (PR 99, W3 set page), merged and published 16 November on Tom's yes. Also from 16 November: PRs 94, 95 (towns pages), 96 (W2 set page), 97 (F1 foundation), 98 (decisions). From 15 November: PRs 88, 91, 92, 93.
 - **Open:** none after this docs pull request. PR 99's `site` check first failed on a port clash in the actual CSP run (port 48788 in use), not on a test, and passed on the rerun; the fix for that clash is still owed.
 - **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md` is closed and kept as the record.
 - **Critical path:** the UK Councils dossier builds from the three sources decided on 16 November (seats, audit status, section 114), due by mid January 2027. Prompts A, B and C are in `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md` for Codex, one at a time; each is a data PR needing Tom's yes.

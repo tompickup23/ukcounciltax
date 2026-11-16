@@ -1,5 +1,7 @@
 # Assessment and plan from here | UK Councils and UK Council Tax | 13 November 2026
 
+**Closed on 16 November 2026.** The current plan is `docs/PLAN-CURRENT.md`. This file is kept as the record of how each choice was reached; do not add to it.
+
 Written in Claude Code at Tom's request, late on 13 November 2026, while the last Codex chat was archiving. Read from GitHub (`gh`, both repositories and estate-kit), the live sites and the local handoffs, not from the local main checkouts. Nothing here authorises a merge, tag, deployment or deletion. Committed with the archive notes of 12 and 13 November 2026 in one documents pull request.
 
 ## 1. Where things stand

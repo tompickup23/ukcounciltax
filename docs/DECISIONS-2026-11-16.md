@@ -35,3 +35,17 @@ In scope today: W3, W4 and W9 page changes, Tier 2 pages, and follow ups to F1 t
 
 - D2 paper: option (a), `#f8f7f2` with white cards, decided in F1 (plan 11.10); it lands through K1 and W8.
 - UK Councils PR 62: the reasons in "What is not shown on this profile" read as internal process. The session bringing PR 62 up to date is drafting plainer wording; the page copy changes only on Tom's yes.
+
+## 4. Taken later on 16 November, on "Make best quality decisions"
+
+Tom's instruction in chat on 16 November 2026, when asked about the W4 game page: "Make best quality decisions. Do best quality prompts". Taken by Claude on that instruction, each reversible by Tom. They are the recommended options in `docs/DESIGN-AUDIT-2026-11-15.md`.
+
+| Decision | Taken | Why |
+|---|---|---|
+| D5, slim the game page inside W4 | (a) Yes, by moving the reference tables behind one drawer under a "Behind the numbers" break. No table, figure or source is removed | The page cannot read as a game with 29 closed tables under it; removing them outright is the N4 change and waits for the reversal |
+| D13, round one start state | (a) Rows start at zero and Reveal stays blocked until 100p is placed | An equal split anchors guesses and changes the scored baseline of the reviewed A6 design |
+| D14, shareable game results | (a) A client side PNG download of the end card only, with no request | Per council grade images would add about 1,500 PNGs for a feature not yet shown to be used |
+
+Also on 16 November Tom instructed that the UK Councils seats build includes council control (`docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`, prompt A).
+
+Not taken by this instruction, because each widens what may merge or publish without Tom: R1 in `docs/PLAN-CURRENT.md`.

@@ -6,7 +6,7 @@
 - **Critical path:** the UK Councils dossier builds from the three sources decided on 16 November (seats, audit status, section 114), due by mid January 2027. Prompts A, B and C are in `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md` for Codex, one at a time; each is a data PR needing Tom's yes.
 - **Measurement:** `docs/MEASUREMENT.md` started 16 November, one record for both sites. Week 1 figures are blank and owed by the next session with Chrome, with the read back of the 28 days to 14 November. The set pages carry no beacon.
 - **Not started and owed now:** the CSP port fix here; the "Refresh data" fix on UK Councils (failed 16 November).
-- **Next page work, one session at a time:** the `/tools/budget/` hub (layout only, fast track), then W4 and W9 through Codex with review. Order and cut line in plan section 4.
+- **Running, started 16 November:** W4 game page (Opus session, two PRs, fast track, prompt in `docs/PROMPTS-2026-11-16-W4-W9.md`); K1 Estate Kit 0.6.4 (Opus session, stops at an open PR); UK Councils seats and control build (Codex, prompt A). Then W9 council page, then the `/tools/budget/` hub. One page session at a time.
 - **Fast track:** granted on 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md`. Layout only, separate reviewer, all checks passed, no deploy running, contact sheet in the PR.
 - **Open elsewhere:** UK Councils has no open pull request (62 and 63 merged and live, main `456a200`). Estate Kit PRs 27 and 28.
 - **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites until the dossier data PR.

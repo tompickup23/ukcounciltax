@@ -54,9 +54,9 @@ One UK Council Tax page session at a time, at most one data session beside it, o
 | Order | Work | Who | Waits on |
 |---|---|---|---|
 | 1 | PR 99, W3 set page | Merged 16 November on Tom's yes | Done |
-| 2 | `/tools/budget/` hub: band first with the picker inside, Guess and Set pills per row | Claude, fast track | Nothing |
-| 3 | W4 game page, two PRs | Codex, Claude reviews | Prompt owed; D5 and D13 |
-| 4 | W9 council page: ledger row under the H1, one bands chart, short record lines | Codex, Claude reviews | Prompt owed |
+| 2 | `/tools/budget/` hub: band first with the picker inside, Guess and Set pills per row | Claude, fast track | A free page lane, after W4 |
+| 3 | W4 game page, two PRs | Claude (Opus), fast track | Prompt in `docs/PROMPTS-2026-11-16-W4-W9.md`; started 16 November, ahead of the hub |
+| 4 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Prompt in the same file; W4 part one merged |
 | 5 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |
 | Kit | K1 (paper, desk, hero step, icons), then W8 and U1 as token swaps | Claude, Tom's yes | Nothing since X3 was settled |
 | UKC | U3 council page network band | Claude, Tom's yes | Nothing; it runs beside the dossier builds |
@@ -71,7 +71,7 @@ W10 share cards on both sites; U4 the `/councils/` map lead; U5 the dossier page
 
 ## 5. Decisions, one register
 
-Taken on 16 November and recorded in `docs/DECISIONS-2026-11-16.md`: the narrow fast track; X3 stay private; X4; Shepway; seats source; audit identity; section 114 register; NV11; D2 paper tint; the reorganisation field stays held.
+Taken on 16 November and recorded in `docs/DECISIONS-2026-11-16.md`: the narrow fast track; X3 stay private; X4; Shepway; seats source; audit identity; section 114 register; NV11; D2 paper tint; the reorganisation field stays held; and, later the same day, D5, D13 and D14 at option (a) and council control in the seats build (section 4 of that note).
 
 Open, with my recommendation, a date and what happens on silence:
 
@@ -80,8 +80,6 @@ Open, with my recommendation, a date and what happens on silence:
 | R1 | Fast track when a reviewer's data rule finding has been fixed | Allow the merge once the same reviewer confirms the fix in the pull request and the PR is still layout only | Before the next such PR | Each such PR waits for Tom |
 | D8 | Header structure | (a) four menus plus "Find my bill" | 30 November | W5 waits |
 | D3 | Marks and accent | (a) distinct marks, accents kept | 1 December | Shared glyph stays; M1 dropped from this season |
-| D5 | Slim the game page inside W4 | (a) yes | With the W4 prompt | Not slimmed |
-| D13 | Game round one start state | (a) keep rows at zero | With the W4 prompt | (a) |
 | D10 | Presets on the set page | (a) one or two, labelled as user requested scenarios | 15 December | None |
 | D12 | Canonical status of rebuilt pages | (a) keep canonical to UK Councils until the reversal | 15 December | (a) |
 | E1 | What the reversal needs from the measurement record | No numeric threshold; eight weekly rows, the canonical sample matching, and the 28 days before set beside the 28 days after (`docs/MEASUREMENT.md`, section 3) | 15 December | Rows kept, no conclusion drawn |
@@ -92,16 +90,15 @@ Open, with my recommendation, a date and what happens on silence:
 | D6 | Links with the tompickup.co.uk games | (a) none | Any time | None |
 | D7 | UK Food Hygiene and UK Places links | (a) footers once each URL is verified live | With W5 | Held |
 | D9 | UK Councils compare page | (a) keep canonical, add an example pair | Any time | As is |
-| D14 | Shareable game results | (a) PNG download only | With W4 | Not built |
 
 ## 6. Prompts owed
 
 Written before the lane's current PR merges, so no lane idles:
 
 1. UK Councils dossier builds: written, `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`. Four points in it are for Tom (control, PSAA permission, City of London and Isles of Scilly, share alike).
-2. W4 game page, part one. Owed now.
-3. W9 council page. Owed when W4 part one opens.
-4. K1 kit release. Owed now.
+2. W4 game page and W9 council page: written, `docs/PROMPTS-2026-11-16-W4-W9.md`.
+3. K1 kit release: session started 16 November.
+4. The `/tools/budget/` hub page. Owed before W4 part two merges.
 5. The two check fixes in section 3. Owed now; small enough to brief in the PR title.
 
 ## 7. Working rules that stay

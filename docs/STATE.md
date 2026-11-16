@@ -1,16 +1,18 @@
-# State | UK Council Tax | 16 November 2026, afternoon
+# State | UK Council Tax | 16 November 2026, evening
 
-- **Live:** main `bd75d27` (PR 99, W3 set page), merged and published 16 November on Tom's yes. Also from 16 November: PRs 94, 95 (towns pages), 96 (W2 set page), 97 (F1 foundation), 98 (decisions). From 15 November: PRs 88, 91, 92, 93.
-- **Open:** none after this docs pull request. PR 99's `site` check first failed on a port clash in the actual CSP run (port 48788 in use), not on a test, and passed on the rerun; the fix for that clash is still owed.
-- **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md` is closed and kept as the record.
-- **Critical path:** the UK Councils dossier builds from the three sources decided on 16 November (seats, audit status, section 114), due by mid January 2027. Prompts A, B and C are in `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md` for Codex, one at a time; each is a data PR needing Tom's yes.
-- **Measurement:** `docs/MEASUREMENT.md` started 16 November, one record for both sites. Week 1 figures are blank and owed by the next session with Chrome, with the read back of the 28 days to 14 November. The set pages carry no beacon.
-- **Not started and owed now:** the CSP port fix here; the "Refresh data" fix on UK Councils (failed 16 November).
-- **Running, started 16 November:** W4 game page (Opus session, two PRs, fast track, prompt in `docs/PROMPTS-2026-11-16-W4-W9.md`); K1 Estate Kit 0.6.4 (Opus session, stops at an open PR); UK Councils seats and control build (Codex, prompt A). Then W9 council page, then the `/tools/budget/` hub. One page session at a time.
-- **Fast track:** granted on 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md`. Layout only, separate reviewer, all checks passed, no deploy running, contact sheet in the PR.
-- **Open elsewhere:** UK Councils has no open pull request (62 and 63 merged and live, main `456a200`). Estate Kit PRs 27 and 28.
+- **Live:** main `5a76109` (PR 101, W4 part one: game hero step cards, pill stepper, ledger row, record lines), merged 16 November; its publish run passed. Also from 16 November: PRs 94 to 100.
+- **Open:** none after this docs pull request.
+- **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. Revised this evening at Tom's request to put the restyle and its colours first.
+- **Finding that changed the plan:** the restyle so far is layout only. The site still vendors Estate Kit 0.6.3, and the planned token swap (K1 paper through W8) would change the light page from white to `#f8f7f2` and nothing visible in dark, which is the theme Tom's browser shows. Detail in plan section 2.
+- **Next, colour lane:** C0 the colour round (three candidates on eight reference pages, dark first), Tom chooses by 23 November (decision C1), then kit 0.6.5 (K2), then the swap (W8), live by 30 November. Prompts in `docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`.
+- **Next, page lane:** W4 part two (prompt in `docs/PROMPTS-2026-11-16-W4-W9.md`; no branch yet), then the front doors PR (budget hub and homepage row), then W9 council page. One page session at a time; the colour lane runs beside it until the swap PR.
+- **Not started and owed now:** the CSP run port fix here, with a look at why the `site` check grew from about 20 to about 32 minutes; the "Refresh data" fix on UK Councils (failed again 16 November); measurement week 1 in `docs/MEASUREMENT.md`, which needs a session with Chrome.
+- **Critical path elsewhere:** UK Councils PR 64 (draft, seats and control, checks passed) needs its review and Tom's yes; then dossier prompts B and C. Due mid January 2027.
+- **Fast track:** granted 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md`. Tokens are outside it, so K2 and W8 are Tom's yes.
+- **Estate Kit:** `v0.6.4` tagged (PR 29). PRs 27 and 28 open.
 - **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites until the dossier data PR.
-- **Decisions waiting:** plan section 5. Soonest: R1, D8 by 30 November, D3 by 1 December, the rest by 15 December.
-- **Binding dates:** links rerun 1 to 5 December; dossier mid January 2027; freeze 20 March; levels day late March; reversal May to June 2027.
-- **Local traps:** copy all of `data/raw/` from the main checkout into a fresh worktree before building or testing; start `npx astro preview --host 127.0.0.1 --port 44321` yourself and run Playwright with `E2E_BASE_URL`, then `npx astro preview stop`; a full build takes 15 to 20 minutes, so use `astro dev` for layout work.
+- **Decisions waiting:** plan section 5. Soonest: R1; C1 and C2 by 23 November; D8 by 30 November; D3 by 4 December; the rest by 15 December.
+- **Binding dates:** links rerun 1 to 5 December; dossier mid January 2027; restyle must list by end of February; freeze 20 March; levels day late March; reversal May to June 2027.
+- **New working rules (plan section 7):** the eight page reference sheet in every page PR, dark first; gates once on the final head; family sized PRs; no colour value in a page PR.
+- **Local traps:** copy all of `data/raw/` from the main checkout into a fresh worktree before building or testing; start `npx astro preview` yourself on a free port and run Playwright with `E2E_BASE_URL`, then stop it; a full build takes 15 to 20 minutes, so use `astro dev` for layout work.
 - **Design reference:** `docs/DESIGN-AUDIT-2026-11-15.md`. Session detail belongs in PR bodies.

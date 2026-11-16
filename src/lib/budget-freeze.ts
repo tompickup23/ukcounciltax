@@ -81,8 +81,8 @@ export function referendumTriggered(rule: FreezeBaseline['rule'], prior: bigint,
 }
 export function referendumExplanation(rule: FreezeBaseline['rule']): string {
   const principle = principles[rule];
-  if (principle.join === 'AND') return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger requires both an increase of at least ${principle.percentageBasisPoints / 100}% and an increase of more than £${inputPounds(principle.poundPence!)} over the previous own charge.`;
-  return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger is an increase of at least ${principle.percentageBasisPoints / 100}% over the previous own charge, comprising ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
+  if (principle.join === 'AND') return `Under the ${FREEZE_YEAR_TEXT} rule for this council, the rise that would need a referendum is one of both at least ${principle.percentageBasisPoints / 100}% and more than £${inputPounds(principle.poundPence!)} over the previous own charge.`;
+  return `Under the ${FREEZE_YEAR_TEXT} rule for this council, the rise that would need a referendum is at least ${principle.percentageBasisPoints / 100}% over the previous own charge: ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
 }
 
 export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): FreezeInputs {
@@ -118,7 +118,7 @@ export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) 
   const remaining = spendingChange-financingChange;
   return {
     changes, spendingChange, financingChange, remaining,
-    status: remaining === 0n ? 'balanced' : remaining > 0n ? 'shortfall' : 'surplus',
+    status: (remaining === 0n ? 'balanced' : remaining > 0n ? 'shortfall' : 'surplus') as 'balanced' | 'shortfall' | 'surplus',
     referendum: referendumTriggered(baseline.rule, prior, selected),
   };
 }
@@ -138,7 +138,7 @@ export function freezeSummary(baseline: FreezeBaseline, inputs: FreezeInputs, so
     `Financing change: £${exactPounds(result.financingChange)}`,
     `Remaining difference: £${exactPounds(result.remaining)} (${result.status})`,
     'Formula: remaining difference = spending change minus (selected own Band D minus published own Band D) times the fixed tax base.',
-    `Referendum trigger under the mapped ${FREEZE_YEAR_TEXT} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
+    `The rise that would need a referendum under the ${FREEZE_YEAR_TEXT} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
     ...FREEZE_ASSUMPTIONS,
     ...(baseline.sourceWarnings ?? []),
     'Displayed money rounds to pennies; this summary preserves four decimal places. Zero is tested before rounding.',

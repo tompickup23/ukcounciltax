@@ -2,11 +2,18 @@
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
 import BudgetModes from '../../../../components/BudgetModes.astro';
+import DeskBand from '../../../../components/DeskBand.astro';
+import RecordLine from '../../../../components/RecordLine.astro';
+import PageSources, {type SourceEntry} from '../../../../components/PageSources.astro';
 import raColumns from '../../../../../data/pilots/budget-freeze-columns.json';
 import {budgetSetPages, budgetSetPath} from '../../../../lib/paths';
 import { type FreezePilot } from '../../../../lib/budget-freeze-data';
 import { FREEZE_YEAR, FREEZE_YEAR_TEXT, FREEZE_MODEL, FREEZE_ASSUMPTIONS, referendumExplanation, calculateFreeze, initialFreezeInputs, inputPounds, money } from '../../../../lib/budget-freeze';
-import { referendumTriggerPence } from '../../../../scripts/budget-freeze';
+import { referendumTriggerPence, boardMoney, stateWord, stateSentence, gapScale, gapShare } from '../../../../scripts/budget-freeze';
+import { formatMoney } from '../../../../lib/money';
+import { gameNeighbours } from '../../../../lib/game-neighbours';
+import { CURRENT_YEAR } from '../../../../lib/council-tax';
+import type { SourceRef } from '../../../../lib/sources';
 import rules from '../../../../../data/pilots/budget-freeze-referendum.json';
 import snapshot from '../../../../../data/pilots/budget-freeze.json';
 import {pinnedBudgetLine} from '../../../../lib/budget-pin';
@@ -23,90 +30,141 @@ const baseText = (Number(pilot.taxBaseHundredths)/100).toLocaleString('en-GB',{m
 const cell = (key: keyof typeof pilot.evidence) => { const c = pilot.evidence[key]; return `${c.sheet}, ${c.column}${c.row}`; };
 const raCell = (id: string) => `${pilot.evidence.raTotal.sheet}, ${raColumns[id as keyof typeof raColumns]}${pilot.evidence.raTotal.row}`;
 const publishedMoney = (pence: string) => money(BigInt(pence)*100n);
+// RA returns publish £ thousand: the card prints £ million to one decimal and the
+// disclosure prints the exact published pounds, never pennies the return does not hold.
+const serviceCompact = (pence: string) => formatMoney(Number(pence), {unit:'pence', style:'compact'});
+const serviceExact = (pence: string) => formatMoney(Number(BigInt(pence)/100000n), {unit:'thousands'});
+const scale = gapScale(pilot);
+const initialSide = initial.remaining === 0n ? 'none' : initial.remaining > 0n ? 'shortfall' : 'surplus';
+const initialGap = `--gap:${gapShare(initial.remaining, scale) / 2}%`;
 // The same note printed in two MHCLG files is shown once, with both cells cited.
 const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: string; explanation: string; citations: (typeof pilot.reviewedNotes)[number]['citation'][]}>>((groups, note) => {
   const key = `${note.text}\n${note.explanation}`;
   (groups[key] ??= {text: note.text, explanation: note.explanation, citations: []}).citations.push(note.citation);
   return groups;
 }, {}));
+
+// Record lines (F1): publisher and a short title built from the data's own title and year.
+const yearIn = (title: string) => /\d{4}\/\d{2}/.exec(title)?.[0] ?? FREEZE_YEAR_TEXT;
+const mhclg = (source: {title: string; url: string}, short?: string): SourceRef => ({publisher:'MHCLG', title:source.title, url:source.url, short: short ?? `${source.title.split(',')[0]}, ${yearIn(source.title)}`});
+const raRef = mhclg(budgetSource, `${budgetSource.title.split(',')[0]}, ${FREEZE_YEAR_TEXT}`);
+const currentRef = mhclg(taxSource);
+const priorRef = mhclg(pilot.sources[2]);
+const table10Ref = mhclg(pilot.sources[3]);
+const rulesRef: SourceRef = {publisher:rules.source.publisher, title:rules.source.title, url:principle.citation.url, date:rules.source.published, table:pilot.ruleLocation, short:`Referendum principles, ${FREEZE_YEAR_TEXT}`};
+const entries: SourceEntry[] = [
+  {key:'set-band-d', label:'Own Band D charges and the fixed tax base', method:'Own-council Band D excluding parish precepts, checked against Table 10; the tax base is in Band D equivalents, not households', sources:[priorRef, currentRef, table10Ref]},
+  {key:'set-services', label:'Net service spending and the published ledger', method:'Published in £ thousand. Cards show £ million to one decimal; each card gives the exact published pounds and its cell', sources:[raRef]},
+  {key:'set-referendum', label:'The rise that would need a referendum', method:'The smallest whole penny charge that meets the rule from the previous own charge', sources:[rulesRef]},
+];
+// The copied scenario names each source in full.
+const copiedSources = [...pilot.sources.map(s => `MHCLG, ${s.title}, ${s.url}`), `${rules.source.publisher}, ${rules.source.title}, ${rules.source.url}`];
+
+// What next: neighbours with their own set page, by name. Names only, never a figure.
+const eligible = new Set(budgetSetPages().map(p => p.slug));
+const near = gameNeighbours(pilot.gss);
+const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b) => a.name.localeCompare(b.name, 'en-GB')).slice(0, 4);
 ---
 <BaseLayout title={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}`} description={`Set ${pilot.name}'s budget using the published ${FREEZE_YEAR_TEXT} ledger. Explore tax and spending with explicit assumptions.`} path={budgetSetPath(pilot.slug)} ephemeral ogImage={`/og/budget-set/${pilot.slug}.png`} ogImageAlt={`Set ${pilot.name}'s budget ${FREEZE_YEAR_TEXT}. An exploration, not a forecast.`}>
   <Breadcrumbs items={[{label:'Tools',href:'/tools/'},{label:'Council budgets',href:'/tools/budget/'},{label:pilot.name,href:`/tools/budget/${pilot.slug}/`},{label:'Set the budget'}]} />
-  <div class="budget-set" data-freeze-pilot data-pilot={JSON.stringify(pilot)}>
-      <BudgetModes gss={pilot.gss} slug={pilot.slug} current="set" />
-
-      <header class="page-head">
-        <div><p class="eyebrow"> {FREEZE_YEAR_TEXT} · User requested scenario | {FREEZE_MODEL}</p>
-        <h1>Set {pilot.name}'s budget</h1>
-        <p class="lede">Choose a charge. Adjust services. See the difference.</p></div>
+  <div class="budget-set" data-freeze-pilot data-pilot={JSON.stringify(pilot)} data-sources={JSON.stringify(copiedSources)} data-status={initial.status}>
+      <div class="set-top">
+        <BudgetModes gss={pilot.gss} slug={pilot.slug} current="set" />
         <button class="theme-icon" type="button" data-theme-toggle hidden aria-label="Change colour theme" title="Change colour theme"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4v16a8 8 0 0 0 0-16Z" fill="currentColor"/></svg></button>
-      </header>
+      </div>
       {pinnedLine && <p class="source-line" data-budget-pinned>{pinnedLine}</p>}
-      <section class="scenario-result" aria-labelledby="result-title">
-        <h2 id="result-title" class="sr-only">Your scenario result</h2>
-        <div class="result-board">
-          <div data-result-status><h3>The remaining difference</h3><strong class="result-amount" data-remaining>{money(initial.remaining)}</strong><p class="source-line">Spending change minus financing change.</p></div>
-          <dl data-result-details><div><dt>Net spending change</dt><dd><strong data-spending>{money(initial.spendingChange)}</strong><p class="source-line">Your services minus published services.</p></dd></div><div><dt>Own-tax financing change</dt><dd><strong data-financing>{money(initial.financingChange)}</strong><p class="source-line">Charge change × fixed tax base.</p></dd></div></dl>
+      <div class="set-layout">
+      <DeskBand id="set-heading" level={1} top layout="stack" class="set-desk" data-scenario-board
+        eyebrow={`${FREEZE_YEAR_TEXT} | User requested scenario | ${FREEZE_MODEL}`}
+        title={`Set ${pilot.name}'s budget`}
+        lede="Choose a charge. Adjust services. See the difference.">
+        <div class="scenario-result">
+          <div class="result-board">
+            <div data-result-status>
+              <h2 class="board-label" id="result-title">The remaining difference</h2>
+              <strong class="result-amount" data-remaining>{boardMoney(initial.remaining)}</strong>
+              <p class="state-row"><span class="state-word" data-state-word>{stateWord(initial.status)}</span> <span data-state>{stateSentence(initial.status)}</span></p>
+              <div class="gap" aria-hidden="true">
+                <div class="gap-bar" data-gap-bar data-side={initialSide} style={initialGap}><span class="gap-fill"></span><span class="gap-target"></span></div>
+                <div class="gap-scale"><span>Surplus</span><span>Balanced</span><span>Shortfall</span></div>
+              </div>
+              <p class="stamp" data-stamp hidden={initial.status !== 'balanced'}>Spending and financing match</p>
+              <p class="source-line">Spending change minus financing change.</p>
+            </div>
+            <dl data-result-details><div><dt>Net spending change</dt><dd><strong data-spending>{boardMoney(initial.spendingChange)}</strong><p class="source-line">Your services minus published services.</p></dd></div><div><dt>Own-tax financing change</dt><dd><strong data-financing>{boardMoney(initial.financingChange)}</strong><p class="source-line">Charge change × fixed tax base.</p></dd></div></dl>
+            <details class="board-exact" data-result-exact><summary>Exact pounds</summary>
+              <dl><div><dt>Remaining difference</dt><dd data-remaining-exact>{money(initial.remaining)}</dd></div><div><dt>Net spending change</dt><dd data-spending-exact>{money(initial.spendingChange)}</dd></div><div><dt>Own-tax financing change</dt><dd data-financing-exact>{money(initial.financingChange)}</dd></div></dl>
+              <p class="source-line">The calculation keeps four decimal places and tests for an exact zero before rounding to pennies.</p>
+            </details>
+            <div class="copy-row"><button type="button" class="copy-button" data-copy hidden>Copy your scenario</button><p class="copy-status" role="status" data-copy-status></p></div>
+          </div>
+          <div class="desk-baseline"><p class="baseline">Published own Band D: {publishedMoney(pilot.priorOwnPence)} for {yearIn(pilot.sources[2].title)}, {publishedMoney(pilot.ownPence)} for {FREEZE_YEAR_TEXT}. Fixed tax base: {baseText} Band D equivalents. Own-council share only, excluding parish precepts.</p>
+          <RecordLine entry="set-band-d" sources={[priorRef, currentRef, table10Ref]} /></div>
+          <p data-error role="alert" hidden></p>
+          <p class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-announcement></p>
         </div>
-        <p data-state>{initial.status === 'balanced' ? 'The arithmetic balances under these assumptions.' : initial.status === 'shortfall' ? 'Shortfall under these assumptions.' : 'Surplus under these assumptions.'}</p>
-        <p class="source-line baseline">Published own Band D: <a href={pilot.sources[2].url}>{publishedMoney(pilot.priorOwnPence)} prior</a>; <a href={taxSource.url}>{publishedMoney(pilot.ownPence)} current</a>. Fixed base: <a href={pilot.sources[3].url}>{baseText} Band D equivalents</a>. MHCLG Tables 8 and 10. Own-council share only, excluding parish precepts.</p>
-        <p data-error role="alert" hidden></p>
-        <p class="sr-only" role="status" aria-live="polite" aria-atomic="true" data-announcement></p>
-      </section>
+      </DeskBand>
       <noscript><p class="notice">The scenario controls need JavaScript. The published baseline, assumptions, ledger and freeze calculation remain available. Open the disclosures to read them.</p></noscript>
       <section class="controls" data-controls hidden aria-labelledby="controls-title">
         <h2 id="controls-title" class="sr-only">Your choices</h2>
         <div class="presets">
-          <p class="preset-prompt">User requested scenarios | {FREEZE_MODEL}{pilot.ownPence === pilot.priorOwnPence && ". Charge frozen."} <a href="#preset-note">Assumptions</a></p>
-          <div class="actions">{trigger !== null && <button type="button" data-trigger-preset aria-describedby="preset-note">Raise to the referendum trigger</button>}<button type="button" data-service-preset aria-describedby="preset-note">Reduce editable services by 5%</button></div>
-
+          <p class="preset-prompt">Starting points{pilot.ownPence === pilot.priorOwnPence && ', charge frozen'}. <a href="#preset-note">Assumptions</a></p>
+          <div class="actions">{trigger !== null && <button type="button" data-trigger-preset aria-describedby="preset-note">Try the rise that would need a referendum</button>}<button type="button" data-service-preset aria-describedby="preset-note">Reduce editable services by 5%</button></div>
         </div>
         <div class="control-card tax-control">
-          <div class="card-heading"><h3>Own-council Band D</h3><strong data-own-value>{publishedMoney(pilot.priorOwnPence)}</strong></div>
-          <label for="own">Your annual charge, pounds</label>
-          <input id="own" data-own type="number" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} aria-describedby="tax-note control-limits" />
-          <div class="tax-track"><input data-own-range type="range" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} list="tax-marks" aria-label="Own-council Band D slider, pounds" aria-valuetext={publishedMoney(pilot.priorOwnPence)} /><datalist id="tax-marks"><option value={inputPounds(pilot.ownPence)} label="Published charge"/>{trigger !== null && <option value={inputPounds(trigger)} label="Referendum trigger"/>}</datalist>
-          <div class="tax-ticks" aria-hidden="true"><span class="published-tick" title="Published charge"></span>{trigger !== null && <span class="trigger-tick" style={`left:${Number(trigger)*100/Number(BigInt(pilot.ownPence)*2n)}%`} title="Referendum trigger"></span>}</div></div>
-          <p class="source-line">Published mark: {publishedMoney(pilot.ownPence)}. MHCLG, <a href={taxSource.url}>{taxSource.title}</a>, {cell('annualCurrent')}; Table 10 {cell('table10Current')}.</p>
-          {trigger !== null ? <p class="source-line" data-trigger-source>Trigger mark: {publishedMoney(String(trigger))}, the first whole penny satisfying the mapped rule from the prior charge. {rules.source.publisher}, <a href={principle.citation.url}>{rules.source.title}</a>, {rules.source.published}, Annex {principle.citation.annex}, paragraph {principle.citation.paragraph}, page {principle.citation.page}.</p> : <p>No official referendum limit is held for this council. No trigger mark or trigger preset is available.</p>}
-          <p data-rule-result></p>
-          <details><summary>Tax assumptions and source</summary><p id="tax-note">{referendumExplanation(pilot.rule)} This is a trigger, not a hard cap. The exercise does not assess the process for a higher charge or compliance with spending duties.</p><p class="source-line">MHCLG, <a href={pilot.sources[4].url}>{pilot.sources[4].title}</a>.</p></details>
+          <div class="tax-head">
+            <div><h3>Own-council Band D</h3><strong class="tax-value" data-own-value>{publishedMoney(pilot.priorOwnPence)}</strong></div>
+          <div class="tax-track"><input data-own-range type="range" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} list="tax-marks" aria-label="Own-council Band D slider, pounds" aria-valuetext={publishedMoney(pilot.priorOwnPence)} /><datalist id="tax-marks"><option value={inputPounds(pilot.ownPence)} label="Published charge"/>{trigger !== null && <option value={inputPounds(trigger)} label="The rise that would need a referendum"/>}</datalist>
+          <div class="tax-ticks" aria-hidden="true"><span class="published-tick" title="Published charge"></span>{trigger !== null && <span class="trigger-tick" style={`left:${Number(trigger)*100/Number(BigInt(pilot.ownPence)*2n)}%`} title="The rise that would need a referendum"></span>}</div></div>
+            <div class="tax-entry"><label for="own">Your annual charge, pounds</label>
+            <input id="own" data-own type="number" min="0" max={inputPounds(BigInt(pilot.ownPence)*2n)} step="0.01" value={inputPounds(pilot.priorOwnPence)} aria-describedby="tax-note control-limits" /></div>
+          </div>
+          <div class="tax-row"><p class="tax-marks"><span><span class="key key-published" aria-hidden="true"></span>Published charge {publishedMoney(pilot.ownPence)}</span>{trigger !== null ? <span data-trigger-mark><span class="key key-trigger" aria-hidden="true"></span>The rise that would need a referendum: {publishedMoney(String(trigger))}</span> : <span>No official referendum limit is held for this council. No referendum mark or preset is available.</span>}</p><details class="tax-assumptions"><summary>Tax assumptions</summary><p id="tax-note">{referendumExplanation(pilot.rule)} This is the point a referendum is needed, not a hard cap. The exercise does not assess the process for a higher charge or compliance with spending duties.</p></details></div>
+          <p class="rule-result" data-rule-result></p>
+          <RecordLine entry="set-band-d" sources={[currentRef]} tail={`${cell('annualCurrent')}; Table 10 ${cell('table10Current')}`} />
+          {trigger !== null && <div data-trigger-source><RecordLine entry="set-referendum" method="Referendum mark: the first whole penny that meets the rule" sources={[rulesRef]} /></div>}
         </div>
-        <div class="service-heading"><h3>Net service spending</h3><p id="control-limits">Explore zero to twice each published amount. Service sliders and steppers move by 0.5% of the published figure; exact entries remain in pounds. Changes imply no service outcomes or achievable savings.</p></div>
-        <div class="service-grid">{pilot.services.filter(s=>s.editable).map(service => <div class="control-card service-card">
-          <h4>{service.label}</h4>
-          <div class="service-value"><strong data-service-value={service.id}>{publishedMoney(service.pence)}</strong><span class="change-chip" data-service-delta={service.id}>£0.00 change</span></div>
+        <div class="service-heading"><h3>Net service spending</h3><p id="control-limits">Zero to twice each published amount, in steps of 0.5%; exact entries in pounds. Changes imply no service outcomes or achievable savings.</p>
+          <RecordLine entry="set-services" sources={[raRef]} tail="each card gives its cell" />
+        </div>
+        <div class:list={["service-grid", {"service-grid--three": pilot.services.filter(s=>s.editable).length > 8}]}>{pilot.services.filter(s=>s.editable).map(service => <div class="control-card service-card">
+          <div class="service-top">
+            <h4>{service.label}</h4>
+            <strong class="service-amount" data-service-value={service.id}>{serviceCompact(service.pence)}</strong>
+            <p class="published-marker" id={`basis-${service.id}`}>Published {serviceCompact(service.pence)}</p>
+            <span class="change-chip" data-service-delta={service.id}>No change</span>
+          </div>
           <div class="range-row"><button type="button" data-service-step={service.id} data-step="-1" aria-label={`Reduce ${service.label} by 0.5% of published spending`}>−</button><input data-service-range={service.id} data-percentage type="range" min="0" max="200" step="0.5" value="100" list={`marks-${service.id}`} aria-label={`${service.label} slider, pounds`} aria-valuetext={publishedMoney(service.pence)} aria-describedby={`basis-${service.id}`} /><button type="button" data-service-step={service.id} data-step="1" aria-label={`Increase ${service.label} by 0.5% of published spending`}>+</button></div>
           <datalist id={`marks-${service.id}`}><option value="100" label="Published spending"/></datalist>
-          <p class="published-marker" id={`basis-${service.id}`}>Published tick: {publishedMoney(service.pence)} <a href={budgetSource.url}>MHCLG RA, {raCell(service.id)}</a></p>
-          <div class="percentage-chips" role="group" aria-label={`${service.label} choices relative to published spending`}>{[90,95,100,105,110].map(percent => <button type="button" data-service-percent={service.id} data-percent={percent}>{percent === 100 ? 'Published' : `${percent>100?'+':'−'}${Math.abs(percent-100)}%`}</button>)}</div>
-          <details><summary>Exact pounds and source</summary><label for={`service-${service.id}`}>Your net spending, pounds</label><input id={`service-${service.id}`} data-service={service.id} type="number" min="0" max={inputPounds(BigInt(service.pence)*2n)} step="0.01" value={inputPounds(service.pence)} aria-describedby="control-limits" /><p class="source-line">User requested scenario. Change is your amount minus the published reference: {publishedMoney(service.pence)}. MHCLG, <a href={budgetSource.url}>RA Part 1, {FREEZE_YEAR_TEXT}, {raCell(service.id)}, line {service.line}</a>. Percentage choices are relative to that reference, rounded to the nearest penny.</p></details>
+          <div class="chip-row"><div class="percentage-chips" role="group" aria-label={`${service.label} choices relative to published spending`}>{[90,95,100,105,110].map(percent => <button type="button" data-service-percent={service.id} data-percent={percent}>{percent === 100 ? 'Published' : `${percent>100?'+':'−'}${Math.abs(percent-100)}%`}</button>)}</div>
+          <details class="service-exact"><summary>Exact pounds</summary><label for={`service-${service.id}`}>Your net spending, pounds</label><input id={`service-${service.id}`} data-service={service.id} type="number" min="0" max={inputPounds(BigInt(service.pence)*2n)} step="0.01" value={inputPounds(service.pence)} aria-describedby="control-limits" /><p class="source-line">Published {serviceExact(service.pence)}, printed as {(Number(BigInt(service.pence)/100000n)).toLocaleString('en-GB')} in £ thousand. MHCLG, <a href={budgetSource.url}>RA Part 1, {FREEZE_YEAR_TEXT}, {raCell(service.id)}, line {service.line}</a>. Change is your amount minus that figure; percentage choices are relative to it, rounded to the nearest penny.</p></details></div>
         </div>)}</div>
         <div class="actions reset-actions"><button type="button" data-freeze-reset>Start again with a freeze</button><button type="button" data-published-reset>Restore published baseline</button></div>
       </section>
+      </div>
       <details class="assumptions"><summary>How this exercise works <span>Fixed tax base, grants and reserves. An exercise, not an actual deficit.</span></summary>
-          <details class="preset-assumptions"><summary>Preset assumptions</summary><p class="source-line" id="preset-note" data-preset-note>Presets restore published services first. Trigger: change the own charge to the first penny requiring a referendum. Services: keep the previous own charge and use 95% of each editable published service. Tax base and all held entries stay fixed.</p></details>
+          <details class="preset-assumptions"><summary>Preset assumptions</summary><p class="source-line" id="preset-note" data-preset-note>Presets restore published services first. Referendum preset: change the own charge to the first penny at which a referendum would be needed. Services preset: keep the previous own charge and use 95% of each editable published service. Tax base and all held entries stay fixed.</p></details>
         <p>User requested scenario | {FREEZE_MODEL}. Starts at the previous own charge with current published services. A shortfall needs additional financing or lower net spending; a surplus has financing above spending. Arithmetic balance does not establish a deliverable or legally compliant budget.</p>
         <ul>{FREEZE_ASSUMPTIONS.map(text => <li>{text}</li>)}</ul>
         {pilot.grantDsgThousands > 0 && <p>Dedicated Schools Grant is included in the published education and financing figures. Education stays fixed here. Reserve accounting also varies with High Needs Stability Grant treatment; reserves are not a spending control. Source: MHCLG RA and specific grants, notes 1, 2 and 6.</p>}
-        <p>Money is displayed to pennies. The calculation keeps four decimal places and tests for an exact zero before rounding. A zero difference means the arithmetic balances under the stated assumptions.</p>
+        <p>Amounts on the result board and the service cards are in £ million to one decimal place; the exact pounds are one click away. The calculation keeps four decimal places and tests for an exact zero before rounding. A zero difference means the arithmetic balances under the stated assumptions. The gap bar's full width is the larger of the freeze starting gap and the gap from the 5% services preset.</p>
         <p class="source-line">Freeze starting calculation: ({publishedMoney(pilot.ownPence)} minus {publishedMoney(pilot.priorOwnPence)}) × {baseText}. Financing change is your charge minus the published current charge, multiplied by the fixed tax base.</p>
               <section class="baseline" aria-labelledby="baseline-title">
         <h2 id="baseline-title">The published starting point</h2>
         <div class="baseline-grid">
-          <div><p class="fact-label">Own Band D, {`${Number(FREEZE_YEAR.slice(0,4))-1}/${FREEZE_YEAR.slice(2,4)}`}</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><p class="source-line">MHCLG, <a href={pilot.sources[2].url}>{pilot.sources[2].title}</a>, {cell('annualPrior')}; Table 10 {cell('table10Prior')}.</p></div>
-          <div><p class="fact-label">Own Band D, {FREEZE_YEAR_TEXT}</p><strong>{publishedMoney(pilot.ownPence)}</strong><p class="source-line">MHCLG, <a href={taxSource.url}>{taxSource.title}</a>, {cell('annualCurrent')}; Table 10 {cell('table10Current')}.</p></div>
-          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><p class="source-line">Band D equivalents. MHCLG, <a href={pilot.sources[3].url}>Table 10, {cell('table10Base')}</a>.</p></div>
+          <div><p class="fact-label">Own Band D, {`${Number(FREEZE_YEAR.slice(0,4))-1}/${FREEZE_YEAR.slice(2,4)}`}</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><RecordLine entry="set-band-d" sources={[priorRef]} tail={`${cell('annualPrior')}; Table 10 ${cell('table10Prior')}`} /></div>
+          <div><p class="fact-label">Own Band D, {FREEZE_YEAR_TEXT}</p><strong>{publishedMoney(pilot.ownPence)}</strong><RecordLine entry="set-band-d" sources={[currentRef]} tail={`${cell('annualCurrent')}; Table 10 ${cell('table10Current')}`} /></div>
+          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><RecordLine entry="set-band-d" method="Band D equivalents" sources={[table10Ref]} tail={cell('table10Base')} /></div>
         </div>
         <p>These are this council's own charges excluding parish precepts, not the full household bill.{pilot.rule === 'district' && ' County council, police, fire and parish charges are outside this exercise.'}</p>
       </section>
 
-        <section class="referendum-rule" aria-labelledby="rule-title"><h2 id="rule-title">The referendum rule</h2><p>{referendumExplanation(pilot.rule)} A referendum would be required when this trigger is reached. It is not a cap.</p><p class="source-line">{rules.source.publisher}, <a href={rules.source.url}>{rules.source.title}</a>, published {rules.source.published}. {pilot.ruleLocation}.</p></section>
+        <section class="referendum-rule" aria-labelledby="rule-title"><h2 id="rule-title">The referendum rule</h2><p>{referendumExplanation(pilot.rule)} A referendum would be required when this rise is reached. It is not a cap.</p><RecordLine entry="set-referendum" sources={[rulesRef]} /></section>
       </details>
       <section class="section ledger" aria-labelledby="ledger-title">
         <h2 id="ledger-title">The published ledger stays unchanged</h2>
-        <p>All service groups, including net income and published zeros, remain in the reference below. The rows after total service expenditure show revenue expenditure and its signed financing entries; they are not additional service totals.</p>
-        <p class="source-line">MHCLG, <a href={budgetSource.url}>{budgetSource.title}</a>. Published unit: £ thousand. Display below preserves that unit.</p>
+        <p>All service groups, including net income and published zeros, remain in the reference below. The rows after total service expenditure show revenue expenditure and its signed financing entries; they are not additional service totals. Published unit: £ thousand, kept in the table.</p>
+        <RecordLine entry="set-services" sources={[raRef]} />
         <details><summary>Read the signed ledger and held service groups</summary>
           <div class="table-wrap"><table class="data"><caption>{pilot.name}, published RA {FREEZE_YEAR_TEXT}, £ thousand</caption><thead><tr><th scope="col">RA line</th><th scope="col">Item</th><th scope="col">Published</th><th scope="col">Treatment and source</th></tr></thead><tbody>{pilot.ledger.map(row=><tr><td data-label="RA line">{row.line}</td><th scope="row">{row.label}</th><td data-label="Published £ thousand">{row.thousands.toLocaleString('en-GB')}</td><td data-label="Treatment and source">{pilot.services.find(s=>s.id===row.id)?.heldReason ?? (pilot.services.find(s=>s.id===row.id)?.editable ? 'Scenario control above' : ['servicetot','revenuetot','ctrtot'].includes(row.id) ? 'Published reference total, not an additional control' : 'Held fixed because financing and non-service adjustments are not modelled')}<span class="source-line">RA Part 1, {raCell(row.id)}</span></td></tr>)}</tbody></table></div>
         </details>
@@ -121,25 +179,151 @@ const notes = Object.values(pilot.reviewedNotes.reduce<Record<string, {text: str
         </details>
       </section>
       {notes.length > 0 && <section class="section"><details><summary>Reviewed source notes</summary><ul>{notes.map(note=><li><p>{note.text}</p><p>{note.explanation}</p><p class="source-line">{note.citations.map(c=>`${c.file}, ${c.sheet}, ${c.column}${c.row}`).join('; ')}.</p></li>)}</ul></details></section>}
-      <section class="section"><details><summary>Sources and next steps</summary><ul>{pilot.sources.map(source=><li><a href={source.url}>{source.title}</a></li>)}</ul><p>Sources checked on {snapshot.reviewedOn}. This exercise is not a consultation and sends no choices to a council. No storage, saved choices, scenario network requests or analytics events. Choices reset on reload.</p><p><a href={`/tools/budget/${pilot.slug}/`}>Open the published budget game</a> | <a href="/tools/budget/">Choose another council</a></p></details></section>
-      <div class="mobile-result" data-mobile-result hidden aria-hidden="true"><span>User requested scenario</span><strong data-mobile-amount></strong><span data-mobile-state></span></div>
+      <section class="section what-next" aria-labelledby="next-title" data-what-next>
+        <h2 id="next-title">What next</h2>
+        <ul class="next-links">
+          <li><a href={`/councils/${pilot.slug}/`}>{pilot.name}'s council tax bill</a><span>Every band, with the published charges.</span></li>
+          <li><a href="/increases/">Council tax increases</a><span>How bills changed across England.</span></li>
+          <li><a href={`/compare/?a=${pilot.slug}&band=D&year=${CURRENT_YEAR}`} data-next-compare>Compare {pilot.name} with another council</a><span>{pilot.name} is filled in; choose the other side.</span></li>
+          <li><a href={`/tools/budget/${pilot.slug}/`}>Guess {pilot.name}'s budget</a><span>The published budget as a game.</span></li>
+        </ul>
+        {neighbours.length > 0 && <div class="next-neighbours"><h3>Set a neighbour's budget</h3><p>{near.basis === 'county' ? `Other districts in ${near.county} with a set page.` : 'Councils whose areas touch this one, with a set page.'}</p><ul data-next-neighbours>{neighbours.map(n => <li><a href={budgetSetPath(n.slug)}>{n.name}</a></li>)}</ul></div>}
+        <p><a href="/tools/budget/">Choose another council</a></p>
+        <p class="privacy-note">Sources checked on {snapshot.reviewedOn}. This exercise is not a consultation and sends no choices to a council. No storage, saved choices, scenario network requests or analytics events. Choices reset on reload. Copy your scenario puts it on your clipboard only.</p>
+      </section>
+      <PageSources entries={entries} />
+      <section class="print-scenario" aria-labelledby="print-title"><h2 id="print-title">Your scenario</h2><pre data-scenario-text></pre></section>
+      <div class="mobile-result" data-mobile-result hidden aria-hidden="true"><span class="meter-label">Your scenario | {FREEZE_MODEL}</span><strong data-mobile-amount>{boardMoney(initial.remaining)}</strong><span class="meter-state" data-mobile-state>{stateWord(initial.status)}</span><span class="gap-bar meter-track" data-gap-bar data-side={initialSide} style={initialGap}><span class="gap-fill"></span><span class="gap-target"></span></span></div>
   </div>
   <script src="../../../../scripts/budget-freeze.ts"></script>
 </BaseLayout>
 <style>
-  .budget-set{--card-pad:1rem;font-variant-numeric:tabular-nums}.eyebrow{font-size:var(--text-sm);color:var(--text-muted);margin:0}.page-head{margin-bottom:0;display:flex;align-items:start;justify-content:space-between;gap:.5rem;padding-block:.25rem .75rem}.page-head h1{font-size:clamp(2rem,4vw,3rem);line-height:1.08;margin:.3rem 0}.lede{margin:0}.theme-icon{flex:none;display:grid;place-items:center;width:44px;padding:0}
-  .scenario-result{border:1px solid var(--border);border-top:4px solid var(--accent);background:var(--bg-card);border-radius:.6rem;padding:.85rem 1rem}.result-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.result-board dl{display:contents}.result-board h3,.result-board dt{font:600 .95rem var(--font-sans);margin:0}.result-board strong,.result-board dd{display:block;font-size:clamp(1.1rem,2.4vw,1.9rem);font-weight:600;margin:.25rem 0;overflow-wrap:anywhere}.result-board .source-line{margin:0}.scenario-result [data-state]{margin:.6rem 0;font-size:.9rem}.baseline{margin:.4rem 0 0}.source-line{overflow-wrap:anywhere;font-size:.8rem;line-height:1.4}.assumptions{border-bottom:1px solid var(--border);padding:.25rem 0;margin:.5rem 0}.assumptions summary span{font-weight:400;font-size:.85rem;margin-left:.5rem}.assumptions .baseline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.assumptions li{margin-block:.3rem}.assumptions .baseline{margin-block:1rem}
-  .control-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem}.control-heading h2{font-size:1.4rem;margin:.5rem 0}.control-heading a{font-size:.85rem}.presets{padding:.65rem .8rem;background:var(--accent-wash);border:1px solid var(--border);border-radius:.6rem;margin:.4rem 0 .8rem}.presets p{margin:0 0 .45rem;font-size:.9rem}.presets p span{font-size:.8rem}.presets .source-line{font-size:.75rem;margin:.5rem 0 0}.actions{display:flex;flex-wrap:wrap;gap:.5rem}.control-card{padding:var(--card-pad);border:1px solid var(--border);border-radius:.6rem;background:var(--bg-card);min-width:0}.card-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem 1rem;justify-content:space-between}.card-heading h3,.control-card h4{margin:0;font-size:1.1rem}.card-heading strong,.service-value strong{font-size:1.45rem}.tax-control{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:1.5rem}.tax-control .card-heading,.tax-control>p,.tax-control>details{grid-column:1/-1}.tax-control label{grid-column:1}.tax-control input[type=number]{grid-column:1;grid-row:3}.tax-track{grid-column:2;grid-row:3;position:relative}.tax-ticks{position:absolute;left:8px;right:8px;bottom:0;height:8px;pointer-events:none}.tax-ticks span{position:absolute;height:8px;border-left:2px solid var(--text)}.published-tick{left:50%}.trigger-tick{top:8px;border-color:var(--accent)!important}.tax-control>p{margin:.65rem 0 0}.tax-control details{margin-top:.4rem}.tax-control label{font-size:.85rem}
-  .service-heading h3{margin:1rem 0 .3rem}.service-heading p{font-size:.85rem;margin:0 0 .8rem}.service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem}.service-card h4{min-height:2.6em}.service-value{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.25rem}.change-chip{font-size:.75rem;border:1px solid var(--border);border-radius:1rem;padding:.1rem .5rem;background:var(--bg-subtle)}.range-row{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:.3rem}.range-row button{font-size:1.3rem;padding:0}.published-marker{font-size:.75rem;line-height:1.3;margin:.1rem 0 .5rem;text-align:center}.published-marker::before{content:'';display:block;border-left:2px solid var(--text);height:6px;width:0;margin:0 auto .2rem}.percentage-chips{display:flex;gap:.2rem;flex-wrap:wrap}.percentage-chips button{font-size:.8rem;flex:1;padding:.2rem}.service-card details{margin-top:.3rem}.service-card summary{font-size:.85rem}.service-card label{display:block;font-size:.85rem;margin:.3rem 0}
-  input[type=number]{font:inherit;width:100%;min-height:44px;padding:.4rem .6rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:.3rem;box-sizing:border-box;min-width:0}input[type=range]{width:100%;min-width:0;min-height:44px;accent-color:var(--accent);margin:0}button{min-height:44px;min-width:44px;padding:.5rem .75rem;border:1px solid var(--border);border-radius:.35rem;background:var(--bg-subtle);color:var(--text);font:inherit;cursor:pointer}button:hover{border-color:var(--accent)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.reset-actions{margin-block:1rem}summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}.section{margin-block:1rem}.ledger h2{font-size:1.4rem;margin-bottom:.4rem}.ledger>p{font-size:.85rem;margin:.4rem 0}.ledger details{margin:.3rem 0}.ledger .source-line{display:block}.table-wrap{overflow:visible;max-height:none}table{min-width:0;width:100%;table-layout:fixed}th,td{white-space:normal;overflow-wrap:anywhere}th:first-child,td:first-child{width:4rem}[data-error]{border-inline-start:4px solid var(--accent);padding:.5rem}[hidden]{display:none!important}.mobile-result{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}input,button,summary{scroll-margin-block:8rem}
-  @media(scripting:enabled){[data-controls][hidden]{display:block!important;visibility:hidden}}
-  @media(max-width:1000px){.service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  @media(max-width:760px){.budget-set{padding-bottom:7rem}.result-board{gap:.5rem}.result-board h3,.result-board dt{font-size:.75rem}.result-board .source-line{font-size:.7rem}.scenario-result{padding:.65rem}.scenario-result [data-state]{font-size:.8rem}.page-head h1{font-size:2rem}.page-head .lede{font-size:.9rem}.eyebrow{font-size:.7rem}.assumptions summary span{display:block;margin:0}.service-grid,.assumptions .baseline-grid{grid-template-columns:1fr}.service-card h4{min-height:0;margin-bottom:.4rem}.presets .actions{display:grid;grid-template-columns:1fr}.tax-control{display:block}.tax-control input[type=number]{margin-block:.3rem}.card-heading strong{font-size:1.3rem}.control-heading a{max-width:12ch;text-align:right}.mobile-result{display:flex;flex-wrap:wrap;gap:.2rem .75rem;position:fixed;bottom:0;left:0;right:0;padding:.65rem 1rem;background:var(--bg-card);border-top:2px solid var(--accent);z-index:5;font-size:.85rem}.mobile-result>span:first-child{width:100%}.mobile-result strong{font-size:1.25rem}.ledger table,.ledger tbody,.ledger tr,.ledger td,.ledger th{display:block;width:auto}.ledger thead{display:none}.ledger tr{padding-block:.75rem;border-bottom:1px solid var(--border)}.ledger td,.ledger th{border:0;padding:.25rem 0;text-align:left}.ledger td::before{content:attr(data-label) ': ';font-weight:600}.ledger caption{display:block;text-align:left}.ledger td:first-child{width:auto}}
-  @media(forced-colors:active){.scenario-result,.control-card,.presets,.change-chip,.mobile-result{background:Canvas;color:CanvasText;border:1px solid CanvasText}button,input{border:1px solid ButtonText;color:ButtonText}.tax-ticks span,.trigger-tick,.published-marker::before{border-color:CanvasText!important}button:focus-visible,input:focus-visible,summary:focus-visible{outline-color:Highlight}}
-  @media print{.mobile-result,.controls,.theme-icon{display:none!important}.assumptions::details-content,.ledger details::details-content{display:block}.budget-set{padding:0}.scenario-result{break-inside:avoid}.result-board{display:block}.result-board dl{display:block}}
+  .budget-set{--card-pad:1rem;--meter-h:6.25rem;font-variant-numeric:tabular-nums}
+  .set-top{display:flex;align-items:center;justify-content:space-between;gap:.5rem}.set-top :global(.budget-modes){margin-block:.25rem}
+  .theme-icon{flex:none;display:grid;place-items:center;width:44px;padding:0}
+  .source-line{overflow-wrap:anywhere;font-size:.8rem;line-height:1.4}
 
-  .preset-assumptions summary{font-size:.8rem;min-height:32px}.preset-prompt span{display:none}.presets{margin-top:.75rem}.service-card{align-self:start}.result-board dd{font-size:inherit}.result-board dd strong{font-size:clamp(1.1rem,2.4vw,1.9rem)}
-  @media(max-width:760px){.result-board{grid-template-columns:repeat(2,minmax(0,1fr))}.result-board>[data-result-status]{grid-column:1/-1;display:grid;grid-template-columns:1fr auto;gap:0 .5rem;align-items:baseline}.result-board>[data-result-status] .source-line{grid-column:1/-1}.result-board>[data-result-status] strong{font-size:1.5rem;white-space:nowrap}.result-board dd strong{font-size:1rem;white-space:nowrap}.result-board dd{margin:0}.result-board .source-line{font-size:.7rem}.presets p{font-size:.8rem}.preset-assumptions summary{min-height:32px}.presets .actions button{font-size:.85rem}.presets .actions{gap:.3rem}.service-card{padding:.8rem}}
+  /* The desk: the page's one band, holding the heading and the result board. Sticky beside the workbench on a desktop screen tall enough to hold it. */
+  .set-layout{display:grid;gap:1rem;margin-top:.5rem}
+  .budget-set :global(.set-desk){margin:0;padding:1.25rem;gap:.9rem;align-items:start;border-radius:14px}
+  .budget-set :global(.set-desk .desk-title){font-size:clamp(1.75rem,1.3rem + 1.4vw,2.25rem)}
+  .budget-set :global(.set-desk .desk-lede){font-size:var(--text-sm);margin-top:.4rem}
+  .budget-set :global(.set-desk .desk-eyebrow){letter-spacing:.08em;margin-bottom:.4rem}
+  @media(min-width:1100px){.set-layout{grid-template-columns:minmax(0,21rem) minmax(0,1fr);align-items:start;gap:1.25rem}}
+  @media(min-width:1100px) and (min-height:700px){.budget-set :global(.set-desk){position:sticky;top:1rem}}
+  @media(scripting:none){.set-layout{grid-template-columns:minmax(0,1fr)}}
+  .scenario-result{display:grid;gap:.6rem;min-width:0}
+  .result-board{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.75rem;align-items:center}.result-board>[data-result-status],.result-board>dl,.board-exact[open]{grid-column:1/-1}.copy-row{justify-content:end}.copy-status{flex-basis:100%;text-align:right}
+  .board-label{font:600 var(--text-xs) var(--font-sans);letter-spacing:.1em;text-transform:uppercase;color:var(--desk-soft);margin:0}
+  .result-amount{display:block;font:700 clamp(2.25rem,1.8rem + 1.6vw,3rem)/1.05 var(--font-display);margin:.2rem 0 .3rem;overflow-wrap:anywhere}
+  .state-row{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}
+  .state-word{display:inline-block;font-weight:700;font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;padding:.1rem .5rem;border-radius:999px;border:1px solid currentColor;color:var(--desk-ink);margin-right:.25rem}
+  [data-status="shortfall"] .state-word{color:var(--gap-short)}[data-status="surplus"] .state-word{color:var(--accent-bright)}
+  .budget-set{--gap-short:color-mix(in srgb,var(--warning) 50%,var(--ground-ink))}
+  .gap{margin:.6rem 0 0}
+  .gap-bar{position:relative;display:block;height:12px;border-radius:6px;background:color-mix(in srgb,var(--ground-ink) 16%,transparent)}
+  .gap-fill{position:absolute;top:0;bottom:0;width:var(--gap,0%)}
+  .gap-bar[data-side="shortfall"] .gap-fill{left:50%;border-radius:0 6px 6px 0;background:var(--gap-short)}
+  .gap-bar[data-side="surplus"] .gap-fill{right:50%;border-radius:6px 0 0 6px;background:var(--accent-bright)}
+  .gap-target{position:absolute;left:50%;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;border-radius:2px;background:var(--desk-ink)}
+  .gap-scale{display:grid;grid-template-columns:1fr auto 1fr;font-size:var(--text-xs);color:var(--desk-faint);margin-top:.35rem}.gap-scale span:last-child{text-align:right}
+  .stamp{justify-self:start;display:inline-block;margin:.6rem 0 0;padding:.2rem .7rem;border:2px solid var(--desk-ink);border-radius:4px;font-weight:700;font-size:var(--text-sm);letter-spacing:.06em;text-transform:uppercase;transform:rotate(-1.5deg)}
+  .result-board .source-line{margin:.3rem 0 0}
+  .result-board dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin:0}
+  .result-board dt{font:600 var(--text-xs) var(--font-sans);color:var(--desk-soft);margin:0}
+  .result-board dd{margin:.15rem 0 0}.result-board dd strong{display:block;font-size:1.35rem;font-weight:700}
+  .board-exact summary{min-height:32px;font-size:var(--text-sm);color:var(--desk-ink)}
+  .board-exact dl{grid-template-columns:1fr;gap:.25rem}.board-exact dl div{display:flex;justify-content:space-between;gap:.5rem;font-size:var(--text-sm)}.board-exact dd{margin:0;font-weight:600}
+  .baseline{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}
+  .copy-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}.copy-status{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}.copy-status:empty{display:none}
+  .copy-button{background:transparent;color:var(--desk-ink);border-color:color-mix(in srgb,var(--ground-ink) 45%,transparent);font-weight:600}.copy-button:hover{border-color:var(--accent-bright)}
+  :global(.set-desk) [data-error]{color:var(--desk-ink)}
 
-  .budget-set :global(.budget-modes){margin-block:.25rem}.presets .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.presets .actions button{line-height:1.25}.result-board dd strong{margin:0}.presets p{margin-bottom:.4rem}
+  /* The workbench: the tax control drawn larger, then the services in two dense columns. */
+  .controls{display:grid;gap:.5rem;align-content:start;min-width:0}
+  .presets{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.4rem .75rem;padding:.5rem .75rem;background:var(--accent-wash);border:1px solid var(--border);border-radius:.6rem}
+  .presets p{margin:0;font-size:var(--text-sm)}.actions{display:flex;flex-wrap:wrap;gap:.5rem}.presets .actions button{line-height:1.25;font-size:var(--text-sm)}
+  .control-card{padding:var(--card-pad);border:1px solid var(--border);border-radius:.6rem;background:var(--bg-card);min-width:0}
+  .tax-control{border-top:4px solid var(--accent);padding:.75rem 1.25rem;display:grid;gap:.3rem}
+  .tax-head{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,12.5rem);gap:1.25rem;align-items:end}
+  .tax-head h3{margin:0;font-size:1.15rem}.tax-value{display:block;font:700 clamp(2rem,1.6rem + 1vw,2.5rem)/1.1 var(--font-display)}
+  .tax-entry label{display:block;font-size:var(--text-sm);margin-bottom:.2rem}
+  .tax-track{position:relative;padding-bottom:10px}.tax-ticks{position:absolute;left:8px;right:8px;bottom:0;height:10px;pointer-events:none}.tax-ticks span{position:absolute;height:10px;border-left:3px solid var(--text)}.published-tick{left:50%}.trigger-tick{border-color:var(--accent)!important}
+  .tax-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem 1rem}.tax-assumptions[open]{flex-basis:100%}.tax-marks{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;margin:0;font-size:var(--text-sm)}.key{display:inline-block;width:3px;height:.9em;margin-right:.4rem;vertical-align:-.1em;background:var(--text)}.key-trigger{background:var(--accent)}
+  .rule-result{margin:0;font-weight:600;font-size:var(--text-sm)}.rule-result:empty{display:none}
+  .tax-control :global(.record-line){margin:0}.tax-control details summary{min-height:32px;font-size:var(--text-sm)}
+  .service-heading{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 1rem}.service-heading h3{margin:.2rem 0 0;font-size:1.1rem}.service-heading p{font-size:var(--text-xs);margin:0}.service-heading p#control-limits{flex-basis:100%;order:3}
+  .service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+  /* Nine services would need a fifth row; at desktop width they take three columns so tax and services still fit one screen. */
+  @media(min-width:1100px){.service-grid--three{grid-template-columns:repeat(3,minmax(0,1fr))}.service-grid--three .percentage-chips{flex-basis:100%}.service-grid--three h4{font-size:.85rem}.service-grid--three .service-amount{font-size:1.15rem}}
+  .service-card{--card-pad:.45rem .7rem;display:grid;gap:.05rem;align-self:start}
+  .service-top{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 .5rem;align-items:baseline}
+  .service-card h4{margin:0;font-size:.95rem;line-height:1.25}
+  .service-amount{font-size:1.3rem;line-height:1.15;text-align:right}
+  .published-marker{grid-column:1;font-size:var(--text-xs);line-height:1.3;margin:0;color:var(--text-muted)}
+  .change-chip{grid-column:2;justify-self:end;font-size:var(--text-xs);border:1px solid var(--border);border-radius:1rem;padding:0 .45rem;background:var(--bg-subtle);white-space:nowrap}
+  .range-row{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:.3rem}.range-row button{font-size:1.3rem;padding:0}
+  .chip-row{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .5rem}
+  .percentage-chips{display:flex;gap:.2rem;flex:1 1 16rem}.percentage-chips button{font-size:.8rem;flex:1 1 auto;padding:.1rem .3rem;min-height:32px;min-width:0}
+  .service-exact{flex:0 0 auto}.service-exact[open]{flex-basis:100%}
+  .service-card summary{font-size:var(--text-xs);min-height:32px}.service-card label{display:block;font-size:var(--text-sm);margin:.3rem 0}
+  input[type=number]{font:inherit;width:100%;min-height:44px;padding:.4rem .6rem;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:.3rem;box-sizing:border-box;min-width:0}input[type=range]{width:100%;min-width:0;min-height:44px;accent-color:var(--accent);margin:0}
+  button{min-height:44px;min-width:44px;padding:.5rem .75rem;border:1px solid var(--border);border-radius:.35rem;background:var(--bg-subtle);color:var(--text);font:inherit;cursor:pointer}button:hover{border-color:var(--accent)}button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+  :global(.set-desk) button:focus-visible,:global(.set-desk) summary:focus-visible{outline-color:var(--accent-bright)}
+  .reset-actions{margin-block:.25rem}summary{cursor:pointer;min-height:44px;align-content:center;font-weight:600}
+  [data-error]{border-inline-start:4px solid var(--accent);padding:.5rem;margin:0}
+
+  .assumptions{border-bottom:1px solid var(--border);padding:.25rem 0;margin:1.25rem 0 .5rem}.assumptions summary span{font-weight:400;font-size:.85rem;margin-left:.5rem}.assumptions .baseline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.assumptions li{margin-block:.3rem}.assumptions .baseline{margin-block:1rem;color:inherit;font-size:inherit}
+  .preset-assumptions summary{font-size:.8rem;min-height:32px}
+  .section{margin-block:1rem}.ledger h2,.what-next h2{font-size:1.4rem;margin-bottom:.4rem}.ledger>p{font-size:.85rem;margin:.4rem 0}.ledger details{margin:.3rem 0}.ledger td .source-line{display:block}.table-wrap{overflow:visible;max-height:none}table{min-width:0;width:100%;table-layout:fixed}th,td{white-space:normal;overflow-wrap:anywhere}th:first-child,td:first-child{width:4rem}
+  .next-links{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+  @media(min-width:760px){.next-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .next-links li{display:grid;gap:.15rem;padding:.75rem 1rem;border:1px solid var(--border);border-radius:.6rem;background:var(--bg-card)}
+  .next-links a{font-weight:600;min-height:24px}.next-links span{font-size:var(--text-sm);color:var(--text-muted)}
+  .next-neighbours h3{font-size:1.1rem;margin:1rem 0 .2rem}.next-neighbours p{margin:0 0 .4rem;font-size:var(--text-sm);color:var(--text-muted)}
+  .next-neighbours ul{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:.4rem .5rem}.next-neighbours a{display:inline-flex;align-items:center;min-height:44px;padding:0 .85rem;border:1px solid var(--border);border-radius:999px;font-weight:600;text-decoration:none}
+  .privacy-note{font-size:var(--text-sm);color:var(--text-muted)}
+  .print-scenario{display:none}
+  [hidden]{display:none!important}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}input,button,summary{scroll-margin-block:8rem}
+
+  /* The phone meter: amount, gap track, one state word and the scenario label, clear of the home indicator. */
+  .mobile-result{display:none}
+  @media(scripting:enabled){[data-controls][hidden]{display:grid!important;visibility:hidden}}
+  @media(max-width:1000px){.tax-head{grid-template-columns:minmax(0,1fr) minmax(0,10rem)}.tax-track{grid-column:1/-1;grid-row:2}}
+  @media(max-width:760px){
+    .budget-set{padding-bottom:calc(var(--meter-h) + 1rem)}
+    .budget-set :global(.set-desk){padding:.9rem 1rem;gap:.5rem}
+    .budget-set :global(.set-desk .desk-lede),.desk-baseline{display:none}
+    .budget-set :global(.set-desk .desk-title){font-size:1.5rem}
+    [data-status="balanced"] .set-layout .gap-scale{display:none}
+    .stamp{margin-top:.3rem}
+    .scenario-result,.result-board{gap:.45rem}
+    .result-amount{font-size:2.25rem;margin:0}
+    .gap{margin-top:.35rem}.result-board .source-line{margin-top:.15rem;font-size:var(--text-xs)}.result-board dd strong{font-size:1.15rem}
+    .presets{padding:.45rem .6rem}
+    .assumptions summary span{display:block;margin:0}
+    .service-grid,.assumptions .baseline-grid{grid-template-columns:1fr}
+    .presets{display:grid}.presets .actions{display:grid;grid-template-columns:1fr 1fr;gap:.3rem}
+    .tax-head{grid-template-columns:1fr;gap:.4rem}
+    .mobile-result{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:.15rem .75rem;position:fixed;bottom:0;left:0;right:0;min-height:var(--meter-h);box-sizing:border-box;padding:.5rem 1rem calc(.6rem + env(safe-area-inset-bottom));background:var(--bg-card);color:var(--text);border-top:3px solid var(--accent);z-index:5}
+    .mobile-result{--desk-ink:var(--text);--gap-short:var(--warning);--accent-bright:var(--accent)}
+    .meter-label{grid-column:1/-1;font-size:var(--text-xs);color:var(--text-muted)}
+    .mobile-result strong{font:700 2rem/1.1 var(--font-display);white-space:nowrap}
+    .meter-state{font-weight:700;font-size:var(--text-sm);text-transform:uppercase;letter-spacing:.06em}
+    .meter-track{grid-column:1/-1;margin:.35rem 0 .1rem;height:8px;background:var(--bg-subtle);border:1px solid var(--border)}
+    .meter-track .gap-target{top:-4px;bottom:-4px}
+    :global(html:has([data-mobile-result]:not([hidden]))){scroll-padding-bottom:calc(var(--meter-h, 6.25rem) + .5rem)}
+    .ledger table,.ledger tbody,.ledger tr,.ledger td,.ledger th{display:block;width:auto}.ledger thead{display:none}.ledger tr{padding-block:.75rem;border-bottom:1px solid var(--border)}.ledger td,.ledger th{border:0;padding:.25rem 0;text-align:left}.ledger td::before{content:attr(data-label) ': ';font-weight:600}.ledger caption{display:block;text-align:left}.ledger td:first-child{width:auto}
+  }
+  /* At 200% zoom or on a short screen the meter stays in the page, so it can never cover the focused control. */
+  @media(max-width:760px) and (max-height:500px){.mobile-result{position:static;min-height:0}.budget-set{padding-bottom:0}:global(html:has([data-mobile-result]:not([hidden]))){scroll-padding-bottom:0}}
+  @media(forced-colors:active){.scenario-result,.control-card,.presets,.change-chip,.mobile-result,.stamp,.state-word{background:Canvas;color:CanvasText;border:1px solid CanvasText}.gap-bar{border:1px solid CanvasText}.gap-fill,.gap-target{background:CanvasText!important;forced-color-adjust:none}button,input{border:1px solid ButtonText;color:ButtonText}.tax-ticks span,.trigger-tick,.key{border-color:CanvasText!important;background:CanvasText}button:focus-visible,input:focus-visible,summary:focus-visible{outline-color:Highlight}}
+  /* Print: the scenario as text with its label, model version, assumptions and sources; no controls. */
+  @media print{
+    .mobile-result,.controls,.theme-icon,.copy-row,.board-exact,.gap,.set-top,.next-neighbours{display:none!important}
+    .print-scenario{display:block;break-before:page}.print-scenario pre{white-space:pre-wrap;font-size:9pt;overflow-wrap:anywhere}
+    .assumptions::details-content,.ledger details::details-content,.preset-assumptions::details-content{display:block;content-visibility:visible}
+    .budget-set{padding:0}.set-layout{display:block}.budget-set :global(.set-desk){position:static}.scenario-result{break-inside:avoid}
+  }
 </style>

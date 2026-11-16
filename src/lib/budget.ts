@@ -1,3 +1,4 @@
+import {formatMoney} from './money';
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {nationalFor} from './national-data';
@@ -54,8 +55,7 @@ export const billSource: SourceRef = {
 
 /** Unit conversion only: preserve each printed integer and its source unit. */
 export function budgetMoney(thousands: number | null): string {
-  if (thousands === null) return 'Unavailable';
-  return new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(thousands * 1000);
+  return formatMoney(thousands, {unit: 'thousands', missing: 'Unavailable'});
 }
 export function observation(council: BudgetCouncil, id: string) {
   const field = budget.fields[id];

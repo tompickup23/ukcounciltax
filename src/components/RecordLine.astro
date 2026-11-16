@@ -1,0 +1,25 @@
+---
+/**
+ * The short record line (F1, plan section 11.5): beside a figure, the method if
+ * the site calculated it, then each source as publisher and short title (linked
+ * to the document; the short title names the table where one matters), then a link to the full reference in the page's one
+ * Sources block (PageSources). It is a .source-line, so check-dist and the design
+ * check pair it with its figure; check-dist also fails a record line whose full
+ * reference link has no Sources entry on the page.
+ */
+import type { SourceRef } from "../lib/sources";
+import { sourceEntryId } from "../lib/sources";
+
+interface Props {
+  sources: readonly SourceRef[];
+  /** The key of the PageSources entry that holds the full reference. */
+  entry: string;
+  method?: string;
+  /** Plain words after the sources, such as "and 3 council schedules". */
+  tail?: string;
+}
+
+const { sources, entry, method, tail } = Astro.props;
+const short = (s: SourceRef) => s.short ?? s.title;
+---
+<p class="source-line record-line">{method && `${method}: `}{sources.map((s, i) => <>{i > 0 && "; "}<span class="record-publisher">{s.publisher}</span> <a href={s.url}>{short(s)}</a></>)}{tail && `; ${tail}`}. <a class="record-full" href={`#${sourceEntryId(entry)}`}>Full reference</a></p>

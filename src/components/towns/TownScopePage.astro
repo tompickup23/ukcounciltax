@@ -12,6 +12,7 @@ import TownSpread from './TownSpread.astro';
 import TownTable from './TownTable.astro';
 import TownsMethod from './TownsMethod.astro';
 import TownsSources from './TownsSources.astro';
+import TownsPageSources from './TownsPageSources.astro';
 import TownRegionNav from './TownRegionNav.astro';
 import {
   councilHref, crawlSentence, scopeStructuredData, scopeSummary, scopeText,
@@ -52,6 +53,7 @@ const regionName = scope.kind === 'region' ? scope.name : null;
   {scope.kind === 'constituency' && split > 0 && <p class="caveat">{split} {split === 1 ? 'area here touches' : 'areas here touch'} wards in more than one constituency. {split === 1 ? 'It is' : 'They are'} listed in full here and on each other constituency's page, never apportioned.</p>}
   <TownTable scope={scope} ranked={summary.ranked} unplaced={summary.unplaced} />
   <TownsMethod />
+  <TownsPageSources rows={scope.rows} lookups={scope.rows.some(t => t.constituencies.length > 0)} />
   <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>
     <h2 id="related-heading">More parish and unparished areas</h2>
     {scope.kind !== 'region' && <p>{regions.length === 1 ? 'Region' : 'Regions'}: {regions.map((r, i) => <>{i > 0 && ', '}<a href={townRegionPath(r)}>{r}</a></>)}.</p>}

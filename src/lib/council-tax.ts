@@ -1,3 +1,4 @@
+import { formatMoney } from "./money";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { edition, FIRST_LEVELS_PAGE_YEAR as FIRST_LEVELS } from "./edition.mjs";
@@ -207,26 +208,14 @@ export function twelveInstalments(annual: number): number {
   return round(annual / 12, 2);
 }
 
-const POUNDS = new Intl.NumberFormat("en-GB", {
-  style: "currency",
-  currency: "GBP",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-const WHOLE_POUNDS = new Intl.NumberFormat("en-GB", {
-  style: "currency",
-  currency: "GBP",
-  maximumFractionDigits: 0,
-});
-
 /** £1,234.56, or n/a for a figure the table does not hold. */
 export function pounds(value: number | null | undefined): string {
-  return typeof value === "number" ? POUNDS.format(value) : "n/a";
+  return formatMoney(value);
 }
 
 /** £1,235 for the England summary tables, which MHCLG publishes to the pound. */
 export function wholePounds(value: number | null | undefined): string {
-  return typeof value === "number" ? WHOLE_POUNDS.format(value) : "n/a";
+  return formatMoney(value, { style: "whole" });
 }
 
 /** 4.9%, or n/a. */

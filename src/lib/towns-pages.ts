@@ -169,8 +169,8 @@ export const POSITION_METHOD = 'Positions and differences are our calculation fr
 export const townSources = {
   /** The GOV.UK statistics page for Table 10, for pages that link only to GOV.UK pages. */
   componentsPage: src.components.url,
-  components: {publisher: 'MHCLG', title: src.components.title, url: src.components.fileUrl ?? src.components.url, table: 'Data_Billing, lines 9 and 16', retrieved: src.components.retrieved} satisfies SourceRef,
-  parishes: {publisher: 'MHCLG', title: src.parishes.title, url: src.parishes.fileUrl ?? src.parishes.url, table: 'Parish_Level_Data', retrieved: src.parishes.retrieved} satisfies SourceRef,
+  components: {publisher: 'MHCLG', title: src.components.title, url: src.components.fileUrl ?? src.components.url, table: 'Data_Billing, lines 9 and 16', retrieved: src.components.retrieved, short: `Council tax levels ${townsYear}, Table 10`} satisfies SourceRef,
+  parishes: {publisher: 'MHCLG', title: src.parishes.title, url: src.parishes.fileUrl ?? src.parishes.url, table: 'Parish_Level_Data', retrieved: src.parishes.retrieved, short: `Town and parish council tax ${townsYear}`} satisfies SourceRef,
   parishWard: {publisher: 'ONS', title: src.parishWard.title, url: src.parishWard.itemUrl ?? src.parishWard.url, retrieved: src.parishWard.retrieved} satisfies SourceRef,
   wardConstituency: {publisher: 'ONS', title: src.wardConstituency.title, url: src.wardConstituency.itemUrl ?? src.wardConstituency.url, retrieved: src.wardConstituency.retrieved} satisfies SourceRef,
   ladCounty: {publisher: 'ONS', title: src.ladCounty.title, url: src.ladCounty.itemUrl ?? src.ladCounty.url, retrieved: src.ladCounty.retrieved} satisfies SourceRef,

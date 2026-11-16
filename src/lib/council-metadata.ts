@@ -1,3 +1,4 @@
+import {formatMoney} from './money';
 import {moneyPence} from './tax-view';
 import {CURRENT_YEAR, PREVIOUS_YEAR, followingYear, yearLabel} from './council-tax';
 
@@ -48,7 +49,7 @@ export function councilMetadata({
 }: CouncilMetadata) {
   const YEAR = yearLabel(year), PREVIOUS = yearLabel(previousYear);
   const amount = wholePounds
-    ? new Intl.NumberFormat('en-GB', {style:'currency', currency:'GBP', maximumFractionDigits:0}).format(currentPence / 100)
+    ? formatMoney(currentPence, {unit: 'pence', style: 'whole'})
     : moneyPence(currentPence);
   const difference = previousPence === null ? null : currentPence - previousPence;
   const change = difference === null || previousPence === null || previousPence <= 0

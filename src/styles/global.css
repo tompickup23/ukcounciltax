@@ -475,3 +475,70 @@ table.data thead th:first-child { left: 0; z-index: 3; }
 .task-card-wide strong{font-size:1.5rem}
 @media(min-width:600px){.task-card-wide{flex-direction:row;align-items:center;gap:var(--space-lg)}.task-card-wide .task-thumb{flex:0 0 12rem}}
 @media(prefers-reduced-motion:reduce){.task-card{transition:none}}
+
+/* === F1 foundation (plan section 11.5, 16 November 2026). Shared parts that every
+   page PR uses instead of building its own: the desk band, the short record line with
+   one Sources block per page, and the chart grid. Built on the existing tokens until
+   the Estate Kit desk and paper values land (K1); then only the values change. === */
+
+/* The desk band: at most one per page, carrying the page's flagship action. In light
+   themes its ground is a deep shade of the accent; in dark themes the same mix lifts
+   it clearly above the page, with a hairline accent rule. */
+.desk{
+  --desk-ground:color-mix(in srgb,var(--accent) 26%,var(--ground));
+  --desk-ink:var(--ground-ink);
+  --desk-soft:color-mix(in srgb,var(--ground-ink) 82%,transparent);
+  --desk-faint:color-mix(in srgb,var(--ground-ink) 75%,transparent);
+  display:grid;gap:var(--space-lg);align-items:center;
+  margin-block:var(--space-xl);padding:clamp(1.5rem,1rem + 3vw,3rem);
+  border-radius:18px;background:var(--desk-ground);color:var(--desk-ink);
+  border:1px solid color-mix(in srgb,var(--accent-bright) 30%,transparent);
+}
+.desk--top{margin-block-start:0}
+@media(min-width:900px){.desk--split{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:var(--space-2xl)}}
+.desk-copy{min-width:0}
+.desk-foot{min-width:0}
+@media(min-width:900px){.desk--split > .desk-foot{grid-column:1/-1}}
+.desk-eyebrow{display:flex;align-items:center;gap:.6rem;margin:0 0 var(--space-sm);font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
+.desk-eyebrow::before{content:"";width:28px;height:2px;background:currentColor;flex:none}
+.desk .desk-title{margin:0;color:var(--desk-ink);font-size:clamp(2rem,1.4rem + 2.6vw,3.4rem);line-height:1.04;letter-spacing:-.02em;text-wrap:balance;overflow-wrap:anywhere}
+.desk .desk-title--hero{font-size:clamp(2.5rem,1.6rem + 4vw,4.5rem);letter-spacing:-.025em}
+.desk-title span{color:var(--accent-bright)}
+.desk-lede{margin:var(--space-md) 0 0;max-width:34rem;font-size:var(--text-md);color:color-mix(in srgb,var(--ground-ink) 88%,transparent)}
+/* Only the band's own words take desk ink: white cards placed on a desk (the game doors) keep their own colours. */
+.desk-copy > p:not([class]),.desk-copy > noscript p{color:var(--desk-soft)}
+.desk-copy a{color:var(--desk-ink)}
+.desk a:focus-visible{outline:3px solid var(--accent-bright);outline-offset:3px}
+/* A card on the desk: translucent, so the band reads as one surface. */
+.desk-card{display:flex;flex-direction:column;gap:var(--space-xs);min-width:0;padding:var(--space-lg);border-radius:14px;color:var(--desk-ink);background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
+a.desk-card{min-height:44px;text-decoration:none}
+a.desk-card:hover{border-color:var(--accent-bright);background:color-mix(in srgb,var(--ground-ink) 11%,transparent)}
+.desk-kicker{font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
+.desk .source-line,.desk .source-line a{color:var(--desk-faint)}
+.desk .source-line a{text-decoration:underline}
+@media(prefers-reduced-motion:no-preference){a.desk-card{transition:transform .15s ease,border-color .15s ease,background-color .15s ease}a.desk-card:hover{transform:translateY(-2px)}}
+@media print{.desk{background:none;color:inherit;border:1px solid}.desk *{color:inherit!important}}
+@media(forced-colors:active){.desk,.desk-card{border:1px solid CanvasText}}
+
+/* The short record line: publisher, short title and table beside every figure, linked
+   to the document, with the full reference one link away in the page's Sources block.
+   It keeps the source-line class, so check-dist and the design check pair it with its
+   figure exactly as before. */
+.record-publisher{font-variant-caps:all-small-caps;letter-spacing:.04em;font-weight:600}
+.record-full{white-space:nowrap}
+.page-sources{margin-block:var(--space-2xl) var(--space-xl);padding-top:var(--space-lg);border-top:1px solid var(--border)}
+.page-sources > h2{font-size:clamp(1.35rem,4vw,1.75rem);margin:0 0 var(--space-sm)}
+.page-sources ol{margin:0;padding-left:1.25rem;display:grid;gap:var(--space-sm)}
+.page-sources li{font-size:var(--text-sm);color:var(--text-muted);line-height:1.5}
+.page-sources li:target{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+.page-sources li p{margin:0 0 var(--space-2xs)}
+.page-sources a{color:var(--text-muted)}
+
+/* Kit charts. The in-SVG title is drawn at a twentieth of the figure's width, so the
+   width cap is what keeps it below the section H2 (28px at most): 30rem gives 24px.
+   e2e/foundation.spec.ts measures it. Charts sit beside their table twin or their
+   explanation in a two column grid from 48rem, so the cap leaves no empty half column. */
+figure.ek-figure{max-width:min(100%,30rem)}
+.chart-pair{display:grid;gap:var(--space-lg);align-items:start}
+.chart-pair > *{min-width:0}
+@media(min-width:48rem){.chart-pair{grid-template-columns:minmax(0,30rem) minmax(0,1fr);gap:var(--space-xl)}}

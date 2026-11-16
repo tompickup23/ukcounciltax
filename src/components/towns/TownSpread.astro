@@ -18,10 +18,12 @@ const id = `spread-${stripName(scope)}`;
 {n >= STRIP_MIN && (
   <section class="section towns-spread" aria-labelledby="spread-heading">
     <h2 id="spread-heading">How the {n.toLocaleString('en-GB')} figures {where} spread</h2>
-    <p>Each area's full Band D sits on one scale from the lowest to the highest. The median, the middle figure, and the 90th percentile are calculated from the areas' own figures. The marked area is the one with the largest tax base, {placeLabel(stripFocus(scope).town)}; an unparished area's tax base is our calculation, the council's tax base less its parishes'. In the table under the chart, "Published" marks a figure taken from this page's own table, where each full Band D is calculated as the method note sets out.</p>
-    <div class="fact" data-fact id={id}>
-      <PositionStrip {...stripOptions(scope)} id={`${id}-twin`} />
-      <ChartActions target={id} captionHtml={townFigures().captionHtml(stripKeys(scope))} pngs={{light: stripPngPath(scope)}} />
+    <div class="chart-pair">
+      <div class="fact" data-fact id={id}>
+        <PositionStrip {...stripOptions(scope)} id={`${id}-twin`} />
+        <ChartActions target={id} captionHtml={townFigures().captionHtml(stripKeys(scope))} pngs={{light: stripPngPath(scope)}} />
+      </div>
+      <p>Each area's full Band D sits on one scale from the lowest to the highest. The median, the middle figure, and the 90th percentile are calculated from the areas' own figures. The marked area is the one with the largest tax base, {placeLabel(stripFocus(scope).town)}; an unparished area's tax base is our calculation, the council's tax base less its parishes'. In the table under the chart, "Published" marks a figure taken from this page's own table, where each full Band D is calculated as the method note sets out.</p>
     </div>
   </section>
 )}

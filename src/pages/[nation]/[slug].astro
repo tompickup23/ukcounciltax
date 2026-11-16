@@ -1,4 +1,5 @@
 ---
+import {formatMoney} from '../../lib/money';
 import {councilMetadata, nextEditionStatus} from '../../lib/council-metadata';
 import SourceLine from '../../components/SourceLine.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -10,7 +11,7 @@ import {councilByGss,sisterLinks,contextLinks} from '../../lib/registry';
 export function getStaticPaths(){return latestEditions().flatMap(e=>e.records.map(row=>({params:{nation:e.nation.toLowerCase(),slug:row.slug},props:{nation:e.nation,row}})));}
 const {nation,row}=Astro.props;const editions=nationEditions(nation);const current=editions.at(-1)!;const isScotland=nation==='Scotland';
 const bands=Object.keys(row.bandsPence); const council=councilByGss(row.gss);const links=council?[...contextLinks(council),...sisterLinks(council)]:[];
-const format=(n:number)=>isScotland?moneyPence(n):new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:0}).format(n/100);
+const format=(n:number)=>isScotland?moneyPence(n):formatMoney(n,{unit:'pence',style:'whole'});
 const neighbours=nationNeighbours(nation,row.slug);
 const past=editions.at(-2)?.records.find(r=>r.gss===row.gss);
 const change=past?row.bandsPence.D-past.bandsPence.D:null;

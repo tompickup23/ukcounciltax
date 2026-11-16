@@ -1,3 +1,4 @@
+import {formatMoney} from './money';
 /** Browser-safe council tax contract. Values are integer pence, never inferred bands. */
 export const TAX_BANDS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] as const;
 export type TaxBand = typeof TAX_BANDS[number];
@@ -56,8 +57,7 @@ export function compareTax(rows: TaxRow[], state: ComparisonState, years: readon
   }
   return {ok: true, a, b, band, year: state.year, aPence, bPence, differencePence: bPence - aPence};
 }
-const money = new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP'});
-export const moneyPence = (pence: number) => money.format(pence / 100);
+export const moneyPence = (pence: number) => formatMoney(pence, {unit: 'pence'});
 export const monthlyPence = (pence: number) => Math.round(pence / 10);
 export function comparisonQuery(state: ComparisonState): string {
   return new URLSearchParams({a: state.a, b: state.b, band: state.band, year: state.year}).toString();

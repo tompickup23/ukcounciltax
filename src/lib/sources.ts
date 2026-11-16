@@ -14,6 +14,17 @@ export interface SourceRef {
   retrieved?: string | null;
   /** Said before the citation, for a figure the site calculated from published ones. */
   method?: string;
+  /**
+   * A short name for the document on a record line (F1), such as "Council tax
+   * levels" and the year. Built in code from the data's own title and year; the full
+   * title is always printed in the page's Sources block.
+   */
+  short?: string;
+}
+
+/** The id of a page's Sources block entry, from its key. */
+export function sourceEntryId(key: string): string {
+  return `source-${key.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}`;
 }
 
 const LONG_DATE = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });

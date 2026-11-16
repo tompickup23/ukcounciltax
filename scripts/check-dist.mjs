@@ -15,6 +15,9 @@
  *     in the band table, or a council page count that does not match it
  *   * a council page with no MHCLG source line or no parish precept caveat
  *   * any built file carrying the held registry reorganisation text
+ *   * the F1 gates in scripts/lib/foundation.mjs: a record line with no Sources
+ *     entry, two desk bands, an unresolved group row with an amount, a page over
+ *     its weight ceiling, or one full citation repeated past its ceiling
  *
  * Exits non-zero naming each failure.
  */
@@ -25,6 +28,7 @@ import { edition, FIRST_LEVELS_PAGE_YEAR } from "../src/lib/edition.mjs";
 import { hashesIn, scriptSrcOf } from "./inject_csp_hashes.mjs";
 import {profileProblems} from "./lib/profile.mjs";
 import { unsourcedFigures } from "./lib/figures.mjs";
+import { deskProblems, recordLineProblems, repeatCap, repeatedCitations, unresolvedAmountProblems, weightCap } from "./lib/foundation.mjs";
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
 import {budgetGameProblems,gameHeaderProblem,publishedText} from './lib/budget-game.mjs';
@@ -222,6 +226,13 @@ for (const path of files(DIST)) {
 
   const { problems } = unsourcedFigures(text);
   for (const problem of new Set(problems)) failures.push(`${problem} on ${rel(path)}`);
+
+  // F1 gates (plan section 11.5): record lines resolve, one desk, page weight, repeated citations, unresolved rows.
+  for (const problem of new Set([...recordLineProblems(text), ...deskProblems(text), ...unresolvedAmountProblems(text)])) failures.push(`${problem} on ${rel(path)}`);
+  const bytes = Buffer.byteLength(text);
+  if (bytes > weightCap(rel(path))) failures.push(`${rel(path)} is ${bytes} bytes of HTML, over its ${weightCap(rel(path))} byte ceiling`);
+  const repeats = repeatedCitations(text);
+  if (repeats.max > repeatCap(rel(path))) failures.push(`${rel(path)} repeats one full citation ${repeats.max} times (ceiling ${repeatCap(rel(path))}): ${repeats.line.slice(0, 80)}`);
 
   // A gate that checks the CSP would allow the beacon is not a gate that checks
   // the beacon is there. Exactly one, carrying this site's token.

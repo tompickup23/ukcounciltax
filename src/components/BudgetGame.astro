@@ -7,6 +7,7 @@ import {gameData} from '../lib/budget-game-data';
 import {waffle} from '../vendor/estate-kit/dist/src/charts/waffle.js';
 import {jsonLd} from '../lib/site';
 import BudgetDoors from './BudgetDoors.astro';
+import DeskBand from './DeskBand.astro';
 import BudgetModes from './BudgetModes.astro';
 import {budgetSetEntry} from '../lib/budget-set-entry';
 interface Props {gss: string; slug: string; name: string}
@@ -27,23 +28,20 @@ function routeStop(kind: string, index: number) {
 ---
 {data && <section id="budget-game" class="section budget-game" data-budget-game data-council-name={name} aria-labelledby="game-heading">
   <BudgetModes gss={Astro.props.gss} slug={Astro.props.slug} current="guess" />
-  <div class="game-desk">
-  <div class="game-lead">
-    <div>
-      <p class="eyebrow">Explore the published budget | {data.year}</p>
-      <h1 id="game-heading">Could you set <span>{name}'s budget?</span></h1>
-      <p class="lede">{data.rounds.length === 5 ? `Five rounds of guessing: how ${name} splits each pound it spends on services, how the county council splits its own, who takes your Band D bill, where the money comes from, and what happens to reserves.` : `Four rounds of guessing: how ${name} splits each pound it spends on services, who takes your Band D bill, where the money comes from, and what happens to reserves.`}</p>
+  <DeskBand id="game-heading" level={1} hero top as="div" class="game-desk" layout="split"
+    eyebrow={`Explore the published budget | ${data.year}`} title="Could you set" accent={`${name}'s budget?`}
+    lede={data.rounds.length === 5 ? `Five rounds of guessing: how ${name} splits each pound it spends on services, how the county council splits its own, who takes your Band D bill, where the money comes from, and what happens to reserves.` : `Four rounds of guessing: how ${name} splits each pound it spends on services, who takes your Band D bill, where the money comes from, and what happens to reserves.`}>
+    <Fragment slot="copy">
       <noscript><p>The game needs JavaScript. {name}'s published budget, with the same figures, is in the tables below.</p></noscript>
       <p>Each round can be skipped. Answers and sources follow each round; the full published tables remain below.</p>
-    </div>
+    </Fragment>
     <ol class="game-route" data-game-route aria-label={`The ${data.rounds.length} rounds`}>
       {data.rounds.map((round, index) => { const stop = routeStop(round.kind, index); return (
         <li><span class="game-stop-number" aria-hidden="true">{index + 1}</span><span class="game-route-text"><strong>{stop.name}</strong><span>{stop.task}</span></span></li>
       ); })}
     </ol>
-  </div>
-  <BudgetDoors gss={Astro.props.gss} slug={Astro.props.slug} />
-  </div>
+    <BudgetDoors slot="foot" gss={Astro.props.gss} slug={Astro.props.slug} />
+  </DeskBand>
   <div id="game-start" class="game-start" data-game-controls hidden><button class="button" type="button" data-game-start>Start the game</button></div>
   <ol class="game-rail" data-game-rail aria-label="Game progress" hidden>
     {data.rounds.map((round,index)=><li><span class="game-stop-number">{index+1}</span><span class="game-stop-name">{round.kind === 'split' ? index === 0 ? 'Council' : 'County' : round.kind === 'bill' ? 'Bill' : round.kind === 'funding' ? 'Funding' : 'Reserves'}</span><span data-step-status></span></li>)}
@@ -66,16 +64,13 @@ function routeStop(kind: string, index: number) {
   /* W1: the mode links open the section; no stacked margin above them. */
   .budget-game:has(> .budget-modes:first-child){margin-top:var(--space-md);padding-top:0}
   .budget-game > .budget-modes:first-child{margin-top:0}
-  .game-desk{background:var(--ground);color:var(--ground-ink);padding:clamp(1.5rem,1rem + 3vw,3rem);border-radius:var(--radius);border:1px solid var(--border-strong)}
-  .game-lead{display:grid;gap:var(--space-lg);align-items:start}
-  .game-lead h1{color:var(--ground-ink);font-size:clamp(2.5rem,1.6rem + 4vw,4.5rem);line-height:1.04;letter-spacing:-.025em;text-wrap:balance}
-  .game-lead h1 span,.game-lead .eyebrow{color:var(--accent-bright)}
-  .game-lead .lede,.game-lead .game-route-text span{color:var(--ground-ink)}
-  .game-lead .game-stop-number{background:transparent;color:var(--ground-ink)}
+  /* The hero is the shared desk band (DeskBand); only the game's own parts are styled here. */
+  .budget-game .game-desk{margin-block:0;align-items:start}
+  .game-desk .desk-copy > p:not(.desk-eyebrow):not(.desk-lede){margin:var(--space-sm) 0 0}
+  .game-desk .game-route-text span{color:var(--ground-ink)}
+  .game-desk .game-stop-number{background:transparent;color:var(--ground-ink)}
   .game-start{margin-block:var(--space-lg);scroll-margin-top:6rem}
   .game-score-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
-  @media print{.game-desk{background:none;color:inherit}.game-lead *{color:inherit!important}}
-  @media(forced-colors:active){.game-desk{border-color:CanvasText}}
   .game-route{list-style:none;margin:0;padding:0;max-width:343px}
   .game-route li{position:relative;display:grid;grid-template-columns:2.75rem minmax(0,1fr);gap:var(--space-sm);align-items:start;padding-bottom:var(--space-md)}
   .game-route li:last-child{padding-bottom:0}
@@ -84,7 +79,7 @@ function routeStop(kind: string, index: number) {
   .game-route-text{display:block;padding-top:.3rem}
   .game-route-text strong{display:block}
   .game-route-text span{display:block;color:var(--text-muted);font-size:var(--text-sm)}
-  @media(min-width:800px){.game-lead{grid-template-columns:minmax(0,1fr) 343px}}
+
 
   .budget-game [hidden]{display:none!important}
   .game-score-card{max-width:40rem;padding:var(--space-lg);background:var(--accent-wash);border-radius:var(--radius)}

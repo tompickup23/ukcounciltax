@@ -1,4 +1,5 @@
 ---
+import {formatMoney} from '../lib/money';
 import SourceLine from './SourceLine.astro';
 import {budget, budgetYear, budgetMoney, budgetSource} from '../lib/budget';
 import {perResident, population, YEAR_MISMATCH} from '../lib/per-resident';
@@ -10,7 +11,7 @@ const authority = budget.councils[code];
 const result = perResident[code];
 const isCounty = authority.class === 'SC';
 const source = population.source;
-const money = (value: number) => new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(value);
+const money = (value: number) => formatMoney(value, {style: 'whole'});
 const bandLabels = {age18plus: 'aged 18 and over', age18to64: 'aged 18 to 64', age65plus: 'aged 65 and over', under18: 'under 18'};
 ---
 <section class="section per-resident" aria-labelledby="per-resident-heading" data-per-resident={code}>

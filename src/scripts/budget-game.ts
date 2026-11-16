@@ -1,3 +1,4 @@
+import {formatMoney} from '../lib/money';
 import {splitControls} from '../lib/budget-game-controls';
 import {createScenario} from '../lib/budget-game-scenario-ui';
 import type {ScenarioData} from '../lib/budget-game-scenario-data';
@@ -22,7 +23,7 @@ function sourceLine(source: GameSource): HTMLElement {
   p.append(link, document.createTextNode(`. ${source.table ?? ''}. ${source.date ? `Published ${new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${source.date}T00:00:00Z`))}.` : ''}`));
   return p;
 }
-const pounds = (thousands: number) => new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(thousands * 1000);
+const pounds = (thousands: number) => formatMoney(thousands, {unit: 'thousands'});
 const directionLabel: Record<string, string> = {draw: 'Draw on reserves', add: 'Add to reserves', neither: 'Neither'};
 interface Distance {label: string; detail: string; distance: number; source: GameSource}
 

@@ -29,13 +29,13 @@ Decided on 16 November and not yet acted on: the seats source, the audit identit
 
 | By | Work | Site | Who | State and what it waits on |
 |---|---|---|---|---|
-| Now | `docs/MEASUREMENT.md` on both sites: the measures in the audit's P0, the first weekly note, and a statement of what was already live when measuring began | Both | Claude, docs PR per site | Not started. Waits on nothing |
+| Now, then each Monday | `docs/MEASUREMENT.md`, one record for both sites: read Search Console and Cloudflare Web Analytics, including the read back of the 28 days to 14 November | Both | A Claude session with Chrome, or Tom | File written 16 November with the week 1 figures blank: neither source could be read in that session |
 | Now | CSP run port fix; "Refresh data" restores the pinned RA workbooks | UKCT; UKC | Codex or Claude, one small PR each | Not started. Waits on nothing |
 | 1 December | D3, the two marks, chosen from candidates | Both | Claude draws candidates, Tom chooses | Candidates not drawn |
 | 1 to 5 December | Council links rerun (prompt 6 of 15 November). Every build fails from 4 January 2027 without it | Both | Codex | Prompt written |
 | Early December, after the links rerun | Shepway slug to `folkestone-and-hythe`: five URLs, redirects on three sites | Three sites | Codex, one PR per site, Tom's yes each | Decided |
 | 15 December | Remaining dossier scope decisions (section 5) | UKC | Tom | Defaults apply from 16 December |
-| Mid January 2027 | Dossier builds from the three decided sources: seats by party and control (Open Council Data snapshot, CC BY-SA); audit status (exact name join plus a reviewed list); section 114 original notices (non exhaustive register). Measured on 15 November in `DOSSIER-GATE.md`: each is built on 0 of 296 profiles | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | Decided 16 November. No prompt yet. **This is the critical path** |
+| Mid January 2027 | Dossier builds from the three decided sources: seats by party and control (Open Council Data snapshot, CC BY-SA); audit status (exact name join plus a reviewed list); section 114 original notices (non exhaustive register). Measured on 15 November in `DOSSIER-GATE.md`: each is built on 0 of 296 profiles | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | Decided 16 November. Prompts A, B and C in `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`, run one at a time in that order. **This is the critical path** |
 | Mid January 2027 | Smaller dossier gaps, same file: election schedule built on 174 of 296, school holidays on 287, service links on 272, published payments on 234 | UKC | Codex | The links rerun lifts the service links row |
 | When the report lands | C6b: referendum principles 2027/28 for the set pages and release records | UKCT | Claude | C6 staging is live since PR 88 |
 | First week of March 2027 | Burnley scenario game refresh, after the February budget papers | UKCT | Codex | Prompt owed once the budget council date is published |
@@ -84,6 +84,8 @@ Open, with my recommendation, a date and what happens on silence:
 | D13 | Game round one start state | (a) keep rows at zero | With the W4 prompt | (a) |
 | D10 | Presets on the set page | (a) one or two, labelled as user requested scenarios | 15 December | None |
 | D12 | Canonical status of rebuilt pages | (a) keep canonical to UK Councils until the reversal | 15 December | (a) |
+| E1 | What the reversal needs from the measurement record | No numeric threshold; eight weekly rows, the canonical sample matching, and the 28 days before set beside the 28 days after (`docs/MEASUREMENT.md`, section 3) | 15 December | Rows kept, no conclusion drawn |
+| E2 | Analytics beacon on the set pages, which have none | Leave it off; use Search Console for `/set/` URLs | Any time | Off |
 | C7 | Dossier: additional body types | Out of the January scope | 15 December | Out of scope, absence stated |
 | C9 | Dossier: contracts | Out of the January scope | 15 December | Out of scope, absence stated |
 | D1 | Display and record faces | (a) estate faces only | With K1 | (a) |
@@ -96,7 +98,7 @@ Open, with my recommendation, a date and what happens on silence:
 
 Written before the lane's current PR merges, so no lane idles:
 
-1. UK Councils dossier builds: one prompt per source (seats, audit status, section 114), each a data PR with a dry run file first. Owed now.
+1. UK Councils dossier builds: written, `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`. Four points in it are for Tom (control, PSAA permission, City of London and Isles of Scilly, share alike).
 2. W4 game page, part one. Owed now.
 3. W9 council page. Owed when W4 part one opens.
 4. K1 kit release. Owed now.

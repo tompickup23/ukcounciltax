@@ -1,11 +1,13 @@
 ---
-import SourceLine from './SourceLine.astro';
-import {budgetYear, billSource, budgetNational} from '../lib/budget';
+import RecordLine from './RecordLine.astro';
+import {billRef} from '../lib/budget-page-sources';
+import {budgetYear, budgetNational} from '../lib/budget';
 import {moneyPence} from '../lib/tax-view';
 interface Props {gss: string; name: string}
 const {gss, name} = Astro.props;
 const bill = budgetNational.components[gss];
 const money = (value: number | null) => value === null ? 'Unavailable' : moneyPence(value);
+/** MHCLG prints some body names with a spaced hyphen; the design check's verbatim marker covers exactly that cell. */
 const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combined: 'Combined authority'};
 ---
 <section class="section" id="your-bill" aria-labelledby="bill-heading">
@@ -16,11 +18,11 @@ const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combine
     <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
     <tbody>
       <tr data-record-type="observation"><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(bill.ownWithParishPence)}</td></tr>
-      {bill.parts.map(part => <tr data-record-type="observation"><th scope="row">{labels[part.kind]}</th><td>{part.name ?? (part.bandDPence === 0 ? 'No separate precept reported' : 'Body unavailable')}</td><td class="num">{money(part.bandDPence)}</td></tr>)}
+      {bill.parts.map(part => <tr data-record-type="observation"><th scope="row">{labels[part.kind]}</th><td data-dash-ok={part.name && / - /.test(part.name) ? '' : undefined}>{part.name ?? (part.bandDPence === 0 ? 'No separate precept reported' : 'Body unavailable')}</td><td class="num">{money(part.bandDPence)}</td></tr>)}
     </tbody>
     <tfoot><tr data-record-type="observation"><th scope="row" colspan="2">Published area average, including all precepts</th><td class="num">{money(bill.areaPence)}</td></tr></tfoot>
   </table></div>
-  <SourceLine source={billSource} />
+  <RecordLine entry="budget-bill" sources={[billRef]} />
   <p data-record-type="observation">The council's own Band D, excluding local precepts, is {money(bill.ownExcludingParishPence)}. This is a separate measure, not an additional charge.</p>
   <p class="small muted">Adult social care is included in council charges. Police and fire may be funded within another line. A zero separate precept does not mean the service is absent.</p>
   {bill.differencePence !== null && bill.differencePence !== 0 && <p class="caveat" data-record-type="calculation">Published component rounding: the displayed lines sum to {Math.abs(bill.differencePence)}p {bill.differencePence > 0 ? 'more' : 'less'} than the published total. Calculated by summing the printed components and subtracting the printed area average; both source figures are preserved.</p>}

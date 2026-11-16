@@ -30,9 +30,8 @@ interface Distance {label: string; detail: string; distance: number; source: Gam
 for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]')) {
   const data = JSON.parse(root.querySelector('[data-budget-game-data]')!.textContent!) as GameData;
   const stage = root.querySelector<HTMLElement>('[data-game-stage]')!;
-  const controls = root.querySelector<HTMLElement>('[data-game-controls]')!;
-  controls.hidden = false;
   let index = 0;
+  let playing = false;
   let scores: (number | null)[] = [];
   let distances: Distance[] = [];
   let restoredSummary = false;
@@ -44,9 +43,15 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const list=root.querySelector<HTMLOListElement>('[data-game-rail]')!;list.hidden=false;
     [...list.children].forEach((node,i)=>{
       node.removeAttribute('aria-current');node.classList.toggle('done',scores[i] !== undefined);
-      if(i === index && scores.length < data.rounds.length)node.setAttribute('aria-current','step');
+      if(i === index && scores.length < data.rounds.length){node.setAttribute('aria-current','step');list.scrollLeft+=node.getBoundingClientRect().left-list.getBoundingClientRect().left-16;}
       node.querySelector('[data-step-status]')!.textContent=scores[i]===null?'skipped':'';
     });
+  }
+  // W4: one line per screen that says what to do next.
+  function move(text: string) {
+    const p = element('p', '', 'game-move');
+    p.append(element('strong', 'Your move'), text);
+    return p;
   }
   function heading(text: string) {
     const h = element('h3', text);
@@ -54,7 +59,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     h.tabIndex = -1;
     stage.append(h);
     h.focus({preventScroll:true});
-    queueMicrotask(()=>root.querySelector('[data-game-rail]')?.scrollIntoView({block:'start'}));
+    queueMicrotask(()=>root.querySelector('[data-game-play]')?.scrollIntoView({block:'start'}));
   }
   function sourceNotes(round: GameRound, parent: HTMLElement) {
     for (const note of round.notes) parent.append(element('p', note));
@@ -65,7 +70,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     restoredSummary = restored;
     delete stage.dataset.scenarioStage;
     rail();
-    controls.hidden = true;
+    playing = true;
     stage.replaceChildren();
     heading(restored ? 'Shared game scores' : 'Your game summary');
     stage.append(element('p', restored ? 'These scores were supplied in the link and are not verified results. Guesses are not shared, so the furthest answers cannot be restored.' : 'Scores describe how close your answers were to the published figures. They do not judge a council’s choices.'));
@@ -139,7 +144,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
   function start() {
     scenario.clear();delete stage.dataset.scenarioStage;
     index = 0; scores = []; distances = [];
-    controls.hidden = true;
+    playing = true;
     if (location.hash.startsWith('#scores=')) history.replaceState(null, '', `${location.pathname}${location.search}`);
     showRound();
   }
@@ -148,7 +153,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const round = data.rounds[index];
     stage.replaceChildren();
     heading(round.title);
-    stage.append(element('p', `Round ${index + 1} of ${data.rounds.length}`, 'eyebrow'), element('p', round.explanation));
+    stage.append(element('p', `Round ${index + 1} of ${data.rounds.length}`, 'eyebrow'), move(
+      round.kind === 'split' ? 'Share all 100p across the services, then press Reveal answer.'
+      : round.kind === 'bill' ? 'Share all 100p between the charging bodies, then press Reveal answer.'
+      : round.kind === 'funding' ? 'Order the funding groups from largest to smallest, then press Reveal answer.'
+      : 'Choose a direction and a size band, then press Reveal answer.'), element('p', round.explanation));
     const form = element('form');
     const rows = element('ol', '', 'game-rows');
     const status = element('p', '', 'game-status');
@@ -311,13 +320,14 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
       if (round.kind === 'reserves') stage.append(root.querySelector<HTMLTemplateElement>(`[data-game-published="${index}"]`)!.content.cloneNode(true));
       answer.append(answerList); sourceNotes(round, answer); stage.append(answer);
       document.dispatchEvent(new Event('budget:reveal'));
-      stage.append(button(index === data.rounds.length - 1 ? 'Show summary' : 'Next round', () => {index++; index === data.rounds.length ? summary() : showRound();}, false));
+      const last = index === data.rounds.length - 1;
+      stage.append(move(`Read the answer and its source, then go on to ${last ? 'your summary' : 'the next round'}.`), button(last ? 'Show summary' : 'Next round', () => {index++; index === data.rounds.length ? summary() : showRound();}, false));
     }
   }
-  root.querySelector('[data-game-start]')!.addEventListener('click', start);
-  // W1: the Guess door starts the game itself once the script is running; without it, the link still jumps to the game.
+  // W1, W4: the Guess door is the one start control. Once the script is running it starts the game;
+  // during play it jumps back to the round; without script the link still jumps to the game.
   root.querySelector('[data-budget-door="guess"]')?.addEventListener('click', event => {
-    if (controls.hidden) return;
+    if (playing) return;
     event.preventDefault(); start();
   });
   const restore = () => {

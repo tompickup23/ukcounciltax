@@ -22,7 +22,7 @@ import {
   yearLabel,
   type Authority,
 } from "../lib/council-tax";
-import { changeSource, councilTaxSource } from "../lib/sources";
+import { changeSource, councilTaxSource, type SourceRef } from "../lib/sources";
 
 interface Props {
   ons: string;
@@ -32,12 +32,14 @@ interface Props {
   compact?: boolean;
   /** The year whose bands are shown; the budget pages pass their own edition's (C6). */
   year?: string;
+  /** Record line mode (F1): the Sources block entry and the source, with its short title, for the band figures. */
+  record?: { entry: string; source: SourceRef };
 }
 
-const { ons, authority, idPrefix = "band", showChange = true, compact = false, year: shownYear = CURRENT_YEAR } = Astro.props;
+const { ons, authority, idPrefix = "band", showChange = true, compact = false, year: shownYear = CURRENT_YEAR, record } = Astro.props;
 const shownPrevious = shownYear === CURRENT_YEAR ? PREVIOUS_YEAR : precedingYear(shownYear);
 const bandTable = loadYear(shownYear).source.bandTable;
-const source = councilTaxSource(shownYear, bandTable);
+const source = record?.source ?? councilTaxSource(shownYear, bandTable);
 const changeRef = changeSource(shownPrevious, shownYear);
 const year = yearLabel(shownYear);
 const previous = yearLabel(shownPrevious);
@@ -70,6 +72,7 @@ const previous = yearLabel(shownPrevious);
             label={`Band ${band}, ${year}, for the year`}
             figure={pounds(annual)}
             source={source}
+            record={record?.entry}
           >
             {!compact && <span class="band-monthly">
               {pounds(tenInstalments(annual))} a month over ten instalments, rounded

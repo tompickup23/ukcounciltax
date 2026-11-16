@@ -12,11 +12,13 @@ import BudgetTables from '../../../components/BudgetTables.astro';
 import PerResident from '../../../components/PerResident.astro';
 import BudgetBill from '../../../components/BudgetBill.astro';
 import BudgetGame from '../../../components/BudgetGame.astro';
-import SourceLine from '../../../components/SourceLine.astro';
+import RecordLine from '../../../components/RecordLine.astro';
+import PageSources from '../../../components/PageSources.astro';
+import {bandsRef, budgetPageEntries, raPart1Ref} from '../../../lib/budget-page-sources';
 import PageContents from '../../../components/PageContents.astro';
 import {gameNeighbours} from '../../../lib/game-neighbours';
 import {councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
-import {budget, budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
+import {budget, budgetYear, budgetFor} from '../../../lib/budget';
 import {loadYear} from '../../../lib/council-tax';
 export function getStaticPaths() {
   return councilPages().map(({council, tax}) => ({params: {slug: council.slug}, props: {council, tax}}));
@@ -43,17 +45,17 @@ const description = available
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
     {localBills.some(b=>b.gss===council.gss) && <p data-find-your-bill>To see your own bill, by band and parish, and what each part pays for, <a href="/precepts/#find-your-bill">find your own bill</a>.</p>}
     {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
-    <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
+    <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}, {id: 'sources', label: 'Sources'}]} />
     <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
     {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}
     <BudgetTables council={data.council} name={tax.name} id="council-budget" />
     {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
     </DataDrawer>
-  </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><SourceLine source={budgetSource()} /></section>}
+  </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><RecordLine entry="budget-ra-part1" sources={[raPart1Ref]} /></section>}
   {!available && <BudgetSetEntry gss={council.gss} />}
   <PerResident gss={council.gss} />
   <BudgetBill gss={council.gss} name={tax.name} />
-  <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} /></section>
+  <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} record={{entry: 'budget-bands', source: bandsRef}} /></section>
   <section class="section game-onward" aria-labelledby="onward-heading" data-game-onward>
     <h2 id="onward-heading">Play another council</h2>
     {nearby.neighbours.length > 0 && <div class="neighbour-row" data-play-neighbour>
@@ -64,6 +66,7 @@ const description = available
     <p class="choose-another" data-choose-another><a href="/tools/budget/">Choose another council</a> from the full list of English billing authorities.</p>
     <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a></p>
   </section>
+  <PageSources entries={budgetPageEntries(available)} />
 </BaseLayout>
 <style>
   .neighbour-row h3 { font-size: 1.05rem; margin: 0 0 0.25rem; }

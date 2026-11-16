@@ -78,7 +78,7 @@ test('every no-return page preserves its notice and every note 4 page preserves 
       await page.locator('#published-budget > summary').click();
       await expect(page.locator('#council-budget').getByRole('row').filter({has: page.getByRole('rowheader', {name: /^Council tax requirement/})})).toContainText(budget.sourceNotes.raPart1['[note 4]']);
       const game = page.locator('[data-budget-game]');
-      await game.getByRole('button', {name: 'Start the game'}).click();
+      await game.locator('[data-budget-door="guess"]').click();
       while (!(await game.getByRole('heading', {level: 3}).innerText()).startsWith('Where the money')) {
         await game.getByRole('button', {name: 'Skip and reveal'}).click();
         await game.getByRole('button', {name: 'Next round', exact: true}).click();

@@ -38,6 +38,8 @@ export interface OgCard {
   heading: string;
   /** The one figure a card may carry, and the line under it. */
   figure?: { value: string; label: string; change?: string };
+  /** Two figures side by side (the towns pair), in place of the one figure. */
+  pair?: { value: string; label: string }[];
   /** What qualifies the figure, printed with it. Required when there is a figure. */
   caveat?: string;
   /** "<source>, <date>", right of the footer rule. */
@@ -98,7 +100,18 @@ function layout(card: OgCard) {
         { fontFamily: "Source Serif 4", fontWeight: 600, fontSize: card.heading.length > 34 ? "50px" : card.heading.length > 24 ? "60px" : "72px", lineHeight: 1.05, maxWidth: "1070px" },
         card.heading,
       ),
-      card.figure
+      card.pair
+        ? h(
+            "div",
+            { gap: "56px", marginTop: "10px" },
+            ...card.pair.map((item) => h(
+              "div",
+              { flexDirection: "column", maxWidth: "500px" },
+              h("div", { fontFamily: "Source Serif 4", fontWeight: 600, fontSize: "72px", color: groundInk }, item.value),
+              h("div", { fontSize: "24px", color: groundInk, lineHeight: 1.25 }, item.label),
+            )),
+          )
+        : card.figure
         ? h(
             "div",
             { alignItems: "baseline", gap: "22px", marginTop: "10px", flexWrap: "wrap" },
@@ -123,7 +136,7 @@ function layout(card: OgCard) {
 }
 
 export async function renderOgCard(card: OgCard): Promise<Uint8Array<ArrayBuffer>> {
-  if (card.figure && !card.caveat) throw new Error(`card "${card.heading}" carries a figure with no caveat`);
+  if ((card.figure || card.pair) && !card.caveat) throw new Error(`card "${card.heading}" carries a figure with no caveat`);
   const svg = await satori(layout(card) as never, { width: 1200, height: 630, fonts: fonts() });
   const png = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
   // Astro rejects a Buffer in a Response body; copy into a fresh array.

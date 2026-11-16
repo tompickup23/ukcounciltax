@@ -1,3 +1,4 @@
+import {townsData} from './towns';
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { CURRENT_YEAR, NEXT_YEAR_PATH, YEARS, councilTaxPath, loadYear, yearLabel, type Year } from "./council-tax";
@@ -512,6 +513,8 @@ export const STATIC_PAGE_DATES: Record<string, string> = {
 export function sitemapLastmod(path: string): string {
   const nationalSources = readJson<Record<string, {retrieved: string}>>('data/national/sources.json');
   if (path.startsWith('/precepts/parishes/')) return national.sources.parishes.retrieved;
+  // The towns pages add the parish return to Table 10: the later of the two retrievals.
+  if (path.startsWith('/council-tax/towns/')) return [townsData.sources.parishes, townsData.sources.components].map(source => (source as {retrieved: string}).retrieved).sort().at(-1)!;
   if (path.startsWith('/council-tax/ranked/')) {
     const date = loadYear(CURRENT_YEAR).source.updated;
     if (!date) throw new Error(`No recorded ranking edition date for ${path}`);

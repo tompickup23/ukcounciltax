@@ -753,3 +753,42 @@ Final verification used Node 22.23.4 first on PATH. All 843 unit tests across
 zero errors, warnings and hints. Distribution checks passed all 1,107 pages
 and 1,106 sitemap URLs; the text sweep passed 1,115 files. All 138 browser
 cases passed under the production CSP. The normal pre-commit hook is retained.
+
+## Town league table pages, 15 November 2026
+
+Towns stage 2 (`docs/PROMPTS-2026-11-15-W1-W3-AND-TOWNS.md` section 5) adds 642
+self canonical routes on the stage 1 dataset `data/towns/england-2026-27.json`:
+the hub `/council-tax/towns/`, 9 region pages, 91 county pages and 541
+constituency pages (T5). There are no per council or per parish routes. Each
+row carries its MHCLG code as its anchor; each `/precepts/parishes/<slug>/` page
+gains a full Band D column linking to that anchor and a link to its county page.
+
+Provenance: every full Band D figure is the dataset's own (Table 10 line 9 and
+line 16 plus the parish Band D, or the council's own schedule where its status is
+`council-schedule`); the pages calculate only positions (standard competition
+ranking), differences, the monthly gap (difference divided by twelve, rounded to
+the penny) and the median. The record line under each figure names the Table 10
+file, the parish return and each council schedule behind the rows shown, with
+retrieval dates; the county and constituency columns name the three ONS lookups.
+
+Wording follows T2: "cheapest" and "most expensive" appear only in the title,
+the meta description and the one H2 above the lowest and highest ten, and only
+where a scope has at least two figures. `tests/towns-pages.test.ts` checks this on
+all 642 pages. JSON-LD carries one Dataset per towns page (allowed on these
+routes only by `scripts/check-dist.mjs`) and ItemLists of names and anchors.
+
+### Limitations
+
+- 2,760 of 10,440 rows have no figure and are listed after the ordered rows
+  with their status, never as zero: 2,581 in special expense councils whose own
+  schedules are not held, 170 grouped parishes whose group cannot be resolved,
+  and 9 charter trustee rows.
+- The position strip marks the area with the largest published tax base,
+  because the kit compares one edition only and MHCLG's Table 7 England average
+  is a different edition from Table 10.
+- Council schedule unparished areas carry tidy labels on the page (for example
+  "Boston, unparished area"); the printed name stays in the row detail.
+- The full bill change is not comparable, as the 2025/26 Table 10 parts are not
+  held; the parish part change is shown.
+- Region pages hold up to 1,920 rows in one static table (about 1.4 MB of HTML,
+  well under 150 KB compressed); the table scrolls inside its box above 30 rows.

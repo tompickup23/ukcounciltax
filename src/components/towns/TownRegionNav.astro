@@ -1,0 +1,11 @@
+---
+/** The nine regions as static links, so every region filter has its own URL without script. */
+import {regionScopes, townsPath} from '../../lib/towns-pages';
+
+interface Props {current?: string | null; england?: boolean}
+const {current = null, england = false} = Astro.props;
+---
+<nav class="pill-nav towns-regions" aria-label="Parish and unparished areas by region" data-pagefind-ignore>
+  <a href={townsPath()} aria-current={england ? 'page' : undefined}>England</a>
+  {regionScopes().map(scope => <a href={scope.path} aria-current={current === scope.name ? 'page' : undefined}>{scope.name}</a>)}
+</nav>

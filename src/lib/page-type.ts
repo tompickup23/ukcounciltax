@@ -24,7 +24,7 @@ export function pageTypeFor(path: string): PageType {
   if (/^\/(?:councils|scotland|wales)\/[^/]+\/$/.test(path)) return "council";
   if (/^\/tools\/budget\/[^/]+\/$/.test(path) || /^\/councils\/[^/]+\/budget-game\/$/.test(path)) return "budget";
   if (/^\/precepts\/parishes\/[^/]+\/$/.test(path)) return "parish";
-  if (path.startsWith('/council-tax/ranked/')) return "ranking";
+  if (path.startsWith('/council-tax/ranked/') || path.startsWith('/council-tax/towns/')) return "ranking";
   if (/^\/council-tax\/band-[a-i]\/$/.test(path)) return "band";
   if (/^\/council-tax\/[^/]+\/$/.test(path)) return "region";
   if (["/scotland/", "/wales/"].includes(path)) return "nation";

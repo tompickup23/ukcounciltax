@@ -1,0 +1,151 @@
+---
+/**
+ * The town league table hub (T1 to T5): England's pair on the desk band, the
+ * lowest and highest ten, the spread, the larger places, and links to every
+ * region, county and constituency page. The hub never ships all the rows; they
+ * live on the county, region and constituency pages, each row anchored by code.
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import PairHero from '../../../components/towns/PairHero.astro';
+import TownLedgers from '../../../components/towns/TownLedgers.astro';
+import TownSpread from '../../../components/towns/TownSpread.astro';
+import TownsMethod from '../../../components/towns/TownsMethod.astro';
+import TownsSources from '../../../components/towns/TownsSources.astro';
+import TownRegionNav from '../../../components/towns/TownRegionNav.astro';
+import {positionCell} from '../../../lib/rankings';
+import {rankTowns, townsData, type RankedTown} from '../../../lib/towns';
+import {
+  constituencyScopes, countyPathOf, countyScopes, crawlSentence, englandScope, money, placeName, regionScopes,
+  scopeStructuredData, scopeSummary, scopeText, STATUS_CHIPS, townAnchor, townsPath, townsYear, POSITION_METHOD,
+} from '../../../lib/towns-pages';
+import {tidy} from '../../../lib/towns-pages';
+import {townOgAlt, townOgPath} from '../../../lib/towns-og';
+
+const scope = englandScope();
+const summary = scopeSummary(scope.rows);
+const text = scopeText(scope, summary);
+const sentence = crawlSentence(summary, 'in England');
+const n = summary.counts.rows;
+const threshold = Number(townsData.method.largerPlaceTaxBase).toLocaleString('en-GB');
+const larger = rankTowns(scope.rows.filter(t => t.largerPlace));
+const largerShown: {label: string; rows: RankedTown[]}[] = [
+  {label: 'Lowest fifteen larger places', rows: larger.slice(0, 15)},
+  {label: 'Highest fifteen larger places', rows: larger.slice(-15).reverse()},
+];
+const regions = regionScopes().map(r => ({scope: r, summary: scopeSummary(r.rows)}));
+const counties = countyScopes().map(c => ({scope: c, summary: scopeSummary(c.rows), region: c.rows[0].region}));
+const constituencies = constituencyScopes();
+const unplaced = summary.unplaced;
+const unplacedBy = (Object.keys(STATUS_CHIPS) as (keyof typeof STATUS_CHIPS)[]).map(status => ({status, count: unplaced.filter(t => t.status === status).length})).filter(s => s.count > 0);
+const range = (s: ReturnType<typeof scopeSummary>) => s.lowest && s.highest ? (s.lowest === s.highest ? money(s.lowest.town.fullBandDPence) : `${money(s.lowest.town.fullBandDPence)} to ${money(s.highest.town.fullBandDPence)}`) : 'No figure from national tables';
+const lede = `Full Band D council tax for every parish and unparished area in England: ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} have a figure from published tables. The lowest are unparished areas of London boroughs, where no parish charge is added; the lowest parish area is shown with them.`;
+---
+<BaseLayout title={text.title} description={text.description} path={townsPath()}
+  structuredData={scopeStructuredData(scope, summary, text.description)}
+  about={{'@type': 'Country', name: 'England'}}
+  ogImage={townOgPath(scope)} ogImageAlt={townOgAlt(scope)}>
+  <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas'}]} />
+  <PairHero scope={scope} h1Lead={text.h1Lead} h1Place={text.h1Place}
+    eyebrow={`Full Band D | ${townsYear} | ${n.toLocaleString('en-GB')} areas`} lede={lede}
+    lowest={summary.lowest} highest={summary.highest} lowestJoint={summary.lowestJoint} highestJoint={summary.highestJoint}
+    lowestParish={summary.lowestParish} gap={summary.gap} />
+  <TownRegionNav england />
+  {sentence && <div class="fact" data-fact><p class="towns-sentence">{sentence}</p><TownsSources rows={[...summary.ranked.slice(0, 5), ...summary.ranked.slice(-5)].map(r => r.town)} /></div>}
+  <TownLedgers scope={scope} where="in England" low={summary.ledgerLow} high={summary.ledgerHigh} of={summary.ranked.length} />
+  <TownSpread scope={scope} where="in England" />
+
+  <section class="section" aria-labelledby="larger-heading">
+    <h2 id="larger-heading">Which larger places have the lowest and highest full Band D?</h2>
+    <p>Larger places have a tax base of {threshold} Band D equivalent properties or more, as published for a parish and, for an unparished area, calculated as the council's tax base less its parishes': {larger.length.toLocaleString('en-GB')} of them have a figure. A tax base counts properties, not people. Every larger place is in the full tables on the region and county pages, where the larger places switch narrows the list.</p>
+    <div class="fact" data-fact>
+      <div class="larger-grid">
+        {largerShown.map(list => (
+          <div class="table-wrap" tabindex="0" role="region" aria-label={list.label}>
+            <table class="data larger-table">
+              <caption>{list.label}, full Band D {townsYear}</caption>
+              <thead><tr><th scope="col" class="num">Position</th><th scope="col">Place</th><th scope="col" class="num">Full Band D</th></tr></thead>
+              <tbody>{list.rows.map(r => <tr><td class="num" data-figure>{positionCell(r.position, r.tied)}</td><th scope="row"><a href={townAnchor(countyPathOf(r.town), r.town)}>{placeName(r.town)}</a><small>{r.town.kind === 'unparished' ? tidy(r.town.county) : `${tidy(r.town.councilName)}, ${tidy(r.town.county)}`}</small></th><td class="num" data-figure>{money(r.town.fullBandDPence)}</td></tr>)}</tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+      <p class="small muted">Positions among the {larger.length.toLocaleString('en-GB')} larger places with a figure.</p>
+      <TownsSources rows={largerShown.flatMap(l => l.rows.map(r => r.town))} method={POSITION_METHOD} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="regions-heading">
+    <h2 id="regions-heading">Council tax by parish in each region</h2>
+    <div class="fact" data-fact>
+      <ul class="region-cards">
+        {regions.map(({scope: r, summary: s}) => (
+          <li><a href={r.path}><strong>{r.name}</strong><span>{s.counts.rows.toLocaleString('en-GB')} areas, {s.counts.withFigure.toLocaleString('en-GB')} with a figure</span><span class="region-range" data-figure>{range(s)}</span></a></li>
+        ))}
+      </ul>
+      <TownsSources rows={regions.flatMap(({summary: s}) => [s.lowest, s.highest].filter((x): x is RankedTown => Boolean(x)).map(x => x.town))} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="counties-heading">
+    <h2 id="counties-heading">Council tax by parish in each county</h2>
+    <p>A county here is the ONS county for shire and metropolitan districts, the unitary council itself, or Greater London.</p>
+    <div class="fact" data-fact>
+      {regions.map(({scope: r}) => (
+        <div class="county-group">
+          <h3>{r.name}</h3>
+          <ul class="link-list county-list">
+            {counties.filter(c => c.region === r.name).map(({scope: c, summary: s}) => <li><a href={c.path}>{c.name}</a> <span class="small muted" data-figure>{range(s)}</span></li>)}
+          </ul>
+        </div>
+      ))}
+      <TownsSources rows={counties.flatMap(({summary: s}) => [s.lowest, s.highest].filter((x): x is RankedTown => Boolean(x)).map(x => x.town))} lookups />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pcon-heading" data-pagefind-ignore>
+    <h2 id="pcon-heading">Council tax by parish in each constituency</h2>
+    <p>{constituencies.length} English constituencies contain a parish or unparished area. An area that touches more than one constituency is listed in full on each page and never apportioned.</p>
+    <details class="pcon-details">
+      <summary>Show all {constituencies.length} constituencies</summary>
+      <ul class="link-list">{constituencies.map(c => <li><a href={c.path}>{c.name}</a></li>)}</ul>
+    </details>
+  </section>
+
+  <section class="section" aria-labelledby="unplaced-heading">
+    <h2 id="unplaced-heading">Areas without a figure</h2>
+    <p>{unplaced.length.toLocaleString('en-GB')} areas are listed on their county, region and constituency pages with their status and are not in the order. None is counted as zero.</p>
+    <ul>{unplacedBy.map(s => <li><span class="town-chip">{STATUS_CHIPS[s.status]}</span> {s.count.toLocaleString('en-GB')}: {townsData.statusLabels[s.status]}.</li>)}</ul>
+  </section>
+
+  <div data-pagefind-ignore><TownsMethod /></div>
+
+  <section class="section" aria-labelledby="related-heading" data-pagefind-ignore>
+    <h2 id="related-heading">Related</h2>
+    <ul>
+      <li><a href="/precepts/parishes/">Parish precepts by council</a>, with each precept's change on the previous year</li>
+      <li><a href="/council-tax/ranked/">Band D ranked by type of council</a>, councils against councils of the same type</li>
+      <li><a href="/precepts/">What makes up a bill</a></li>
+    </ul>
+  </section>
+</BaseLayout>
+
+<style>
+.towns-sentence{max-width:48rem;font-size:var(--text-md)}
+.larger-grid{display:grid;gap:var(--space-lg)}
+@media(min-width:900px){.larger-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.larger-table{width:100%}
+.larger-table th[scope="row"]{overflow-wrap:anywhere}
+.larger-table th[scope="row"] small{display:block;font-weight:400;font-size:var(--text-xs);color:var(--text-muted)}
+.region-cards{list-style:none;margin:0 0 var(--space-sm);padding:0;display:grid;gap:var(--space-sm);grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+.region-cards a{display:flex;flex-direction:column;gap:var(--space-2xs);height:100%;padding:var(--space-md);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);background:var(--bg-card);text-decoration:none;color:var(--text)}
+.region-cards a:hover{border-color:var(--accent)}
+.region-cards strong{font-family:var(--font-display);font-size:var(--text-lg);color:var(--accent)}
+.region-cards span{font-size:var(--text-sm);color:var(--text-muted)}
+.region-cards .region-range{font-size:var(--text-base);font-weight:600;color:var(--text);font-variant-numeric:tabular-nums lining-nums}
+@media(prefers-reduced-motion:no-preference){.region-cards a{transition:transform .15s ease}.region-cards a:hover{transform:translateY(-2px)}}
+.county-group h3{font-size:var(--text-md);margin:var(--space-lg) 0 var(--space-xs)}
+.county-list{columns:20rem auto}
+.pcon-details summary{cursor:pointer;font-weight:600;min-height:44px;padding-block:var(--space-sm)}
+.town-chip{display:inline-block;padding:.1rem .55rem;border:1px solid var(--border-strong);border-radius:999px;font-size:var(--text-xs);line-height:1.5}
+</style>

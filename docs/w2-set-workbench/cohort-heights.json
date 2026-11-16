@@ -1,0 +1,790 @@
+[
+  {
+    "slug": "redcar-and-cleveland",
+    "height": 2783
+  },
+  {
+    "slug": "stockton-on-tees",
+    "height": 2783
+  },
+  {
+    "slug": "darlington",
+    "height": 2783
+  },
+  {
+    "slug": "halton",
+    "height": 2783
+  },
+  {
+    "slug": "warrington",
+    "height": 2843
+  },
+  {
+    "slug": "blackburn-with-darwen",
+    "height": 2783
+  },
+  {
+    "slug": "blackpool",
+    "height": 2783
+  },
+  {
+    "slug": "kingston-upon-hull-city-of",
+    "height": 2783
+  },
+  {
+    "slug": "north-east-lincolnshire",
+    "height": 2783
+  },
+  {
+    "slug": "north-lincolnshire",
+    "height": 2783
+  },
+  {
+    "slug": "york",
+    "height": 2783
+  },
+  {
+    "slug": "nottingham",
+    "height": 2783
+  },
+  {
+    "slug": "herefordshire-county-of",
+    "height": 2783
+  },
+  {
+    "slug": "telford-and-wrekin",
+    "height": 2783
+  },
+  {
+    "slug": "stoke-on-trent",
+    "height": 2783
+  },
+  {
+    "slug": "bristol-city-of",
+    "height": 2783
+  },
+  {
+    "slug": "north-somerset",
+    "height": 2843
+  },
+  {
+    "slug": "plymouth",
+    "height": 2783
+  },
+  {
+    "slug": "torbay",
+    "height": 2783
+  },
+  {
+    "slug": "swindon",
+    "height": 2783
+  },
+  {
+    "slug": "peterborough",
+    "height": 2783
+  },
+  {
+    "slug": "luton",
+    "height": 2783
+  },
+  {
+    "slug": "southend-on-sea",
+    "height": 2783
+  },
+  {
+    "slug": "medway",
+    "height": 2843
+  },
+  {
+    "slug": "bracknell-forest",
+    "height": 2843
+  },
+  {
+    "slug": "west-berkshire",
+    "height": 2783
+  },
+  {
+    "slug": "reading",
+    "height": 2783
+  },
+  {
+    "slug": "brighton-and-hove",
+    "height": 2843
+  },
+  {
+    "slug": "portsmouth",
+    "height": 2783
+  },
+  {
+    "slug": "southampton",
+    "height": 2783
+  },
+  {
+    "slug": "isle-of-wight",
+    "height": 2783
+  },
+  {
+    "slug": "county-durham",
+    "height": 2783
+  },
+  {
+    "slug": "cheshire-east",
+    "height": 2783
+  },
+  {
+    "slug": "wiltshire",
+    "height": 2783
+  },
+  {
+    "slug": "central-bedfordshire",
+    "height": 2783
+  },
+  {
+    "slug": "bournemouth-christchurch-and-poole",
+    "height": 2894
+  },
+  {
+    "slug": "dorset",
+    "height": 2783
+  },
+  {
+    "slug": "buckinghamshire",
+    "height": 2783
+  },
+  {
+    "slug": "north-northamptonshire",
+    "height": 2783
+  },
+  {
+    "slug": "west-northamptonshire",
+    "height": 2783
+  },
+  {
+    "slug": "north-yorkshire",
+    "height": 2783
+  },
+  {
+    "slug": "east-cambridgeshire",
+    "height": 2783
+  },
+  {
+    "slug": "huntingdonshire",
+    "height": 2467
+  },
+  {
+    "slug": "south-cambridgeshire",
+    "height": 2467
+  },
+  {
+    "slug": "amber-valley",
+    "height": 2783
+  },
+  {
+    "slug": "bolsover",
+    "height": 2783
+  },
+  {
+    "slug": "chesterfield",
+    "height": 2467
+  },
+  {
+    "slug": "derbyshire-dales",
+    "height": 2467
+  },
+  {
+    "slug": "erewash",
+    "height": 2467
+  },
+  {
+    "slug": "high-peak",
+    "height": 2467
+  },
+  {
+    "slug": "north-east-derbyshire",
+    "height": 2467
+  },
+  {
+    "slug": "south-derbyshire",
+    "height": 2783
+  },
+  {
+    "slug": "east-devon",
+    "height": 2467
+  },
+  {
+    "slug": "exeter",
+    "height": 2467
+  },
+  {
+    "slug": "north-devon",
+    "height": 2467
+  },
+  {
+    "slug": "south-hams",
+    "height": 2467
+  },
+  {
+    "slug": "teignbridge",
+    "height": 2467
+  },
+  {
+    "slug": "torridge",
+    "height": 2467
+  },
+  {
+    "slug": "west-devon",
+    "height": 2467
+  },
+  {
+    "slug": "eastbourne",
+    "height": 2467
+  },
+  {
+    "slug": "hastings",
+    "height": 2467
+  },
+  {
+    "slug": "rother",
+    "height": 2467
+  },
+  {
+    "slug": "wealden",
+    "height": 2783
+  },
+  {
+    "slug": "basildon",
+    "height": 2467
+  },
+  {
+    "slug": "braintree",
+    "height": 2467
+  },
+  {
+    "slug": "brentwood",
+    "height": 2467
+  },
+  {
+    "slug": "harlow",
+    "height": 2783
+  },
+  {
+    "slug": "maldon",
+    "height": 2467
+  },
+  {
+    "slug": "tendring",
+    "height": 2783
+  },
+  {
+    "slug": "cotswold",
+    "height": 2467
+  },
+  {
+    "slug": "forest-of-dean",
+    "height": 2467
+  },
+  {
+    "slug": "gloucester",
+    "height": 2467
+  },
+  {
+    "slug": "stroud",
+    "height": 2467
+  },
+  {
+    "slug": "tewkesbury",
+    "height": 2467
+  },
+  {
+    "slug": "basingstoke-and-deane",
+    "height": 2467
+  },
+  {
+    "slug": "east-hampshire",
+    "height": 2467
+  },
+  {
+    "slug": "gosport",
+    "height": 2467
+  },
+  {
+    "slug": "hart",
+    "height": 2467
+  },
+  {
+    "slug": "havant",
+    "height": 2467
+  },
+  {
+    "slug": "new-forest",
+    "height": 2467
+  },
+  {
+    "slug": "rushmoor",
+    "height": 2843
+  },
+  {
+    "slug": "test-valley",
+    "height": 2467
+  },
+  {
+    "slug": "winchester",
+    "height": 2467
+  },
+  {
+    "slug": "broxbourne",
+    "height": 2467
+  },
+  {
+    "slug": "north-hertfordshire",
+    "height": 2467
+  },
+  {
+    "slug": "watford",
+    "height": 2467
+  },
+  {
+    "slug": "ashford",
+    "height": 2467
+  },
+  {
+    "slug": "dartford",
+    "height": 2767
+  },
+  {
+    "slug": "dover",
+    "height": 2467
+  },
+  {
+    "slug": "gravesham",
+    "height": 2467
+  },
+  {
+    "slug": "maidstone",
+    "height": 2467
+  },
+  {
+    "slug": "shepway",
+    "height": 2467
+  },
+  {
+    "slug": "swale",
+    "height": 2467
+  },
+  {
+    "slug": "tonbridge-and-malling",
+    "height": 2527
+  },
+  {
+    "slug": "tunbridge-wells",
+    "height": 2467
+  },
+  {
+    "slug": "chorley",
+    "height": 2467
+  },
+  {
+    "slug": "fylde",
+    "height": 2467
+  },
+  {
+    "slug": "hyndburn",
+    "height": 2467
+  },
+  {
+    "slug": "lancaster",
+    "height": 2467
+  },
+  {
+    "slug": "preston",
+    "height": 2783
+  },
+  {
+    "slug": "ribble-valley",
+    "height": 2467
+  },
+  {
+    "slug": "rossendale",
+    "height": 2783
+  },
+  {
+    "slug": "south-ribble",
+    "height": 2467
+  },
+  {
+    "slug": "west-lancashire",
+    "height": 2467
+  },
+  {
+    "slug": "wyre",
+    "height": 2783
+  },
+  {
+    "slug": "blaby",
+    "height": 2783
+  },
+  {
+    "slug": "charnwood",
+    "height": 2783
+  },
+  {
+    "slug": "north-west-leicestershire",
+    "height": 2783
+  },
+  {
+    "slug": "oadby-and-wigston",
+    "height": 2467
+  },
+  {
+    "slug": "boston",
+    "height": 2467
+  },
+  {
+    "slug": "lincoln",
+    "height": 2467
+  },
+  {
+    "slug": "south-holland",
+    "height": 2467
+  },
+  {
+    "slug": "south-kesteven",
+    "height": 2467
+  },
+  {
+    "slug": "west-lindsey",
+    "height": 2467
+  },
+  {
+    "slug": "broadland",
+    "height": 2783
+  },
+  {
+    "slug": "great-yarmouth",
+    "height": 2467
+  },
+  {
+    "slug": "north-norfolk",
+    "height": 2467
+  },
+  {
+    "slug": "south-norfolk",
+    "height": 2783
+  },
+  {
+    "slug": "ashfield",
+    "height": 2467
+  },
+  {
+    "slug": "bassetlaw",
+    "height": 2467
+  },
+  {
+    "slug": "newark-and-sherwood",
+    "height": 2467
+  },
+  {
+    "slug": "rushcliffe",
+    "height": 2467
+  },
+  {
+    "slug": "oxford",
+    "height": 2467
+  },
+  {
+    "slug": "south-oxfordshire",
+    "height": 2467
+  },
+  {
+    "slug": "vale-of-white-horse",
+    "height": 2467
+  },
+  {
+    "slug": "cannock-chase",
+    "height": 2467
+  },
+  {
+    "slug": "lichfield",
+    "height": 2467
+  },
+  {
+    "slug": "newcastle-under-lyme",
+    "height": 2467
+  },
+  {
+    "slug": "south-staffordshire",
+    "height": 2783
+  },
+  {
+    "slug": "stafford",
+    "height": 2783
+  },
+  {
+    "slug": "babergh",
+    "height": 2467
+  },
+  {
+    "slug": "ipswich",
+    "height": 2467
+  },
+  {
+    "slug": "elmbridge",
+    "height": 2843
+  },
+  {
+    "slug": "epsom-and-ewell",
+    "height": 2467
+  },
+  {
+    "slug": "spelthorne",
+    "height": 2467
+  },
+  {
+    "slug": "surrey-heath",
+    "height": 2783
+  },
+  {
+    "slug": "tandridge",
+    "height": 2783
+  },
+  {
+    "slug": "woking",
+    "height": 2527
+  },
+  {
+    "slug": "north-warwickshire",
+    "height": 2783
+  },
+  {
+    "slug": "nuneaton-and-bedworth",
+    "height": 2467
+  },
+  {
+    "slug": "stratford-on-avon",
+    "height": 2467
+  },
+  {
+    "slug": "adur",
+    "height": 2467
+  },
+  {
+    "slug": "arun",
+    "height": 2467
+  },
+  {
+    "slug": "chichester",
+    "height": 2467
+  },
+  {
+    "slug": "crawley",
+    "height": 2467
+  },
+  {
+    "slug": "horsham",
+    "height": 2783
+  },
+  {
+    "slug": "mid-sussex",
+    "height": 2467
+  },
+  {
+    "slug": "malvern-hills",
+    "height": 2467
+  },
+  {
+    "slug": "worcester",
+    "height": 2467
+  },
+  {
+    "slug": "wychavon",
+    "height": 2783
+  },
+  {
+    "slug": "wyre-forest",
+    "height": 2783
+  },
+  {
+    "slug": "st-albans",
+    "height": 2467
+  },
+  {
+    "slug": "welwyn-hatfield",
+    "height": 2467
+  },
+  {
+    "slug": "east-hertfordshire",
+    "height": 2467
+  },
+  {
+    "slug": "west-suffolk",
+    "height": 2467
+  },
+  {
+    "slug": "bolton",
+    "height": 2783
+  },
+  {
+    "slug": "manchester",
+    "height": 2783
+  },
+  {
+    "slug": "oldham",
+    "height": 2783
+  },
+  {
+    "slug": "rochdale",
+    "height": 2783
+  },
+  {
+    "slug": "salford",
+    "height": 2783
+  },
+  {
+    "slug": "stockport",
+    "height": 2783
+  },
+  {
+    "slug": "tameside",
+    "height": 2783
+  },
+  {
+    "slug": "trafford",
+    "height": 2843
+  },
+  {
+    "slug": "wigan",
+    "height": 2783
+  },
+  {
+    "slug": "knowsley",
+    "height": 2783
+  },
+  {
+    "slug": "liverpool",
+    "height": 2783
+  },
+  {
+    "slug": "st-helens",
+    "height": 2783
+  },
+  {
+    "slug": "doncaster",
+    "height": 2783
+  },
+  {
+    "slug": "newcastle-upon-tyne",
+    "height": 2783
+  },
+  {
+    "slug": "north-tyneside",
+    "height": 2843
+  },
+  {
+    "slug": "south-tyneside",
+    "height": 2783
+  },
+  {
+    "slug": "birmingham",
+    "height": 2783
+  },
+  {
+    "slug": "sandwell",
+    "height": 2783
+  },
+  {
+    "slug": "solihull",
+    "height": 2783
+  },
+  {
+    "slug": "walsall",
+    "height": 2783
+  },
+  {
+    "slug": "bradford",
+    "height": 2783
+  },
+  {
+    "slug": "calderdale",
+    "height": 2783
+  },
+  {
+    "slug": "kirklees",
+    "height": 2783
+  },
+  {
+    "slug": "leeds",
+    "height": 2843
+  },
+  {
+    "slug": "wakefield",
+    "height": 2843
+  },
+  {
+    "slug": "gateshead",
+    "height": 2843
+  },
+  {
+    "slug": "barnsley",
+    "height": 2843
+  },
+  {
+    "slug": "sheffield",
+    "height": 2783
+  },
+  {
+    "slug": "barking-and-dagenham",
+    "height": 2783
+  },
+  {
+    "slug": "brent",
+    "height": 2783
+  },
+  {
+    "slug": "bromley",
+    "height": 2783
+  },
+  {
+    "slug": "camden",
+    "height": 2783
+  },
+  {
+    "slug": "hackney",
+    "height": 2783
+  },
+  {
+    "slug": "hammersmith-and-fulham",
+    "height": 2783
+  },
+  {
+    "slug": "haringey",
+    "height": 2783
+  },
+  {
+    "slug": "harrow",
+    "height": 2783
+  },
+  {
+    "slug": "havering",
+    "height": 2843
+  },
+  {
+    "slug": "hounslow",
+    "height": 2843
+  },
+  {
+    "slug": "merton",
+    "height": 2783
+  },
+  {
+    "slug": "redbridge",
+    "height": 2843
+  },
+  {
+    "slug": "sutton",
+    "height": 2783
+  },
+  {
+    "slug": "tower-hamlets",
+    "height": 2783
+  }
+]

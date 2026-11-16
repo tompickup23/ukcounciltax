@@ -1,4 +1,5 @@
 import edition from '../../data/pilots/budget-freeze-model.json' with {type:'json'};
+import { formatMoney } from './money';
 // Only the principles: the full referendum file carries every authority's mapping and would bloat the page script.
 import referendum from '../../data/pilots/budget-freeze-principles.json' with {type:'json'};
 const {principles} = referendum;
@@ -81,8 +82,8 @@ export function referendumTriggered(rule: FreezeBaseline['rule'], prior: bigint,
 }
 export function referendumExplanation(rule: FreezeBaseline['rule']): string {
   const principle = principles[rule];
-  if (principle.join === 'AND') return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger requires both an increase of at least ${principle.percentageBasisPoints / 100}% and an increase of more than £${inputPounds(principle.poundPence!)} over the previous own charge.`;
-  return `The mapped ${FREEZE_YEAR_TEXT} referendum trigger is an increase of at least ${principle.percentageBasisPoints / 100}% over the previous own charge, comprising ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
+  if (principle.join === 'AND') return `Under the ${FREEZE_YEAR_TEXT} rule for this council, a referendum would be needed for a rise that is both at least ${principle.percentageBasisPoints / 100}% and more than £${inputPounds(principle.poundPence!)} over the previous own charge.`;
+  return `Under the ${FREEZE_YEAR_TEXT} rule for this council, the rise that would need a referendum is at least ${principle.percentageBasisPoints / 100}% over the previous own charge: ${principle.ascBasisPoints / 100}% for adult social care and ${principle.otherBasisPoints / 100}% for other expenditure.`;
 }
 
 export function initialFreezeInputs(baseline: FreezeBaseline, frozen = true): FreezeInputs {
@@ -118,30 +119,41 @@ export function calculateFreeze(baseline: FreezeBaseline, inputs: FreezeInputs) 
   const remaining = spendingChange-financingChange;
   return {
     changes, spendingChange, financingChange, remaining,
-    status: remaining === 0n ? 'balanced' : remaining > 0n ? 'shortfall' : 'surplus',
+    status: (remaining === 0n ? 'balanced' : remaining > 0n ? 'shortfall' : 'surplus') as 'balanced' | 'shortfall' | 'surplus',
     referendum: referendumTriggered(baseline.rule, prior, selected),
   };
 }
 
+/**
+ * The copied and printed scenario (W3). Published service figures print in whole
+ * pounds, as their RA source prints them in £ thousand; the user's own choices and
+ * the changes print to pennies, the precision of the entry. Only the financing
+ * change and the remaining difference carry sub-penny parts (a pence change times a
+ * tax base in hundredths), so the four decimal place values appear once, in a
+ * labelled calculation line.
+ */
 export function freezeSummary(baseline: FreezeBaseline, inputs: FreezeInputs, sources: string[]): string {
   const result = calculateFreeze(baseline, inputs);
+  const pounds = (pence: bigint) => money(pence * 100n);
+  const publishedService = (pence: string) => formatMoney(Number(BigInt(pence) / 100000n), {unit: 'thousands'});
   return [
     `User requested scenario | ${FREEZE_MODEL}`,
     `${baseline.name} (${baseline.gss}), ${FREEZE_YEAR_TEXT}`,
-    `Previous own Band D: £${inputPounds(baseline.priorOwnPence)}; fixed current tax base: ${inputPounds(baseline.taxBaseHundredths)} Band D equivalents`,
-    `Own Band D selected: £${inputPounds(parsePence(inputs.ownPounds))}; published: £${inputPounds(baseline.ownPence)}`,
+    `Previous own Band D: ${pounds(BigInt(baseline.priorOwnPence))}; fixed current tax base: ${inputPounds(baseline.taxBaseHundredths)} Band D equivalents`,
+    `Own Band D selected: ${pounds(parsePence(inputs.ownPounds))}; published: ${pounds(BigInt(baseline.ownPence))}`,
     ...result.changes.filter(s => s.deltaUnits !== 0n).map(change => {
       const service = baseline.services.find(s => s.id === change.id)!;
-      return `${service.label}: selected £${inputPounds(change.selectedPence)}; change £${exactPounds(change.deltaUnits)}`;
+      return `${service.label}: selected ${pounds(change.selectedPence)}; published ${publishedService(service.pence)}; change ${money(change.deltaUnits)}`;
     }),
-    `Spending change: £${exactPounds(result.spendingChange)}`,
-    `Financing change: £${exactPounds(result.financingChange)}`,
-    `Remaining difference: £${exactPounds(result.remaining)} (${result.status})`,
+    `Spending change: ${money(result.spendingChange)}`,
+    `Financing change: ${money(result.financingChange)}`,
+    `Remaining difference: ${money(result.remaining)} (${result.status})`,
+    `Exact calculation in pounds, four decimal places: financing change ${exactPounds(result.financingChange)}; remaining difference ${exactPounds(result.remaining)}.`,
     'Formula: remaining difference = spending change minus (selected own Band D minus published own Band D) times the fixed tax base.',
-    `Referendum trigger under the mapped ${FREEZE_YEAR_TEXT} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
+    `The rise that would need a referendum under the ${FREEZE_YEAR_TEXT} rule: ${result.referendum ? 'reached' : 'not reached'}. This is not a legal feasibility assessment.`,
     ...FREEZE_ASSUMPTIONS,
     ...(baseline.sourceWarnings ?? []),
-    'Displayed money rounds to pennies; this summary preserves four decimal places. Zero is tested before rounding.',
+    'Published service figures are whole pounds, printed in £ thousand in the RA return. Your choices and the changes are shown to pennies; the financing change and remaining difference also appear to four decimal places above. Zero is tested before rounding.',
     'Sources:', ...sources,
   ].join('\n');
 }

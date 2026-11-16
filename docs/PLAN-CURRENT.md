@@ -8,7 +8,7 @@ Written in Claude Code on Monday 16 November 2026 at Tom's request, from GitHub 
 
 | Site | Main | Live | Open |
 |---|---|---|---|
-| UK Council Tax | `d5670a2` (PR 97, F1 foundation) | Published 16 November: PRs 94 to 98, with towns pages, the W2 set page and F1 | PR 99, W3 set page |
+| UK Council Tax | `bd75d27` (PR 99, W3 set page) | Merged 16 November: PRs 94 to 99, with towns pages, the W2 and W3 set page and F1 | None |
 | UK Councils | `456a200` (PR 63, U2 homepage) | Published 16 November: PR 62 (dossier gate) and PR 63 | None |
 | Estate Kit | | | PR 27 (site header part), PR 28 (scrub report, draft) |
 
@@ -53,8 +53,8 @@ One UK Council Tax page session at a time, at most one data session beside it, o
 
 | Order | Work | Who | Waits on |
 |---|---|---|---|
-| 1 | PR 99, W3 set page | Built, checks passed; Tom's yes | Nothing |
-| 2 | `/tools/budget/` hub: band first with the picker inside, Guess and Set pills per row | Claude, fast track | PR 99 merged |
+| 1 | PR 99, W3 set page | Merged 16 November on Tom's yes | Done |
+| 2 | `/tools/budget/` hub: band first with the picker inside, Guess and Set pills per row | Claude, fast track | Nothing |
 | 3 | W4 game page, two PRs | Codex, Claude reviews | Prompt owed; D5 and D13 |
 | 4 | W9 council page: ledger row under the H1, one bands chart, short record lines | Codex, Claude reviews | Prompt owed |
 | 5 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |
@@ -77,7 +77,7 @@ Open, with my recommendation, a date and what happens on silence:
 
 | Ref | Decision | Recommendation | Decide by | Default |
 |---|---|---|---|---|
-| R1 | Fast track when a reviewer's data rule finding has been fixed | Allow the merge once the same reviewer confirms the fix in the pull request and the PR is still layout only | With PR 99 | Each such PR waits for Tom |
+| R1 | Fast track when a reviewer's data rule finding has been fixed | Allow the merge once the same reviewer confirms the fix in the pull request and the PR is still layout only | Before the next such PR | Each such PR waits for Tom |
 | D8 | Header structure | (a) four menus plus "Find my bill" | 30 November | W5 waits |
 | D3 | Marks and accent | (a) distinct marks, accents kept | 1 December | Shared glyph stays; M1 dropped from this season |
 | D5 | Slim the game page inside W4 | (a) yes | With the W4 prompt | Not slimmed |

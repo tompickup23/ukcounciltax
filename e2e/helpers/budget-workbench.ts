@@ -46,8 +46,11 @@ for (const slug of ['leeds', 'hyndburn', 'east-cambridgeshire']) {
     expect(immediate).toBe(announcement);
     await expect(page.locator('[data-announcement]')).not.toHaveText(announcement!);
     expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    // Only the forced-colours block gives the phone result bar a border on every side.
+    const sideBorder = () => page.locator('.mobile-result').evaluate(e => getComputedStyle(e).borderLeftStyle);
+    expect(await sideBorder()).toBe('none');
     await page.emulateMedia({forcedColors:'active'});
-    expect(await page.locator('.control-card').first().evaluate(e => getComputedStyle(e).borderTopStyle)).toBe('solid');
+    expect(await sideBorder()).toBe('solid');
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize()!.width);
   });
 }

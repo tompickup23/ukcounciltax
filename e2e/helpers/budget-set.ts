@@ -14,6 +14,11 @@ async function accessible(page: Page) {
   for (const el of await page.locator('.ledger .table-wrap, [data-controls] input').all()) {
     expect(await el.evaluate(e => e.scrollWidth <= e.clientWidth)).toBe(true);
   }
+  // The workbench closes its disclosures on arrival; audit what is inside them too.
+  await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
+  const opened = await new AxeBuilder({page}).analyze();
+  expect(opened.violations.map(v => ({id:v.id,targets:v.nodes.map(n => n.target)}))).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize()!.width);
 }
 export function budgetSetJourneys() {
   for (const width of [375,1440]) for (const theme of ['light','dark'] as const) for (const slug of slugs) {

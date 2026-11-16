@@ -50,3 +50,10 @@ it('keeps an exact pounds entry when stepping and clamps only at the exploration
   expect(stepService('100000', '0.01', -1)).toBe('0.00');
   expect(stepService('100000', '1999.99', 1)).toBe('2000.00');
 });
+
+it('keeps every half-percent step exact: each editable published service is a multiple of two pounds', () => {
+  // The slider position is read back by division, so a step that had to round would not return to its own notch.
+  for (const pilot of freezePilots()) for (const service of pilot.services.filter(s => s.editable)) {
+    expect(BigInt(service.pence) % 200n, `${pilot.slug} ${service.id}`).toBe(0n);
+  }
+});

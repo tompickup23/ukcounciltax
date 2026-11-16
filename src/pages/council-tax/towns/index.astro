@@ -12,6 +12,7 @@ import TownLedgers from '../../../components/towns/TownLedgers.astro';
 import TownSpread from '../../../components/towns/TownSpread.astro';
 import TownsMethod from '../../../components/towns/TownsMethod.astro';
 import TownsSources from '../../../components/towns/TownsSources.astro';
+import TownsPageSources from '../../../components/towns/TownsPageSources.astro';
 import TownRegionNav from '../../../components/towns/TownRegionNav.astro';
 import {positionCell} from '../../../lib/rankings';
 import {rankTowns, townsData, type RankedTown} from '../../../lib/towns';
@@ -37,6 +38,14 @@ const regions = regionScopes().map(r => ({scope: r, summary: scopeSummary(r.rows
 const counties = countyScopes().map(c => ({scope: c, summary: scopeSummary(c.rows), region: c.rows[0].region}));
 const constituencies = constituencyScopes();
 const unplaced = summary.unplaced;
+// Every row whose figure the hub prints, so the Sources block lists each council schedule behind one.
+const extremes = (list: {summary: ReturnType<typeof scopeSummary>}[]) => list.flatMap(({summary: s}) => [s.lowest, s.highest]);
+const shownRows = [...new Set([
+  summary.lowest, summary.highest, summary.lowestParish,
+  ...summary.ranked.slice(0, 5), ...summary.ranked.slice(-5),
+  ...summary.ledgerLow.rows, ...summary.ledgerHigh.rows, summary.ledgerLow.moreAt, summary.ledgerHigh.moreAt,
+  ...largerShown.flatMap(l => l.rows), ...extremes(regions), ...extremes(counties),
+].filter((x): x is RankedTown => Boolean(x)).map(x => x.town))];
 const unplacedBy = (Object.keys(STATUS_CHIPS) as (keyof typeof STATUS_CHIPS)[]).map(status => ({status, count: unplaced.filter(t => t.status === status).length})).filter(s => s.count > 0);
 const range = (s: ReturnType<typeof scopeSummary>) => s.lowest && s.highest ? (s.lowest === s.highest ? money(s.lowest.town.fullBandDPence) : `${money(s.lowest.town.fullBandDPence)} to ${money(s.highest.town.fullBandDPence)}`) : 'No figure from national tables';
 const lede = `Full Band D council tax for every parish and unparished area in England: ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} have a figure from published tables. The lowest are unparished areas of London boroughs, where no parish charge is added; the lowest parish area is shown with them.`;
@@ -119,6 +128,7 @@ const lede = `Full Band D council tax for every parish and unparished area in En
   </section>
 
   <div data-pagefind-ignore><TownsMethod /></div>
+  <TownsPageSources rows={shownRows} lookups />
 
   <section class="section" aria-labelledby="related-heading" data-pagefind-ignore>
     <h2 id="related-heading">Related</h2>

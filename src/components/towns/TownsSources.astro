@@ -1,21 +1,23 @@
 ---
 /**
- * The record line for full Band D figures, as one paragraph: the method, then the
- * Table 10 parts, the parish return and every council schedule behind the rows
- * shown, each with its table and retrieval date. On request a second line names
- * the ONS lookups behind the county and constituency columns.
+ * The record line for full Band D figures (F1): the method in a few words, the two
+ * MHCLG sources by short title, any council schedules behind the rows shown, and a
+ * link to the full reference in the page's Sources block (TownsPageSources), which
+ * carries the method, every title, table and retrieval date in full. Before F1 this
+ * printed the whole reference here, three or four times on every towns page.
  */
-import {longDate, type SourceRef} from '../../lib/sources';
-import {FULL_METHOD, scheduleSourcesFor, townSources} from '../../lib/towns-pages';
-import {townsData, type Town} from '../../lib/towns';
+import RecordLine from '../RecordLine.astro';
+import {scheduleSourcesFor, townSources} from '../../lib/towns-pages';
+import type {Town} from '../../lib/towns';
 
 interface Props {rows: readonly Town[]; lookups?: boolean; method?: string}
 const {rows, lookups = false, method} = Astro.props;
 const schedules = scheduleSourcesFor(rows);
-const main: SourceRef[] = [townSources.components, townSources.parishes, ...schedules];
-const ons: SourceRef[] = [townSources.parishWard, townSources.wardConstituency, townSources.ladCounty];
-const licence = (townsData.sources as {parishWard: {licence: string}}).parishWard.licence;
-const tail = (s: SourceRef) => `${s.table ? `, ${s.table}` : ''}${s.retrieved ? `, retrieved ${longDate(s.retrieved)}` : ''}`;
+const names = schedules.length <= 2 ? schedules.map(s => s.publisher).join(' and ') : `${schedules.length} council schedules`;
+const tail = [
+  schedules.length > 0 ? `or, where a row says so, as printed by ${names}` : null,
+  lookups ? 'county and constituency from ONS lookups' : null,
+].filter(Boolean).join('; ') || undefined;
 ---
-<p class="source-line">{method ? `${method}. ` : ''}{FULL_METHOD}{schedules.length > 0 ? ', or the council\'s own published figure where a row says so' : ''}. Sources: {main.map((s, i) => <>{i > 0 && '; '}<a href={s.url}>{s.publisher}, {s.title}</a>{tail(s)}</>)}.</p>
-{lookups && <p class="source-line">County and constituency: {ons.map((s, i) => <>{i > 0 && '; '}<a href={s.url}>{s.publisher}, {s.title}</a>{tail(s)}</>)}. {licence}</p>}
+<RecordLine entry="band-d" method={method ? 'Full Band D, positions and differences calculated from' : 'Full Band D calculated from'}
+  sources={[townSources.components, townSources.parishes]} tail={tail} />

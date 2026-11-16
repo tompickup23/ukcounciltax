@@ -1,0 +1,22 @@
+---
+/**
+ * The one Sources block on a towns page (F1). Every towns record line links here.
+ * The rows given are every row the page shows, so every council schedule behind a
+ * printed figure is listed.
+ */
+import PageSources, {type SourceEntry} from '../PageSources.astro';
+import {FULL_METHOD, POSITION_METHOD, scheduleSourcesFor, townSources} from '../../lib/towns-pages';
+import {townsData, type Town} from '../../lib/towns';
+
+interface Props {rows: readonly Town[]; lookups?: boolean}
+const {rows, lookups = false} = Astro.props;
+const schedules = scheduleSourcesFor(rows);
+const licence = (townsData.sources as {parishWard: {licence: string}}).parishWard.licence;
+const entries: SourceEntry[] = [
+  {key: 'band-d', label: 'Full Band D, positions and differences',
+    method: `${FULL_METHOD}${schedules.length > 0 ? ', or the council\'s own published figure where a row says so' : ''}. ${POSITION_METHOD}`,
+    sources: [townSources.components, townSources.parishes, ...schedules]},
+  ...(lookups ? [{key: 'lookups', label: 'County and constituency', sources: [townSources.parishWard, townSources.wardConstituency, townSources.ladCounty], note: licence}] : []),
+];
+---
+<PageSources entries={entries} />

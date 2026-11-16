@@ -1,0 +1,45 @@
+---
+/**
+ * The desk band (F1, plan section 11.5; "Ledger and Desk" in the design audit
+ * of 15 November 2026). One per page at most, for the page's flagship action.
+ * Every dark band on the site is this component, so a token change in K1
+ * restyles all of them at once. Styles are the global .desk classes.
+ *
+ * The heading is two toned with a span inside the same text node, so a pinned
+ * H1 keeps its exact text. The default slot is the right column on a split band
+ * (doors, a pair of figures); the copy slot sits under the lede; the foot slot
+ * spans the band under both columns.
+ */
+interface Props {
+  /** The heading's id, which labels the section. */
+  id: string;
+  level?: 1 | 2 | 3;
+  eyebrow: string;
+  title: string;
+  /** Printed after the title in the accent, inside the same heading. */
+  accent?: string;
+  lede?: string;
+  layout?: "split" | "stack";
+  /** The larger hero step, for game heroes and tool landings only. */
+  hero?: boolean;
+  /** The band opens the page, so it takes no top margin. */
+  top?: boolean;
+  class?: string;
+  [attribute: `data-${string}`]: string | boolean | undefined;
+}
+
+const { id, level = 2, eyebrow, title, accent, lede, layout = "split", hero = false, top = false, class: className, ...rest } = Astro.props;
+const Heading = `h${level}` as "h1" | "h2" | "h3";
+const hasCopy = Astro.slots.has("copy");
+const hasFoot = Astro.slots.has("foot");
+---
+<section class:list={["desk", `desk--${layout}`, { "desk--top": top }, className]} aria-labelledby={id} {...rest}>
+  <div class="desk-copy">
+    <p class="desk-eyebrow">{eyebrow}</p>
+    <Heading id={id} class:list={["desk-title", { "desk-title--hero": hero }]}>{title}{accent && <> <span>{accent}</span></>}</Heading>
+    {lede && <p class="desk-lede">{lede}</p>}
+    {hasCopy && <slot name="copy" />}
+  </div>
+  <slot />
+  {hasFoot && <div class="desk-foot"><slot name="foot" /></div>}
+</section>

@@ -73,7 +73,7 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
         </tr></thead>
         <tbody>
           {rows.map(({town: t, position}) => { const pp = parishPart(t); const ch = parishChange(t); const printed = printedName(t); return (
-            <tr id={t.code} data-v={t.fullBandDPence ?? undefined} data-pp={pp ?? undefined} data-ch={ch ?? undefined} data-c={t.councilGss} data-k={t.constituencies.map(c => c.code).join(' ') || undefined} data-l={t.largerPlace ? '1' : undefined} class:list={[{'t-none': position === null}]}>
+            <tr id={t.code} data-v={t.fullBandDPence ?? undefined} data-pp={pp ?? undefined} data-ch={ch ?? undefined} data-c={t.councilGss} data-k={t.constituencies.map(c => c.code).join(' ') || undefined} data-l={t.largerPlace ? '1' : undefined} data-unresolved={t.status === 'group-member-unresolved' ? '' : undefined} class:list={[{'t-none': position === null}]}>
               <td data-figure>{position ?? 'Not placed'}</td>
               <th scope="row">{placeName(t)}<small>{t.kind === 'unparished' ? (t.taxBaseBasis === 'calculated' ? 'Unparished area' : 'Unparished area, tax base not published separately') : t.type}{t.groupCarrier && `, group carried by ${carrierName(t.groupCarrier)}`}{t.groupLabel && `, group: ${t.groupLabel}`}{printed && <>, printed as <q>{printed}</q></>}{t.mhclgNotes.map(n => <>, <a href={`#mhclg-${letter(n)}`}>MHCLG note {letter(n)}</a></>)}</small></th>
               <td><a href={councilHref(t.councilGss)}>{tidy(t.councilName)}</a></td>

@@ -336,7 +336,7 @@ Tom's instruction on 16 November 2026, after reading this section: "Make best qu
 | Short record line with one full Sources block per page | Yes. Built in F1; every figure keeps a named source beside it and the full reference one link away |
 | Set page amounts in £ million to one decimal, exact pounds one click away | Yes, in W3 |
 | Towns headline pair led by the larger places | Yes, as a follow up PR after PR 95 merges; the full order stays in the tables |
-| D2 paper tint | Decided in F1 from captures of both, against contrast and the charts drawn on top |
+| D2 paper tint | Option (a), tinted paper `#f8f7f2` with white cards, decided in F1 (11.10). It lands through the kit token route in K1 and W8, never by hand |
 | Towns page weight | Cell classes removed in the PR 95 fix pass (South West 1.38 MB to 1.08 MB). The 500 KB ceiling needs the region pages split or paged, a design choice for the towns follow up |
 
 Still Tom's, in words, because each publishes: the merge of PR 96, the merge of PR 95, and the fast track (recommended in the narrow scope of 11.6).
@@ -344,3 +344,21 @@ Still Tom's, in words, because each publishes: the merge of PR 96, the merge of 
 ### 11.9 Fix passes done, 16 November 2026
 
 PR 96: all four items in 11.2, pushed as `3516be5`. PR 95: items 1 to 4 and 6, and the cell classes from item 5. One thing 11.2 did not foresee: the strip's table twin says "Published" in the kit's own words for any value it is given; the kit is vendored and hash checked, so the page now explains the word beside the chart, and the wording goes to the kit as a change request.
+
+### 11.10 F1 foundation, 16 November 2026
+
+Built in one pull request on `feat/f1-foundation`, by Claude Code (Opus). What later page PRs now reuse instead of building:
+
+| Part | Where | Adopted in F1 |
+|---|---|---|
+| Desk band | `DeskBand.astro` and the `.desk` classes in `global.css`, on the existing `--ground` and `--accent` tokens | Homepage, `/tools/`, `/tools/budget/` (the budget band), every game page hero, every towns page hero. The game hero moves from near black onto the shared accent ground |
+| Short record line and one Sources block | `RecordLine.astro`, `PageSources.astro`, `SourceRef.short` | Every towns page: the full source paragraph printed three or four times is now one short line per figure and one Sources block |
+| Money formatter | `src/lib/money.ts`: the caller names the unit (pence, pounds, £ thousand), the formatter never prints finer; a compact style (`£366.0m`) for W3 | Every currency format on the site; built pages byte identical to main apart from script hashes |
+| Chart title rule | `figure.ek-figure` capped at 30rem, so the in-SVG title draws at 24px under the 28px section H2; `e2e/foundation.spec.ts` measures it | Every kit chart |
+| Two column chart grid | `.chart-pair`, from 48rem | The towns spread, the chart beside its explanation |
+| Gates | `scripts/lib/foundation.mjs` in `check-dist`: record lines resolve to a Sources entry, one desk band a page, no amount in an unresolved group row, 500 KB of HTML, one full citation at most three times | Ratchets for pages over a ceiling when F1 landed, each naming the PR that removes it |
+
+D2: captures of the homepage, the Pendle council page, the Lancashire towns page and the Pendle game on white and on `#f8f7f2` at 1440 px. White cards, tables and the bill card lift off the paper; the desk band reads the same on both. Contrast on the paper: `--text-faint` 5.2 to 1, `--text` 16 to 1, the neutral series 4.5 to 1. Decision (a), on Tom's instruction "Make best quality decisions" (11.8), reversible by Tom; it lands in K1 and W8 through `apply-brand.py`.
+
+Not in F1, by design: page by page changes in 11.4 (each page PR does its own, on these parts), the Sources block on pages other than towns (each page PR moves its citations as it is restyled; the ratchet in `foundation.mjs` falls with it), and the towns follow up (headline pair, region pages under 500 KB).
+

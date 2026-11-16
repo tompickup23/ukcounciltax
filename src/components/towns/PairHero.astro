@@ -5,6 +5,7 @@
  * same text node. One fact holds both figures and the gap, with every source line
  * under them, so check-dist pairs each figure with its source.
  */
+import DeskBand from '../DeskBand.astro';
 import TownsSources from './TownsSources.astro';
 import type {RankedTown} from '../../lib/towns';
 import {money, placeName, POSITION_METHOD, townAnchor, countyPathOf, type TownScope} from '../../lib/towns-pages';
@@ -29,18 +30,13 @@ const cards = lowest && highest && lowest !== highest ? [
 ] : lowest ? [{kicker: 'Full Band D', row: lowest, joint: lowestJoint, side: 'only'}] : [];
 const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTown => Boolean(r)).map(r => r.town);
 ---
-<section class="pair-band" aria-labelledby="pair-heading" data-pair-band>
-  <div class="pair-copy">
-    <p class="pair-eyebrow">{eyebrow}</p>
-    <h1 id="pair-heading" class="pair-title">{h1Lead} <span>{h1Place}</span></h1>
-    <p class="pair-lede">{lede}</p>
-  </div>
+<DeskBand id="pair-heading" level={1} top class="pair-band" data-pair-band eyebrow={eyebrow} title={h1Lead} accent={h1Place} lede={lede}>
   {cards.length > 0 ? (
     <div class="fact pair-fact" data-fact>
       <div class="pair-cards">
         {cards.map(card => (
-          <div class="pair-card" data-pair={card.side}>
-            <span class="pair-kicker">{card.kicker}</span>
+          <div class="pair-card desk-card" data-pair={card.side}>
+            <span class="desk-kicker">{card.kicker}</span>
             <a class="pair-place" href={href(card.row)}>{placeName(card.row.town)}</a>
             <span class="pair-meta">{meta(card.row)}</span>
             <span class="pair-figure" data-figure>{money(card.row.town.fullBandDPence)}</span>
@@ -57,27 +53,13 @@ const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTo
   ) : (
     <p class="pair-none">No area here has a full Band D from published tables yet. Each is listed below with its status.</p>
   )}
-</section>
+</DeskBand>
 
 <style>
-.pair-band{
-  --pair-ground:color-mix(in srgb,var(--accent) 26%,var(--ground));
-  display:grid;gap:var(--space-lg);
-  margin-block:0 var(--space-xl);padding:clamp(1.5rem,1rem + 3vw,3rem);
-  border-radius:18px;background:var(--pair-ground);color:var(--ground-ink);
-  border:1px solid color-mix(in srgb,var(--accent-bright) 30%,transparent);
-}
-@media(min-width:1000px){.pair-band{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;gap:var(--space-2xl)}}
-.pair-eyebrow{display:flex;align-items:center;gap:.6rem;margin:0 0 var(--space-sm);font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
-.pair-eyebrow::before{content:"";width:28px;height:2px;background:currentColor;flex:none}
-.pair-band .pair-title{margin:0;color:var(--ground-ink);font-size:clamp(2rem,1.4rem + 2.6vw,3.4rem);line-height:1.04;letter-spacing:-.02em;text-wrap:balance;overflow-wrap:anywhere}
-.pair-title span{color:var(--accent-bright)}
-.pair-lede{margin:var(--space-md) 0 0;max-width:34rem;font-size:var(--text-md);color:color-mix(in srgb,var(--ground-ink) 88%,transparent)}
+/* The band is the shared desk (DeskBand and the .desk classes in global.css). */
 .pair-fact{margin:0}
 .pair-cards{display:grid;gap:var(--space-md)}
 @media(min-width:600px){.pair-cards{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}}
-.pair-card{display:flex;flex-direction:column;gap:var(--space-2xs);min-width:0;padding:var(--space-lg);border-radius:14px;background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
-.pair-kicker{font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-bright)}
 .pair-band .pair-place{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);line-height:1.15;color:var(--ground-ink);overflow-wrap:anywhere;text-decoration-color:color-mix(in srgb,var(--ground-ink) 45%,transparent)}
 .pair-band .pair-place:hover{color:var(--accent-bright)}
 .pair-meta{font-size:var(--text-sm);color:color-mix(in srgb,var(--ground-ink) 78%,transparent)}
@@ -92,6 +74,4 @@ const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTo
 .pair-band .pair-sources :global(.source-line a){color:color-mix(in srgb,var(--ground-ink) 85%,transparent);text-decoration:underline}
 .pair-none{margin:0;color:var(--ground-ink)}
 @media(prefers-reduced-motion:no-preference){.pair-card{transition:transform .15s ease,border-color .15s ease}.pair-card:hover{transform:translateY(-2px);border-color:var(--accent-bright)}}
-@media print{.pair-band{background:none;color:inherit;border:1px solid}.pair-band *{color:inherit!important}}
-@media(forced-colors:active){.pair-band,.pair-card{border:1px solid CanvasText}}
 </style>

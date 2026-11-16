@@ -42,7 +42,7 @@ export function stepService(publishedPence: string, selectedPounds: string, dire
 export function boardMoney(units: bigint): string {
   if (units === 0n) return '£0';
   const absolute = units < 0n ? -units : units;
-  if (absolute < 100n) return 'less than £0.01';
+  if (absolute < 100n) return `${units < 0n ? 'minus ' : ''}less than £0.01`;
   const pounds = Number(units) / 10000;
   return formatMoney(pounds, {style: absolute < 10000n ? 'exact' : 'compact'});
 }
@@ -72,7 +72,8 @@ export function gapScale(pilot: FreezePilot): bigint {
 export function gapShare(remaining: bigint, scale: bigint): number {
   if (remaining === 0n || scale <= 0n) return 0;
   const absolute = remaining < 0n ? -remaining : remaining;
-  return absolute >= scale ? 100 : Number(absolute * 1000n / scale) / 10;
+  // A gap too small to draw still shows a sliver, so a non zero gap never sits on the target line.
+  return absolute >= scale ? 100 : Math.max(1, Number(absolute * 1000n / scale) / 10);
 }
 /** The copied and printed scenario: the exact summary with its label, model version, assumptions and sources. */
 export function scenarioText(pilot: FreezePilot, inputs: FreezeInputs, sources: string[]): string {
@@ -161,7 +162,7 @@ if (root) {
       setText('[data-financing-exact]', money(calculated.financingChange));
       ruleResult.textContent = calculated.referendum
         ? `A referendum would be required for this charge under the ${FREEZE_YEAR_TEXT} rule.`
-        : `This charge is below the rise that would need a referendum in ${FREEZE_YEAR_TEXT}. This does not establish legal feasibility.`;
+        : `This charge is below the level that would need a referendum in ${FREEZE_YEAR_TEXT}. This does not establish legal feasibility.`;
       for (const change of calculated.changes) {
         const row = root!.querySelector<HTMLElement>(`[data-service-delta="${change.id}"]`);
         if (row) row.textContent = changeText(change.deltaUnits);

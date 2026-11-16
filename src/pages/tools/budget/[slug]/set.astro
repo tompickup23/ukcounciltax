@@ -13,7 +13,7 @@ import { referendumTriggerPence, boardMoney, stateWord, stateSentence, gapScale,
 import { formatMoney } from '../../../../lib/money';
 import { gameNeighbours } from '../../../../lib/game-neighbours';
 import { CURRENT_YEAR } from '../../../../lib/council-tax';
-import type { SourceRef } from '../../../../lib/sources';
+import { longDate, type SourceRef } from '../../../../lib/sources';
 import rules from '../../../../../data/pilots/budget-freeze-referendum.json';
 import snapshot from '../../../../../data/pilots/budget-freeze.json';
 import {pinnedBudgetLine} from '../../../../lib/budget-pin';
@@ -52,10 +52,11 @@ const currentRef = mhclg(taxSource);
 const priorRef = mhclg(pilot.sources[2]);
 const table10Ref = mhclg(pilot.sources[3]);
 const rulesRef: SourceRef = {publisher:rules.source.publisher, title:rules.source.title, url:principle.citation.url, date:rules.source.published, table:pilot.ruleLocation, short:`Referendum principles, ${FREEZE_YEAR_TEXT}`};
+const checked = `Sources checked on ${longDate(snapshot.reviewedOn)}.`;
 const entries: SourceEntry[] = [
-  {key:'set-band-d', label:'Own Band D charges and the fixed tax base', method:'Own-council Band D excluding parish precepts, checked against Table 10; the tax base is in Band D equivalents, not households', sources:[priorRef, currentRef, table10Ref]},
-  {key:'set-services', label:'Net service spending and the published ledger', method:'Published in £ thousand. Cards show £ million to one decimal; each card gives the exact published pounds and its cell', sources:[raRef]},
-  {key:'set-referendum', label:'The rise that would need a referendum', method:'The smallest whole penny charge that meets the rule from the previous own charge', sources:[rulesRef]},
+  {key:'set-band-d', label:'Own Band D charges and the fixed tax base', method:'Own-council Band D excluding parish precepts, checked against Table 10; the tax base is in Band D equivalents, not households', sources:[priorRef, currentRef, table10Ref], note:checked},
+  {key:'set-services', label:'Net service spending and the published ledger', method:'Published in £ thousand. Cards show £ million to one decimal; each card gives the exact published pounds and its cell', sources:[raRef], note:checked},
+  {key:'set-referendum', label:'The rise that would need a referendum', method:'The smallest whole penny charge that meets the rule from the previous own charge', sources:[rulesRef], note:checked},
 ];
 // The copied scenario names each source in full.
 const copiedSources = [...pilot.sources.map(s => `MHCLG, ${s.title}, ${s.url}`), `${rules.source.publisher}, ${rules.source.title}, ${rules.source.url}`];
@@ -154,7 +155,7 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
         <div class="baseline-grid">
           <div><p class="fact-label">Own Band D, {`${Number(FREEZE_YEAR.slice(0,4))-1}/${FREEZE_YEAR.slice(2,4)}`}</p><strong>{publishedMoney(pilot.priorOwnPence)}</strong><RecordLine entry="set-band-d" sources={[priorRef]} tail={`${cell('annualPrior')}; Table 10 ${cell('table10Prior')}`} /></div>
           <div><p class="fact-label">Own Band D, {FREEZE_YEAR_TEXT}</p><strong>{publishedMoney(pilot.ownPence)}</strong><RecordLine entry="set-band-d" sources={[currentRef]} tail={`${cell('annualCurrent')}; Table 10 ${cell('table10Current')}`} /></div>
-          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><RecordLine entry="set-band-d" method="Band D equivalents" sources={[table10Ref]} tail={cell('table10Base')} /></div>
+          <div><p class="fact-label">Fixed tax base, {FREEZE_YEAR_TEXT}</p><strong>{baseText}</strong><RecordLine entry="set-band-d" sources={[table10Ref]} tail={`${cell('table10Base')}, Band D equivalents`} /></div>
         </div>
         <p>These are this council's own charges excluding parish precepts, not the full household bill.{pilot.rule === 'district' && ' County council, police, fire and parish charges are outside this exercise.'}</p>
       </section>
@@ -322,7 +323,7 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
   /* Print: the scenario as text with its label, model version, assumptions and sources; no controls. */
   @media print{
     .mobile-result,.controls,.theme-icon,.copy-row,.board-exact,.gap,.set-top,.next-neighbours{display:none!important}
-    .print-scenario{display:block;break-before:page}.print-scenario pre{white-space:pre-wrap;font-size:9pt;overflow-wrap:anywhere}
+    .print-scenario{display:block;break-before:page}.print-scenario:has(pre:empty){display:none}.print-scenario pre{white-space:pre-wrap;font-size:9pt;overflow-wrap:anywhere}
     .assumptions::details-content,.ledger details::details-content,.preset-assumptions::details-content{display:block;content-visibility:visible}
     .budget-set{padding:0}.set-layout{display:block}.budget-set :global(.set-desk){position:static}.scenario-result{break-inside:avoid}
   }

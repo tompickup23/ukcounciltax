@@ -55,7 +55,7 @@ export function budgetSetJourneys() {
       const freeze = await page.locator('[data-remaining]').textContent();
       const own = page.locator('[data-own]');
       await own.fill(inputPounds(crossing-1n));
-      await expect(page.locator('[data-rule-result]')).toContainText('below the rise that would need a referendum');
+      await expect(page.locator('[data-rule-result]')).toContainText('below the level that would need a referendum');
       await own.focus(); await own.press('ArrowUp');
       await expect(own).toHaveValue(inputPounds(crossing));
       await expect(page.locator('[data-rule-result]')).toContainText('A referendum would be required');

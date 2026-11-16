@@ -21,6 +21,9 @@ it('builds a copied scenario with no en dash, em dash or spaced hyphen for every
       expect(text.startsWith(`User requested scenario | ${FREEZE_MODEL}`)).toBe(true);
       expect(text).toContain('tax base stays fixed');
       for (const s of pilot.sources) expect(text).toContain(s.url);
+      // Review finding 1: nothing derived from a £ thousand return prints to four decimal places;
+      // only the labelled calculation line carries sub-penny values.
+      for (const line of text.split('\n')) if (!line.startsWith('Exact calculation')) expect(line, `${pilot.slug}: ${line}`).not.toMatch(/\d\.\d{3,}/);
     }
   }
 });
@@ -35,7 +38,7 @@ it('prints board amounts in £ million to one decimal and never shows a non zero
   expect(boardMoney(pounds(0.4))).toBe('£0.40');
   expect(boardMoney(-pounds(0.4))).toBe('-£0.40');
   expect(boardMoney(1n)).toBe('less than £0.01');
-  expect(boardMoney(-99n)).toBe('less than £0.01');
+  expect(boardMoney(-99n)).toBe('minus less than £0.01');
   expect(changeText(0n)).toBe('No change');
   expect(changeText(pounds(1_830_040))).toBe('+£1.8m change');
   expect(changeText(-pounds(2_280))).toBe('-£2,280 change');
@@ -47,6 +50,7 @@ it('scales the gap bar from amounts the page offers and caps it at the full half
   expect(gapShare(50n, 100n)).toBe(50);
   expect(gapShare(-25n, 100n)).toBe(25);
   expect(gapShare(500n, 100n)).toBe(100);
+  expect(gapShare(1n, 1_000_000n)).toBe(1);
 });
 
 const built = existsSync('dist/tools/budget/leeds/set/index.html');

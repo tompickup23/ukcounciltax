@@ -18,7 +18,7 @@ Written in Claude Code for Tom to paste into Codex in the ChatGPT app. The decis
 ## A. Seats by party (Codex)
 
 ```text
-Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-seats on branch data/dossier-seats from origin/main. Node 22.23.4 first on PATH. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. The registry reorganisation field stays held and unread. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
+Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-seats on branch data/dossier-seats from origin/main. Node 22.23.4 first on PATH. data/raw/ is not tracked: copy all of it from ~/ukcouncils/data/raw/ into the new worktree before running tests or a build. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. The registry reorganisation field stays held and unread. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
 
 Why: the dossier is due on all 296 English billing profiles by mid January 2027 and gates the May to June 2027 reversal. docs/DOSSIER-GATE.md measures "Seats by party and control" as built on 0 of 296 profiles because the source decision was held. On 16 November 2026 Tom decided option A: a dated snapshot of Open Council Data's English council compositions under CC BY-SA 4.0, credited, with share alike applied to the composition table only (tompickup23/ukcounciltax docs/DECISIONS-2026-11-16.md, section 2).
 
@@ -46,7 +46,7 @@ Verification: npm test, npm run check, npm run build, npm run test:dist, the bro
 ## B. Section 114 original notices (Codex)
 
 ```text
-Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-s114 on branch data/dossier-section-114 from origin/main (after the seats PR has merged). Node 22.23.4 first on PATH. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
+Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-s114 on branch data/dossier-section-114 from origin/main (after the seats PR has merged). Node 22.23.4 first on PATH. data/raw/ is not tracked: copy all of it from ~/ukcouncils/data/raw/ into the new worktree before running tests or a build. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
 
 Why: docs/DOSSIER-GATE.md measures "Section 114 original notices" as built on 0 of 296 profiles. On 16 November 2026 Tom decided: a register of original notices only, labelled as not exhaustive (tompickup23/ukcounciltax docs/DECISIONS-2026-11-16.md, section 2).
 
@@ -72,7 +72,7 @@ Verification: npm test, npm run check, npm run build, npm run test:dist. Number 
 ## C. External audit status (Codex)
 
 ```text
-Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-audit on branch data/dossier-audit-status from origin/main (after the section 114 PR has merged). Node 22.23.4 first on PATH. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
+Repository tompickup23/ukcouncils. One draft PR. New worktree ~/wt/ukc-audit on branch data/dossier-audit-status from origin/main (after the section 114 PR has merged). Node 22.23.4 first on PATH. data/raw/ is not tracked: copy all of it from ~/ukcouncils/data/raw/ into the new worktree before running tests or a build. British English; no em dash, en dash or spaced hyphen anywhere, including JSON and scripts. Stage named paths only. Never bypass the pre-commit hook. The repository is public. Do not edit data/registry/councils.json. When done: commit, push and open a draft PR. Do not merge, tag or deploy.
 
 Why: docs/DOSSIER-GATE.md measures "Audit status" as built on 0 of 296 profiles. On 16 November 2026 Tom decided the identity method: the exact name join measured in PR 60, plus a reviewed list for the remaining councils; PSAA data only if its terms allow reuse (tompickup23/ukcounciltax docs/DECISIONS-2026-11-16.md, section 2). PSAA's terms restrict modification without written consent, so this PR builds from the MHCLG publication only and does not commit or render any per body PSAA value.
 

@@ -1,3 +1,4 @@
+import {formatMoney} from '../../../lib/money';
 import {cachedImageRoute} from "../../../../scripts/lib/image-cache.mjs";
 import type { APIRoute } from 'astro';
 import { buildOg, renderOgCard } from '../../../lib/og';
@@ -14,7 +15,7 @@ export function getStaticPaths() {
 export const GET: APIRoute = cachedImageRoute(async ({props}) => {
   const {edition, row} = props as {edition: Edition; row: DevolvedRow};
   const scotland = edition.nation === 'Scotland';
-  const value = scotland ? moneyPence(row.bandsPence.D) : new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP', maximumFractionDigits: 0}).format(row.bandsPence.D/100);
+  const value = scotland ? moneyPence(row.bandsPence.D) : formatMoney(row.bandsPence.D, {unit: 'pence', style: 'whole'});
   const png = await renderOgCard({
     eyebrow: `${edition.nation} council tax ${yearLabel(edition.year)}`,
     heading: row.name,

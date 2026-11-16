@@ -6,6 +6,9 @@ import {canonicalUrl} from '../src/lib/canonical';
 import manifest from '../data/pilots/budget-freeze-eligibility.json';
 import columns from '../data/pilots/budget-freeze-columns.json';
 import {sitemapLastmod} from '../src/lib/releases';
+// The existing DOM gate dependency ships without TypeScript declarations.
+// @ts-expect-error jsdom has no declarations in this repository.
+import {JSDOM} from 'jsdom';
 it('routes exactly the 197 eligible GSS codes from the audited fixture', () => {
   const pages = budgetSetPages();
   expect(pages).toHaveLength(197);
@@ -18,24 +21,43 @@ it('routes exactly the 197 eligible GSS codes from the audited fixture', () => {
   }
 });
 it.each(manifest.councils.filter(c => !c.eligible))('$name budget entry shows its exact stored exclusion reason', council => {
-  expect(budgetSetEntry(council.gss)).toEqual({href:null,text:council.reason});
+  expect(budgetSetEntry(council.gss)).toEqual({href:council.slug === 'burnley' ? '/councils/burnley/budget-game/' : null,text:council.reason});
   expect(council.reason).not.toBe('');
 });
 it.skipIf(!existsSync('dist/tools/budget/burnley/index.html')).each(manifest.councils.filter(c => !c.eligible))('$name built budget page shows its stored exclusion reason', council => {
   const html = readFileSync(`dist/tools/budget/${council.slug}/index.html`, 'utf8');
   const text = /<p[^>]*data-budget-set-entry[^>]*>([\s\S]*?)<\/p>/.exec(html)?.[1];
   expect(text).toBe(council.reason.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'));
+  const doc = JSDOM.fragment(html);
+  expect(doc.querySelector(`a[href="/tools/budget/${council.slug}/set/"]`)).toBeNull();
 });
-it('renders the entry for both return states and keeps the Burnley link before it', () => {
+it('renders one entry for both return states, with the game entry inside its Set door', () => {
   const page = readFileSync('src/pages/tools/budget/[slug].astro','utf8');
   expect(page).toContain('{!available && <BudgetSetEntry gss={council.gss} />}');
-  expect(page).toMatch(/data-scenario-game-link[\s\S]*?<BudgetSetEntry gss=\{council.gss\} \/>/);
-  expect(readFileSync('src/components/BudgetSetEntry.astro','utf8')).toContain(': entry.text}');
+  expect(page.match(/<BudgetSetEntry /g)).toHaveLength(1);
+  expect(readFileSync('src/components/BudgetDoors.astro','utf8')).toMatch(/data-budget-door="set"[\s\S]*data-budget-set-entry/);
 });
-it('links eligible entries to their exact set pages and rejects unknown councils', () => {
+it('links eligible entries to their exact set pages and rejects unknown England councils', () => {
   for (const c of manifest.councils.filter(c => c.eligible)) expect(budgetSetEntry(c.gss)).toEqual({href:budgetSetPath(c.slug),text:'Set the budget yourself'});
-  expect(() => budgetSetEntry('unknown')).toThrow('Missing C2 eligibility');
+  expect(() => budgetSetEntry('E00000000')).toThrow('Missing C2 eligibility');
 });
+it.each(['S12000033', 'W06000015', 'N09000003', 'unknown'])('does not offer an England entry for %s', gss => {
+  expect(budgetSetEntry(gss)).toBeNull();
+  for (const component of ['BudgetDoors', 'BudgetSetEntry', 'BudgetModes']) {
+    expect(readFileSync(`src/components/${component}.astro`, 'utf8')).toContain('{entry &&');
+  }
+});
+it.skipIf(!existsSync('dist/tools/budget/leeds/index.html'))('renders every eligible Set door and score invitation without new numeric copy', () => {
+  for (const council of manifest.councils.filter(c => c.eligible)) {
+    const doc: DocumentFragment = JSDOM.fragment(readFileSync(`dist/tools/budget/${council.slug}/index.html`, 'utf8'));
+    const door = doc.querySelector('[data-budget-door="set"]')!;
+    expect(door.getAttribute('href')).toBe(budgetSetPath(council.slug));
+    expect(door.querySelector('[data-budget-set-entry]')?.textContent).toBe('Set the budget yourself');
+    expect(doc.querySelector('[data-budget-doors]')?.textContent).not.toMatch(/\d/);
+    const next = doc.querySelector<HTMLTemplateElement>('template[data-game-set-next]')!;
+    expect(next.content.querySelector('a')?.textContent).toBe('Now set it yourself');
+  }
+}, 60_000);
 
 it('renders a set invitation card with no invented budget figure', async () => {
   const {budgetSetCard} = await import('../src/lib/budget-set-card');

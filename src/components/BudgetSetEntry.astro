@@ -3,4 +3,4 @@ import {budgetSetEntry} from '../lib/budget-set-entry';
 interface Props {gss: string}
 const entry = budgetSetEntry(Astro.props.gss);
 ---
-<p data-budget-set-entry>{entry.href ? <a href={entry.href}>{entry.text}</a> : entry.text}</p>
+{entry && <p data-budget-set-entry>{entry.href ? <a href={entry.href}>{entry.text}</a> : entry.text}</p>}

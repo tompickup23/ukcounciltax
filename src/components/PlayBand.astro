@@ -14,13 +14,13 @@ import { budgetFor, budgetYear } from "../lib/budget";
 interface Props {
   /** The heading level, so the band sits under the page's own outline. */
   level?: 2 | 3;
+  guessHref?: string;
 }
 
-const { level = 2 } = Astro.props;
+const { level = 2, guessHref = '/tools/budget/' } = Astro.props;
 const pages = councilPages();
 const games = pages.filter(({ council }) => budgetFor(council.gss).council.status === "available").length;
 const sets = manifest.councils.filter((row) => row.eligible).length;
-const guessHref = "/tools/budget/";
 const setHref = "/tools/budget/#set-the-budget";
 const Heading = level === 2 ? "h2" : "h3";
 ---

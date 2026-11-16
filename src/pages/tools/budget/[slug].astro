@@ -43,7 +43,6 @@ const description = available
     <BudgetGame gss={council.gss} slug={council.slug} name={tax.name} />
     {localBills.some(b=>b.gss===council.gss) && <p data-find-your-bill>To see your own bill, by band and parish, and what each part pays for, <a href="/precepts/#find-your-bill">find your own bill</a>.</p>}
     {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
-    <BudgetSetEntry gss={council.gss} />
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}]} />
     <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
     {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}

@@ -72,6 +72,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const maximum=scores.filter(score=>score!==null).length*100;
     const card=element('div','','game-score-card');card.dataset.gameScoreCard='';
     card.append(element('p',`Your score, ${root.dataset.councilName} budget game`),element('p',`${total} out of ${maximum}`,'game-score'));
+    const next = root.querySelector<HTMLTemplateElement>('[data-game-set-next]');
+    if (next) card.append(next.content.cloneNode(true));
     stage.append(card);
     const list = element('ul','','game-summary-rows');
     data.rounds.forEach((round, i) => {
@@ -312,6 +314,11 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     }
   }
   root.querySelector('[data-game-start]')!.addEventListener('click', start);
+  // W1: the Guess door starts the game itself once the script is running; without it, the link still jumps to the game.
+  root.querySelector('[data-budget-door="guess"]')?.addEventListener('click', event => {
+    if (controls.hidden) return;
+    event.preventDefault(); start();
+  });
   const restore = () => {
     const restored = readScores(location.hash, data.rounds.length);
     if (restored) {scores = restored; summary(true);}

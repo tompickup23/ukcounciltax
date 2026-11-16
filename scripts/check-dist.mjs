@@ -28,6 +28,7 @@ import { unsourcedFigures } from "./lib/figures.mjs";
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
 import {budgetGameProblems,gameHeaderProblem,publishedText} from './lib/budget-game.mjs';
+import {JSDOM} from 'jsdom';
 const gameCounts={available:0,absent:0};
 // C6: the years the built pages must carry come from the data present, as the build's do.
 const YEAR_STATE = edition();
@@ -274,8 +275,13 @@ const c2 = JSON.parse(readFileSync('data/pilots/budget-freeze-eligibility.json',
 for (const council of c2.councils) {
   const budgetHtml = readFileSync(join(DIST, 'tools/budget', council.slug, 'index.html'), 'utf8');
   const entry = /<p[^>]*data-budget-set-entry[^>]*>([\s\S]*?)<\/p>/.exec(budgetHtml)?.[1];
+  const budgetDoc = JSDOM.fragment(budgetHtml);
+  const entries = budgetDoc.querySelectorAll('[data-budget-set-entry]');
+  if (entries.length !== 1) failures.push(`C2 entry count: ${council.slug}`);
   if (council.eligible) {
-    if (!entry?.includes(`/tools/budget/${council.slug}/set/`)) failures.push(`missing C2 entry: ${council.slug}`);
+    // W1 moves the exact entry text inside a full-card link, with no nested anchor.
+    const door = entries[0]?.closest('a[data-budget-door="set"]');
+    if (entries[0]?.textContent !== 'Set the budget yourself' || door?.getAttribute('href') !== `/tools/budget/${council.slug}/set/`) failures.push(`missing C2 entry: ${council.slug}`);
     const setHtml = readFileSync(join(DIST, 'tools/budget', council.slug, 'set/index.html'), 'utf8');
     if (!setHtml.includes('data-pagefind-body') || /<meta name="robots" content="noindex/.test(setHtml)) failures.push(`C2 indexing: ${council.slug}`);
     const card = `/og/budget-set/${council.slug}.png`;
@@ -284,6 +290,7 @@ for (const council of c2.councils) {
     // Astro escapes text as html-escaper does, quotes included.
     const escaped = council.reason.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
     if (entry !== escaped) failures.push(`C2 exclusion wording: ${council.slug}`);
+    if (budgetDoc.querySelector(`a[href="/tools/budget/${council.slug}/set/"]`)) failures.push(`excluded C2 link: ${council.slug}`);
     if (existsSync(join(DIST, 'tools/budget', council.slug, 'set/index.html'))) failures.push(`excluded C2 route: ${council.slug}`);
   }
 }

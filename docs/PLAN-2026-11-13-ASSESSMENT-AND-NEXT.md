@@ -235,3 +235,112 @@ Written in Claude Code after PR 84 went live and every ready PR on the three rep
 | Claude Code | C6b, referendum principles 2027/28 for the set pages and the release records | When the principles report lands; the week before release |
 | Codex | Burnley scenario game refresh | First week of March 2027 |
 | Claude Code with Tom | Levels day release (D5 runbook) | Release morning, late March 2027 |
+
+## 11. Assessment and reworked plan, 16 November 2026
+
+Written in Claude Code at main `810be18`, after the Codex W2 session and the Claude towns session finished. Method: both open pull requests read by a separate reviewer each, the built pages captured at 1440 and 390 px from the towns branch build (which contains main), and the W2 captures read from its branch. Where this differs from section 10 or from `docs/DESIGN-AUDIT-2026-11-15.md`, this section is the later record.
+
+### 11.1 What finished, and its state
+
+| Item | Built by | Checks | Verdict |
+|---|---|---|---|
+| PR 96, W2 set page workbench | Codex | Green | Sound. Trigger arithmetic traced for all 197 councils, no hard coded limit, script 5 KB to 10 KB. Small fix pass (11.2), then ready for Tom's yes. |
+| PR 95, towns pages, 642 routes | Claude | Green | Not ready. Three breaches of the data rules that every gate passed (11.2). Fix pass first. |
+| PR 94, docs | Claude | Green | Ready once this section is in it. PR 95 also edits `docs/STATE.md`; PR 95 should drop that edit. |
+| UK Councils PR 62, dossier gate | Codex | Green, conflicts with main | Idle since 15 November. It defines the January gate, so it is the most urgent item on that site. |
+| Estate Kit PRs 27 and 28 | | | Wait on X3. |
+
+Levels day staging (C6, PR 88) is merged eight weeks before its date. No date in 10.1 is at risk.
+
+### 11.2 Fix passes before merge
+
+PR 96 (about 30 minutes):
+
+1. The percentage chips sit in a `div` with an `aria-label` and no role, so a screen reader hears "minus 5%" with no service name. Add `role="group"`.
+2. The forced colours test asserts a border that exists without forced colours, so it would pass with the rules deleted. Assert something only the forced colours block sets.
+3. Open every disclosure before the axe run; the closed sections are no longer audited.
+4. Pin the assumption the slider relies on: every editable published service is a multiple of £2, so each 0.5% step is exact. One unit test over the 197 councils. Today it holds; nothing says so.
+
+PR 95 (two to three hours):
+
+1. **Unknown shown as zero.** All 170 rows whose group figure is unresolved print "Parish part £0.00, Change £0.00" beside "Not published" (Yetminster, row E1203P265 on the South West page). All 161 calculated group members print "Change £0.00", the member's own nil, not the group's change. Print "Not published" or leave blank, and keep them out of the parish part and change sorts.
+2. **Calculated called published.** The unparished tax base is the council base less its parishes. The hub, the strip and its table twin call it "published" (Birmingham on the England strip; 44 of 63 strip markers). Say "calculated" and give the calculation.
+3. **Ties ignored in the sentence and the list data.** Lancashire has eight areas at joint lowest; the sentence names five of them as "the five lowest", in alphabetical order. 25 counties, 43 constituencies and 4 regions are affected. Where the cut falls inside a tie, say "N areas share the lowest figure" and name the council.
+4. Tests: assert no `£0.00` in a row without a figure; cover loading from `?q=` and the tie order.
+5. Weight: the South West page is 1.38 MB of HTML, 672 bytes a row. Dropping per cell classes and the duplicated `data-` values cuts about 430 KB.
+6. Small: the Sort by select goes blank after a header click.
+
+The lesson for the fast track question (11.6): the Claude built PR carried the more serious faults, and its own checks and self review passed them. Self review is not the control. A separate reviewer is.
+
+### 11.3 What the restyle is getting wrong as a programme
+
+Each workstream so far has restyled its own page well and the site as a whole less well. Six faults repeat across pages:
+
+1. **Four versions of the dark band.** Homepage and budget hub: dark green, rounded, translucent cards. Game page: near black, square, white cards. Towns: dark green with its own pair component. Set page: none at all, although it is the page the audit most wanted on a desk. Each session built its own.
+2. **The citation is the loudest thing on the page.** The Pendle council page prints the full MHCLG document title 31 times across 36 source lines. The towns pages print the same 60 word source paragraph three times in the first two screens, once inside the hero. Each set page card repeats the return name. The rule is "a nearby source"; it is being met by repeating the whole reference.
+3. **False precision.** The set page shows `£366,008,000.00` from a return published in £ thousand, and a headline of `£22,600,898.51`.
+4. **Chart titles still outrank the section heading** (Pendle "Bands A to H", the towns strip), and charts stop at 40rem with half the column empty. The W0 rule did not reach these.
+5. **The answer is below the first screen** on the council page (10,710 px tall, Band D first appears under a contents block), and on phones the towns hero fills two screens before a figure in a table.
+6. **Tables and charts say the same thing twice side by side** (Pendle bands table beside the bands bar chart; the towns "five lowest" sentence above the lowest ten list).
+
+### 11.4 Page by page
+
+| Page | What is weak now | Change |
+|---|---|---|
+| Homepage | Bill card carries eight lines of small print and two source lines; map card thumb is a grey shape; the England average sits in a large empty box | Bill card to bar, legend and one record line; map thumb drawn from the real map outline; average, change and the line chart in one two column row |
+| `/tools/budget/` | Band sits below the table; "Set the budget" wraps to two lines in a narrow column; "Try a council" uses share cards that read as black rectangles | Band first with the picker inside it; one row action ("Guess" and "Set" as two small pills); featured councils drawn as the round rail, not the share image |
+| Game page | Near black band unlike the rest; "Start the game" repeats the Guess door; mode links repeat the doors again; per resident cards are walls of small text | Shared band; one start control; per resident as a four cell ledger row with the calculation behind a disclosure |
+| Set page (after PR 96) | White page, eight identical grey cards, pennies on hundreds of millions, "mapped referendum trigger" wording, nothing changes colour when it balances | Result board on the shared band and sticky on desktop; amounts as `£366.0m` with exact pounds in the disclosure; the tax control drawn larger than the service cards because it is the lever; two dense columns so tax and all services fit one desktop screen; plain words for the trigger ("the rise that would need a referendum"). The gap bar and stamp stay in W3 |
+| Council page | No answer above the fold; bands table and bands chart duplicate; 36 source lines; three button styles in the action row | Ledger row under the H1 (Band D, change, own share, position); bands as one chart with the table behind "The figures as a table"; one button group; short record lines |
+| Compare | Empty form, "No council selected." twice | As audit W7: example pairs in the empty state, bars in the result |
+| Towns hub | 7,891 px desktop, 15,086 px phone; lowest ten is London boroughs and the Temples, which says little; source paragraph inside the hero | Lead with the larger places lists (T3 already defines them); source out of the hero to one record line; constituency list behind a search box or a disclosure; phone hero to one screen |
+| Towns county and constituency | Hero pair can be "joint lowest with 7 others"; strip half width with an oversized title | Tie aware hero ("8 areas in Ribble Valley share the lowest figure"); strip beside the ledgers in two columns |
+| Increases, precepts, ranked, Wales, 2027/28, your area | Old look | Tier 2 as the audit says, built on the shared parts below |
+
+### 11.5 Efficiency and quality changes
+
+1. **Foundation first, one PR (F1), before W3.** Build once what every page PR keeps rebuilding: a `DeskBand` component and `.band` classes on the existing `--ground` token; a short record line (publisher, short title, table) that links to one full "Sources" block per page, with `check-dist` and the design check taught to accept the pair; one money formatter with a rule for the source's published unit; the chart title rule fixed for the kit figures it missed; the two column chart grid. About a day. Every later page PR gets smaller, the towns and game bands are swapped onto it in the same PR, and W8 shrinks to a token swap when the kit lands.
+2. **Drop the mockup round (P1) as a gate for the bands.** The live desk band is the mockup. Paper against white (D2) can be decided from one preview capture in F1. Mockups stay only for the two marks (M1).
+3. **Two lanes by repository.** One UK Council Tax page session at a time (plus at most one data session), and one UK Councils session beside it. Sessions on the same repository cost more in collisions, test timeouts and port clashes than they saved on 15 November.
+4. **Three new gates, so review stops finding the same class of fault.** In `check-dist`: no amount at all in a row whose status is an unresolved group (a non precepting parish keeps its published nil, which is a real figure, so the gate cannot be "no `£0.00` without a full Band D"); a page weight ceiling of 500 KB of HTML; a count ceiling on identical source strings per page once the short record line exists.
+5. **A contact sheet in every page PR.** The design check already makes one. Posting it in the PR turns Tom's taste check into two minutes and is what the fast track needs.
+6. **UK Councils first job: rebase PR 62.** Then U2 (homepage with the tools band) on its existing tokens.
+
+### 11.6 The fast track, recommended scope
+
+Grant it narrowly: an Opus session may merge and publish its own PR when all checks pass **and** a separate reviewer session has read the diff against the data rules **and** the PR changes only page layout (number diff empty outside its allowed pages, no data, no new route family, no header, footer or tokens). That covers F1 follow ups, W3, W4, W9 and the Tier 2 pages. Tom's yes stays for data, new page families (towns), navigation (W5), tokens (W8) and anything on UK Councils that touches the dossier. Not authorised until Tom says so in words.
+
+### 11.7 Order
+
+| Step | Work | Who | Waits on |
+|---|---|---|---|
+| 1 | PR 96 fix pass, merge | Claude, Tom's yes | Nothing |
+| 2 | PR 95 fix pass, merge | Claude, Tom's yes | Step 1 published |
+| 3 | PR 94 merge; UK Councils PR 62 rebase | Claude; Codex | Nothing |
+| 4 | F1 foundation | Claude (Opus) | Steps 1 and 2 |
+| 5 | W3 set page feedback, with the 11.4 set page changes | Claude | F1 |
+| 6 | W4 game page, then W9 council page | Codex, reviewed | F1 |
+| 7 | W5 header, drawer and footer, alone | Claude | D8 |
+| 8 | W7 compare; Tier 2 pages | Codex | F1, D4, D12 |
+| UKC lane | PR 62, U2 homepage, council page network band | Codex | Runs beside steps 4 to 8 |
+| Kit lane | X3, K1, then W8 and U1 as token swaps, M1, W10 | Claude | X3 |
+
+Dates in 10.1 stand: links rerun 1 to 5 December, decisions by 15 December, freeze 20 March.
+
+### 11.8 Decisions
+
+Tom's instruction on 16 November 2026, after reading this section: "Make best quality decisions". Taken on that instruction, each reversible by Tom:
+
+| Decision | Taken |
+|---|---|
+| Short record line with one full Sources block per page | Yes. Built in F1; every figure keeps a named source beside it and the full reference one link away |
+| Set page amounts in £ million to one decimal, exact pounds one click away | Yes, in W3 |
+| Towns headline pair led by the larger places | Yes, as a follow up PR after PR 95 merges; the full order stays in the tables |
+| D2 paper tint | Decided in F1 from captures of both, against contrast and the charts drawn on top |
+| Towns page weight | Cell classes removed in the PR 95 fix pass (South West 1.38 MB to 1.08 MB). The 500 KB ceiling needs the region pages split or paged, a design choice for the towns follow up |
+
+Still Tom's, in words, because each publishes: the merge of PR 96, the merge of PR 95, and the fast track (recommended in the narrow scope of 11.6).
+
+### 11.9 Fix passes done, 16 November 2026
+
+PR 96: all four items in 11.2, pushed as `3516be5`. PR 95: items 1 to 4 and 6, and the cell classes from item 5. One thing 11.2 did not foresee: the strip's table twin says "Published" in the kit's own words for any value it is given; the kit is vendored and hash checked, so the page now explains the word beside the chart, and the wording goes to the kit as a change request.

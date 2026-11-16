@@ -7,7 +7,6 @@ interface Props {gss: string; name: string}
 const {gss, name} = Astro.props;
 const bill = budgetNational.components[gss];
 const money = (value: number | null) => value === null ? 'Unavailable' : moneyPence(value);
-/** MHCLG prints some body names with a spaced hyphen; the design check's verbatim marker covers exactly that cell. */
 const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combined: 'Combined authority'};
 ---
 <section class="section" id="your-bill" aria-labelledby="bill-heading">
@@ -18,7 +17,8 @@ const labels = {county: 'County or GLA', police: 'Police', fire: 'Fire', combine
     <thead><tr><th scope="col">Part of the bill</th><th scope="col">Charging body</th><th scope="col" class="num">Annual Band D</th></tr></thead>
     <tbody>
       <tr data-record-type="observation"><th scope="row">Council, including average local precepts</th><td>{name}</td><td class="num">{money(bill.ownWithParishPence)}</td></tr>
-      {bill.parts.map(part => <tr data-record-type="observation"><th scope="row">{labels[part.kind]}</th><td data-dash-ok={part.name && / - /.test(part.name) ? '' : undefined}>{part.name ?? (part.bandDPence === 0 ? 'No separate precept reported' : 'Body unavailable')}</td><td class="num">{money(part.bandDPence)}</td></tr>)}
+      {/* MHCLG prints some body names with a spaced hyphen; the design check's verbatim marker covers exactly that cell. */}
+      {bill.parts.map(part => <tr data-record-type="observation"><th scope="row">{labels[part.kind]}</th><td data-dash-ok={part.name && /\s-\s/.test(part.name) ? '' : undefined}>{part.name ?? (part.bandDPence === 0 ? 'No separate precept reported' : 'Body unavailable')}</td><td class="num">{money(part.bandDPence)}</td></tr>)}
     </tbody>
     <tfoot><tr data-record-type="observation"><th scope="row" colspan="2">Published area average, including all precepts</th><td class="num">{money(bill.areaPence)}</td></tr></tfoot>
   </table></div>

@@ -12,10 +12,10 @@ import {budget, budgetYear, budgetSource, billSource} from './budget';
 import {population} from './per-resident';
 
 const short = (part: string) => `Revenue expenditure and financing, ${budgetYear} budget, ${part}`;
-/** The three RA files share one title and sheet name, so the full reference names the file as well. MHCLG, as on the set page and the bill source. */
+/** The three RA files share one title and sheet name, so the full reference names the file as well. */
 const ra = (key: 'raPart1' | 'raPart2' | 'raGrants', part: string): SourceRef => {
   const source = budgetSource(key);
-  return {...source, publisher: 'MHCLG', table: `${budget.sources[key].fileUrl.split("/").pop()}, ${source.table}`, retrieved: budget.sources[key].retrieved, short: short(part)};
+  return {...source, table: `${budget.sources[key].fileUrl.split("/").pop()}, ${source.table}`, retrieved: budget.sources[key].retrieved, short: short(part)};
 };
 
 export const raPart1Ref = ra('raPart1', 'Part 1');
@@ -43,7 +43,11 @@ export function budgetPageEntries(available: boolean): SourceEntry[] {
     {key: 'budget-ra-grants', label: 'Dedicated Schools Grant', method: 'Published in whole £ thousand and shown in pounds', sources: [raGrantsRef]},
     {key: 'budget-bill', label: 'Band D bill components', method: 'Published area averages in pounds and pence', sources: [billRef]},
     {key: 'budget-bands', label: 'Published whole-bill charges by band', method: 'Area averages including parish precepts, in pounds and pence', sources: [bandsRef]},
-    {key: 'budget-population', label: 'Resident populations for the per resident ratios', method: 'Single years grouped as under 18, 18 to 64, 65 and over, and 18 and over', sources: [populationRef]},
+    {key: 'budget-population', label: 'Per resident ratios: budget lines and resident populations', method: 'A budget line divided by residents; single years of age grouped as under 18, 18 to 64, 65 and over, and 18 and over', sources: [raPart1Ref, populationRef]},
   ];
-  return available ? entries : entries.filter(entry => entry.key !== 'budget-ra-part2' && entry.key !== 'budget-ra-grants');
+  if (available) return entries;
+  // No budget return: the notice cites the publication it is missing from, and no RA figure is shown.
+  return entries
+    .filter(entry => entry.key !== 'budget-ra-part2' && entry.key !== 'budget-ra-grants')
+    .map(entry => entry.key === 'budget-ra-part1' ? {key: entry.key, label: 'The budget publication with no return for this council', sources: entry.sources} : entry);
 }

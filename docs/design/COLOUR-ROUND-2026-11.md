@@ -6,6 +6,18 @@ Step C0 of `docs/PLAN-CURRENT.md` section 4 (as revised in pull request 102). Th
 
 Tom chose **B, green and cream** in chat on 16 November 2026 ("B, green and cream"), after seeing the sheets. Taken as drawn: B's cream paper `#f6f1e4` supersedes the D2 value `#f8f7f2`, and links and actions share the cream gold in dark, so the swap stays values only. Both are reversible by Tom. Next is the kit release (K2), then the swap on the site (W8); each is Tom's yes.
 
+## B as the kit holds it, 16 November 2026
+
+Estate Kit 0.6.5 (estate-kit pull request 30) puts palette B into the kit. Its gates are stricter than this round's table and moved some values, so B was drawn again with the kit's values: `colour-round/sheet-b-kit-dark.jpg` and `sheet-b-kit-light.jpg` (entry `b-kit` in `palettes.mjs`). These two sheets, not the first B sheets, show what the swap (W8) will bring.
+
+What differs from B as first drawn:
+
+1. The bill bar. The kit holds each series to 3:1 on the paper, the warm paper and the card, and each pair to 0.09 apart in OKLab under normal, protan, deutan and tritan vision. Light is `#0d6648`, `#8e8360`, `#181100`, `#392f0e`; dark is `#2ea471`, `#f7e4aa`, `#736847`, `#c9bd99`. The dark green is deeper than first drawn and the two darkest light values are darker.
+2. The dark link and the highlight are one value, `#f0dfae`, because the kit holds one bright per site.
+3. The footer is the band green in both themes, because the kit's `--ground` is the band. The first sheets showed a near black footer.
+
+Not on these sheets: the series the band itself carries (`#57c792`, `#f0dda4`, `#978c69`, `#fffcf2`) and the band's critical state (`#f39287`), since no chart or state is drawn on a band on these eight pages at rest.
+
 ## How the pictures were made
 
 The live site (origin/main `5a76109`, read only) was loaded in Chromium through Playwright at 1440 by 900 and 390 by 844, in dark then light, with reduced motion. Each candidate is a set of token overrides (`colour-round/candidate-a.css`, `-b.css`, `-c.css`, generated from `colour-round/palettes.mjs`) injected into the loaded page. No build was needed because every colour on the site is a token. `colour-round/round.mjs` reproduces all of it: `css`, `contrast`, `capture`, `sheets`.

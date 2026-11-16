@@ -79,6 +79,27 @@ export const palettes = {
     },
   },
 
+  "b-kit": {
+    name: "B as the kit holds it (0.6.5)",
+    idea: "Palette B after the Estate Kit's gates: one bright for the dark link and the highlight, series moved to pass the colour vision and contrast gates, and the footer on the band green because the kit's ground is the band.",
+    light: {
+      bg: "#f6f1e4", "bg-subtle": "#ece6d6", "bg-card": "#fffdf8", border: "#dcd5c2", "border-strong": "#b7ae96",
+      text: "#1b1f1a", "text-muted": "#55594d", "text-faint": "#626656",
+      ground: "#0e4a36", "ground-ink": "#f7f2e3", "ground-muted": "#bdc8b8", desk: "#0e4a36",
+      accent: "#0d6648", "accent-bright": "#f0dfae", "accent-wash": "#e9eedd", "accent-ink": "#ffffff",
+      "series-1": "#0d6648", "series-2": "#8e8360", "series-3": "#181100", "series-4": "#392f0e",
+      ...states.light,
+    },
+    dark: {
+      bg: "#0c1310", "bg-subtle": "#131b16", "bg-card": "#151f19", border: "#2a372e", "border-strong": "#435245",
+      text: "#f4efe2", "text-muted": "#c1bfae", "text-faint": "#9d9d8c",
+      ground: "#0e4a36", "ground-ink": "#f7f2e3", "ground-muted": "#bdc8b8", desk: "#0e4a36",
+      accent: "#f0dfae", "accent-bright": "#f0dfae", "accent-wash": "#1a251d", "accent-ink": "#0c1310",
+      "series-1": "#2ea471", "series-2": "#f7e4aa", "series-3": "#736847", "series-4": "#c9bd99",
+      ...states.dark,
+    },
+  },
+
   c: {
     name: "C, ink and paper",
     idea: "Charcoal bands and warm paper. Green is kept for links, actions and the council's own share, so it reads as the colour of money.",

@@ -101,7 +101,7 @@ function contrastTable() {
   for (const theme of THEMES) {
     const ids = Object.keys(palettes);
     out.push(`### ${theme === "dark" ? "Dark" : "Light"}`, "");
-    out.push(`| Pair | Floor | ${ids.map((id) => (id === "live" ? "Live" : id.toUpperCase())).join(" | ")} |`);
+    out.push(`| Pair | Floor | ${ids.map((id) => (id === "live" ? "Live" : id === "b-kit" ? "B in kit" : id.toUpperCase())).join(" | ")} |`);
     out.push(`|---|---:|${ids.map(() => "---:").join("|")}|`);
     const rows = ids.map((id) => pairs(palettes[id][theme]));
     rows[0].forEach(([label, , , floor], i) => {
@@ -156,6 +156,11 @@ async function capture() {
             }, p.second);
             await page.waitForTimeout(300);
             if (y > 0) await page.screenshot({ path: shot(id, theme, view.id, p.id, 2) });
+            if (p.id === "home") {
+              await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+              await page.waitForTimeout(300);
+              await page.screenshot({ path: shot(id, theme, view.id, p.id, 3) });
+            }
           }
           await page.close();
         }));
@@ -191,13 +196,14 @@ async function sheets() {
   };
   for (const id of Object.keys(palettes)) {
     for (const theme of THEMES) {
-      const body = pages.map((p) => `<div class="label">${pageLabel[p.id]}</div><div class="row">${img(shot(id, theme, "1440", p.id, 1), 470)}${p.second ? img(shot(id, theme, "1440", p.id, 2), 470) : ""}${img(shot(id, theme, "390", p.id, 1), 136)}</div>`).join("");
+      const foot = existsSync(shot(id, theme, "1440", "home", 3)) ? `<div class="label">Homepage, foot of the page</div><div class="row">${img(shot(id, theme, "1440", "home", 3), 470)}</div>` : "";
+      const body = pages.map((p) => `<div class="label">${pageLabel[p.id]}</div><div class="row">${img(shot(id, theme, "1440", p.id, 1), 470)}${p.second ? img(shot(id, theme, "1440", p.id, 2), 470) : ""}${img(shot(id, theme, "390", p.id, 1), 136)}</div>`).join("") + foot;
       await save(shell(palettes[id].name, `${theme === "dark" ? "Dark" : "Light"} theme. ${palettes[id].idea} Each row: first screen at 1440, further down at 1440, first screen at 390.`, body, 1096), `sheet-${id}-${theme}.jpg`, 1096);
     }
   }
   const picks = [["home", 1], ["home", 2], ["game", 1], ["set", 1], ["council", 2], ["towns", 1]];
   for (const theme of THEMES) {
-    const ids = Object.keys(palettes);
+    const ids = Object.keys(palettes).filter((id) => id !== "b-kit");
     const head = `<div class="row">${ids.map((id) => `<div class="col" style="width:432px">${palettes[id].name}</div>`).join("")}</div>`;
     const body = head + picks.map(([p, n]) => `<div class="label">${pageLabel[p]}${n === 2 ? ", further down" : ""}</div><div class="row">${ids.map((id) => img(shot(id, theme, "1440", p, n), 430)).join("")}</div>`).join("");
     await save(shell(`Side by side, ${theme} theme`, "The same six screens at 1440 in the live colours and in each candidate.", body, 1760), `sheet-side-by-side-${theme}.jpg`, 1760);

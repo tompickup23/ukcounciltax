@@ -8,6 +8,8 @@ import {national,parishesFor,PARISH_YEAR} from '../lib/national-data';
 import {parishRange, parishSource as parishRef} from '../lib/parish-pages';
 import {parishPath} from '../lib/paths';
 import {councilByGss} from '../lib/registry';
+import {towns} from '../lib/towns';
+import {countyPathOf, tidy} from '../lib/towns-pages';
 import SourceLine from './SourceLine.astro';
 import {moneyPence} from '../lib/tax-view';
 import {precedingYear,yearLabel} from '../lib/council-tax';
@@ -18,6 +20,8 @@ const chart = profileChartOptions(slug).bill;
 const rounding = billShareRounding(chart);
 const data=national.components[gss];
 const parishes=parishesFor(gss);
+// The towns page for this council's county: full Band D for each of its parish and unparished areas.
+const townRow=towns.find(t=>t.councilGss===gss);
 const money=(n:number|null)=>n===null?'Unavailable':moneyPence(n);
 const labels={county:['ILB','OLB'].includes(classCode)?'Greater London Authority':'County council',police:'Police',fire:'Fire',combined:'Combined authority'};
 const source=national.sources.components;
@@ -56,6 +60,7 @@ const earlier=precedingYear(PARISH_YEAR);
     {parishes.length ? <>
       <p>{parishRange(name,parishes)}</p>
       <p><a href={parishPath(councilByGss(gss)!)}>Every parish precept in {name}, with its change on {yearLabel(earlier)}</a></p>
+      {townRow && <p><a href={countyPathOf(townRow)}>Full Band D by parish and unparished area in {tidy(townRow.county)}</a>, every charge added up for each area.</p>}
     </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
     <SourceLine source={parishRef} />
   </div>

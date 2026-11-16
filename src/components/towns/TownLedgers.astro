@@ -1,0 +1,59 @@
+---
+/**
+ * "Lowest ten" and "Highest ten" as ledgers on paper: ordered lists with the real
+ * position in a span (not a CSS counter), so copied text and screen readers keep
+ * it. The section H2 is the page's one heading that may say "cheapest" (T2).
+ */
+import TownsSources from './TownsSources.astro';
+import {positionCell} from '../../lib/rankings';
+import {money, placeName, POSITION_METHOD, townAnchor, countyPathOf, type TownScope} from '../../lib/towns-pages';
+import {tidy} from '../../lib/towns-pages';
+import type {RankedTown} from '../../lib/towns';
+
+type Ledger = {rows: RankedTown[]; more: number; moreAt: RankedTown | null};
+interface Props {scope: TownScope; where: string; low: Ledger; high: Ledger; of: number}
+const {scope, where, low, high, of} = Astro.props;
+const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : `#${r.town.code}`;
+const lists = [
+  {id: 'lowest', heading: 'Lowest ten', ledger: low},
+  {id: 'highest', heading: 'Highest ten', ledger: high},
+];
+const rows = [...low.rows, ...high.rows].map(r => r.town);
+---
+<section class="section ledgers" aria-labelledby="ledgers-heading">
+  <h2 id="ledgers-heading">Where is council tax cheapest and most expensive {where}?</h2>
+  <p>Full Band D for {of.toLocaleString('en-GB')} parish and unparished areas {where} with a figure, lowest first. Position 1 is the lowest. {scope.kind === 'england' ? 'Each name opens its row on its county page.' : 'Each name opens its row in the full table.'}</p>
+  <div class="fact" data-fact>
+    <div class="ledger-grid">
+      {lists.map(list => (
+        <div class="ledger" id={`${list.id}-ten`}>
+          <h3>{list.heading}</h3>
+          <ol class="ledger-list">
+            {list.ledger.rows.map(r => (
+              <li>
+                <span class="ledger-pos" data-figure>{positionCell(r.position, r.tied)}</span>
+                <span class="ledger-place"><a href={href(r)}>{placeName(r.town)}</a><small>{r.town.kind === 'unparished' ? tidy(r.town.county) : `${tidy(r.town.councilName)}, ${tidy(r.town.county)}`}</small></span>
+                <span class="ledger-figure" data-figure>{money(r.town.fullBandDPence)}</span>
+              </li>
+            ))}
+          </ol>
+          {list.ledger.more > 0 && list.ledger.moreAt && <p class="small muted">And {list.ledger.more} more {list.ledger.more === 1 ? 'area shares' : 'areas share'} position {positionCell(list.ledger.moreAt.position, true)} at <span data-figure>{money(list.ledger.moreAt.town.fullBandDPence)}</span>{scope.kind === 'england' ? '' : <>, listed in <a href="#towns-table">the full table</a></>}.</p>}
+        </div>
+      ))}
+    </div>
+    <TownsSources rows={rows} method={POSITION_METHOD} />
+  </div>
+</section>
+
+<style>
+.ledger-grid{display:grid;gap:var(--space-xl)}
+@media(min-width:900px){.ledger-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ledger h3{margin:0 0 var(--space-xs);font-size:var(--text-md)}
+.ledger-list{list-style:none;margin:0;padding:0;border-top:2px solid var(--text)}
+.ledger-list li{display:grid;grid-template-columns:3.2rem minmax(0,1fr) auto;gap:var(--space-sm);align-items:baseline;padding:var(--space-xs) 0;border-bottom:1px solid var(--border)}
+.ledger-pos{font-family:var(--font-display);font-weight:600;font-size:var(--text-md);color:var(--text-faint);font-variant-numeric:tabular-nums lining-nums}
+.ledger-place{min-width:0;overflow-wrap:anywhere}
+.ledger-place a{font-weight:600}
+.ledger-place small{display:block;color:var(--text-muted);font-size:var(--text-sm)}
+.ledger-figure{text-align:right;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
+</style>

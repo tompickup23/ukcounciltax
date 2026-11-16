@@ -41,3 +41,17 @@ test('parish filtering works under the production policy',async({page})=>{
  await expect(page.locator('[data-parish-name]:visible')).toContainText('+£5.42');
  expect(violations).toEqual([]);
 });
+
+test('towns filtering and sorting work under the production policy',async({page})=>{
+ const violations:string[]=[];
+ await page.addInitScript(()=>document.addEventListener('securitypolicyviolation',e=>console.error(`CSP violation: ${e.violatedDirective}`)));
+ page.on('console',message=>{if(message.text().includes('CSP violation'))violations.push(message.text());});
+ const response=await page.goto('/council-tax/towns/county/lancashire/');
+ expect(response?.headers()['content-security-policy']).toContain("script-src 'self'");
+ await expect(page.locator('[data-town-filters]')).toBeVisible();
+ await page.getByLabel('Find a place').fill('Padiham');
+ await expect(page.locator('[data-town-table] tbody tr:visible')).toHaveCount(1);
+ await page.getByRole('button',{name:'Full Band D'}).click();
+ await expect(page.locator('th[data-sort="v"]')).toHaveAttribute('aria-sort','ascending');
+ expect(violations).toEqual([]);
+});

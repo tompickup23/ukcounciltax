@@ -9,6 +9,8 @@ import {parishesFor, parishChange, PARISH_YEAR, type ParishYear} from '../../../
 import {parishRange, parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
 import {moneyPence} from '../../../lib/tax-view';
 import {councilTaxSource} from '../../../lib/sources';
+import {townByCode, towns, hasFigure} from '../../../lib/towns';
+import {countyPathOf, tidy, money as townMoney, noFigure, placeName, townAnchor, townSources, TOWNS_YEAR} from '../../../lib/towns-pages';
 export function getStaticPaths() { return parishPages().map(council => ({params:{slug:council.slug},props:{council}})); }
 const {council} = Astro.props;
 const gss = council.gss;
@@ -23,6 +25,12 @@ const description = `${summary.nonZero} local ${summary.nonZero === 1 ? 'precept
 const notes = [...new Map(parishes.flatMap(p=>p.notes).map(n=>[n.id,n])).values()];
 const money = (n:number|null) => n === null ? 'Unavailable' : moneyPence(n);
 const parishMoney = (y:ParishYear) => y.status === 'not-existing' ? 'Did not exist' : money(y.bandDPence);
+// Full Band D (the towns dataset) only while it is on this page's parish year.
+const showFull = TOWNS_YEAR === CURRENT_YEAR;
+const councilTowns = showFull ? towns.filter(t => t.councilGss === gss) : [];
+const unparishedTowns = councilTowns.filter(t => t.kind === 'unparished');
+const countyHref = councilTowns[0] ? countyPathOf(councilTowns[0]) : null;
+const fullCell = (code: string) => townByCode.get(code) ?? null;
 ---
 <BaseLayout title={title} description={description} path={parishPath(council)}>
   <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts',href:'/precepts/parishes/'},{label:name}]} />
@@ -31,21 +39,26 @@ const parishMoney = (y:ParishYear) => y.status === 'not-existing' ? 'Did not exi
   <p>In a parish, the parish's own Band D precept is charged in addition to this and to the county, police and fire charges. The area average Band D on the <a href={councilPath(council)}>{name} council page</a> already includes parish precepts as an average, so do not add a parish figure to it.</p>
   <section class="section" data-parish-table aria-labelledby="parish-table-heading">
     <h2 id="parish-table-heading">Every local Band D precept in {name}</h2>
-    <p>These are individual Band D local charges, not full bills. Other property bands are not inferred. Match the charging locality to your council bill. Grouped parishes and charter trustees can have overlapping charging areas. A postcode alone cannot establish every charge on a property.</p>
+    <p>The precept columns are individual Band D local charges, not full bills{showFull ? '; the last column is the full Band D bill in that parish, every charge added up' : ''}. Other property bands are not inferred. Match the charging locality to your council bill. Grouped parishes and charter trustees can have overlapping charging areas. A postcode alone cannot establish every charge on a property.</p>
     <label class="field parish-search" hidden>Filter parish or local body<input type="search" autocomplete="off" placeholder="Type a parish name" /></label>
     <p class="small muted" data-parish-count role="status">All {parishes.length} records shown.</p>
     <div class="fact" data-fact>
     <div class="table-wrap" tabindex="0" role="region" aria-label="Parish Band D charges"><table class="data">
-      <caption>{name}: local Band D precepts, {yearLabel(earlier)} and {yearLabel(year)}</caption>
-      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Change</th></tr></thead>
-      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num" data-figure>{parishMoney(p.years[earlier])}</td><td class="num" data-figure>{parishMoney(p.years[year])}</td><td class="num" data-figure>{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td></tr>;})}</tbody>
+      <caption>{name}: local Band D precepts, {yearLabel(earlier)} and {yearLabel(year)}{showFull ? ', with full Band D' : ''}</caption>
+      <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Change</th>{showFull && <th scope="col" class="num">Full Band D {yearLabel(year)}</th>}</tr></thead>
+      <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num" data-figure>{parishMoney(p.years[earlier])}</td><td class="num" data-figure>{parishMoney(p.years[year])}</td><td class="num" data-figure>{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td>{showFull && (()=>{const t=fullCell(p.code);return <td class="num" data-figure>{t===null?'Not published':hasFigure(t)?<a href={townAnchor(countyPathOf(t),t)}>{townMoney(t.fullBandDPence)}</a>:noFigure(t)}</td>;})()}</tr>;})}</tbody>
     </table></div>
     <SourceLine source={parishSource} />
+    {showFull && <>
+      {unparishedTowns.map(t => <p>{placeName(t)}, full Band D {yearLabel(year)}: <span data-figure>{hasFigure(t) ? townMoney(t.fullBandDPence) : noFigure(t)}</span>.</p>)}
+      <SourceLine source={{...townSources.components, url: townSources.componentsPage, method: 'Full Band D adds the parish Band D above to the council\'s Band D excluding local precepts and the major precepts, our calculation from published figures, or the council\'s own published figure where it publishes one'}} />
+    </>}
     </div>
     {notes.length>0&&<ul class="small">{notes.map(n=><li>{n.id}: {n.text}</li>)}</ul>}
     {gss==='E06000047'&&<p class="caveat">Durham Charter Trustees overlap some parish areas. Both charges may apply. Parish tax bases cannot be summed without removing the overlap.</p>}
     <p class="small muted">Change is the {yearLabel(year)} Band D minus the {yearLabel(earlier)} Band D on the same source row, our calculation. A row that did not exist in either year is not comparable. Missing and ceased entries stay distinct from published £0.00 precepts.</p>
   </section>
+  {countyHref && <p>Full Band D for every parish and unparished area in {tidy(councilTowns[0].county)}, lowest to highest: <a href={countyHref}>{tidy(councilTowns[0].county)} by parish and unparished area</a>.</p>}
   <p><a href={councilPath(council)}>{name} council tax</a> · <a href="/precepts/parishes/">Parish precepts by council</a> · <a href="/precepts/">Your bill and precepts</a></p>
 </BaseLayout>
 <script>

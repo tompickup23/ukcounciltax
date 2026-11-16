@@ -70,7 +70,7 @@ it('labels each kind of search result from its own route', () => {
   for (const [path, type] of [
     ['/councils/burnley/', 'council'], ['/scotland/glasgow-city/', 'council'], ['/wales/cardiff/', 'council'],
     ['/tools/budget/burnley/', 'budget'], ['/precepts/parishes/burnley/', 'parish'],
-    ['/council-tax/ranked/shire-districts/', 'ranking'], ['/council-tax/band-d/', 'band'],
+    ['/council-tax/ranked/shire-districts/', 'ranking'], ['/council-tax/towns/', 'ranking'], ['/council-tax/towns/county/lancashire/', 'ranking'], ['/council-tax/band-d/', 'band'],
     ['/council-tax/north-west/', 'region'], ['/scotland/', 'nation'], ['/help/', 'guide'],
     ['/increases/', 'guide'], ['/compare/', 'tool'], ['/tools/budget/', 'hub'], ['/about/', 'other'],
   ]) expect(pageTypeFor(path)).toBe(type);

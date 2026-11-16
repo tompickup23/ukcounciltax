@@ -1,0 +1,51 @@
+$ npm test -- --testTimeout=120000 --maxWorkers=1
+> ukcounciltax@0.1.0 test
+> vitest run --testTimeout=120000 --maxWorkers=1
+
+
+ RUN  v4.1.11 /Users/tompickup/.codex/worktrees/uct-w2/ukcounciltax
+
+
+ Test Files  71 passed (71)
+      Tests  912 passed (912)
+   Start at  00:42:37
+   Duration  260.99s (transform 1.96s, setup 0ms, import 18.40s, tests 234.20s, environment 5ms)
+
+$ npm run check
+Result (350 files):
+- 0 errors
+- 0 warnings
+- 1 hint
+
+$ BUILD_OG=1 OG_IMAGE_CACHE=1 npm run build
+00:34:52 [build] 1107 page(s) built in 18m 0s
+  Indexed 1 language
+  Indexed 1106 pages
+  Indexed 85122 words
+  Indexed 0 filters
+  Indexed 0 sorts
+Finished in 4.031 seconds
+
+$ npm run test:dist
+> ukcounciltax@0.1.0 test:dist
+> node scripts/check-dist.mjs
+
+dist check: 318 mapped canonicals and 69 unique self canonicals checked
+dist check: 1107 pages point at a built share card
+dist check: 2207 chart PNG links resolve
+dist check: 1107 pages, 1106 sitemap URLs, all passed
+
+$ npm run test:text
+> ukcounciltax@0.1.0 test:text
+> node scripts/check-text.mjs
+
+Text sweep: 1115 files, no dashes or pseudo-dashes outside verbatim body names.
+
+$ node scripts/diff-numbers.mjs BASELINE/dist dist --allow 'tools/budget/*/set/index.html'
+Summary: 197 pages differing; 0 pages added; 0 pages removed; 0 pages outside allowed globs.
+
+$ E2E_BASE_URL=http://127.0.0.1:44321 npm run test:e2e -- --workers=2
+562 passed (11.7m)
+
+$ CSP_PORT=48789 npm run test:csp -- --workers=2
+141 passed (3.7m)

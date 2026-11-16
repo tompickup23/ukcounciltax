@@ -1,0 +1,271 @@
+{
+  "baselineCommit": "810be18",
+  "baseline": [
+    {
+      "edition": "baseline",
+      "slug": "leeds",
+      "width": 390,
+      "theme": "light",
+      "height": 15599,
+      "scrollWidth": 390,
+      "cls": 0.048120345045900605,
+      "ownTop": 3749.328125,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "leeds",
+      "width": 390,
+      "theme": "dark",
+      "height": 15599,
+      "scrollWidth": 390,
+      "cls": 0.048120345045900605,
+      "ownTop": 3749.328125,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "leeds",
+      "width": 1440,
+      "theme": "light",
+      "height": 8759,
+      "scrollWidth": 1440,
+      "cls": 0.0089641845703125,
+      "ownTop": 1746.609375,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "leeds",
+      "width": 1440,
+      "theme": "dark",
+      "height": 8759,
+      "scrollWidth": 1440,
+      "cls": 0.0089641845703125,
+      "ownTop": 1746.609375,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "hyndburn",
+      "width": 390,
+      "theme": "light",
+      "height": 14216,
+      "scrollWidth": 390,
+      "cls": 0,
+      "ownTop": 3595.328125,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "hyndburn",
+      "width": 390,
+      "theme": "dark",
+      "height": 14216,
+      "scrollWidth": 390,
+      "cls": 0.046570456631845523,
+      "ownTop": 3595.328125,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "hyndburn",
+      "width": 1440,
+      "theme": "light",
+      "height": 7759,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 1703.265625,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "hyndburn",
+      "width": 1440,
+      "theme": "dark",
+      "height": 7759,
+      "scrollWidth": 1440,
+      "cls": 0.008950512695312501,
+      "ownTop": 1703.265625,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "east-cambridgeshire",
+      "width": 390,
+      "theme": "light",
+      "height": 14655,
+      "scrollWidth": 390,
+      "cls": 0,
+      "ownTop": 3629.875,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "east-cambridgeshire",
+      "width": 390,
+      "theme": "dark",
+      "height": 14655,
+      "scrollWidth": 390,
+      "cls": 0.046570456631845523,
+      "ownTop": 3629.875,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "east-cambridgeshire",
+      "width": 1440,
+      "theme": "light",
+      "height": 8154,
+      "scrollWidth": 1440,
+      "cls": 0.0089778564453125,
+      "ownTop": 1753.171875,
+      "presetTop": null
+    },
+    {
+      "edition": "baseline",
+      "slug": "east-cambridgeshire",
+      "width": 1440,
+      "theme": "dark",
+      "height": 8154,
+      "scrollWidth": 1440,
+      "cls": 0.0089778564453125,
+      "ownTop": 1753.171875,
+      "presetTop": null
+    }
+  ],
+  "candidate": [
+    {
+      "edition": "candidate",
+      "slug": "leeds",
+      "width": 390,
+      "theme": "light",
+      "height": 5301,
+      "scrollWidth": 390,
+      "cls": 0.016778804605887942,
+      "ownTop": 776.234375,
+      "presetTop": 619.703125
+    },
+    {
+      "edition": "candidate",
+      "slug": "leeds",
+      "width": 390,
+      "theme": "dark",
+      "height": 5301,
+      "scrollWidth": 390,
+      "cls": 0.016778804605887942,
+      "ownTop": 776.234375,
+      "presetTop": 619.703125
+    },
+    {
+      "edition": "candidate",
+      "slug": "leeds",
+      "width": 1440,
+      "theme": "light",
+      "height": 2843,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    },
+    {
+      "edition": "candidate",
+      "slug": "leeds",
+      "width": 1440,
+      "theme": "dark",
+      "height": 2843,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    },
+    {
+      "edition": "candidate",
+      "slug": "hyndburn",
+      "width": 390,
+      "theme": "light",
+      "height": 4723,
+      "scrollWidth": 390,
+      "cls": 0.03453038154874961,
+      "ownTop": 851.671875,
+      "presetTop": 695.140625
+    },
+    {
+      "edition": "candidate",
+      "slug": "hyndburn",
+      "width": 390,
+      "theme": "dark",
+      "height": 4723,
+      "scrollWidth": 390,
+      "cls": 0.03453038154874961,
+      "ownTop": 851.671875,
+      "presetTop": 695.140625
+    },
+    {
+      "edition": "candidate",
+      "slug": "hyndburn",
+      "width": 1440,
+      "theme": "light",
+      "height": 2467,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    },
+    {
+      "edition": "candidate",
+      "slug": "hyndburn",
+      "width": 1440,
+      "theme": "dark",
+      "height": 2467,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    },
+    {
+      "edition": "candidate",
+      "slug": "east-cambridgeshire",
+      "width": 390,
+      "theme": "light",
+      "height": 5054,
+      "scrollWidth": 390,
+      "cls": 0.020064613010446344,
+      "ownTop": 886.21875,
+      "presetTop": 729.6875
+    },
+    {
+      "edition": "candidate",
+      "slug": "east-cambridgeshire",
+      "width": 390,
+      "theme": "dark",
+      "height": 5054,
+      "scrollWidth": 390,
+      "cls": 0.020064613010446344,
+      "ownTop": 886.21875,
+      "presetTop": 729.6875
+    },
+    {
+      "edition": "candidate",
+      "slug": "east-cambridgeshire",
+      "width": 1440,
+      "theme": "light",
+      "height": 2783,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    },
+    {
+      "edition": "candidate",
+      "slug": "east-cambridgeshire",
+      "width": 1440,
+      "theme": "dark",
+      "height": 2783,
+      "scrollWidth": 1440,
+      "cls": 0,
+      "ownTop": 678.640625,
+      "presetTop": 536.4375
+    }
+  ]
+}

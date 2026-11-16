@@ -6,6 +6,7 @@ const inputPounds = (pence: string | bigint) => { const n = BigInt(pence); retur
 
 const slugs = ['huntingdonshire','trafford','camden'];
 async function accessible(page: Page) {
+  await page.locator('.ledger details').first().locator('summary').click();
   const result = await new AxeBuilder({page}).analyze();
   expect(result.violations.map(v => ({id:v.id,targets:v.nodes.map(n => n.target)}))).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize()!.width);
@@ -44,6 +45,7 @@ export function budgetSetJourneys() {
       await expect(page.locator('[data-controls]')).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       await expect(page.locator('[data-result-status]')).toBeVisible();
+      await expect(page.locator('.ledger details').first()).not.toHaveAttribute('open', '');
       const ledger = await page.locator('.ledger table').textContent();
       const freeze = await page.locator('[data-remaining]').textContent();
       const own = page.locator('[data-own]');
@@ -65,7 +67,8 @@ export function budgetSetJourneys() {
       const published = await service.inputValue();
       const slider = page.locator('[data-service-range]').first();
       await slider.focus(); await slider.press('ArrowLeft');
-      expect(Number(await service.inputValue())).toBeCloseTo(Number(published)-0.01, 2);
+      expect(Number(await service.inputValue())).toBeCloseTo(Number(published) * 0.995, 2);
+      await service.locator('xpath=ancestor::details').locator('summary').click();
       await service.fill('0');
       await expect(page.locator('[data-remaining]')).not.toHaveText('£0.00');
       await service.fill('0.001');
@@ -106,6 +109,11 @@ export function budgetSetJourneys() {
       await expect(page.locator('[data-theme-toggle]')).toBeHidden();
       await expect(page.locator('.ledger tbody tr')).toHaveCount(pilot.ledger.length);
       await expect(page.locator('[data-remaining]')).toBeVisible();
+      await page.locator('.assumptions > summary').click();
+      await expect(page.locator('.assumptions .baseline')).toBeVisible();
+      await expect(page.locator('.assumptions ul').first()).toBeVisible();
+      await expect(page.locator('noscript .notice')).toBeVisible();
+      await expect(page.locator('noscript .notice')).toContainText('controls need JavaScript');
       await expect(page.locator('.referendum-rule')).toContainText('A referendum would be required');
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
       // Axe needs timers. Audit a copy of the observed no-script DOM with all

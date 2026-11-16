@@ -1,0 +1,59 @@
+WARN `--no-project` was provided, but no project was found
+Installed 3 packages in 32ms
+## Design check
+
+Contact sheet: `/private/tmp/uct-w2-design-01a1e199/20261116T003840Z_0nyl5kye/contact_sheet.jpg`
+
+Desktop height cap: 3000 px. Lab observation: 4 s after load.
+Each capture uses a fresh Chromium context with no network or CPU throttling.
+LCP and CLS describe this lab observation only, not field performance.
+
+### Page 1
+
+* PASS Page loads: 390 light, 390 dark, 1440 light, 1440 dark: HTTP 200.
+* PASS Phone header: 390 light, 390 dark: 60 px; limit below 72 px.
+* PASS Link colours: 390 light, 390 dark, 1440 light, 1440 dark: 0 links use rgb(0, 0, 238).
+* PASS Figure sources: 390 light, 390 dark, 1440 light, 1440 dark: 0 marked figures (0 inside 21 closed drawers, checked open); 0 without a local source; 0 facts without a visible caption.
+* PASS Social image: 390 light, 390 dark, 1440 light, 1440 dark: decoded width 1200 px; minimum 1200 px.
+* PASS SVG favicon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked SVG favicons verified.
+* PASS Apple touch icon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked PNG icons verified at 180 by 180 px.
+* PASS Phone overflow: 390 light, 390 dark: document 390 px; viewport 390 px.
+* PASS Desktop height: 1440 light, 1440 dark: 2843 px; limit below 3000 px.
+* PASS Lab LCP: 390 light: 0.228 s; limit below 2.5 s; 390 dark: 0.740 s; limit below 2.5 s; 1440 light: 0.272 s; limit below 2.5 s; 1440 dark: 0.284 s; limit below 2.5 s.
+* PASS Lab CLS: 390 light, 390 dark, 1440 light, 1440 dark: 0.0000; limit below 0.1.
+* PASS Visible text: 390 light, 390 dark, 1440 light, 1440 dark: dash check 0 findings; Unicode dashes 0; spaced hyphens 0; exempt dashes 0.
+* PASS Page heading: 390 light, 390 dark, 1440 light, 1440 dark: 1 visible H1 elements; descriptive.
+
+### Page 2
+
+* PASS Page loads: 390 light, 390 dark, 1440 light, 1440 dark: HTTP 200.
+* PASS Phone header: 390 light, 390 dark: 60 px; limit below 72 px.
+* PASS Link colours: 390 light, 390 dark, 1440 light, 1440 dark: 0 links use rgb(0, 0, 238).
+* PASS Figure sources: 390 light, 390 dark, 1440 light, 1440 dark: 0 marked figures (0 inside 18 closed drawers, checked open); 0 without a local source; 0 facts without a visible caption.
+* PASS Social image: 390 light, 390 dark, 1440 light, 1440 dark: decoded width 1200 px; minimum 1200 px.
+* PASS SVG favicon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked SVG favicons verified.
+* PASS Apple touch icon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked PNG icons verified at 180 by 180 px.
+* PASS Phone overflow: 390 light, 390 dark: document 390 px; viewport 390 px.
+* PASS Desktop height: 1440 light, 1440 dark: 2467 px; limit below 3000 px.
+* PASS Lab LCP: 390 light: 0.144 s; limit below 2.5 s; 390 dark: 0.084 s; limit below 2.5 s; 1440 light: 0.064 s; limit below 2.5 s; 1440 dark: 0.092 s; limit below 2.5 s.
+* PASS Lab CLS: 390 light, 390 dark, 1440 light, 1440 dark: 0.0000; limit below 0.1.
+* PASS Visible text: 390 light, 390 dark, 1440 light, 1440 dark: dash check 0 findings; Unicode dashes 0; spaced hyphens 0; exempt dashes 0.
+* PASS Page heading: 390 light, 390 dark, 1440 light, 1440 dark: 1 visible H1 elements; descriptive.
+
+### Page 3
+
+* PASS Page loads: 390 light, 390 dark, 1440 light, 1440 dark: HTTP 200.
+* PASS Phone header: 390 light, 390 dark: 60 px; limit below 72 px.
+* PASS Link colours: 390 light, 390 dark, 1440 light, 1440 dark: 0 links use rgb(0, 0, 238).
+* PASS Figure sources: 390 light, 390 dark, 1440 light, 1440 dark: 0 marked figures (0 inside 19 closed drawers, checked open); 0 without a local source; 0 facts without a visible caption.
+* PASS Social image: 390 light, 390 dark, 1440 light, 1440 dark: decoded width 1200 px; minimum 1200 px.
+* PASS SVG favicon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked SVG favicons verified.
+* PASS Apple touch icon: 390 light, 390 dark, 1440 light, 1440 dark: 1 linked PNG icons verified at 180 by 180 px.
+* PASS Phone overflow: 390 light, 390 dark: document 390 px; viewport 390 px.
+* PASS Desktop height: 1440 light, 1440 dark: 2783 px; limit below 3000 px.
+* PASS Lab LCP: 390 light, 390 dark: 0.084 s; limit below 2.5 s; 1440 light: 0.096 s; limit below 2.5 s; 1440 dark: 0.068 s; limit below 2.5 s.
+* PASS Lab CLS: 390 light, 390 dark, 1440 light, 1440 dark: 0.0000; limit below 0.1.
+* PASS Visible text: 390 light, 390 dark, 1440 light, 1440 dark: dash check 0 findings; Unicode dashes 0; spaced hyphens 0; exempt dashes 0.
+* PASS Page heading: 390 light, 390 dark, 1440 light, 1440 dark: 1 visible H1 elements; descriptive.
+
+Result: PASS. 0 failed checks across 3 pages.

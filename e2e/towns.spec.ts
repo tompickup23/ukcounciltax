@@ -64,3 +64,27 @@ test('a hub link opens a row on its county page and the method drawer opens by h
   await expect(page.locator('details#how-calculated')).toHaveAttribute('open', '');
   await expect(page.locator('details#how-calculated')).toContainText('£2,584.38');
 });
+
+test('the table restores its filters from the address and keeps every sort honest', async ({page}) => {
+  await page.goto('/council-tax/towns/county/lancashire/?q=padiham&council=not-a-council&ref=x');
+  const visible = page.locator('[data-town-table] tbody tr:visible');
+  await expect(visible).toHaveCount(1);
+  await expect(page.getByLabel('Find a place')).toHaveValue('padiham');
+  // A council value with no option falls back to all councils, and an unrelated parameter is kept.
+  await expect(page.locator('[data-f-council]')).toHaveValue('');
+  await expect(page).toHaveURL(/ref=x/);
+  await page.getByLabel('Find a place').fill('');
+  // Sorting by parish change never lifts a row without a figure above one with a figure.
+  for (const option of ['ch:-1', 'ch:1', 'pp:-1']) {
+    await page.getByLabel('Sort by').selectOption(option);
+    const placed = await page.locator('[data-town-table] tbody tr').evaluateAll(rows => rows.map(r => (r as HTMLElement).dataset.v !== undefined));
+    expect(placed.lastIndexOf(true), option).toBeLessThan(placed.indexOf(false));
+  }
+  if (page.viewportSize()!.width >= 600) {
+    // A header click always leaves the select naming the order in use.
+    for (const key of ['place', 'place', 'v', 'v', 'pos', 'pos']) {
+      await page.locator(`th[data-sort="${key}"] button`).click();
+      expect(await page.getByLabel('Sort by').evaluate((s: HTMLSelectElement) => s.selectedIndex)).toBeGreaterThanOrEqual(0);
+    }
+  }
+});

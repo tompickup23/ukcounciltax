@@ -57,7 +57,7 @@ const lede = `Full Band D council tax for every parish and unparished area in En
 
   <section class="section" aria-labelledby="larger-heading">
     <h2 id="larger-heading">Which larger places have the lowest and highest full Band D?</h2>
-    <p>Larger places have a published tax base of {threshold} Band D equivalent properties or more: {larger.length.toLocaleString('en-GB')} of them have a figure. A tax base counts properties, not people. Every larger place is in the full tables on the region and county pages, where the larger places switch narrows the list.</p>
+    <p>Larger places have a tax base of {threshold} Band D equivalent properties or more, as published for a parish and, for an unparished area, calculated as the council's tax base less its parishes': {larger.length.toLocaleString('en-GB')} of them have a figure. A tax base counts properties, not people. Every larger place is in the full tables on the region and county pages, where the larger places switch narrows the list.</p>
     <div class="fact" data-fact>
       <div class="larger-grid">
         {largerShown.map(list => (

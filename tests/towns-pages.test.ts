@@ -1,9 +1,8 @@
 import {existsSync, readFileSync} from 'node:fs';
 import {describe, expect, it} from 'vitest';
-import {filterTowns, hasFigure, rankTowns, townByCode} from '../src/lib/towns';
+import {filterTowns, hasFigure, rankTowns, townByCode, towns} from '../src/lib/towns';
 import {
-  constituencyScopes, countyScopes, englandScope, placeLabel, placeName, printedName, regionScopes,
-  scopeStructuredData, scopeSummary, scopeText, townCountyPath, townPaths,
+  constituencyScopes, countyScopes, crawlSentence, englandScope, parishChange, parishPart, placeLabel, placeName, printedName, regionScopes, scopeStructuredData, scopeSummary, scopeText, townCountyPath, townPaths,
 } from '../src/lib/towns-pages';
 import {townOgCard} from '../src/lib/towns-og';
 
@@ -69,6 +68,38 @@ describe('towns page layer', () => {
     }
   });
 
+  it('never picks five from a tie: the sentence states a tie as a count at its figure', () => {
+    const lancashire = countyScopes().find(s => s.slug === 'lancashire')!;
+    const sentence = crawlSentence(scopeSummary(lancashire.rows), 'in Lancashire')!;
+    expect(sentence).toMatch(/^8 areas share the lowest full Band D figure in Lancashire, £2,359\.57: Dinckley, /);
+    expect(sentence).not.toContain('five lowest');
+    expect(sentence).toContain('The five highest full Band D figures in Lancashire are Wennington, Lancaster (£2,856.18); ');
+    for (const scope of [englandScope(), ...regionScopes(), ...countyScopes(), ...constituencyScopes()]) {
+      const summary = scopeSummary(scope.rows);
+      const text = crawlSentence(summary, 'here');
+      if (!text) continue;
+      const figures = summary.ranked.map(r => r.town.fullBandDPence);
+      // "The five lowest" is only said where the fifth and sixth figures differ.
+      expect(text.includes('The five lowest'), scope.path).toBe(figures[4] !== figures[5]);
+      expect(text.includes('The five highest'), scope.path).toBe(figures.at(-5) !== figures.at(-6));
+    }
+  });
+
+  it('gives tied rows one shared position in the ItemLists', () => {
+    const scope = countyScopes().find(s => s.slug === 'lancashire')!;
+    const nodes = scopeStructuredData(scope, scopeSummary(scope.rows), 'x') as {itemListElement?: {position: number}[]}[];
+    expect(nodes[1].itemListElement!.slice(0, 9).map(i => i.position)).toEqual([1, 1, 1, 1, 1, 1, 1, 1, 9]);
+  });
+
+  it('takes a group member\'s parish change from the row that carries its group, and gives none where the group is unresolved', () => {
+    const members = towns.filter(t => t.status === 'calculated-group-member');
+    expect(members).toHaveLength(161);
+    for (const t of members) expect(parishChange(t), t.code).toBe(townByCode.get(t.groupCarrier!)!.parishChangePence);
+    const unresolved = towns.filter(t => t.status === 'group-member-unresolved');
+    expect(unresolved).toHaveLength(170);
+    for (const t of unresolved) { expect(parishChange(t)).toBeNull(); expect(parishPart(t)).toBeNull(); }
+  });
+
   it('puts the pair on every share card with its caveat', () => {
     const card = townOgCard(englandScope());
     expect(card.pair?.map(p => p.value)).toEqual(['£1,028.21', '£2,948.01']);
@@ -107,6 +138,19 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
         expect(row.text).toMatch(town.status === 'special-expenses' ? /Published by the council only/ : /Not published/);
       }
     }
+    // Unknown is not zero: a group member whose group is unresolved prints no amount at all.
+    // (A non-precepting parish keeps its published nil parish part, which is a real figure.)
+    let unresolved = 0;
+    for (const scope of [...regionScopes(), ...countyScopes(), ...constituencyScopes()]) {
+      for (const row of bodyRows(read(scope.path))) {
+        if (townByCode.get(row.id)!.status !== 'group-member-unresolved') continue;
+        unresolved++;
+        expect(row.text, `${scope.path} ${row.id}`).not.toMatch(/£/);
+      }
+    }
+    expect(unresolved).toBeGreaterThanOrEqual(170 * 2);
+    const yetminster = bodyRows(read('/council-tax/towns/region/south-west/')).find(r => r.id === 'E1203P265')!;
+    expect(yetminster.text).toMatch(/Not published Not published Not published Listed under its group$/);
     const boston = bodyRows(read('/council-tax/towns/county/lincolnshire/')).find(r => r.id === 'E2531U')!;
     expect(boston.text).toContain('Boston, unparished area');
     expect(boston.text).toContain('printed as Boston Special Expenses*');

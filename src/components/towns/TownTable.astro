@@ -11,7 +11,7 @@ import TownsSources from './TownsSources.astro';
 import {positionCell} from '../../lib/rankings';
 import {national} from '../../lib/national-data';
 import {noteText, townByCode, townsData, type RankedTown, type Town, type TownStatus} from '../../lib/towns';
-import {councilHref, money, noFigure, parishPart, placeName, printedName, signedMoney, STATUS_CHIPS, townConstituencyPath, POSITION_METHOD, type TownScope} from '../../lib/towns-pages';
+import {councilHref, money, noFigure, parishChange, parishPart, placeName, printedName, signedMoney, STATUS_CHIPS, townConstituencyPath, POSITION_METHOD, type TownScope} from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 
 interface Props {scope: TownScope; ranked: RankedTown[]; unplaced: Town[]}
@@ -47,15 +47,18 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
       <option value="pos:1">Position, lowest first</option>
       <option value="v:-1">Full Band D, highest first</option>
       <option value="place:1">Place, A to Z</option>
+      <option value="place:-1">Place, Z to A</option>
       <option value="pp:-1">Parish part, highest first</option>
+      <option value="pp:1">Parish part, lowest first</option>
       <option value="ch:-1">Parish change, highest first</option>
+      <option value="ch:1">Parish change, lowest first</option>
     </select></label>
     {larger > 0 && <label class="town-check"><input type="checkbox" data-f-larger /> <span>Larger places only: a tax base of 2,000 Band D equivalents or more ({larger.toLocaleString('en-GB')} here; a tax base, not a population)</span></label>}
   </div>
   <p class="small muted town-count" data-f-count role="status">All {all.length.toLocaleString('en-GB')} areas shown.</p>
   <div class="fact" data-fact id="towns-table">
     <div class="table-wrap town-wrap" tabindex="0" role="region" aria-label={caption}>
-      <table class="data town-table" data-town-table>
+      <table class:list={["data town-table", {"town-county": showCounty}]} data-town-table>
         <caption>{caption}</caption>
         <thead><tr>
           <th scope="col" class="num" data-sort="pos">Position</th>
@@ -69,17 +72,17 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
           <th scope="col">Status</th>
         </tr></thead>
         <tbody>
-          {rows.map(({town: t, position}) => { const pp = parishPart(t); const printed = printedName(t); return (
-            <tr id={t.code} data-v={t.fullBandDPence ?? undefined} data-pp={pp ?? undefined} data-ch={t.parishChangePence ?? undefined} data-c={t.councilGss} data-k={t.constituencies.map(c => c.code).join(' ') || undefined} data-l={t.largerPlace ? '1' : undefined} class:list={[{'t-none': position === null}]}>
-              <td class="num t-pos" data-figure>{position ?? 'Not placed'}</td>
-              <th scope="row" class="t-place">{placeName(t)}<small>{t.kind === 'unparished' ? (t.taxBaseBasis === 'calculated' ? 'Unparished area' : 'Unparished area, tax base not published separately') : t.type}{t.groupCarrier && `, group carried by ${carrierName(t.groupCarrier)}`}{t.groupLabel && `, group: ${t.groupLabel}`}{printed && <>, printed as <q>{printed}</q></>}{t.mhclgNotes.map(n => <>, <a href={`#mhclg-${letter(n)}`}>MHCLG note {letter(n)}</a></>)}</small></th>
-              <td class="t-council"><a href={councilHref(t.councilGss)}>{tidy(t.councilName)}</a></td>
-              {showCounty && <td class="t-county">{tidy(t.county)}</td>}
-              {showPcon && <td class="t-pcon">{t.constituencies.length ? <>{t.constituencies.map((c, i) => <>{i > 0 && '; '}<a href={townConstituencyPath(c.slug)}>{c.name}</a></>)}{t.constituencySplit && <small> (split, not apportioned)</small>}</> : <span class="muted">Not matched</span>}</td>}
-              <td class="num t-full" data-figure>{t.fullBandDPence === null ? noFigure(t) : money(t.fullBandDPence)}</td>
-              <td class="num t-parish" data-figure>{pp === null ? (t.kind === 'unparished' ? 'No parish' : 'Not published') : money(pp)}</td>
-              <td class="num t-change" data-figure>{t.parishChangePence === null ? 'Not comparable' : signedMoney(t.parishChangePence)}</td>
-              <td class:list={['t-status', {'t-calc': t.status === 'calculated'}]}>{t.status === 'calculated' ? 'Calculated' : <span class="town-chip">{STATUS_CHIPS[t.status]}</span>}</td>
+          {rows.map(({town: t, position}) => { const pp = parishPart(t); const ch = parishChange(t); const printed = printedName(t); return (
+            <tr id={t.code} data-v={t.fullBandDPence ?? undefined} data-pp={pp ?? undefined} data-ch={ch ?? undefined} data-c={t.councilGss} data-k={t.constituencies.map(c => c.code).join(' ') || undefined} data-l={t.largerPlace ? '1' : undefined} class:list={[{'t-none': position === null}]}>
+              <td data-figure>{position ?? 'Not placed'}</td>
+              <th scope="row">{placeName(t)}<small>{t.kind === 'unparished' ? (t.taxBaseBasis === 'calculated' ? 'Unparished area' : 'Unparished area, tax base not published separately') : t.type}{t.groupCarrier && `, group carried by ${carrierName(t.groupCarrier)}`}{t.groupLabel && `, group: ${t.groupLabel}`}{printed && <>, printed as <q>{printed}</q></>}{t.mhclgNotes.map(n => <>, <a href={`#mhclg-${letter(n)}`}>MHCLG note {letter(n)}</a></>)}</small></th>
+              <td><a href={councilHref(t.councilGss)}>{tidy(t.councilName)}</a></td>
+              {showCounty && <td>{tidy(t.county)}</td>}
+              {showPcon && <td>{t.constituencies.length ? <>{t.constituencies.map((c, i) => <>{i > 0 && '; '}<a href={townConstituencyPath(c.slug)}>{c.name}</a></>)}{t.constituencySplit && <small> (split, not apportioned)</small>}</> : <span class="muted">Not matched</span>}</td>}
+              <td data-figure>{t.fullBandDPence === null ? noFigure(t) : money(t.fullBandDPence)}</td>
+              <td data-figure>{pp === null ? (t.kind === 'unparished' ? 'No parish' : 'Not published') : money(pp)}</td>
+              <td data-figure>{ch === null ? (t.status === 'group-member-unresolved' ? 'Not published' : 'Not comparable') : signedMoney(ch)}</td>
+              <td class={t.status === 'calculated' ? 't-calc' : undefined}>{t.status === 'calculated' ? 'Calculated' : <span class="town-chip">{STATUS_CHIPS[t.status]}</span>}</td>
             </tr>
           ); })}
         </tbody>
@@ -115,8 +118,12 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
     const names = new Map(rows.map(row => [row, (row.cells[1].firstChild?.textContent ?? '').toLowerCase()]));
     const params = new URLSearchParams(location.search);
     if (q && params.get('q')) q.value = params.get('q')!;
-    if (council && params.get('council')) council.value = params.get('council')!;
-    if (pcon && params.get('constituency')) pcon.value = params.get('constituency')!;
+    // A value with no matching option leaves a select blank, so fall back to "All".
+    for (const [select, key] of [[council, 'council'], [pcon, 'constituency']] as const) {
+      if (!select || !params.get(key)) continue;
+      select.value = params.get(key)!;
+      if (select.selectedIndex < 0) select.value = '';
+    }
     if (larger && params.get('larger') === '1') larger.checked = true;
     panel.hidden = false;
     const total = rows.length;
@@ -133,7 +140,8 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
         if (ok) shown++;
       }
       status!.textContent = shown === total ? `All ${format(total)} areas shown.` : `Showing ${format(shown)} of ${format(total)} areas.`;
-      const next = new URLSearchParams();
+      const next = new URLSearchParams(location.search);
+      for (const key of ['q', 'council', 'constituency', 'larger']) next.delete(key);
       if (query) next.set('q', query);
       if (council?.value) next.set('council', council.value);
       if (pcon?.value) next.set('constituency', pcon.value);
@@ -151,11 +159,10 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
       const value = (row: HTMLTableRowElement) => row.dataset[key] === undefined ? null : Number(row.dataset[key]);
       const sorted = [...rows].sort((a, b) => {
         if (key === 'place') return names.get(a)!.localeCompare(names.get(b)!, 'en-GB') * dir;
-        if (key === 'pos') {
-          const na = a.dataset.v === undefined, nb = b.dataset.v === undefined;
-          if (na !== nb) return na ? 1 : -1;
-          return (original.get(a)!-original.get(b)!) * (na ? 1 : dir);
-        }
+        const na = a.dataset.v === undefined, nb = b.dataset.v === undefined;
+        if (na !== nb) return na ? 1 : -1;
+        if (na) return original.get(a)!-original.get(b)!;
+        if (key === 'pos') return (original.get(a)!-original.get(b)!) * dir;
         const va = value(a), vb = value(b);
         if (va === null && vb === null) return original.get(a)!-original.get(b)!;
         if (va === null) return 1;
@@ -164,7 +171,9 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
       });
       body.append(...sorted);
       for (const th of headers) th.setAttribute('aria-sort', th.dataset.sort === key ? (dir === 1 ? 'ascending' : 'descending') : 'none');
-      if (sortSelect) sortSelect.value = `${key}:${dir}`;
+      // Position and full Band D are one order, so the select has one option for each direction.
+      const option = key === 'pos' && dir === -1 ? 'v:-1' : key === 'v' && dir === 1 ? 'pos:1' : `${key}:${dir}`;
+      if (sortSelect) sortSelect.value = option;
     }
     for (const th of headers) {
       const button = document.createElement('button');
@@ -187,7 +196,7 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
 </script>
 
 <style is:global>
-/* Global so the thousands of rows carry no scoped style attribute; every selector is prefixed town- or t-. */
+/* Global so the thousands of rows carry no scoped style attribute, and cells are styled by column position, not a class on every cell: position, place, council, [county], constituency, full Band D, parish part, parish change, status. */
 .town-filters{display:grid;gap:var(--space-sm) var(--space-md);margin:var(--space-md) 0 var(--space-xs);padding:var(--space-md);border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-subtle)}
 @media(min-width:600px){.town-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:900px){.town-filters{grid-template-columns:2fr 1.4fr 1.4fr 1.4fr}}
@@ -198,18 +207,18 @@ const carrierName = (code: string) => { const t = townByCode.get(code); return t
 .town-count{margin:var(--space-xs) 0}
 .town-table{width:100%}
 .town-table th[scope="row"]{min-width:10rem;max-width:18rem;overflow-wrap:anywhere}
-.town-table th[scope="row"] small,.t-pcon small{display:block;font-weight:400;font-size:var(--text-xs);color:var(--text-muted)}
-.town-table td.num{white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
-.town-table .t-full{font-weight:600}
-.town-table .t-pcon{min-width:10rem}
-.town-table .t-council{min-width:7.5rem}
-.t-none .t-full,.t-none .t-parish{white-space:normal;min-width:6.5rem}
+.town-table th[scope="row"] small,.town-table tbody td:nth-last-child(5) small{display:block;font-weight:400;font-size:var(--text-xs);color:var(--text-muted)}
+.town-table tbody td:first-child,.town-table tbody td:nth-last-child(4),.town-table tbody td:nth-last-child(3),.town-table tbody td:nth-last-child(2){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
+.town-table tbody td:nth-last-child(4){font-weight:600}
+.town-table tbody td:nth-last-child(5){min-width:10rem}
+.town-table tbody td:nth-child(3){min-width:7.5rem}
+.town-table .t-none td:nth-last-child(4),.town-table .t-none td:nth-last-child(3){white-space:normal;min-width:6.5rem}
 .town-table .town-chip{white-space:normal}
-.town-table .t-status{min-width:8rem}
+.town-table tbody td:last-child{min-width:8rem}
 .town-table tr:target{background:var(--accent-wash)}
 .town-table tr:target td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
 .town-table tr:target th[scope="row"]{background:var(--accent-wash)}
-.t-none .t-pos,.t-none .t-full{color:var(--text-muted);font-weight:400}
+.town-table .t-none td:first-child,.town-table .t-none td:nth-last-child(4){color:var(--text-muted);font-weight:400}
 .town-chip{display:inline-block;padding:.1rem .55rem;border:1px solid var(--border-strong);border-radius:999px;font-size:var(--text-xs);line-height:1.5;white-space:nowrap}
 .town-sort{font:inherit;font-weight:600;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit;min-height:24px}
 .town-sort::after{content:" \2195";color:var(--text-faint)}
@@ -229,25 +238,25 @@ th[aria-sort="descending"] .town-sort::after{content:" \2193";color:var(--accent
   .town-table tbody tr[hidden]{display:none}
   .town-table tbody td,.town-table tbody th{display:block;padding:0;border:0;background:none;position:static;min-width:0;max-width:none;text-align:left}
   .town-table tbody tr:nth-child(even) th:first-child,.town-table tbody tr:nth-child(even){background:none}
-  .town-table .t-pos{grid-column:1;grid-row:1/span 6;font-family:var(--font-display);font-weight:600;font-size:var(--text-md);color:var(--text-faint);white-space:normal}
-  .t-none .t-pos{font-family:var(--font-sans);font-size:var(--text-xs)}
+  .town-table tbody td:first-child{grid-column:1;grid-row:1/span 6;font-family:var(--font-display);font-weight:600;font-size:var(--text-md);color:var(--text-faint);white-space:normal}
+  .town-table .t-none td:first-child{font-family:var(--font-sans);font-size:var(--text-xs)}
   .town-table th[scope="row"]{grid-column:2;grid-row:1}
-  .town-table .t-full{grid-column:3;grid-row:1;text-align:right;white-space:normal;max-width:9rem}
-  .town-table .t-council,.town-table .t-county,.town-table .t-pcon,.town-table .t-status{grid-column:2/span 2;font-size:var(--text-sm);color:var(--text-muted)}
-  .town-table .t-council{grid-row:2}
-  .town-table .t-county{grid-row:3}
-  .town-table .t-pcon{grid-row:4}
-  .town-table .t-county::before{content:"County: "}
-  .town-table .t-pcon::before{content:"Constituency: "}
-  .town-table .t-council::before{content:"Council: "}
-  .town-table .t-parish,.town-table .t-change{grid-row:5;font-size:var(--text-sm);color:var(--text-muted)}
-  .town-table .t-parish{grid-column:2}
-  .town-table .t-change{grid-column:3;text-align:right}
-  .town-table .t-parish::before{content:"Parish part "}
-  .town-table .t-change::before{content:"Change "}
-  .town-table .t-status{grid-row:6;margin-top:var(--space-2xs)}
+  .town-table tbody td:nth-last-child(4){grid-column:3;grid-row:1;text-align:right;white-space:normal;max-width:9rem}
+  .town-table tbody td:nth-child(3),.town-county tbody td:nth-child(4),.town-table tbody td:nth-last-child(5),.town-table tbody td:last-child{grid-column:2/span 2;font-size:var(--text-sm);color:var(--text-muted)}
+  .town-table tbody td:nth-child(3){grid-row:2}
+  .town-county tbody td:nth-child(4){grid-row:3}
+  .town-table tbody td:nth-last-child(5){grid-row:4}
+  .town-county tbody td:nth-child(4)::before{content:"County: "}
+  .town-table tbody td:nth-last-child(5)::before{content:"Constituency: "}
+  .town-table tbody td:nth-child(3)::before{content:"Council: "}
+  .town-table tbody td:nth-last-child(3),.town-table tbody td:nth-last-child(2){grid-row:5;font-size:var(--text-sm);color:var(--text-muted)}
+  .town-table tbody td:nth-last-child(3){grid-column:2}
+  .town-table tbody td:nth-last-child(2){grid-column:3;text-align:right}
+  .town-table tbody td:nth-last-child(3)::before{content:"Parish part "}
+  .town-table tbody td:nth-last-child(2)::before{content:"Change "}
+  .town-table tbody td:last-child{grid-row:6;margin-top:var(--space-2xs)}
   .town-table .t-calc{display:none}
-  .town-table tbody td.t-parish{text-align:left}
+  .town-table tbody td:nth-last-child(3){text-align:left}
   .town-wrap{max-height:70vh}
 }
 @media print{.town-filters,.town-count{display:none!important}.town-wrap{max-height:none!important;overflow:visible}}

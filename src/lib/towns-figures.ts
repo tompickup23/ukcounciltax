@@ -1,6 +1,6 @@
 /**
  * The Estate Kit position strip for the towns pages: every full Band D in a scope
- * as one distribution, with the area with the largest published tax base as the
+ * as one distribution, with the area with the largest tax base as the
  * marked point (the kit compares only one edition, so MHCLG's Table 7 average cannot
  * be marked on this class). Its own figure set, so the site set stays small; the
  * strip draws five numbers, not one mark per row, so the page stays light.
@@ -22,7 +22,7 @@ export const stripPngPath = (scope: TownScope) => `/og/charts/towns/${stripName(
 const seriesKey = (scope: TownScope) => `towns.${stripName(scope)}.full_bandd`;
 const focusKey = (scope: TownScope) => `towns.${stripName(scope)}.largest`;
 
-/** The marked point: the area with the largest published tax base among those with a figure. */
+/** The marked point: the area with the largest tax base among those with a figure. */
 export function stripFocus(scope: TownScope) {
   const ranked = rankTowns(scope.rows).filter(r => r.town.taxBase !== null);
   return ranked.reduce((best, r) => (r.town.taxBase! > best.town.taxBase! ? r : best), ranked[0]);
@@ -55,7 +55,7 @@ export function stripOptions(scope: TownScope): PositionStripOptions {
   return {
     set: townFigures(), figure: focusKey(scope), distribution: seriesKey(scope), place: stripFocus(scope).town.code,
     classLabel: 'parish and unparished areas',
-    basis: 'Full Band D, including the parish precept; the marked area has the largest published tax base',
+    basis: 'Full Band D, including the parish precept; the marked area has the largest tax base (for an unparished area, the tax base of the council less that of its parishes)',
     title: `Full Band D across ${n.toLocaleString('en-GB')} parish and unparished areas ${scopeIn(scope)}, ${townsYear}`,
   };
 }

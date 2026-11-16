@@ -15,7 +15,7 @@ import {moneyPence} from './tax-view';
 import {absoluteUrl, SITE_URL} from './site';
 import type {SourceRef} from './sources';
 import {
-  countTowns, extremes, filterTowns, hasFigure, rankTowns, statusLabel, townsData, towns,
+  countTowns, extremes, filterTowns, hasFigure, rankTowns, statusLabel, townByCode, townsData, towns,
   type RankedTown, type Town, type TownStatus,
 } from './towns';
 import {REGIONS, slugify} from './paths';
@@ -134,10 +134,23 @@ const parishByCode = new Map(sameParishReturn ? national.parishes.map(p => [p.co
  * from the same parish return row (the file hashes must match). Null when unknown.
  */
 export function parishPart(town: Town): number | null {
+  // A group member the return lists without its group's figure carries a nil of its own, which is not its charge.
+  if (town.status === 'group-member-unresolved') return null;
   if (town.parts) return town.parts.parish + town.parts.trustees;
   if (town.kind === 'unparished') return null;
   const year = parishByCode.get(town.code)?.years[TOWNS_YEAR];
   return year?.status === 'published' ? year.bandDPence : null;
+}
+
+/**
+ * The change in a row's parish part. The parish return gives a group member a nil
+ * row of its own: the group's change is on the row that carries the group, so a
+ * member shows that row's change, and nothing where the group is not resolved.
+ */
+export function parishChange(town: Town): number | null {
+  if (town.status === 'group-member-unresolved') return null;
+  if (town.status === 'calculated-group-member') return town.groupCarrier ? townByCode.get(town.groupCarrier)?.parishChangePence ?? null : null;
+  return town.parishChangePence;
 }
 
 /** The council link for a row: its parish precepts page where one exists, else its profile. */
@@ -212,13 +225,27 @@ function ledger(rows: RankedTown[], side: 'low' | 'high') {
   return {rows: shown, more: sameAsEdge-shownAtEdge, moreAt: edge};
 }
 
-/** The plain sentence naming the five lowest and five highest, so the text is crawlable. */
+/**
+ * The plain sentence naming the lowest and highest figures, so the text is crawlable.
+ * Five each where the fifth figure is not shared beyond the five. Where the cut
+ * would fall inside a tie, the places clear of the tie are named and the tie is
+ * stated as a count at its figure (named in full up to eight), never a pick from it.
+ */
 export function crawlSentence(summary: ReturnType<typeof scopeSummary>, where: string): string | null {
   const {ranked} = summary;
   if (ranked.length < 10) return null;
   const name = (r: RankedTown) => `${placeLabel(r.town)} (${money(r.town.fullBandDPence)})`;
-  const list = (rows: RankedTown[]) => `${rows.slice(0, -1).map(name).join('; ')} and ${name(rows.at(-1)!)}`;
-  return `The five lowest full Band D figures ${where} are ${list(ranked.slice(0, 5))}. The five highest are ${list(ranked.slice(-5).reverse())}.`;
+  const join = (parts: string[]) => parts.length > 1 ? `${parts.slice(0, -1).join('; ')} and ${parts.at(-1)}` : parts[0];
+  const side = (rows: RankedTown[], word: 'lowest' | 'highest') => {
+    const cut = rows[4].town.fullBandDPence;
+    const tie = rows.filter(r => r.town.fullBandDPence === cut);
+    const clear = rows.filter(r => word === 'lowest' ? r.town.fullBandDPence < cut : r.town.fullBandDPence > cut);
+    if (clear.length + tie.length === 5) return `The five ${word} full Band D figures ${where} are ${join(rows.slice(0, 5).map(name))}.`;
+    const shared = `${tie.length} areas share ${money(cut)}${tie.length <= 8 ? `: ${join(tie.map(r => placeLabel(r.town)))}` : ''}`;
+    if (!clear.length) return `${tie.length} areas share the ${word} full Band D figure ${where}, ${money(cut)}${tie.length <= 8 ? `: ${join(tie.map(r => placeLabel(r.town)))}` : ''}.`;
+    return `The ${word} full Band D ${clear.length === 1 ? 'figure' : 'figures'} ${where} ${clear.length === 1 ? 'is' : 'are'} ${join(clear.map(name))}; then ${shared}.`;
+  };
+  return `${side(ranked, 'lowest')} ${side([...ranked].reverse(), 'highest')}`;
 }
 
 /** Title, H1 and meta description per T2, with the figures from the data. */
@@ -252,12 +279,13 @@ const OGL = 'https://www.nationalarchives.gov.uk/doc/open-government-licence/ver
 /** JSON-LD: a Dataset for the table, and the lowest and highest ten by name and anchor only. */
 export function scopeStructuredData(scope: TownScope, summary: ReturnType<typeof scopeSummary>, description: string) {
   const where = scopeIn(scope);
-  const item = (r: RankedTown, i: number) => ({'@type': 'ListItem', position: i + 1, name: placeLabel(r.town), url: absoluteUrl(townAnchor(scope.path, r.town))});
+  // Positions are the page's own: equal figures share one, as in the ledgers these lists mirror.
+  const item = (r: RankedTown) => ({'@type': 'ListItem', position: r.position, name: placeLabel(r.town), url: absoluteUrl(townAnchor(scope.path, r.town))});
   const list = (name: string, rows: RankedTown[], order: string) => ({
     '@context': 'https://schema.org', '@type': 'ItemList', name, itemListOrder: order,
     numberOfItems: rows.length, itemListElement: rows.map(item),
   });
-  const low = summary.ranked.slice(0, 10), high = summary.ranked.slice(-10).reverse();
+  const low = summary.ledgerLow.rows, high = summary.ledgerHigh.rows;
   const nodes: object[] = [{
     '@context': 'https://schema.org', '@type': 'Dataset',
     name: `Full Band D council tax by parish and unparished area ${where}, ${townsYear}`,

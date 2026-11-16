@@ -1,12 +1,12 @@
-# State | UK Council Tax | 15 November 2026, towns pages
+# State | UK Council Tax | 15 November 2026, late night
 
-- **Live:** towns stage 1 data (PR 92) and schedules audit (PR 91) merged; PR 88 merged. Earlier: main `b5f8ced` (PR 89, W0), published 15 November 18:47: the budget band with Play and Set doors on the homepage and `/tools/`, the England map card, Set links on 197 rows of `/tools/budget/`, the 404 with the tools.
+- **Live:** main `b5f8ced` (PR 89, W0), published 15 November 18:47: the budget band with Play and Set doors on the homepage and `/tools/`, the England map card, Set links on 197 rows of `/tools/budget/`, the 404 with the tools.
 - **Not yet restyled:** `/tools/budget/`, `/tools/budget/<slug>/` and `/set/`. That is W1 to W3, which wait on PR 88 because it holds those files.
-- **Open:** towns stage 2 pages (branch `feat/towns-pages`, draft, waits on Tom's merge yes); PR 93 (W1 budget doors); UK Councils PR 62; Estate Kit PRs 27 and 28.
+- **Open:** PR 88 (C6 levels day staging, draft, waits on Tom's six decisions, defaults in the prompts file); this docs PR (plan and towns research); UK Councils PR 62; Estate Kit PRs 27 and 28.
 - **Next:** `docs/PROMPTS-2026-11-15-W1-W3-AND-TOWNS.md`. Wave 1 now: PR 88 decisions and merge (Opus), towns data layer (Opus), special expense council schedules (Codex). Wave 2: W1 (Codex) beside towns pages (Opus). Then W2 (Codex), then W3 (Opus).
-- **Town league table:** asked for by Tom on 15 November. Research in `docs/TOWNS-RESEARCH-2026-11-15.md`: the full Band D formula is exact to the penny where a council has no special expenses (Burnley, Cornwall checked), wrong for the 48 special expense councils with parishes (Rushcliffe, Chorley, Westminster checked). Constituency via the ONS parish to ward to constituency chain, 96.3% clean match. T1 to T5 taken 15 November. Stage 2 builds 642 routes (hub, 9 regions, 91 counties, 541 constituencies); see `docs/RELEASE.md` and the PR body.
+- **Town league table:** asked for by Tom on 15 November. Research in `docs/TOWNS-RESEARCH-2026-11-15.md`: the full Band D formula is exact to the penny where a council has no special expenses (Burnley, Cornwall checked), wrong for the 48 special expense councils with parishes (Rushcliffe, Chorley, Westminster checked). Constituency via the ONS parish to ward to constituency chain, 96.3% clean match. Decisions T1 to T5 for Tom in the prompts file; T1 supersedes the A4 "no ranking of parishes" line for the towns routes.
 - **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites.
-- **Decisions waiting:** towns pages merge; D10; plan section 10.3 (X3, X4, Shepway slug, seats source, audit identity, section 114 register) by 15 December.
+- **Decisions waiting:** PR 88 one to six; D10; T1 to T5; plan section 10.3 (X3, X4, Shepway slug, seats source, audit identity, section 114 register) by 15 December.
 - **Untracked:** `output/town-research/` in the main checkout (45 MB of ONS exports and scratch scripts); session 2 downloads the portal CSVs again, so it can be deleted on Tom's yes.
 - **Binding dates:** levels day staged by mid January 2027; links check before 10 February; freeze 20 March; reversal May to June 2027.
 - **Local trap:** Astro 7 `astro preview` detaches, so Playwright's own webServer fails locally. Start `npx astro preview --host 127.0.0.1 --port 44321`, run with `E2E_BASE_URL=http://127.0.0.1:44321`, then `npx astro preview stop`.

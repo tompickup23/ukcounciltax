@@ -2,6 +2,10 @@
 
 Step C0 of `docs/PLAN-CURRENT.md` section 4 (as revised in pull request 102). Three candidate palettes for UK Council Tax, drawn on the eight reference pages in dark and light so that Tom can choose from pictures (decision C1, by 23 November 2026). Pictures and a contrast table only: nothing in `src/` changed, and nothing here is on the site.
 
+## Decision C1, 16 November 2026
+
+Tom chose **B, green and cream** in chat on 16 November 2026 ("B, green and cream"), after seeing the sheets. Taken as drawn: B's cream paper `#f6f1e4` supersedes the D2 value `#f8f7f2`, and links and actions share the cream gold in dark, so the swap stays values only. Both are reversible by Tom. Next is the kit release (K2), then the swap on the site (W8); each is Tom's yes.
+
 ## How the pictures were made
 
 The live site (origin/main `5a76109`, read only) was loaded in Chromium through Playwright at 1440 by 900 and 390 by 844, in dark then light, with reduced motion. Each candidate is a set of token overrides (`colour-round/candidate-a.css`, `-b.css`, `-c.css`, generated from `colour-round/palettes.mjs`) injected into the loaded page. No build was needed because every colour on the site is a token. `colour-round/round.mjs` reproduces all of it: `css`, `contrast`, `capture`, `sheets`.

@@ -16,11 +16,13 @@ for (const route of ['', 'leeds/', 'burnley/', 'camden/']) {
         expect(bounds!.width).toBeGreaterThanOrEqual(44);
       }
       if (route) {
-        await expect(page.locator('[data-budget-modes] a').first()).toHaveText('Guess');
+        // W4: the doors are the one way to Guess and to Set; no mode links repeat them, and there is no second start button.
+        await expect(page.locator('[data-budget-modes]')).toHaveCount(0);
+        await expect(page.locator('[data-game-start]')).toHaveCount(0);
         const setDoor = page.locator('[data-budget-door="set"]');
         await expect(page.locator('[data-budget-set-entry]')).toHaveCount(1);
         await expect(setDoor.locator('[data-budget-set-entry]')).toHaveCount(route === 'burnley/' ? 0 : 1);
-        if (route === 'burnley/') await expect(page.locator('[data-budget-modes] a')).toHaveText(['Guess', "The council's own gap"]);
+        if (route === 'burnley/') await expect(setDoor).toContainText("Explore the council's own gap");
         await expect(page.locator('#game-heading')).toHaveText(`Could you set ${route === 'leeds/' ? 'Leeds' : route === 'burnley/' ? 'Burnley' : 'Camden'}'s budget?`);
       } else {
         await expect(page.locator('th.picker-action')).toHaveText('Set');
@@ -34,7 +36,7 @@ for (const route of ['', 'leeds/', 'burnley/', 'camden/']) {
 for (const slug of ['leeds', 'burnley', 'camden']) {
   test(`${slug} score card offers Set only when eligible`, async ({page}) => {
     await page.goto(`/tools/budget/${slug}/`);
-    await page.locator('[data-game-start]').click();
+    await page.locator('[data-budget-door="guess"]').click();
     const rounds = await page.locator('[data-game-route] > li').count();
     for (let round = 0; round < rounds; round++) {
       await page.getByRole('button', {name: 'Skip and reveal', exact: true}).click();

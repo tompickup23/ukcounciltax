@@ -9,7 +9,7 @@ for (const slug of ['', 'burnley/', 'birmingham/']) test(`budget game has no act
   expect(policy.match(/script-src[^;]*/)?.[0]).not.toContain("'unsafe-inline'");
   if (slug) {
     const game = page.locator('[data-budget-game]');
-    await game.getByRole('button', {name: 'Start the game'}).click();
+    await game.locator('[data-budget-door="guess"]').click();
     const rounds = slug === 'burnley/' ? 5 : 4;
     for (let i = 0; i < rounds; i++) {
       const stage=game.locator('[data-game-stage]');

@@ -21,7 +21,7 @@ export function scenarioJourneys(widths:(number|undefined)[]=[undefined]) {
       const root=page.locator('[data-budget-game]'),stage=root.locator('[data-game-stage]');
       const tables=await page.locator('.budget-tables').allTextContents();
       const storage=await page.evaluate(()=>({local:{...localStorage},session:{...sessionStorage},cookie:document.cookie}));
-      await activate(page,root.getByRole('button',{name:'Start the game',exact:true}));
+      await activate(page,root.locator('[data-budget-door="guess"]'));
       const rounds=slug==='burnley'?5:4;
       for(let i=0;i<rounds;i++){
         await activate(page,stage.getByRole('button',{name:'Skip and reveal',exact:true}));
@@ -87,11 +87,11 @@ export function scenarioJourneys(widths:(number|undefined)[]=[undefined]) {
       await page.context().grantPermissions(['clipboard-read','clipboard-write']);await stage.getByRole('button',{name:'Copy score link',exact:true}).click();expect(await page.evaluate(()=>navigator.clipboard.readText())).toBe(scoreLink);
       await stage.getByRole('button',{name:'Try your version',exact:true}).click();await expect(inputs.first()).toHaveValue('0');
       await inputs.first().fill('60');await stage.getByRole('button',{name:'Reset this screen',exact:true}).click();await expect(inputs.first()).toHaveValue('0');
-      await inputs.first().fill('60');await page.reload();await expect(root.getByRole('button',{name:'Start the game',exact:true})).toBeVisible();
+      await inputs.first().fill('60');await page.reload();await expect(root.locator('[data-game-rail]')).toBeHidden();
       await page.goto(scoreLink!);await expect(stage).toContainText('not verified');await stage.getByRole('button',{name:'Try your version',exact:true}).click();await expect(inputs.first()).toHaveValue('0');
       await stage.getByRole('button',{name:/Band D split$/}).click();await stage.getByRole('button',{name:'Show scenario summary',exact:true}).click();await expect(stage).toContainText('not shown yet');
       await stage.getByRole('button',{name:'Play again',exact:true}).click();await expect(stage.getByRole('heading',{level:3})).toContainText('Guess the split');await expect(stage.getByRole('spinbutton').first()).toHaveValue('0');
-      await page.goto(`${scoreLink}&scenario=60,40`);await page.reload();await expect(root.getByRole('button',{name:'Start the game',exact:true})).toBeVisible();
+      await page.goto(`${scoreLink}&scenario=60,40`);await page.reload();await expect(root.locator('[data-game-rail]')).toBeHidden();
     });
   }
   test('scenario pointer controls update squares and typed invalid values remain invalid',async({page})=>{

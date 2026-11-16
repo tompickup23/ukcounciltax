@@ -34,7 +34,7 @@ for (const slug of ['burnley', 'birmingham']) for (const theme of ['light', 'dar
     await page.goto(`/tools/budget/${slug}/?postcode=ignore&band=H`);
     const root = page.locator('[data-budget-game]');
     const stage = root.locator('[data-game-stage]');
-    await keyboardActivate(page, root.getByRole('button', {name: 'Start the game'}));
+    await keyboardActivate(page, root.locator('[data-budget-door="guess"]'));
     const rounds = slug === 'burnley' ? 5 : 4;
     for (let i = 0; i < rounds; i++) {
       await expect(root.locator('[data-game-rail] [aria-current=step] .game-stop-number')).toHaveText(String(i+1));
@@ -87,7 +87,7 @@ for (const slug of ['burnley', 'birmingham']) for (const theme of ['light', 'dar
 test('all rounds can be skipped and invalid share totals can be corrected', async ({page}) => {
   await page.goto('/tools/budget/burnley/');
   const root = page.locator('[data-budget-game]');
-  await root.getByRole('button', {name: 'Start the game'}).click();
+  await root.locator('[data-budget-door="guess"]').click();
   await root.getByRole('button', {name: 'Reveal answer', exact: true}).press('Enter');
   await expect(root.locator('[role="status"]')).toContainText('Share exactly 100p');
   const input = root.getByRole('spinbutton').first();
@@ -111,14 +111,15 @@ test('all rounds can be skipped and invalid share totals can be corrected', asyn
 });
 test('invalid shared scores cannot inject markup or create a summary', async ({page}) => {
   await page.goto('/tools/budget/birmingham/#scores=101,2,3,4');
-  await expect(page.getByRole('button', {name: 'Start the game'})).toBeVisible();
+  await expect(page.locator('[data-budget-door="guess"]')).toBeVisible();
+  await expect(page.locator('[data-game-rail]')).toBeHidden();
   await expect(page.getByRole('heading', {name: 'Shared game scores'})).toHaveCount(0);
 });
 
 
 test('62p stays in the round, sliders recolour squares and the phone check bar stays visible', async ({page}) => {
   await page.goto('/tools/budget/burnley/');
-  await page.getByRole('button',{name:'Start the game'}).click();
+  await page.locator('[data-budget-door="guess"]').click();
   const stage=page.locator('[data-game-stage]');const numbers=stage.getByRole('spinbutton');
   await numbers.first().fill('62');
   const check=stage.getByRole('button',{name:'Reveal answer',exact:true});
@@ -148,7 +149,36 @@ test('without JavaScript the lead explains the game and the published tables rem
   await page.goto((test.info().project.use.baseURL as string)+'/tools/budget/burnley/');
   await expect(page.locator('noscript p')).toHaveText("The game needs JavaScript. Burnley's published budget, with the same figures, is in the tables below.");
   await expect(page.locator('noscript p')).toBeVisible();
-  await expect(page.locator('[data-game-controls]')).toBeHidden();await page.locator('#published-budget > summary').click();
+  await expect(page.locator('[data-game-rail]')).toBeHidden();await expect(page.locator('[data-game-route] > li')).toHaveCount(5);await expect(page.locator('[data-game-route]')).toBeVisible();await page.locator('#published-budget > summary').click();
   await expect(page.locator('#council-budget')).toBeVisible();await expect(page.locator('#published-budget [data-published-round]')).toHaveCount(5);
   expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBe(375);await context.close();
+});
+
+test('W4 play frame: one start control, Your move per screen, a stepper that scrolls inside itself and turns static on a short screen', async ({page}) => {
+  await page.goto('/tools/budget/burnley/');
+  await expect(page.locator('.game-desk [data-game-route] > li')).toHaveCount(5);
+  await expect(page.locator('.game-desk [data-ek-square]')).toHaveCount(0);
+  await expect(page.locator('[data-game-start], [data-budget-modes]')).toHaveCount(0);
+  await expect(page.getByText('Start the game', {exact: true})).toHaveCount(0);
+  await page.locator('[data-budget-door="guess"]').click();
+  const stage = page.locator('[data-game-stage]'), rail = page.locator('[data-game-rail]');
+  await expect(stage.locator('.game-move')).toHaveCount(1);
+  await expect(stage.locator('.game-move')).toContainText('Your move');
+  for (let i = 0; i < 3; i++) {
+    await stage.getByRole('button', {name: 'Skip and reveal', exact: true}).click();
+    await expect(stage.locator('.game-move')).toContainText('next round');
+    await stage.getByRole('button', {name: 'Next round', exact: true}).click();
+  }
+  await expect(rail.locator('[aria-current=step] .game-stop-number')).toHaveText('4');
+  const state = () => rail.evaluate(list => {
+    const box = list.getBoundingClientRect(), current = list.querySelector('[aria-current=step]')!.getBoundingClientRect();
+    return {position: getComputedStyle(list).position, inside: current.left >= box.left - 1 && current.right <= box.right + 1, page: document.documentElement.scrollWidth - document.documentElement.clientWidth};
+  });
+  const width = page.viewportSize()!.width;
+  await page.evaluate(() => window.scrollBy(0, 400));
+  expect(await state()).toEqual({position: 'sticky', inside: true, page: 0});
+  if (width === 375) expect(await rail.evaluate(list => list.scrollWidth > list.clientWidth)).toBe(true);
+  await page.setViewportSize({width: 720, height: 450});
+  expect((await state()).position).toBe('static');
+  await page.setViewportSize({width, height: 800});
 });

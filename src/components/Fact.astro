@@ -5,6 +5,7 @@
  * data-figure against a source line inside the same fact.
  */
 import SourceLine from "./SourceLine.astro";
+import RecordLine from "./RecordLine.astro";
 import type { SourceRef } from "../lib/sources";
 
 interface Props {
@@ -13,14 +14,16 @@ interface Props {
   source: SourceRef;
   change?: string | null;
   class?: string;
+  /** A short record line pointing to this Sources block entry, in place of the full source line (F1). */
+  record?: string;
 }
 
-const { figure, label, source, change = null, class: className } = Astro.props;
+const { figure, label, source, change = null, class: className, record } = Astro.props;
 ---
 <div class:list={["fact", className]} data-fact>
   <span class="fact-label">{label}</span>
   <span class="fact-figure" data-figure>{figure}</span>
   {change && <span class="fact-change">{change}</span>}
   <slot />
-  <SourceLine source={source} />
+  {record ? <RecordLine entry={record} sources={[source]} method={source.method} /> : <SourceLine source={source} />}
 </div>

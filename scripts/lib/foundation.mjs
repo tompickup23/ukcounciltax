@@ -22,7 +22,7 @@ export const WEIGHT_CAP = 500 * 1024;
 export const WEIGHT_ALLOWANCES = [
   { pattern: /^\/increases\/index\.html$/, cap: 1_170_000, until: "Tier 2 increases page" },
   { pattern: /^\/council-tax\/index\.html$/, cap: 772_000, until: "Tier 2 national page" },
-  { pattern: /^\/tools\/budget\/[^/]+\/index\.html$/, cap: 541_000, until: "W4 game page" },
+  { pattern: /^\/tools\/budget\/[^/]+\/index\.html$/, cap: 537_000, until: "W4 part two: reveal reuses the drawer charts" },
   { pattern: /^\/council-tax\/towns\/region\/[^/]+\/index\.html$/, cap: 1_110_000, until: "towns follow up: region pages split or paged" },
 ];
 
@@ -36,7 +36,7 @@ export const REPEAT_CAP = 3;
 
 /** Templates that repeated full citations when F1 landed, capped at that count. */
 export const REPEAT_ALLOWANCES = [
-  { pattern: /^\/tools\/budget\/[^/]+\/index\.html$/, cap: 26, until: "W4 game page" },
+  { pattern: /^\/tools\/budget\/[^/]+\/index\.html$/, cap: 4, until: "W4 part two: the kit chart captions in the drawer" },
   { pattern: /^\/council-tax\/[^/]+\/index\.html$/, cap: 18, until: "Tier 2 band and ranked pages" },
   { pattern: /^\/changes\/index\.html$/, cap: 13, until: "Tier 2 changes page" },
   { pattern: /^\/councils\/[^/]+\/index\.html$/, cap: 8, until: "W9 council page" },

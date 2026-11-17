@@ -14,7 +14,10 @@ C1, palette B). It is added on the first run and replaced on every later one.
 
 Refuses to write when:
   * scripts/brand-colours.json differs from tokens.json sites.ukcounciltax in the kit;
-  * an @import sits below the block start;
+  * an @import sits below the block start, or inside the kit's skin file;
+  * the kit's site or skin file does not carry its markers;
+  * a skin block sits anywhere but directly below `/* estate-tokens:end */`, or has
+    lost its end marker;
   * any custom property name defined before the splice is missing after it (the
     `comm -23` check of the adoption method).
 
@@ -68,13 +71,22 @@ def main() -> int:
     if not skin.startswith(SKIN_START) or not skin.endswith(SKIN_END):
         print('the kit skin file does not carry the estate-skin markers', file=sys.stderr)
         return 1
+    if '@import' in skin:
+        print('the kit skin file holds an @import; it cannot sit below the token block', file=sys.stderr)
+        return 1
+    if SKIN_START in css[:end]:
+        print('a skin block sits above /* estate-tokens:end */; move it directly below', file=sys.stderr)
+        return 1
     rest = css[end:]
     if SKIN_START in rest:
         skin_start = rest.index(SKIN_START)
         if rest[:skin_start].strip():
             print('the skin block is not directly below /* estate-tokens:end */', file=sys.stderr)
             return 1
-        rest = rest[rest.index(SKIN_END) + len(SKIN_END):]
+        if SKIN_END not in rest[skin_start:]:
+            print('the skin block has no /* estate-skin:end */ marker', file=sys.stderr)
+            return 1
+        rest = rest[rest.index(SKIN_END, skin_start) + len(SKIN_END):]
     after = css[:start] + block + '\n\n' + skin + rest
 
     lost = sorted(names(css) - names(after))
@@ -85,7 +97,7 @@ def main() -> int:
 
     if args.check:
         if after != css:
-            print('src/styles/global.css is not the current kit block; run python3 scripts/apply-brand.py', file=sys.stderr)
+            print('src/styles/global.css does not hold the current kit token and skin blocks; run python3 scripts/apply-brand.py', file=sys.stderr)
             return 1
         print('UK Council Tax estate tokens and skin are current.')
         return 0

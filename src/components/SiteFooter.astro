@@ -42,6 +42,8 @@ const year = new Date().getUTCFullYear();
 </footer>
 
 <style>
+  /* The footer sits on the band green in both themes, so its focus ring takes the highlight: the link colour is 1.47 to 1 there in light. */
+  .site-footer :global(:focus-visible) { outline-color: var(--accent-bright); }
   .site-footer {
     margin-top: 3rem;
     background: var(--ground);

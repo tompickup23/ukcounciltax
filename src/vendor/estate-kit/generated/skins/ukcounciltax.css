@@ -1,47 +1,164 @@
 /* estate-skin:start
    Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
-   Skin: ukcounciltax, register record. Splice below the estate-tokens block. */
+   Skin: ukcounciltax, register record. Splice below the estate-tokens block. Proposed, not confirmed: overrides.light.series-neutral-soft, desk.light.positive-ink, desk.light.positive-bg, desk.light.warning-ink, desk.light.warning-bg, desk.light.critical-ink, desk.light.critical-bg, desk.light.series-neutral-soft, desk.dark.positive-ink, desk.dark.positive-bg, desk.dark.warning-ink, desk.dark.warning-bg, desk.dark.critical-ink, desk.dark.critical-bg, desk.dark.series-neutral-soft, desk.light.muted, desk.light.rule, desk.light.edge, desk.dark.muted, desk.dark.rule, desk.dark.edge, ramp.sequential, overrides.light.series-2, overrides.light.series-3, overrides.light.series-4, overrides.dark.series-1, overrides.dark.series-2, overrides.dark.series-3, overrides.dark.series-4, desk.light.critical, desk.light.series-1, desk.light.series-2, desk.light.series-3, desk.light.series-4, desk.dark.critical, desk.dark.series-1, desk.dark.series-2, desk.dark.series-3, desk.dark.series-4. */
 
 :root, [data-theme="light"] {
-  --paper: #ffffff;
-  --paper-warm: #f5f6f7;
-  --paper-line: #dbdfe3;
+  --paper: #f6f1e4;
+  --paper-warm: #ece6d6;
+  --paper-line: #dcd5c2;
   --bg: var(--paper);
   --bg-subtle: var(--paper-warm);
   --border: var(--paper-line);
+  --bg-card: #fffdf8;
+  --border-strong: #b7ae96;
+  --text: #1b1f1a;
+  --text-muted: #55594d;
+  --text-faint: #626656;
+  --series-1: #0d6648;
+  --series-2: #8e8360;
+  --series-3: #181100;
+  --series-4: #392f0e;
+  --series-neutral-soft: #7d858d;
+  --ground: #0e4a36;
+  --ground-ink: #f7f2e3;
+  --ground-muted: #bdc8b8;
+  --ground-rule: #336552;
+  --ground-edge: #52775a;
+  --ground-positive: #6fcf9a;
+  --ground-warning: #f0b03e;
+  --ground-critical: #f39287;
+  --ground-positive-ink: #c1e4c6;
+  --ground-positive-bg: #256a4e;
+  --ground-warning-ink: #f4d8a1;
+  --ground-warning-bg: #446238;
+  --ground-critical-ink: #f5c6b9;
+  --ground-critical-bg: #455846;
+  --ground-series-1: #57c792;
+  --ground-series-2: #f0dda4;
+  --ground-series-3: #978c69;
+  --ground-series-4: #fffcf2;
+  --ground-series-neutral-soft: #858c93;
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-display-italic: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-display-italic-style: normal;
   --font-sans: "Source Sans 3", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --display-1: clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem);
   --display-2: clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem);
-  --display-hero: clamp(2rem, 1.55rem + 2vw, 3rem);
+  --display-hero: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
   --section: 4.5rem;
   --radius: 10px;
   --radius-sm: 6px;
   --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-fast: 160ms;
   --motion-base: 200ms;
+  --ramp-1: #0a2e20;
+  --ramp-2: #013d29;
+  --ramp-3: #014d35;
+  --ramp-4: #036043;
+  --ramp-5: #017653;
+  --ramp-6: #029066;
+  --ramp-7: #05b27e;
 }
 
 :root[data-theme="dark"], [data-theme="dark"] {
-  --paper: #0f1317;
-  --paper-warm: #171c21;
-  --paper-line: #2a3138;
+  --paper: #0c1310;
+  --paper-warm: #131b16;
+  --paper-line: #2a372e;
   --bg: var(--paper);
   --bg-subtle: var(--paper-warm);
   --border: var(--paper-line);
+  --bg-card: #151f19;
+  --border-strong: #435245;
+  --text: #f4efe2;
+  --text-muted: #c1bfae;
+  --text-faint: #9d9d8c;
+  --accent-ink: #0c1310;
+  --series-1: #2ea471;
+  --series-2: #f7e4aa;
+  --series-3: #736847;
+  --series-4: #c9bd99;
+  --ground: #0e4a36;
+  --ground-ink: #f7f2e3;
+  --ground-muted: #bdc8b8;
+  --ground-rule: #336552;
+  --ground-edge: #52775a;
+  --ground-positive: #6fcf9a;
+  --ground-warning: #f0b03e;
+  --ground-critical: #f39287;
+  --ground-positive-ink: #c1e4c6;
+  --ground-positive-bg: #256a4e;
+  --ground-warning-ink: #f4d8a1;
+  --ground-warning-bg: #446238;
+  --ground-critical-ink: #f5c6b9;
+  --ground-critical-bg: #455846;
+  --ground-series-1: #57c792;
+  --ground-series-2: #f0dda4;
+  --ground-series-3: #978c69;
+  --ground-series-4: #fffcf2;
+  --ground-series-neutral-soft: #858c93;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --paper: #0f1317;
-    --paper-warm: #171c21;
-    --paper-line: #2a3138;
+    --paper: #0c1310;
+    --paper-warm: #131b16;
+    --paper-line: #2a372e;
     --bg: var(--paper);
     --bg-subtle: var(--paper-warm);
     --border: var(--paper-line);
+    --bg-card: #151f19;
+    --border-strong: #435245;
+    --text: #f4efe2;
+    --text-muted: #c1bfae;
+    --text-faint: #9d9d8c;
+    --accent-ink: #0c1310;
+    --series-1: #2ea471;
+    --series-2: #f7e4aa;
+    --series-3: #736847;
+    --series-4: #c9bd99;
+    --ground: #0e4a36;
+    --ground-ink: #f7f2e3;
+    --ground-muted: #bdc8b8;
+    --ground-rule: #336552;
+    --ground-edge: #52775a;
+    --ground-positive: #6fcf9a;
+    --ground-warning: #f0b03e;
+    --ground-critical: #f39287;
+    --ground-positive-ink: #c1e4c6;
+    --ground-positive-bg: #256a4e;
+    --ground-warning-ink: #f4d8a1;
+    --ground-warning-bg: #446238;
+    --ground-critical-ink: #f5c6b9;
+    --ground-critical-bg: #455846;
+    --ground-series-1: #57c792;
+    --ground-series-2: #f0dda4;
+    --ground-series-3: #978c69;
+    --ground-series-4: #fffcf2;
+    --ground-series-neutral-soft: #858c93;
   }
+}
+
+[data-ground="desk"] {
+  --bg: var(--ground);
+  --bg-subtle: var(--ground);
+  --bg-card: var(--ground);
+  --text: var(--ground-ink);
+  --text-muted: var(--ground-muted);
+  --text-faint: var(--ground-muted);
+  --border: var(--ground-rule);
+  --border-strong: var(--ground-rule);
+  --positive: var(--ground-positive);
+  --warning: var(--ground-warning);
+  --critical: var(--ground-critical);
+  --accent: var(--accent-bright);
+  --accent-ink: var(--ground);
+  --accent-wash: var(--ground);
+  --series-1: var(--ground-series-1);
+  --series-2: var(--ground-series-2);
+  --series-3: var(--ground-series-3);
+  --series-4: var(--ground-series-4);
+  --series-neutral: #9aa2ab;
+  --series-neutral-soft: var(--ground-series-neutral-soft);
 }
 
 @media (prefers-reduced-motion: reduce) {

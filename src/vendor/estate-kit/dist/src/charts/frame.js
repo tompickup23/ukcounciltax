@@ -22,7 +22,7 @@ export function fillSlots(text, set) {
 export function frame(o, caption, plotNeed, thumbForm, figures = []) {
     const tpl = TEMPLATES[o.template ?? "inline"];
     if (tpl.thumb && !thumbForm)
-        throw new Error("this chart has no thumb form: only ZeroBar, Waffle, BillAnatomy and PositionStrip draw the 160 by 64 thumb");
+        throw new Error("this chart has no thumb form: only ZeroBar, Waffle, BillAnatomy and PositionStrip draw the 160 by 64 thumb, beside the set and map thumb kinds");
     const set = currentFigures(o.set);
     const site = o.site ?? "ukdemographics";
     const mode = tpl.card ? { kind: "hex", theme: "dark", site } : withGround(o.mode ?? { kind: "css" }, o.ground);
@@ -31,6 +31,8 @@ export function frame(o, caption, plotNeed, thumbForm, figures = []) {
     const title = o.title ? fillSlots(o.title, set) : undefined;
     if (tpl.card && !title)
         throw new Error("a card needs a title: the takeaway sentence");
+    const htmlTitle = !tpl.card && !tpl.thumb && mode.kind === "css" && o.titlePlacement === "html" && !!title;
+    const pageOutput = sourceOutput || htmlTitle ? { ...sourceOutput, ...(htmlTitle ? { titleHtml: esc(title) } : {}) } : undefined;
     const canvas = new Canvas(mode, tpl.W, tpl.H || 1);
     if (tpl.thumb) {
         // Marks only: no title, no footer, the whole canvas less a hairline pad for the plot.
@@ -59,7 +61,11 @@ export function frame(o, caption, plotNeed, thumbForm, figures = []) {
         canvas.text(tpl.pad + (mark ? markH * 1.26 : 0), y + markH / 2 + f.brand * 0.35, tokens.sites[site].name, { size: f.brand, weight: 600, family: "display", fill: "text", bg, cls: "ek-lockup" });
         y += markH + Math.round(f.brand * 0.9);
     }
-    if (title) {
+    if (title && htmlTitle) {
+        // Out of the drawing, still gated: the words, and its contrast as the page draws it.
+        canvas.checks.texts.push({ content: title, size: f.title, weight: 600, fill: "text", bg, role: "title", group: "title" });
+    }
+    else if (title) {
         y = canvas.para(tpl.pad, y, title, innerW, { size: f.title, weight: 600, family: "display", fill: "text", bg, lineHeight: 1.2, role: "title", group: "title" });
         y += tpl.card ? 20 : 16;
     }
@@ -92,7 +98,7 @@ export function frame(o, caption, plotNeed, thumbForm, figures = []) {
             canvas.parts.unshift(canvas.parts.pop());
         }
     };
-    return { canvas, tpl, plot, bg, set, title, close, sourceOutput };
+    return { canvas, tpl, plot, bg, set, title, close, sourceOutput: pageOutput };
 }
 /** The paint mode with the chart's ground on it; a ground on the mode itself wins. */
 export function withGround(mode, ground) {

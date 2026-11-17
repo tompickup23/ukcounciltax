@@ -28,6 +28,9 @@
 .ek-stat-value { font-family: var(--font-display); font-weight: 600; font-size: var(--text-2xl); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .ek-stat-perspective { font-size: var(--text-base); }
 .ek-source { margin: var(--space-xs) 0 0; font-size: var(--text-xs); color: var(--text-muted); }
+/* A title moved out of the drawing (titlePlacement "html", 0.6.4): the figure's caption, at body scale so it sits under the page's own heading. */
+.ek-caption { margin: 0 0 var(--space-xs); }
+.ek-title { font-family: var(--font-display); font-weight: 600; font-size: var(--text-md); line-height: 1.25; color: var(--text); text-wrap: balance; }
 .ek-source a { color: inherit; }
 
 /* The grid only waffle (waffle({ grid: true })): one class per square, sq-p0 to sq-p11 or
@@ -54,3 +57,7 @@
 .ek-area-link:hover > path { stroke: var(--text) !important; stroke-width: 3; }
 .ek-table a { color: var(--accent); text-decoration: underline; }
 .ek-table a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* Icons (0.6.4): the sprite takes no space; an icon is 1em square in the text colour, beside its words. */
+.ek-icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.ek-icon { width: 1em; height: 1em; flex: none; vertical-align: -0.125em; color: inherit; }

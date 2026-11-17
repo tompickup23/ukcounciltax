@@ -1,0 +1,12 @@
+---
+/** A marks only task card thumb of kind "set" or "map" (0.6.4); see src/charts/thumbs.ts. Hidden from assistive technology: the card around it speaks. */
+import ChartFigure from "./ChartFigure.astro";
+import { thumb, type ThumbOptions } from "../../dist/src/index.js";
+
+type Props = ThumbOptions & { class?: string };
+
+const { class: className, ...opts } = Astro.props;
+const out = thumb(opts as ThumbOptions);
+const keys = opts.kind === "set" ? opts.rows : Object.values(opts.values);
+---
+<ChartFigure out={out} keys={keys} class={className} />

@@ -20,6 +20,14 @@ export interface ChartOptions {
     set?: FigureSet;
     /** Inline source position. Defaults to drawing. Hex renders and cards always keep it inside. */
     sourcePlacement?: "drawing" | "html";
+    /**
+     * Inline title position (0.6.4). Defaults to drawing. With "html" the title leaves the
+     * drawing and comes back as `titleHtml`, which ChartFigure prints as the figure's caption,
+     * so a page can set it under its own section heading. The title is still gated for
+     * ranking and loaded words and still leads the alt text. Cards, thumbs and hex renders
+     * always keep it inside.
+     */
+    titlePlacement?: "drawing" | "html";
     /** Linked HTML citation format. Requires id, publicationDate and URL on each source. */
     sourceFormat?: "full" | "short";
     template?: TemplateKey;
@@ -41,6 +49,8 @@ export interface ChartOutput {
     svg: string;
     /** A source line beside the SVG when sourcePlacement is html. */
     sourceHtml?: string;
+    /** The title, escaped, for the figure's caption when titlePlacement is html (0.6.4). */
+    titleHtml?: string;
     /** The table twin as HTML, the accessible view of the same figures. */
     table: string;
     alt: string;
@@ -53,8 +63,10 @@ export interface ChartOutput {
 export declare function fillSlots(text: string, set: FigureSet): string;
 export interface Framed {
     canvas: Canvas;
+    /** What leaves the drawing for the page: the source line, the title, or both. */
     sourceOutput?: {
-        sourceHtml: string;
+        sourceHtml?: string;
+        titleHtml?: string;
     };
     tpl: Template;
     plot: Rect;

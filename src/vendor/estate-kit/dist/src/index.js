@@ -10,7 +10,7 @@ export { waffle, squaresFor, squareClass, WAFFLE_PAINTS, WAFFLE_MAX_PARTS } from
 export { billAnatomy } from "./charts/billAnatomy.js";
 export { positionStrip, percentile, stripStats, SCALE_LABELS, MIN_CLASS } from "./charts/positionStrip.js";
 export { hemicycle } from "./charts/hemicycle.js";
-export { locatorMap, rampFor } from "./charts/locatorMap.js";
+export { locatorMap, rampFor, rampSite } from "./charts/locatorMap.js";
 export { statTile, statTileParts, scoreCard } from "./charts/statTile.js";
 export { fillSlots } from "./charts/frame.js";
 export { TEMPLATES, TEMPLATE_KEYS, CARD_KEYS } from "./output/templates.js";
@@ -27,3 +27,4 @@ export { linear, zeroDomain, zeroScale, bands, barPath, openBar, polylineObstacl
 export { rankedBars } from "./charts/rankedBars.js";
 export { areaMap } from "./charts/areaMap.js";
 export { defineMapIndicators, mapClass, colourFor } from "./charts/mapIndicators.js";
+export { thumb } from "./charts/thumbs.js";

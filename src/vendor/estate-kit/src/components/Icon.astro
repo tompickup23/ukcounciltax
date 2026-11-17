@@ -1,0 +1,15 @@
+---
+/**
+ * One icon from the kit's subset (0.6.4), drawn from the sprite IconSprite.astro inlines.
+ * Decoration beside words: hidden from assistive technology, so the words beside it are the
+ * label. It takes the text colour and is 1em square unless the class sets otherwise.
+ */
+import icons from "../../icons/icons.json";
+
+export type IconName = keyof typeof icons.icons;
+interface Props { name: IconName; class?: string }
+
+const { name, class: className } = Astro.props;
+if (!(name in icons.icons)) throw new Error(`no icon "${name}" in the kit's subset; one of ${Object.keys(icons.icons).join(", ")}`);
+---
+<svg class:list={["ek-icon", className]} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href={`#${icons.prefix}${name}`} /></svg>

@@ -1,5 +1,5 @@
 // Generated from tokens/tokens.json by scripts/build-tokens.mjs. Do not hand edit: run npm run tokens.
-export const VERSION = "0.6.3";
+export const VERSION = "0.6.5";
 export const tokens = {
     "color": {
         "light": {
@@ -103,10 +103,10 @@ export const tokens = {
             "domain": "aidoge.co.uk"
         },
         "ukcounciltax": {
-            "deep": "#23664f",
-            "bright": "#94d7b5",
-            "wash": "#edf6f0",
-            "darkWash": "#112d25",
+            "deep": "#0d6648",
+            "bright": "#f0dfae",
+            "wash": "#e9eedd",
+            "darkWash": "#1a251d",
             "name": "UK Council Tax",
             "domain": "ukcounciltax.co.uk"
         },
@@ -125,10 +125,18 @@ export const tokens = {
             "darkWash": "#172240",
             "name": "Lancashire care atlas",
             "domain": "lancs-care-atlas.pages.dev"
+        },
+        "ukcouncils": {
+            "deep": "#245b87",
+            "bright": "#8cc4ed",
+            "wash": "#eef5fb",
+            "darkWash": "#122838",
+            "name": "UK Councils",
+            "domain": "ukcouncils.co.uk"
         }
     },
     "skins": {
-        "about": "A skin per site, beside its accent triple: a paper triple (paper, warm paper, line) for each theme, a display scale that reaches hero size, a display face with an italic slot and the body face, a section rhythm, a radius pair and a motion set (one easing, two durations under 300 ms, both set to 0ms by a reduced motion guard), and, where a kit colour fails on the skin's paper, an override of that colour. A site entry names its register and inherits that register's skin; an editorial entry gives its own values, each quoted in $meta.sources.skins. A record entry may carry its own paper, radius and overrides where the site's own stylesheet holds them (Council Intel), each quoted in $meta.sources.skins; a record entry without them reproduces the kit exactly. Keys listed in proposed were derived by scripts/derive-skin-dark.mjs, not read from the site, and wait on the owner.",
+        "about": "A skin per site, beside its accent triple: a paper triple (paper, warm paper, line) for each theme, a display scale that reaches hero size, a display face with an italic slot and the body face, a section rhythm, a radius pair and a motion set (one easing, two durations under 300 ms, both set to 0ms by a reduced motion guard), and, where a kit colour fails on the skin's paper, an override of that colour. A site entry names its register and inherits that register's skin; an editorial entry gives its own values, each quoted in $meta.sources.skins. A record entry may carry its own paper, radius and overrides where the site's own stylesheet holds them (Council Intel) or where a decision sets them (UK Council Tax's paper, D2), each quoted in $meta.sources.skins, and from 0.6.4 a ramp: a sequential map ramp derived from the site's accent, set as --ramp-1 to --ramp-7; a record entry without them reproduces the kit exactly. Keys listed in proposed were derived by scripts/derive-skin-dark.mjs, not read from the site, and wait on the owner.",
         "registers": {
             "record": {
                 "about": "For the data sites: restrained, dense, colour kept for data. Every value is one the kit already ships, so a record site's output does not change.",
@@ -173,7 +181,7 @@ export const tokens = {
             }
         },
         "desk": {
-            "about": "A desk is a dark ground band inside a light page, in both themes: its ground, ink, muted text, rule, the three state colours drawn on it and each state's ink on its badge ground. A skin that has one lists its values under desk; generated CSS sets them as --ground, --ground-ink, --ground-muted, --ground-rule, --ground-positive and so on, and a [data-ground=\"desk\"] rule points the kit's names at them, so text, rules and a chart in css mode inside the band take the desk's values. names maps each kit name to a desk key, to another kit name (kit:accent-bright), or to the kit's dark value of a name (dark:series-1): the series and neutrals on the desk are the kit's dark set, which is validated for a dark ground. There is no wash on the desk, so accent-wash is the ground.",
+            "about": "A desk is a dark ground band inside a light page, in both themes: its ground, ink, muted text, rule, the three state colours drawn on it and each state's ink on its badge ground. A skin that has one lists its values under desk; generated CSS sets them as --ground, --ground-ink, --ground-muted, --ground-rule, --ground-positive and so on, and a [data-ground=\"desk\"] rule points the kit's names at them, so text, rules and a chart in css mode inside the band take the desk's values. names maps each kit name to a desk key, to another kit name (kit:accent-bright), or to the kit's dark value of a name (dark:series-1): the series and neutrals on the desk are the kit's dark set, which is validated for a dark ground. There is no wash on the desk, so accent-wash is the ground. Added in 0.6.4: edge, the band's 1px border, set as --ground-edge; and a desk may hold its own value for a kit name the map reads from the dark set (series-neutral-soft on UK Council Tax's dark desk), where the kit's dark value fails on that desk: the generated CSS then sets --ground-<name> in both themes, the other theme taking the kit's dark value.",
             "names": {
                 "bg": "ground",
                 "bg-subtle": "ground",
@@ -217,7 +225,146 @@ export const tokens = {
                 "register": "record"
             },
             "ukcounciltax": {
-                "register": "record"
+                "register": "record",
+                "paper": {
+                    "light": {
+                        "paper": "#f6f1e4",
+                        "warm": "#ece6d6",
+                        "line": "#dcd5c2"
+                    },
+                    "dark": {
+                        "paper": "#0c1310",
+                        "warm": "#131b16",
+                        "line": "#2a372e"
+                    }
+                },
+                "display": {
+                    "1": "clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem)",
+                    "2": "clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem)",
+                    "hero": "clamp(2.5rem, 1.6rem + 4vw, 4.5rem)"
+                },
+                "overrides": {
+                    "light": {
+                        "bg-card": "#fffdf8",
+                        "border-strong": "#b7ae96",
+                        "text": "#1b1f1a",
+                        "text-muted": "#55594d",
+                        "text-faint": "#626656",
+                        "series-1": "#0d6648",
+                        "series-2": "#8e8360",
+                        "series-3": "#181100",
+                        "series-4": "#392f0e",
+                        "series-neutral-soft": "#7d858d"
+                    },
+                    "dark": {
+                        "bg-card": "#151f19",
+                        "border-strong": "#435245",
+                        "text": "#f4efe2",
+                        "text-muted": "#c1bfae",
+                        "text-faint": "#9d9d8c",
+                        "accent-ink": "#0c1310",
+                        "series-1": "#2ea471",
+                        "series-2": "#f7e4aa",
+                        "series-3": "#736847",
+                        "series-4": "#c9bd99"
+                    }
+                },
+                "desk": {
+                    "light": {
+                        "ground": "#0e4a36",
+                        "ink": "#f7f2e3",
+                        "muted": "#bdc8b8",
+                        "rule": "#336552",
+                        "edge": "#52775a",
+                        "positive": "#6fcf9a",
+                        "warning": "#f0b03e",
+                        "critical": "#f39287",
+                        "positive-ink": "#c1e4c6",
+                        "positive-bg": "#256a4e",
+                        "warning-ink": "#f4d8a1",
+                        "warning-bg": "#446238",
+                        "critical-ink": "#f5c6b9",
+                        "critical-bg": "#455846",
+                        "series-1": "#57c792",
+                        "series-2": "#f0dda4",
+                        "series-3": "#978c69",
+                        "series-4": "#fffcf2",
+                        "series-neutral-soft": "#858c93"
+                    },
+                    "dark": {
+                        "ground": "#0e4a36",
+                        "ink": "#f7f2e3",
+                        "muted": "#bdc8b8",
+                        "rule": "#336552",
+                        "edge": "#52775a",
+                        "positive": "#6fcf9a",
+                        "warning": "#f0b03e",
+                        "critical": "#f39287",
+                        "positive-ink": "#c1e4c6",
+                        "positive-bg": "#256a4e",
+                        "warning-ink": "#f4d8a1",
+                        "warning-bg": "#446238",
+                        "critical-ink": "#f5c6b9",
+                        "critical-bg": "#455846",
+                        "series-1": "#57c792",
+                        "series-2": "#f0dda4",
+                        "series-3": "#978c69",
+                        "series-4": "#fffcf2",
+                        "series-neutral-soft": "#858c93"
+                    }
+                },
+                "ramp": {
+                    "sequential": [
+                        "#0a2e20",
+                        "#013d29",
+                        "#014d35",
+                        "#036043",
+                        "#017653",
+                        "#029066",
+                        "#05b27e"
+                    ]
+                },
+                "proposed": [
+                    "overrides.light.series-neutral-soft",
+                    "desk.light.positive-ink",
+                    "desk.light.positive-bg",
+                    "desk.light.warning-ink",
+                    "desk.light.warning-bg",
+                    "desk.light.critical-ink",
+                    "desk.light.critical-bg",
+                    "desk.light.series-neutral-soft",
+                    "desk.dark.positive-ink",
+                    "desk.dark.positive-bg",
+                    "desk.dark.warning-ink",
+                    "desk.dark.warning-bg",
+                    "desk.dark.critical-ink",
+                    "desk.dark.critical-bg",
+                    "desk.dark.series-neutral-soft",
+                    "desk.light.muted",
+                    "desk.light.rule",
+                    "desk.light.edge",
+                    "desk.dark.muted",
+                    "desk.dark.rule",
+                    "desk.dark.edge",
+                    "ramp.sequential",
+                    "overrides.light.series-2",
+                    "overrides.light.series-3",
+                    "overrides.light.series-4",
+                    "overrides.dark.series-1",
+                    "overrides.dark.series-2",
+                    "overrides.dark.series-3",
+                    "overrides.dark.series-4",
+                    "desk.light.critical",
+                    "desk.light.series-1",
+                    "desk.light.series-2",
+                    "desk.light.series-3",
+                    "desk.light.series-4",
+                    "desk.dark.critical",
+                    "desk.dark.series-1",
+                    "desk.dark.series-2",
+                    "desk.dark.series-3",
+                    "desk.dark.series-4"
+                ]
             },
             "councilintel": {
                 "register": "record",
@@ -293,6 +440,83 @@ export const tokens = {
             },
             "careatlas": {
                 "register": "record"
+            },
+            "ukcouncils": {
+                "register": "record",
+                "paper": {
+                    "light": {
+                        "paper": "#f7f8f6",
+                        "warm": "#eef0ee",
+                        "line": "#d8dde0"
+                    },
+                    "dark": {
+                        "paper": "#0f1317",
+                        "warm": "#171c21",
+                        "line": "#2a3138"
+                    }
+                },
+                "display": {
+                    "1": "clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem)",
+                    "2": "clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem)",
+                    "hero": "clamp(2.5rem, 1.6rem + 4vw, 4.5rem)"
+                },
+                "overrides": {
+                    "light": {
+                        "series-neutral-soft": "#838b93"
+                    }
+                },
+                "desk": {
+                    "light": {
+                        "ground": "#142634",
+                        "ink": "#f4f6f7",
+                        "muted": "#bcc2c6",
+                        "rule": "#384753",
+                        "edge": "#38556c",
+                        "positive": "#6fcf9a",
+                        "warning": "#f0b03e",
+                        "critical": "#f2857a",
+                        "positive-ink": "#bfe6d2",
+                        "positive-bg": "#2a4f4c",
+                        "warning-ink": "#f2daad",
+                        "warning-bg": "#494736",
+                        "critical-ink": "#f3c9c5",
+                        "critical-bg": "#493d45"
+                    },
+                    "dark": {
+                        "ground": "#283945",
+                        "ink": "#f4f6f7",
+                        "muted": "#c1c7cb",
+                        "rule": "#495761",
+                        "edge": "#48657b",
+                        "positive": "#6fcf9a",
+                        "warning": "#f0b03e",
+                        "critical": "#f2857a",
+                        "positive-ink": "#bfe6d2",
+                        "positive-bg": "#395d59",
+                        "warning-ink": "#f2daad",
+                        "warning-bg": "#585643",
+                        "critical-ink": "#f3c9c5",
+                        "critical-bg": "#584b52"
+                    }
+                },
+                "ramp": {
+                    "sequential": [
+                        "#10293e",
+                        "#003559",
+                        "#014470",
+                        "#025489",
+                        "#0168a8",
+                        "#027fcb",
+                        "#269df3"
+                    ]
+                },
+                "proposed": [
+                    "paper.light",
+                    "overrides.light.series-neutral-soft",
+                    "desk.light",
+                    "desk.dark",
+                    "ramp.sequential"
+                ]
             },
             "ukai": {
                 "register": "editorial",
@@ -976,7 +1200,7 @@ export function deskPalette(theme, key) {
     const base = skinPalette(theme, key), d = s.desk[theme];
     const out = { ...base };
     for (const [name, ref] of Object.entries(tokens.skins.desk.names)) {
-        out[name] = ref.startsWith("dark:") ? tokens.color.dark[ref.slice(5)]
+        out[name] = ref.startsWith("dark:") ? (d[ref.slice(5)] ?? tokens.color.dark[ref.slice(5)])
             : ref.startsWith("kit:") ? base[ref.slice(4)]
                 : d[ref];
     }

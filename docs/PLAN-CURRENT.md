@@ -8,9 +8,9 @@ Revised in Claude Code on Monday 16 November 2026 at Tom's request ("focus on th
 
 | Site | Main and live | Open |
 |---|---|---|
-| UK Council Tax | `5a76109` (PR 101, W4 part one, game page), published 16 November | None |
+| UK Council Tax | `5a76109` (PR 101, W4 part one, game page), published 16 November | 102 (this plan), 103 (colour round), 104 (W8 palette swap, draft) |
 | UK Councils | `456a200` (PR 63, U2 homepage) | PR 64, draft: seats by party and control (dossier prompt A), checks passed, not yet reviewed |
-| Estate Kit | `v0.6.4` tagged (PR 29, K1) | PR 27 (site header part), PR 28 (scrub report, draft) |
+| Estate Kit | `v0.6.5` tagged (PR 30, palette B for UK Council Tax) | PR 27 (site header part), PR 28 (scrub report, draft) |
 
 Restyle so far on UK Council Tax: W0 to W3, F1 and W4 part one are live. UK Council Tax still vendors kit 0.6.3, so none of K1 is on the site.
 
@@ -57,8 +57,8 @@ Lanes: one UK Council Tax page session at a time; the colour lane beside it (it 
 | Step | Work | Who | Output | By |
 |---|---|---|---|---|
 | C0, done 16 November | Colour round. Three candidate palettes as token overrides, rendered on the eight reference pages in dark and light at 390 and 1440, with a contrast table. No site code changes | Claude, one session | A docs PR with the sheets and the values; Tom picks one (decision C1) | 20 November |
-| K2 | Estate Kit 0.6.5: the chosen values in `skins.sites.ukcounciltax` for both themes (paper, ink and neutrals, accent roles, desk, the bill bar series), through `derive-desk.mjs` and the kit colour gates | Claude, Tom's yes and tag | Kit PR | 25 November |
-| W8 | The swap on UK Council Tax: vendor 0.6.5, extend `apply-brand.py` to splice the skin block, bring `palette.ts` and the share card into line. Values only: no template changes | Claude, Tom's yes | One PR, every page, full browser suite and the reference sheet | Live by 30 November |
+| K2, done 17 November | Estate Kit 0.6.5: the chosen values in `skins.sites.ukcounciltax` for both themes (paper, ink and neutrals, accent roles, desk, the bill bar series), through `derive-desk.mjs` and the kit colour gates | Claude, Tom's yes and tag | Kit PR | Merged as `26847ee`, tagged `v0.6.5` |
+| W8, started | The swap on UK Council Tax: vendor 0.6.5, extend `apply-brand.py` to splice the skin block, bring `palette.ts` and the share card into line. Values only: no template changes | Claude, Tom's yes | One PR, every page, full browser suite and the reference sheet | Draft pull request 104, gates owed. Live by 30 November |
 
 What the round must fix, as a brief for all three candidates:
 

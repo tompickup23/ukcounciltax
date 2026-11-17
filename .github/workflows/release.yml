@@ -11,6 +11,11 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  # The release gate is four jobs. `site` builds once and checks the built tree, `unit` runs
+  # the unit tests and the type check beside it, `browser` runs the browser suites in parallel
+  # against the tree `site` built, and `publish` deploys that same tree only when all three
+  # pass. Until 17 November 2026 this was one serial job, and the browser steps had grown
+  # from 12 to 20 minutes of it.
   site:
     env:
       BUILD_OG: ${{ github.event_name != 'pull_request' && '1' || '' }}
@@ -18,8 +23,105 @@ jobs:
       contents: read
       pull-requests: read
     runs-on: ubuntu-24.04
-    # Keep the full production gate within a 60 minute budget.
-    timeout-minutes: 60
+    timeout-minutes: 30
+    steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
+      - uses: actions/checkout@v7
+        if: steps.changes.outputs.docs-only != 'true'
+      - uses: actions/setup-node@v7
+        if: steps.changes.outputs.docs-only != 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: steps.changes.outputs.docs-only != 'true'
+      - name: Read the three pinned RA source hashes
+        if: steps.changes.outputs.docs-only != 'true'
+        id: ra-source-hashes
+        run: |
+          node --input-type=module <<'NODE' >> "$GITHUB_OUTPUT"
+          import {readFileSync} from 'node:fs';
+          const sources=JSON.parse(readFileSync('data/national/sources.json','utf8'));
+          const hashes=['raPart1','raPart2','raGrants'].map(key=>sources[key].sha256);
+          if(hashes.some(hash=>!/^[a-f0-9]{64}$/.test(hash)))throw new Error('Invalid pinned RA source hash');
+          console.log('hashes='+hashes.join('-'));
+          NODE
+      - name: Restore the pinned RA workbooks
+        if: steps.changes.outputs.docs-only != 'true'
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            data/raw/RA_2026-27_data_Part_1.ods
+            data/raw/RA_2026-27_data_Part_2.ods
+            data/raw/SG_2026-27.ods
+          key: ${{ runner.os }}-ra-${{ steps.ra-source-hashes.outputs.hashes }}
+      - name: Prepare and verify the pinned RA workbooks
+        if: steps.changes.outputs.docs-only != 'true'
+        run: |
+          node scripts/import-ra-budget.mjs
+          git diff --exit-code -- data/national/budget.json
+      - name: Hash the generated image inputs
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        id: image-inputs
+        run: |
+          image_key=$(node scripts/image-cache-key.mjs)
+          printf 'key=%s\n' "$image_key" >> "$GITHUB_OUTPUT"
+      - name: Cache generated images
+        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
+        uses: actions/cache@v6.1.0
+        with:
+          path: .cache/generated-images
+          key: ${{ runner.os }}-${{ runner.arch }}-images-${{ steps.image-inputs.outputs.key }}
+      - run: npm run build
+        if: steps.changes.outputs.docs-only != 'true'
+        env:
+          OG_IMAGE_CACHE: '1'
+      - run: npm run test:dist
+        if: steps.changes.outputs.docs-only != 'true'
+      - run: npm run test:text
+        if: steps.changes.outputs.docs-only != 'true'
+      - run: node scripts/audit-links.mjs
+        if: steps.changes.outputs.docs-only != 'true'
+      # One tar file keeps dot files and is quicker to move than several thousand files.
+      - name: Pack the built tree
+        if: steps.changes.outputs.docs-only != 'true'
+        run: tar -cf "$RUNNER_TEMP/dist.tar" dist
+      - name: Keep the built tree for the browser and publish jobs
+        if: steps.changes.outputs.docs-only != 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: ${{ runner.temp }}/dist.tar
+          if-no-files-found: error
+          compression-level: 1
+          retention-days: 1
+
+  unit:
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Detect documents only changes
         id: changes
@@ -80,28 +182,67 @@ jobs:
         if: steps.changes.outputs.docs-only != 'true'
       - run: npm run check
         if: steps.changes.outputs.docs-only != 'true'
-      - name: Hash the generated image inputs
-        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
-        id: image-inputs
-        run: |
-          image_key=$(node scripts/image-cache-key.mjs)
-          printf 'key=%s\n' "$image_key" >> "$GITHUB_OUTPUT"
-      - name: Cache generated images
-        if: steps.changes.outputs.docs-only != 'true' && env.BUILD_OG == '1'
-        uses: actions/cache@v6.1.0
+
+  browser:
+    name: browser (${{ matrix.suite }})
+    needs: site
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: e2e 1 of 3
+            command: npm run test:e2e -- --workers=2 --shard=1/3
+          - suite: e2e 2 of 3
+            command: npm run test:e2e -- --workers=2 --shard=2/3
+          - suite: e2e 3 of 3
+            command: npm run test:e2e -- --workers=2 --shard=3/3
+          - suite: csp
+            command: npm run test:csp -- --workers=2
+    steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
         with:
-          path: .cache/generated-images
-          key: ${{ runner.os }}-${{ runner.arch }}-images-${{ steps.image-inputs.outputs.key }}
-      - run: npm run build
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
+      - uses: actions/checkout@v7
         if: steps.changes.outputs.docs-only != 'true'
-        env:
-          OG_IMAGE_CACHE: '1'
-      - run: npm run test:dist
+      - uses: actions/setup-node@v7
         if: steps.changes.outputs.docs-only != 'true'
-      - run: npm run test:text
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
         if: steps.changes.outputs.docs-only != 'true'
-      - run: node scripts/audit-links.mjs
+      - name: Fetch the built tree
         if: steps.changes.outputs.docs-only != 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: ${{ runner.temp }}
+      - name: Unpack the built tree
+        if: steps.changes.outputs.docs-only != 'true'
+        run: tar -xf "$RUNNER_TEMP/dist.tar"
       - run: |
           # The browser comes from Playwright's own host. Its system packages come from
           # Ubuntu's package servers, which could not be resolved on 11 November 2026 and
@@ -111,10 +252,66 @@ jobs:
           npx playwright install chromium
           timeout --kill-after=10 180 npx playwright install-deps chromium || echo "::warning::Chromium system packages were not installed because the Ubuntu package servers could not be reached. The run continues with the packages the runner image holds."
         if: steps.changes.outputs.docs-only != 'true'
-      - run: npm run test:e2e -- --workers=2
+      - name: Run the browser suite
         if: steps.changes.outputs.docs-only != 'true'
-      - run: npm run test:csp -- --workers=2
+        run: ${{ matrix.command }}
+      - name: Keep the browser test results
+        if: steps.changes.outputs.docs-only != 'true' && (failure())
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-test-results-${{ strategy.job-index }}
+          path: test-results/
+          retention-days: 7
+
+  publish:
+    needs: [site, unit, browser]
+    # Only a push to main or a manual run on main publishes; a pull request never starts this job.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Detect documents only changes
+        id: changes
+        uses: actions/github-script@v8
+        with:
+          script: |
+            let files = [];
+            let complete = false;
+            if (context.eventName === 'pull_request') {
+              files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.issue.number, per_page: 100
+              });
+              // GitHub caps this endpoint at 3000 files. Treat a capped list as code.
+              complete = files.length < 3000;
+            }
+            // Pushes to main always run the gate and publish: a newer push cancels a running
+            // release, so a documents only push must not be the run that skips a code deploy.
+            const document = path => path.startsWith('docs/') || (!path.includes('/') && path.endsWith('.md'));
+            const docsOnly = complete && files.length > 0 && files.every(file =>
+              document(file.filename) && (!file.previous_filename || document(file.previous_filename)));
+            core.setOutput('docs-only', String(docsOnly));
+            core.info(docsOnly ? 'Documents only: this check passes without running the release gate.' : 'Run the full check.');
+      - uses: actions/checkout@v7
         if: steps.changes.outputs.docs-only != 'true'
+      - uses: actions/setup-node@v7
+        if: steps.changes.outputs.docs-only != 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+        if: steps.changes.outputs.docs-only != 'true'
+      - name: Fetch the built tree
+        if: steps.changes.outputs.docs-only != 'true'
+        uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: ${{ runner.temp }}
+      - name: Unpack the built tree
+        if: steps.changes.outputs.docs-only != 'true'
+        run: tar -xf "$RUNNER_TEMP/dist.tar"
       - name: Publish verified production build
         if: steps.changes.outputs.docs-only != 'true' && (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
         run: npx wrangler pages deploy dist --project-name ukcounciltax --branch main
@@ -130,12 +327,6 @@ jobs:
         run: |
           sleep 20
           node scripts/indexnow.mjs || echo "::warning::IndexNow submission failed; the deploy is unaffected"
-      - uses: actions/upload-artifact@v4
-        if: steps.changes.outputs.docs-only != 'true' && (failure())
-        with:
-          name: browser-test-results
-          path: test-results/
-          retention-days: 7
 
   number-diff:
     name: number diff

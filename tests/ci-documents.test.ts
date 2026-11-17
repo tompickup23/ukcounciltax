@@ -18,17 +18,33 @@ async function detect(eventName: string, files: object[], extra = {}) {
 }
 
 describe('documents only release checks', () => {
-  it('starts each existing job with the same detector and keeps all job names', () => {
-    expect(detectors).toHaveLength(3);
+  it('starts every job with the same detector and keeps all job names', () => {
+    const jobs = ['site', 'unit', 'browser', 'publish', 'number-diff', 'design-check'];
+    expect(detectors).toHaveLength(jobs.length);
     expect(new Set(detectors).size).toBe(1);
     expect(workflow).not.toContain('paths-ignore:');
-    for (const job of ['site', 'number-diff', 'design-check']) {
+    for (const job of jobs) {
       const section = workflow.split(`  ${job}:\n`)[1].split(/\n  [a-z][a-z-]+:\n/)[0];
-      expect(section.split('    steps:')[0]).not.toMatch(/^    if:/m);
+      // Only publish may carry a job level condition, and only the one that keeps it to main.
+      const conditions = section.split('    steps:')[0].match(/^    if:.*$/gm) ?? [];
+      expect(conditions).toEqual(job === 'publish'
+        ? ["    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'"] : []);
       expect(section).toMatch(/steps:\n      - name: Detect documents only changes/);
       const steps = section.split(/^      - /m).slice(2);
       for (const step of steps) expect(step).toContain("if: steps.changes.outputs.docs-only != 'true'");
     }
+  });
+  it('publishes only the tree that the build, unit and browser jobs all passed', () => {
+    const job = (name: string) => workflow.split(`  ${name}:\n`)[1].split(/\n  [a-z][a-z-]+:\n/)[0];
+    expect(job('publish')).toContain('needs: [site, unit, browser]');
+    expect(job('browser')).toContain('needs: site');
+    expect(job('browser')).toContain('fail-fast: false');
+    expect(workflow.match(/run: npm run build\n/g)).toHaveLength(1);
+    expect(workflow.match(/wrangler pages deploy/g)).toHaveLength(1);
+    expect(job('publish')).not.toContain('npm run build');
+    const shards = [...job('browser').matchAll(/--shard=(\d)\/(\d)/g)].map(match => `${match[1]}/${match[2]}`);
+    expect(shards).toEqual(['1/3', '2/3', '3/3']);
+    expect(job('browser')).toContain('npm run test:csp');
   });
   for (const event of ['pull_request']) {
     it(`passes documents only ${event} changes, including root Markdown`, async () => {

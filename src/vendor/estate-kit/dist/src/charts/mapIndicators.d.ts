@@ -2,6 +2,7 @@
  * Sites own their small registry. Nothing here derives thresholds from observations.
  */
 import type { Unit } from "../figures/figures.js";
+import { type SkinKey } from "../../generated/tokens.js";
 export interface FixedMapIndicator {
     kind: "fixed";
     label: string;
@@ -30,4 +31,4 @@ export declare function mapClass(ind: MapIndicator, value: number | string | nul
  * colour. Categorical classes are unordered, so they take the four gated series, repeated
  * only with a different pattern for further classes.
  */
-export declare function colourFor(ind: MapIndicator, value: number | string | null): string;
+export declare function colourFor(ind: MapIndicator, value: number | string | null, site?: SkinKey): string;

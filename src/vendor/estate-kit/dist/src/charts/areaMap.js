@@ -11,7 +11,7 @@ import { pole, rewind } from "./grammar/geo.js";
 import { placePlates } from "./grammar/plates.js";
 import { defineMapIndicators, mapClass, colourFor } from "./mapIndicators.js";
 import { tableTwin } from "./table.js";
-import { rampFor } from "./locatorMap.js";
+import { rampFor, rampSite } from "./locatorMap.js";
 const R = tokens.ramp;
 const PATTERNS = ["horizontal lines", "vertical lines", "rising lines", "falling lines", "dots", "rings", "grid", "crosses"];
 const strokes = ["M0 4H8", "M4 0V8", "M-2 2L2 -2M0 8L8 0M6 10L10 6", "M-2 6L2 10M0 0L8 8M6 -2L10 2", "", "", "M0 4H8M4 0V8", "M2 2L6 6M6 2L2 6"];
@@ -31,6 +31,9 @@ export function areaMap(o) {
     if (!o.areas?.length)
         throw new Error("AreaMap needs geometry");
     const registry = defineMapIndicators(o.registry);
+    if (o.ramp === "accent" && o.modeData !== "fixed")
+        throw new Error("an accent ramp shades fixed classes; categories take the series");
+    const accentSite = rampSite(o.ramp, o.site);
     const ind = registry[o.indicator];
     if (!ind || ind.kind !== o.modeData)
         throw new Error("select a registry indicator matching modeData");
@@ -88,7 +91,7 @@ export function areaMap(o) {
         const d = path(a);
         if (!d || /NaN|Infinity/.test(d) || !(path.area(a) > 0))
             throw new Error(`${code}: geometry cannot be drawn`);
-        return { a, code, cls, shown, link, d, colour: colourFor(ind, value) };
+        return { a, code, cls, shown, link, d, colour: colourFor(ind, value, accentSite) };
     });
     canvas.allow(...rows.map(r => r.shown));
     const fixed = ind.kind === "fixed";
@@ -97,7 +100,7 @@ export function areaMap(o) {
     // UK Demographics maps draw them, where lightness carries the order without a hatch, and an
     // unknown is the ramp's striped no figure fill. Categorical classes are unordered: the four
     // gated series, each with its own pattern so no class rests on colour alone.
-    const ramp = fixed ? rampFor(labels.length) : [];
+    const ramp = fixed ? rampFor(labels.length, accentSite) : [];
     const fillFor = (cls) => cls === null ? `url(#${patternId(7)})` : fixed ? ramp[cls] : `url(#${patternId(cls)})`;
     const ground = fixed ? R.ground : bg;
     canvas.add("<defs>");
@@ -166,7 +169,7 @@ export function areaMap(o) {
         y = canvas.para(P.x, y + 4, "Some area labels do not fit on the map. Every area is named in its link and in the table below.", P.w, { size: tpl.font.axis, fill: "text-muted", bg });
     fr.close(y);
     canvas.assertTextBounds();
-    if (fr.sourceOutput && o.sourceFormat)
+    if (fr.sourceOutput?.sourceHtml !== undefined && o.sourceFormat)
         fr.sourceOutput.sourceHtml += ` ${esc(o.boundaryCredit)} Not drawn: ${esc(o.notDrawn)}`;
     const alt = o.alt ?? `${fr.title}. ${o.description} Not drawn: ${o.notDrawn} Every area links to its page; the table gives every area and class.`;
     if ([alt, caption, ...rows.flatMap(r => [r.a.properties.name, r.shown]), ...labels].some(s => DASHES.test(s)))

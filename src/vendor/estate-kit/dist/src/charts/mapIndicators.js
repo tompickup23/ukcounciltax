@@ -44,9 +44,9 @@ export function mapClass(ind, value) {
  * colour. Categorical classes are unordered, so they take the four gated series, repeated
  * only with a different pattern for further classes.
  */
-export function colourFor(ind, value) {
+export function colourFor(ind, value, site) {
     const i = mapClass(ind, value);
     if (ind.kind === "fixed")
-        return i === null ? tokens.ramp.na : rampFor(ind.breaks.length + 1)[i];
+        return i === null ? tokens.ramp.na : rampFor(ind.breaks.length + 1, site)[i];
     return i === null ? "text-muted" : `series-${i % 4 + 1}`;
 }

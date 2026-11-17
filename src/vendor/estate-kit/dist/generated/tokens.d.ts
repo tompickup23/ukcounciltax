@@ -1,4 +1,4 @@
-export declare const VERSION = "0.6.3";
+export declare const VERSION = "0.6.5";
 export declare const tokens: {
     readonly color: {
         readonly light: {
@@ -102,10 +102,10 @@ export declare const tokens: {
             readonly domain: "aidoge.co.uk";
         };
         readonly ukcounciltax: {
-            readonly deep: "#23664f";
-            readonly bright: "#94d7b5";
-            readonly wash: "#edf6f0";
-            readonly darkWash: "#112d25";
+            readonly deep: "#0d6648";
+            readonly bright: "#f0dfae";
+            readonly wash: "#e9eedd";
+            readonly darkWash: "#1a251d";
             readonly name: "UK Council Tax";
             readonly domain: "ukcounciltax.co.uk";
         };
@@ -125,9 +125,17 @@ export declare const tokens: {
             readonly name: "Lancashire care atlas";
             readonly domain: "lancs-care-atlas.pages.dev";
         };
+        readonly ukcouncils: {
+            readonly deep: "#245b87";
+            readonly bright: "#8cc4ed";
+            readonly wash: "#eef5fb";
+            readonly darkWash: "#122838";
+            readonly name: "UK Councils";
+            readonly domain: "ukcouncils.co.uk";
+        };
     };
     readonly skins: {
-        readonly about: "A skin per site, beside its accent triple: a paper triple (paper, warm paper, line) for each theme, a display scale that reaches hero size, a display face with an italic slot and the body face, a section rhythm, a radius pair and a motion set (one easing, two durations under 300 ms, both set to 0ms by a reduced motion guard), and, where a kit colour fails on the skin's paper, an override of that colour. A site entry names its register and inherits that register's skin; an editorial entry gives its own values, each quoted in $meta.sources.skins. A record entry may carry its own paper, radius and overrides where the site's own stylesheet holds them (Council Intel), each quoted in $meta.sources.skins; a record entry without them reproduces the kit exactly. Keys listed in proposed were derived by scripts/derive-skin-dark.mjs, not read from the site, and wait on the owner.";
+        readonly about: "A skin per site, beside its accent triple: a paper triple (paper, warm paper, line) for each theme, a display scale that reaches hero size, a display face with an italic slot and the body face, a section rhythm, a radius pair and a motion set (one easing, two durations under 300 ms, both set to 0ms by a reduced motion guard), and, where a kit colour fails on the skin's paper, an override of that colour. A site entry names its register and inherits that register's skin; an editorial entry gives its own values, each quoted in $meta.sources.skins. A record entry may carry its own paper, radius and overrides where the site's own stylesheet holds them (Council Intel) or where a decision sets them (UK Council Tax's paper, D2), each quoted in $meta.sources.skins, and from 0.6.4 a ramp: a sequential map ramp derived from the site's accent, set as --ramp-1 to --ramp-7; a record entry without them reproduces the kit exactly. Keys listed in proposed were derived by scripts/derive-skin-dark.mjs, not read from the site, and wait on the owner.";
         readonly registers: {
             readonly record: {
                 readonly about: "For the data sites: restrained, dense, colour kept for data. Every value is one the kit already ships, so a record site's output does not change.";
@@ -172,7 +180,7 @@ export declare const tokens: {
             };
         };
         readonly desk: {
-            readonly about: "A desk is a dark ground band inside a light page, in both themes: its ground, ink, muted text, rule, the three state colours drawn on it and each state's ink on its badge ground. A skin that has one lists its values under desk; generated CSS sets them as --ground, --ground-ink, --ground-muted, --ground-rule, --ground-positive and so on, and a [data-ground=\"desk\"] rule points the kit's names at them, so text, rules and a chart in css mode inside the band take the desk's values. names maps each kit name to a desk key, to another kit name (kit:accent-bright), or to the kit's dark value of a name (dark:series-1): the series and neutrals on the desk are the kit's dark set, which is validated for a dark ground. There is no wash on the desk, so accent-wash is the ground.";
+            readonly about: "A desk is a dark ground band inside a light page, in both themes: its ground, ink, muted text, rule, the three state colours drawn on it and each state's ink on its badge ground. A skin that has one lists its values under desk; generated CSS sets them as --ground, --ground-ink, --ground-muted, --ground-rule, --ground-positive and so on, and a [data-ground=\"desk\"] rule points the kit's names at them, so text, rules and a chart in css mode inside the band take the desk's values. names maps each kit name to a desk key, to another kit name (kit:accent-bright), or to the kit's dark value of a name (dark:series-1): the series and neutrals on the desk are the kit's dark set, which is validated for a dark ground. There is no wash on the desk, so accent-wash is the ground. Added in 0.6.4: edge, the band's 1px border, set as --ground-edge; and a desk may hold its own value for a kit name the map reads from the dark set (series-neutral-soft on UK Council Tax's dark desk), where the kit's dark value fails on that desk: the generated CSS then sets --ground-<name> in both themes, the other theme taking the kit's dark value.";
             readonly names: {
                 readonly bg: "ground";
                 readonly "bg-subtle": "ground";
@@ -217,6 +225,97 @@ export declare const tokens: {
             };
             readonly ukcounciltax: {
                 readonly register: "record";
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#f6f1e4";
+                        readonly warm: "#ece6d6";
+                        readonly line: "#dcd5c2";
+                    };
+                    readonly dark: {
+                        readonly paper: "#0c1310";
+                        readonly warm: "#131b16";
+                        readonly line: "#2a372e";
+                    };
+                };
+                readonly display: {
+                    readonly "1": "clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem)";
+                    readonly "2": "clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem)";
+                    readonly hero: "clamp(2.5rem, 1.6rem + 4vw, 4.5rem)";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "bg-card": "#fffdf8";
+                        readonly "border-strong": "#b7ae96";
+                        readonly text: "#1b1f1a";
+                        readonly "text-muted": "#55594d";
+                        readonly "text-faint": "#626656";
+                        readonly "series-1": "#0d6648";
+                        readonly "series-2": "#8e8360";
+                        readonly "series-3": "#181100";
+                        readonly "series-4": "#392f0e";
+                        readonly "series-neutral-soft": "#7d858d";
+                    };
+                    readonly dark: {
+                        readonly "bg-card": "#151f19";
+                        readonly "border-strong": "#435245";
+                        readonly text: "#f4efe2";
+                        readonly "text-muted": "#c1bfae";
+                        readonly "text-faint": "#9d9d8c";
+                        readonly "accent-ink": "#0c1310";
+                        readonly "series-1": "#2ea471";
+                        readonly "series-2": "#f7e4aa";
+                        readonly "series-3": "#736847";
+                        readonly "series-4": "#c9bd99";
+                    };
+                };
+                readonly desk: {
+                    readonly light: {
+                        readonly ground: "#0e4a36";
+                        readonly ink: "#f7f2e3";
+                        readonly muted: "#bdc8b8";
+                        readonly rule: "#336552";
+                        readonly edge: "#52775a";
+                        readonly positive: "#6fcf9a";
+                        readonly warning: "#f0b03e";
+                        readonly critical: "#f39287";
+                        readonly "positive-ink": "#c1e4c6";
+                        readonly "positive-bg": "#256a4e";
+                        readonly "warning-ink": "#f4d8a1";
+                        readonly "warning-bg": "#446238";
+                        readonly "critical-ink": "#f5c6b9";
+                        readonly "critical-bg": "#455846";
+                        readonly "series-1": "#57c792";
+                        readonly "series-2": "#f0dda4";
+                        readonly "series-3": "#978c69";
+                        readonly "series-4": "#fffcf2";
+                        readonly "series-neutral-soft": "#858c93";
+                    };
+                    readonly dark: {
+                        readonly ground: "#0e4a36";
+                        readonly ink: "#f7f2e3";
+                        readonly muted: "#bdc8b8";
+                        readonly rule: "#336552";
+                        readonly edge: "#52775a";
+                        readonly positive: "#6fcf9a";
+                        readonly warning: "#f0b03e";
+                        readonly critical: "#f39287";
+                        readonly "positive-ink": "#c1e4c6";
+                        readonly "positive-bg": "#256a4e";
+                        readonly "warning-ink": "#f4d8a1";
+                        readonly "warning-bg": "#446238";
+                        readonly "critical-ink": "#f5c6b9";
+                        readonly "critical-bg": "#455846";
+                        readonly "series-1": "#57c792";
+                        readonly "series-2": "#f0dda4";
+                        readonly "series-3": "#978c69";
+                        readonly "series-4": "#fffcf2";
+                        readonly "series-neutral-soft": "#858c93";
+                    };
+                };
+                readonly ramp: {
+                    readonly sequential: readonly ["#0a2e20", "#013d29", "#014d35", "#036043", "#017653", "#029066", "#05b27e"];
+                };
+                readonly proposed: readonly ["overrides.light.series-neutral-soft", "desk.light.positive-ink", "desk.light.positive-bg", "desk.light.warning-ink", "desk.light.warning-bg", "desk.light.critical-ink", "desk.light.critical-bg", "desk.light.series-neutral-soft", "desk.dark.positive-ink", "desk.dark.positive-bg", "desk.dark.warning-ink", "desk.dark.warning-bg", "desk.dark.critical-ink", "desk.dark.critical-bg", "desk.dark.series-neutral-soft", "desk.light.muted", "desk.light.rule", "desk.light.edge", "desk.dark.muted", "desk.dark.rule", "desk.dark.edge", "ramp.sequential", "overrides.light.series-2", "overrides.light.series-3", "overrides.light.series-4", "overrides.dark.series-1", "overrides.dark.series-2", "overrides.dark.series-3", "overrides.dark.series-4", "desk.light.critical", "desk.light.series-1", "desk.light.series-2", "desk.light.series-3", "desk.light.series-4", "desk.dark.critical", "desk.dark.series-1", "desk.dark.series-2", "desk.dark.series-3", "desk.dark.series-4"];
             };
             readonly councilintel: {
                 readonly register: "record";
@@ -290,6 +389,69 @@ export declare const tokens: {
             };
             readonly careatlas: {
                 readonly register: "record";
+            };
+            readonly ukcouncils: {
+                readonly register: "record";
+                readonly paper: {
+                    readonly light: {
+                        readonly paper: "#f7f8f6";
+                        readonly warm: "#eef0ee";
+                        readonly line: "#d8dde0";
+                    };
+                    readonly dark: {
+                        readonly paper: "#0f1317";
+                        readonly warm: "#171c21";
+                        readonly line: "#2a3138";
+                    };
+                };
+                readonly display: {
+                    readonly "1": "clamp(1.3rem, 1.16rem + 0.62vw, 1.6rem)";
+                    readonly "2": "clamp(1.65rem, 1.36rem + 1.28vw, 2.3rem)";
+                    readonly hero: "clamp(2.5rem, 1.6rem + 4vw, 4.5rem)";
+                };
+                readonly overrides: {
+                    readonly light: {
+                        readonly "series-neutral-soft": "#838b93";
+                    };
+                };
+                readonly desk: {
+                    readonly light: {
+                        readonly ground: "#142634";
+                        readonly ink: "#f4f6f7";
+                        readonly muted: "#bcc2c6";
+                        readonly rule: "#384753";
+                        readonly edge: "#38556c";
+                        readonly positive: "#6fcf9a";
+                        readonly warning: "#f0b03e";
+                        readonly critical: "#f2857a";
+                        readonly "positive-ink": "#bfe6d2";
+                        readonly "positive-bg": "#2a4f4c";
+                        readonly "warning-ink": "#f2daad";
+                        readonly "warning-bg": "#494736";
+                        readonly "critical-ink": "#f3c9c5";
+                        readonly "critical-bg": "#493d45";
+                    };
+                    readonly dark: {
+                        readonly ground: "#283945";
+                        readonly ink: "#f4f6f7";
+                        readonly muted: "#c1c7cb";
+                        readonly rule: "#495761";
+                        readonly edge: "#48657b";
+                        readonly positive: "#6fcf9a";
+                        readonly warning: "#f0b03e";
+                        readonly critical: "#f2857a";
+                        readonly "positive-ink": "#bfe6d2";
+                        readonly "positive-bg": "#395d59";
+                        readonly "warning-ink": "#f2daad";
+                        readonly "warning-bg": "#585643";
+                        readonly "critical-ink": "#f3c9c5";
+                        readonly "critical-bg": "#584b52";
+                    };
+                };
+                readonly ramp: {
+                    readonly sequential: readonly ["#10293e", "#003559", "#014470", "#025489", "#0168a8", "#027fcb", "#269df3"];
+                };
+                readonly proposed: readonly ["paper.light", "overrides.light.series-neutral-soft", "desk.light", "desk.dark", "ramp.sequential"];
             };
             readonly ukai: {
                 readonly register: "editorial";
@@ -891,12 +1053,16 @@ export interface Skin {
     proposed?: readonly string[];
     /** A dark ground band inside the page, in both themes (tokens.json skins.desk). */
     desk?: Record<Theme, Record<string, string>>;
+    /** A sequential map ramp derived from the site's accent, drawn on the estate ground (0.6.4). */
+    ramp?: {
+        sequential: readonly string[];
+    };
 }
 /** One site's skin: its register's skin under its own values. */
 export declare function skin(key: SkinKey): Skin;
 /** Every colour for one theme and skin, as plain hex: the kit's colours with the skin's paper as bg, bg-subtle and border, and the skin's accent where it has one. */
 export declare function skinPalette(theme: Theme, key: SkinKey): Record<string, string>;
 /** The skins that have a desk. */
-export declare const DESK_KEYS: ("ukdemographics" | "ukelections" | "ukfoodhygiene" | "ukschoolholidaydates" | "asylumstats" | "aidoge" | "ukcounciltax" | "councilintel" | "careatlas" | "ukai" | "lancashireai" | "tourdefrancelancashire")[];
+export declare const DESK_KEYS: ("ukdemographics" | "ukelections" | "ukfoodhygiene" | "ukschoolholidaydates" | "asylumstats" | "aidoge" | "ukcounciltax" | "councilintel" | "careatlas" | "ukcouncils" | "ukai" | "lancashireai" | "tourdefrancelancashire")[];
 /** Every colour on a skin's desk, as plain hex: the skin palette with the kit's names pointed at the desk, as the [data-ground="desk"] rule does. */
 export declare function deskPalette(theme: Theme, key: SkinKey): Record<string, string>;

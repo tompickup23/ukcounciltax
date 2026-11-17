@@ -16,18 +16,34 @@
  * caller's breaks, so a colour means the same value on every map that shares them.
  */
 import { geoMercator, geoPath } from "d3-geo";
-import { tokens } from "../../generated/tokens.js";
+import { skin, tokens, SKIN_KEYS } from "../../generated/tokens.js";
 import { esc, n2, textWidth } from "./canvas.js";
 import { frame } from "./frame.js";
 import { gutterLabels, leaderAnchor, lockedWidth, placePlates, polylineObstacles, segmentHitsBox, segmentsCross } from "./grammar/index.js";
 import { tableTwin } from "./table.js";
 import { currentFigures, formatValue } from "../figures/figures.js";
 import { rewind, pole } from "./grammar/geo.js";
+/** The skin whose accent ramp a map draws, or none for the estate ramp. Throws for an accent ramp a site does not have. */
+export function rampSite(ramp, site) {
+    if (!ramp || ramp === "estate")
+        return undefined;
+    if (ramp !== "accent")
+        throw new Error(`a map ramp is "estate" or "accent", not "${ramp}"`);
+    if (!site)
+        throw new Error('ramp "accent" needs the site whose accent ramp it draws');
+    if (!SKIN_KEYS.includes(site) || !skin(site).ramp)
+        throw new Error(`${site} has no accent ramp`);
+    return site;
+}
 const R = tokens.ramp;
 const RATE_UNITS = new Set(["percent", "rate", "index", "gbp", "pence"]);
-/** The ramp steps for a number of classes, spread across the seven so the ends always show. */
-export function rampFor(classes) {
-    const all = R.sequential;
+/**
+ * The ramp steps for a number of classes, spread across the seven so the ends always show.
+ * With a site whose skin carries an accent ramp (0.6.4: UK Council Tax and UK Councils),
+ * the steps come from that ramp; with any other site, or none, from the estate ramp.
+ */
+export function rampFor(classes, site) {
+    const all = (site ? skin(site).ramp?.sequential : undefined) ?? R.sequential;
     if (classes < 4 || classes > all.length)
         throw new Error(`a map takes 4 to ${all.length} classes, not ${classes}`);
     return Array.from({ length: classes }, (_, i) => all[Math.round((i * (all.length - 1)) / (classes - 1))]);
@@ -43,7 +59,7 @@ export function locatorMap(o) {
     const breaks = o.breaks;
     if (breaks.some((b, i) => i > 0 && b <= breaks[i - 1]))
         throw new Error("breaks must rise");
-    const ramp = rampFor(breaks.length + 1);
+    const ramp = rampFor(breaks.length + 1, rampSite(o.ramp, o.site));
     const keys = Object.values(o.values);
     const figs = Object.fromEntries(Object.entries(o.values).map(([code, k]) => [code, set.value(k)]));
     const unit = figs[o.focus]?.unit ?? Object.values(figs)[0]?.unit;
@@ -234,7 +250,7 @@ export function locatorMap(o) {
         .sort((p, q) => (q.f?.value ?? -Infinity) - (p.f?.value ?? -Infinity))
         .map(({ a, f }) => [a.properties.name + (a.properties.code === o.focus ? " (this place)" : ""), f ? set.show(o.values[a.properties.code]) : "no figure"]);
     const table = tableTwin({ caption: fr.title ?? (fv?.label ?? "Map"), head: ["Area", fv?.name ?? "Figure"], rows, source: caption });
-    if (fr.sourceOutput && o.sourceFormat)
+    if (fr.sourceOutput?.sourceHtml !== undefined && o.sourceFormat)
         fr.sourceOutput.sourceHtml += ` ${esc(o.boundaryCredit)}`;
     return { ...fr.sourceOutput, svg, table, alt, caption, title: fr.title, width: canvas.W, height: canvas.H };
 }

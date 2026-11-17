@@ -2,6 +2,8 @@
 /**
  * The wrapper every kit chart renders through: the inline SVG, which carries its own
  * source line, the actions (when asked for), then the table twin in a details element.
+ * A chart drawn with titlePlacement "html" (0.6.4) leads with its title as the figure's one
+ * caption; a source line moved out of the drawing then follows the SVG as a paragraph.
  * The chart has direct labels on every key value, so nothing essential sits behind the
  * click.
  */
@@ -29,8 +31,9 @@ const thumb = out.svg.includes('class="ek-chart ek-thumb"');
   <span class:list={["ek-thumb-slot", className]} data-figure={keys.join(" ")}><Fragment set:html={out.svg} /></span>
 ) : (
   <figure class:list={["ek-figure", className]} data-figure={keys.join(" ")}>
+    {out.titleHtml && <figcaption class="ek-caption"><span class="ek-title" set:html={out.titleHtml} /></figcaption>}
     <Fragment set:html={out.svg} />
-    {out.sourceHtml && <figcaption class="ek-source" set:html={out.sourceHtml} />}
+    {out.sourceHtml && (out.titleHtml ? <p class="ek-source" set:html={out.sourceHtml} /> : <figcaption class="ek-source" set:html={out.sourceHtml} />)}
     {act && <ChartActions twinId={id} label={act.label ?? out.title ?? out.alt} png={act.png} />}
     {out.table && (
       <details class="ek-twin" id={id} open={tableOpen}>

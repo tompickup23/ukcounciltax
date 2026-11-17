@@ -1,3 +1,4 @@
+import { type SiteKey, type SkinKey } from "../../generated/tokens.js";
 import { type ChartOptions, type ChartOutput } from "./frame.js";
 export type { AreaFeature } from "./grammar/geo.js";
 import { type AreaFeature } from "./grammar/geo.js";
@@ -24,7 +25,20 @@ export interface LocatorMapOptions extends ChartOptions {
      * area, the leaders never crossing, and in the line under the key only if no gutter has room.
      */
     neighbourLabels?: "list" | "gutter";
+    /**
+     * Which sequential ramp shades the classes: "estate" (the default, the UK Demographics
+     * ramp) or "accent", the ramp derived from the accent of `site`, which must have one
+     * (0.6.4: UK Council Tax and UK Councils). Both are drawn on the estate ground.
+     */
+    ramp?: MapRamp;
 }
-/** The ramp steps for a number of classes, spread across the seven so the ends always show. */
-export declare function rampFor(classes: number): string[];
+export type MapRamp = "estate" | "accent";
+/** The skin whose accent ramp a map draws, or none for the estate ramp. Throws for an accent ramp a site does not have. */
+export declare function rampSite(ramp: MapRamp | undefined, site: SiteKey | undefined): SkinKey | undefined;
+/**
+ * The ramp steps for a number of classes, spread across the seven so the ends always show.
+ * With a site whose skin carries an accent ramp (0.6.4: UK Council Tax and UK Councils),
+ * the steps come from that ramp; with any other site, or none, from the estate ramp.
+ */
+export declare function rampFor(classes: number, site?: SkinKey): string[];
 export declare function locatorMap(o: LocatorMapOptions): ChartOutput;

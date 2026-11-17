@@ -220,7 +220,8 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
   .state-row{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}
   .state-word{display:inline-block;font-weight:700;font-size:var(--text-xs);letter-spacing:.08em;text-transform:uppercase;padding:.1rem .5rem;border-radius:999px;border:1px solid currentColor;color:var(--desk-ink);margin-right:.25rem}
   [data-status="shortfall"] .state-word{color:var(--gap-short)}[data-status="surplus"] .state-word{color:var(--accent-bright)}
-  .budget-set{--gap-short:color-mix(in srgb,var(--warning) 50%,var(--ground-ink))}
+  /* On the band the shortfall takes the band's own warning: the paper one fails 4.5 to 1 on the band green in light. */
+  .budget-set{--gap-short:var(--ground-warning)}
   .gap{margin:.6rem 0 0}
   .gap-bar{position:relative;display:block;height:12px;border-radius:6px;background:color-mix(in srgb,var(--ground-ink) 16%,transparent)}
   .gap-fill{position:absolute;top:0;bottom:0;width:var(--gap,0%)}
@@ -238,7 +239,7 @@ const neighbours = near.neighbours.filter(n => eligible.has(n.slug)).sort((a, b)
   .baseline{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}
   .copy-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}.copy-status{margin:0;font-size:var(--text-sm);color:var(--desk-soft)}.copy-status:empty{display:none}
   .copy-button{background:transparent;color:var(--desk-ink);border-color:color-mix(in srgb,var(--ground-ink) 45%,transparent);font-weight:600}.copy-button:hover{border-color:var(--accent-bright)}
-  :global(.set-desk) [data-error]{color:var(--desk-ink)}
+  :global(.set-desk) [data-error]{color:var(--desk-ink);border-color:var(--accent-bright)}
 
   /* The workbench: the tax control drawn larger, then the services in two dense columns. */
   .controls{display:grid;gap:.5rem;align-content:start;min-width:0}

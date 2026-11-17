@@ -2,6 +2,7 @@ import { type Source } from "../figures/figures.js";
 import { type ChartOptions, type ChartOutput } from "./frame.js";
 import { type AreaFeature } from "./grammar/geo.js";
 import { type MapIndicatorRegistry } from "./mapIndicators.js";
+import { type MapRamp } from "./locatorMap.js";
 interface AreaMapBase extends ChartOptions {
     /** Unique on the page, for pattern ids. */
     id: string;
@@ -20,6 +21,8 @@ interface AreaMapBase extends ChartOptions {
      * and on a whole country map only the largest areas take one.
      */
     plates?: boolean;
+    /** Fixed classes only: the estate ramp (the default) or the accent ramp of `site` (0.6.4). */
+    ramp?: MapRamp;
 }
 export type AreaMapOptions = AreaMapBase & ({
     modeData: "fixed";

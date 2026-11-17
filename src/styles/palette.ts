@@ -3,15 +3,16 @@
  * outside a browser and cannot read a custom property, so this is the one
  * file outside global.css allowed to hold a colour; tests/palette.test.ts
  * holds every value here equal to its light token in the vendored Estate Kit
- * file that scripts/apply-brand.py splices into global.css.
+ * files that scripts/apply-brand.py splices into global.css: the skin block where
+ * the skin sets the name (the band and its ink), the token block otherwise.
  */
 export const cardPalette = {
-  ground: "#0f1317",
-  groundInk: "#f4f6f7",
-  groundMuted: "#98a3ac",
-  accentBright: "#94d7b5",
-  accentDeep: "#23664f",
-  accentWash: "#edf6f0",
+  ground: "#0e4a36",
+  groundInk: "#f7f2e3",
+  groundMuted: "#bdc8b8",
+  accentBright: "#f0dfae",
+  accentDeep: "#0d6648",
+  accentWash: "#e9eedd",
 } as const;
 
 /** The estate token each value mirrors. */

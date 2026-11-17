@@ -9,7 +9,7 @@ export { waffle, squaresFor, squareClass, WAFFLE_PAINTS, WAFFLE_MAX_PARTS, type 
 export { billAnatomy, type BillAnatomyOptions } from "./charts/billAnatomy.js";
 export { positionStrip, percentile, stripStats, SCALE_LABELS, MIN_CLASS, type PositionStripOptions, type StripStats } from "./charts/positionStrip.js";
 export { hemicycle, type HemicycleOptions } from "./charts/hemicycle.js";
-export { locatorMap, rampFor, type LocatorMapOptions, type AreaFeature } from "./charts/locatorMap.js";
+export { locatorMap, rampFor, rampSite, type LocatorMapOptions, type AreaFeature, type MapRamp } from "./charts/locatorMap.js";
 export { statTile, statTileParts, scoreCard, type StatTileOptions, type StatTileParts, type ScoreCardOptions, type ScoreCardRow } from "./charts/statTile.js";
 export { fillSlots, type ChartOptions, type ChartOutput } from "./charts/frame.js";
 export { TEMPLATES, TEMPLATE_KEYS, CARD_KEYS, type TemplateKey } from "./output/templates.js";
@@ -25,3 +25,4 @@ export { linear, zeroDomain, zeroScale, bands, barPath, openBar, polylineObstacl
 export { rankedBars, type RankedBarsOptions, type RankedBarRow } from "./charts/rankedBars.js";
 export { areaMap, type AreaMapOptions } from "./charts/areaMap.js";
 export { defineMapIndicators, mapClass, colourFor, type MapIndicator, type MapIndicatorRegistry, type FixedMapIndicator, type CategoricalMapIndicator } from "./charts/mapIndicators.js";
+export { thumb, type ThumbKind, type ThumbOptions, type SetThumbOptions, type MapThumbOptions } from "./charts/thumbs.js";

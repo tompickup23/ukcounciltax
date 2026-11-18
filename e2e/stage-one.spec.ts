@@ -141,7 +141,8 @@ test('metadata separates publisher from the council and retains dated sitemap en
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)];
   // The 197 public set pages join the existing 909 sitemap entries.
   // C6 adds the levels day page and precept day from 2027-28.
-  expect(entries).toHaveLength(1748 + levelsDayRoutes().length);
+  // The league tables (18 November 2026) add 11 region table parts.
+  expect(entries).toHaveLength(1748 + 11 + levelsDayRoutes().length);
   for (const entry of entries) expect(entry[1]).toMatch(/<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/);
   expect(sitemap).toContain('/compare/</loc>');
   expect(sitemap).not.toContain('?a=');

@@ -277,10 +277,11 @@ export function scopeText(scope: TownScope, summary: ReturnType<typeof scopeSumm
 
 const OGL = 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/';
 /** JSON-LD: a Dataset for the table, and the lowest and highest ten by name and anchor only. */
-export function scopeStructuredData(scope: TownScope, summary: ReturnType<typeof scopeSummary>, description: string) {
+export function scopeStructuredData(scope: TownScope, summary: ReturnType<typeof scopeSummary>, description: string, rowPath: (town: Town) => string = town => townAnchor(scope.path, town)) {
   const where = scopeIn(scope);
   // Positions are the page's own: equal figures share one, as in the ledgers these lists mirror.
-  const item = (r: RankedTown) => ({'@type': 'ListItem', position: r.position, name: placeLabel(r.town), url: absoluteUrl(townAnchor(scope.path, r.town))});
+  // A row on a later part of a long region table is linked on that part (src/lib/towns-parts.ts).
+  const item = (r: RankedTown) => ({'@type': 'ListItem', position: r.position, name: placeLabel(r.town), url: absoluteUrl(rowPath(r.town))});
   const list = (name: string, rows: RankedTown[], order: string) => ({
     '@context': 'https://schema.org', '@type': 'ItemList', name, itemListOrder: order,
     numberOfItems: rows.length, itemListElement: rows.map(item),

@@ -3,9 +3,11 @@ import {national} from '../lib/national-data';
 import BandDLine from './BandDLine.astro';
 import DataDrawer from './DataDrawer.astro';
 import SourceLine from './SourceLine.astro';
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
 import {pounds, wholePounds, yearLabel} from '../lib/council-tax';
-interface Props {gss: string; name: string; view: 'chart'}
-const {gss, name} = Astro.props;
+interface Props {gss: string; name: string; view: 'chart'; /** Record line mode (W9): the Sources block entry and the source with its short title. */ record?: {entry: string; source: SourceRef}}
+const {gss, name, record} = Astro.props;
 const series = national.history[gss];
 const source = national.sources.history;
 const years = series ? Object.keys(series.area.values) : [];
@@ -18,7 +20,7 @@ const reference = {publisher: source.publisher, title: source.title, url: source
 {series && <>
   <div class="fact" data-fact>
     <BandDLine id={`band-d-line-${gss}`} series={years.map(year => ({year, value: series.area.values[year]}))} format={historyPounds} title={`Band D area council tax in ${name}, ${first?.replace('-', '/')} to ${last?.replace('-', '/')}`} basis={`Band D area council tax, including average parish precepts, annual figures ${precision}`} table={false}>
-      <SourceLine source={reference} />
+      {record ? <RecordLine entry={record.entry} sources={[record.source]} method={record.source.method} /> : <SourceLine source={reference} />}
       <p class="caveat">Cash figures, not adjusted for inflation. Includes average parish precepts, so the Band D bill in any one parish or unparished part of {name} can differ from this figure.</p>
     </BandDLine>
   </div>
@@ -30,7 +32,7 @@ const reference = {publisher: source.publisher, title: source.title, url: source
           <tbody>{available.map(year => <tr><th scope="row">{yearLabel(year)}</th><td class="num" data-figure>{historyPounds(series.area.values[year]!)}</td></tr>)}</tbody>
         </table>
       </div>
-      <SourceLine source={reference} />
+      {record ? <RecordLine entry={record.entry} sources={[record.source]} method={record.source.method} /> : <SourceLine source={reference} />}
     </div>
   </DataDrawer>
 </>}

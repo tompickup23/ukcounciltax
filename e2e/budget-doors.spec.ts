@@ -8,7 +8,8 @@ for (const route of ['', 'leeds/', 'burnley/', 'camden/']) {
       await page.goto(`/tools/budget/${route}`);
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize()!.width);
-      const doors = page.locator(route ? '[data-budget-door]' : '[data-play-door]');
+      // Front doors: the hub's band carries the picker, and each row's Guess and Set pills are the doors.
+      const doors = route ? page.locator('[data-budget-door]') : page.locator('[data-hub-band] td.picker-pills').first().locator('a');
       await expect(doors).toHaveCount(2);
       for (const door of await doors.all()) {
         const bounds = await door.boundingBox();
@@ -25,8 +26,17 @@ for (const route of ['', 'leeds/', 'burnley/', 'camden/']) {
         if (route === 'burnley/') await expect(setDoor).toContainText("Explore the council's own gap");
         await expect(page.locator('#game-heading')).toHaveText(`Could you set ${route === 'leeds/' ? 'Leeds' : route === 'burnley/' ? 'Burnley' : 'Camden'}'s budget?`);
       } else {
-        await expect(page.locator('th.picker-action')).toHaveText('Set');
-        await expect(page.locator('.featured-strip img')).toHaveCount(3);
+        await expect(page.locator('th.picker-action')).toHaveText('Play');
+        await expect(page.locator('[data-hub-band][data-ground="desk"] [data-council-picker]')).toHaveCount(1);
+        // Featured councils are drawn as their round rail, not the share image.
+        await expect(page.locator('.featured-rail')).toHaveCount(3);
+        await expect(page.locator('.featured-budgets img')).toHaveCount(0);
+        // Set only where a set page exists: Burnley has none.
+        const burnley = page.locator('tr[data-row]', {has: page.locator('th a[href="/tools/budget/burnley/"]')}).locator('td.picker-pills a');
+        await expect(burnley).toHaveText(['Guess']);
+        const leeds = page.locator('tr[data-row]', {has: page.locator('th a[href="/tools/budget/leeds/"]')}).locator('td.picker-pills a');
+        await expect(leeds).toHaveText(['Guess', 'Set']);
+        await expect(leeds.nth(1)).toHaveAttribute('href', '/tools/budget/leeds/set/');
       }
       expect((await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([]);
     });

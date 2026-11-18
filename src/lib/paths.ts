@@ -5,6 +5,7 @@ import {devolvedPaths} from './devolved';
 import { BANDS, CURRENT_YEAR, loadYear, type Authority, type Band } from "./council-tax";
 import { loadRegistry, type Council } from "./registry";
 import { townPaths } from "./towns-pages";
+import { townPartPaths } from "./towns-parts";
 
 /**
  * Every programmatic page and the data behind it, in one place, so the pages'
@@ -96,6 +97,7 @@ export function programmaticPaths(): string[] {
     ...budgetSetPages().map(pilot => budgetSetPath(pilot.slug)),
     ...rankingPaths(),
     ...townPaths(),
+    ...townPartPaths(),
     ...parishPages().map(parishPath),
     ...BANDS.map(bandPath),
     ...REGIONS.map(regionPath),

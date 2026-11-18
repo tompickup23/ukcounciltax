@@ -1,11 +1,13 @@
 ---
-interface Props { id: string }
-const {id} = Astro.props;
+import Icon from '../vendor/estate-kit/src/components/Icon.astro';
+/** icons: draw the kit's share and printer icons beside the words (W9). The page must inline IconSprite once. */
+interface Props { id: string; icons?: boolean }
+const {id, icons = false} = Astro.props;
 ---
 <div class="view-actions" data-view-actions data-pagefind-ignore>
   <div class="action-links">
-    <button class="button secondary" type="button" data-share-view disabled>Share this view</button>
-    <button class="button secondary" type="button" data-print-view disabled>Print</button>
+    <button class="button secondary" type="button" data-share-view disabled>{icons && <Icon name="share-2" />}Share this view</button>
+    <button class="button secondary" type="button" data-print-view disabled>{icons && <Icon name="printer" />}Print</button>
   </div>
   <p class="small" role="status" data-share-status></p>
   <input id={`${id}-share-link`} type="text" readonly hidden aria-label="Link to this view" data-share-fallback />

@@ -42,7 +42,8 @@ describe("the repeated citation gate", () => {
   it("caps new pages at the ceiling and allows only listed templates more", () => {
     expect(repeatCap("/council-tax/towns/county/lancashire/index.html")).toBe(REPEAT_CAP);
     expect(repeatCap("/councils/pendle/index.html")).toBe(REPEAT_CAP);
-    expect(repeatCap("/compare/index.html")).toBe(5);
+    expect(repeatCap("/compare/index.html")).toBe(REPEAT_CAP);
+    expect(repeatCap("/changes/index.html")).toBe(13);
     expect(repeatCap("/council-tax/towns/index.html")).toBe(REPEAT_CAP);
     expect(repeatCap("/council-tax/ranked/index.html")).toBe(4);
     expect(repeatCap("/council-tax/band-d/index.html")).toBe(18);

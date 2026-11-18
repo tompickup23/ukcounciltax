@@ -29,7 +29,7 @@ async function answer(page: Page, status: number, adminDistrict?: string) {
   );
 }
 
-/** Opens the filters drawer where it is closed (below 600 px); from 600 px the chips are already open. */
+/** Opens the filters drawer where it is closed (below 600 px, and on the budget hub at every width); elsewhere from 600 px the chips are already open. */
 async function openFilters(page: Page) {
   const summary = page.locator("[data-picker-filters] > summary");
   if (await summary.isVisible()) await summary.click();

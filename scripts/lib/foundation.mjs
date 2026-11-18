@@ -39,7 +39,6 @@ export const REPEAT_ALLOWANCES = [
   { pattern: /^\/council-tax\/ranked\/index\.html$/, cap: 4, until: "a kit option to caption the four class strips once; the caption is vendored" },
   { pattern: /^\/council-tax\/(?!ranked\/|towns\/)[^/]+\/index\.html$/, cap: 18, until: "Tier 2 band pages" },
   { pattern: /^\/changes\/index\.html$/, cap: 13, until: "Tier 2 changes page" },
-  { pattern: /^\/compare\/index\.html$/, cap: 5, until: "W7 compare" },
 ];
 
 export function repeatCap(pagePath) {

@@ -7,7 +7,7 @@
  */
 import { BURNLEY_PARTS, siteFigures } from "../lib/figures";
 import { budgetFor, services } from "../lib/budget";
-import { CURRENT_YEAR, loadYear } from "../lib/council-tax";
+import { mapThumb } from "../lib/map-thumb";
 
 interface Props {
   kind: "stack" | "line" | "bands" | "strip" | "game" | "map";
@@ -26,6 +26,7 @@ const BASE = 60;
 const f = (v: number) => v.toFixed(2);
 
 let body = "";
+let viewBox = `0 0 ${W} ${H}`;
 if (kind === "stack") {
   const total = set.value("burnley.bandd.total").value;
   let x = LEFT;
@@ -64,22 +65,14 @@ if (kind === "stack") {
     .map((v, i) => `<rect x="${LEFT}" y="${f(4 + i * band)}" width="${f((v / max) * SPAN)}" height="${f(band - 4)}" rx="2" style="fill:var(${i === 0 ? "--accent" : "--series-neutral-soft"})"/>`)
     .join("");
 } else if (kind === "map") {
-  // Every English billing authority's area Band D this year, lowest to highest,
-  // as thin columns from zero, shaded in four steps as the map is: the spread
-  // the England map draws by place.
-  const values = Object.values(loadYear(CURRENT_YEAR).authorities)
-    .map((row) => row.bands.D)
-    .filter((v) => Number.isFinite(v) && v > 0)
-    .sort((a, b) => a - b);
-  const max = values[values.length - 1];
-  const step = SPAN / values.length;
-  const tone = ["--series-neutral-soft", "--series-neutral", "--accent-bright", "--accent"];
-  body = values
-    .map((v, i) => {
-      const h = (v / max) * 56;
-      return `<rect x="${f(LEFT + i * step)}" y="${f(BASE - h)}" width="${f(Math.max(step - 0.15, 0.2))}" height="${f(h)}" style="fill:var(${tone[Math.min(3, Math.floor((i / values.length) * 4))]})"/>`;
-    })
-    .join("");
+  // The England map itself, small: every English billing authority's outline from
+  // the same boundary file the map draws, simplified harder, shaded in the map's own
+  // six fixed steps of area Band D. The steps take the skin's sequential ramp as the
+  // kit's rampFor picks six of its seven (darkest for the lowest step, as the map).
+  const { shapes, width, height } = mapThumb();
+  viewBox = `0 0 ${width} ${height}`;
+  const ramp = [1, 2, 3, 5, 6, 7];
+  body = shapes.map((d, i) => d && `<path d="${d}" style="fill:var(--ramp-${ramp[i]});stroke:var(--bg-card);stroke-width:.35"/>`).join("");
 } else {
   const place = set.value("burnley.area_bandd.current").value;
   const england = set.value("england.area_bandd.current").value;
@@ -89,4 +82,4 @@ if (kind === "stack") {
   body = `<rect x="${LEFT}" y="30" width="${SPAN}" height="4" rx="2" style="fill:var(--border-strong)"/><rect x="${f(sx(england) - 1.5)}" y="16" width="3" height="32" style="fill:var(--series-neutral)"/><rect x="${f(sx(place) - 2)}" y="12" width="4" height="40" style="fill:var(--accent)"/>`;
 }
 ---
-<svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${W} ${H}`} class="task-thumb" aria-hidden="true" focusable="false" data-thumb={kind} set:html={body} />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} class="task-thumb" aria-hidden="true" focusable="false" data-thumb={kind} set:html={body} />

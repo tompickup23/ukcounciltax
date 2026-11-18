@@ -53,6 +53,8 @@ table.league thead .lg-range { vertical-align: bottom; }
 /* Jump links and pagers: plain anchors that work without script. */
 .league-jump { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); margin: var(--space-sm) 0; font-size: var(--text-sm); }
 .league-jump > span { color: var(--text-muted); margin-right: var(--space-2xs); }
+.league-jump > ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-xs); list-style: none; margin: 0; padding: 0; }
+.league-jump > ul > li { display: inline-flex; }
 .league-jump a, .league-jump [aria-current] { display: inline-flex; align-items: center; min-height: 36px; padding: .2rem .75rem; border: 1px solid var(--border); border-radius: 999px; text-decoration: none; color: var(--text); background: var(--bg-card); font-variant-numeric: tabular-nums lining-nums; }
 .league-jump a:hover { border-color: var(--accent); color: var(--accent); }
 .league-jump [aria-current] { border-color: var(--accent); background: var(--accent-wash); color: var(--accent); font-weight: 600; }

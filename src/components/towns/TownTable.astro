@@ -57,7 +57,7 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
   {paged && (
     <nav class="league-jump towns-parts" aria-label="Parts of this table">
       <span>Positions</span>
-      {parts.map(p => <>{' '}{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</>)}
+      <ul>{parts.map(p => <li>{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</li>)}</ul>
     </nav>
   )}
   {!paged && rows.length > 30 && (
@@ -125,7 +125,7 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
   {paged && (
     <nav class="league-jump towns-parts" aria-label="Parts of this table, again">
       <span>Positions</span>
-      {parts.map(p => <>{' '}{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</>)}
+      <ul>{parts.map(p => <li>{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</li>)}</ul>
     </nav>
   )}
   <div class="town-legend">

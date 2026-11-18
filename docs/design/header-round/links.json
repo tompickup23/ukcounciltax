@@ -1,0 +1,32 @@
+[
+  {
+    "option": "a",
+    "topLevelItems": {
+      "desktop": "4 menus, Search, Find my bill (6)",
+      "phone": "Find my bill, Menu (2)"
+    },
+    "headerLinks": 18,
+    "footerLinks": 20,
+    "notReachedFromHeaderOrFooter": []
+  },
+  {
+    "option": "b",
+    "topLevelItems": {
+      "desktop": "3 links, More, Search (5)",
+      "phone": "Your bill, Game, Menu (3)"
+    },
+    "headerLinks": 18,
+    "footerLinks": 20,
+    "notReachedFromHeaderOrFooter": []
+  },
+  {
+    "option": "c",
+    "topLevelItems": {
+      "desktop": "4 menus, Search (5)",
+      "phone": "Search, Menu (2)"
+    },
+    "headerLinks": 18,
+    "footerLinks": 12,
+    "notReachedFromHeaderOrFooter": []
+  }
+]

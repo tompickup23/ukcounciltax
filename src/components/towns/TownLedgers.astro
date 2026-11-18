@@ -9,11 +9,12 @@ import {positionCell} from '../../lib/rankings';
 import {money, placeName, POSITION_METHOD, townAnchor, countyPathOf, type TownScope} from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 import type {RankedTown} from '../../lib/towns';
+import {rowHref} from '../../lib/towns-parts';
 
 type Ledger = {rows: RankedTown[]; more: number; moreAt: RankedTown | null};
 interface Props {scope: TownScope; where: string; low: Ledger; high: Ledger; of: number}
 const {scope, where, low, high, of} = Astro.props;
-const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : `#${r.town.code}`;
+const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : rowHref(scope, r.town);
 const lists = [
   {id: 'lowest', heading: 'Lowest ten', ledger: low},
   {id: 'highest', heading: 'Highest ten', ledger: high},

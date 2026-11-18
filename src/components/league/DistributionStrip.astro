@@ -1,0 +1,36 @@
+---
+/**
+ * A small distribution strip for a desk band: how the figures in a league table
+ * spread from the lowest to the highest, as columns of equal slices of the range.
+ * Decorative and aria-hidden: an SVG with no text and no ek-chart class (as
+ * TaskThumb works), so it prints no number. The figures themselves are in the
+ * table on the page, and the lowest and highest are named beside it.
+ */
+import '../../styles/league.css';
+
+interface Props {
+  /** Every figure in the table, in any unit; only their spread is drawn. */
+  values: readonly number[];
+  bins?: number;
+  /** The words under the two ends of the strip. */
+  low?: string;
+  high?: string;
+}
+const {values, bins = 40, low = 'Lowest', high = 'Highest'} = Astro.props;
+const min = Math.min(...values), max = Math.max(...values);
+const span = max - min;
+const counts = new Array(bins).fill(0);
+for (const v of values) counts[span > 0 ? Math.min(bins - 1, Math.floor(((v - min) / span) * bins)) : 0]++;
+const peak = Math.max(...counts, 1);
+const W = 400, H = 44, gap = 2;
+const w = W / bins;
+const bars = counts.map((c, i) => ({x: i * w + gap / 2, w: w - gap, h: c ? Math.max(2, (c / peak) * H) : 0, end: c > 0 && (i === 0 || i === bins - 1)}));
+---
+{values.length >= 2 && span > 0 && (
+  <div class="lg-strip-wrap" aria-hidden="true">
+    <svg class="lg-strip" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" focusable="false">
+      {bars.filter(b => b.h > 0).map(b => <rect x={b.x.toFixed(1)} y={(H - b.h).toFixed(1)} width={b.w.toFixed(1)} height={b.h.toFixed(1)} rx="1" class={b.end ? 'lg-strip-end' : undefined} />)}
+    </svg>
+    <p class="lg-strip-scale"><span>{low}</span><span>{high}</span></p>
+  </div>
+)}

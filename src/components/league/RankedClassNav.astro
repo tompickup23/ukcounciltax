@@ -1,0 +1,13 @@
+---
+/** The council types as static links, so every ranked table has its own URL without script. */
+import {rankingClasses} from '../../lib/ranking-page';
+import {rankingPath} from '../../lib/paths';
+import {sentenceCase} from '../../lib/rankings';
+
+interface Props {current?: string | null}
+const {current = null} = Astro.props;
+---
+<nav class="pill-nav ranked-classes" aria-label="Band D ranked by type of council" data-pagefind-ignore>
+  <a href="/council-tax/ranked/" aria-current={current === null ? 'page' : undefined}>All types</a>
+  {rankingClasses.map(cls => <a href={rankingPath(cls.slug)} aria-current={current === cls.slug ? 'page' : undefined}>{sentenceCase(cls.label)}</a>)}
+</nav>

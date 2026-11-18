@@ -39,7 +39,6 @@ export const REPEAT_ALLOWANCES = [
   { pattern: /^\/tools\/budget\/[^/]+\/index\.html$/, cap: 4, until: "W4 part two: the kit chart captions in the drawer" },
   { pattern: /^\/council-tax\/[^/]+\/index\.html$/, cap: 18, until: "Tier 2 band and ranked pages" },
   { pattern: /^\/changes\/index\.html$/, cap: 13, until: "Tier 2 changes page" },
-  { pattern: /^\/councils\/[^/]+\/index\.html$/, cap: 8, until: "W9 council page" },
 ];
 
 export function repeatCap(pagePath) {

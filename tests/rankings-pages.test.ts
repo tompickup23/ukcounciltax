@@ -46,7 +46,8 @@ describe.skipIf(!existsSync('dist/council-tax/ranked/index.html'))('profile clas
   it('prints the profile anchors and the generic source note clause', () => {
     expect(text(read('/councils/burnley/'))).toContain('130th of 164 for area Band D and 160th of 164');
     const havant=text(read('/councils/havant/')); expect(havant).toContain('joint 21st of 164'); expect(havant).toContain('joint 116th of 164');
-    expect(text(read('/councils/windsor-and-maidenhead/')).match(/1st of 63/g)).toHaveLength(2);
+    // W9: the ledger row under the H1 repeats the area position, so the page prints it three times (area and own in the compare section, area in the ledger).
+    expect(text(read('/councils/windsor-and-maidenhead/')).match(/1st of 63/g)).toHaveLength(3);
     expect(text(read('/councils/lewes/'))).toContain('MHCLG publishes a note on this figure');
   });
 });

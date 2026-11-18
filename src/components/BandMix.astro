@@ -1,9 +1,11 @@
 ---
 /** Properties in each band for one English billing authority, beside England, from HMRC CTSOP1.1. */
 import SourceLine from './SourceLine.astro';
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
 import {STOCK_BANDS,bandStock,bandStockFor,bandStockSource,stockCount,stockShare} from '../lib/band-stock';
-interface Props {gss:string;name:string}
-const {gss,name}=Astro.props;
+interface Props {gss:string;name:string;/** Record line mode (W9). */record?:{entry:string;source:SourceRef}}
+const {gss,name,record}=Astro.props;
 const row=bandStockFor(gss);
 const england=bandStock.england;
 const source=bandStockSource();
@@ -48,7 +50,7 @@ const suppressed=row?STOCK_BANDS.filter(b=>row.counts[b]===null):[];
         Each share is the band's printed count divided by the printed total of all properties, to one decimal place.
         The table also covers Wales, which has its own bands including Band I, so the England comparison leaves Wales out; Scotland and Northern Ireland are not in it.
       </p>
-      <SourceLine source={source} />
+      {record ? <RecordLine entry={record.entry} sources={[record.source]} method={record.source.method} /> : <SourceLine source={source} />}
     </div>
   </section>
 )}

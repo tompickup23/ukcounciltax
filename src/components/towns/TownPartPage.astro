@@ -21,7 +21,7 @@ const summary = scopeSummary(scope.rows);
 const where = scopeIn(scope);
 const range = part.ranked === 0 ? 'areas without a figure' : part.ranked === part.rows.length ? `positions ${part.first} to ${part.last}` : `positions ${part.first} to ${part.last} and areas without a figure`;
 const title = `Full Band D by parish and unparished area ${where} ${townsYear}, part ${part.index} of ${parts.length}`;
-const description = `Part ${part.index} of ${parts.length} of the full Band D table for every parish and unparished area ${where}, ${townsYear}: ${range}, in the same order as part 1.`;
+const description = `Full Band D by parish and unparished area ${where}, ${townsYear}, part ${part.index} of ${parts.length}: ${range}.`;
 ---
 <BaseLayout title={title} description={description} path={part.path} ogImage={townOgPath(scope)} ogImageAlt={townOgAlt(scope)}>
   <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas', href: townsPath()}, {label: `Region: ${scope.name}`, href: scope.path}, {label: `Part ${part.index}`}]} />

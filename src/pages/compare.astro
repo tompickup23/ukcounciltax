@@ -1,77 +1,157 @@
 ---
+/**
+ * Compare two councils (W7, NV11). The page opens on a worked example pair, labelled
+ * as one, drawn at build time, so it shows a comparison with or without JavaScript.
+ * The picker sits above it in the page's one desk band; a reader's own pair is drawn
+ * in the browser by src/lib/comparison-page.ts with the same drawings
+ * (src/lib/compare-charts.ts) and the same words (comparisonWords in src/lib/tax-view.ts).
+ *
+ * Canonical to ukcouncils.co.uk/compare/ until the reversal (D12): the figures and the
+ * comparisons are the ones that page gives, drawn as bars.
+ */
 import ViewActions from '../components/ViewActions.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import SourceLine from '../components/SourceLine.astro';
-import {CURRENT_YEAR, YEARS, BANDS, yearLabel} from '../lib/council-tax';
+import DeskBand from '../components/DeskBand.astro';
+import RecordLine from '../components/RecordLine.astro';
+import PageSources, {type SourceEntry} from '../components/PageSources.astro';
+import ChartActions from '../components/kit/ChartActions.astro';
+import {CURRENT_YEAR, YEARS, BANDS, loadYear, yearLabel} from '../lib/council-tax';
 import {taxRows, taxSources} from '../lib/tax-view-data';
 import {englishRows} from '../lib/council-picker';
+import {comparisonWords} from '../lib/tax-view';
+import {councilTaxSource, sourceEntryId, tableName, type SourceRef} from '../lib/sources';
+import {bandChart, pairedBandsChart} from '../lib/compare-charts';
+import {COMPARE_EXAMPLE, compareExample, comparePng} from '../lib/compare-example';
 import {SITE_URL, jsonLd} from '../lib/site';
 const picker = new Map(englishRows('profile').map(row => [row.gss, row]));
 const rows = taxRows().map(row => ({...row, search: picker.get(row.gss)!.search}));
 const sources = taxSources();
+
+// One Sources entry per year, and the short record line a figure of that year carries.
+const refs: Record<string, SourceRef> = Object.fromEntries(YEARS.map(year => {
+  const table = loadYear(year).source.bandTable;
+  return [year, {...councilTaxSource(year, table), short: `Council tax levels ${yearLabel(year)}, ${tableName(table)}`}];
+}));
+const entryKey = (year: string) => `council-tax-${year}`;
+const entries: SourceEntry[] = [...YEARS].reverse().map(year => ({
+  key: entryKey(year), label: `Area charges by band, ${yearLabel(year)}`,
+  method: 'Published area charges for each band, including adult social care and average parish precepts. Differences, percentages and monthly equivalents are calculated from two published charges, with the calculation printed beside them',
+  sources: [refs[year]],
+}));
+const records = Object.fromEntries(YEARS.map(year => [year, {publisher: refs[year].publisher, short: refs[year].short, url: refs[year].url, full: `#${sourceEntryId(entryKey(year))}`}]));
+
+const example = compareExample();
+const words = comparisonWords(example);
+const charts = {band: bandChart(example.a, example.b, example.band, example.year, example.source), bands: pairedBandsChart(example.a, example.b, example.year, example.source)};
+const sides = [['a', example.a, example.aPence], ['b', example.b, example.bPence]] as const;
+const money = (pence: number) => new Intl.NumberFormat('en-GB', {style: 'currency', currency: 'GBP'}).format(pence / 100);
+// Same type pairs a reader can open in one tap; checked at build time like the example.
+const PAIRS = [['camden', 'barnet', 'London boroughs'], ['leeds', 'bradford', 'Metropolitan districts'], ['cornwall', 'wiltshire', 'Unitary authorities']] as const;
+const pairLinks = PAIRS.map(([a, b, group]) => {
+  const first = rows.find(row => row.slug === a)!; const second = rows.find(row => row.slug === b)!;
+  return {href: `/compare/?a=${a}&b=${b}&band=D&year=${CURRENT_YEAR}`, label: `${first.name} and ${second.name}`, group};
+});
 ---
 <BaseLayout title={`Compare council tax in England ${yearLabel(CURRENT_YEAR)}`} description="Compare the published area council tax charge for two councils of the same type, in the same band and financial year." path="/compare/">
   <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Compare councils'}]} />
-  <header class="page-head"><p class="eyebrow">Council tax, England</p><h1>Compare two councils</h1>
-    <p class="lede">The same band. The same year. The same type of council.</p>
-    <p class="muted">Choose your first council to see eligible comparisons. These are whole-area charges, including average parish precepts, rather than each council's own share.</p>
-  </header>
-  <section data-tax-compare>
-    <section hidden data-comparison-results aria-label="Comparison result">
-      <h2 data-comparison-heading tabindex="-1"></h2>
-      <div class="card fact comparison-lead" data-fact>
-        <strong class="difference-figure" data-figure data-result-difference></strong>
-        <p class="source-line" data-difference-source></p>
-        <p class="difference-detail" data-result-percentage></p>
-        <p class="source-line" data-percentage-calculation></p>
-        <p class="difference-detail" data-result-monthly-difference></p>
-        <p class="source-line" data-monthly-calculation></p>
-        <p class="caveat">Area averages including parish precepts. Your exact bill and any discounts can differ.</p>
+  <section data-tax-compare aria-labelledby="compare-heading">
+    <DeskBand id="compare-heading" level={1} as="div" layout="stack" eyebrow={`Council tax, England | ${yearLabel(CURRENT_YEAR)}`} title="Compare two" accent="councils" lede="The same band. The same year. The same type of council." data-ground="desk" class="compare-desk">
+      <form id="comparison-form" class="compare-form" data-comparison-form>
+        <fieldset disabled data-comparison-fields>
+          <legend class="visually-hidden">Choose your comparison</legend>
+          <div class="compare-pair">
+            {['a','b'].map((side, i) => <>
+              {i === 1 && <button class="compare-swap" type="button" data-swap aria-label="Swap councils" title="Swap councils"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="compare-swap-text">Swap</span></button>}
+              <div class="compare-chooser" data-chooser={side}>
+                <label class="compare-label" for={`compare-search-${side}`}><span class="compare-key" data-key={side} aria-hidden="true"></span><span>{i === 0 ? 'First' : 'Second'} council<span class="compare-label-more">, county, region or postcode</span></span></label>
+                <div class="chooser-input">
+                   <input id={`compare-search-${side}`} type="search" placeholder="Council, county, region or postcode" data-picker-filter={side} autocomplete="off" spellcheck="false" aria-describedby={`compare-note compare-count-${side}`} />
+                  <button class="button secondary" type="button" data-find={side} aria-label={`Find ${i === 0 ? 'first' : 'second'} council`}>Find</button>
+                </div>
+                <p class="small chooser-status" id={`compare-count-${side}`} role="status" data-chooser-status={side}>{i === 0 ? 'Type a council, county or region, or enter a full postcode.' : 'Choose the first council before searching for the second.'}</p>
+                <ul class="chooser-matches" data-chooser-matches={side} aria-label={`${i === 0 ? 'First' : 'Second'} council matches`}></ul>
+                <button type="button" class="button secondary" data-chooser-more={side} hidden>Show more councils</button>
+                <p class="chosen-council" data-chosen={side}></p>
+                <select id={`council-${side}`} name={side} aria-label={`${i === 0 ? 'First' : 'Second'} council`} hidden>
+                  <option value="">Choose a council</option>
+                  {rows.map(row => <option value={row.slug}>{row.name} ({row.classLabel})</option>)}
+                </select>
+              </div>
+            </>)}
+          </div>
+          <div class="compare-settings">
+            <div class="field"><label for="compare-band">Band</label><select id="compare-band" name="band">{BANDS.map(band => <option selected={band === 'D'}>{band}</option>)}</select></div>
+            <div class="field"><label for="compare-year">Financial year</label><select id="compare-year" name="year">{[...YEARS].reverse().map(year => <option value={year} selected={year === CURRENT_YEAR}>{yearLabel(year)}</option>)}</select></div>
+            <button class="button compare-go" type="submit">Compare</button>
+          </div>
+          <p class="small compare-note"><span id="compare-note">A postcode is sent to postcodes.io and not stored. <a href="/privacy/">Privacy</a>.</span> <span id="comparison-rule" data-comparison-rule>Choose the first council to see eligible comparisons.</span></p>
+        </fieldset>
+      </form>
+    </DeskBand>
+
+    <p class="compare-status" role="status" data-comparison-status>Choose two councils to see their published charges.</p>
+
+    <section data-comparison-results aria-labelledby="comparison-heading" data-example={`${COMPARE_EXAMPLE.a} ${COMPARE_EXAMPLE.b}`}>
+      <p class="compare-example" data-comparison-example><span class="compare-example-flag">Example</span> <span>{example.a.name} and {example.b.name} are shown as an example. Search above to compare your own councils.</span></p>
+      <h2 id="comparison-heading" data-comparison-heading tabindex="-1">{words.heading}</h2>
+      <div class="compare-lead">
+        <div class="compare-answer" data-fact>
+          <strong class="difference-figure" data-figure data-result-difference>{words.difference}</strong>
+          <div data-difference-source><RecordLine entry={entryKey(example.year)} method="Calculated from published area charges" sources={[refs[example.year]]} /></div>
+          <div class="compare-derived">
+            <div><p class="difference-detail" data-result-percentage>{words.percentage}</p><p class="source-line" data-percentage-calculation>{words.percentageCalculation}</p></div>
+            <div><p class="difference-detail" data-result-monthly-difference>{words.monthly}</p><p class="source-line" data-monthly-calculation>{words.monthlyCalculation}</p></div>
+          </div>
+        </div>
+        <div class="fact compare-chart" data-fact id="compare-band-chart" data-compare-chart="band">
+          <figure class="ek-figure" data-figure="compare.band">
+            <figcaption class="ek-caption"><span class="ek-title" data-chart-title>{charts.band.title}</span></figcaption>
+            <Fragment set:html={charts.band.svg} />
+            <details class="ek-twin" id="compare-band-twin"><summary>The figures as a table</summary><Fragment set:html={charts.band.table} /></details>
+          </figure>
+          <ChartActions target="compare-band-chart" captionHtml="" pngs={{light: comparePng('band')}}><div slot="source" data-chart-record><RecordLine entry={entryKey(example.year)} sources={[refs[example.year]]} /></div></ChartActions>
+        </div>
       </div>
-      <p><a href="#comparison-form">Change councils, band or year</a></p>
-      <div class="task-grid">
-        {['a','b'].map(side => <div class="card fact" data-fact data-result-side={side}>
-          <h3><a data-result-name></a></h3><p class="fact-label" data-result-label></p>
-          <strong class="fact-figure" data-figure data-result-annual></strong>
-          <p class="source-line" data-result-source></p>
-          <p class="caveat">Area average including parish precepts. Your exact bill and any discounts can differ.</p>
+      <div class="compare-sides">
+        {sides.map(([side, row, pence]) => <div class="card fact compare-side" data-fact data-result-side={side}>
+          <h3><span class="compare-key" data-key={side} aria-hidden="true"></span><a data-result-name href={`/councils/${row.slug}/#band-${example.band}`} title={`Open ${row.name}'s current council tax page`}>{row.name}</a></h3>
+          <p class="fact-label" data-result-label>{row.classLabel} · annual area charge</p>
+          <strong class="fact-figure" data-figure data-result-annual>{money(pence)}</strong>
+          <div data-result-source><RecordLine entry={entryKey(example.year)} sources={[refs[example.year]]} /></div>
         </div>)}
       </div>
+      <p class="caveat">Area averages including parish precepts. Your exact bill and any discounts can differ.</p>
+      <div class="fact compare-chart compare-chart--bands" data-fact id="compare-bands-chart" data-compare-chart="bands">
+        <figure class="ek-figure" data-figure="compare.bands">
+          <figcaption class="ek-caption"><span class="ek-title" data-chart-title>{charts.bands.title}</span></figcaption>
+          <Fragment set:html={charts.bands.svg} />
+          <details class="ek-twin" id="compare-bands-twin"><summary>The figures as a table</summary><Fragment set:html={charts.bands.table} /></details>
+        </figure>
+        <ChartActions target="compare-bands-chart" captionHtml="" pngs={{light: comparePng('bands')}}><div slot="source" data-chart-record><RecordLine entry={entryKey(example.year)} sources={[refs[example.year]]} /></div></ChartActions>
+      </div>
+      <p class="small muted" data-bands-missing hidden></p>
       <ViewActions id="comparison" />
-      <p><a data-comparison-link>Link to this comparison</a>. You can bookmark this page or copy its address.</p>
+      <p class="small"><a data-comparison-link href={`/compare/?a=${example.a.slug}&b=${example.b.slug}&band=${example.band}&year=${example.year}`}>Link to this comparison</a>. You can bookmark this page or copy its address.</p>
+      <nav class="compare-pairs" aria-label="Other example pairs">
+        <p class="compare-pairs-lead">Try another pair</p>
+        <ul>{pairLinks.map(link => <li><a href={link.href}><span>{link.label}</span><span class="compare-pairs-group">{link.group}</span></a></li>)}</ul>
+      </nav>
     </section>
-    <form id="comparison-form" class="card" data-comparison-form>
-      <fieldset disabled data-comparison-fields>
-        <legend>Choose your comparison</legend>
-        <div class="task-grid">
-          {['a','b'].map((side, i) => <div class="compare-chooser" data-chooser={side}>
-            <label class="field" for={`compare-search-${side}`}>{i === 0 ? 'First' : 'Second'} council, county, region or postcode</label>
-            <div class="chooser-input">
-              <input id={`compare-search-${side}`} type="search" data-picker-filter={side} autocomplete="off" spellcheck="false" aria-describedby={`compare-note compare-count-${side}`} />
-              <button class="button secondary" type="button" data-find={side} aria-label={`Find ${i === 0 ? 'first' : 'second'} council`}>Find</button>
-            </div>
-            <p class="small" id={`compare-count-${side}`} role="status" data-chooser-status={side}></p>
-            <ul class="chooser-matches" data-chooser-matches={side} aria-label={`${i === 0 ? 'First' : 'Second'} council matches`}></ul>
-            <button type="button" class="button secondary" data-chooser-more={side} hidden>Show more councils</button>
-            <p class="chosen-council" data-chosen={side}>No council selected.</p>
-            <select id={`council-${side}`} name={side} aria-label={`${i === 0 ? 'First' : 'Second'} council`} hidden>
-              <option value="">Choose a council</option>
-              {rows.map(row => <option value={row.slug}>{row.name} ({row.classLabel})</option>)}
-            </select>
-          </div>)}
-        </div>
-        <p class="small muted" id="compare-note">A postcode is sent to postcodes.io and not stored. <a href="/privacy/">Privacy</a></p>
-        <p id="comparison-rule" class="small muted" data-comparison-rule>The second list is limited to the first council's type.</p>
-        <div class="task-grid">
-          <div class="field"><label for="compare-band">Band</label><select id="compare-band" name="band">{BANDS.map(band => <option selected={band === 'D'}>{band}</option>)}</select></div>
-          <div class="field"><label for="compare-year">Financial year</label><select id="compare-year" name="year">{[...YEARS].reverse().map(year => <option value={year} selected={year === CURRENT_YEAR}>{yearLabel(year)}</option>)}</select></div>
-        </div>
-        <div class="action-links"><button class="button" type="submit">Compare</button><button class="button secondary" type="button" data-swap>Swap councils</button></div>
-      </fieldset>
-    </form>
-    <p role="status" data-comparison-status>Choose two councils to see their published charges.</p>
-    <script type="application/json" data-comparison-data set:html={jsonLd({site: SITE_URL, rows, sources, years: YEARS, currentYear: CURRENT_YEAR})} />
+
+    <section class="compare-apart" data-comparison-apart aria-labelledby="comparison-apart-heading" hidden>
+      <h2 id="comparison-apart-heading">Each council on its own</h2>
+      <p data-apart-reason>These two councils are not put on one scale.</p>
+      <div class="compare-sides">
+        {['a','b'].map(side => <div class="card fact compare-side" data-fact data-apart-side={side}>
+          <h3><a data-apart-name></a></h3>
+          <p class="fact-label" data-apart-label></p>
+          <strong class="fact-figure" data-figure data-apart-annual></strong>
+          <div data-apart-source></div>
+        </div>)}
+      </div>
+    </section>
+    <script type="application/json" data-comparison-data set:html={jsonLd({site: SITE_URL, rows, sources, records, example: {...COMPARE_EXAMPLE, year: example.year, png: {band: comparePng('band'), bands: comparePng('bands')}}, years: YEARS, currentYear: CURRENT_YEAR})} />
   </section>
   <noscript>
     <section aria-labelledby="compare-without-scripts" data-pagefind-ignore>
@@ -83,39 +163,93 @@ const sources = taxSources();
       <p><a href="/council-tax/">Read the complete published tables</a>.</p>
     </section>
   </noscript>
-  <details class="section"><summary>Sources and comparison rules</summary>
-    <p>Comparisons use published area charges for the same council class, band and financial year. A changed authority code or an absent source value is not filled from an earlier area.</p>
-    {YEARS.map(year => <SourceLine source={sources[year]} />)}
+  <section class="compare-rules" aria-labelledby="compare-rules-heading">
+    <h2 id="compare-rules-heading">How the comparison works</h2>
+    <ul>
+      <li>Only councils of the same type are compared. London boroughs and the City of London count as one type.</li>
+      <li>Both charges are for the same band and the same financial year, from the same published table.</li>
+      <li>These are whole area charges, including average parish precepts, rather than each council's own share.</li>
+      <li>A changed authority code or an absent source value is not filled from an earlier year. A year a council does not hold is greyed out.</li>
+      <li>England only. Council tax in Scotland is shown without water and sewerage charges, Wales has a ninth band, Band I, and Northern Ireland has domestic rates, so none of them is put on one scale with England.</li>
+    </ul>
     <p><a href="/methodology/">Read the methodology</a>.</p>
-  </details>
+  </section>
+  <PageSources entries={entries} />
 </BaseLayout>
 <script>
   import '../lib/comparison-page';
 </script>
 <style>
-  /* Keep the static controls in layout while the first answer is prepared. */
-  :global(html.js) [data-tax-compare]:not([data-comparison-ready]),
-  :global(html.js) [data-tax-compare]:not([data-comparison-ready]) ~ details,
-  :global(html.js:has([data-tax-compare]:not([data-comparison-ready])) footer) { visibility: hidden; }
-  :global(html:not(.js)) [data-comparison-form] { display: none; }
+  /* With script, the answer waits for the page's own reading of the address, so a shared
+     pair never shows the example first. The example itself is unchanged by that reading. */
+  :global(html.js) [data-tax-compare]:not([data-comparison-ready]) :is([data-comparison-results], [data-comparison-apart], [data-comparison-status]) { visibility: hidden; }
+  :global(html:not(.js)) [data-comparison-form], :global(html:not(.js)) .compare-pairs, :global(html:not(.js)) .view-actions { display: none; }
   fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
-  legend { font-weight: 600; margin-bottom: 1rem; }
-  select { width: 100%; min-width: 0; padding: 0.65rem; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+  .compare-desk { gap: var(--space-md); }
+  @media (max-width: 759px) { .compare-label-more { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+  .chooser-input input::placeholder { color: var(--text-muted); opacity: 1; }
+  .compare-form { min-width: 0; }
+  .compare-pair { display: grid; gap: var(--space-sm); align-items: start; }
+  @media (min-width: 760px) { .compare-pair { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: var(--space-md); } .compare-swap { margin-top: 1.9rem; } }
   .compare-chooser { min-width: 0; }
+  .compare-label { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .compare-key { display: inline-block; flex: none; width: 0.85rem; height: 0.85rem; border-radius: 3px; background: var(--series-1); vertical-align: -0.05em; }
+  .compare-key[data-key="b"] { background: var(--series-2); }
   .chooser-input { display: flex; gap: 0.5rem; }
-  .chooser-input input { min-width: 0; width: 100%; font: inherit; padding: 0.65rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text); background: var(--bg); }
-  .chooser-matches { list-style: none; padding: 0; margin: 0; }
-  .chosen-council { font-weight: 600; }
-  .comparison-lead { margin-bottom: var(--space-md, 1rem); }
-  .difference-figure { display: block; font-family: var(--font-display); font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1.25; }
-  .difference-detail { font-weight: 600; margin-bottom: 0.25rem; }
-  [data-comparison-results] { margin-bottom: var(--space-lg, 2rem); }
-  [data-comparison-heading] { scroll-margin-top: 1rem; }
-  h3 { margin: 0 0 0.75rem; }
+  .chooser-input input { min-width: 0; width: 100%; min-height: 48px; font: inherit; font-size: 1.05rem; padding: 0.65rem 0.8rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); color: var(--text); background: color-mix(in srgb, var(--ground-ink) 8%, transparent); }
+  .chooser-input input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .chooser-input .button { min-height: 48px; }
+  .chooser-status { margin: 0.35rem 0 0; color: var(--text-muted); }
+  .chooser-matches { list-style: none; padding: 0; margin: 0.4rem 0 0; }
+  .chosen-council { font-weight: 600; margin: 0.35rem 0 0; }
+  .chosen-council:empty { display: none; }
+  .compare-swap { display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; min-width: 48px; min-height: 44px; padding: 0 0.8rem; justify-self: center; font: inherit; font-weight: 600; color: var(--accent); background: transparent; border: 1px solid var(--border-strong); border-radius: 999px; cursor: pointer; }
+  .compare-swap:hover { border-color: var(--accent); }
+  .compare-swap:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .compare-swap svg { transform: rotate(90deg); }
+  @media (min-width: 760px) { .compare-swap svg { transform: none; } .compare-swap-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } }
+  .compare-settings { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); align-items: end; margin-top: var(--space-md); }
+  .compare-settings .field { margin: 0; }
+  .compare-settings label { font-weight: 600; }
+  .compare-go { grid-column: 1 / -1; min-height: 48px; font-size: 1.05rem; }
+  @media (min-width: 760px) { .compare-settings { grid-template-columns: minmax(0, 10rem) minmax(0, 12rem) auto; justify-content: start; } .compare-go { grid-column: auto; padding-inline: 2rem; } }
+  select { width: 100%; min-width: 0; min-height: 48px; padding: 0.65rem; font: inherit; color: var(--text); background: color-mix(in srgb, var(--ground-ink) 8%, transparent); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+  select option { color: initial; background: initial; }
+  .compare-note { margin: var(--space-sm) 0 0; color: var(--text-muted); }
+  .compare-note a { color: var(--text); }
+  .compare-status { margin: var(--space-md) 0 0; color: var(--text-muted); }
+  [data-comparison-results] { margin: var(--space-lg) 0 var(--space-xl); }
+  .compare-example { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 var(--space-xs); color: var(--text-muted); }
+  .compare-example[hidden] { display: none; }
+  .compare-example-flag { display: inline-block; padding: 0.1rem 0.6rem; font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid currentColor; border-radius: 999px; }
+  [data-comparison-heading] { margin-top: 0; scroll-margin-top: 1rem; }
+  .compare-lead { display: grid; gap: var(--space-lg); align-items: start; }
+  @media (min-width: 900px) { .compare-lead { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: var(--space-xl); } }
+  .compare-answer { min-width: 0; }
+  .difference-figure { display: block; font-family: var(--font-display); font-size: clamp(1.6rem, 1.1rem + 2.4vw, 2.6rem); line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+  .compare-derived { display: grid; gap: var(--space-sm); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--border); }
+  @media (min-width: 560px) { .compare-derived { grid-template-columns: 1fr 1fr; } }
+  .difference-detail { font-weight: 600; font-size: 1.1rem; margin: 0 0 0.25rem; }
+  .compare-chart { min-width: 0; }
+  .compare-chart :global(.ek-caption) { font-weight: 600; font-size: 1rem; margin-bottom: 0.25rem; }
+  .compare-sides { display: grid; gap: var(--space-md); margin-top: var(--space-lg); }
+  @media (min-width: 560px) { .compare-sides { grid-template-columns: 1fr 1fr; } }
+  .compare-side { min-width: 0; margin: 0; }
+  .compare-side h3 { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.5rem; }
+  .compare-chart--bands { margin-top: var(--space-xl); max-width: 46rem; }
+  .compare-pairs { margin-top: var(--space-lg); }
+  .compare-pairs-lead { font-weight: 600; margin: 0 0 0.5rem; }
+  .compare-pairs ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .compare-pairs a { display: inline-flex; flex-direction: column; min-height: 44px; justify-content: center; padding: 0.45rem 0.9rem; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); text-decoration: none; }
+  .compare-pairs a:hover { border-color: var(--accent); }
+  .compare-pairs-group { font-size: var(--text-xs); color: var(--text-muted); }
+  .compare-apart { margin: var(--space-lg) 0 var(--space-xl); }
+  .compare-rules { margin-top: var(--space-xl); }
+  @media print { [data-comparison-form], .compare-pairs { display: none; } }
 </style>
 
 <style is:global>
-  .chooser-matches button { display: block; width: 100%; min-height: 44px; text-align: left; font: inherit; padding: 0.6rem; color: var(--accent); background: var(--bg); border: 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-  .chooser-matches button:hover { background: var(--accent-wash); }
+  .chooser-matches button { display: block; width: 100%; min-height: 44px; text-align: left; font: inherit; padding: 0.6rem; color: var(--text); background: transparent; border: 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .chooser-matches button:hover { background: color-mix(in srgb, var(--ground-ink) 10%, transparent); }
   .chooser-matches button span { display: block; color: var(--text-muted); font-size: 0.85rem; }
 </style>

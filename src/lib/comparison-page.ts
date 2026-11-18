@@ -1,19 +1,23 @@
-import {compareTax, comparisonQuery, compareGroup, groupLabel, heldYear, normaliseState, moneyPence, type TaxRow, type ComparisonState} from './tax-view';
+import {compareTax, comparisonQuery, comparisonWords, compareGroup, groupLabel, heldYear, normaliseState, moneyPence, validPence, type TaxBand, type TaxRow, type ComparisonState} from './tax-view';
+import {allBandsHeld, bandChart, pairedBandsChart, type CompareSource} from './compare-charts';
 import {matchesCouncil, matchingRegion, normalise, rankCouncils} from './council-search';
 import {shareView} from './share';
 
-type ComparisonSource = {publisher: string; table?: string; url: string; date?: string | null};
+type ComparisonSource = CompareSource;
+type RecordRef = {publisher: string; short: string; url: string; full: string};
 type SearchRow = TaxRow & {search: string};
 type Side = 'a' | 'b';
 const sides: Side[] = ['a', 'b'];
 const POSTCODE = /^[A-Z]{1,2}[0-9][A-Z0-9]?\s?[0-9][A-Z]{2}$/;
 const PAGE_SIZE = 12;
 const root = document.querySelector<HTMLElement>('[data-tax-compare]')!;
-const data = JSON.parse(root.querySelector('[data-comparison-data]')!.textContent!) as {site: string; rows: SearchRow[]; years: string[]; currentYear: string; sources: Record<string, ComparisonSource>};
+const data = JSON.parse(root.querySelector('[data-comparison-data]')!.textContent!) as {site: string; rows: SearchRow[]; years: string[]; currentYear: string; sources: Record<string, ComparisonSource>; records: Record<string, RecordRef>; example: {a: string; b: string; band: string; year: string; png: Record<'band' | 'bands', string>}};
 const form = root.querySelector<HTMLFormElement>('form')!;
 const fields = root.querySelector<HTMLFieldSetElement>('fieldset')!;
 const status = root.querySelector<HTMLElement>('[data-comparison-status]')!;
 const result = root.querySelector<HTMLElement>('[data-comparison-results]')!;
+const apart = root.querySelector<HTMLElement>('[data-comparison-apart]')!;
+const exampleState: ComparisonState = {a: data.example.a, b: data.example.b, band: data.example.band, year: data.example.year};
 const control = (name: string) => form.elements.namedItem(name) as HTMLSelectElement;
 const state = (): ComparisonState => ({a: control('a').value, b: control('b').value, band: control('band').value, year: control('year').value});
 const input = (side: Side) => root.querySelector<HTMLInputElement>(`[data-picker-filter="${side}"]`)!;
@@ -46,7 +50,7 @@ function options(side: Side, selected: string) {
   input(side).disabled = side === 'b' && !first;
   root.querySelector<HTMLButtonElement>(`[data-find="${side}"]`)!.disabled = input(side).disabled;
   const row = choices.find(row => row.slug === control(side).value);
-  root.querySelector(`[data-chosen="${side}"]`)!.textContent = row ? `Selected: ${row.name} (${row.classLabel}).` : 'No council selected.';
+  root.querySelector(`[data-chosen="${side}"]`)!.textContent = row ? `Selected: ${row.name} (${row.classLabel}).` : '';
   root.querySelector('[data-comparison-rule]')!.textContent = first ? `Choose another ${groupLabel(first)}. Other types of council are excluded.` : 'Choose the first council to see eligible comparisons.';
 }
 function matches(side: Side) {
@@ -80,7 +84,7 @@ function choose(side: Side, row: SearchRow) {
     options('b', control('b').value);
     input('b').value = ''; renderMatches('b');
   }
-  years(); result.hidden = true; status.textContent = 'Choose Compare to update the result.';
+  years(); result.hidden = true; apart.hidden = true; status.textContent = 'Choose Compare to update the result.';
   // The result button disappears on selection, so return focus to its search box.
   input(side).focus();
 }
@@ -116,33 +120,75 @@ async function find(side: Side) {
     if (requests[side] === request) delete requests[side];
   }
 }
-function sourceLine(target: Element, year: string, calculated = false) {
-  const source = data.sources[year];
-  const a = document.createElement('a'); a.href = source.url; a.textContent = `${source.publisher}, ${source.table}, ${year.replace('-', '/')}`;
-  target.replaceChildren(document.createTextNode(calculated ? 'Calculated from published area charges. Source: ' : 'Source: '), a, document.createTextNode(source.date ? `, published ${source.date}.` : '.'));
+/** The short record line, the same markup RecordLine.astro prints for the example. */
+function recordLine(target: Element, year: string, method?: string) {
+  const ref = data.records[year];
+  const p = document.createElement('p'); p.className = 'source-line record-line';
+  const publisher = document.createElement('span'); publisher.className = 'record-publisher'; publisher.textContent = ref.publisher;
+  const doc = document.createElement('a'); doc.href = ref.url; doc.textContent = ref.short;
+  const full = document.createElement('a'); full.className = 'record-full'; full.href = ref.full; full.textContent = 'Full reference';
+  p.append(...(method ? [`${method}: `] : []), publisher, ' ', doc, '. ', full);
+  target.replaceChildren(p);
 }
 function years() {
   const chosen = sides.map(side => data.rows.find(row => row.slug === control(side).value));
   for (const option of control('year').options) option.disabled = !chosen.every(row => heldYear(row, option.value));
 }
-function show(value: ComparisonState, focus = false) {
+const fragment = (html: string) => {const t = document.createElement('template'); t.innerHTML = html; return t.content;};
+/** Puts a fresh drawing into a chart block, keeping the block, its table element and its actions. */
+function draw(name: 'band' | 'bands', out: {svg: string; table: string; title?: string} | null, year: string, example: boolean) {
+  const block = root.querySelector<HTMLElement>(`[data-compare-chart="${name}"]`)!;
+  block.hidden = !out;
+  if (!out) return;
+  block.querySelector('[data-chart-title]')!.textContent = out.title ?? '';
+  block.querySelector('svg.ek-chart')!.replaceWith(fragment(out.svg));
+  // chart-actions.js holds the table element for Copy table, so its rows are replaced in place.
+  const table = block.querySelector('details.ek-twin table')!;
+  table.replaceChildren(...fragment(out.table).querySelector('table')!.childNodes);
+  recordLine(block.querySelector('[data-chart-record]')!, year);
+  // Only the example pair has a prebuilt PNG; a reader's own pair offers the table instead.
+  const png = block.querySelector<HTMLAnchorElement>('[data-chart-png]');
+  if (png) {png.closest('li')!.hidden = !example; png.href = data.example.png[name];}
+}
+const exampleShown = () => !result.hidden && !root.querySelector<HTMLElement>('[data-comparison-example]')!.hidden;
+/** What the controls act on: the reader's choices, or the pair on screen while the example shows. */
+const current = (): ComparisonState => exampleShown() ? {...exampleState, band: control('band').value, year: control('year').value} : state();
+const isExample = (value: ComparisonState) => value.a === exampleState.a && value.b === exampleState.b && value.band === exampleState.band && value.year === exampleState.year;
+/** Two councils that cannot share a scale: each figure on its own, or said to be unheld. */
+function showApart(value: ComparisonState, message: string) {
+  const pair = sides.map(side => data.rows.find(row => row.slug === value[side]));
+  apart.hidden = !(pair[0] && pair[1] && pair[0].gss !== pair[1].gss && data.years.includes(value.year) && /^[A-H]$/.test(value.band));
+  if (apart.hidden) return;
+  root.querySelector('[data-apart-reason]')!.textContent = `Each council's own published Band ${value.band} charge for ${value.year.replace('-', '/')} is shown below, apart and not on one scale.`;
+  pair.forEach((row, i) => {
+    const card = root.querySelector(`[data-apart-side="${sides[i]}"]`)!;
+    const link = card.querySelector<HTMLAnchorElement>('[data-apart-name]')!;
+    link.textContent = row!.name; link.href = `/councils/${row!.slug}/#band-${value.band}`;
+    const pence = row!.years[value.year]?.[value.band as TaxBand];
+    card.querySelector('[data-apart-label]')!.textContent = `${row!.classLabel} · Band ${value.band} annual area charge, ${value.year.replace('-', '/')}`;
+    card.querySelector('[data-apart-annual]')!.textContent = validPence(pence) ? moneyPence(pence) : 'Not held';
+    const source = card.querySelector('[data-apart-source]')!;
+    if (validPence(pence)) recordLine(source, value.year);
+    else {const p = document.createElement('p'); p.className = 'small'; p.textContent = `No published Band ${value.band} figure for ${value.year.replace('-', '/')} is held under the current authority code. It is not shown as zero.`; source.replaceChildren(p);}
+  });
+}
+function show(value: ComparisonState, focus = false, example = false) {
   const checked = compareTax(data.rows, value, data.years);
+  // Half a choice (one council so far) keeps the example on screen while it asks for the other.
+  if (!checked.ok && (!value.a || !value.b) && exampleShown()) {status.textContent = checked.message; return;}
   result.hidden = !checked.ok;
-  if (!checked.ok) {status.textContent = checked.message; return;}
-  status.textContent = 'Comparison ready.';
-  root.querySelector('[data-comparison-heading]')!.textContent = `Band ${checked.band}, ${checked.year.replace('-', '/')}`;
-  const difference = Math.abs(checked.differencePence);
-  const lower = Math.min(checked.aPence, checked.bPence);
-  const higherName = checked.differencePence > 0 ? checked.b.name : checked.a.name;
-  const lowerName = checked.differencePence > 0 ? checked.a.name : checked.b.name;
-  const percent = (difference / lower * 100).toFixed(2);
-  const month = moneyPence(Math.round(difference / 12));
-  root.querySelector('[data-result-difference]')!.textContent = difference === 0 ? 'Both areas have the same published annual charge.' : `${higherName} is ${moneyPence(difference)} more a year than ${lowerName}.`;
-  sourceLine(root.querySelector('[data-difference-source]')!, checked.year, true);
-  root.querySelector('[data-result-percentage]')!.textContent = `${percent}% of the lower annual charge`;
-  root.querySelector('[data-percentage-calculation]')!.textContent = `Calculation: ${moneyPence(difference)} ÷ ${moneyPence(lower)} × 100, rounded to two decimal places.`;
-  root.querySelector('[data-result-monthly-difference]')!.textContent = `${month} a month, spread over 12 months`;
-  root.querySelector('[data-monthly-calculation]')!.textContent = `Calculation: ${moneyPence(difference)} ÷ 12, rounded to the nearest penny. A budgeting equivalent; councils set their own instalment plans.`;
+  apart.hidden = true;
+  if (!checked.ok) {status.textContent = checked.message; showApart(value, checked.message); return;}
+  status.textContent = example ? 'Choose two councils to see their published charges.' : 'Comparison ready.';
+  root.querySelector<HTMLElement>('[data-comparison-example]')!.hidden = !example;
+  const words = comparisonWords(checked);
+  root.querySelector('[data-comparison-heading]')!.textContent = words.heading;
+  root.querySelector('[data-result-difference]')!.textContent = words.difference;
+  recordLine(root.querySelector('[data-difference-source]')!, checked.year, 'Calculated from published area charges');
+  root.querySelector('[data-result-percentage]')!.textContent = words.percentage;
+  root.querySelector('[data-percentage-calculation]')!.textContent = words.percentageCalculation;
+  root.querySelector('[data-result-monthly-difference]')!.textContent = words.monthly;
+  root.querySelector('[data-monthly-calculation]')!.textContent = words.monthlyCalculation;
   for (const [side, row, amount] of [['a', checked.a, checked.aPence], ['b', checked.b, checked.bPence]] as const) {
     const card = root.querySelector(`[data-result-side="${side}"]`)!;
     const link = card.querySelector<HTMLAnchorElement>('[data-result-name]')!;
@@ -150,8 +196,16 @@ function show(value: ComparisonState, focus = false) {
     link.title = `Open ${row.name}'s current council tax page`;
     card.querySelector('[data-result-label]')!.textContent = `${row.classLabel} · annual area charge`;
     card.querySelector('[data-result-annual]')!.textContent = moneyPence(amount);
-    sourceLine(card.querySelector('[data-result-source]')!, checked.year);
+    recordLine(card.querySelector('[data-result-source]')!, checked.year);
   }
+  const source = data.sources[checked.year];
+  const shownExample = isExample(value);
+  draw('band', bandChart(checked.a, checked.b, checked.band, checked.year, source), checked.year, shownExample);
+  const full = allBandsHeld(checked.a, checked.b, checked.year);
+  draw('bands', full ? pairedBandsChart(checked.a, checked.b, checked.year, source) : null, checked.year, shownExample);
+  const missing = root.querySelector<HTMLElement>('[data-bands-missing]')!;
+  missing.hidden = full;
+  missing.textContent = full ? '' : `Not every band from A to H is held for both councils in ${checked.year.replace('-', '/')}, so the bands are not drawn. No band is shown as zero.`;
   root.querySelector<HTMLAnchorElement>('[data-comparison-link]')!.href = `/compare/?${comparisonQuery(value)}`;
   if (focus) root.querySelector<HTMLElement>('[data-comparison-heading]')!.focus();
 }
@@ -164,12 +218,13 @@ function restore() {
   control('band').value = value.band; control('year').value = value.year;
   years();
   if (params.has('a') || params.has('b')) show(value);
-  else {result.hidden = true; status.textContent = 'Choose two councils to see their published charges.';}
+  // No pair asked for: the worked example stays, labelled as one; the controls stay empty.
+  else show(exampleState, false, true);
 }
 const share = root.querySelector<HTMLButtonElement>('[data-share-view]')!;
 share.disabled = false;
 share.addEventListener('click', () => {
-  const value = state(); if (!compareTax(data.rows, value, data.years).ok || result.hidden) return;
+  const value = current(); if (!compareTax(data.rows, value, data.years).ok || result.hidden) return;
   void shareView(new URL(`/compare/?${comparisonQuery(value)}`, data.site).href, 'Compare council tax', root.querySelector('[data-share-status]')!, root.querySelector('[data-share-fallback]')!);
 });
 fields.disabled = false; form.hidden = false; restore();
@@ -186,7 +241,7 @@ form.addEventListener('change', event => {
   invalidate(); years();
   // Updating the answer in place preserves the selected band, year and focus.
   if ((event.target === control('band') || event.target === control('year')) && !result.hidden) {
-    const value = state(); history.replaceState(null, '', `/compare/?${comparisonQuery(value)}`); show(value);
+    const value = current(); history.replaceState(null, '', `/compare/?${comparisonQuery(value)}`); show(value);
   }
 });
 form.addEventListener('submit', event => {
@@ -194,7 +249,7 @@ form.addEventListener('submit', event => {
   history.pushState(null, '', `/compare/?${comparisonQuery(value)}`); show(value, true);
 });
 root.querySelector('[data-swap]')!.addEventListener('click', () => {
-  invalidate(); const value = state(); const checked = compareTax(data.rows, value, data.years);
+  invalidate(); const value = current(); const checked = compareTax(data.rows, value, data.years);
   if (!checked.ok) {show(value); return;}
   history.pushState(null, '', `/compare/?${comparisonQuery({...value, a: value.b, b: value.a})}`); restore();
 });

@@ -28,8 +28,19 @@ for (const [a, b, band, year] of [['burnley','pendle','D','2026-27'], ['camden',
     await expect(page.locator('[data-result-monthly-difference]')).toHaveText(`${money(Math.round(gap / 12))} a month, spread over 12 months`);
     await expect(page.locator('[data-percentage-calculation]')).toContainText(`${money(gap)} ÷ ${money(low)} × 100`);
     await expect(page.locator('[data-monthly-calculation]')).toContainText(`${money(gap)} ÷ 12`);
-    const positions = await page.evaluate(() => ['[data-result-difference]', '[data-result-side="a"]', '[data-comparison-form]'].map(selector => document.querySelector(selector)!.getBoundingClientRect().top));
+    // W7: the picker sits above the answer, which leads with the headline, then the cards.
+    const positions = await page.evaluate(() => ['[data-comparison-form]', '[data-result-difference]', '[data-result-side="a"]'].map(selector => document.querySelector(selector)!.getBoundingClientRect().top));
     expect(positions[0]).toBeLessThan(positions[1]); expect(positions[1]).toBeLessThan(positions[2]);
+    await expect(page.locator('[data-comparison-example]')).toBeHidden();
+    // Both drawings are of this pair: one bar per council for the band, sixteen for A to H.
+    await expect(page.locator(`[data-compare-chart="band"] [data-ek-bar][data-band="${band}"]`)).toHaveCount(2);
+    await expect(page.locator(`[data-compare-chart="band"] [data-council="${a}"]`)).toHaveAttribute('data-value', String(x / 100));
+    await expect(page.locator('[data-compare-chart="bands"] [data-ek-bar]')).toHaveCount(16);
+    for (const [slug, row] of [[a, first], [b, second]] as const) for (const letter of ['A','D','H'] as const)
+      await expect(page.locator(`[data-compare-chart="bands"] [data-council="${slug}"][data-band="${letter}"]`)).toHaveAttribute('data-value', String(row.years[year][letter]! / 100));
+    await expect(page.locator('[data-compare-chart="bands"] details.ek-twin table')).toContainText(money(second.years[year].H!));
+    // A reader's own pair has no prebuilt PNG; the table stays.
+    await expect(page.locator('[data-compare-chart="bands"] [data-chart-png]')).toBeHidden();
     const headline = await page.locator('[data-result-difference]').textContent();
     await page.getByRole('button', {name:'Swap councils'}).click();
     await expect(page.locator('[data-result-difference]')).toHaveText(headline!);
@@ -166,3 +177,53 @@ for (const theme of ['light','dark'] as const) {
     });
   }
 }
+
+test('the page opens on the labelled example pair, drawn, with the picker above it', async ({page}) => {
+  const burnley = rows.find(row => row.slug === 'burnley')!; const pendle = rows.find(row => row.slug === 'pendle')!;
+  const year = Object.keys(burnley.years).sort().at(-1)!;
+  await page.goto('/compare/');
+  await expect(page.locator('[data-comparison-example]')).toBeVisible();
+  await expect(page.locator('[data-comparison-example]')).toContainText('Burnley and Pendle are shown as an example');
+  await expect(page.locator('[data-comparison-results]')).toBeVisible();
+  await expect(page.locator('[data-result-side="b"]')).toContainText(money(pendle.years[year].D!));
+  await expect(page.locator('[data-compare-chart="bands"] [data-ek-bar]')).toHaveCount(16);
+  await expect(page.locator('[data-compare-chart="bands"] [data-chart-png]')).toBeVisible();
+  const [form, answer] = await page.evaluate(() => ['[data-comparison-form]', '[data-comparison-results]'].map(s => document.querySelector(s)!.getBoundingClientRect().top));
+  expect(form).toBeLessThan(answer);
+  // Swap acts on the pair on screen, and the empty choosers stay empty.
+  await expect(page.locator('#council-a')).toHaveValue('');
+  await page.getByRole('button', {name: 'Swap councils'}).click();
+  await expect(page).toHaveURL(/a=pendle&b=burnley/);
+  await expect(page.locator('[data-result-side="a"] h3')).toHaveText('Pendle');
+  await expect(page.locator('[data-comparison-example]')).toBeHidden();
+  await page.goBack();
+  await expect(page.locator('[data-comparison-example]')).toBeVisible();
+  expect(burnley.years[year].D).toBeTruthy();
+});
+
+test('a pair of different types is said plainly and each is shown on its own, never on one scale', async ({page}) => {
+  const manchester = rows.find(row => row.slug === 'manchester')!;
+  await page.goto('/compare/?a=burnley&b=manchester&band=D&year=2026-27');
+  await expect(page.locator('[data-comparison-results]')).toBeHidden();
+  await expect(page.locator('[data-comparison-status]')).toContainText('Compare works within one type of council');
+  const apart = page.locator('[data-comparison-apart]');
+  await expect(apart).toBeVisible();
+  await expect(apart.locator('[data-apart-side="b"]')).toContainText(money(manchester.years['2026-27'].D!));
+  await expect(apart.locator('svg')).toHaveCount(0);
+  // A year one council does not hold is unknown, never zero.
+  await page.goto('/compare/?a=barnsley&b=burnley&band=D&year=2024-25');
+  await expect(apart.locator('[data-apart-side="a"] [data-apart-annual]')).toHaveText('Not held');
+  await expect(apart).not.toContainText('£0.00');
+});
+
+test('without scripts the example pair is still drawn with its tables and sources', async ({browser}) => {
+  const context = await browser.newContext({javaScriptEnabled:false}); const page = await context.newPage();
+  await page.goto(test.info().project.use.baseURL + '/compare/');
+  await expect(page.locator('[data-comparison-example]')).toBeVisible();
+  await expect(page.locator('[data-compare-chart] svg.ek-chart')).toHaveCount(2);
+  await expect(page.locator('[data-compare-chart] details.ek-twin')).toHaveCount(2);
+  await expect(page.locator('[data-comparison-results] .record-line a.record-full').first()).toHaveAttribute('href', /^#source-council-tax-/);
+  await expect(page.locator('[data-page-sources]')).toHaveCount(1);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(2);
+  await context.close();
+});

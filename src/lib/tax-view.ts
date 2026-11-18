@@ -68,3 +68,23 @@ export function completeClass(rows: TaxRow[], code: string, year: string, band: 
   return peers.length > 0 && peers.every(row => validPence(row.years[year]?.[band]));
 }
 
+/**
+ * The words of a comparison result, built once for the page's example pair at build
+ * time and for a reader's pair in the browser. Every amount is a published charge, or
+ * calculated from two of them with the calculation printed beside it.
+ */
+export function comparisonWords(checked: Extract<ComparisonResult, {ok: true}>) {
+  const difference = Math.abs(checked.differencePence);
+  const lower = Math.min(checked.aPence, checked.bPence);
+  const higherName = checked.differencePence > 0 ? checked.b.name : checked.a.name;
+  const lowerName = checked.differencePence > 0 ? checked.a.name : checked.b.name;
+  const month = moneyPence(Math.round(difference / 12));
+  return {
+    heading: `Band ${checked.band}, ${shownYear(checked.year)}`,
+    difference: difference === 0 ? 'Both areas have the same published annual charge.' : `${higherName} is ${moneyPence(difference)} more a year than ${lowerName}.`,
+    percentage: `${(difference / lower * 100).toFixed(2)}% of the lower annual charge`,
+    percentageCalculation: `Calculation: ${moneyPence(difference)} ÷ ${moneyPence(lower)} × 100, rounded to two decimal places.`,
+    monthly: `${month} a month, spread over 12 months`,
+    monthlyCalculation: `Calculation: ${moneyPence(difference)} ÷ 12, rounded to the nearest penny. A budgeting equivalent; councils set their own instalment plans.`,
+  };
+}

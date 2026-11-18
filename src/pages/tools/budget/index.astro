@@ -32,8 +32,8 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
     eyebrow={`Where the money goes | ${budgetYear}`} title="Explore your council's" accent="budget"
     lede="Find your council, then guess how it spends each pound or set the budget yourself. Both are built from the council's own published budget return.">
     <ul slot="copy" class="hub-ways">
-      <li><span class="desk-kicker">Guess</span> Play the budget game, then see what the council published. <span class="hub-count">{available.length} councils</span></li>
-      <li><span class="desk-kicker">Set</span> Change tax and service spending and see what is left to find. <span class="hub-count">{sets} councils</span></li>
+      <li><span class="desk-kicker">Guess</span><span class="hub-way-text">Play the budget game, then see what the council published.</span><span class="hub-count">{available.length} councils</span></li>
+      <li><span class="desk-kicker">Set</span><span class="hub-way-text">Change tax and service spending and see what is left to find.</span><span class="hub-count">{sets} councils</span></li>
     </ul>
     <div id="set-the-budget" class="hub-start">
       <h2 id="choose-a-council" class="hub-pick-title">Choose your council</h2>
@@ -63,8 +63,10 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
 @media(min-width:900px){.hub-desk{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}}
 .hub-ways{list-style:none;margin:var(--space-lg) 0 0;padding:0;display:grid;gap:.6rem;max-width:30rem}
 .hub-ways li{display:grid;grid-template-columns:4rem minmax(0,1fr);gap:.75rem;align-items:baseline;padding:.85rem 1rem;border-radius:14px;color:var(--desk-soft);background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
-@media(max-width:599px){.hub-ways li{grid-template-columns:3.25rem minmax(0,1fr);padding:.65rem .8rem}}
+.hub-way-text{grid-column:2}
 .hub-count{grid-column:2;color:var(--desk-faint);font-size:var(--text-sm)}
+/* On a phone the two ways shrink to a pair of small cards, so the search box is on the first screen; the sentences stay for screen readers. */
+@media(max-width:599px){.hub-ways{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:var(--space-md)}.hub-ways li{grid-template-columns:minmax(0,1fr);gap:.15rem;padding:.6rem .8rem}.hub-count{grid-column:1}.hub-way-text{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 /* The picker as the band's right hand panel: a search box, quiet filters and a list of councils. */
 .hub-start{min-width:0;padding:clamp(1rem,.6rem + 1.5vw,1.5rem);border-radius:14px;background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
 .desk .hub-pick-title{margin:0;font-size:var(--text-lg);color:var(--desk-ink)}
@@ -96,7 +98,7 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
 .hub-start :global(th[scope="row"] a:hover){text-decoration:underline}
 .hub-start :global(.picker-action){width:1%;border-left:0}
 .hub-start :global(.picker-tail-head th){background:transparent;color:var(--desk-soft);font-size:var(--text-sm);padding-top:1rem}
-@media(max-width:599px){.hub-start :global(td.picker-pills a.picker-pill){padding:0 .85rem}}
+@media(max-width:599px){.hub-start :global(td.picker-pills a.picker-pill){padding:0 .85rem}.hub-start :global(.picker-submit){padding-inline:1rem}}
 .featured-budgets{margin-block:var(--space-xl)}
 .featured-rails{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-md)}
 @media(min-width:700px){.featured-rails{grid-template-columns:repeat(3,minmax(0,1fr))}}

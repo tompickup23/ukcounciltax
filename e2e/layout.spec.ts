@@ -25,6 +25,7 @@ const SAMPLES = [
   "/council-tax/band-d/",
   "/council-tax/yorkshire-and-the-humber/",
   "/council-tax/towns/region/south-west/",
+  "/council-tax/towns/region/south-west/part-2/",
   "/council-tax/towns/county/herefordshire/",
   "/council-tax/towns/constituency/burnley/",
 ];

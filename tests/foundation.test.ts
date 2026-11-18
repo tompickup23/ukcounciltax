@@ -42,6 +42,9 @@ describe("the repeated citation gate", () => {
   it("caps new pages at the ceiling and allows only listed templates more", () => {
     expect(repeatCap("/council-tax/towns/county/lancashire/index.html")).toBe(REPEAT_CAP);
     expect(repeatCap("/councils/pendle/index.html")).toBe(8);
+    expect(repeatCap("/council-tax/towns/index.html")).toBe(REPEAT_CAP);
+    expect(repeatCap("/council-tax/ranked/index.html")).toBe(4);
+    expect(repeatCap("/council-tax/band-d/index.html")).toBe(18);
   });
 });
 
@@ -51,7 +54,8 @@ describe("the weight gate", () => {
     expect(weightCap("/tools/budget/pendle/set/index.html")).toBe(WEIGHT_CAP);
   });
   it("ratchets the pages that were over when F1 landed", () => {
-    expect(weightCap("/council-tax/towns/region/south-west/index.html")).toBeGreaterThan(WEIGHT_CAP);
+    expect(weightCap("/council-tax/towns/region/south-west/index.html")).toBe(WEIGHT_CAP);
+    expect(weightCap("/council-tax/towns/region/south-west/part-2/index.html")).toBe(WEIGHT_CAP);
     expect(weightCap("/tools/budget/pendle/index.html")).toBeGreaterThan(WEIGHT_CAP);
   });
 });

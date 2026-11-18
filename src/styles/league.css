@@ -1,0 +1,97 @@
+/*
+ * League tables: the ranked council pages and the parish and unparished area
+ * pages (18 November 2026). Rules, never zebra; position, place, the figure in
+ * tabular numerals and a mark showing where the row sits between the lowest
+ * and highest on the page. Imported by the components that draw them, so the
+ * rules are global and thousands of rows carry no scoped attribute. Colours are
+ * tokens only.
+ */
+
+.league-wrap { margin: 0; }
+/* Between phone cards and a full desktop table the columns can be wider than the
+   page, so the table scrolls inside its own box there and only there. */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .league-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+table.league { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .95rem; }
+table.league caption { caption-side: top; text-align: left; padding: 0 0 var(--space-sm); font-weight: 600; color: var(--text); text-wrap: balance; }
+table.league thead th {
+  padding: .55rem .6rem; text-align: left; vertical-align: bottom; white-space: nowrap;
+  font-size: var(--text-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted);
+  background: var(--bg); border-bottom: 2px solid var(--text);
+}
+/* The header follows the reader down a long table, under the site's sticky bar. */
+@media (min-width: 1024px) {
+  table.league thead th { position: sticky; top: var(--league-top, 4.2rem); z-index: 2; }
+}
+table.league tbody th, table.league tbody td { padding: .7rem .6rem; text-align: left; vertical-align: baseline; border-bottom: 1px solid var(--border); }
+table.league tbody th { font-weight: 600; }
+table.league tbody th small { display: block; margin-top: .1rem; font-size: var(--text-xs); font-weight: 400; color: var(--text-muted); }
+table.league .num, table.league thead th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums lining-nums; }
+table.league .lg-pos { width: 3.6rem; text-align: right; font-family: var(--font-display); font-weight: 600; color: var(--text-faint); font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+table.league .lg-fig { font-weight: 600; color: var(--text); }
+table.league tbody tr:hover > * { background: color-mix(in srgb, var(--accent-wash) 40%, transparent); }
+table.league tbody tr:target > * { background: var(--accent-wash); }
+table.league tbody tr:target > :first-child { box-shadow: inset 3px 0 0 var(--accent); }
+table.league a { font-weight: inherit; }
+
+/* The range mark: a hairline track from the lowest to the highest on the page, a
+   filled bar to the row's figure and a dot at it. Position comes from --p. */
+table.league .lg-range { width: 24%; min-width: 6.5rem; padding-inline: .9rem; vertical-align: middle; }
+table.league thead .lg-range { vertical-align: bottom; }
+.lg-mark { display: block; position: relative; height: 12px; }
+.lg-mark::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 2px; border-radius: 1px;
+  background: linear-gradient(to right, color-mix(in srgb, var(--accent) 55%, transparent) 0 var(--p, 0%), var(--border) var(--p, 0%) 100%); }
+.lg-mark::after { content: ""; position: absolute; top: 1px; left: var(--p, 0%); width: 10px; height: 10px; margin-left: -5px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 2px var(--bg); }
+.lg-scale { display: flex; justify-content: space-between; gap: var(--space-xs); font-size: var(--text-xs); letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--text-faint); }
+@media (forced-colors: active) {
+  .lg-mark::before { background: CanvasText; }
+  .lg-mark::after { background: Highlight; box-shadow: none; }
+}
+
+/* Jump links and pagers: plain anchors that work without script. */
+.league-jump { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-xs); margin: var(--space-sm) 0; font-size: var(--text-sm); }
+.league-jump > span { color: var(--text-muted); margin-right: var(--space-2xs); }
+.league-jump a, .league-jump [aria-current] { display: inline-flex; align-items: center; min-height: 36px; padding: .2rem .75rem; border: 1px solid var(--border); border-radius: 999px; text-decoration: none; color: var(--text); background: var(--bg-card); font-variant-numeric: tabular-nums lining-nums; }
+.league-jump a:hover { border-color: var(--accent); color: var(--accent); }
+.league-jump [aria-current] { border-color: var(--accent); background: var(--accent-wash); color: var(--accent); font-weight: 600; }
+
+/* The filter that script adds: one quiet row above the table, beside the jump links. */
+.league-tools { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 0 var(--space-lg); margin-bottom: var(--space-sm); }
+.league-tools .league-find { margin: var(--space-sm) 0; flex: 0 1 22rem; }
+.league-find { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-sm) var(--space-md); margin: var(--space-md) 0 var(--space-xs); }
+.league-find .field { flex: 1 1 16rem; max-width: 26rem; }
+.league-find .field input { min-height: 44px; }
+.league-count { margin: var(--space-2xs) 0 var(--space-sm); font-size: var(--text-sm); color: var(--text-muted); }
+
+/* The distribution strip on a desk band: one column per slice of the range,
+   drawn from the figures in the table; no text, so it adds no number. */
+.lg-strip { display: block; width: 100%; height: 44px; margin: var(--space-md) 0 var(--space-2xs); }
+.lg-strip rect { fill: color-mix(in srgb, var(--ground-ink, var(--text)) 55%, transparent); }
+.lg-strip .lg-strip-end { fill: var(--accent-bright, var(--accent)); }
+.lg-strip-scale { display: flex; justify-content: space-between; gap: var(--space-sm); margin: 0; font-size: var(--text-xs); color: color-mix(in srgb, var(--ground-ink, var(--text)) 78%, transparent); font-variant-numeric: tabular-nums lining-nums; }
+
+/* Phones: each row is a card. Position at the left, place and figure on the first
+   line, the range mark across, the rest small beneath. Pages place their own
+   secondary cells. */
+@media (max-width: 599px) {
+  table.league, table.league tbody { display: block; width: 100%; }
+  table.league thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  table.league caption { display: block; }
+  table.league tbody tr { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; column-gap: var(--space-sm); row-gap: .3rem; padding: var(--space-sm) .15rem; border-bottom: 1px solid var(--border); }
+  table.league tbody tr:first-child { border-top: 2px solid var(--text); }
+  table.league tbody tr[hidden] { display: none; }
+  table.league tbody th, table.league tbody td { display: block; padding: 0; border: 0; min-width: 0; max-width: none; text-align: left; background: none; }
+  table.league tbody tr > :first-child { grid-column: 1; grid-row: 1 / span 5; font-size: var(--text-md); width: auto; text-align: left; }
+  table.league tbody th[scope="row"] { grid-column: 2; grid-row: 1; overflow-wrap: anywhere; }
+  table.league tbody .lg-fig { grid-column: 3; grid-row: 1; text-align: right; }
+  table.league tbody .lg-range { grid-column: 2 / span 2; grid-row: 2; width: auto; min-width: 0; padding: .15rem 0; }
+  table.league tbody tr:target > * { background: none; }
+  table.league tbody tr:target { background: var(--accent-wash); box-shadow: inset 3px 0 0 var(--accent); }
+}
+@media print {
+  .league-find, .league-count, .league-jump { display: none !important; }
+  table.league thead th { position: static !important; }
+  .league-wrap { overflow: visible !important; }
+}

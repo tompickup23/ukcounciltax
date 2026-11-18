@@ -20,6 +20,7 @@ import {
 } from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 import {townOgPath, townOgAlt} from '../../lib/towns-og';
+import {scopeParts} from '../../lib/towns-parts';
 
 interface Props {scope: TownScope}
 const {scope} = Astro.props;
@@ -37,6 +38,8 @@ const lede = scope.kind === 'constituency'
   ? `Full Band D council tax for every parish and unparished area that touches the ${scope.name} constituency, ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} with a figure. An area that crosses into another constituency is listed in full on both pages and never apportioned.`
   : `Full Band D council tax for every parish and unparished area ${text.where}, ${summary.counts.withFigure.toLocaleString('en-GB')} of ${n.toLocaleString('en-GB')} with a figure, lowest first. Calculated from published MHCLG figures, or the council's own where it publishes them.`;
 const regionName = scope.kind === 'region' ? scope.name : null;
+const parts = scopeParts(scope);
+const values = summary.ranked.map(r => r.town.fullBandDPence);
 ---
 <BaseLayout title={text.title} description={text.description} path={scope.path}
   structuredData={scopeStructuredData(scope, summary, text.description)}
@@ -45,13 +48,14 @@ const regionName = scope.kind === 'region' ? scope.name : null;
   <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas', href: townsPath()}, {label: `${kindLabel}: ${scope.name}`}]} />
   <PairHero scope={scope} h1Lead={text.h1Lead} h1Place={text.h1Place}
     eyebrow={`Full Band D | ${townsYear} | ${n.toLocaleString('en-GB')} ${n === 1 ? 'area' : 'areas'}`} lede={lede}
-    lowest={summary.lowest} highest={summary.highest} lowestJoint={summary.lowestJoint} highestJoint={summary.highestJoint} gap={summary.gap} />
+    lowest={summary.lowest} highest={summary.highest} lowestJoint={summary.lowestJoint} highestJoint={summary.highestJoint} gap={summary.gap} values={values} />
   <TownRegionNav current={regionName} />
   {sentence && <div class="fact" data-fact><p class="towns-sentence">{sentence}</p><TownsSources rows={[...summary.ranked.slice(0, 5), ...summary.ranked.slice(-5)].map(r => r.town)} /></div>}
   {summary.ranked.length >= 2 && <TownLedgers scope={scope} where={text.where} low={summary.ledgerLow} high={summary.ledgerHigh} of={summary.ranked.length} />}
   {scope.kind !== 'constituency' && <TownSpread scope={scope} where={text.where} />}
   {scope.kind === 'constituency' && split > 0 && <p class="caveat">{split} {split === 1 ? 'area here touches' : 'areas here touch'} wards in more than one constituency. {split === 1 ? 'It is' : 'They are'} listed in full here and on each other constituency's page, never apportioned.</p>}
-  <TownTable scope={scope} ranked={summary.ranked} unplaced={summary.unplaced} />
+  <TownTable scope={scope} rows={parts[0].rows} rankedCount={summary.ranked.length} unplacedCount={summary.unplaced.length}
+    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={parts[0]} parts={parts} />
   <TownsMethod />
   <TownsPageSources rows={scope.rows} lookups={scope.rows.some(t => t.constituencies.length > 0)} />
   <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>

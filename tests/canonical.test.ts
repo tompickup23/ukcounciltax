@@ -6,6 +6,7 @@ import { canonicalUrl } from "../src/lib/canonical";
 import { programmaticPaths, rankingPaths, parishPages, parishPath, scenarioGamePath, SCENARIO_GAME_SLUGS } from "../src/lib/paths";
 import { absoluteUrl, STATIC_PATHS } from "../src/lib/site";
 import { townPaths } from "../src/lib/towns-pages";
+import { townPartPaths } from "../src/lib/towns-parts";
 
 const data = JSON.parse(readFileSync(join(process.cwd(), "data", "canonical-map.json"), "utf8"));
 const snapshot = (name: string) => readFileSync(join(process.cwd(), "data", "canonical-sitemaps", `${name}.xml`), "utf8");
@@ -62,7 +63,7 @@ describe("the reviewed canonical map", () => {
     }
     const townsPaths = ["/council-tax/towns/", ...townPaths()];
     expect(townsPaths).toHaveLength(642);
-    const addedUrls = [...a4Paths, ...townsPaths, "/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/')), ...SCENARIO_GAME_SLUGS.map(scenarioGamePath)].map(absoluteUrl);
+    const addedUrls = [...a4Paths, ...townsPaths, ...townPartPaths(), "/council-tax-2027-28/", "/findings/", "/changes/", "/tools/budget/", ...programmaticPaths().filter(path => path.startsWith('/tools/budget/')), ...SCENARIO_GAME_SLUGS.map(scenarioGamePath)].map(absoluteUrl);
     expect(sourceUrls.filter(url => !builtUrls.includes(url))).toEqual([retiredUrl]);
     expect(builtUrls.filter(url => !sourceUrls.includes(url)).sort()).toEqual(addedUrls.sort());
     expect(builtUrls.filter(url => data.mappings[url])).toHaveLength(318);

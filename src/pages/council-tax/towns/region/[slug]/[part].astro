@@ -1,0 +1,13 @@
+---
+import TownPartPage from '../../../../../components/towns/TownPartPage.astro';
+import {regionScopes} from '../../../../../lib/towns-pages';
+import {scopeParts} from '../../../../../lib/towns-parts';
+export function getStaticPaths() {
+  return regionScopes().flatMap(scope => {
+    const parts = scopeParts(scope);
+    return parts.slice(1).map(part => ({params: {slug: scope.slug, part: `part-${part.index}`}, props: {scope, part, parts}}));
+  });
+}
+const {scope, part, parts} = Astro.props;
+---
+<TownPartPage scope={scope} part={part} parts={parts} />

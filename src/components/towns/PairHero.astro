@@ -7,6 +7,8 @@
  */
 import DeskBand from '../DeskBand.astro';
 import TownsSources from './TownsSources.astro';
+import DistributionStrip from '../league/DistributionStrip.astro';
+import {rowHref} from '../../lib/towns-parts';
 import type {RankedTown} from '../../lib/towns';
 import {money, placeName, POSITION_METHOD, townAnchor, countyPathOf, type TownScope} from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
@@ -19,10 +21,12 @@ interface Props {
   lowestJoint: RankedTown[]; highestJoint: RankedTown[];
   lowestParish?: RankedTown | null;
   gap: number | null;
+  /** Every full Band D in the scope, in pence, for the distribution strip. */
+  values?: readonly number[];
 }
-const {scope, h1Lead, h1Place, eyebrow, lede, lowest, highest, lowestJoint, highestJoint, lowestParish, gap} = Astro.props;
-// On the hub a row's anchor is on its county page; on a scope page it is in the table below.
-const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : `#${r.town.code}`;
+const {scope, h1Lead, h1Place, eyebrow, lede, lowest, highest, lowestJoint, highestJoint, lowestParish, gap, values = []} = Astro.props;
+// On the hub a row's anchor is on its county page; on a scope page it is in the table below, or on its part.
+const href = (r: RankedTown) => scope.kind === 'england' ? townAnchor(countyPathOf(r.town), r.town) : rowHref(scope, r.town);
 const meta = (r: RankedTown) => [r.town.kind === 'unparished' ? null : r.town.type, tidy(r.town.councilName), tidy(r.town.county) === tidy(r.town.councilName) ? null : tidy(r.town.county)].filter(Boolean).join(', ');
 const cards = lowest && highest && lowest !== highest ? [
   {kicker: 'Lowest full Band D', row: lowest, joint: lowestJoint, side: 'lowest'},
@@ -47,6 +51,7 @@ const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTo
           </div>
         ))}
       </div>
+      {cards.length === 2 && values.length >= 10 && <DistributionStrip values={values} low="Lowest" high="Highest" />}
       {gap !== null && cards.length === 2 && <p class="pair-gap">Difference <strong data-figure>{money(gap)}</strong> a year at Band D, <span data-figure>{money(Math.round(gap / 12))}</span> a month.</p>}
       <div class="pair-sources"><TownsSources rows={rowsForSources} method={cards.length === 2 ? POSITION_METHOD : undefined} /></div>
     </div>
@@ -63,7 +68,7 @@ const rowsForSources = [lowest, highest, lowestParish].filter((r): r is RankedTo
 .pair-band .pair-place{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);line-height:1.15;color:var(--ground-ink);overflow-wrap:anywhere;text-decoration-color:color-mix(in srgb,var(--ground-ink) 45%,transparent)}
 .pair-band .pair-place:hover{color:var(--accent-bright)}
 .pair-meta{font-size:var(--text-sm);color:color-mix(in srgb,var(--ground-ink) 78%,transparent)}
-.pair-figure{margin-top:var(--space-xs);font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:1;font-variant-numeric:tabular-nums lining-nums;color:var(--ground-ink)}
+.pair-figure{margin-top:auto;padding-top:var(--space-xs);font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:1;font-variant-numeric:tabular-nums lining-nums;color:var(--ground-ink)}
 .pair-joint,.pair-parish{font-size:var(--text-sm);color:color-mix(in srgb,var(--ground-ink) 82%,transparent)}
 .pair-parish{margin-top:var(--space-xs);padding-top:var(--space-xs);border-top:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
 .pair-band .pair-parish a{color:var(--ground-ink)}

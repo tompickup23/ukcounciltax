@@ -1,23 +1,111 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import DeskBand from '../../../components/DeskBand.astro';
 import Fact from '../../../components/Fact.astro';
-import SourceLine from '../../../components/SourceLine.astro';
+import RecordLine from '../../../components/RecordLine.astro';
+import PageSources from '../../../components/PageSources.astro';
+import DistributionStrip from '../../../components/league/DistributionStrip.astro';
+import RankedClassNav from '../../../components/league/RankedClassNav.astro';
+import '../../../styles/league.css';
 import {CURRENT_YEAR, loadYear, pounds, wholePounds, yearLabel} from '../../../lib/council-tax';
 import {rankingClasses, rankingPage, rankingRule, rankingMethod} from '../../../lib/ranking-page';
 import {positionCell, sentenceCase} from '../../../lib/rankings';
 import {rankingPath} from '../../../lib/paths';
-import {councilTaxSource} from '../../../lib/sources';
+import {councilTaxSource, tableName, type SourceRef} from '../../../lib/sources';
 export function getStaticPaths() { return rankingClasses.map(cls => ({params:{class:cls.slug},props:{cls}})); }
 const {cls} = Astro.props;
 const data = rankingPage(loadYear(CURRENT_YEAR), cls);
 const year = yearLabel(CURRENT_YEAR);
-const source = councilTaxSource(CURRENT_YEAR, data.table, rankingMethod);
 const london = cls.slug === 'london-boroughs';
+// A record line names the document by a short title; the Sources block carries it in full.
+const ref = (table: string, method?: string): SourceRef => ({...councilTaxSource(CURRENT_YEAR, table, method), short: `Council tax levels ${year}, ${tableName(table)}`});
+const rankRef = ref(data.table, rankingMethod);
+const areaRef = ref('Table_7');
+const ownRef = ref('Table_2');
+// The H1 keeps its exact words: the part after the colon takes the accent inside the same heading.
+const cut = data.title.indexOf(': ');
+const h1Lead = data.title.slice(0, cut + 1), h1Place = data.title.slice(cut + 2);
+const rows = data.rows ?? [];
+const figure = (row: (typeof rows)[number]) => (data.county ? row.own : row.area) as number;
+const values = rows.map(figure);
+const min = Math.min(...values), max = Math.max(...values);
+const at = (v: number) => max === min ? 0 : Math.round(((v - min) / (max - min)) * 1000) / 10;
+const lowest = rows[0], highest = rows.at(-1);
+const basis = data.county ? 'own Band D' : 'area Band D';
+const position = (row: (typeof rows)[number]) => data.county ? positionCell(row.ownPosition, row.ownTied) : positionCell(row.areaPosition!, row.areaTied);
+const rowId = (row: (typeof rows)[number]) => `council-${row.slug ?? row.gss}`;
+// MHCLG notes, one item per note text, naming every council it applies to; each council keeps its own anchor.
+const groups = [...data.notes.reduce((map, note) => {
+  const key = `${note.id}|${note.text}`;
+  map.set(key, [...(map.get(key) ?? []), note]);
+  return map;
+}, new Map<string, typeof data.notes>()).values()];
+const sources = [
+  {key: 'ranking', label: `${sentenceCase(cls.label)} by ${basis}, positions`, method: rankingMethod, sources: [rankRef]},
+  ...(!data.county ? [{key: 'area-average', label: `Average area Band D for ${data.areaLabel}`, sources: [areaRef]}] : []),
+  {key: 'class-average', label: `Average Band D for ${cls.table2}`, sources: [ownRef]},
+];
 ---
 <BaseLayout title={data.title} description={data.description} path={rankingPath(cls.slug)}>
   <Breadcrumbs items={[{label:'Council tax',href:'/council-tax/'},{label:'Ranked',href:'/council-tax/ranked/'},{label:sentenceCase(cls.label)}]} />
-  <header class="page-head"><h1>{data.title}</h1><p class="lede">All {cls.label} in England, by published Band D for {year}, lowest first. Position 1 is the lowest. {rankingRule}</p></header>
+  <DeskBand id="ranked-heading" level={1} top class="ranked-desk" eyebrow={`${sentenceCase(basis)} | ${year}${rows.length ? ` | ${rows.length} ${cls.label}` : ''}`} title={h1Lead} accent={h1Place}
+    lede={`All ${cls.label} in England, by published Band D for ${year}, lowest first. Position 1 is the lowest. ${rankingRule}`}>
+    {lowest && highest && (
+      <div class="fact ranked-pair" data-fact>
+        <div class="ranked-pair-cards">
+          {[{kicker: `Lowest ${basis}`, row: lowest}, {kicker: `Highest ${basis}`, row: highest}].map(card => (
+            <div class="desk-card">
+              <span class="desk-kicker">{card.kicker}</span>
+              <a class="ranked-pair-place" href={`#${rowId(card.row)}`}>{card.row.name}</a>
+              <span class="ranked-pair-figure" data-figure>{pounds(figure(card.row))}</span>
+            </div>
+          ))}
+        </div>
+        <DistributionStrip values={values} low="Lowest" high="Highest" />
+        <RecordLine entry="ranking" sources={[rankRef]} />
+      </div>
+    )}
+  </DeskBand>
+  <RankedClassNav current={cls.slug} />
+  {data.rows ? <>
+    <section class="section" aria-labelledby="table-heading">
+      <h2 id="table-heading">All {rows.length} {cls.label}, lowest to highest</h2>
+      <div class="league-tools">
+      <nav class="league-jump" aria-label="Jump within this table">
+        <span>Jump to</span>
+        <a href="#ranked-table">Lowest</a>
+        <a href={`#${rowId(highest!)}`}>Highest</a>
+        {data.notes.length > 0 && <a href="#notes-heading">MHCLG notes</a>}
+        <a href="#basis-heading">What is ranked</a>
+      </nav>
+      <div class="league-find" data-league-find hidden>
+        <label class="field">Find a council<input type="search" autocomplete="off" placeholder="Type part of a name" data-league-q /></label>
+      </div>
+      </div>
+      <p class="league-count" data-league-count role="status" hidden></p>
+      <div class="fact" data-fact id="ranked-table">
+        <div class="league-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table data-pagefind-ignore data-league-table class:list={["league ranked-table", {"billing-ranking": !data.county}]}>
+          <caption>{sentenceCase(cls.label)}, Band D {year}, lowest to highest {data.county ? 'own' : 'area'} Band D</caption>
+          <thead><tr><th scope="col" class="num">Position</th><th scope="col">Council</th>{london && <th scope="col">Type</th>}<th scope="col" class="lg-range"><span class="lg-scale"><span>Lowest</span><span>Highest</span></span><span class="visually-hidden">Where the {basis} sits between the lowest and highest</span></th>{!data.county && <><th scope="col" class="num">Area Band D</th><th scope="col" class="num own-column">Position by own share</th></>}<th scope="col" class:list={["num", {"own-column": !data.county}]}>Own Band D</th></tr></thead>
+          <tbody>{rows.map(row => <tr id={rowId(row)}>
+            <td class="lg-pos" data-figure>{position(row)}</td>
+            <th scope="row">{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}
+              {!data.county && <span class="own-inline" data-figure>Own share: {positionCell(row.ownPosition,row.ownTied)}, {pounds(row.own)}</span>}
+              {[...row.areaNotes,...row.ownNotes].map(note => <span class="note-marker"> <a href={`#note-${row.gss}-${note.id}`}>note {note.id}</a></span>)}
+              {row.areaNotes.map(note => <small class="row-note">{note.text}</small>)}
+            </th>
+            {london && <td class="ranked-type">{row.londonType}</td>}
+            <td class="lg-range"><i class="lg-mark" style={`--p:${at(figure(row))}%`}></i></td>
+            {!data.county && <><td class="num lg-fig" data-figure>{pounds(row.area)}</td><td class="num own-column" data-figure>{positionCell(row.ownPosition,row.ownTied)}</td></>}
+            <td class:list={["num", {"own-column": !data.county, "lg-fig": data.county}]} data-figure>{pounds(row.own)}</td>
+          </tr>)}</tbody>
+        </table></div>
+        <RecordLine entry="ranking" method="Positions calculated from" sources={[rankRef]} />
+      </div>
+    </section>
+    {groups.length > 0 && <section class="section" aria-labelledby="notes-heading"><h2 id="notes-heading">MHCLG notes</h2><ul class="ranked-notes">{groups.map(group => <li><p><strong>Note {group[0].id}.</strong> {group[0].text}</p><p class="ranked-notes-who">Applies to {group.map((note, i) => <>{i > 0 && (i === group.length - 1 ? ' and ' : ', ')}<span id={`note-${note.gss}-${note.id}`}>{note.name}</span></>)}.</p></li>)}</ul></section>}
+  </> : <section class="section"><p>{data.description}</p><ul>{data.available.map(row => <li>{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}</li>)}</ul></section>}
   <section class="section" aria-labelledby="basis-heading">
     <h2 id="basis-heading">What is ranked</h2>
     {data.county ? <p>A county council's precept is charged in every shire district in its county and is part of each district's area Band D. <a href={rankingPath('shire-districts')}>Shire districts ranked by area Band D</a>.</p> : <>
@@ -25,34 +113,39 @@ const london = cls.slug === 'london-boroughs';
       <p>Own Band D is the council's own share, including adult social care where it has it, excluding parish precepts.</p>
       {cls.slug === 'shire-districts' && <p>In a shire district most of the area Band D is the county council's precept, so the area positions mostly follow the county.</p>}
     </>}
-    <div class="fact-grid">
-      {!data.county && <Fact label={`Average area Band D for ${data.areaLabel}, ${year}`} figure={wholePounds(data.areaAverage)} source={councilTaxSource(CURRENT_YEAR,'Table_7')} />}
-      <Fact label={`Average Band D for ${cls.table2}, ${year}`} figure={wholePounds(data.ownAverage)} source={councilTaxSource(CURRENT_YEAR,'Table_2')} />
+    <div class="fact-grid ranked-averages">
+      {!data.county && <Fact label={`Average area Band D for ${data.areaLabel}, ${year}`} figure={wholePounds(data.areaAverage)} source={areaRef} record="area-average" />}
+      <Fact label={`Average Band D for ${cls.table2}, ${year}`} figure={wholePounds(data.ownAverage)} source={ownRef} record="class-average" />
     </div>
   </section>
-  {data.rows ? <>
-    <div class="fact" data-fact>
-      <div class="table-wrap" tabindex="0" role="region" aria-label={`${cls.label} Band D positions`}><table data-pagefind-ignore class:list={["data", {"billing-ranking": !data.county}]}>
-        <caption>{sentenceCase(cls.label)}, Band D {year}, lowest to highest {data.county ? 'own' : 'area'} Band D</caption>
-        <thead><tr><th scope="col">Position</th><th scope="col">Council</th>{london && <th scope="col">Type</th>}{!data.county && <><th scope="col" class="num">Area Band D</th><th scope="col" class="num own-column">Position by own share</th></>}<th scope="col" class:list={["num", {"own-column": !data.county}]}>Own Band D</th></tr></thead>
-        <tbody>{data.rows.map(row => <tr>
-          <td data-figure>{positionCell(data.county ? row.ownPosition : row.areaPosition!,data.county ? row.ownTied : row.areaTied)}</td>
-          <th scope="row">{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}
-            {!data.county && <span class="own-inline" data-figure>Own share: {positionCell(row.ownPosition,row.ownTied)}, {pounds(row.own)}</span>}
-            {[...row.areaNotes,...row.ownNotes].map(note => <span class="note-marker"> <a href={`#note-${row.gss}-${note.id}`}>note {note.id}</a></span>)}
-            {row.areaNotes.map(note => <small class="row-note">{note.text}</small>)}
-          </th>
-          {london && <td>{row.londonType}</td>}
-          {!data.county && <><td class="num" data-figure>{pounds(row.area)}</td><td class="num own-column" data-figure>{positionCell(row.ownPosition,row.ownTied)}</td></>}
-          <td class:list={["num", {"own-column": !data.county}]} data-figure>{pounds(row.own)}</td>
-        </tr>)}</tbody>
-      </table></div>
-      <SourceLine source={source} />
-    </div>
-    {data.notes.length > 0 && <section class="section" aria-labelledby="notes-heading"><h2 id="notes-heading">MHCLG notes</h2><ul>{data.notes.map(note => <li id={`note-${note.gss}-${note.id}`}>{note.name}: note {note.id}. {note.text}</li>)}</ul></section>}
-  </> : <section class="section"><p>{data.description}</p><ul>{data.available.map(row => <li>{row.slug ? <a href={`/councils/${row.slug}/`}>{row.name}</a> : row.name}</li>)}</ul></section>}
+  <PageSources entries={sources} />
   <section class="section" aria-labelledby="related-heading"><h2 id="related-heading">Other council types and comparisons</h2><ul>{rankingClasses.filter(other => other.slug !== cls.slug).map(other => <li><a href={rankingPath(other.slug)}>{other.label}</a></li>)}<li><a href="/council-tax/">Council tax in England</a></li><li><a href="/council-tax/towns/">Council tax by parish and unparished area</a></li><li><a href="/increases/">Annual increases</a></li></ul></section>
 </BaseLayout>
-<style>.row-note{display:block;font-weight:400;max-width:28rem}.note-marker{font-weight:400;font-size:.85em}.own-inline{display:none}
-@media(max-width:599px){.billing-ranking .own-column{display:none}.own-inline{display:block;font-size:.8rem;font-weight:400;margin-top:var(--space-2xs)}.billing-ranking{width:100%;font-size:.875rem}.billing-ranking th,.billing-ranking td{padding:.45rem .3rem}.billing-ranking th[scope="row"]{overflow-wrap:anywhere}}
+<script>
+  import {enhanceLeagueFind} from '../../../lib/league-find';
+  enhanceLeagueFind();
+</script>
+<style>
+.ranked-pair{margin:0}
+.ranked-pair-cards{display:grid;gap:var(--space-md)}
+@media(min-width:600px){.ranked-pair-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ranked-pair-place{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);line-height:1.15;color:var(--desk-ink);overflow-wrap:anywhere}
+.ranked-pair-figure{margin-top:auto;padding-top:var(--space-sm);font-family:var(--font-display);font-weight:600;font-size:var(--text-2xl);line-height:1;font-variant-numeric:tabular-nums lining-nums;color:var(--desk-ink)}
+.ranked-desk :global(.record-line){margin:var(--space-sm) 0 0;font-size:var(--text-xs)}
+.ranked-table :global(.row-note){display:block;font-weight:400;font-size:var(--text-xs);color:var(--text-muted);max-width:30rem}
+.ranked-table :global(.note-marker){font-weight:400;font-size:var(--text-xs)}
+.ranked-table :global(.own-inline){display:none}
+.ranked-type{font-size:var(--text-sm);color:var(--text-muted)}
+.ranked-table :global(.own-column){color:var(--text-muted)}
+.ranked-notes{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.ranked-notes li{padding:var(--space-sm) 0;border-top:1px solid var(--border);max-width:48rem}
+.ranked-notes p{margin:0}
+.ranked-notes-who{margin-top:var(--space-2xs)!important;font-size:var(--text-sm);color:var(--text-muted)}
+.ranked-notes :global(span:target){color:var(--text);background:var(--accent-wash);outline:2px solid var(--accent);outline-offset:1px;border-radius:2px}
+.ranked-averages{margin-top:var(--space-md)}
+@media(max-width:599px){
+  .billing-ranking :global(.own-column){display:none}
+  .ranked-table :global(.own-inline){display:block;margin-top:.15rem;font-size:var(--text-xs);font-weight:400;color:var(--text-muted)}
+  .ranked-table .ranked-type{grid-column:2/span 2;grid-row:3}
+}
 </style>

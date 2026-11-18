@@ -1,0 +1,46 @@
+---
+/**
+ * A later part of a long region table (src/lib/towns-parts.ts): the same table in
+ * the same order, from where the previous part stopped. No desk band and no
+ * summary: the pair, the ledgers and the spread stay on the region page, which
+ * every part links back to. Self canonical; the share card is the region's.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../Breadcrumbs.astro';
+import TownTable from './TownTable.astro';
+import TownsMethod from './TownsMethod.astro';
+import TownsPageSources from './TownsPageSources.astro';
+import TownRegionNav from './TownRegionNav.astro';
+import {scopeIn, scopeSummary, townsPath, townsYear, type TownScope} from '../../lib/towns-pages';
+import {townOgAlt, townOgPath} from '../../lib/towns-og';
+import type {TownPart} from '../../lib/towns-parts';
+
+interface Props {scope: TownScope; part: TownPart; parts: TownPart[]}
+const {scope, part, parts} = Astro.props;
+const summary = scopeSummary(scope.rows);
+const where = scopeIn(scope);
+const range = part.ranked === 0 ? 'areas without a figure' : part.ranked === part.rows.length ? `positions ${part.first} to ${part.last}` : `positions ${part.first} to ${part.last} and areas without a figure`;
+const title = `Full Band D by parish and unparished area ${where} ${townsYear}, part ${part.index} of ${parts.length}`;
+const description = `Part ${part.index} of ${parts.length} of the full Band D table for every parish and unparished area ${where}, ${townsYear}: ${range}, in the same order as part 1.`;
+---
+<BaseLayout title={title} description={description} path={part.path} ogImage={townOgPath(scope)} ogImageAlt={townOgAlt(scope)}>
+  <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas', href: townsPath()}, {label: `Region: ${scope.name}`, href: scope.path}, {label: `Part ${part.index}`}]} />
+  <header class="page-head towns-part-head">
+    <p class="towns-part-kicker">Full Band D | {townsYear} | Part {part.index} of {parts.length}</p>
+    <h1>Parish and unparished areas {where}, {range}</h1>
+    <p class="lede">The table {where} is long, so it is split into parts in its own order. The lowest and highest, the lowest and highest ten and how the figures spread are on <a href={scope.path}>the {scope.name} page</a>.</p>
+  </header>
+  <TownRegionNav current={scope.name} />
+  <TownTable scope={scope} rows={part.rows} rankedCount={summary.ranked.length} unplacedCount={summary.unplaced.length}
+    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={part} parts={parts} />
+  <TownsMethod />
+  <TownsPageSources rows={part.rows.map(r => r.town)} lookups={part.rows.some(r => r.town.constituencies.length > 0)} />
+  <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>
+    <h2 id="related-heading">More parish and unparished areas</h2>
+    <p><a href={scope.path}>{scope.name}: the lowest and highest, and part 1 of this table</a> · <a href={townsPath()}>Every parish and unparished area in England</a> · <a href="/council-tax/ranked/">Band D ranked by type of council</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+.towns-part-kicker{margin:0 0 var(--space-xs);font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+</style>

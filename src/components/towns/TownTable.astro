@@ -298,7 +298,7 @@ th[aria-sort="descending"] .town-sort::after{content:" \2193";color:var(--accent
 /* On desktop a long table reads in a window almost the height of the screen, its
    header held at the top, so the page keeps its sections in view; phones scroll the page. */
 @media(min-width:1024px){
-  .town-wrap:has(tbody tr:nth-child(31)){max-height:calc(100vh - 7rem);overflow:auto;border-block:1px solid var(--border);--league-top:0px}
+  .town-wrap:has(tbody tr:nth-child(31)){max-height:calc(100vh + -7rem);overflow:auto;border-block:1px solid var(--border);--league-top:0px}
   .town-wrap:has(tbody tr:nth-child(31)) table.league thead th{top:0}
 }
 @media print{.town-filters,.town-count{display:none!important}.town-wrap{max-height:none!important;overflow:visible!important}}

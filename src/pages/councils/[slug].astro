@@ -399,7 +399,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 </BaseLayout>
 
 <style>
-  .locator-fact { max-width: 40rem; }
+  /* The kit map draws neighbouring areas past its viewBox; clip them at the figure so large text in the narrower main column cannot widen the page. */
+  .locator-fact { max-width: 40rem; overflow-x: clip; }
   #council-tax { margin-top: 0; }
   .notes { font-size: 0.9rem; color: var(--text-muted); padding-left: 1.1rem; }
 
@@ -442,10 +443,12 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   @media (min-width: 1100px) and (max-height: 599px) { .council-rail { position: static; max-height: none; overflow: visible; } }
 
   .band-chart { max-width: 46rem; }
-  /* From 1100px the chart (with its table disclosure) and the band selector sit side by side; the table still comes before the selector in the markup. */
+  /* On a wide main column the chart (with its table disclosure) and the band selector sit side by side; the table still comes before the selector in the markup. */
   .band-pair { min-width: 0; }
   .band-pair > div { min-width: 0; }
-  @media (min-width: 1100px) { .band-pair { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-xl); align-items: start; } .band-pair-selector > h3 { margin-top: 0; } }
+  /* A container query, not a media query: its rem follows the page's text size, so at 200% text the pair stacks instead of squeezing the band figures. */
+  .council-main { container: council-main / inline-size; }
+  @container council-main (min-width: 48rem) { .band-pair { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-xl); align-items: start; } .band-pair-selector > h3 { margin-top: 0; } }
   /* The one Sources block in two columns on desktop; each entry stays whole. */
   @media (min-width: 1100px) { .council-main :global(.page-sources ol) { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); align-items: start; } }
   .band-figures { margin-block: var(--space-sm) var(--space-md); }

@@ -145,10 +145,11 @@ const pairLinks = PAIRS.map(([a, b, group]) => {
       <h2 id="comparison-apart-heading">Each council on its own</h2>
       <p data-apart-reason>These two councils are not put on one scale.</p>
       <div class="compare-sides">
-        {['a','b'].map(side => <div class="card fact compare-side" data-fact data-apart-side={side}>
+        {/* Empty until the browser fills a pair; it then marks the card as a sourced figure. */}
+        {['a','b'].map(side => <div class="card fact compare-side" data-apart-side={side}>
           <h3><a data-apart-name></a></h3>
           <p class="fact-label" data-apart-label></p>
-          <strong class="fact-figure" data-figure data-apart-annual></strong>
+          <strong class="fact-figure" data-apart-annual></strong>
           <div data-apart-source></div>
         </div>)}
       </div>

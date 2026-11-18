@@ -161,7 +161,8 @@ function showApart(value: ComparisonState, message: string) {
   if (apart.hidden) return;
   root.querySelector('[data-apart-reason]')!.textContent = `Each council area's published Band ${value.band} area charge for ${value.year.replace('-', '/')} is shown below, apart and not on one scale.`;
   pair.forEach((row, i) => {
-    const card = root.querySelector(`[data-apart-side="${sides[i]}"]`)!;
+    const card = root.querySelector<HTMLElement>(`[data-apart-side="${sides[i]}"]`)!;
+    card.dataset.fact = ''; card.querySelector<HTMLElement>('[data-apart-annual]')!.dataset.figure = '';
     const link = card.querySelector<HTMLAnchorElement>('[data-apart-name]')!;
     link.textContent = row!.name; link.href = `/councils/${row!.slug}/#band-${value.band}`;
     const pence = row!.years[value.year]?.[value.band as TaxBand];

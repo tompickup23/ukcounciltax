@@ -48,7 +48,9 @@ export function mapThumb(): Thumb {
   const features: { properties: { LAD26CD: string }; geometry: { type: "Polygon" | "MultiPolygon"; coordinates: Ring[][] | Ring[] } }[] =
     JSON.parse(readFileSync(join(process.cwd(), "data/geography/lad26-england.geojson"), "utf8")).features;
   const authorities = loadYear(CURRENT_YEAR).authorities;
-  const breaks = AREA_BAND_D_REGISTRY.areaBandD.breaks as readonly number[];
+  const indicator = AREA_BAND_D_REGISTRY.areaBandD;
+  if (indicator.kind !== "fixed") throw new Error("The map thumb needs the fixed area Band D breaks");
+  const breaks: readonly number[] = indicator.breaks;
   const outer = (f: (typeof features)[number]): Ring[] =>
     f.geometry.type === "Polygon" ? [(f.geometry.coordinates as Ring[])[0]] : (f.geometry.coordinates as Ring[][]).map((p) => p[0]);
   let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;

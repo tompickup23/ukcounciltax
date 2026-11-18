@@ -27,14 +27,14 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
   <DeskBand id="hub-heading" level={1} top layout="split" class="hub-desk" data-ground="desk" data-hub-band
     eyebrow={`Where the money goes | ${budgetYear}`} title="Explore your council's" accent="budget"
-    lede="Find your council, then guess how it spends each pound or set the budget yourself. Both are built from the council's own published budget return.">
+    lede="Guess how your council spends each pound, or set its budget yourself, from its own published return.">
     <ul slot="copy" class="hub-ways">
       <li><span class="desk-kicker">Guess</span><span class="hub-way-text">Play the budget game, then see what the council published.</span><span class="hub-count">{available.length} councils</span></li>
       <li><span class="desk-kicker">Set</span><span class="hub-way-text">Change tax and service spending and see what is left to find.</span><span class="hub-count">{setCount} councils</span></li>
     </ul>
     <div id="set-the-budget" class="hub-start">
       <h2 id="choose-a-council" class="hub-pick-title">Choose your council</h2>
-      <CouncilPicker id="budget-picker" filtersClosed action={{heading: 'Play', links: setLinks, missing: 'Not available', pills: {lead: 'Guess', action: 'Set', leadLabel: (name: string) => `Guess: play the ${name} budget game`, actionLabel: (name: string) => `Set: set the ${name} budget yourself`}}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+      <CouncilPicker id="budget-picker" filtersClosed labelledby="choose-a-council" action={{heading: 'Play', links: setLinks, missing: 'Not available', pills: {lead: 'Guess', action: 'Set', leadLabel: (name: string) => `Guess: play the ${name} budget game`, actionLabel: (name: string) => `Set: set the ${name} budget yourself`}}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
     </div>
   </DeskBand>
   <section class="featured-budgets" aria-labelledby="featured-heading">
@@ -62,8 +62,8 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
 .hub-ways li{display:grid;grid-template-columns:4rem minmax(0,1fr);gap:.75rem;align-items:baseline;padding:.85rem 1rem;border-radius:14px;color:var(--desk-soft);background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
 .hub-way-text{grid-column:2}
 .hub-count{grid-column:2;color:var(--desk-faint);font-size:var(--text-sm)}
-/* On a phone the two ways shrink to a pair of small cards, so the search box is on the first screen; the sentences stay for screen readers. */
-@media(max-width:599px){.hub-ways{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:var(--space-md)}.hub-ways li{grid-template-columns:minmax(0,1fr);gap:.15rem;padding:.6rem .8rem}.hub-count{grid-column:1}.hub-way-text{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
+/* On a phone the two ways and the table caption are kept for screen readers only, so the box, its button and the first match fit the first screen (council-picker.spec.ts); both counts are also in "About these budgets". */
+@media(max-width:599px){.hub-ways,.hub-start :global(.picker-table caption){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}.hub-desk{gap:var(--space-sm)}.hub-desk :global(.desk-lede){margin-top:var(--space-sm);font-size:var(--text-base)}.hub-start{padding-top:.85rem}}
 /* The picker as the band's right hand panel: a search box, quiet filters and a list of councils. */
 .hub-start{min-width:0;padding:clamp(1rem,.6rem + 1.5vw,1.5rem);border-radius:14px;background:color-mix(in srgb,var(--ground-ink) 7%,transparent);border:1px solid color-mix(in srgb,var(--ground-ink) 16%,transparent)}
 .desk .hub-pick-title{margin:0;font-size:var(--text-lg);color:var(--desk-ink)}

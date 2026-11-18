@@ -66,6 +66,8 @@ interface Props {
   outside?: string;
   /** Keep the region and type filters in their closed drawer at every width (the budget hub's band). */
   filtersClosed?: boolean;
+  /** The id of a heading that names the picker, so it and the table's scroll region do not share the caption's name. */
+  labelledby?: string;
 }
 
 const {
@@ -79,6 +81,7 @@ const {
   tailHeading,
   outside = "That postcode is not in a council listed here.",
   filtersClosed = false,
+  labelledby,
 } = Astro.props;
 const head = rows.filter((row) => !row.noReturn);
 const tail = rows.filter((row) => row.noReturn);
@@ -88,7 +91,7 @@ const extraTypes = [...new Set(rows.map((row) => row.type))].filter((type) => ty
 const types = [...pickerTypes(rows), ...extraTypes.map((type) => ({ label: type, value: slugify(type) }))];
 const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
 ---
-<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} data-filters-closed={filtersClosed ? "" : undefined} aria-labelledby={`${id}-caption`}>
+<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} data-filters-closed={filtersClosed ? "" : undefined} aria-labelledby={labelledby ?? `${id}-caption`}>
   <form class="picker-controls" role="search" data-picker-form novalidate>
     <div class="picker-box">
       <label class="picker-label" for={`${id}-q`}>{label}</label>

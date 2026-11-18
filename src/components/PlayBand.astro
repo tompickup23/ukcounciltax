@@ -4,7 +4,8 @@
  * council's budget, the game and set mode, as two equal doors on a dark band.
  * Static anchors, so it works without JavaScript; no figure is printed except
  * the two coverage counts, which come from the budget returns and the set mode
- * eligibility manifest. Both doors lead to the picker on the budget hub, where
+ * eligibility manifest. The band is marked data-ground="desk" (front doors,
+ * 18 November 2026), so the skin's desk tokens apply inside it. Both doors lead to the picker on the budget hub, where
  * a council's name opens its game and its Set link opens set mode.
  */
 import DeskBand from "./DeskBand.astro";
@@ -24,7 +25,7 @@ const games = pages.filter(({ council }) => budgetFor(council.gss).council.statu
 const sets = manifest.councils.filter((row) => row.eligible).length;
 const setHref = "/tools/budget/#set-the-budget";
 ---
-<DeskBand id="play-band-heading" level={level} class="play-band" data-play-band data-pagefind-ignore
+<DeskBand id="play-band-heading" level={level} class="play-band" data-play-band data-pagefind-ignore data-ground="desk"
   eyebrow={`Council budgets | ${budgetYear}`} title="Could you set your council's" accent="budget?"
   lede="Two ways in, both built from each council's own published budget return. Every answer shows its source.">
   <div class="play-doors">

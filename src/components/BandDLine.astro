@@ -97,7 +97,8 @@ const descId = `${id}-desc`;
   .band-d-line svg { width: 100%; height: auto; display: block; overflow: visible; }
   .band-d-line .line { fill: none; stroke: var(--accent); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
   .band-d-line .point { fill: var(--accent); }
-  .band-d-line .point:hover { fill: var(--accent-bright); }
+  /* Hollow on hover, so it reads in both themes (the cream accent was cream on cream in light). */
+  .band-d-line .point:hover { fill: var(--bg-card); stroke: var(--accent); stroke-width: 2.5; }
   .band-d-line .rule { stroke: var(--border); stroke-width: 1; }
   .band-d-line .axis { stroke: var(--border-strong); stroke-width: 1; }
   .band-d-line .tick { fill: var(--text-muted); font-size: 14px; font-variant-numeric: tabular-nums; }

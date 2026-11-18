@@ -45,7 +45,7 @@ const historyFrom = figures.series("england.area_bandd.history").points[0].label
       <h2 id="bill-heading">Burnley, unparished area, Band D</h2>
       <div data-fact class="bill-fact" id="bill-chart">
         <BillAnatomy {...KIT_CHARTS["home-bill"].options()} class="bill-figure" />
-        <ChartActions chart="home-bill" target="bill-chart" />
+        <ChartActions chart="home-bill" target="bill-chart" fold="Save the image or copy the table" />
         {rounding && <p class="small" data-share-rounding>{rounding}</p>}
       </div>
       <p class="caveat">A parish or town council precept adds to this Band D total where one applies. Before discounts.</p>
@@ -61,31 +61,31 @@ const historyFrom = figures.series("england.area_bandd.history").points[0].label
     <a class="task-card" href="/compare/"><TaskThumb kind="strip" /><strong>How do areas compare</strong><span>Two councils, same band, year and type. See the annual difference and its monthly equivalent.</span><span class="task-source">{drawnFrom(["burnley.area_bandd.current", "england.area_bandd.current"])}</span></a>
   </nav>
   {area && (
-    <section class="section" aria-labelledby="home-average">
+    <section class="section home-average" aria-labelledby="home-average">
       <h2 id="home-average">How much is council tax in England in {year}?</h2>
-      <div class="fact-grid">
-        <div class="card">
+      <div class="average-row">
+        <div class="card average-figure">
           <Fact
             label={`Average area Band D, England, ${year}`}
             figure={wholePounds(area.england.pounds)}
             change={`up ${percent(area.england.changePct)} on ${previous}`}
             source={councilTaxSource(CURRENT_YEAR, area.table)}
           ><p class="caveat">Includes adult social care and average parish precepts.</p></Fact>
+          <p class="average-links"><a href="/council-tax/">Council tax for all {count} councils in England</a> · <a href={increasesYearPath(CURRENT_YEAR)}>How much each council raised its share</a></p>
         </div>
+        {data.england.history && <div class="average-history">
+          <h3 id="home-history">How the England average has changed</h3>
+          <div data-fact class="fact">
+            <BandDLine id="home-band-d-line" series={data.england.history.rows.map(r => ({year: r.year, value: r.pounds}))} format={(v) => wholePounds(v)} title={`Average area Band D in England, ${yearLabel(data.england.history.rows[0].year)} to ${year}`} basis="Average area Band D in England, including adult social care and average parish precepts" table={false} />
+            <SourceLine source={councilTaxSource(CURRENT_YEAR, data.england.history.table)} />
+            <p class="caveat">Cash figures, not adjusted for inflation. Includes adult social care and average parish precepts.</p>
+            <a href="/council-tax/#history-heading">Read the complete history table</a>
+          </div>
+        </div>}
       </div>
-      <p><a href="/council-tax/">Council tax for all {count} councils in England</a> · <a href={increasesYearPath(CURRENT_YEAR)}>How much each council raised its share</a></p>
     </section>
   )}
 
-  {data.england.history && <section class="section" aria-labelledby="home-history">
-    <h2 id="home-history">How the England average has changed</h2>
-    <div data-fact class="fact">
-      <BandDLine id="home-band-d-line" series={data.england.history.rows.map(r => ({year: r.year, value: r.pounds}))} format={(v) => wholePounds(v)} title={`Average area Band D in England, ${yearLabel(data.england.history.rows[0].year)} to ${year}`} basis="Average area Band D in England, including adult social care and average parish precepts" table={false} />
-      <SourceLine source={councilTaxSource(CURRENT_YEAR, data.england.history.table)} />
-      <p class="caveat">Cash figures, not adjusted for inflation. Includes adult social care and average parish precepts.</p>
-      <a href="/council-tax/#history-heading">Read the complete history table</a>
-    </div>
-  </section>}
   <section class="editorial-callout section"><p class="eyebrow">More than a band lookup</p><h2>The bill you pay and the council share are different measures.</h2><p>Your bill can include county, district, police, fire, mayoral and parish charges. We keep the published area total separate from each council's own element, and show the source beside both.</p><a href="/precepts/">Understand the parts of your bill →</a></section>
   <section class="section" aria-labelledby="home-bands">
     <h2 id="home-bands">Council tax by band</h2>
@@ -126,5 +126,13 @@ const historyFrom = figures.series("england.area_bandd.history").points[0].label
 .bill-card h2{font-size:var(--text-lg);margin:var(--space-2xs) 0 var(--space-sm)}
 .bill-card :global(.bill-figure){margin:0}
 .bill-card .caveat{margin:var(--space-xs) 0 0}
+.bill-card :global(.chart-fold > :not(summary)){margin-block:var(--space-2xs) 0}
+/* The England average, its change and the line chart in one row from 900 px. */
+.average-row{display:grid;gap:var(--space-lg);align-items:start}
+@media(min-width:900px){.average-row{grid-template-columns:minmax(0,20rem) minmax(0,1fr);gap:var(--space-2xl)}}
+.average-figure{min-width:0}
+.average-links{margin:var(--space-md) 0 0;font-size:var(--text-sm)}
+.average-history{min-width:0}
+.average-history h3{margin:0 0 var(--space-sm);font-size:var(--text-lg)}
 .bill-link{display:inline-block;margin-top:var(--space-sm);font-weight:600}
 </style>

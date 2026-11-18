@@ -218,6 +218,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
     <p class="muted">Published yearly charge for each band, before discounts.</p>
+    <div class="band-pair">
+      <div class="band-pair-chart">
     <div class="fact band-chart" data-fact id="band-bars">
       <ZeroBar {...charts.bands} />
       <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
@@ -237,15 +239,19 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         <p class="small">Instalment wording: <a href="https://www.gov.uk/council-tax/paying-your-bill">GOV.UK, How Council Tax works, Paying your bill</a>, updated 5 February 2025, read 9 November 2026.</p>
       </div>
     </details>
+      </div>
+      <div class="band-pair-selector">
+    <h3>Change on {previous} by band</h3>
+    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link above.</p>
+    <BandSelector ons={council.gss} authority={tax} compact record={{entry: 'council-bands', source: refs.bands}} changeRecord={{entry: 'council-change', source: refs.change}} />
+      </div>
+    </div>
     <p class="caveat" data-parish-caveat>Every band includes the share of every body that sets council tax in {name}, with parish and town council precepts as an average across the area. A home in a parish pays that parish's own precept instead of the average, so its bill differs. Discounts, such as the single person discount, are not taken off.</p>
     {tax.notes.length > 0 && (
       <ul class="notes">
         {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
       </ul>
     )}
-    <h3>Change on {previous} by band</h3>
-    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link above.</p>
-    <BandSelector ons={council.gss} authority={tax} compact record={{entry: 'council-bands', source: refs.bands}} changeRecord={{entry: 'council-change', source: refs.change}} />
     {localBills.some(b=>b.gss===council.gss)&&<p data-find-your-bill>The full published schedule is held for this council: <a href="/precepts/#find-your-bill">find your own bill, by band and parish</a>, see what each part pays for and what changed since last year.</p>}
   </section>
 
@@ -436,6 +442,10 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   @media (min-width: 1100px) and (max-height: 599px) { .council-rail { position: static; max-height: none; overflow: visible; } }
 
   .band-chart { max-width: 46rem; }
+  /* From 1100px the chart (with its table disclosure) and the band selector sit side by side; the table still comes before the selector in the markup. */
+  .band-pair { min-width: 0; }
+  .band-pair > div { min-width: 0; }
+  @media (min-width: 1100px) { .band-pair { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-xl); align-items: start; } .band-pair-selector > h3 { margin-top: 0; } }
   /* The one Sources block in two columns on desktop; each entry stays whole. */
   @media (min-width: 1100px) { .council-main :global(.page-sources ol) { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); align-items: start; } }
   .band-figures { margin-block: var(--space-sm) var(--space-md); }

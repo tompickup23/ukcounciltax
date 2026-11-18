@@ -64,7 +64,7 @@ function table(caption: string, head: string[], rows: string[][]): HTMLElement {
   wrapBox.append(t); box.append(wrapBox);
   return box;
 }
-/** Your guess and the published share for each part, on one pence scale, with its source inside the drawing. */
+/** Your guess and the calculated share for each part, on one pence scale, with its source inside the drawing. */
 function dotPlot(items: {label: string}[], guesses: number[], actual: number[], source: GameSource, room: number): SVGElement {
   // Drawn at about 1.3 units a pixel, so its 20 unit text stays readable at 375 px.
   const W = Math.round(Math.min(600, Math.max(440, room * 1.3)));
@@ -73,7 +73,7 @@ function dotPlot(items: {label: string}[], guesses: number[], actual: number[], 
   const plot = svg('svg', {width: W, class: 'ek-chart game-dots', role: 'img'});
   let y = 30;
   plot.append(svg('circle', {cx: 14, cy: y-7, r: 8, class: 'game-dot-you'}), svg('text', {x: 30, y}, 'Your guess'),
-    svg('circle', {cx: 174, cy: y-7, r: 8, class: 'game-dot-pub'}), svg('text', {x: 190, y}, 'Published share'));
+    svg('circle', {cx: 174, cy: y-7, r: 8, class: 'game-dot-pub'}), svg('text', {x: 190, y}, 'Calculated share'));
   y += 22;
   items.forEach((item, i) => {
     for (const line of wrap(item.label, Math.floor(W / 11))) plot.append(svg('text', {x: left, y: y += 24}, line));
@@ -87,7 +87,7 @@ function dotPlot(items: {label: string}[], guesses: number[], actual: number[], 
   for (const line of wrap(`Source: ${source.publisher}, ${source.title}, ${source.table ?? ''}. Your guesses are your own, not published figures.`, Math.floor(W / 10))) plot.append(svg('text', {x: left, y: y += 26, class: 'game-dot-source'}, line));
   plot.setAttribute('viewBox', `0 0 ${W} ${y + 12}`);
   plot.setAttribute('height', String(y + 12));
-  plot.setAttribute('aria-label', `Your guess and the published share, in pence per 100p: ${items.map((item, i) => `${item.label}, ${guesses[i]}p and ${actual[i].toFixed(2)}p`).join('; ')}.`);
+  plot.setAttribute('aria-label', `Your guess and the calculated share, in pence per 100p: ${items.map((item, i) => `${item.label}, ${guesses[i]}p and ${actual[i].toFixed(2)}p`).join('; ')}.`);
   return plot;
 }
 
@@ -145,9 +145,10 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     const grade = maximum ? GRADES.find(([floor]) => total / maximum * 100 >= floor)! : null;
     const played = `${maximum / 100} of ${scores.length} rounds played`;
     const sorted = [...distances].sort((x, y) => x.distance - y.distance);
-    const closest = sorted.slice(0, 3), furthest = sorted.slice(3).reverse().slice(0, 3);
+    // With fewer than six scored answers the two lists may share an answer, rather than leave one empty.
+    const closest = sorted.slice(0, 3), furthest = (sorted.length < 6 ? [...sorted] : sorted.slice(3)).reverse().slice(0, 3);
     const stamp = restored ? 'Shared score, not verified' : 'Scored against published figures';
-    const sourceText = `Published figures: ${[...new Set(data.rounds.map(round => `${round.source.publisher}, ${round.source.title}`))].join('; ')}. Scores and grades are game measures, not a judgement of the council.`;
+    const sourceText = `Published figures: ${[...new Set(data.rounds.map(round => `${round.source.publisher}, ${round.source.title}, ${round.source.table ?? ''}`))].join('; ')}, ${data.year}. Each calculated share is a part's published amount over the round's published total, times 100. Calls are ranked on the game's 0 to 100 measure: pence gaps for splits, wrongly ordered pairs for funding, 0 or 100 for reserves. Scores and grades are game measures, not a judgement of the council.`;
     const card=element('div','','game-end-card');card.dataset.gameScoreCard='';
     card.append(element('p',`Your score, ${name} budget game`,'game-end-kicker'));
     const head = element('div', '', 'game-end-head');
@@ -209,16 +210,19 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         const look = getComputedStyle(card), ink = look.color, soft = getComputedStyle(card.querySelector('.game-end-source')!).color, accent = look.borderTopColor;
         const serif = getComputedStyle(card.querySelector('.game-score')!).fontFamily, sans = look.fontFamily;
         const W = 1200, pad = 72, canvas = document.createElement('canvas');
-        const lines = (list: Distance[]) => list.length ? list.flatMap(item => [item.name, ...wrap(item.call, 40)].map((text, n) => [text, n] as const)) : [[restored ? 'Guesses are not shared in a score link.' : 'No scored answers to show.', 1] as const];
+        const lines = (list: Distance[]) => list.length ? list.flatMap(item => [...wrap(item.name, 34).map(text => [text, 0] as const), ...wrap(item.call, 40).map(text => [text, 1] as const)]) : [[restored ? 'Guesses are not shared in a score link.' : 'No scored answers to show.', 1] as const];
         const left = lines(closest), right = lines(furthest), source = wrap(sourceText, 92);
         const height = (list: ReturnType<typeof lines>) => list.reduce((sum, [, n]) => sum + (n ? 34 : 50), 0);
-        const stampY = 470 + Math.max(height(left), height(right)) + 90, sourceY = stampY + 60, H = sourceY + source.length * 30 + 90;
+        const head = wrap(`Your score, ${name} budget game | ${data.year}`, 56), extra = (head.length-1)*42;
+        const stampY = 470 + Math.max(height(left), height(right)) + 90, sourceY = stampY + 60, H = sourceY + source.length * 30 + 90 + extra;
         canvas.width = W; canvas.height = H;
         const c = canvas.getContext('2d')!;
         const text = (value: string, x: number, y: number, font: string, colour = ink) => {c.font = font; c.fillStyle = colour; c.fillText(value, x, y);};
         c.fillStyle = look.backgroundColor; c.fillRect(0, 0, W, H);
         c.fillStyle = accent; c.fillRect(0, 0, W, 14);
-        text(`Your score, ${name} budget game | ${data.year}`, pad, 104, `600 34px ${sans}`, soft);
+        head.forEach((value, n) => text(value, pad, 104 + n * 42, `600 34px ${sans}`, soft));
+        text(new URL(document.querySelector<HTMLLinkElement>('link[rel=canonical]')?.href ?? location.href).host, pad, H-40, `600 24px ${sans}`);
+        c.translate(0, extra);
         c.strokeStyle = accent; c.lineWidth = 6; c.beginPath(); c.arc(pad + 90, 250, 84, 0, Math.PI * 2); c.stroke();
         c.textAlign = 'center'; text(grade?.[1] ?? 'None', pad + 90, grade ? 290 : 262, `600 ${grade ? 116 : 44}px ${serif}`); text('GRADE', pad + 90, 384, `600 22px ${sans}`, soft);
         c.textAlign = 'start'; text(`${total} out of ${maximum}`, pad + 230, 260, `600 92px ${serif}`); text(`${grade ? `${grade[2]}. ` : ''}${played}.`, pad + 234, 318, `400 34px ${sans}`, soft);
@@ -230,7 +234,6 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         const label = stamp.toUpperCase(), wide = c.measureText(label).width + 48;
         c.save(); c.translate(pad + wide / 2, stampY - 16); c.rotate(-0.035); c.strokeStyle = accent; c.lineWidth = 4; c.strokeRect(-wide / 2, -30, wide, 56); c.textAlign = 'center'; text(label, 0, 6, c.font); c.restore();
         source.forEach((value, n) => text(value, pad, sourceY + n * 30, `400 22px ${sans}`, soft));
-        text(new URL(document.querySelector<HTMLLinkElement>('link[rel=canonical]')?.href ?? location.href).host, pad, H-40, `600 24px ${sans}`);
         const save = element('a', 'Save your score card');
         save.href = canvas.toDataURL('image/png'); save.download = `${data.slug}-budget-game-score.png`; save.click();
         status.textContent = 'Score card saved. Your answers stay in this browser.';
@@ -250,7 +253,6 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
     playing = false;
     root.querySelector<HTMLOListElement>('[data-game-rail]')!.hidden = true;
     const box = element('div', '', 'game-unreadable');
-    box.setAttribute('role', 'alert');
     stage.replaceChildren();
     heading('This score link could not be read');
     const h = stage.lastElementChild as HTMLElement;
@@ -356,7 +358,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
           round.items.forEach((item, i) => {
             const detail = `${skipped ? '' : `Your guess: ${guesses[i].value}p. `}Calculated share: ${actual[i].toFixed(2)}p per 100p. ${item.detail}.`;
             answerList.append(element('li', `${item.label}: ${detail}`));
-            if (!skipped) details.push({label: `${round.title}: ${item.label}`, detail, distance: Math.abs(Number(guesses[i].value) - actual[i]), source: round.source, name: item.label, call: `You: ${guesses[i].value}p. Published: ${actual[i].toFixed(2)}p.`});
+            if (!skipped) details.push({label: `${round.title}: ${item.label}`, detail, distance: Math.abs(Number(guesses[i].value) - actual[i]), source: round.source, name: item.label, call: `You: ${guesses[i].value}p. Calculated share: ${actual[i].toFixed(2)}p.`});
           });
           if (round.kind === 'split') answer.append(element('p', `Calculated positive-service base: ${pounds(round.base!)}. This is the sum of the positive service totals only.`));
         } else if (round.kind === 'funding') {
@@ -368,7 +370,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
             answerList.append(element('li', `${item.label}: ${detail}`));
             const unequal = order.filter(other => Math.abs(round.items[other].value) !== Math.abs(item.value));
             const wrong = unequal.filter(other => (order.indexOf(other) < order.indexOf(itemIndex)) !== (Math.abs(round.items[other].value) > Math.abs(item.value))).length;
-            if (!skipped) details.push({label: item.label, detail, distance: unequal.length ? wrong / unequal.length * 100 : 0, source: round.source, name: item.label, call: `Your position: ${order.indexOf(itemIndex) + 1}. Published position: ${i + 1}.`});
+            if (!skipped) details.push({label: item.label, detail, distance: unequal.length ? wrong / unequal.length * 100 : 0, source: round.source, name: item.label, call: `Your position: ${order.indexOf(itemIndex) + 1}. Answer position: ${i + 1}.`});
           });
         } else {
           const change = round.items[1].value - round.items[0].value;
@@ -378,8 +380,8 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
           for (const item of round.items) answerList.append(element('li', `${item.label}: ${item.detail}`));
           answerList.append(element('li', `Calculated change, end minus start: ${pounds(change)}. ${directionLabel[d]}; ${SIZE_BANDS[b]}.`));
           if (!skipped) {
-            details.push({label: `${round.title}: direction`, detail: `Your answer: ${directionLabel[directionValue]}. Published balances imply: ${directionLabel[d]}. Change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016.`, distance: directionValue === d ? 0 : 100, source: round.source, name: 'Reserves direction', call: `You: ${directionLabel[directionValue]}. Published: ${directionLabel[d]}.`});
-            details.push({label: `${round.title}: size`, detail: `Your answer: ${SIZE_BANDS[Number(size.value)]}. Calculated change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016. Answer band: ${SIZE_BANDS[b]}.`, distance: Number(size.value) === b ? 0 : 100, source: round.source, name: 'Reserves size', call: `You: ${SIZE_BANDS[Number(size.value)]}. Published: ${SIZE_BANDS[b]}.`});
+            details.push({label: `${round.title}: direction`, detail: `Your answer: ${directionLabel[directionValue]}. Published balances imply: ${directionLabel[d]}. Change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016.`, distance: directionValue === d ? 0 : 100, source: round.source, name: 'Reserves direction', call: `You: ${directionLabel[directionValue]}. Answer: ${directionLabel[d]}.`});
+            details.push({label: `${round.title}: size`, detail: `Your answer: ${SIZE_BANDS[Number(size.value)]}. Calculated change: ${pounds(change)}, end minus start of the sum of RA Part 2 lines 1015 and 1016. Answer band: ${SIZE_BANDS[b]}.`, distance: Number(size.value) === b ? 0 : 100, source: round.source, name: 'Reserves size', call: `You: ${SIZE_BANDS[Number(size.value)]}. Answer: ${SIZE_BANDS[b]}.`});
           }
         }
       } catch (error) {status.textContent = (error as Error).message; return;}
@@ -409,7 +411,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
         if (!skipped) {
           const actual = shares(round.items, round.base!), mine = guesses.map(input => Number(input.value));
           const dots = element('figure', '', 'game-figure');
-          dots.append(element('h4', 'Your guess beside the published share'), dotPlot(round.items, mine, actual, round.source, stage.clientWidth));
+          dots.append(element('h4', 'Your guess beside the calculated share'), dotPlot(round.items, mine, actual, round.source, stage.clientWidth));
           stage.append(dots, element('h4', 'The gap, part by part', 'game-gaps-title'));
           const gaps = element('div', '', 'game-gaps');gaps.setAttribute('aria-label', 'Your pence less the published share');
           round.items.forEach((item,i) => {
@@ -423,7 +425,7 @@ for (const root of document.querySelectorAll<HTMLElement>('[data-budget-game]'))
             row.append(drawing);gaps.append(row);
           });
           stage.append(gaps,element('p', round.kind === 'bill' ? 'Gap: your pence less the published share. Each printed component is divided by the published Band D area average, times 100.' : `Gap: your pence less the published share. The published share is each service's amount over the ${round.items.length} services' total, times 100.`, 'small'),
-            table(`Your split and ${subject.replace(/'s (Band D )?split$/, '')}'s published split, pence per 100p`, ['Part', 'Your guess', 'Published share', 'Gap'], round.items.map((item, i) => [item.label, `${mine[i]}p`, `${actual[i].toFixed(2)}p`, pence(mine[i] - actual[i])])));
+            table(`Your split and the calculated shares of ${subject.replace(/'s (Band D )?split$/, '')}'s published amounts, pence per 100p`, ['Part', 'Your guess', 'Calculated share', 'Gap'], round.items.map((item, i) => [item.label, `${mine[i]}p`, `${actual[i].toFixed(2)}p`, pence(mine[i] - actual[i])])));
         }
         const counts=squaresFor(shares(round.items,round.base!));
         counts.forEach((count,i)=>{if(count===0)answer.append(element('p', `${round.items[i].label}: under half a square. The published amount is retained in the table.`));});

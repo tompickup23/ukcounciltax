@@ -7,7 +7,13 @@ import {bandStockFor} from '../../lib/band-stock';
 import {collectionFor} from '../../lib/collection-rates';
 import {councilMetadata, NEXT_EDITION_STATUS} from '../../lib/council-metadata';
 import {classFor, rankClass, positionWords, sentenceCase} from '../../lib/rankings';
-import {rankingPath} from '../../lib/paths';
+import {rankingPath, budgetSetPages, budgetSetPath} from '../../lib/paths';
+import {councilPageSources} from '../../lib/council-page-sources';
+import {stockShare} from '../../lib/band-stock';
+import RecordLine from '../../components/RecordLine.astro';
+import PageSources from '../../components/PageSources.astro';
+import IconSprite from '../../vendor/estate-kit/src/components/IconSprite.astro';
+import Icon from '../../vendor/estate-kit/src/components/Icon.astro';
 import NearbyCouncils from "../../components/NearbyCouncils.astro";
 import NetworkStrip from "../../components/NetworkStrip.astro";
 import NationalPrecepts from '../../components/NationalPrecepts.astro';
@@ -31,7 +37,6 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import BandSelector from "../../components/BandSelector.astro";
 import PageContents from "../../components/PageContents.astro";
 import Fact from "../../components/Fact.astro";
-import SourceLine from "../../components/SourceLine.astro";
 import {
   BANDS,
   AREA_TYPE_LABEL,
@@ -39,6 +44,7 @@ import {
   PREVIOUS_YEAR,
   areaTypeFor,
   bandChange,
+  changePhrase,
   increasesYearPath,
   loadYear,
   percent,
@@ -103,6 +109,15 @@ const countySource = county ? councilTaxSource(CURRENT_YEAR, county.table) : nul
 const path = councilPath(council);
 const question = `How much is council tax in ${name} in ${year}?`;
 
+/** W9: the ledger row, record lines and the one Sources block. */
+const hasSetPage = budgetSetPages().some(page => page.slug === council.slug);
+const hasComponents = Boolean(national.components[council.gss]);
+const stock = bandStockFor(council.gss);
+const refs = councilPageSources({gss: council.gss, name, tax, rankType, county: county ? {name: county.name, table: county.table} : null, areaTable: englandArea && areaSource ? englandArea.table : null, hasPosition: Boolean(position && classRanks)});
+const ownChange = own && typeof own.changePct === "number" ? `${own.changePct >= 0 ? "up" : "down"} ${percent(Math.abs(own.changePct), 2)} on ${previous}, as published` : null;
+const ledgerCells = 1 + (own && typeof own.bandD === "number" ? 1 : 0) + (position && classRanks ? 1 : 0) + (stock && stock.bandDAndBelowShare !== null ? 1 : 0);
+const historyStart = Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/');
+
 const {title, description} = councilMetadata({name, currentPence: Math.round(bandD * 100), previousPence: changeD ? Math.round(changeD.from * 100) : null, basis: 'area average including average parish precepts', nation: 'England'});
 
 ---
@@ -114,44 +129,103 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   ogImage={councilCardPath(council.slug)}
   ogImageAlt={`${name}: council tax bands A to H, ${year}`}
 >
+  <IconSprite />
   <Breadcrumbs items={[{ label: "Councils", href: "/councils/" }, { label: name }]} />
 
   <header class="page-head council-head">
     <p class="eyebrow">Council</p>
     <h1>{title}</h1>
     <p class="muted">{typeLine}</p>
-    <p class="small" data-next-edition>{NEXT_EDITION_STATUS}</p>
   </header>
 
-  <PageContents groups={[
-    {label: 'Your council tax', items: [
-      {id: 'council-tax', label: 'Bands A to H'},
-      ...(national.components[council.gss] ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
-      ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
-    ]},
-    {label: 'Area and history', items: [
-      {id: 'map', label: 'Map'},
-      {id: 'history', label: `Band D since ${Object.keys(national.history[council.gss].area.values).find(year => national.history[council.gss].area.values[year] !== null)?.replace('-', '/')}`},
-    ]},
-    {label: 'Paying and precepts', items: [
-      {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
-      ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
-      ...(tax.region === 'London' && glaDecision() ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
-      {id: 'parish-precepts', label: 'Parish charges'},
-    ]},
-    {label: 'Council and local context', items: [
-      ...(bandStockFor(council.gss) ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
-      ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
-      {id: 'where-money-goes', label: 'Where the money goes'},
-      {id: 'similar', label: 'Nearby and alike'},
-      {id: 'more', label: `${name} across the network`},
-    ]},
-  ]} />
+  <div class="council-ledger" style={`--cells:${ledgerCells}`} data-council-ledger>
+    <div class="ledger-cell" data-fact data-ledger="band-d">
+      <p class="ledger-label">Band D, {year}, area average</p>
+      <p class="ledger-value" data-figure>{pounds(bandD)}</p>
+      {changeD && <p class="ledger-change">{changePhrase(changeD)} on {previous}</p>}
+      <p class="ledger-note">Includes average parish precepts, before discounts.</p>
+      {changeD && <details class="ledger-calc"><summary>Calculation</summary>
+        <p>The change is the {year} Band D charge less the {previous} charge of {pounds(changeD.from)}, and that difference as a percentage of the {previous} charge, rounded to one decimal place.</p>
+      </details>}
+      {changeD ? <RecordLine entry="council-change" method={refs.change.method} sources={[refs.change]} /> : <RecordLine entry="council-bands" sources={[refs.bands]} />}
+    </div>
+    {own && refs.own && typeof own.bandD === "number" && <div class="ledger-cell" data-fact data-ledger="own">
+      <p class="ledger-label">{name} council's own Band D, {year}</p>
+      <p class="ledger-value" data-figure>{pounds(own.bandD)}</p>
+      {ownChange && <p class="ledger-change">{ownChange}</p>}
+      <p class="ledger-note">The council's own share of the bill.</p>
+      <RecordLine entry="council-own" sources={[refs.own]} />
+    </div>}
+    {position && classRanks && <div class="ledger-cell" data-fact data-ledger="position">
+      <p class="ledger-label">Area Band D within {rankType.label}</p>
+      <p class="ledger-value" data-figure>{positionWords(position.areaPosition, position.areaTied)} of {classRanks.length}</p>
+      <p class="ledger-note">Counted from the lowest.</p>
+      <details class="ledger-calc"><summary>Calculation</summary>
+        <p>Every one of the {classRanks.length} {rankType.label} in England put in order of its published area Band D for {year}, from the lowest. Equal figures share a position.</p>
+      </details>
+      <RecordLine entry="council-position" method="Positions calculated from the published figures" sources={[refs.position]} />
+    </div>}
+    {stock && refs.stock && stock.bandDAndBelowShare !== null && <div class="ledger-cell" data-fact data-ledger="stock">
+      <p class="ledger-label">Properties in Band D or below</p>
+      <p class="ledger-value" data-figure>{stockShare(stock.bandDAndBelowShare, null)}</p>
+      <p class="ledger-note">Of the properties on the valuation list in {name}.</p>
+      <details class="ledger-calc"><summary>Calculation</summary>
+        <p>HMRC's printed counts for Bands A to D added together, divided by its printed total of all properties, to one decimal place. HMRC rounds every count to the nearest 10.</p>
+      </details>
+      <RecordLine entry="council-stock" method="Share calculated from the printed counts" sources={[refs.stock]} />
+    </div>}
+  </div>
 
+  <div class="council-actions" role="group" aria-label="Council tax next steps">
+    <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}><Icon name="scale" />Compare this council</a>
+    {hasSetPage && <a class="button secondary" data-council-set href={budgetSetPath(council.slug)}><Icon name="sliders-horizontal" />Set the budget</a>}
+    {hasComponents && <a class="button secondary" data-council-parts href="#precept-breakdown"><Icon name="list-checks" />What makes up this bill</a>}
+    <CouncilActions slug={council.slug} />
+  </div>
+  <p class="small council-edition" data-next-edition>{NEXT_EDITION_STATUS}</p>
+
+  <div class="council-body">
+    <aside class="council-rail">
+      <PageContents rail groups={[
+        {label: 'Your council tax', items: [
+          {id: 'council-tax', label: 'Bands A to H'},
+          ...(hasComponents ? [{id: 'precept-breakdown', label: 'Where a Band D bill goes'}] : []),
+          ...(englandArea && areaSource ? [{id: 'compared', label: `${sentenceCase(rankType.label)} and England`}] : []),
+        ]},
+        {label: 'Area and history', items: [
+          {id: 'map', label: 'Map'},
+          {id: 'history', label: `Band D since ${historyStart}`},
+        ]},
+        {label: 'Paying and precepts', items: [
+          {id: 'discounts-and-paying', label: 'Discounts, exemptions and how to pay'},
+          ...(own && ownSource ? [{id: 'who-sets-it', label: 'Who sets the charge'}] : []),
+          ...(tax.region === 'London' && glaDecision() ? [{id: 'mayoral-precept', label: 'The mayoral precept'}] : []),
+          {id: 'parish-precepts', label: 'Parish charges'},
+        ]},
+        {label: 'Council and local context', items: [
+          ...(stock ? [{id: 'band-mix', label: 'Properties in each band'}] : []),
+          ...(collectionFor(council.gss) ? [{id: 'collection', label: 'Collection rates'}] : []),
+          {id: 'where-money-goes', label: 'Where the money goes'},
+          {id: 'similar', label: 'Nearby and alike'},
+          {id: 'next-steps', label: 'Next steps'},
+          {id: 'more', label: `${name} across the network`},
+          {id: 'sources', label: 'Sources'},
+        ]},
+      ]} />
+    </aside>
+
+    <div class="council-main">
   <section class="section" id="council-tax" aria-labelledby="council-tax-heading">
     <h2 id="council-tax-heading">{question}</h2>
     <p class="muted">Published yearly charge for each band, before discounts.</p>
-    <div class="band-answer">
+    <div class="band-pair">
+      <div class="band-pair-chart">
+    <div class="fact band-chart" data-fact id="band-bars">
+      <ZeroBar {...charts.bands} />
+      <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
+    </div>
+    <details class="band-figures" data-band-figures>
+      <summary>Band table, with each charge divided by 10 and by 12</summary>
       <div class="fact" data-fact>
         <div class="table-wrap" tabindex="0" role="region" aria-label="Published council tax bands and budgeting equivalents">
           <table class="data" data-band-table>
@@ -161,12 +235,15 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
           </table>
         </div>
         <p class="calc-label">The two right hand columns are our calculation: the published yearly charge divided by 10 and by 12, rounded to the penny. They are not your instalments. GOV.UK says “The cost is usually split into 10 monthly payments”, and your council can agree 12. Your bill sets the actual amounts and dates.</p>
-        <SourceLine source={councilTaxSource(CURRENT_YEAR, current.source.bandTable, 'Divided by 10 and by 12 calculated from it')} />
+        <RecordLine entry="council-bands" method={refs.bandsCalc.method} sources={[refs.bandsCalc]} />
         <p class="small">Instalment wording: <a href="https://www.gov.uk/council-tax/paying-your-bill">GOV.UK, How Council Tax works, Paying your bill</a>, updated 5 February 2025, read 9 November 2026.</p>
       </div>
-      <div class="fact" data-fact id="band-bars">
-        <ZeroBar {...charts.bands} />
-        <ChartActions chart={`councils/${council.slug}/bands`} target="band-bars" />
+    </details>
+      </div>
+      <div class="band-pair-selector">
+    <h3>Change on {previous} by band</h3>
+    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link above.</p>
+    <BandSelector ons={council.gss} authority={tax} compact record={{entry: 'council-bands', source: refs.bands}} changeRecord={{entry: 'council-change', source: refs.change}} />
       </div>
     </div>
     <p class="caveat" data-parish-caveat>Every band includes the share of every body that sets council tax in {name}, with parish and town council precepts as an average across the area. A home in a parish pays that parish's own precept instead of the average, so its bill differs. Discounts, such as the single person discount, are not taken off.</p>
@@ -175,24 +252,12 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         {tax.notes.map((note) => <li>MHCLG note: {note.text}</li>)}
       </ul>
     )}
-    <h3>Change on {previous} by band</h3>
-    <p>Choose a band to see its change on {previous}. The band you choose is also set in the compare link below.</p>
-    <BandSelector ons={council.gss} authority={tax} compact />
+    {localBills.some(b=>b.gss===council.gss)&&<p data-find-your-bill>The full published schedule is held for this council: <a href="/precepts/#find-your-bill">find your own bill, by band and parish</a>, see what each part pays for and what changed since last year.</p>}
   </section>
-
-  <div class="action-links" aria-label="Council tax next steps">
-    <a href="#precept-breakdown">What makes up this bill</a>
-    <a class="button" data-council-compare href={`/compare/?a=${council.slug}&band=D&year=${CURRENT_YEAR}`}>Compare this council</a>
-    <a href={`/tools/budget/${council.slug}/`}>Explore {name}'s budget and play the budget game</a>
-  </div>
-  {localBills.some(b=>b.gss===council.gss)&&<p data-find-your-bill>The full published schedule is held for this council: <a href="/precepts/#find-your-bill">find your own bill, by band and parish</a>, see what each part pays for and what changed since last year.</p>}
-  <CouncilActions slug={council.slug} />
-
-
 
   <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="bill" />
 
-  {englandArea && areaSource && (
+  {englandArea && areaSource && refs.area && (
     <section class="section" id="compared" aria-labelledby="compared-heading">
       <h2 id="compared-heading">How does Band D in {name} compare?</h2>
       <div class="fact-grid">
@@ -201,7 +266,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
             label={`England average area Band D, ${year}`}
             figure={wholePounds(englandArea.england.pounds)}
             change={`up ${percent(englandArea.england.changePct)} on ${previous}`}
-            source={areaSource}
+            source={refs.area}
+            record="council-averages"
           />
         </div>
         <div class="card">
@@ -209,7 +275,8 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
             label={`Average area Band D for ${AREA_TYPE_LABEL[areaType]}, ${year}`}
             figure={wholePounds(englandArea.byAreaType[areaType].pounds)}
             change={`up ${percent(englandArea.byAreaType[areaType].changePct)} on ${previous}`}
-            source={areaSource}
+            source={refs.area}
+            record="council-averages"
           />
         </div>
       </div>
@@ -217,7 +284,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         <p>Within {rankType.label} in {year}: {name} is {positionWords(position.areaPosition, position.areaTied)} of {classRanks.length} for area Band D and {positionWords(position.ownPosition, position.ownTied)} of {classRanks.length} for the council's own Band D, counted from the lowest.</p>
         <p><a href={rankingPath(rankType.slug)}>All {rankType.label} ranked by Band D</a>.</p>
         {tax.notes.length > 0 && <p>MHCLG publishes a note on this figure; it is under the band table.</p>}
-        <SourceLine source={councilTaxSource(CURRENT_YEAR, `Table 9 and ${rankType.ownTable.replace('_', ' ')}`, 'Positions calculated from the published figures: equal figures share a position')} />
+        <RecordLine entry="council-position" method="Positions calculated from the published figures" sources={[refs.position]} />
       </div>}
       <div class="fact" data-fact id="class-position-chart">
         <PositionStrip {...charts.position} />
@@ -248,7 +315,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
 
   <section class="section" id="history" aria-labelledby="history-heading">
     <h2 id="history-heading">How has Band D in {name} changed?</h2>
-    <LongTaxHistory gss={council.gss} name={name} view="chart" />
+    <LongTaxHistory gss={council.gss} name={name} view="chart" record={{entry: 'council-history', source: refs.history}} />
   </section>
 
   <section class="section" id="discounts-and-paying" aria-labelledby="discounts-heading">
@@ -260,7 +327,6 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       <p class="source-line">Link from <a href={councilLinksSource.url}>GOV.UK Local Links Manager</a>, service “Pay your Council Tax” (LGSL 57), export of {longDate(councilLinksSource.exportDate)}, checked by UK Places on {longDate(councilLinksSource.checkedOn)}.</p>
     </> : <p>We do not hold a checked link to {name}'s own council tax page. <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council on GOV.UK</a>.</p>}
     <p><a href="/help/">Help with your bill</a> · <a href="/help/#what-council-tax-band-am-i">What council tax band am I?</a> · <a href={OFFICIAL_BAND_CHECK}>Find your property band on GOV.UK</a> · <a href={OFFICIAL_COUNCIL_LOOKUP}>Find your council for your exact bill</a>.</p>
-    <p><a data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}>What could council tax cost</a> · <a href="/precepts/">What makes up my bill</a> · <a href="/increases/">Council tax increases {year} by council</a>.</p>
     <p>Check the payment dates on your bill. <a href="/help/#check-the-payment-schedule">How council tax is paid</a>.</p>
   </section>
 
@@ -271,23 +337,25 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
         The figures below show each council's own share and its published annual change. The national breakdown above also identifies police, fire and combined-authority charges for this billing area.
       </p>
       <div class="fact-grid">
-        {typeof own.bandD === "number" && (
+        {typeof own.bandD === "number" && refs.own && (
           <div class="card">
             <Fact
               label={`${name} council's own Band D, ${year}`}
               figure={pounds(own.bandD)}
-              change={typeof own.changePct === "number" ? `${own.changePct >= 0 ? "up" : "down"} ${percent(Math.abs(own.changePct), 2)} on ${previous}, as published` : null}
-              source={ownSource}
+              change={ownChange}
+              source={refs.own}
+              record="council-own"
             />
           </div>
         )}
-        {county && countySource && typeof county.bandD === "number" && (
+        {county && refs.county && typeof county.bandD === "number" && (
           <div class="card">
             <Fact
               label={`${county.name} County Council's Band D, ${year}`}
               figure={pounds(county.bandD)}
               change={typeof county.changePct === "number" ? `${county.changePct >= 0 ? "up" : "down"} ${percent(Math.abs(county.changePct), 2)} on ${previous}, as published` : null}
-              source={countySource}
+              source={refs.county}
+              record="council-own"
             />
           </div>
         )}
@@ -302,30 +370,96 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   )}
 
   <PreceptContext region={tax.region} gss={council.gss} />
-  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="parishes" />
-  <BandMix gss={council.gss} name={name} />
-  <CollectionRates gss={council.gss} name={name} />
-  <BudgetSummary gss={council.gss} slug={council.slug} name={name} />
+  <NationalPrecepts gss={council.gss} name={name} classCode={tax.classCode} view="parishes" parishRecord={{entry: 'council-parishes', source: refs.parishes}} />
+  <BandMix gss={council.gss} name={name} record={refs.stock ? {entry: 'council-stock', source: refs.stock} : undefined} />
+  <CollectionRates gss={council.gss} name={name} record={refs.collection ? {entry: 'council-collection', source: refs.collection} : undefined} />
+  <BudgetSummary gss={council.gss} slug={council.slug} name={name} record={{entry: 'council-budget', source: refs.budget}} />
   {hasScenarioGame && <p>A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from {name} Borough Council's own published budget gap and lets you set council tax, spending and reserves.</p>}
 
-
-
-
   <NearbyCouncils council={council} rankingHref={rankingPath(rankType.slug)} rankingLabel={rankType.label} />
+
+  <section class="section" id="next-steps" aria-labelledby="next-steps-heading">
+    <h2 id="next-steps-heading">Next steps</h2>
+    <ul class="next-cards" data-next-steps>
+      <li><a class="next-card" href={`/tools/budget/${council.slug}/`} data-council-game><Icon name="gamepad-2" /><span>Explore {name}'s budget and play the budget game</span></a></li>
+      <li><a class="next-card" data-council-scenario href={`/tools/future-cost/?council=${council.slug}&band=D`}><Icon name="calculator" /><span>What could council tax cost</span></a></li>
+      <li><a class="next-card" href="/precepts/"><Icon name="landmark" /><span>What makes up my bill</span></a></li>
+      <li><a class="next-card" href="/increases/"><Icon name="chart-column" /><span>Council tax increases {year} by council</span></a></li>
+    </ul>
+  </section>
 
   <section class="section" id="more" aria-labelledby="more-heading">
     <h2 id="more-heading">{name} across the network</h2>
     <NetworkStrip council={council} name={name} />
   </section>
+
+  <PageSources entries={refs.entries} />
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-  .locator-fact { max-width: 40rem; }
-  .band-answer { display: grid; gap: var(--space-lg); min-width: 0; }
-  .band-answer > div { min-width: 0; }
-  @media (min-width: 960px) { .band-answer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
-  #council-tax { margin-top: 1rem; }
+  /* The kit map draws neighbouring areas past its viewBox; clip them at the figure so large text in the narrower main column cannot widen the page. */
+  .locator-fact { max-width: 40rem; overflow-x: clip; }
+  #council-tax { margin-top: 0; }
   .notes { font-size: 0.9rem; color: var(--text-muted); padding-left: 1.1rem; }
+
+  /* W9: the ledger row under the H1. Figures already on the page, on a 2px ink rule with hairline dividers; each derived figure has its calculation behind a disclosure. */
+  .council-head { margin-bottom: var(--space-sm); }
+  .council-ledger { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 2px solid var(--text); margin-block: var(--space-sm) var(--space-md); }
+  .ledger-cell { display: flex; flex-direction: column; min-width: 0; padding: var(--space-sm) var(--space-md) var(--space-xs); border-bottom: 1px solid var(--border); }
+  .ledger-cell:nth-child(even) { border-left: 1px solid var(--border); }
+  .ledger-cell p { margin: 0; }
+  .ledger-label { font-size: var(--text-sm); font-weight: 600; line-height: 1.3; color: var(--text-muted); text-wrap: balance; }
+  .ledger-value { font-family: var(--font-display); font-size: clamp(1.7rem, 1.3rem + 1.4vw, 2.5rem); font-weight: 600; line-height: 1.1; margin-top: 0.3rem !important; font-variant-numeric: tabular-nums lining-nums; overflow-wrap: anywhere; }
+  .ledger-change { font-weight: 600; font-size: var(--text-sm); margin-top: 0.15rem !important; }
+  .ledger-note { font-size: var(--text-sm); color: var(--text-muted); margin-top: 0.15rem !important; }
+  .ledger-calc { margin-top: 0.15rem; }
+  .ledger-calc summary { cursor: pointer; font-weight: 600; font-size: var(--text-sm); min-height: 44px; padding-block: 0.65rem; box-sizing: border-box; }
+  .ledger-calc p { font-size: var(--text-sm); margin-bottom: var(--space-xs); }
+  .ledger-cell .record-line { margin-top: auto; padding-top: var(--space-xs); }
+  @media (min-width: 900px) {
+    .council-ledger { grid-template-columns: repeat(var(--cells), minmax(0, 1fr)); }
+    .ledger-cell + .ledger-cell { border-left: 1px solid var(--border); }
+  }
+  @media (max-width: 359px) { .council-ledger { grid-template-columns: 1fr; } .ledger-cell { border-left: 0 !important; } }
+
+  /* One button group: Compare first, then the other doors, Share and Print, all one height. */
+  .council-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs) var(--space-sm); margin: 0 0 var(--space-xs); }
+  .council-actions :global([data-council-actions]), .council-actions :global(.view-actions), .council-actions :global(.view-actions .action-links) { display: contents; }
+  .council-actions :global(.button) { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; box-sizing: border-box; }
+  .council-actions :global([data-share-status]) { flex-basis: 100%; margin: 0; }
+  .council-actions :global([data-share-status]:empty) { display: none; }
+  .council-actions :global([data-share-fallback]:not([hidden])) { flex-basis: 100%; }
+  .council-edition { margin: 0 0 var(--space-lg); color: var(--text-muted); }
+
+  /* The page body: a sticky contents rail beside the sections from 1100px, a details element below. */
+  .council-body { display: block; }
+  .council-main { min-width: 0; }
+  @media (min-width: 1100px) {
+    .council-body { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); gap: var(--space-2xl); align-items: start; }
+    .council-rail { position: sticky; top: 5.5rem; max-height: calc(-6.5rem + 100vh); overflow-y: auto; overscroll-behavior: contain; padding-right: var(--space-xs); border-right: 1px solid var(--border); }
+  }
+  @media (min-width: 1100px) and (max-height: 599px) { .council-rail { position: static; max-height: none; overflow: visible; } }
+
+  .band-chart { max-width: 46rem; }
+  /* On a wide main column the chart (with its table disclosure) and the band selector sit side by side; the table still comes before the selector in the markup. */
+  .band-pair { min-width: 0; }
+  .band-pair > div { min-width: 0; }
+  /* A container query, not a media query: its rem follows the page's text size, so at 200% text the pair stacks instead of squeezing the band figures. */
+  .council-main { container: council-main / inline-size; }
+  @container council-main (min-width: 48rem) { .band-pair { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--space-xl); align-items: start; } .band-pair-selector > h3 { margin-top: 0; } }
+  /* The one Sources block in two columns on desktop; each entry stays whole. */
+  @media (min-width: 1100px) { .council-main :global(.page-sources ol) { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); align-items: start; } }
+  .band-figures { margin-block: var(--space-sm) var(--space-md); }
+  .band-figures > summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+
+  .next-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--space-sm); }
+  .next-card { display: flex; align-items: flex-start; gap: 0.6rem; height: 100%; box-sizing: border-box; min-height: 44px; padding: var(--space-md); border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-card); font-weight: 600; text-decoration: none; }
+  .next-card :global(.ek-icon) { width: 1.25rem; height: 1.25rem; margin-top: 0.1rem; color: var(--accent); }
+  .next-card:hover { border-color: var(--accent); text-decoration: underline; }
+
+  @media print { .council-actions, .council-rail, .ledger-calc summary { display: none !important; } .council-body { display: block; } }
 </style>
 
 <style is:global>

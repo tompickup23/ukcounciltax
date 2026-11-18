@@ -68,6 +68,9 @@ test('profile contents keep every link under four useful headings', async ({ pag
     await page.goto(`/councils/${slug}/`);
     const contents = page.getByRole('navigation', { name: 'On this page', exact: true });
     await expect(contents.locator('[data-contents-group]')).toHaveCount(4);
+    // W9: on phones the contents are a closed details element; on desktop a rail with no summary.
+    const summary = contents.locator('summary');
+    if (await summary.isVisible()) await summary.click();
     expect(await contents.locator('a').evaluateAll(links => links.every(link => document.getElementById(link.getAttribute('href')!.slice(1))))).toBe(true);
     await contents.getByRole('link', { name: 'Discounts, exemptions and how to pay' }).click();
     await expect(page).toHaveURL(/#discounts-and-paying$/);

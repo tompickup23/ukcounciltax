@@ -135,7 +135,9 @@ test('W4 part two: the reveal pairs the waffles with a dot plot, gap bars and on
   for (const [i, value] of [5, 30, 25, 25, 15].entries()) await inputs.nth(i).fill(String(value));
   await stage.getByRole('button', {name: 'Reveal answer', exact: true}).click();
   await expect(stage.locator('.game-score-panel')).toContainText('out of 100');
-  await expect(stage.locator('.game-reveal-waffles [data-ek-square]')).toHaveCount(200);
+  // Twin waffles: your 100 squares beside the published round chart, which keeps its table and in SVG source.
+  await expect(stage.locator('.game-reveal-waffles [data-ek-square]')).toHaveCount(100);
+  await expect(stage.locator('.game-reveal-waffles [data-published-round="0"] table')).toHaveCount(1);
   const dots = stage.locator('svg.game-dots');
   await expect(dots).toHaveCount(1);
   await expect(dots.locator('circle.game-dot-pub')).toHaveCount(6);

@@ -82,18 +82,10 @@ const description = available
   </section>
   <PageSources entries={budgetPageEntries(available)} />
 </BaseLayout>
-<style>
-  .neighbour-row h3 { font-size: 1.05rem; margin: 0 0 0.25rem; }
-  .neighbour-row p { margin: 0 0 0.6rem; }
-  .choose-another { margin: 1rem 0 0.5rem; }
-  .choose-another a { font-weight: 600; }
-  .neighbour-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
-  .neighbour-card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 0.75rem; min-width: 0; padding: 0.6rem 0.75rem 0.6rem 1rem; border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: var(--radius); background: var(--bg-card); }
-  .neighbour-name { flex: 1 1 8rem; min-width: 0; font-family: var(--font-display); font-size: var(--text-lg); line-height: 1.15; overflow-wrap: anywhere; }
-  .neighbour-doors { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .neighbour-doors a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border: 1px solid var(--border-strong); border-radius: 999px; font-weight: 600; text-decoration: none; color: var(--text); }
-  .neighbour-doors a:hover { border-color: var(--accent); }
-  .neighbour-doors [data-neighbour-door="guess"] { background: var(--text); border-color: var(--text); color: var(--bg); }
-  .neighbour-doors a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-  @media (forced-colors: active) { .neighbour-card, .neighbour-doors a { border: 1px solid CanvasText; } }
+<style is:global>
+  /* Global, so the page's elements carry no scoped attributes (F1 weight cap). The neighbour cards are styled in BudgetGame.astro. */
+  .game-onward .neighbour-row h3 { font-size: 1.05rem; margin: 0 0 0.25rem; }
+  .game-onward .neighbour-row p { margin: 0 0 0.6rem; }
+  .game-onward .choose-another { margin: 1rem 0 0.5rem; }
+  .game-onward .choose-another a { font-weight: 600; }
 </style>

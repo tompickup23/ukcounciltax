@@ -29,14 +29,4 @@ const {id, title, tableCount, open = false, summary = `Show the published tables
   summary{cursor:pointer;font-weight:600;min-height:44px;padding-block:var(--space-sm)}
   .data-drawer{border-block:1px solid var(--border)}
   .data-drawer-body{padding-block:var(--space-sm)}
-  /* W4: a break that ends the game and starts the reference record (D5). */
-  .data-drawer-break{margin-top:var(--space-xl);padding-top:var(--space-lg);border-top:4px solid var(--text)}
-  .data-drawer-break h2{font-size:var(--text-2xl);margin:0}
-  .data-drawer-lede{max-width:44rem;margin:var(--space-xs) 0 var(--space-md);color:var(--text-muted)}
-  .data-drawer-break summary{display:flex;align-items:center;gap:.6rem;padding:.75rem 1.1rem;border:1px solid var(--border-strong);border-radius:999px;background:var(--bg-card);width:fit-content;max-width:100%;list-style:none}
-  .data-drawer-break summary::-webkit-details-marker{display:none}
-  .data-drawer-break summary::before{content:"+";display:grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--text);color:var(--bg);font-weight:700;line-height:1}
-  .data-drawer-break details[open] > summary::before{content:"\2212"}
-  .data-drawer-break .data-drawer{border:0}
-  .data-drawer-break summary:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 </style>

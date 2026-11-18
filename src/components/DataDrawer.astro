@@ -1,10 +1,11 @@
 ---
 /** Adapted from UK Demographics' DataDrawer: keep the heading outside summary. */
-interface Props {id: string; title: string; tableCount: number; open?: boolean; summary?: string; headingLevel?: "h2" | "h3"}
-const {id, title, tableCount, open = false, summary = `Show the published tables (${tableCount})`, headingLevel: Heading = "h2"} = Astro.props;
+interface Props {id: string; title: string; tableCount: number; open?: boolean; summary?: string; headingLevel?: "h2" | "h3"; lede?: string; pageBreak?: boolean}
+const {id, title, tableCount, open = false, summary = `Show the published tables (${tableCount})`, headingLevel: Heading = "h2", lede, pageBreak = false} = Astro.props;
 ---
-<section class="section data-drawer-section" aria-labelledby={`${id}-heading`}>
+<section class:list={['section', 'data-drawer-section', {'data-drawer-break': pageBreak}]} aria-labelledby={`${id}-heading`}>
   <Heading id={`${id}-heading`}>{title}</Heading>
+  {lede && <p class="data-drawer-lede">{lede}</p>}
   <details id={id} class="data-drawer" open={open}>
     <summary>{summary}</summary>
     <div class="data-drawer-body"><slot /></div>

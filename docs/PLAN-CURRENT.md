@@ -82,7 +82,7 @@ My recommendation before seeing them drawn is B. It is a view, not a finding: th
 
 | Order | Work | Who | Waits on |
 |---|---|---|---|
-| 1 | W4 part two: reveal, result card, PNG, the drawer | Claude (Opus), fast track | Nothing. Prompt in `docs/PROMPTS-2026-11-16-W4-W9.md` |
+| 1 | W4 part two: reveal (twin waffles, dot plot, gap bars, one table twin), the end card with a canvas PNG, the unreadable score link message, "Behind the numbers" with every reference table in one drawer, neighbour cards with Guess and Set | Claude (Opus), fast track | In its pull request, opened 18 November with every gate reported in its body. Merges under the fast track only if all five conditions hold |
 | 2 | Front doors, one PR: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills per row) and the homepage row (bill card trimmed to bar, legend and one record line; England average, change and line chart in one row; map thumb from the real outline). It also takes the three faults left from the W8 review: `data-ground="desk"` on the band; in light, the map thumb's third shade and the Band D line's hovered point are cream on cream; the share card logo square merges into the ground. A fault that needs a new colour value goes to the kit (rule 4) | Claude, fast track if it stays layout only | W4 part two merged |
 | 3 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Prompt written |
 | 4 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |

@@ -79,7 +79,8 @@ function layout(card: OgCard) {
           height: 44,
           viewBox: "0 0 64 64",
           children: [
-            { type: "rect", props: { width: 64, height: 64, rx: 12, fill: accentDeep } },
+            // The cream rule keeps the square off the band green (1.47 to 1 without it).
+            { type: "rect", props: { x: 1.5, y: 1.5, width: 61, height: 61, rx: 11, fill: accentDeep, stroke: accentBright, strokeWidth: 3 } },
             { type: "path", props: { d: "M14 50V28L32 16l18 12v22H38V36H26v14z", fill: accentWash } },
           ],
         },

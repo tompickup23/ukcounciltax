@@ -38,6 +38,13 @@ interface Action {
   /** The link for each row, by GSS code. Null prints the missing label. */
   links: Record<string, { href: string; text: string } | null>;
   missing: string;
+  /**
+   * Front doors (18 November 2026): the cell as two small pills, a first one to
+   * the row's own name link and then the action link under a short word, such as
+   * Guess and Set. The links' text stays their accessible name. A row with no
+   * action link prints the first pill alone, with no missing label.
+   */
+  pills?: { lead: string; leadLabel: string; action: string };
 }
 
 interface Props {
@@ -124,7 +131,8 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
                   <td class="wide-only" data-cell="region">{row.region}</td>
                   <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>
                   {figure && <td class="num">{value ? <span data-figure>{value.text}</span> : <span class="muted">{figure.missing}</span>}</td>}
-                  {action && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.links[row.gss]!.text}</a> : <span class="muted">{action.missing}</span>}</td>}
+                  {action && !action.pills && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.links[row.gss]!.text}</a> : <span class="muted">{action.missing}</span>}</td>}
+                  {action?.pills && <td class="picker-action picker-pills">{row.noReturn ? <span class="muted">{action.missing}</span> : <><a class="picker-pill" href={row.href} aria-label={`${action.pills.leadLabel}: ${row.name}`}>{action.pills.lead}</a>{action.links[row.gss] && <a class="picker-pill" href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.pills.action}</a>}</>}</td>}
                 </tr>
               );
             })}
@@ -336,6 +344,14 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
   .council-picker .picker-action { white-space: nowrap; }
   .council-picker td.picker-action a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
   .council-picker td.picker-action .muted { font-size: 0.88rem; }
+  /* Two small pills in one cell (front doors): each a 44 px target, side by side. */
+  .council-picker td.picker-pills { white-space: nowrap; }
+  .council-picker td.picker-pills a.picker-pill {
+    min-height: 44px; padding: 0 0.85rem; border: 1px solid var(--border-strong); border-radius: 999px;
+    background: var(--bg-card); color: var(--accent); text-decoration: none; font-size: 0.9rem; line-height: 1;
+  }
+  .council-picker td.picker-pills a.picker-pill + a.picker-pill { margin-left: 0.35rem; }
+  .council-picker td.picker-pills a.picker-pill:hover { border-color: var(--accent); background: var(--accent-wash); }
   .council-picker .picker-tail-head th { background: var(--bg-subtle); font-weight: 600; }
   .council-picker .sort-button {
     font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 0.15em;

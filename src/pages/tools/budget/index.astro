@@ -3,11 +3,13 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import CouncilPicker from '../../../components/CouncilPicker.astro';
-import PlayBand from '../../../components/PlayBand.astro';
+import DeskBand from '../../../components/DeskBand.astro';
+import manifest from '../../../../data/pilots/budget-freeze-eligibility.json';
 import {councilPages} from '../../../lib/paths';
 import {englishRows} from '../../../lib/council-picker';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
 import {budgetSetEntry} from '../../../lib/budget-set-entry';
+import {gameData} from '../../../lib/budget-game-data';
 const pages = councilPages();
 const available = pages.filter(({council}) => budgetFor(council.gss).council.status === 'available');
 const missing = pages.filter(({council}) => budgetFor(council.gss).council.status === 'no return');
@@ -18,21 +20,33 @@ const setLinks = Object.fromEntries(pages.map(({council}) => {
 }));
 const setCount = Object.values(setLinks).filter(Boolean).length;
 const featured = ['leeds', 'burnley', 'camden'].map(slug => pages.find(page => page.council.slug === slug)!);
+// The same two counts the play band prints on the homepage and /tools/.
+const sets = manifest.councils.filter((row) => row.eligible).length;
+/** Each featured council's game as its round rail: the stops the game page's rail names, and no figure. */
+const stopName = (kind: string, index: number) => kind === 'split' ? (index === 0 ? 'Council' : 'County') : kind === 'bill' ? 'Bill' : kind === 'funding' ? 'Funding' : 'Reserves';
+const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.name, setHref: setLinks[council.gss]?.href, stops: (gameData(council.gss, council.slug, tax.name)?.rounds ?? []).map((round, index) => stopName(round.kind, index))}));
 ---
 <BaseLayout title="Council budget game" description={`Explore published ${budgetYear} council budgets, funding, reserves and Band D bill breakdowns for every English billing authority.`} path="/tools/budget/">
   <Breadcrumbs items={[{label: 'Tools', href: '/tools/'}, {label: 'Council budgets'}]} />
-  <header class="page-head"><p class="eyebrow">Where the money goes | {budgetYear}</p><h1>Explore your council's budget</h1><p class="lede">Find your council and play its budget game, or follow <strong>Set the budget</strong> in its row to set the budget yourself.</p></header>
-  <h2 id="choose-a-council">Choose your council</h2>
-  <div id="set-the-budget" class="hub-start">
-  <CouncilPicker id="budget-picker" action={{heading: 'Set', links: setLinks, missing: 'Not available'}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
-  </div>
-  <PlayBand guessHref="#choose-a-council" />
+  <DeskBand id="hub-heading" level={1} hero top layout="stack" class="hub-desk" data-ground="desk" data-hub-band
+    eyebrow={`Where the money goes | ${budgetYear}`} title="Explore your council's" accent="budget"
+    lede="Find your council, then guess how it spends each pound or set the budget yourself. Both are built from the council's own published budget return.">
+    <ul slot="copy" class="hub-ways">
+      <li><span class="desk-kicker">Guess</span> Play the budget game, then see what the council published. <span class="hub-count">{available.length} councils</span></li>
+      <li><span class="desk-kicker">Set</span> Change tax and service spending and see what is left to find. <span class="hub-count">{sets} councils</span></li>
+    </ul>
+    <div id="set-the-budget" class="hub-start">
+      <h2 id="choose-a-council" class="hub-pick-title">Choose your council</h2>
+      <CouncilPicker id="budget-picker" action={{heading: 'Play', links: setLinks, missing: 'Not available', pills: {lead: 'Guess', leadLabel: 'Guess, play the budget game', action: 'Set'}}} actionHash="#set-the-budget" rows={englishRows('budget')} caption={`English billing authorities and their ${budgetYear} budget game`} tailHeading={`No ${budgetYear} budget return received`} outside="That postcode is not in an English billing authority. The budget game covers councils in England only." />
+    </div>
+  </DeskBand>
   <section class="featured-budgets" aria-labelledby="featured-heading">
     <h2 id="featured-heading">Try a council</h2>
-    <div class="featured-strip">{featured.map(({council, tax}) => <a href={`/tools/budget/${council.slug}/`}>
-      <img src={`/og/budget/${council.slug}.png`} alt="" width="1200" height="630" loading="lazy" />
-      <strong>{tax.name}</strong><span>Play the budget game →</span>
-    </a>)}</div>
+    <ul class="featured-rails">{rails.map(({slug, name, setHref, stops}) => <li class="featured-rail">
+      <a class="featured-name" href={`/tools/budget/${slug}/`}>{name}</a>
+      <ol class="featured-stops" aria-label={`The ${stops.length} rounds of the ${name} game`}>{stops.map((stop, index) => <li><span class="featured-stop-number" aria-hidden="true">{index + 1}</span>{stop}</li>)}</ol>
+      <p class="featured-go"><a class="featured-pill" href={`/tools/budget/${slug}/`} aria-label={`Guess, play the budget game: ${name}`}>Guess</a>{setHref && <a class="featured-pill" href={setHref} aria-label={`Set the budget: ${name}`}>Set</a>}</p>
+    </li>)}</ul>
   </section>
   <section class="section" aria-labelledby="about-budgets">
     <h2 id="about-budgets">About these budgets</h2>
@@ -44,20 +58,31 @@ const featured = ['leeds', 'burnley', 'camden'].map(slug => pages.find(page => p
 </BaseLayout>
 
 <style>
-.hub-start{scroll-margin-top:5rem}
-#choose-a-council{scroll-margin-top:5rem}
-.featured-budgets{margin-block:var(--space-xl)}
-.featured-strip{display:grid;gap:var(--space-md)}
-.featured-strip a{display:grid;grid-template-columns:8rem minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:var(--space-md);align-items:start;min-width:0;min-height:44px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;text-decoration:none;background:var(--bg-card)}
-.featured-strip a:hover{border-color:var(--accent)}
-.featured-strip img{width:100%;height:auto;grid-row:span 2}
-.featured-strip strong{padding:var(--space-md) var(--space-md) 0;font-family:var(--font-display);font-size:var(--text-lg)}
-.featured-strip span{padding:var(--space-sm) var(--space-md) var(--space-md)}
-@media(max-width:599px){.featured-strip strong,.featured-strip span{padding-left:0;padding-right:var(--space-sm)}}
-@media(min-width:600px){.featured-strip{grid-template-columns:repeat(3,minmax(0,1fr))}.featured-strip a{display:flex;flex-direction:column}}
+.hub-start,#choose-a-council{scroll-margin-top:5rem}
+.hub-desk{align-items:start}
+.hub-ways{list-style:none;margin:var(--space-md) 0 0;padding:0;display:grid;gap:var(--space-xs);max-width:44rem}
+.hub-ways li{color:var(--desk-soft)}
+.hub-ways .desk-kicker{margin-right:.35rem}
+.hub-count{white-space:nowrap;color:var(--desk-faint);font-size:var(--text-sm)}
+.hub-count::before{content:"\00b7";margin:0 .35rem}
+.hub-start{min-width:0}
+.desk .hub-pick-title{margin:0;font-size:var(--text-lg);color:var(--desk-ink)}
+.hub-start :global(.council-picker){margin-top:var(--space-sm)}
 .hub-start :global(.picker-table){table-layout:fixed;width:100%}
-.hub-start :global(.picker-action){width:8rem;white-space:normal;border-left:1px solid var(--border)}
-.hub-start :global(td.picker-action a){padding:.4rem .65rem;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--accent-wash);line-height:1.2}
+.hub-start :global(.picker-action){width:9.5rem;border-left:1px solid var(--border)}
 .hub-start :global(th[scope="row"] a){display:inline-flex;align-items:center;min-height:44px}
-@media(max-width:599px){.hub-start :global(.picker-action){width:7.25rem}.hub-start :global(th[scope="row"]){overflow-wrap:anywhere}}
+@media(max-width:599px){.hub-start :global(.picker-action){width:8.25rem}.hub-start :global(th[scope="row"]){overflow-wrap:anywhere}.hub-start :global(td.picker-pills a.picker-pill){padding:0 .7rem}}
+.featured-budgets{margin-block:var(--space-xl)}
+.featured-rails{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-md)}
+@media(min-width:700px){.featured-rails{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.featured-rail{display:flex;flex-direction:column;gap:var(--space-sm);min-width:0;padding:var(--space-md);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:var(--radius);background:var(--bg-card)}
+.featured-name{font-family:var(--font-display);font-weight:600;font-size:var(--text-lg);line-height:1.2;text-decoration:none;min-height:44px;display:flex;align-items:center}
+.featured-name:hover{text-decoration:underline}
+.featured-stops{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.featured-stops li{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .65rem .25rem .3rem;border:1px solid var(--border);border-radius:999px;font-size:var(--text-sm);color:var(--text-muted);background:var(--bg)}
+.featured-stop-number{display:inline-grid;place-items:center;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:var(--text-xs);font-variant-numeric:tabular-nums}
+.featured-go{display:flex;gap:.4rem;margin:auto 0 0}
+.featured-pill{display:inline-flex;align-items:center;min-height:44px;padding:0 1rem;border:1px solid var(--border-strong);border-radius:999px;font-weight:600;text-decoration:none}
+.featured-pill:hover{border-color:var(--accent);background:var(--accent-wash)}
+@media(forced-colors:active){.featured-pill,.featured-stops li{border-color:ButtonText}}
 </style>

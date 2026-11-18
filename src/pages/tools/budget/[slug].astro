@@ -17,7 +17,7 @@ import PageSources from '../../../components/PageSources.astro';
 import {bandsRef, budgetPageEntries, raPart1Ref} from '../../../lib/budget-page-sources';
 import PageContents from '../../../components/PageContents.astro';
 import {gameNeighbours} from '../../../lib/game-neighbours';
-import {councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
+import {budgetSetPages, budgetSetPath, councilPages, scenarioGamePath, SCENARIO_GAME_SLUGS, type CouncilPage} from '../../../lib/paths';
 import {budget, budgetYear, budgetFor} from '../../../lib/budget';
 import {loadYear} from '../../../lib/council-tax';
 export function getStaticPaths() {
@@ -32,6 +32,7 @@ const available = data.council.status === 'available';
 const game = available ? gameData(council.gss, council.slug, tax.name) : null;
 const tableCount = [data.council, ...(data.county ? [data.county] : [])].reduce((sum, body) => sum + 4 + services(body).filter(row => row.value !== 0 && row.subLines.length).length, 0);
 const nearby = gameNeighbours(council.gss);
+const setSlugs = new Set(budgetSetPages().map(page => page.slug));
 const hasScenarioGame = (SCENARIO_GAME_SLUGS as readonly string[]).includes(council.slug);
 const title = available ? `${tax.name} budget game ${budgetYear}` : `${tax.name} budget ${budgetYear}: no return received`;
 const description = available
@@ -46,22 +47,35 @@ const description = available
     {localBills.some(b=>b.gss===council.gss) && <p data-find-your-bill>To see your own bill, by band and parish, and what each part pays for, <a href="/precepts/#find-your-bill">find your own bill</a>.</p>}
     {hasScenarioGame && <p data-scenario-game-row>{tax.name} Borough Council has also published its own budget gap for the next two years. A separate <a href={scenarioGamePath(council.slug)} data-scenario-game-link>budget scenario game</a> starts from that gap and lets you set council tax, spending and reserves.</p>}
     <PageContents items={[{id: 'budget-game', label: 'Play the budget game'}, {id: 'council-budget', label: `${tax.name} budget`}, ...(data.county ? [{id: 'county-budget', label: `${data.county.name} County Council budget`}] : []), {id: 'your-bill', label: 'Your bill'}, {id: 'sources', label: 'Sources'}]} />
-    <DataDrawer id="published-budget" title="The published budget" tableCount={tableCount + (game?.rounds.length ?? 0)}>
+    {/* W4 part two (D5): a break, then every reference table behind one drawer, in the order the page printed them. Nothing is removed or reworded. */}
+    <DataDrawer id="published-budget" title="Behind the numbers" pageBreak lede="The published figures behind every round: the chart and table for each round, the full budget tables, the per resident figures, your Band D bill and the charges by band." tableCount={tableCount + (game?.rounds.length ?? 0) + 1}>
     {game?.rounds.map((round, index) => <BudgetPublishedChart round={round} index={index} slug={council.slug} location="published" />)}
     <BudgetTables council={data.council} name={tax.name} id="council-budget" />
     {data.county && <BudgetTables council={data.county} name={data.county.name} id="county-budget" county />}
+    <PerResident gss={council.gss} />
+    <BudgetBill gss={council.gss} name={tax.name} />
+    <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} record={{entry: 'budget-bands', source: bandsRef}} /></section>
     </DataDrawer>
-  </> : <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><RecordLine entry="budget-ra-part1" sources={[raPart1Ref]} /></section>}
-  {!available && <BudgetSetEntry gss={council.gss} />}
-  <PerResident gss={council.gss} />
-  <BudgetBill gss={council.gss} name={tax.name} />
-  <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} record={{entry: 'budget-bands', source: bandsRef}} /></section>
+  </> : <>
+    <section class="section" data-no-budget-return><h2>No {budgetYear} budget return</h2><p>No {budgetYear} return for {tax.name} was received in time for MHCLG's publication on 11 June 2026. No budget game or earlier year's budget is shown. The bill breakdown below comes from the separate council tax return.</p><RecordLine entry="budget-ra-part1" sources={[raPart1Ref]} /></section>
+    {!available && <BudgetSetEntry gss={council.gss} />}
+    <PerResident gss={council.gss} />
+    <BudgetBill gss={council.gss} name={tax.name} />
+    <section class="section" aria-labelledby="band-heading"><h2 id="band-heading">Published whole-bill charges by band</h2><p>Choose a band to read its published area average. The component breakdown above is available for Band D only; other bands' component charges are not inferred.</p><BandSelector ons={council.gss} authority={budgetTax} showChange={false} year={budget.year} record={{entry: 'budget-bands', source: bandsRef}} /></section>
+  </>}
   <section class="section game-onward" aria-labelledby="onward-heading" data-game-onward>
     <h2 id="onward-heading">Play another council</h2>
     {nearby.neighbours.length > 0 && <div class="neighbour-row" data-play-neighbour>
       <h3>Play a neighbour</h3>
       <p class="small muted">{nearby.basis === 'county' ? `The other districts of ${nearby.county} that have a budget game.` : `Councils whose areas touch ${tax.name}'s in the ONS boundary file, and that have a budget game. The file is clipped to the coastline, so councils that face each other across an estuary or a tidal river may not touch in it.`}</p>
-      <ul class="pill-nav" data-pagefind-ignore>{nearby.neighbours.map(n => <li><a href={`/tools/budget/${n.slug}/`}>{n.name}</a></li>)}</ul>
+      {/* W4 part two: a card per neighbour with Guess, and Set only where that council has a set page. */}
+      <ul class="neighbour-cards" data-pagefind-ignore>{nearby.neighbours.map(n => <li class="neighbour-card" data-neighbour={n.slug}>
+        <strong class="neighbour-name">{n.name}</strong>
+        <span class="neighbour-doors">
+          <a href={`/tools/budget/${n.slug}/`} data-neighbour-door="guess" aria-label={`Guess: play the ${n.name} budget game`}>Guess</a>
+          {setSlugs.has(n.slug) && <a href={budgetSetPath(n.slug)} data-neighbour-door="set" aria-label={`Set: set the ${n.name} budget yourself`}>Set</a>}
+        </span>
+      </li>)}</ul>
     </div>}
     <p class="choose-another" data-choose-another><a href="/tools/budget/">Choose another council</a> from the full list of English billing authorities.</p>
     <p><a href={`/councils/${council.slug}/`}>More council tax information for {tax.name}</a></p>
@@ -73,4 +87,13 @@ const description = available
   .neighbour-row p { margin: 0 0 0.6rem; }
   .choose-another { margin: 1rem 0 0.5rem; }
   .choose-another a { font-weight: 600; }
+  .neighbour-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); }
+  .neighbour-card { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 0.75rem; min-width: 0; padding: 0.6rem 0.75rem 0.6rem 1rem; border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: var(--radius); background: var(--bg-card); }
+  .neighbour-name { flex: 1 1 8rem; min-width: 0; font-family: var(--font-display); font-size: var(--text-lg); line-height: 1.15; overflow-wrap: anywhere; }
+  .neighbour-doors { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .neighbour-doors a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1.1rem; border: 1px solid var(--border-strong); border-radius: 999px; font-weight: 600; text-decoration: none; color: var(--text); }
+  .neighbour-doors a:hover { border-color: var(--accent); }
+  .neighbour-doors [data-neighbour-door="guess"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .neighbour-doors a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (forced-colors: active) { .neighbour-card, .neighbour-doors a { border: 1px solid CanvasText; } }
 </style>

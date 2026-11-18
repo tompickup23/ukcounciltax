@@ -98,16 +98,54 @@ function routeStop(kind: string, index: number) {
   .game-move{display:flex;flex-wrap:wrap;gap:.4rem .75rem;align-items:baseline;max-width:44rem;margin-block:var(--space-md);padding:.85rem 1.1rem;border:2px solid var(--text);border-radius:12px;background:var(--bg-card);font-weight:600}
   .game-move strong{flex:none;padding:0 .5rem;border-radius:4px;background:var(--text);color:var(--bg);font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;line-height:1.9}
   @media(forced-colors:active){.game-route li,.game-rail li,.game-move{border:1px solid CanvasText}.game-rail [aria-current=step]{outline:2px solid Highlight}}
-  .game-score-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
   .game-stop-number{display:grid;place-items:center;width:2.75rem;height:2.75rem;border:2px solid var(--border-strong);border-radius:50%;font-weight:600}
 
 
   .budget-game [hidden]{display:none!important}
+  /* W4 part two: the end card. A card on the paper with the accent rule, never a second desk band. */
+  .game-end-card{max-width:48rem;margin-block:var(--space-md);padding:clamp(1.25rem,1rem + 2vw,2.25rem);border:1px solid var(--border-strong);border-top:6px solid var(--accent);border-radius:var(--radius);background:var(--bg-card);color:var(--text);position:relative}
+  .game-end-kicker{margin:0;color:var(--text-muted);font-size:var(--text-sm);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .game-end-head{display:flex;flex-wrap:wrap;gap:var(--space-md) var(--space-lg);align-items:center;margin-block:var(--space-md)}
+  .game-end-head p{margin:0}
+  .game-end-grade{display:grid;place-items:center;align-content:center;width:7rem;height:7rem;border:3px solid var(--accent);border-radius:50%;text-align:center;flex:none}
+  .game-end-grade span{font-size:var(--text-xs);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+  .game-end-grade strong{font-family:var(--font-display);font-size:2.6rem;line-height:1}
+  .game-end-head .game-score{font-size:clamp(2rem,1.5rem + 2vw,3rem);line-height:1.05;font-variant-numeric:tabular-nums}
+  .game-end-calls{display:grid;gap:var(--space-md);border-top:1px solid var(--border);padding-top:var(--space-md)}
+  @media(min-width:640px){.game-end-calls{grid-template-columns:1fr 1fr}}
+  .game-end-calls h4{margin:0 0 var(--space-xs);font-size:var(--text-lg)}
+  .game-end-calls ol{margin:0;padding-left:1.25rem;display:grid;gap:.5rem}
+  .game-end-calls li strong,.game-end-calls li span{display:block;overflow-wrap:anywhere}
+  .game-end-calls li span{color:var(--text-muted);font-size:var(--text-sm);font-variant-numeric:tabular-nums}
+  .game-end-stamp{display:inline-block;margin:var(--space-md) 0 0;padding:.35rem .8rem;border:2px solid var(--accent);border-radius:6px;font-size:var(--text-sm);font-weight:700;letter-spacing:.1em;text-transform:uppercase;transform:rotate(-2deg)}
+  .game-end-source{margin:var(--space-sm) 0 0;color:var(--text-muted);font-size:var(--text-sm);overflow-wrap:anywhere}
+  .game-end-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
+  /* The scenario summary card (C1b) keeps its look. */
   .game-score-card{max-width:40rem;padding:var(--space-lg);background:var(--accent-wash);border-radius:var(--radius)}
   .game-score-card .game-score{margin-block:.25rem}
-  .game-summary-rows{list-style:none;padding:0;display:grid;gap:var(--space-sm);max-width:40rem}
-  .game-score-track{display:block;height:.75rem;background:var(--bg-subtle);border:1px solid var(--border-strong);border-radius:var(--radius-sm);overflow:hidden;margin-top:.5rem}
-  .game-score-fill{display:block;height:100%;background:var(--accent)}
+  .game-score-card a{display:inline-flex;align-items:center;min-height:44px;font-weight:600}
+  .game-summary-rows{list-style:none;padding:0;margin:0 0 var(--space-sm);display:flex;flex-wrap:wrap;gap:.25rem 1rem;font-size:var(--text-sm);color:var(--text-muted)}
+  .game-score-panel{max-width:44rem;margin-block:var(--space-sm) var(--space-md);padding:var(--space-md) var(--space-lg);border-left:6px solid var(--accent);border-radius:var(--radius);background:var(--accent-wash)}
+  .game-score-panel p{margin:0}
+  .game-score-panel p + p{margin-top:.35rem}
+  .game-figure{margin:var(--space-md) 0;max-width:600px}
+  /* F1: a chart title never outranks the round heading above it. */
+  .game-figure h4,.game-reveal-waffles h4,.budget-game .game-gaps-title{font-size:1rem;margin:0 0 .5rem}
+  .game-figure svg{display:block;width:100%;height:auto}
+  .game-figure-score{max-width:28rem}
+  .game-dots text{font-family:var(--font-sans);font-size:20px;fill:var(--text)}
+  .game-dots .game-dot-source{font-size:18px;fill:var(--text-muted)}
+  .game-dot-track{stroke:var(--border);stroke-width:2}
+  .game-dot-gap{stroke:var(--text-muted);stroke-width:4}
+  .game-dot-pub{fill:var(--accent)}
+  .game-dot-you{fill:var(--bg);stroke:var(--text);stroke-width:3}
+  .game-twin{margin-block:var(--space-sm) var(--space-md);max-width:44rem}
+  .game-twin summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+  .game-twin .table-wrap{overflow-x:auto}
+  .game-twin td,.game-twin th{overflow-wrap:anywhere}
+  .game-unreadable{max-width:40rem;margin-block:var(--space-lg);padding:var(--space-lg);border:1px solid var(--border-strong);border-top:6px solid var(--warning);border-radius:var(--radius);background:var(--bg-card)}
+  .game-unreadable h3{margin-top:0}
+  @media(forced-colors:active){.game-end-card,.game-end-grade,.game-end-stamp,.game-score-panel,.game-unreadable{border:2px solid CanvasText}.game-dot-pub{fill:Highlight}.game-dot-you{stroke:CanvasText}}
   .budget-game h3:focus{outline:2px solid var(--accent);outline-offset:4px}
   .budget-game h3:focus:not(:focus-visible){outline:none}
   [data-scenario-stage] h2,[data-scenario-stage] h3{scroll-margin-top:6rem}

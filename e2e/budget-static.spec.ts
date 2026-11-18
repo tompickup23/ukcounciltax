@@ -6,6 +6,8 @@ for (const theme of ['light', 'dark'] as const) {
     test(`${slug} budget: ${theme} accessibility and layout`, async ({page}) => {
       await page.emulateMedia({colorScheme: theme});
       await page.goto(`/tools/budget/${slug}/`);
+      // W4 part two: on a game page the bill sits in the one drawer under "Behind the numbers".
+      if (slug !== 'coventry') {await expect(page.getByRole('heading', {name: 'Behind the numbers', exact: true})).toBeVisible(); await page.locator('#published-budget > summary').click();}
       await expect(page.getByRole('heading', {name: 'Your bill', exact: true})).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(2);
       const result = await new AxeBuilder({page}).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
@@ -98,6 +100,7 @@ for (const [slug, code, heading, adult] of [
     const context = await browser.newContext({javaScriptEnabled: false, viewport: testInfo.project.use.viewport});
     const page = await context.newPage();
     await page.goto(`${baseURL}/tools/budget/${slug}/`);
+    await page.locator('#published-budget > summary').click();
     const block = page.locator('[data-per-resident]');
     await expect(block).toHaveAttribute('data-per-resident', code);
     await expect(block.getByRole('heading', {name: heading, exact: true})).toBeVisible();
@@ -129,7 +132,17 @@ test('Burnley offers its 11 neighbours and a plain link to every council', async
   await page.goto('/tools/budget/burnley/');
   const neighbours = page.locator('[data-play-neighbour]');
   await expect(neighbours.getByRole('heading', {name: 'Play a neighbour'})).toBeVisible();
-  await expect(neighbours.locator('li a')).toHaveCount(11);
+  await expect(neighbours.locator('li[data-neighbour]')).toHaveCount(11);
+  // W4 part two: every card has Guess; Set only where the council has a set page (Pendle has none).
+  await expect(neighbours.locator('[data-neighbour-door="guess"]')).toHaveCount(11);
+  await expect(neighbours.locator('[data-neighbour="pendle"] [data-neighbour-door="set"]')).toHaveCount(0);
+  await expect(neighbours.locator('[data-neighbour="chorley"] [data-neighbour-door="set"]')).toHaveAttribute('href', '/tools/budget/chorley/set/');
+  const {budgetSetPages} = await import('../src/lib/paths');
+  const setSlugs = new Set(budgetSetPages().map(pilot => pilot.slug));
+  for (const card of await neighbours.locator('li[data-neighbour]').all()) {
+    const slug = await card.getAttribute('data-neighbour');
+    await expect(card.locator('[data-neighbour-door="set"]')).toHaveCount(setSlugs.has(slug!) ? 1 : 0);
+  }
   const link = page.locator('[data-choose-another] a');
   await expect(link).toHaveText('Choose another council');
   await expect(link).toHaveAttribute('href', '/tools/budget/');

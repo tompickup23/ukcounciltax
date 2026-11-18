@@ -114,6 +114,80 @@ test('invalid shared scores cannot inject markup or create a summary', async ({p
   await expect(page.locator('[data-budget-door="guess"]')).toBeVisible();
   await expect(page.locator('[data-game-rail]')).toBeHidden();
   await expect(page.getByRole('heading', {name: 'Shared game scores'})).toHaveCount(0);
+  // W4 part two: a designed message and a fresh start, never a broken board.
+  const message = page.locator('.game-unreadable');
+  await expect(message.getByRole('heading', {name: 'This score link could not be read'})).toBeVisible();
+  await message.getByRole('button', {name: 'Start a fresh game'}).click();
+  await expect(page).not.toHaveURL(/#scores/);
+  await expect(page.locator('[data-game-rail] [aria-current=step] .game-stop-number')).toHaveText('1');
+  for (const hash of ['#scores=', '#scores=1,2', '#scores=a,b,c,d', '#scores']) {
+    await page.goto('/tools/budget/birmingham/'); await page.goto(`/tools/budget/birmingham/${hash}`); await page.reload();
+    await expect(page.locator('.game-unreadable')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+  }
+});
+
+test('W4 part two: the reveal pairs the waffles with a dot plot, gap bars and one table twin', async ({page}) => {
+  await page.goto('/tools/budget/burnley/');
+  await page.locator('[data-budget-door="guess"]').click();
+  const stage = page.locator('[data-game-stage]');
+  const inputs = stage.getByRole('spinbutton');
+  for (const [i, value] of [5, 30, 25, 25, 15].entries()) await inputs.nth(i).fill(String(value));
+  await stage.getByRole('button', {name: 'Reveal answer', exact: true}).click();
+  await expect(stage.locator('.game-score-panel')).toContainText('out of 100');
+  await expect(stage.locator('.game-reveal-waffles [data-ek-square]')).toHaveCount(200);
+  const dots = stage.locator('svg.game-dots');
+  await expect(dots).toHaveCount(1);
+  await expect(dots.locator('circle.game-dot-pub')).toHaveCount(6);
+  expect((await dots.locator('text').allTextContents()).join(' ')).toContain('RA_LA_Data_2026-27');
+  await expect(stage.locator('.game-gap-row')).toHaveCount(5);
+  const twin = stage.locator('.game-twin');
+  await twin.locator('summary').click();
+  await expect(twin.locator('tbody tr')).toHaveCount(5);
+  await expect(twin.locator('tbody tr').first()).toContainText('Adult Social Care');
+  await expect(twin.locator('tbody tr').nth(1)).toContainText('30p');
+  // Chart titles stay under the round heading (F1).
+  const sizes = await stage.evaluate(el => ({round: parseFloat(getComputedStyle(el.querySelector('h3')!).fontSize), titles: [...el.querySelectorAll('h4')].map(h => parseFloat(getComputedStyle(h).fontSize))}));
+  for (const size of sizes.titles) expect(size).toBeLessThan(sizes.round);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+});
+
+test('W4 part two: the end card has a grade, three closest and three furthest calls, a stamp, and a PNG from the canvas', async ({page}) => {
+  test.setTimeout(90_000);
+  const requests: string[] = [];
+  await page.goto('/tools/budget/burnley/');
+  await page.locator('[data-budget-door="guess"]').click();
+  const stage = page.locator('[data-game-stage]');
+  for (let i = 0; i < 5; i++) {
+    if (await stage.getByRole('spinbutton').count()) await stage.getByRole('spinbutton').first().fill('100');
+    if (await stage.getByRole('radio').count()) {await stage.getByRole('radio').first().check(); await stage.getByLabel('Size of the change').selectOption('2');}
+    await stage.getByRole('button', {name: 'Reveal answer', exact: true}).click();
+    await stage.getByRole('button', {name: i === 4 ? 'Show summary' : 'Next round', exact: true}).click();
+  }
+  const card = stage.locator('[data-game-score-card]');
+  await expect(card.locator('.game-end-grade strong')).toHaveText(/^[A-E]$/);
+  await expect(card.locator('.game-end-calls ol').first().locator('li')).toHaveCount(3);
+  await expect(card.locator('.game-end-calls ol').last().locator('li')).toHaveCount(3);
+  await expect(card.locator('.game-end-stamp')).toHaveText('Scored against published figures');
+  await expect(card.locator('.game-end-source')).toContainText('Ministry of Housing, Communities and Local Government');
+  await expect(stage.locator('svg.ek-chart .ek-score-total')).toHaveText(/^\d+$/);
+  page.on('request', request => {if (!request.url().startsWith('data:')) requests.push(request.url());});
+  const download = page.waitForEvent('download');
+  await stage.getByRole('button', {name: 'Save score as PNG'}).click();
+  const file = await (await download).path();
+  const {readFileSync} = await import('node:fs');
+  const bytes = readFileSync(file!);
+  expect(bytes.subarray(1, 4).toString()).toBe('PNG');
+  expect(bytes.readUInt32BE(16)).toBe(1200);
+  expect(bytes.length).toBeLessThan(400_000);
+  test.info().annotations.push({type: 'png-bytes', description: String(bytes.length)});
+  expect(requests).toEqual([]);
+  expect(page.url()).not.toMatch(/#/);
+  expect(await page.evaluate(() => ({local: {...localStorage}, session: {...sessionStorage}}))).toEqual({local: {}, session: {}});
+  // A restored link has no guesses, so the card says so and the stamp says it is not verified.
+  await page.goto(await stage.locator('[data-game-share]').getAttribute('href') as string);
+  await expect(card.locator('.game-end-stamp')).toHaveText('Shared score, not verified');
+  await expect(card.locator('.game-end-calls li')).toHaveCount(0);
 });
 
 

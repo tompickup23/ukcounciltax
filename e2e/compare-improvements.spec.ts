@@ -198,7 +198,13 @@ test('the page opens on the labelled example pair, drawn, with the picker above 
   await expect(page.locator('[data-comparison-example]')).toBeHidden();
   await page.goBack();
   await expect(page.locator('[data-comparison-example]')).toBeVisible();
-  expect(burnley.years[year].D).toBeTruthy();
+  // A new band on the example adopts its two councils, so a second change keeps them.
+  await page.getByLabel('Band', {exact: true}).selectOption('A');
+  await expect(page.locator('[data-result-side="a"]')).toContainText(money(burnley.years[year].A!));
+  await expect(page.locator('#council-a')).toHaveValue('burnley');
+  await page.getByLabel('Band', {exact: true}).selectOption('H');
+  await expect(page.locator('[data-result-side="b"]')).toContainText(money(pendle.years[year].H!));
+  await expect(page.locator('[data-comparison-example]')).toBeHidden();
 });
 
 test('a pair of different types is said plainly and each is shown on its own, never on one scale', async ({page}) => {

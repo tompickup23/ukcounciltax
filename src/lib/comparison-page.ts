@@ -159,7 +159,7 @@ function showApart(value: ComparisonState, message: string) {
   const pair = sides.map(side => data.rows.find(row => row.slug === value[side]));
   apart.hidden = !(pair[0] && pair[1] && pair[0].gss !== pair[1].gss && data.years.includes(value.year) && /^[A-H]$/.test(value.band));
   if (apart.hidden) return;
-  root.querySelector('[data-apart-reason]')!.textContent = `Each council's own published Band ${value.band} charge for ${value.year.replace('-', '/')} is shown below, apart and not on one scale.`;
+  root.querySelector('[data-apart-reason]')!.textContent = `Each council area's published Band ${value.band} area charge for ${value.year.replace('-', '/')} is shown below, apart and not on one scale.`;
   pair.forEach((row, i) => {
     const card = root.querySelector(`[data-apart-side="${sides[i]}"]`)!;
     const link = card.querySelector<HTMLAnchorElement>('[data-apart-name]')!;
@@ -200,12 +200,18 @@ function show(value: ComparisonState, focus = false, example = false) {
   }
   const source = data.sources[checked.year];
   const shownExample = isExample(value);
-  draw('band', bandChart(checked.a, checked.b, checked.band, checked.year, source), checked.year, shownExample);
   const full = allBandsHeld(checked.a, checked.b, checked.year);
-  draw('bands', full ? pairedBandsChart(checked.a, checked.b, checked.year, source) : null, checked.year, shownExample);
+  // Both drawings are made before either is shown, so a drawing the kit refuses never
+  // leaves the previous pair's bars beside this pair's words.
+  let drawn: {band: ReturnType<typeof bandChart> | null; bands: ReturnType<typeof bandChart> | null};
+  try {drawn = {band: bandChart(checked.a, checked.b, checked.band, checked.year, source), bands: full ? pairedBandsChart(checked.a, checked.b, checked.year, source) : null};}
+  catch {drawn = {band: null, bands: null};}
+  draw('band', drawn.band, checked.year, shownExample);
+  draw('bands', drawn.bands, checked.year, shownExample);
   const missing = root.querySelector<HTMLElement>('[data-bands-missing]')!;
-  missing.hidden = full;
-  missing.textContent = full ? '' : `Not every band from A to H is held for both councils in ${checked.year.replace('-', '/')}, so the bands are not drawn. No band is shown as zero.`;
+  missing.hidden = Boolean(drawn.band) && full;
+  missing.textContent = !drawn.band ? 'The drawings could not be made for this pair. The published charges and the calculations above stand.'
+    : full ? '' : `Not every band from A to H is held for both councils in ${checked.year.replace('-', '/')}, so the bands are not drawn. No band is shown as zero.`;
   root.querySelector<HTMLAnchorElement>('[data-comparison-link]')!.href = `/compare/?${comparisonQuery(value)}`;
   if (focus) root.querySelector<HTMLElement>('[data-comparison-heading]')!.focus();
 }
@@ -241,6 +247,9 @@ form.addEventListener('change', event => {
   invalidate(); years();
   // Updating the answer in place preserves the selected band, year and focus.
   if ((event.target === control('band') || event.target === control('year')) && !result.hidden) {
+    // The example becomes the reader's pair: its councils go into the choosers, so a
+    // further change of band or year keeps acting on the same two councils.
+    if (exampleShown()) for (const side of sides) {const row = data.rows.find(r => r.slug === exampleState[side])!; options(side, row.slug); input(side).value = row.name;}
     const value = current(); history.replaceState(null, '', `/compare/?${comparisonQuery(value)}`); show(value);
   }
 });

@@ -19,7 +19,7 @@ import ChartActions from '../components/kit/ChartActions.astro';
 import {CURRENT_YEAR, YEARS, BANDS, loadYear, yearLabel} from '../lib/council-tax';
 import {taxRows, taxSources} from '../lib/tax-view-data';
 import {englishRows} from '../lib/council-picker';
-import {comparisonWords} from '../lib/tax-view';
+import {compareTax, comparisonWords} from '../lib/tax-view';
 import {councilTaxSource, sourceEntryId, tableName, type SourceRef} from '../lib/sources';
 import {bandChart, pairedBandsChart} from '../lib/compare-charts';
 import {COMPARE_EXAMPLE, compareExample, comparePng} from '../lib/compare-example';
@@ -49,7 +49,9 @@ const money = (pence: number) => new Intl.NumberFormat('en-GB', {style: 'currenc
 // Same type pairs a reader can open in one tap; checked at build time like the example.
 const PAIRS = [['camden', 'barnet', 'London boroughs'], ['leeds', 'bradford', 'Metropolitan districts'], ['cornwall', 'wiltshire', 'Unitary authorities']] as const;
 const pairLinks = PAIRS.map(([a, b, group]) => {
-  const first = rows.find(row => row.slug === a)!; const second = rows.find(row => row.slug === b)!;
+  const checked = compareTax(rows, {a, b, band: 'D', year: CURRENT_YEAR}, YEARS);
+  if (!checked.ok) throw new Error(`Compare pair ${a} and ${b}: ${checked.message}`);
+  const first = checked.a; const second = checked.b;
   return {href: `/compare/?a=${a}&b=${b}&band=D&year=${CURRENT_YEAR}`, label: `${first.name} and ${second.name}`, group};
 });
 ---

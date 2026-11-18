@@ -14,7 +14,7 @@
 import TownsSources from './TownsSources.astro';
 import '../../styles/league.css';
 import {national} from '../../lib/national-data';
-import {noteText, townByCode, townsData, type TownStatus} from '../../lib/towns';
+import {noteText, townByCode, townsData, type Town, type TownStatus} from '../../lib/towns';
 import {councilHref, money, noFigure, parishChange, parishPart, placeName, printedName, scopeIn, signedMoney, STATUS_CHIPS, townConstituencyPath, POSITION_METHOD, type TownScope} from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 import type {TableRow, TownPart} from '../../lib/towns-parts';
@@ -27,14 +27,16 @@ interface Props {
   /** The scope's lowest and highest full Band D, in pence: the ends of every range mark. */
   min: number | null; max: number | null;
   part: TownPart; parts: TownPart[];
+  /** Every row in the scope, for the counts that describe the whole table (status legend, larger places). */
+  scopeRows: readonly Town[];
 }
-const {scope, rows, rankedCount, unplacedCount, min, max, part, parts} = Astro.props;
+const {scope, rows, rankedCount, unplacedCount, min, max, part, parts, scopeRows} = Astro.props;
 const showCounty = scope.kind !== 'county';
 const all = rows.map(r => r.town);
 const councils = [...new Map(all.map(t => [t.councilGss, tidy(t.councilName)])).entries()].sort((a, b) => a[1].localeCompare(b[1], 'en-GB'));
 const pcons = [...new Map(all.flatMap(t => t.constituencies.map(c => [c.code, c.name] as const))).entries()].sort((a, b) => a[1].localeCompare(b[1], 'en-GB'));
-const larger = all.filter(t => t.largerPlace).length;
-const statuses = (Object.keys(STATUS_CHIPS) as TownStatus[]).map(status => ({status, count: all.filter(t => t.status === status).length})).filter(s => s.count > 0);
+const larger = scopeRows.filter(t => t.largerPlace).length;
+const statuses = (Object.keys(STATUS_CHIPS) as TownStatus[]).map(status => ({status, count: scopeRows.filter(t => t.status === status).length, here: all.some(t => t.status === status)})).filter(s => s.count > 0 && s.here);
 const noteIds = [...new Set(all.flatMap(t => t.noteIds))].filter(id => id !== 'calculated' && id !== 'rounding');
 const mhclgNotes = [...new Set(all.flatMap(t => t.mhclgNotes))].sort();
 const mhclgText = (id: string) => (national.parishNotes as Record<string, string>)[id] ?? null;
@@ -55,7 +57,7 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
   {paged && (
     <nav class="league-jump towns-parts" aria-label="Parts of this table">
       <span>Positions</span>
-      {parts.map(p => p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>)}
+      {parts.map(p => <>{' '}{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</>)}
     </nav>
   )}
   {!paged && rows.length > 30 && (
@@ -83,7 +85,7 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
           <option value="ch:-1">Parish change, highest first</option>
           <option value="ch:1">Parish change, lowest first</option>
         </select></label>
-        {larger > 0 && <label class="town-check"><input type="checkbox" data-f-larger /> <span>Larger places only: a tax base of 2,000 Band D equivalents or more ({larger.toLocaleString('en-GB')} here; a tax base, not a population)</span></label>}
+        {larger > 0 && <label class="town-check"><input type="checkbox" data-f-larger /> <span>Larger places only: a tax base of 2,000 Band D equivalents or more ({larger.toLocaleString('en-GB')} {paged ? scopeIn(scope) : 'here'}; a tax base, not a population)</span></label>}
       </div>
     </details>
   </div>
@@ -123,13 +125,13 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
   {paged && (
     <nav class="league-jump towns-parts" aria-label="Parts of this table, again">
       <span>Positions</span>
-      {parts.map(p => p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>)}
+      {parts.map(p => <>{' '}{p.index === part.index ? <span aria-current="page">{partLabel(p)}</span> : <a href={`${p.path}#towns-table`}>{partLabel(p)}</a>}</>)}
     </nav>
   )}
   <div class="town-legend">
     <h3>What each status means</h3>
     <dl>
-      {statuses.map(s => <div><dt><span class="town-chip">{STATUS_CHIPS[s.status]}</span> <span class="muted">{s.count.toLocaleString('en-GB')} {s.count === 1 ? 'area' : 'areas'}{paged ? ' in this part' : ''}</span></dt><dd>{townsData.statusLabels[s.status]}.</dd></div>)}
+      {statuses.map(s => <div><dt><span class="town-chip">{STATUS_CHIPS[s.status]}</span> <span class="muted">{s.count.toLocaleString('en-GB')} {s.count === 1 ? 'area' : 'areas'}{paged ? ` ${scopeIn(scope)}` : ''}</span></dt><dd>{townsData.statusLabels[s.status]}.</dd></div>)}
     </dl>
     {noteIds.length > 0 && <><h3>Notes on these rows</h3><ul class="small">{noteIds.map(id => noteText(id) && <li>{noteText(id)}</li>)}</ul></>}
     {mhclgNotes.length > 0 && <><h3>MHCLG notes</h3><ul class="small">{mhclgNotes.map(id => <li id={`mhclg-${letter(id)}`}>Note {letter(id)}: {mhclgText(id) ?? 'see the parish return Notes sheet'}</li>)}</ul></>}

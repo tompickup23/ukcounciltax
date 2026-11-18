@@ -55,7 +55,7 @@ const values = summary.ranked.map(r => r.town.fullBandDPence);
   {scope.kind !== 'constituency' && <TownSpread scope={scope} where={text.where} />}
   {scope.kind === 'constituency' && split > 0 && <p class="caveat">{split} {split === 1 ? 'area here touches' : 'areas here touch'} wards in more than one constituency. {split === 1 ? 'It is' : 'They are'} listed in full here and on each other constituency's page, never apportioned.</p>}
   <TownTable scope={scope} rows={parts[0].rows} rankedCount={summary.ranked.length} unplacedCount={summary.unplaced.length}
-    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={parts[0]} parts={parts} />
+    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={parts[0]} parts={parts} scopeRows={scope.rows} />
   <TownsMethod />
   <TownsPageSources rows={scope.rows} lookups={scope.rows.some(t => t.constituencies.length > 0)} />
   <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>

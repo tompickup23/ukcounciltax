@@ -32,7 +32,7 @@ const description = `Full Band D by parish and unparished area ${where}, ${towns
   </header>
   <TownRegionNav current={scope.name} />
   <TownTable scope={scope} rows={part.rows} rankedCount={summary.ranked.length} unplacedCount={summary.unplaced.length}
-    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={part} parts={parts} />
+    min={summary.lowest?.town.fullBandDPence ?? null} max={summary.highest?.town.fullBandDPence ?? null} part={part} parts={parts} scopeRows={scope.rows} />
   <TownsMethod />
   <TownsPageSources rows={part.rows.map(r => r.town)} lookups={part.rows.some(r => r.town.constituencies.length > 0)} />
   <section class="section towns-related" aria-labelledby="related-heading" data-pagefind-ignore>

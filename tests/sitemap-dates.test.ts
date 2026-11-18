@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import {STATIC_PATHS} from '../src/lib/site';
 import {programmaticPaths, rankingPaths, parishPages, parishPath} from '../src/lib/paths';
 import {townPaths} from '../src/lib/towns-pages';
+import {townPartPaths} from '../src/lib/towns-parts';
 import {townsData} from '../src/lib/towns';
 import {sitemapLastmod, STATIC_PAGE_DATES} from '../src/lib/releases';
 import {CURRENT_YEAR, loadYear} from '../src/lib/council-tax';
@@ -10,7 +11,9 @@ import {CURRENT_YEAR, loadYear} from '../src/lib/council-tax';
 describe('sitemap edition dates', () => {
   it('covers every indexed route without falling back to the clock', () => {
     const routes = [...STATIC_PATHS, ...programmaticPaths()];
-    expect(routes).toHaveLength(1748);
+    // 1,748 before the league tables split seven long region tables into 11 more part pages.
+    expect(townPartPaths()).toHaveLength(11);
+    expect(routes).toHaveLength(1748 + 11);
     for (const route of routes) expect(sitemapLastmod(route), route).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(() => sitemapLastmod('/unrecorded/')).toThrow('No recorded sitemap date');
   });
@@ -28,6 +31,6 @@ describe('sitemap edition dates', () => {
     // The towns pages: the later of the parish return and Table 10 retrievals.
     const towns = townsData.sources as Record<string, {retrieved: string}>;
     const townsDate = [towns.parishes.retrieved, towns.components.retrieved].sort().at(-1);
-    for (const path of ['/council-tax/towns/', ...townPaths()]) expect(sitemapLastmod(path)).toBe(townsDate);
+    for (const path of ['/council-tax/towns/', ...townPaths(), ...townPartPaths()]) expect(sitemapLastmod(path)).toBe(townsDate);
   });
 });

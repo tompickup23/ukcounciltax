@@ -147,7 +147,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
       {changeD && <details class="ledger-calc"><summary>Calculation</summary>
         <p>The change is the {year} Band D charge less the {previous} charge of {pounds(changeD.from)}, and that difference as a percentage of the {previous} charge, rounded to one decimal place.</p>
       </details>}
-      {changeD ? <RecordLine entry="council-change" sources={[refs.change]} /> : <RecordLine entry="council-bands" sources={[refs.bands]} />}
+      {changeD ? <RecordLine entry="council-change" method={refs.change.method} sources={[refs.change]} /> : <RecordLine entry="council-bands" sources={[refs.bands]} />}
     </div>
     {own && refs.own && typeof own.bandD === "number" && <div class="ledger-cell" data-fact data-ledger="own">
       <p class="ledger-label">{name} council's own Band D, {year}</p>
@@ -168,7 +168,7 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
     {stock && refs.stock && stock.bandDAndBelowShare !== null && <div class="ledger-cell" data-fact data-ledger="stock">
       <p class="ledger-label">Properties in Band D or below</p>
       <p class="ledger-value" data-figure>{stockShare(stock.bandDAndBelowShare, null)}</p>
-      <p class="ledger-note">Of the homes on the valuation list in {name}.</p>
+      <p class="ledger-note">Of the properties on the valuation list in {name}.</p>
       <details class="ledger-calc"><summary>Calculation</summary>
         <p>HMRC's printed counts for Bands A to D added together, divided by its printed total of all properties, to one decimal place. HMRC rounds every count to the nearest 10.</p>
       </details>
@@ -431,13 +431,13 @@ const {title, description} = councilMetadata({name, currentPence: Math.round(ban
   .council-main { min-width: 0; }
   @media (min-width: 1100px) {
     .council-body { display: grid; grid-template-columns: 13.5rem minmax(0, 1fr); gap: var(--space-2xl); align-items: start; }
-    .council-rail { position: sticky; top: 5.5rem; max-height: calc(100vh - 6.5rem); overflow-y: auto; overscroll-behavior: contain; padding-right: var(--space-xs); border-right: 1px solid var(--border); }
+    .council-rail { position: sticky; top: 5.5rem; max-height: calc(-6.5rem + 100vh); overflow-y: auto; overscroll-behavior: contain; padding-right: var(--space-xs); border-right: 1px solid var(--border); }
   }
   @media (min-width: 1100px) and (max-height: 599px) { .council-rail { position: static; max-height: none; overflow: visible; } }
 
   .band-chart { max-width: 46rem; }
-  .council-main :global(.page-sources) { font-size: var(--text-sm); }
-  .council-main :global(.page-sources li p) { margin-block: 0.2rem; }
+  /* The one Sources block in two columns on desktop; each entry stays whole. */
+  @media (min-width: 1100px) { .council-main :global(.page-sources ol) { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-xl); align-items: start; } }
   .band-figures { margin-block: var(--space-sm) var(--space-md); }
   .band-figures > summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 

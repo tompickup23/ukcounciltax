@@ -39,7 +39,7 @@ table.league a { font-weight: inherit; }
    filled bar to the row's figure and a dot at it. Position comes from --p. */
 table.league .lg-range { width: 24%; min-width: 6.5rem; padding-inline: .9rem; vertical-align: middle; }
 table.league thead .lg-range { vertical-align: bottom; }
-.lg-mark { display: block; position: relative; height: 12px; }
+.lg-mark { display: block; position: relative; height: 12px; margin-inline: 5px; }
 .lg-mark::before { content: ""; position: absolute; left: 0; right: 0; top: 5px; height: 2px; border-radius: 1px;
   background: linear-gradient(to right, color-mix(in srgb, var(--accent) 55%, transparent) 0 var(--p, 0%), var(--border) var(--p, 0%) 100%); }
 .lg-mark::after { content: ""; position: absolute; top: 1px; left: var(--p, 0%); width: 10px; height: 10px; margin-left: -5px; border-radius: 50%;
@@ -79,7 +79,8 @@ table.league thead .lg-range { vertical-align: bottom; }
    secondary cells. */
 @media (max-width: 599px) {
   table.league, table.league tbody { display: block; width: 100%; }
-  table.league thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .league-wrap { position: relative; }
+  table.league thead { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
   table.league caption { display: block; }
   table.league tbody tr { display: grid; grid-template-columns: 2.5rem minmax(0, 1fr) auto; column-gap: var(--space-sm); row-gap: .3rem; padding: var(--space-sm) .15rem; border-bottom: 1px solid var(--border); }
   table.league tbody tr:first-child { border-top: 2px solid var(--text); }

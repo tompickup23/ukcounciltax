@@ -41,10 +41,11 @@ interface Action {
   /**
    * Front doors (18 November 2026): the cell as two small pills, a first one to
    * the row's own name link and then the action link under a short word, such as
-   * Guess and Set. The links' text stays their accessible name. A row with no
-   * action link prints the first pill alone, with no missing label.
+   * Guess and Set, styled as the game page's neighbour cards (first filled, second
+   * outlined). Each label starts with the pill's word. A row with no action link
+   * prints the first pill alone, with no missing label.
    */
-  pills?: { lead: string; leadLabel: string; action: string };
+  pills?: { lead: string; action: string; leadLabel: (name: string) => string; actionLabel: (name: string) => string };
 }
 
 interface Props {
@@ -63,6 +64,8 @@ interface Props {
   tailHeading?: string;
   /** What the box says about a postcode outside the rows. */
   outside?: string;
+  /** Keep the region and type filters in their closed drawer at every width (the budget hub's band). */
+  filtersClosed?: boolean;
 }
 
 const {
@@ -75,6 +78,7 @@ const {
   actionHash,
   tailHeading,
   outside = "That postcode is not in a council listed here.",
+  filtersClosed = false,
 } = Astro.props;
 const head = rows.filter((row) => !row.noReturn);
 const tail = rows.filter((row) => row.noReturn);
@@ -84,7 +88,7 @@ const extraTypes = [...new Set(rows.map((row) => row.type))].filter((type) => ty
 const types = [...pickerTypes(rows), ...extraTypes.map((type) => ({ label: type, value: slugify(type) }))];
 const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
 ---
-<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} aria-labelledby={`${id}-caption`}>
+<section class="council-picker" data-council-picker data-action-hash={action && actionHash ? actionHash : undefined} data-total={rows.length} data-outside={outside} data-filters-closed={filtersClosed ? "" : undefined} aria-labelledby={`${id}-caption`}>
   <form class="picker-controls" role="search" data-picker-form novalidate>
     <div class="picker-box">
       <label class="picker-label" for={`${id}-q`}>{label}</label>
@@ -132,7 +136,7 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
                   <td class="wide-only" data-cell="type">{row.type}{row.county && <span class="picker-county">{row.county}</span>}</td>
                   {figure && <td class="num">{value ? <span data-figure>{value.text}</span> : <span class="muted">{figure.missing}</span>}</td>}
                   {action && !action.pills && <td class="picker-action">{action.links[row.gss] ? <a href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.links[row.gss]!.text}</a> : <span class="muted">{action.missing}</span>}</td>}
-                  {action?.pills && <td class="picker-action picker-pills">{row.noReturn ? <span class="muted">{action.missing}</span> : <><a class="picker-pill" href={row.href} aria-label={`${action.pills.leadLabel}: ${row.name}`}>{action.pills.lead}</a>{action.links[row.gss] && <a class="picker-pill" href={action.links[row.gss]!.href} aria-label={`${action.links[row.gss]!.text}: ${row.name}`} data-picker-action>{action.pills.action}</a>}</>}</td>}
+                  {action?.pills && <td class="picker-action picker-pills">{row.noReturn ? <span class="muted">{action.missing}</span> : <><a class="picker-pill picker-pill--lead" href={row.href} aria-label={action.pills.leadLabel(row.name)}>{action.pills.lead}</a>{action.links[row.gss] && <a class="picker-pill" href={action.links[row.gss]!.href} aria-label={action.pills.actionLabel(row.name)} data-picker-action>{action.pills.action}</a>}</>}</td>}
                 </tr>
               );
             })}
@@ -250,7 +254,7 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
     const filters = picker.querySelector<HTMLDetailsElement>("[data-picker-filters]");
     const filterCount = picker.querySelector<HTMLElement>("[data-filter-count]");
     const fitFilters = () => {
-      if (filters) filters.open = wide.matches;
+      if (filters && picker.dataset.filtersClosed === undefined) filters.open = wide.matches;
     };
     fitFilters();
     wide.addEventListener("change", () => {
@@ -344,14 +348,17 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
   .council-picker .picker-action { white-space: nowrap; }
   .council-picker td.picker-action a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
   .council-picker td.picker-action .muted { font-size: 0.88rem; }
-  /* Two small pills in one cell (front doors): each a 44 px target, side by side. */
-  .council-picker td.picker-pills { white-space: nowrap; }
+  /* Two small pills in one cell (front doors), as the game page's neighbour cards: the first filled, the second outlined. */
+  .council-picker td.picker-pills { white-space: nowrap; text-align: right; }
   .council-picker td.picker-pills a.picker-pill {
-    min-height: 44px; padding: 0 0.85rem; border: 1px solid var(--border-strong); border-radius: 999px;
-    background: var(--bg-card); color: var(--accent); text-decoration: none; font-size: 0.9rem; line-height: 1;
+    min-height: 44px; padding: 0 1.1rem; border: 1px solid var(--border-strong); border-radius: 999px;
+    color: var(--text); text-decoration: none; font-weight: 600;
   }
-  .council-picker td.picker-pills a.picker-pill + a.picker-pill { margin-left: 0.35rem; }
-  .council-picker td.picker-pills a.picker-pill:hover { border-color: var(--accent); background: var(--accent-wash); }
+  .council-picker td.picker-pills a.picker-pill--lead { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .council-picker td.picker-pills a.picker-pill + a.picker-pill { margin-left: 0.4rem; }
+  .council-picker td.picker-pills a.picker-pill:hover { border-color: var(--accent); }
+  .council-picker td.picker-pills a.picker-pill:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (forced-colors: active) { .council-picker td.picker-pills a.picker-pill { border: 1px solid CanvasText; } }
   .council-picker .picker-tail-head th { background: var(--bg-subtle); font-weight: 600; }
   .council-picker .sort-button {
     font: inherit; font-weight: 600; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 0.15em;
@@ -363,11 +370,11 @@ const columns = 3 + (figure ? 1 : 0) + (action ? 1 : 0);
   html.js .council-picker .nojs-only { display: none; }
   @media (min-width: 600px) {
   .council-picker .picker-meta { display: none; }
-  .council-picker .picker-filters > summary { display: none; }
+  .council-picker:not([data-filters-closed]) .picker-filters > summary { display: none; }
   }
   /* Shown before the script opens the drawer, so nothing moves on a wide screen. */
   @media (min-width: 600px) {
-  .council-picker .picker-filters::details-content { content-visibility: visible; display: block; }
+  .council-picker:not([data-filters-closed]) .picker-filters::details-content { content-visibility: visible; display: block; }
   }
   @media (max-width: 599px) {
   .council-picker .wide-only { display: none; }

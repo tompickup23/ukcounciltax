@@ -12,7 +12,10 @@ import { defineConfig, devices } from "@playwright/test";
  * Kept in its own config and its own directory so the main run cannot pick these
  * specs up and pass them against a server that sends no policy at all.
  */
-const PORT = process.env.CSP_PORT ?? "48788";
+// Below 32768 on purpose. Linux hands out 32768 to 60999 (and macOS 49152 upwards) for
+// outgoing connections, so a port in that range can already be taken when the server
+// starts. That failed a hosted run on 16 November 2026 with the old port, 48788.
+const PORT = process.env.CSP_PORT ?? "28788";
 
 const externalURL = process.env.CSP_BASE_URL;
 

@@ -6,7 +6,11 @@ import { defineConfig, devices } from "@playwright/test";
  * astro preview sends no security headers, so nothing here says anything about
  * the CSP; playwright.csp.config.ts is the run that does.
  */
-const PORT = process.env.E2E_PORT ?? "44321";
+// Below 32768 on purpose. Linux hands out 32768 to 60999 (and macOS 49152 upwards) for
+// outgoing connections, so a port in that range can already be taken when the server
+// starts. The CSP run failed that way on a hosted run on 16 November 2026; this run used
+// 44321 until then and carried the same risk.
+const PORT = process.env.E2E_PORT ?? "24321";
 
 const externalURL = process.env.E2E_BASE_URL;
 

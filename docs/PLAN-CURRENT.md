@@ -1,6 +1,8 @@
-# Current plan | UK Council Tax and UK Councils | 16 November 2026, evening
+# Current plan | UK Council Tax and UK Councils | 18 November 2026
 
 Revised in Claude Code on Monday 16 November 2026 at Tom's request ("focus on the restyle", "the colour theme is ugly"), from GitHub (`gh`, both repositories and estate-kit), the live site read in Chrome at 1440 px, the design check captures of PR 101, `src/styles/global.css`, Estate Kit 0.6.4 `generated/skins/ukcounciltax.css` and `docs/DESIGN-AUDIT-2026-11-15.md`. Nothing here authorises a merge, deployment or deletion.
+
+Revised again on Tuesday 17 November 2026, after W8 went live, from GitHub (`gh`, all three repositories) and the step timings of hosted runs 43769524014 (15 November) and 44087295580 (17 November): sections 1, 2, 3, stage 2 of section 4, section 6 and rules 5 and 6 of section 7.
 
 **This file is replaced, not appended to.** A session that changes the plan rewrites the part that changed, in its own pull request, as it does with `docs/STATE.md`. `docs/PLAN-2026-11-13-ASSESSMENT-AND-NEXT.md` is closed and kept as the record.
 
@@ -8,39 +10,36 @@ Revised in Claude Code on Monday 16 November 2026 at Tom's request ("focus on th
 
 | Site | Main and live | Open |
 |---|---|---|
-| UK Council Tax | `30706ef` (PR 104, W8, palette B), published 17 November | 102 (this plan), 103 (colour round) |
-| UK Councils | `456a200` (PR 63, U2 homepage) | PR 64, draft: seats by party and control (dossier prompt A), checks passed, not yet reviewed |
+| UK Council Tax | `4f7dc97` (PR 102); palette B live since `30706ef` (PR 104) on 17 November | The pull request that carries this revision (release gate in parallel jobs) |
+| UK Councils | `f9139d4` (PR 64, seats by party and control), published 18 November | None |
 | Estate Kit | `v0.6.5` tagged (PR 30, palette B for UK Council Tax) | PR 27 (site header part), PR 28 (scrub report, draft) |
 
-Restyle so far on UK Council Tax: W0 to W3, F1 and W4 part one are live. UK Council Tax still vendors kit 0.6.3, so none of K1 is on the site.
+Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The site vendors kit 0.6.5.
 
-## 2. What is wrong with the restyle, and what changes
+## 2. What was wrong with the restyle, and what is still open
 
-1. **The colours have not changed at all, and the planned swap would not change what Tom sees.** Every restyle pull request so far is layout. The colour work was two late rows ("K1, then W8 as token swaps"). Checked against the files:
-   - The site follows the system theme, and Chrome on this Mac shows it dark. The K1 skin's dark paper is `#0f1317`, the same value as the live `--bg`. Its dark desk (`#2a3e36`) was derived to match the live band on purpose (kit changelog 0.6.4: "the band keeps its colours when it moves onto the kit"). So W8 as written changes the light page from white to `#f8f7f2` and changes nothing visible in dark.
-   - In dark, `--accent` and `--accent-bright` are both `#94d7b5`. One pastel mint is the link, the button, the eyebrow, the second headline tone, the rule, the focus ring and the chart highlight.
-   - The dark desk is that mint at 26 per cent over near black, which gives a grey sage. The homepage stacks three different dark greens: the postcode panel, the budget band and the map card.
-   - The neutrals are cool blue greys (`#0f1317`, `#171c21`, `#545c63`) beside a green accent and, in light, a warm paper.
-   - The bill bar, which the audit names as the site's signature, is drawn in blue, orange, purple and magenta (`--series-1` to `--series-4`), unrelated to anything else on the page. The audit's rule (the council's own share in the accent, other bodies muted) was never built.
-   - The mockup round (audit P1) was dropped on 16 November as a gate for the bands. That was right for layout, and it is why nobody has looked at the palette as a whole.
-2. **Colour is the cheapest change on the site and was scheduled as if it were the dearest.** No component or page holds a colour: every value is a token in `global.css` (a search for hex values outside the token block finds none). A new palette is one kit release and one values only pull request, it reaches all 1,749 pages at once, and no page pull request has to be redone after it. So it moves to the front and runs beside the page lane (section 4, stage 1).
-3. **Each page is judged alone.** Plan 11.3 found four versions of the dark band for this reason. Every page pull request now carries the same eight page reference sheet, dark first (section 7).
-4. **The gates cost about an hour a pull request and the cost is rising.** The `site` check took 19 to 22 minutes for W0, W1 and F1 and 32 to 33 minutes for W4 part one. W3 took seven commits, one cancelled run and one run of 86 minutes with its rerun. Fewer pushes and fewer, family sized pull requests matter more than faster sessions.
-5. **Work with no owner.** The homepage row from the old section 11.4 was in no step. Six Tier 2 pages were queued as six design sessions, though what they need is mostly mechanical (record lines, one Sources block, the chart pair, weight). Both are absorbed in section 4.
-6. **Prompts repeat themselves.** About half of the W4 and W9 prompts is the same traps, gates and merge text. A standing preamble now carries it once (`docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`).
+1. **Colour, fixed.** Until 17 November every restyle pull request was layout, and the planned token swap would have changed nothing in dark, the theme Tom's browser shows. The colour round (PR 103), kit 0.6.5 and W8 (PR 104) replaced the palette on every page at once. The detail of what was wrong is in the body of PR 102 and in `docs/design/COLOUR-ROUND-2026-11.md`. Three small faults from the W8 review are left and now belong to the front doors PR (section 4, stage 2).
+2. **Each page is judged alone.** Every page pull request carries the same eight page reference sheet, dark first (section 7).
+3. **The gates cost about an hour a pull request, and the cause is now measured.** Between the hosted runs of 15 and 17 November named at the top, the serial `site` job's browser steps grew from 12.0 to 20.0 minutes (`test:e2e` 8.5 to 14.7, `test:csp` 3.5 to 5.3), while the build fell from 3.7 to 2.4 minutes. The suite grew with the pages; the build did not slow. The pull request that carries this revision splits the gate into four jobs (section 3). W8 then took five hosted runs: two failed in the number diff and two in the browser suite. Rules 5 and 6 in section 7 answer that.
+4. **Documents only merges are not free.** A push to main always runs the whole gate and publishes, by design (a newer push cancels a running release). The merges of PRs 103 and 102 on 17 November each ran a full release, 23 and 30 minutes, and no other merge may happen during one. Rule 6.
+5. **The critical path was not getting sessions.** Every session of 16 and 17 November went to colour and pages, and UK Councils PR 64 waited two days for its review. It was reviewed and merged on 18 November; the dossier row in section 3 now leads.
+6. **Measurement has no owner.** Week 1 is blank and each session without Chrome has passed it on. E1 asks for eight consecutive weekly rows before the reversal. It needs a named reader each Monday (decision M1 in section 5).
+7. **Prompts repeat themselves.** A standing preamble carries the traps, gates and merge text once (`docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`).
 
 ## 3. Track A: dated work, in date order
 
 | By | Work | Site | Who | State and what it waits on |
 |---|---|---|---|---|
-| Now, then each Monday | `docs/MEASUREMENT.md`: Search Console and Cloudflare Web Analytics, with the read back of the 28 days to 14 November | Both | A Claude session with Chrome, or Tom | Week 1 figures blank |
-| Now | CSP run port fix, with a look at why the `site` check grew from about 20 to about 32 minutes; "Refresh data" restores the pinned RA workbooks (it failed again on 16 November) | UKCT; UKC | Codex or Claude, one small PR each | Not started. The port clash can trip the fast track on any PR |
+| Done, 18 November | Review of UK Councils PR 64 (seats by party and control): the pinned table matched the publisher's page on all 318 rows; one fix, the reason printed for a held control line; merged as `f9139d4` on Tom's yes | UKC | Claude | Live. Review in the pull request. Dossier prompts B and C can start |
+| Now, then each Monday | `docs/MEASUREMENT.md`: Search Console and Cloudflare Web Analytics, with the read back of the 28 days to 14 November | Both | A Claude session with Chrome, or Tom (decision M1) | Week 1 figures blank; week 2 is due on 23 November |
+| Now | Release gate in parallel jobs: `site` builds once, `unit` and three browser shards plus the CSP run go beside it, `publish` deploys the same tree only when all pass. Both test servers move below port 32768, out of the range the runner hands to outgoing connections. `npm run check:pr-body` reads a description the way the hosted checks do | UKCT | Claude, Tom's yes | In the pull request that carries this revision. The time saved is not known until its own hosted run is read |
+| Now | "Refresh data" restores the pinned RA workbooks (the scheduled run failed again on 16 November) | UKC | Codex or Claude, one small PR | Not started |
 | Done, 16 November | C1, the palette: B, green and cream, chosen from the colour round sheets | UKCT | Tom | Decided. K2 and W8 follow (section 4) |
 | 1 to 5 December | Council links rerun (prompt 6 of 15 November). Every build fails from 4 January 2027 without it | Both | Codex | Prompt written |
 | 4 December | D3, the two marks, drawn in the chosen palette | Both | Claude draws candidates, Tom chooses | Moved from 1 December so the marks follow the palette |
 | Early December, after the links rerun | Shepway slug to `folkestone-and-hythe`: five URLs, redirects on three sites | Three sites | Codex, one PR per site, Tom's yes each | Decided |
 | 15 December | Remaining dossier scope decisions (section 5) | UKC | Tom | Defaults apply from 16 December |
-| Mid January 2027 | Dossier builds from the three decided sources: seats and control (prompt A, PR 64 draft: 294 party tables, 129 control lines, 167 control labels held), then audit status (prompt B), then section 114 notices (prompt C) | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | **The critical path.** PR 64 needs its review next |
+| Mid January 2027 | Dossier builds from the three decided sources: seats and control (prompt A, live since PR 64: 294 party tables, 129 control lines, 167 control lines held), then audit status (prompt B), then section 114 notices (prompt C) | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | **The critical path.** Prompts B and C are next. The composition snapshot is dated 16 November and has no refresh date yet |
 | Mid January 2027 | Smaller dossier gaps: election schedule built on 174 of 296, school holidays on 287, service links on 272, published payments on 234 (`DOSSIER-GATE.md`, measured 15 November) | UKC | Codex | The links rerun lifts the service links row |
 | When the report lands | C6b: referendum principles 2027/28 for the set pages and release records | UKCT | Claude | C6 staging is live since PR 88 |
 | First week of March 2027 | Burnley scenario game refresh, after the February budget papers | UKCT | Codex | Prompt owed once the budget council date is published |
@@ -84,11 +83,10 @@ My recommendation before seeing them drawn is B. It is a view, not a finding: th
 | Order | Work | Who | Waits on |
 |---|---|---|---|
 | 1 | W4 part two: reveal, result card, PNG, the drawer | Claude (Opus), fast track | Nothing. Prompt in `docs/PROMPTS-2026-11-16-W4-W9.md` |
-| 2 | Front doors, one PR: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills per row) and the homepage row (bill card trimmed to bar, legend and one record line; England average, change and line chart in one row; map thumb from the real outline) | Claude, fast track if it stays layout only | W4 part two merged |
-| 3 | W8, the colour swap (stage 1) | Claude, Tom's yes | C1 and K2. Slots between page PRs, never beside one |
-| 4 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Prompt written. After W8 if W8 is ready, so its sheet is judged in the final colours |
-| 5 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |
-| 6 | Tier 2 sweep, two PRs, mechanical: record lines and one Sources block, the chart pair, the title rule and page weight on the national page, band pages, increases, changes, precepts, Wales, 2027/28 and your area. No redesign | Codex, Claude reviews, Tom's yes | W9 merged, as the worked example. Removes four ratchet rows |
+| 2 | Front doors, one PR: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills per row) and the homepage row (bill card trimmed to bar, legend and one record line; England average, change and line chart in one row; map thumb from the real outline). It also takes the three faults left from the W8 review: `data-ground="desk"` on the band; in light, the map thumb's third shade and the Band D line's hovered point are cream on cream; the share card logo square merges into the ground. A fault that needs a new colour value goes to the kit (rule 4) | Claude, fast track if it stays layout only | W4 part two merged |
+| 3 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Prompt written |
+| 4 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |
+| 5 | Tier 2 sweep, two PRs, mechanical: record lines and one Sources block, the chart pair, the title rule and page weight on the national page, band pages, increases, changes, precepts, Wales, 2027/28 and your area. No redesign | Codex, Claude reviews, Tom's yes | W9 merged, as the worked example. Removes four ratchet rows |
 | UKC | U1 kit token route, then the UK Councils palette by the same round (one short session, the method exists by then), then U3 network band | Claude, Tom's yes | K2 for U1; nothing for U3 |
 
 Target: the must list live by the end of February, leaving three weeks before the freeze.
@@ -97,7 +95,7 @@ Target: the must list live by the end of February, leaving three weeks before th
 
 **After the reversal:** W10 share cards on both sites; U4 the `/councils/` map lead; U5 the dossier page layout; D14 option b.
 
-Sessions left on the restyle: 3 for colour, 6 pages in the must list, 3 on UK Councils, 4 in the should list, 4 parked. The old plan had 7 must and 6 should and did not include a palette at all.
+Sessions left on the restyle: 5 pages in the must list, 3 on UK Councils, 4 in the should list, 4 parked. The three colour sessions are done.
 
 ## 5. Decisions, one register
 
@@ -107,6 +105,7 @@ Open, with my recommendation, a date and what happens on silence:
 
 | Ref | Decision | Recommendation | Decide by | Default |
 |---|---|---|---|---|
+| M1 | Who reads the measurement figures each Monday | A scheduled Monday session with Chrome connected, and Tom reads it in any week that session cannot | 23 November | The row stays blank and E1's eight weeks start later |
 | C2 | Which theme leads | Dark is captured and judged first on every sheet; both must pass | With C1 | Dark first |
 | R1 | Fast track when a reviewer's data rule finding has been fixed | Allow the merge once the same reviewer confirms the fix in the pull request and the PR is still layout only | Before the next such PR | Each such PR waits for Tom |
 | D8 | Header structure | (a) four menus plus "Find my bill" | 30 November | W5 waits |
@@ -127,7 +126,7 @@ Open, with my recommendation, a date and what happens on silence:
 1. Colour round (C0), kit 0.6.5 (K2), the swap (W8) and the front doors PR: written, `docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`, with the standing preamble every later prompt cites.
 2. W4 part two and W9: written, `docs/PROMPTS-2026-11-16-W4-W9.md`.
 3. Dossier builds A, B, C: written, `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`.
-4. Owed: the two check fixes (small enough to brief in the PR title); the Tier 2 sweep, written when W9 merges, from W9's diff.
+4. Owed: the UK Councils "Refresh data" fix (small enough to brief in the PR title); the Tier 2 sweep, written when W9 merges, from W9's diff.
 
 ## 7. Working rules
 
@@ -139,5 +138,7 @@ New from this revision:
 2. **Gate once.** Full local gates run on the final head only. Review findings are fixed together and pushed once, so a PR costs two hosted runs, not five.
 3. **Family sized PRs.** Where two changes share one "Pages allowed to differ" glob and one reviewer can hold both, they are one PR (the front doors, the Tier 2 sweep). A PR that needs Tom's yes is never bundled with one that does not.
 4. **No colour in a page PR.** A page PR that needs a new colour stops and asks the kit; values arrive only through `apply-brand.py`.
+5. **Check the description before it is opened or edited.** Write the body to a file and run `npm run check:pr-body -- body.md` (or `-- --pr <number>` on an open one). It uses the hosted parser, so a missing fenced block or an allowed glob written as a URL fails here in a second, not in the number diff after a hosted run. Every edit to a description starts a new hosted run, so edit once.
+6. **Documents ride with the work.** `docs/STATE.md`, this file and prompts change inside the page or data pull request they describe. A pull request of documents alone is for a decision record or a plan revision Tom asked for, and it merges when no release is running and none is about to start.
 
 Dates and figures in this file are restated from the documents named at the top; check GitHub before relying on a state line.

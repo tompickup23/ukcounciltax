@@ -792,3 +792,20 @@ routes only by `scripts/check-dist.mjs`) and ItemLists of names and anchors.
   held; the parish part change is shown.
 - Region pages hold up to 1,920 rows in one static table (about 1.4 MB of HTML,
   well under 150 KB compressed); the table scrolls inside its box above 30 rows.
+
+## Release gate in parallel jobs, 17 November 2026
+
+No page, figure or source changes. The hosted release gate was one serial `site` job. Its browser steps took 12.0 minutes on 15 November 2026 (run 43769524014: `test:e2e` 8.5, `test:csp` 3.5) and 20.0 minutes on 17 November 2026 (run 44087295580: 14.7 and 5.3), as the browser suite grew to 626 cases across two viewports and 148 CSP cases. The build itself took 3.7 and then 2.4 minutes.
+
+The gate is now four jobs in `.github/workflows/release.yml`:
+
+- `site` builds once, runs `test:dist`, `test:text` and the link audit, and keeps the built tree as one tar file.
+- `unit` runs `npm test` and `npm run check` beside it.
+- `browser` runs four legs against the tree `site` built: the main suite in three shards (209, 209 and 208 cases) and the CSP run.
+- `publish` needs all of them and deploys that same tree. Nothing is rebuilt between the checks and the deploy, and a pull request never starts it.
+
+Both Playwright servers moved below port 32768 (24321 and 28788, from 44321 and 48788). Linux gives ports 32768 to 60999 to outgoing connections, and the CSP server found 48788 taken on a hosted run on 16 November 2026. `E2E_PORT`, `CSP_PORT`, `E2E_BASE_URL` and `CSP_BASE_URL` still override them.
+
+`npm run check:pr-body` reads a pull request description with the parser the hosted number diff and design check use, and fails on a heading without its fenced block or an allowed glob written as a URL path.
+
+Limit: the time the split saves is not stated here because it was not measured before this note was written; read it from the first hosted run of the pull request.

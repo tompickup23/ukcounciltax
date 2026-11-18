@@ -39,8 +39,11 @@ for (const [a, b, band, year] of [['burnley','pendle','D','2026-27'], ['camden',
     for (const [slug, row] of [[a, first], [b, second]] as const) for (const letter of ['A','D','H'] as const)
       await expect(page.locator(`[data-compare-chart="bands"] [data-council="${slug}"][data-band="${letter}"]`)).toHaveAttribute('data-value', String(row.years[year][letter]! / 100));
     await expect(page.locator('[data-compare-chart="bands"] details.ek-twin table')).toContainText(money(second.years[year].H!));
-    // A reader's own pair has no prebuilt PNG; the table stays.
-    await expect(page.locator('[data-compare-chart="bands"] [data-chart-png]')).toBeHidden();
+    // Only the example pair (Burnley and Pendle, Band D, the current year) has a prebuilt
+    // PNG; any other pair offers the table instead.
+    const png = page.locator('[data-compare-chart="bands"] [data-chart-png]');
+    if (a === 'burnley' && band === 'D' && year === Object.keys(first.years).sort().at(-1)) await expect(png).toBeVisible();
+    else await expect(png).toBeHidden();
     const headline = await page.locator('[data-result-difference]').textContent();
     await page.getByRole('button', {name:'Swap councils'}).click();
     await expect(page.locator('[data-result-difference]')).toHaveText(headline!);

@@ -1,9 +1,11 @@
 ---
 /** One English billing authority's in-year council tax collection rate and arrears, beside England, from MHCLG Table 9a (QRC4). */
 import SourceLine from './SourceLine.astro';
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
 import {collection,collectionFor,collectionSource,collectionYear,collectionYearEnd,collectionPriorYear,collectionAmount,collectionRate,shownNotes} from '../lib/collection-rates';
-interface Props {gss:string;name:string}
-const {gss,name}=Astro.props;
+interface Props {gss:string;name:string;/** Record line mode (W9). */record?:{entry:string;source:SourceRef}}
+const {gss,name,record}=Astro.props;
 const row=collectionFor(gss);
 const england=collection.england;
 const source=collectionSource();
@@ -62,7 +64,7 @@ const englandNotes=row?shownNotes(england):[];
           {englandNotes.map(n=><li>MHCLG note for England: {n.text}</li>)}
         </ul>
       )}
-      <SourceLine source={source} />
+      {record ? <RecordLine entry={record.entry} sources={[record.source]} method={record.source.method} /> : <SourceLine source={source} />}
     </div>
   </section>
 )}

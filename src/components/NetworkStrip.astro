@@ -8,13 +8,17 @@ const links = networkLinks(council, name);
 ---
 <ul class="network-strip" data-network-strip>
   {links.map(link => <li data-fact={link.residents !== undefined || link.election ? '' : undefined}>
+    <span class="network-site" aria-hidden="true">{link.site}</span>
     <a href={link.url} data-figure={link.residents !== undefined || link.election ? '' : undefined}>{link.label}</a>
     {link.residents !== undefined && <p class="source-line" data-network-population>Source: <a href={populationSource.fileUrl}>{populationSource.publisher}, {populationSource.title}</a>, MYE2 Persons, published {longDate(populationSource.published)}.</p>}
     {link.election && <p class="source-line" data-network-election>Source: <a href={link.election.sourceUrl}>{link.election.sourceLabel}</a>, recorded in UK Elections' council election register, checked {longDate(electionsChecked)}.</p>}
   </li>)}
 </ul>
 <style>
-.network-strip{list-style:none;padding:0;margin:0}
-.network-strip li{padding-block:var(--space-sm);border-bottom:1px solid var(--border)}
-.network-strip .source-line{margin-bottom:0}
+/* W9: sister cards, one per verified live site, wrapping to the space available. */
+.network-strip{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--space-sm)}
+.network-strip li{display:flex;flex-direction:column;gap:.35rem;min-width:0;padding:var(--space-md);border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card)}
+.network-site{font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.network-strip a{font-weight:600;overflow-wrap:anywhere}
+.network-strip .source-line{margin:auto 0 0;padding-top:.35rem}
 </style>

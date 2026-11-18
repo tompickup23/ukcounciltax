@@ -58,9 +58,12 @@ describe.runIf(fresh)('collection block in the built council page',()=>{
   expect(block).toContain('95.60%');
   expect(block).toContain('£15,841 thousand');
   expect(block).toContain('£7,423,938 thousand');
-  expect(block).toContain('class="source-line"');
+  // W9: a short record line in the block; the full reference, with its date, in the page's one Sources block.
+  expect(block).toContain('class="source-line record-line"');
   expect(block).toContain('Table 9a');
-  expect(block).toContain('published 24 June 2026');
+  const sources=/<section[^>]*data-page-sources[\s\S]*?<\/section>/.exec(html)?.[0]??'';
+  expect(sources).toContain('Table 9a');
+  expect(sources).toContain('published 24 June 2026');
  });
  it('shows the revision note for Kensington and Chelsea',()=>{
   expect(section('kensington-and-chelsea').block).toContain('MHCLG note:');

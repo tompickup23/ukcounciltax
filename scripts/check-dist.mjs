@@ -413,7 +413,11 @@ if (existsSync(bandFile)) {
   }
   for (const page of councilPages) {
     const html = readFileSync(page, "utf-8");
-    if (!/Source: <a href="https:\/\/www\.gov\.uk\/government\/statistics\//.test(html)) {
+    // W9: the council page cites MHCLG through short record lines; the full reference sits in its one Sources block.
+    const fullLine = /Source: <a href="https:\/\/www\.gov\.uk\/government\/statistics\//.test(html);
+    const recordLine = /record-publisher">MHCLG<\/span> <a href="https:\/\/www\.gov\.uk\/government\/statistics\/council-tax-levels-set-by-local-authorities/.test(html)
+      && /<li id="source-council-bands"><p>(?:(?!<\/li>)[\s\S])*?<a href="https:\/\/www\.gov\.uk\/government\/statistics\/council-tax-levels-set-by-local-authorities[^"]*">MHCLG, /.test(html);
+    if (!fullLine && !recordLine) {
       failures.push(`${rel(page)} has no MHCLG source line`);
     }
     if (!/class="caveat"/.test(html)) failures.push(`${rel(page)} has no parish precept caveat`);

@@ -11,10 +11,12 @@ import {councilByGss} from '../lib/registry';
 import {towns} from '../lib/towns';
 import {countyPathOf, tidy} from '../lib/towns-pages';
 import SourceLine from './SourceLine.astro';
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
 import {moneyPence} from '../lib/tax-view';
 import {precedingYear,yearLabel} from '../lib/council-tax';
-interface Props {gss:string;name:string;classCode:Authority["classCode"];view?:"bill"|"parishes"|"both"}
-const {gss,name,classCode,view="both"}=Astro.props;
+interface Props {gss:string;name:string;classCode:Authority["classCode"];view?:"bill"|"parishes"|"both";/** Record line mode for the parish line (W9). */parishRecord?:{entry:string;source:SourceRef}}
+const {gss,name,classCode,view="both",parishRecord}=Astro.props;
 const slug = councilByGss(gss)!.slug;
 const chart = profileChartOptions(slug).bill;
 const rounding = billShareRounding(chart);
@@ -62,6 +64,6 @@ const earlier=precedingYear(PARISH_YEAR);
       <p><a href={parishPath(councilByGss(gss)!)}>Every parish precept in {name}, with its change on {yearLabel(earlier)}</a></p>
       {townRow && <p><a href={countyPathOf(townRow)}>Full Band D by parish and unparished area in {tidy(townRow.county)}</a>, every charge added up for each area.</p>}
     </> : <p>No parish or local-body rows for {name} appear in this national parish return. This is not an address-level confirmation that no additional local charge applies. Check the council's published schedule.</p>}
-    <SourceLine source={parishRef} />
+    {parishRecord ? <RecordLine entry={parishRecord.entry} sources={[parishRecord.source]} /> : <SourceLine source={parishRef} />}
   </div>
 </section>}

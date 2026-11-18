@@ -10,8 +10,8 @@ Revised again on 17 November (after W8 went live, from the step timings of hoste
 
 | Site | Main and live | Open |
 |---|---|---|
-| UK Council Tax | `238e78f` (PR 105, release gate in parallel jobs), published 18 November; palette B live since `30706ef` (PR 104) | None. W4 part two is being built in its own session |
-| UK Councils | `c5de1bf` (PR 66, refreshed payments summaries), published 18 November; seats and control live since `f9139d4` (PR 64) | PR 68, draft: section 114 notice register (dossier prompt B). PR 67, draft: audit identity crosswalk (dossier prompt C, stage 1, data only) |
+| UK Council Tax | `8c20976` (PR 107, W4 part two), published 18 November; release gate in parallel jobs since `238e78f` (PR 105); palette B live since `30706ef` (PR 104) | Being built in Opus sessions started 18 November: front doors, W9, compare (W7), the league tables, and a documents only round for D8 and D3 |
+| UK Councils | `37cb4a4` (PR 68, section 114 notice register), published 18 November; audit identity crosswalk `81db050` (PR 67); seats and control live since `f9139d4` (PR 64) | Being built in Opus sessions started 18 November: audit status stage 2 (page work), and upkeep (control line wording; research pins, a description checker and a weekly snapshot check) |
 | Estate Kit | `v0.6.5` tagged (PR 30, palette B for UK Council Tax) | PR 27 (site header part), PR 28 (scrub report, draft) |
 
 Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The site vendors kit 0.6.5.
@@ -42,8 +42,8 @@ Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The
 | 4 December | D3, the two marks, drawn in the chosen palette | Both | Claude draws candidates, Tom chooses | Moved from 1 December so the marks follow the palette |
 | Early December, after the links rerun | Shepway slug to `folkestone-and-hythe`: five URLs, redirects on three sites | Three sites | Codex, one PR per site, Tom's yes each | Decided |
 | 15 December | Remaining dossier scope decisions (section 5) | UKC | Tom | Defaults apply from 16 December |
-| Now | PSAA permission request: written permission to publish a per council table derived from its audit opinion data, with acknowledgement. Without it audit status reaches only the profiles on an MHCLG list | UKC | Claude drafts, Tom sends | Not drafted. It has a lead time, so it goes before audit stage 2, not after |
-| Mid January 2027 | Dossier builds from the three decided sources. Seats and control: live since PR 64 (294 party tables, 129 control lines, 167 control lines held). Section 114 notices (prompt B): PR 68, draft, 11 inspected originals on 8 profiles. Audit status (prompt C): stage 1, the identity crosswalk, is PR 67, draft, 79 of 296 profiles reached; stage 2, the page work, follows PR 68 | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | **The critical path.** Next: review PR 67 and PR 68 when their hosted checks pass, then prompt C stage 2 |
+| On hold | PSAA permission request: written permission to publish a per council table derived from its audit opinion data. Without it audit status reaches only the profiles on an MHCLG list (79 of 296 by the crosswalk) | UKC | Tom | Held by Tom on 18 November ("I don't want to send any permission requests yet"). Nothing is drafted or sent until he says so. The audit pages say PSAA data is not shown because its reuse terms have not been cleared |
+| Mid January 2027 | Dossier builds from the three decided sources. Seats and control: live since PR 64 (294 party tables, 129 control lines, 167 control lines held). Section 114 notices: live since PR 68, 11 inspected originals on 8 profiles, every one hashed. Audit status: the identity crosswalk merged as PR 67 (79 of 296 profiles reached); stage 2, the page work, is being built | UKC | Opus sessions build, Claude reviews, Tom's yes for each data PR | **The critical path.** Next: review the audit stage 2 pull request when its hosted checks pass |
 | Mid January 2027 | The rest of the dossier, ranked by profiles reached (`DOSSIER-GATE.md`, measured 15 and 16 November): election schedule, built on 174 of 296, so 122 to gain; published payments on 234; service links on 272; school holidays on 287 | UKC | Codex | Election schedule first. The links rerun lifts the service links row |
 | When the report lands | C6b: referendum principles 2027/28 for the set pages and release records | UKCT | Claude | C6 staging is live since PR 88 |
 | First week of March 2027 | Burnley scenario game refresh, after the February budget papers | UKCT | Codex | Prompt owed once the budget council date is published |
@@ -67,22 +67,23 @@ The colour round (C0, PR 103), Estate Kit 0.6.5 (K2, tagged `v0.6.5`) and the sw
 | Order | Work | Who | Waits on |
 |---|---|---|---|
 | 1 | W4 part two: reveal (twin waffles, dot plot, gap bars, one table twin), the end card with a canvas PNG, the unreadable score link message, "Behind the numbers" with every reference table in one drawer, neighbour cards with Guess and Set | Claude (Opus), fast track | In its pull request, opened 18 November with every gate reported in its body. Merges under the fast track only if all five conditions hold |
-| 2 | Front doors, one PR: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills per row) and the homepage row (bill card trimmed to bar, legend and one record line; England average, change and line chart in one row; map thumb from the real outline). It also takes the three faults left from the W8 review: `data-ground="desk"` on the band; in light, the map thumb's third shade and the Band D line's hovered point are cream on cream; the share card logo square merges into the ground. A fault that needs a new colour value goes to the kit (rule 4) | Claude, fast track if it stays layout only | W4 part two merged |
-| 3 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Prompt written |
+| 2 | Front doors, one PR: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills per row) and the homepage row (bill card trimmed to bar, legend and one record line; England average, change and line chart in one row; map thumb from the real outline), with the three faults left from the W8 review. Tom, 18 November: the council picker for the budget game "looks pretty amateur"; its look is what this PR is judged on | Claude (Opus), fast track if it stays layout only | Being built, started 18 November |
+| 3 | W9 council page: ledger row under the H1, one bands chart, short record lines | Claude (Opus), fast track | Being built, started 18 November |
 | 4 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 |
-| 5 | W7 compare as bars for fixed pairs (NV11, decided 16 November). Moved up from the should list on 18 November: the design audit ranks the compare tool at severity 5 and the Tier 2 pages at severity 3 | Codex, Claude reviews, Tom's yes | Nothing |
+| 5 | W7 compare as bars (NV11, decided 16 November): never a blank form, a worked example pair, paired bars with table twins, honest handling of pairs that cannot be compared. Tom, 18 November: the compare page "looks pretty amateur" | Claude (Opus), Tom's yes | Being built, started 18 November |
+| 5a | League tables: the `/council-tax/ranked/` family and the towns league under `/council-tax/towns/`, redesigned as scannable tables (rank, figure, an inline bar, a lead on the desk band, no sideways scroll on phones, region pages under 500 KB). Moved up from the should list on 18 November at Tom's request ("the ranking league table aesthetics ... look pretty amateur"). The change to which places lead the headline pair is a separate PR for Tom's yes | Claude (Opus), fast track for the layout PR | Being built, started 18 November |
 | 6 | Tier 2 sweep, two PRs, mechanical: record lines and one Sources block, the chart pair, the title rule and page weight on the national page, band pages, increases, changes, precepts, Wales, 2027/28 and your area. No redesign | Codex, Claude reviews, Tom's yes | W9 merged, as the worked example. Removes four ratchet rows |
 | UKC | U1 kit token route, then the UK Councils palette by the same round (one short session, the method exists by then), then U3 network band | Claude, Tom's yes | The UK Councils lane is free for these once the dossier pull requests merge |
 
 Target: the must list live by the end of February, leaving three weeks before the freeze.
 
-**Should land, in this order, if the must list is on time by the end of January:** towns follow up (larger places lead the headline pair; region pages under 500 KB; Tom's yes; asked for by Tom on 15 November); `/council-tax/ranked/`; M1 marks after D3.
+**Should land, if the must list is on time by the end of January:** M1 marks after D3.
 
 **Proposed on 18 November, each needs Tom's yes before it is planned:** a public coverage page on UK Councils (one table of what the site holds for each council and why anything is absent, from the gate report); a one line summary at the top of a UK Councils profile (control, and the next scheduled election) where both parts are built; a weekly check in the UK Councils refresh job that compares the live composition table's hash with the pin and opens an issue when it differs, changing no data.
 
 **After the reversal:** W10 share cards on both sites; U4 the `/councils/` map lead; U5 the dossier page layout; D14 option b.
 
-Sessions left on the restyle: 6 in the must list (W4 part two, front doors, W9, W5, compare, the Tier 2 sweep), 3 on UK Councils, 3 in the should list, 4 parked. The three colour sessions are done.
+Sessions left on the restyle once the five page sessions of 18 November land: W5 (waits on D8) and the Tier 2 sweep in the must list, 3 on UK Councils, 1 in the should list, 4 parked. The three colour sessions and W4 are done.
 
 ## 5. Decisions, one register
 
@@ -114,8 +115,8 @@ Open, with my recommendation, a date and what happens on silence:
 1. Colour round (C0), kit 0.6.5 (K2), the swap (W8) and the front doors PR: written, `docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`, with the standing preamble every later prompt cites.
 2. W4 part two and W9: written, `docs/PROMPTS-2026-11-16-W4-W9.md`.
 3. Dossier builds A, B, C: written, `docs/PROMPTS-2026-11-16-DOSSIER-BUILDS.md`.
-4. Dossier prompt B (section 114, full build) and prompt C stage 1 (audit identity crosswalk, data only) were rewritten on 18 November to run side by side and given to Tom in chat; they are UK Councils PRs 68 and 67. Each carries the session rules block of rule 7.
-5. Owed: dossier prompt C stage 2 (audit page work), written when PR 68 merges, from its diff; the Tier 2 sweep, written when W9 merges, from W9's diff; the election schedule build; the PSAA permission request for Tom to send.
+4. From 18 November build work goes to Opus 5.5 sessions on high effort started and managed from a Claude session, in place of Codex prompts (Tom, 18 November). Each brief names the files the other sessions own, and tells the session to leave the browser suites to the hosted checks and to take the build lock, because the Mac has 8 GB of memory. Dossier prompts B and C stage 1 ran in Codex earlier that day (UK Councils PRs 68 and 67).
+5. Owed: the Tier 2 sweep brief, written when W9 merges, from W9's diff; the election schedule build, whose source is the UK Elections repository and so needs Tom's word first.
 
 ## 7. Working rules
 

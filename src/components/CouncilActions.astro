@@ -8,7 +8,7 @@ const {slug} = Astro.props;
 const row = taxRows().find(row => row.slug === slug)!;
 ---
 <div data-council-actions>
-  <ViewActions id="council" />
+  <ViewActions id="council" icons />
   <script type="application/json" data-council-export set:html={jsonLd({row, year: CURRENT_YEAR, site: SITE_URL})} />
 </div>
 <script>

@@ -69,7 +69,10 @@ export function profileProblems(html, slug) {
   const navIds = [...nav?.querySelectorAll('a[href^="#"]') ?? []].map(link => link.getAttribute('href').slice(1));
   const sectionIds = [...doc.querySelectorAll('main section[id]')].filter(section => nav && (nav.compareDocumentPosition(section) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING)).map(section => section.id);
   if (!nav || JSON.stringify(navIds) !== JSON.stringify(sectionIds)) problems.push('page contents differ from document section order');
-  if (doc.querySelectorAll('.action-links a').length !== 3) problems.push('the action row must hold three links');
+  // W9: one button group under the ledger row, with Compare; the budget game door moved to the next steps cards.
+  if (doc.querySelectorAll('.council-actions').length !== 1 || !doc.querySelector('.council-actions [data-council-compare]')) problems.push('one button group with the compare link is required');
+  if (!doc.querySelector(`#next-steps a[href="/tools/budget/${slug}/"]`)) problems.push('the next steps cards must link to the budget game');
+  if (!doc.querySelector('[data-council-ledger] [data-ledger="band-d"] [data-figure]')) problems.push('the ledger row must open with Band D');
   doc.replaceChildren();
   return problems;
 }

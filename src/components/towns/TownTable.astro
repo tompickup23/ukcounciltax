@@ -15,7 +15,7 @@ import TownsSources from './TownsSources.astro';
 import '../../styles/league.css';
 import {national} from '../../lib/national-data';
 import {noteText, townByCode, townsData, type TownStatus} from '../../lib/towns';
-import {councilHref, money, noFigure, parishChange, parishPart, placeName, printedName, signedMoney, STATUS_CHIPS, townConstituencyPath, POSITION_METHOD, type TownScope} from '../../lib/towns-pages';
+import {councilHref, money, noFigure, parishChange, parishPart, placeName, printedName, scopeIn, signedMoney, STATUS_CHIPS, townConstituencyPath, POSITION_METHOD, type TownScope} from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 import type {TableRow, TownPart} from '../../lib/towns-parts';
 
@@ -51,7 +51,7 @@ const lastPlaced = rows.filter(r => r.position !== null).at(-1)?.town.code;
 ---
 <section class="section towns-table-section" aria-labelledby="towns-table-heading" data-towns-table>
   <h2 id="towns-table-heading">Every parish and unparished area, lowest to highest</h2>
-  <p>{rankedCount.toLocaleString('en-GB')} areas have a full Band D and are in position order. {unplacedCount > 0 ? `${unplacedCount.toLocaleString('en-GB')} more are listed after them with their status: their full Band D is not published in the national tables, so they are not in the order.` : 'Every area here has a full Band D.'} Full Band D is the whole Band D bill in that area: the billing council, the county or GLA, police, fire and combined authority, and the parish. It is before discounts, reductions and premiums.</p>
+  <p>{rankedCount.toLocaleString('en-GB')} areas{paged ? ` ${scopeIn(scope)}, across every part of this table,` : ''} have a full Band D and are in position order. {unplacedCount > 0 ? `${unplacedCount.toLocaleString('en-GB')} more are listed after them with their status: their full Band D is not published in the national tables, so they are not in the order.` : 'Every area here has a full Band D.'} Full Band D is the whole Band D bill in that area: the billing council, the county or GLA, police, fire and combined authority, and the parish. It is before discounts, reductions and premiums.</p>
   {paged && (
     <nav class="league-jump towns-parts" aria-label="Parts of this table">
       <span>Positions</span>

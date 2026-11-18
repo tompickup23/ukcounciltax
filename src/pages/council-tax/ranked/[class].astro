@@ -54,7 +54,7 @@ const sources = [
     {lowest && highest && (
       <div class="fact ranked-pair" data-fact>
         <div class="ranked-pair-cards">
-          {[{kicker: `Lowest ${basis}`, row: lowest}, {kicker: `Highest ${basis}`, row: highest}].map(card => (
+          {[{kicker: `${(data.county ? lowest.ownTied : lowest.areaTied) ? 'Joint lowest' : 'Lowest'} ${basis}`, row: lowest}, {kicker: `${(data.county ? highest.ownTied : highest.areaTied) ? 'Joint highest' : 'Highest'} ${basis}`, row: highest}].map(card => (
             <div class="desk-card">
               <span class="desk-kicker">{card.kicker}</span>
               <a class="ranked-pair-place" href={`#${rowId(card.row)}`}>{card.row.name}</a>

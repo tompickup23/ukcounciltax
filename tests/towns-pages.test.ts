@@ -200,6 +200,8 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
     const highest = scopeSummary(regionScopes().find(r => r.slug === 'south-west')!.rows).highest!;
     expect(sw).toContain(`href="/council-tax/towns/region/south-west/part-`);
     expect(sw).toMatch(new RegExp(`href="/council-tax/towns/region/south-west/part-\\d+/#${highest.town.code}"`));
+    // The structured data's lists point at the same part.
+    expect(sw).toMatch(new RegExp(`"url":"https://ukcounciltax\\.co\\.uk/council-tax/towns/region/south-west/part-\\d+/#${highest.town.code}"`));
   });
 
   it('keeps the hub to bounded lists and links every region, county and constituency', () => {

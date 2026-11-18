@@ -20,7 +20,7 @@ import {
 } from '../../lib/towns-pages';
 import {tidy} from '../../lib/towns-pages';
 import {townOgPath, townOgAlt} from '../../lib/towns-og';
-import {scopeParts} from '../../lib/towns-parts';
+import {rowHref, scopeParts} from '../../lib/towns-parts';
 
 interface Props {scope: TownScope}
 const {scope} = Astro.props;
@@ -42,7 +42,7 @@ const parts = scopeParts(scope);
 const values = summary.ranked.map(r => r.town.fullBandDPence);
 ---
 <BaseLayout title={text.title} description={text.description} path={scope.path}
-  structuredData={scopeStructuredData(scope, summary, text.description)}
+  structuredData={scopeStructuredData(scope, summary, text.description, town => { const href = rowHref(scope, town); return href.startsWith('#') ? `${scope.path}${href}` : href; })}
   about={{'@type': 'AdministrativeArea', name: scope.kind === 'constituency' ? `${scope.name} constituency` : scope.name}}
   ogImage={townOgPath(scope)} ogImageAlt={townOgAlt(scope)}>
   <Breadcrumbs items={[{label: 'Council tax', href: '/council-tax/'}, {label: 'Parish and unparished areas', href: townsPath()}, {label: `${kindLabel}: ${scope.name}`}]} />

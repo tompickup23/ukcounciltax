@@ -1,4 +1,4 @@
-# Current plan | UK Council Tax and UK Councils | 17 November 2026
+# Current plan | UK Council Tax and UK Councils | 18 November 2026
 
 Revised in Claude Code on Monday 16 November 2026 at Tom's request ("focus on the restyle", "the colour theme is ugly"), from GitHub (`gh`, both repositories and estate-kit), the live site read in Chrome at 1440 px, the design check captures of PR 101, `src/styles/global.css`, Estate Kit 0.6.4 `generated/skins/ukcounciltax.css` and `docs/DESIGN-AUDIT-2026-11-15.md`. Nothing here authorises a merge, deployment or deletion.
 
@@ -11,7 +11,7 @@ Revised again on Tuesday 17 November 2026, after W8 went live, from GitHub (`gh`
 | Site | Main and live | Open |
 |---|---|---|
 | UK Council Tax | `4f7dc97` (PR 102); palette B live since `30706ef` (PR 104) on 17 November | The pull request that carries this revision (release gate in parallel jobs) |
-| UK Councils | `456a200` (PR 63, U2 homepage) | PR 64, draft: seats by party and control (dossier prompt A), checks passed, not reviewed, unchanged since 16 November |
+| UK Councils | `f9139d4` (PR 64, seats by party and control), published 18 November | None |
 | Estate Kit | `v0.6.5` tagged (PR 30, palette B for UK Council Tax) | PR 27 (site header part), PR 28 (scrub report, draft) |
 
 Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The site vendors kit 0.6.5.
@@ -22,7 +22,7 @@ Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The
 2. **Each page is judged alone.** Every page pull request carries the same eight page reference sheet, dark first (section 7).
 3. **The gates cost about an hour a pull request, and the cause is now measured.** Between the hosted runs of 15 and 17 November named at the top, the serial `site` job's browser steps grew from 12.0 to 20.0 minutes (`test:e2e` 8.5 to 14.7, `test:csp` 3.5 to 5.3), while the build fell from 3.7 to 2.4 minutes. The suite grew with the pages; the build did not slow. The pull request that carries this revision splits the gate into four jobs (section 3). W8 then took five hosted runs: two failed in the number diff and two in the browser suite. Rules 5 and 6 in section 7 answer that.
 4. **Documents only merges are not free.** A push to main always runs the whole gate and publishes, by design (a newer push cancels a running release). The merges of PRs 103 and 102 on 17 November each ran a full release, 23 and 30 minutes, and no other merge may happen during one. Rule 6.
-5. **The critical path was not getting sessions.** Every session of 16 and 17 November went to colour and pages; UK Councils PR 64 was not reviewed. It is now the first row of section 3.
+5. **The critical path was not getting sessions.** Every session of 16 and 17 November went to colour and pages, and UK Councils PR 64 waited two days for its review. It was reviewed and merged on 18 November; the dossier row in section 3 now leads.
 6. **Measurement has no owner.** Week 1 is blank and each session without Chrome has passed it on. E1 asks for eight consecutive weekly rows before the reversal. It needs a named reader each Monday (decision M1 in section 5).
 7. **Prompts repeat themselves.** A standing preamble carries the traps, gates and merge text once (`docs/PROMPTS-2026-11-16-COLOUR-AND-RESTYLE.md`).
 
@@ -30,7 +30,7 @@ Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The
 
 | By | Work | Site | Who | State and what it waits on |
 |---|---|---|---|---|
-| Now | Review of UK Councils PR 64 (seats by party and control), then Tom's yes | UKC | Claude reviews | **First in the queue.** The dossier row below cannot start prompts B and C until it merges |
+| Done, 18 November | Review of UK Councils PR 64 (seats by party and control): the pinned table matched the publisher's page on all 318 rows; one fix, the reason printed for a held control line; merged as `f9139d4` on Tom's yes | UKC | Claude | Live. Review in the pull request. Dossier prompts B and C can start |
 | Now, then each Monday | `docs/MEASUREMENT.md`: Search Console and Cloudflare Web Analytics, with the read back of the 28 days to 14 November | Both | A Claude session with Chrome, or Tom (decision M1) | Week 1 figures blank; week 2 is due on 23 November |
 | Now | Release gate in parallel jobs: `site` builds once, `unit` and three browser shards plus the CSP run go beside it, `publish` deploys the same tree only when all pass. Both test servers move below port 32768, out of the range the runner hands to outgoing connections. `npm run check:pr-body` reads a description the way the hosted checks do | UKCT | Claude, Tom's yes | In the pull request that carries this revision. The time saved is not known until its own hosted run is read |
 | Now | "Refresh data" restores the pinned RA workbooks (the scheduled run failed again on 16 November) | UKC | Codex or Claude, one small PR | Not started |
@@ -39,7 +39,7 @@ Restyle so far on UK Council Tax: W0 to W3, F1, W4 part one and W8 are live. The
 | 4 December | D3, the two marks, drawn in the chosen palette | Both | Claude draws candidates, Tom chooses | Moved from 1 December so the marks follow the palette |
 | Early December, after the links rerun | Shepway slug to `folkestone-and-hythe`: five URLs, redirects on three sites | Three sites | Codex, one PR per site, Tom's yes each | Decided |
 | 15 December | Remaining dossier scope decisions (section 5) | UKC | Tom | Defaults apply from 16 December |
-| Mid January 2027 | Dossier builds from the three decided sources: seats and control (prompt A, PR 64 draft: 294 party tables, 129 control lines, 167 control labels held), then audit status (prompt B), then section 114 notices (prompt C) | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | **The critical path.** PR 64 needs its review next |
+| Mid January 2027 | Dossier builds from the three decided sources: seats and control (prompt A, live since PR 64: 294 party tables, 129 control lines, 167 control lines held), then audit status (prompt B), then section 114 notices (prompt C) | UKC | Codex builds, Claude reviews, Tom's yes for each data PR | **The critical path.** Prompts B and C are next. The composition snapshot is dated 16 November and has no refresh date yet |
 | Mid January 2027 | Smaller dossier gaps: election schedule built on 174 of 296, school holidays on 287, service links on 272, published payments on 234 (`DOSSIER-GATE.md`, measured 15 November) | UKC | Codex | The links rerun lifts the service links row |
 | When the report lands | C6b: referendum principles 2027/28 for the set pages and release records | UKCT | Claude | C6 staging is live since PR 88 |
 | First week of March 2027 | Burnley scenario game refresh, after the February budget papers | UKCT | Codex | Prompt owed once the budget council date is published |

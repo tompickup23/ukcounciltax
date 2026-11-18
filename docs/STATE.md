@@ -1,16 +1,16 @@
-# State | UK Council Tax | 17 November 2026
+# State | UK Council Tax | 18 November 2026
 
 - **Live:** main `4f7dc97` (PR 102, the plan), published 17 November; its publish run passed. Palette B (green and cream, Estate Kit 0.6.5) has been on every page since `30706ef` (PR 104) the same day. Before it: `5a76109` (PR 101, W4 part one).
 - **Open:** the pull request that carries this file: the release gate split into parallel jobs (`site`, `unit`, four `browser` legs, `publish`), both test server ports moved below 32768, and `npm run check:pr-body`. It changes the release workflow, so it is Tom's yes. PRs 102 and 103 merged on 17 November.
-- **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. Revised 17 November: the review of UK Councils PR 64 is first in the queue, the W8 leftovers belong to the front doors PR, and rules 5 and 6 are new.
+- **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended. Revised 17 and 18 November: UK Councils PR 64 is reviewed and merged, so dossier prompts B and C lead the dated work; the W8 leftovers belong to the front doors PR; rules 5 and 6 are new.
 - **Finding that changed the plan:** the serial `site` job's browser steps grew from 12.0 to 20.0 minutes between the hosted runs of 15 and 17 November (43769524014 and 44087295580); the build did not slow. Detail in plan section 2.
 - **Colour lane:** done. C1 decided 16 November (palette B); kit `v0.6.5` tagged and W8 merged as `30706ef` on 17 November, both on Tom's yes. Left from the W8 review, now owned by the front doors PR: adopt `data-ground="desk"` on the band; in light the map thumb's third shade and the Band D line's hovered point are cream on cream; the share card logo square merges into the ground. For Tom's eye: the two creams in the bill bar.
 - **Next, page lane:** W4 part two (prompt in `docs/PROMPTS-2026-11-16-W4-W9.md`; no branch yet), then the front doors PR, then W9. One page session at a time.
-- **Not started and owed now:** the review of UK Councils PR 64; the "Refresh data" fix on UK Councils (the scheduled run failed again on 16 November); measurement week 1 in `docs/MEASUREMENT.md`, which needs a session with Chrome, with week 2 due on 23 November.
-- **Critical path elsewhere:** UK Councils PR 64 (draft, seats and control, checks passed, unchanged since 16 November) needs its review and Tom's yes; then dossier prompts B and C. Due mid January 2027.
+- **Not started and owed now:** the "Refresh data" fix on UK Councils (the scheduled run failed again on 16 November); measurement week 1 in `docs/MEASUREMENT.md`, which needs a session with Chrome, with week 2 due on 23 November.
+- **Critical path elsewhere:** UK Councils PR 64 (seats and control) merged as `f9139d4` and published on 18 November, after a review and one fix to the reason printed for a held control line. Next: dossier prompts B and C in Codex. Due mid January 2027. The publisher's control field names the party of the mayor or administration leader, so the 165 held labels are administration statements: printing any needs Tom's decision and a second source for each council.
 - **Fast track:** granted 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md`. Tokens are outside it, so K2 and W8 are Tom's yes.
 - **Estate Kit:** `v0.6.5` tagged (PR 30). PRs 27 and 28 open. The site vendors 0.6.5 on main.
-- **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party held on both sites until the dossier data PR.
+- **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party stay held on UK Council Tax; UK Councils prints them from its pinned snapshot since its PR 64.
 - **Decisions waiting:** plan section 5. Soonest: R1; M1 (who reads the measurement figures) by 23 November; D8 by 30 November; D3 by 4 December; the rest by 15 December.
 - **Binding dates:** links rerun 1 to 5 December; dossier mid January 2027; restyle must list by end of February; freeze 20 March; levels day late March; reversal May to June 2027.
 - **Working rules (plan section 7):** the eight page reference sheet in every page PR, dark first; gates once on the final head; family sized PRs; no colour value in a page PR; `npm run check:pr-body` before a description is opened or edited; documents ride with the work they describe.

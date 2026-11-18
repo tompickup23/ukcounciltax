@@ -4,7 +4,6 @@ import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import SourceLine from '../../../components/SourceLine.astro';
 import CouncilPicker from '../../../components/CouncilPicker.astro';
 import DeskBand from '../../../components/DeskBand.astro';
-import manifest from '../../../../data/pilots/budget-freeze-eligibility.json';
 import {councilPages} from '../../../lib/paths';
 import {englishRows} from '../../../lib/council-picker';
 import {budgetYear, budgetFor, budgetSource} from '../../../lib/budget';
@@ -20,8 +19,6 @@ const setLinks = Object.fromEntries(pages.map(({council}) => {
 }));
 const setCount = Object.values(setLinks).filter(Boolean).length;
 const featured = ['leeds', 'burnley', 'camden'].map(slug => pages.find(page => page.council.slug === slug)!);
-// The same two counts the play band prints on the homepage and /tools/.
-const sets = manifest.councils.filter((row) => row.eligible).length;
 /** Each featured council's game as its round rail: the stops the game page's rail names, and no figure. */
 const stopName = (kind: string, index: number) => kind === 'split' ? (index === 0 ? 'Council' : 'County') : kind === 'bill' ? 'Bill' : kind === 'funding' ? 'Funding' : 'Reserves';
 const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.name, setHref: setLinks[council.gss]?.href, stops: (gameData(council.gss, council.slug, tax.name)?.rounds ?? []).map((round, index) => stopName(round.kind, index))}));
@@ -33,7 +30,7 @@ const rails = featured.map(({council, tax}) => ({slug: council.slug, name: tax.n
     lede="Find your council, then guess how it spends each pound or set the budget yourself. Both are built from the council's own published budget return.">
     <ul slot="copy" class="hub-ways">
       <li><span class="desk-kicker">Guess</span><span class="hub-way-text">Play the budget game, then see what the council published.</span><span class="hub-count">{available.length} councils</span></li>
-      <li><span class="desk-kicker">Set</span><span class="hub-way-text">Change tax and service spending and see what is left to find.</span><span class="hub-count">{sets} councils</span></li>
+      <li><span class="desk-kicker">Set</span><span class="hub-way-text">Change tax and service spending and see what is left to find.</span><span class="hub-count">{setCount} councils</span></li>
     </ul>
     <div id="set-the-budget" class="hub-start">
       <h2 id="choose-a-council" class="hub-pick-title">Choose your council</h2>

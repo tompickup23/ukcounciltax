@@ -45,13 +45,10 @@ const historyFrom = figures.series("england.area_bandd.history").points[0].label
       <h2 id="bill-heading">Burnley, unparished area, Band D</h2>
       <div data-fact class="bill-fact" id="bill-chart">
         <BillAnatomy {...KIT_CHARTS["home-bill"].options()} class="bill-figure" />
-        <ChartActions chart="home-bill" target="bill-chart" fold="About this example">
-          <Fragment slot="more">
-            {rounding && <p class="small" data-share-rounding>{rounding}</p>}
-            <p class="caveat">A parish or town council precept adds to this Band D total where one applies. Before discounts.</p>
-          </Fragment>
-        </ChartActions>
+        <ChartActions chart="home-bill" target="bill-chart" fold="Save the image or copy the table" />
+        {rounding && <p class="small" data-share-rounding>{rounding}</p>}
       </div>
+      <p class="caveat">A parish or town council precept adds to this Band D total where one applies. Before discounts.</p>
       <a class="bill-link" href="/precepts/">See the local breakdown and model each part</a>
     </aside>
   </section>

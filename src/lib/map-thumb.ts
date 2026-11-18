@@ -10,7 +10,8 @@ import { AREA_BAND_D_REGISTRY } from "./england-map";
  * link, so it carries no text and no figure; each area is placed in one of the
  * map's six fixed area Band D steps (the site owned breaks in england-map.ts),
  * never a value of its own. Outer rings only; an island too small to keep four
- * points at this scale is left out.
+ * points at this scale is left out. An area with no area Band D fails the build,
+ * as the map's own join does, rather than leaving a hole in the outline.
  */
 
 const K = Math.cos((52 * Math.PI) / 180);
@@ -62,14 +63,14 @@ export function mapThumb(): Thumb {
     }).filter((ring) => ring.length >= 4);
     for (const ring of rings) for (const [x, y] of ring) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
     const value = authorities[f.properties.LAD26CD]?.bands.D;
-    const step = typeof value === "number" && Number.isFinite(value) ? breaks.filter((b) => value >= b).length : -1;
+    if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`${f.properties.LAD26CD} has no area Band D for the map thumb`);
+    const step = breaks.filter((b) => value >= b).length;
     return { rings, step };
   });
   const scale = HEIGHT / (y1 - y0);
   const width = Math.ceil((x1 - x0) * scale);
   const shapes = Array.from({ length: breaks.length + 1 }, () => "");
   for (const { rings, step } of areas) {
-    if (step < 0) continue;
     for (const ring of rings) {
       let px = 0, py = 0;
       const parts = ring.map(([x, y], i) => {

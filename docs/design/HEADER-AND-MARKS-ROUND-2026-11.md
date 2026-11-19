@@ -1,5 +1,7 @@
 # Header and marks round | UK Council Tax | 18 November 2026
 
+**Decided on 19 November 2026** (`docs/DECISIONS-2026-11-19.md`): D8 at option B, D3 at pair 2. The roundel judgement under the D3 recommendation stays with Tom before M1 is final. The rest of this page is the round as it was put to him.
+
 Two decisions for Tom, drawn as pictures in the way the colour round was: **D8**, the header, drawer and footer (due 30 November 2026; W5 waits on it), and **D3**, distinct marks for UK Council Tax and UK Councils (due 4 December 2026). Documents only: nothing under `src/`, `public/`, `data/` or `scripts/` changed, and nothing here is on either site.
 
 **Recommendations, in short:** D8, option **B** (lean: Your bill, Budget game, Compare, More). D3, pair **2** (the share of a pound for UK Council Tax, the locator for UK Councils), with pair 1 as the fallback. Both are views from the sheets; the choices are Tom's.

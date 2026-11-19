@@ -73,64 +73,130 @@ export const STATIC_PATHS = [
 export type NavItem = { href: string; label: string; desc: string };
 export type NavGroup = { label: string; items: NavItem[] };
 
+/** The hub section where a reader chooses a council to set its budget. src/pages/tools/budget/index.astro owns the id. */
+export const SET_THE_BUDGET_HREF = "/tools/budget/#set-the-budget";
+
 /**
- * The header menu: three groups and one direct link. Everything else that is
- * indexable is in FOOTER_LINKS, so no page is reachable only by link.
+ * The header at D8 option B (decided 19 November 2026): three plain links, then
+ * one "More" menu holding NAV_GROUPS as three columns, then Search. At phone
+ * width the header row carries "Your bill" and "Game" (named "Budget game")
+ * and the drawer repeats the lot as flat lists.
  */
+export const NAV_DIRECT: NavItem[] = [
+  { href: "/your-area/", label: "Your bill", desc: "Find your council and bill by postcode" },
+  { href: "/tools/budget/", label: "Budget game", desc: "Guess how a council splits its budget, then see the published answer" },
+  { href: "/compare/", label: "Compare", desc: "Compare the same band and year within a council type" },
+];
+
+/** The "More" menu, in three columns. Everything else indexable is in FOOTER_COLUMNS. */
 export const NAV_GROUPS: NavGroup[] = [
-  {
-    label: "Find your council",
-    items: [
-      { href: "/your-area/", label: "Your area", desc: "Find your council by postcode" },
-      { href: "/councils/", label: "Every council", desc: "All 296 councils in England, by region" },
-      { href: "/scotland/", label: "Scotland", desc: "Published bands, with water charges kept separate" },
-      { href: "/wales/", label: "Wales", desc: "Published Band D averages and their components" },
-    ],
-  },
-  {
-    label: "Compare and rank",
-    items: [
-      { href: "/council-tax/", label: "Council tax in England", desc: "The England average and every council" },
-      { href: "/council-tax/ranked/", label: "Band D ranked", desc: "Every council against councils of the same type" },
-      { href: "/compare/", label: "Compare councils", desc: "Compare the same band and year within a council type" },
-      { href: "/council-tax/towns/", label: "By parish and area", desc: "Full Band D for every parish and unparished area" },
-      { href: increasesYearPath(CURRENT_YEAR), label: `Rises ${yearLabel(CURRENT_YEAR)}`, desc: "How much each council raised its own share" },
-    ],
-  },
   {
     label: "Your bill",
     items: [
-      { href: "/precepts/", label: "What makes up a bill", desc: "Postcode, parish and individual charging bodies" },
+      { href: "/precepts/", label: "What makes up a bill", desc: "Council, county, police, fire and parish shares" },
       { href: "/precepts/parishes/", label: "Parish precepts", desc: "Every parish precept by council" },
       { href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps" },
       { href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time" },
       { href: NEXT_YEAR_PATH, label: `Council tax ${yearLabel(NEXT_YEAR)}`, desc: "Not yet set: when each nation's figures publish" },
     ],
   },
+  {
+    label: "Budgets",
+    items: [
+      { href: SET_THE_BUDGET_HREF, label: "Set a budget yourself", desc: "Move the levers, balance the books" },
+      { href: "/tools/", label: "All tools", desc: "Bills, budgets and future costs" },
+    ],
+  },
+  {
+    label: "Compare and explore",
+    items: [
+      { href: "/council-tax/", label: "Council tax in England", desc: "The map, the average and every council" },
+      { href: "/council-tax/ranked/", label: "Band D ranked", desc: "Against councils of the same type" },
+      { href: increasesYearPath(CURRENT_YEAR), label: `Rises ${yearLabel(CURRENT_YEAR)}`, desc: "How much each council raised its own share" },
+      { href: "/council-tax/towns/", label: "By parish and area", desc: "Full Band D for every parish and area" },
+      { href: "/councils/", label: "Every council", desc: "All 296 councils in England, by region" },
+      { href: "/scotland/", label: "Scotland", desc: "Published bands, water charges kept separate" },
+      { href: "/wales/", label: "Wales", desc: "Band D averages and their components" },
+    ],
+  },
 ];
 
-/** The one header link with no menu: the budget game hub. */
-export const NAV_DIRECT: NavItem = {
-  href: "/tools/budget/",
-  label: "Budget game",
-  desc: "Guess how a council splits its budget, then see the published answer",
-};
-
-/** Reference and site pages, linked from the footer of every page. */
-export const FOOTER_LINKS: NavItem[] = [
-  { href: "/about/", label: "About", desc: "What the site publishes and its rules" },
-  { href: "/methodology/", label: "Methodology", desc: "How every figure is read" },
-  { href: "/sources/", label: "Sources", desc: "Every table used, with dates" },
-  { href: "/data/", label: "Official publications", desc: "Official publications and source editions" },
-  { href: "/coverage/", label: "UK coverage", desc: "What is included in each nation" },
-  { href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs" },
-  { href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares" },
-  { href: "/changes/", label: "What changed", desc: "Read the record of data updates" },
-  { href: "/findings/", label: "Findings", desc: "Dated notes from the published tables" },
-  { href: "/corrections/", label: "Corrections", desc: "How factual corrections are recorded" },
-  { href: "/contact/", label: "Contact", desc: "Questions about the site and official council services" },
-  { href: "/privacy/", label: "Privacy", desc: "What happens to a postcode" },
+/** The two cards at the top of the phone drawer, after search. */
+export const DRAWER_CARDS: NavItem[] = [
+  { href: SET_THE_BUDGET_HREF, label: "Set a budget", desc: "Balance the books" },
+  { href: "/compare/", label: "Compare", desc: "Two councils, same band" },
 ];
+
+/**
+ * The footer's four columns, on every page. Every route the header held before
+ * W5 is in the header or here, and every static route is linked from one of them.
+ */
+export const FOOTER_COLUMNS: NavGroup[] = [
+  {
+    label: "Tools",
+    items: [
+      { href: "/tools/budget/", label: "Play the budget game", desc: "Guess how a council splits its budget" },
+      { href: SET_THE_BUDGET_HREF, label: "Set a budget yourself", desc: "Move the levers, balance the books" },
+      { href: "/compare/", label: "Compare two councils", desc: "The same band and year within a council type" },
+      { href: "/tools/future-cost/", label: "Future cost", desc: "Model annual changes over time" },
+      { href: "/tools/", label: "All tools", desc: "Explore bills, budgets and future costs" },
+    ],
+  },
+  {
+    label: "Your bill",
+    items: [
+      { href: "/your-area/", label: "Find your bill", desc: "Find your council by postcode" },
+      { href: "/precepts/", label: "What makes up a bill", desc: "Postcode, parish and individual charging bodies" },
+      { href: "/help/", label: "Help with your bill", desc: "Bands, discounts and official next steps" },
+      { href: NEXT_YEAR_PATH, label: `Council tax ${yearLabel(NEXT_YEAR)}`, desc: "Not yet set: when each nation's figures publish" },
+    ],
+  },
+  {
+    label: "About the data",
+    items: [
+      { href: "/methodology/", label: "Methodology", desc: "How every figure is read" },
+      { href: "/sources/", label: "Sources", desc: "Every table used, with dates" },
+      { href: "/data/", label: "Official publications", desc: "Official publications and source editions" },
+      { href: "/coverage/", label: "UK coverage", desc: "What is included in each nation" },
+      { href: "/changes/", label: "What changed", desc: "Read the record of data updates" },
+      { href: "/corrections/", label: "Corrections", desc: "How factual corrections are recorded" },
+    ],
+  },
+  {
+    label: "Site",
+    items: [
+      { href: "/about/", label: "About", desc: "What the site publishes and its rules" },
+      { href: "/findings/", label: "Findings", desc: "Dated notes from the published tables" },
+      { href: "/increases/", label: "Annual increases", desc: "Whole bills and council shares" },
+      { href: "/contact/", label: "Contact", desc: "Questions about the site and official council services" },
+      { href: "/privacy/", label: "Privacy", desc: "What happens to a postcode" },
+    ],
+  },
+];
+
+/**
+ * Every destination the header and footer held before W5 (PR 108's main,
+ * dcb7b7b), with year paths resolved. tests/site.test.ts and check-dist hold
+ * each of them in the new header or footer, so the restyle drops no route.
+ */
+export const CHROME_ROUTES_BEFORE_W5: string[] = [
+  "/your-area/", "/councils/", "/scotland/", "/wales/",
+  "/council-tax/", "/council-tax/ranked/", "/compare/", "/council-tax/towns/", increasesYearPath(CURRENT_YEAR),
+  "/precepts/", "/precepts/parishes/", "/help/", "/tools/future-cost/", NEXT_YEAR_PATH,
+  "/tools/budget/",
+  "/about/", "/methodology/", "/sources/", "/data/", "/coverage/", "/tools/", "/increases/",
+  "/changes/", "/findings/", "/corrections/", "/contact/", "/privacy/",
+];
+
+/** Every distinct destination in the header, menus and drawer, the brand link included. */
+export function headerHrefs(): string[] {
+  return [...new Set(["/", ...NAV_DIRECT.map((i) => i.href), ...NAV_GROUPS.flatMap((g) => g.items.map((i) => i.href)), ...DRAWER_CARDS.map((i) => i.href), "/councils/"])];
+}
+
+/** Every distinct destination in the footer's four columns. */
+export function footerHrefs(): string[] {
+  return [...new Set(FOOTER_COLUMNS.flatMap((g) => g.items.map((i) => i.href)))];
+}
 
 /** A path on this site as an absolute URL on the canonical origin. */
 export function absoluteUrl(path: string): string {

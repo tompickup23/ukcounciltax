@@ -18,6 +18,9 @@
  *   * the F1 gates in scripts/lib/foundation.mjs: a record line with no Sources
  *     entry, two desk bands, an unresolved group row with an amount, a page over
  *     its weight ceiling, or one full citation repeated past its ceiling
+ *   * the W5 navigation gates in scripts/lib/chrome-nav.mjs (D8 option B): one
+ *     header and footer on every page, no route dropped, the sister link table,
+ *     and scripts/lib/link-graph.mjs: no indexable page left with no inbound link
  *
  * Exits non-zero naming each failure.
  */
@@ -32,6 +35,8 @@ import { deskProblems, recordLineProblems, repeatCap, repeatedCitations, unresol
 import { chartProblems, chromeProblems, headerProblems, homeProblems } from "./lib/face.mjs";
 
 import {budgetGameProblems,gameHeaderProblem,publishedText} from './lib/budget-game.mjs';
+import { chromeParts, pageProblems, referenceProblems, sisterTable } from "./lib/chrome-nav.mjs";
+import { orphans } from "./lib/link-graph.mjs";
 import {JSDOM} from 'jsdom';
 const gameCounts={available:0,absent:0};
 // C6: the years the built pages must carry come from the data present, as the build's do.
@@ -82,6 +87,10 @@ function* files(dir) {
 
 const failures = [];
 const rel = (path) => path.slice(DIST.length) || "/";
+// W5: the homepage's header and footer are the reference every page is held to.
+const homeChrome = chromeParts(readFileSync(join(DIST, "index.html"), "utf-8"));
+for (const problem of referenceProblems(homeChrome, { years: YEAR_STATE, sisters: sisterTable() })) failures.push(`navigation: ${problem}`);
+let chromePages = 0;
 let pages = 0;
 let profiles = 0;
 let paymentLinks = 0, paymentAbsent = 0;
@@ -100,7 +109,8 @@ for (const path of files(DIST)) {
   for (const phrase of HELD_PHRASES) if (text.includes(phrase)) failures.push(`held reorganisation text "${phrase}" in ${rel(path)}`);
   if (path.endsWith(".html") && /href=["\']\/downloads\/|data-(?:export-view|table-export|download-scenario)/.test(text)) failures.push(`download control in ${rel(path)}`);
   if (DASH.test(text)) failures.push(`dash in ${rel(path)}`);
-  if (/https?:\/\/ukfoodhygiene\.co\.uk\b/.test(text)) failures.push(`private sister link in ${rel(path)}`);
+  // D7 (19 November 2026): the footer links UK Food Hygiene's home page. Council deep links stay held.
+  for (const m of text.matchAll(/https?:\/\/(?:www\.)?ukfoodhygiene\.co\.uk[^"'\s<>)]*/g)) if (m[0] !== "https://ukfoodhygiene.co.uk/") failures.push(`UK Food Hygiene deep link ${m[0]} in ${rel(path)}`);
   if (!path.endsWith(".html")) continue;
   pages += 1;
   if (text.includes('asylumstats.co.uk')) failures.push(`Asylum Stats domain on ${rel(path)}`);
@@ -114,6 +124,10 @@ for (const path of files(DIST)) {
   }
   const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
+
+  // W5: one header and one footer on every page, each the same as the homepage's.
+  for (const problem of pageProblems(chromeParts(text), homeChrome)) failures.push(`navigation: ${problem} on ${rel(path)}`);
+  chromePages += 1;
 
   // The A5 face (docs/A5-FACE-BRIEF.md, section 8).
   if (!rel(path).startsWith("/pagefind/") && /<footer\b/.test(text)) {
@@ -517,6 +531,9 @@ else {
 // chart PNG link resolves to a file. The CSP still allows the kit's inline style
 // attributes (A5 brief, section 5).
 if (!homeChecked) failures.push("homepage not found for the face checks");
+const orphaned = orphans(DIST);
+for (const route of orphaned) failures.push(`link graph: no page links to ${route}`);
+console.log(`dist check: header ${homeChrome.header.length} destinations (${homeChrome.headerAnchors} links with the drawer), footer ${homeChrome.footer.length} destinations and ${homeChrome.sisters.length} sister sites, the same on ${chromePages} pages; ${orphaned.length} pages with no inbound link`);
 if (requireImages(DIST)) {
   for (const [png, page] of chartPngLinks) if (!existsSync(join(DIST, png))) failures.push(`chart PNG ${png} on ${page} was not built`);
   if (existsSync(join(DIST, 'og'))) for (const image of files(join(DIST, 'og'))) {

@@ -15,7 +15,7 @@ async function accessible(page: Page) {
     expect(await el.evaluate(e => e.scrollWidth <= e.clientWidth)).toBe(true);
   }
   // The workbench closes its disclosures on arrival; audit what is inside them too.
-  await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
+  await page.evaluate(() => document.querySelectorAll<HTMLDetailsElement>('main details').forEach(d => { d.open = true; }));
   const opened = await new AxeBuilder({page}).analyze();
   expect(opened.violations.map(v => ({id:v.id,targets:v.nodes.map(n => n.target)}))).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(page.viewportSize()!.width);

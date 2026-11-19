@@ -14,7 +14,7 @@ for (const path of CHART_PAGES) {
   test(`no kit chart title renders larger than its section heading: ${path}`, async ({page}) => {
     await page.goto(path);
     // Charts inside closed disclosures are measured open.
-    await page.evaluate(() => document.querySelectorAll('details').forEach(d => { d.open = true; }));
+    await page.evaluate(() => document.querySelectorAll<HTMLDetailsElement>('main details').forEach(d => { d.open = true; }));
     const rows = await page.evaluate(() => [...document.querySelectorAll<SVGSVGElement>('svg.ek-chart')].flatMap(svg => {
       const title = svg.querySelector(':scope > text');
       if (!title || !svg.getBoundingClientRect().width) return [];

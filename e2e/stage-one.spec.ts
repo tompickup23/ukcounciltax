@@ -136,7 +136,9 @@ test('metadata separates publisher from the council and retains dated sitemap en
   expect(nodes.find(node => node['@type'] === 'WebPage').about.identifier).toBe('E07000117');
   expect(nodes.find(node => node['@type'] === 'Organization').name).toBe('UK Council Tax');
   expect(nodes.some(node => node['@type'] === 'GovernmentOrganization' && node.url?.includes('ukcouncils'))).toBe(false);
-  await expect(page.locator('a[href*="ukfoodhygiene"]')).toHaveCount(0);
+  // D7 (19 November 2026): the footer links UK Food Hygiene's home page only; council deep links stay held.
+  await expect(page.locator('a[href*="ukfoodhygiene"]')).toHaveCount(1);
+  await expect(page.locator('footer.site-footer a[href="https://ukfoodhygiene.co.uk/"]')).toHaveCount(1);
   const sitemap = await (await request.get('/sitemap.xml')).text();
   const entries = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)];
   // The 197 public set pages join the existing 909 sitemap entries.

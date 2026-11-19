@@ -1,6 +1,12 @@
 import {test, expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+/** Below 600px the council, constituency, sort and larger places controls fold under one summary. */
+async function openMore(page: import('@playwright/test').Page) {
+  const more = page.locator('[data-f-more]');
+  if (await more.getAttribute('open') === null) await more.locator('summary').click();
+}
+
 const PAGES = ['/council-tax/towns/', '/council-tax/towns/region/north-west/', '/council-tax/towns/county/lancashire/', '/council-tax/towns/constituency/burnley/', '/council-tax/towns/county/herefordshire/'];
 
 for (const path of PAGES) {
@@ -38,6 +44,7 @@ test('filters, search, the larger places switch and sorting narrow and reorder t
   await expect(page.locator('[data-f-count]')).toHaveText('Showing 1 of 222 areas.');
   await expect(page).toHaveURL(/\?q=padiham/);
   await page.getByLabel('Find a place').fill('');
+  await openMore(page);
   await page.locator('[data-f-council]').selectOption({label: 'Burnley'});
   await expect(visible).toHaveCount(9);
   await page.locator('[data-f-council]').selectOption('');
@@ -74,6 +81,7 @@ test('the table restores its filters from the address and keeps every sort hones
   await expect(page.locator('[data-f-council]')).toHaveValue('');
   await expect(page).toHaveURL(/ref=x/);
   await page.getByLabel('Find a place').fill('');
+  await openMore(page);
   // Sorting by parish change never lifts a row without a figure above one with a figure.
   for (const option of ['ch:-1', 'ch:1', 'pp:-1']) {
     await page.getByLabel('Sort by').selectOption(option);

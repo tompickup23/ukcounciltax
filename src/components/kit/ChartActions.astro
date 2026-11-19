@@ -21,21 +21,39 @@ interface Props {
   pngs?: {light: string};
   /** The id of the data-fact wrapper that holds the kit figure. */
   target: string;
+  /**
+   * Front doors (18 November 2026): the summary of a details element that folds
+   * the image and copy links under the source line, so a compact card shows the
+   * drawing, its legend and one source line.
+   */
+  fold?: string;
 }
 
-const { chart, target } = Astro.props;
+const { chart, target, fold } = Astro.props;
 const caption = Astro.props.captionHtml ?? siteFigures().captionHtml(chartKeys(chart!));
 const pngs = Astro.props.pngs ?? {light: chartPngPath(chart!, 'light')};
 const locator = chart?.startsWith('councils/') && chart.endsWith('/map');
 ---
 <div class="chart-actions" data-chart-actions data-chart={chart ?? target}>
   <slot name="source"><p class="source-line" set:html={caption} /></slot>
-  <ul class="chart-actions-links">
-    {!locator && CHART_THEMES.map((theme) => (
-      <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>
-    ))}
-    <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
-  </ul>
+  {fold ? (
+    <details class="chart-fold">
+      <summary>{fold}</summary>
+      <ul class="chart-actions-links">
+        {!locator && CHART_THEMES.map((theme) => (
+          <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>
+        ))}
+        <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
+      </ul>
+    </details>
+  ) : (
+    <ul class="chart-actions-links">
+      {!locator && CHART_THEMES.map((theme) => (
+        <li><a href={pngs[theme]} data-chart-png>Image, {theme} (PNG)</a></li>
+      ))}
+      <li><button type="button" class="chart-copy" data-chart-copy hidden>Copy table</button></li>
+    </ul>
+  )}
   <p class="chart-actions-status small muted" role="status" aria-live="polite" data-chart-status></p>
 </div>
 
@@ -49,4 +67,6 @@ const locator = chart?.startsWith('councils/') && chart.endsWith('/map');
   .chart-copy { font: inherit; padding: 0; border: 0; background: none; color: var(--accent); text-decoration: underline; cursor: pointer; }
   .chart-actions-status { margin: var(--space-2xs) 0 0; min-height: 0; }
   .chart-actions-status:empty { display: none; }
+  .chart-fold { margin-top: var(--space-2xs); }
+  .chart-fold > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--accent); }
 </style>

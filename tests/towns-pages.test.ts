@@ -5,11 +5,17 @@ import {
   constituencyScopes, countyScopes, crawlSentence, englandScope, parishChange, parishPart, placeLabel, placeName, printedName, regionScopes, scopeStructuredData, scopeSummary, scopeText, townCountyPath, townPaths,
 } from '../src/lib/towns-pages';
 import {townOgCard} from '../src/lib/towns-og';
+import {scopeParts, townPartPaths} from '../src/lib/towns-parts';
 
 const T2 = /\b(?:cheapest|most expensive|best|worst)\b/i;
 const read = (path: string) => readFileSync(`dist${path}index.html`, 'utf8');
 const text = (html: string) => html.replace(/<script\b[\s\S]*?<\/script>/g, ' ').replace(/<style\b[\s\S]*?<\/style>/g, ' ').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').replace(/&#39;|&#x27;/g, "'").replace(/&amp;/g, '&').trim();
 const bodyRows = (html: string) => [...html.matchAll(/<tr id="([^"]+)"[^>]*>([\s\S]*?)<\/tr>/g)].map(m => ({id: m[1], text: text(m[2])}));
+/** Every row of a scope's table, across its parts where a long region table is split. */
+const scopeRows = (path: string) => {
+  const scope = regionScopes().find(r => r.path === path);
+  return scope ? scopeParts(scope).flatMap(part => bodyRows(read(part.path))) : bodyRows(read(path));
+};
 
 describe('towns page layer', () => {
   it('builds 9 region, 91 county and 541 constituency routes with unique slugs', () => {
@@ -110,12 +116,12 @@ describe('towns page layer', () => {
 describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns pages', () => {
   it('lists every row of each county, region and constituency once, anchored by code', () => {
     for (const scope of [...regionScopes(), ...countyScopes(), ...constituencyScopes()]) {
-      const rows = bodyRows(read(scope.path));
+      const rows = scopeRows(scope.path);
       expect(rows, scope.path).toHaveLength(scope.rows.length);
       expect(new Set(rows.map(r => r.id))).toEqual(new Set(scope.rows.map(t => t.code)));
     }
     expect(bodyRows(read('/council-tax/towns/county/lancashire/'))).toHaveLength(222);
-    expect(bodyRows(read('/council-tax/towns/region/north-west/'))).toHaveLength(799);
+    expect(scopeRows('/council-tax/towns/region/north-west/')).toHaveLength(799);
     expect(bodyRows(read('/council-tax/towns/constituency/burnley/'))).toHaveLength(12);
   });
 
@@ -131,7 +137,7 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
 
   it('never shows a row without a figure as zero or in the order', () => {
     for (const path of ['/council-tax/towns/county/nottinghamshire/', '/council-tax/towns/county/lincolnshire/', '/council-tax/towns/region/east-midlands/']) {
-      for (const row of bodyRows(read(path))) {
+      for (const row of scopeRows(path)) {
         const town = townByCode.get(row.id)!;
         if (hasFigure(town)) continue;
         expect(row.text, row.id).toMatch(/^Not placed /);
@@ -142,14 +148,14 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
     // (A non-precepting parish keeps its published nil parish part, which is a real figure.)
     let unresolved = 0;
     for (const scope of [...regionScopes(), ...countyScopes(), ...constituencyScopes()]) {
-      for (const row of bodyRows(read(scope.path))) {
+      for (const row of scopeRows(scope.path)) {
         if (townByCode.get(row.id)!.status !== 'group-member-unresolved') continue;
         unresolved++;
         expect(row.text, `${scope.path} ${row.id}`).not.toMatch(/£/);
       }
     }
     expect(unresolved).toBeGreaterThanOrEqual(170 * 2);
-    const yetminster = bodyRows(read('/council-tax/towns/region/south-west/')).find(r => r.id === 'E1203P265')!;
+    const yetminster = scopeRows('/council-tax/towns/region/south-west/').find(r => r.id === 'E1203P265')!;
     expect(yetminster.text).toMatch(/Not published Not published Not published Listed under its group$/);
     const boston = bodyRows(read('/council-tax/towns/county/lincolnshire/')).find(r => r.id === 'E2531U')!;
     expect(boston.text).toContain('Boston, unparished area');
@@ -159,7 +165,7 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
   it('uses cheapest and most expensive only in the title, description and one H2 on every towns page', () => {
     for (const path of ['/council-tax/towns/', ...townPaths()]) {
       const html = read(path);
-      const placed = bodyRows(html).filter(r => !r.text.startsWith('Not placed')).length;
+      const placed = scopeRows(path).filter(r => !r.text.startsWith('Not placed')).length;
       const ranked = path === '/council-tax/towns/' || placed >= 2;
       expect(html.match(/<title>(.*?)<\/title>/)![1]).toMatch(ranked ? /^Cheapest and most expensive council tax / : /^Council tax by parish and unparished area in /);
       const h2s = [...html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/g)].map(m => text(m[1]));
@@ -171,6 +177,31 @@ describe.skipIf(!existsSync('dist/council-tax/towns/index.html'))('built towns p
       expect(text(h1s[0][1])).toMatch(/^Council tax by parish and unparished area in .+ 2026\/27$/);
       expect(html.match(/"@type":"Dataset"/g)).toHaveLength(1);
     }
+  });
+
+  it('splits only long region tables, in their own order, and keeps every region page under 500 KB', () => {
+    for (const scope of regionScopes()) {
+      const parts = scopeParts(scope);
+      for (const part of parts) {
+        expect(part.rows.length, part.path).toBeLessThanOrEqual(650);
+        expect(readFileSync(`dist${part.path}index.html`).length, part.path).toBeLessThanOrEqual(500 * 1024);
+      }
+      // Rows with a figure first in position order, then rows without one, exactly as one table would print them.
+      const rows = scopeRows(scope.path);
+      const firstUnplaced = rows.findIndex(r => r.text.startsWith('Not placed'));
+      if (firstUnplaced >= 0) expect(rows.slice(firstUnplaced).every(r => r.text.startsWith('Not placed')), scope.path).toBe(true);
+      const values = rows.filter(r => !r.text.startsWith('Not placed')).map(r => townByCode.get(r.id)!.fullBandDPence!);
+      expect(values.every((v, i) => i === 0 || v >= values[i - 1]), scope.path).toBe(true);
+    }
+    expect(townPartPaths().length).toBeGreaterThan(0);
+    for (const path of townPartPaths()) expect(read(path)).not.toMatch(/\b(?:cheapest|most expensive)\b/i);
+    // A row on a later part is linked from the region page's pair and ledgers by its part's address.
+    const sw = read('/council-tax/towns/region/south-west/');
+    const highest = scopeSummary(regionScopes().find(r => r.slug === 'south-west')!.rows).highest!;
+    expect(sw).toContain(`href="/council-tax/towns/region/south-west/part-`);
+    expect(sw).toMatch(new RegExp(`href="/council-tax/towns/region/south-west/part-\\d+/#${highest.town.code}"`));
+    // The structured data's lists point at the same part.
+    expect(sw).toMatch(new RegExp(`"url":"https://ukcounciltax\\.co\\.uk/council-tax/towns/region/south-west/part-\\d+/#${highest.town.code}"`));
   });
 
   it('keeps the hub to bounded lists and links every region, county and constituency', () => {

@@ -56,8 +56,10 @@ test('scripts off retains the complete county and boundary lists', async ({ brow
 
 test('contents reaches the section and its ranking stays within the council class', async ({ page }) => {
   await page.goto('/councils/burnley/');
-  await page.getByRole('navigation', { name: 'On this page', exact: true })
-    .getByRole('link', { name: 'Nearby and alike', exact: true }).click();
+  const contents = page.getByRole('navigation', { name: 'On this page', exact: true });
+  // W9: on phones the contents are a closed details element; on desktop a rail with no summary.
+  if (await contents.locator('summary').isVisible()) await contents.locator('summary').click();
+  await contents.getByRole('link', { name: 'Nearby and alike', exact: true }).click();
   const block = page.locator('[data-nearby-councils]');
   await expect(block.getByRole('heading', { name: 'Nearby and alike', exact: true })).toBeInViewport();
   await block.getByRole('link', { name: 'Council tax rankings for shire districts', exact: true }).click();

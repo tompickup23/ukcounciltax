@@ -37,7 +37,7 @@ test('ranking own shares stay readable on phones', async ({page}) => {
   await page.setViewportSize({width:375,height:812});
   for (const slug of ['shire-districts','unitary-authorities','london-boroughs']) {
     await page.goto(`/council-tax/ranked/${slug}/`);
-    const region = page.locator('.table-wrap').first();
+    const region = page.locator('.league-wrap').first();
     expect(await region.evaluate(node => node.scrollWidth === node.clientWidth)).toBe(true);
     if (slug === 'shire-districts') await expect(page.locator('tbody tr').filter({has:page.getByRole('link',{name:'Havant',exact:true})})).toContainText(ownShareCell('Havant', 'shire-districts'));
   }

@@ -125,11 +125,13 @@ for (const path of files(DIST)) {
   const readerHtml = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   if (/£\d{4,}/.test(readerHtml)) failures.push(`currency lacks thousands separators on ${rel(path)}`);
 
+  // W5: one header and one footer on every page, each the same as the homepage's.
+  for (const problem of pageProblems(chromeParts(text), homeChrome)) failures.push(`navigation: ${problem} on ${rel(path)}`);
+  chromePages += 1;
+
   // The A5 face (docs/A5-FACE-BRIEF.md, section 8).
   if (!rel(path).startsWith("/pagefind/") && /<footer\b/.test(text)) {
     for (const problem of chromeProblems(text)) failures.push(`${problem} on ${rel(path)}`);
-    for (const problem of pageProblems(chromeParts(text), homeChrome)) failures.push(`navigation: ${problem} on ${rel(path)}`);
-    chromePages += 1;
     const charts = chartProblems(text);
     for (const problem of charts.problems) failures.push(`${problem} on ${rel(path)}`);
     chartPngLinks.push(...charts.pngs.map((png) => [png, rel(path)]));

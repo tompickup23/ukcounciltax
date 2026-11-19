@@ -45,6 +45,8 @@ export function chromeParts(page) {
   return {
     hasHeader: Boolean(bar),
     hasFooter: Boolean(footer),
+    headerCount: (html.match(/<div\b[^>]*class="site-header-bar\b/g) ?? []).length,
+    footerCount: (html.match(/<footer\b[^>]*class="site-footer\b/g) ?? []).length,
     headerIgnored: /^<div\b[^>]*\sdata-pagefind-ignore\b/.test(bar),
     footerIgnored: /^<footer\b[^>]*\sdata-pagefind-ignore\b/.test(footer),
     headerAnchors: hrefs(bar).length,
@@ -100,6 +102,8 @@ export function referenceProblems(home, { years, sisters }) {
 /** Problems with one page's header and footer against the homepage's. */
 export function pageProblems(page, home) {
   const problems = [];
+  if (page.headerCount !== 1) problems.push(`${page.headerCount} site headers, not one`);
+  if (page.footerCount !== 1) problems.push(`${page.footerCount} site footers, not one`);
   if (!page.hasHeader || !page.hasFooter) return problems;
   if (!page.headerIgnored) problems.push("the header lacks data-pagefind-ignore");
   if (!page.footerIgnored) problems.push("the footer lacks data-pagefind-ignore");

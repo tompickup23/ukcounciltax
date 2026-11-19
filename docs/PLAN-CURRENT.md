@@ -1,4 +1,4 @@
-# Current plan | UK Council Tax and UK Councils | 18 November 2026, decisions of 19 November added
+# Current plan | UK Council Tax and UK Councils | 18 November 2026, decisions of 19 November and W5 added
 
 Revised in Claude Code on Monday 16 November 2026 at Tom's request ("focus on the restyle", "the colour theme is ugly"), from GitHub (`gh`, both repositories and estate-kit), the live site read in Chrome at 1440 px, the design check captures of PR 101, `src/styles/global.css`, Estate Kit 0.6.4 `generated/skins/ukcounciltax.css` and `docs/DESIGN-AUDIT-2026-11-15.md`. Nothing here authorises a merge, deployment or deletion.
 
@@ -69,7 +69,7 @@ The colour round (C0, PR 103), Estate Kit 0.6.5 (K2, tagged `v0.6.5`) and the sw
 | 1 | W4 part two: reveal, end card with a canvas PNG, the drawer, neighbour cards | Claude (Opus), fast track | Live, PR 107, 18 November |
 | 2 | Front doors: the `/tools/budget/` hub (band first, picker inside, Guess and Set pills) and the homepage row, with the three faults left from the W8 review | Claude (Opus), fast track | Live, PR 110, 18 November |
 | 3 | W9 council page: ledger row under the H1, one button group, contents rail, record lines with one Sources block | Claude (Opus), fast track | Live, PR 111, 18 November |
-| 4 | W5 header, drawer and footer, alone | Claude, Tom's yes | D8 decided on 19 November: option B, lean (PR 108). Ready to start; D7 rides with it |
+| 4 | W5 header, drawer and footer, alone | Claude (Opus), Tom's yes | PR 113, opened 19 November at D8 option B with D7's footer links (UK Places and UK Food Hygiene, both checked live that day). Waits on Tom's yes to merge |
 | 5 | W7 compare as bars (NV11): a worked example pair first, paired bars with table twins | Claude (Opus), Tom's yes | Live, PR 109, 18 November, on Tom's yes |
 | 5a | League tables: the `/council-tax/ranked/` family and the towns league as designed tables, region tables in parts | Claude (Opus), fast track | Live, PR 112, 18 November. Not done: the change to which places lead the towns headline pair, which needs its own PR and Tom's yes |
 | 6 | Tier 2 sweep, two PRs, mechanical: record lines and one Sources block, the chart pair, the title rule and page weight on the national page, band pages, increases, changes, precepts, Wales, 2027/28 and your area. No redesign | Codex, Claude reviews, Tom's yes | W9 merged, as the worked example. Removes four ratchet rows |
@@ -77,13 +77,13 @@ The colour round (C0, PR 103), Estate Kit 0.6.5 (K2, tagged `v0.6.5`) and the sw
 
 Target: the must list live by the end of February, leaving three weeks before the freeze.
 
-**Should land, if the must list is on time by the end of January:** M1 marks, pair 2, after W5.
+**Should land, if the must list is on time by the end of January:** M1 marks, pair 2, after W5 merges (PR 113 leaves the marks and favicon unchanged).
 
 **Proposed on 18 November, each needs Tom's yes before it is planned:** a public coverage page on UK Councils (one table of what the site holds for each council and why anything is absent, from the gate report); a one line summary at the top of a UK Councils profile (control, and the next scheduled election) where both parts are built; a weekly check in the UK Councils refresh job that compares the live composition table's hash with the pin and opens an issue when it differs, changing no data.
 
 **After the reversal:** W10 share cards on both sites; U4 the `/councils/` map lead; U5 the dossier page layout; D14 option b.
 
-Sessions left on the restyle: W5 (D8 decided on 19 November, option B; ready to start) and the Tier 2 sweep (two PRs, brief to be written from W9's diff) in the must list; 3 on UK Councils; marks after W5 (D3 decided, pair 2); 4 parked. Tom is to judge the look of the hub, compare and the league tables on the live site; a second pass on any of them is a new row.
+Sessions left on the restyle: W5 built (PR 113, waiting on Tom's yes) and the Tier 2 sweep (two PRs, brief to be written from W9's diff) in the must list; 3 on UK Councils; marks after W5 (D3 decided, pair 2); 4 parked. Tom is to judge the look of the hub, compare and the league tables on the live site; a second pass on any of them is a new row.
 
 ## 5. Decisions, one register
 

@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest";
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-// @ts-expect-error plain JavaScript module shared with scripts/check-dist.mjs
 import { chromeParts, pageProblems, referenceProblems, routesBeforeW5, sisterTable } from "../scripts/lib/chrome-nav.mjs";
-// @ts-expect-error plain JavaScript module shared with scripts/check-dist.mjs
 import { lostOnlyInbound, orphans } from "../scripts/lib/link-graph.mjs";
 import { CHROME_ROUTES_BEFORE_W5, footerHrefs, headerHrefs } from "../src/lib/site";
 import { CURRENT_YEAR, NEXT_YEAR } from "../src/lib/council-tax";
@@ -41,6 +39,7 @@ describe("the W5 navigation gates", () => {
     expect(referenceProblems(drift, { years, sisters: sisterTable() }).some((p: string) => p.startsWith("footer sister links"))).toBe(true);
     const short = chromeParts(page(undefined, footerHrefs().slice(1)));
     expect(pageProblems(short, chromeParts(page()))).toContain("footer columns differ from the homepage");
+    expect(pageProblems(chromeParts("<html><body><main></main></body></html>"), chromeParts(page()))).toEqual(["0 site headers, not one", "0 site footers, not one"]);
     const many = chromeParts(page(Array.from({ length: 19 }, (_, i) => `/p${i}/`)));
     expect(referenceProblems(many, { years, sisters: sisterTable() })).toContain("the header holds 20 destinations, not fewer than 20");
   });

@@ -20,7 +20,7 @@ const year = new Date().getUTCFullYear();
     <nav class="footer-cols" aria-label="Footer">
       {FOOTER_COLUMNS.map((column, i) => (
         <div>
-          <h2 id={`footer-col-${i + 1}`} class="footer-eyebrow">{column.label}</h2>
+          <p id={`footer-col-${i + 1}`} class="footer-eyebrow">{column.label}</p>
           <ul aria-labelledby={`footer-col-${i + 1}`}>
             {column.items.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
           </ul>
@@ -41,13 +41,12 @@ const year = new Date().getUTCFullYear();
         ))}
       </ul>
     </section>
-    <p class="footer-imprint">
-      An independent reference site, not a council or government service.{' '}
-      {SITE_NAME} republishes official figures about local authorities in the UK. Every figure carries its
-      source and date. Council tax figures are from MHCLG, the Scottish Government and the Welsh Government under the Open Government Licence v3.0. &copy; {year} {SITE_NAME}.
-    </p>
     <div class="footer-base">
-      <span class="footer-name">{SITE_NAME}</span>
+      <p class="footer-imprint">
+        An independent reference site, not a council or government service.{' '}
+        {SITE_NAME} republishes official figures about local authorities in the UK. Every figure carries its
+        source and date. Council tax figures are from MHCLG, the Scottish Government and the Welsh Government under the Open Government Licence v3.0. &copy; {year} {SITE_NAME}.
+      </p>
       {!ephemeral && <div class="footer-theme"><ThemeSelect label="Theme" /></div>}
     </div>
   </div>
@@ -60,11 +59,12 @@ const year = new Date().getUTCFullYear();
     margin-top: 3rem;
     background: var(--ground);
     color: var(--ground-muted);
-    padding: 2.5rem 0;
+    padding: 2rem 0;
     font-size: 0.92rem;
   }
   .site-footer a { color: var(--ground-ink); text-decoration: none; }
   .site-footer a:hover { text-decoration: underline; }
+  /* Column labels are not headings: a page's own "Your bill" heading stays the only one by that name. */
   .footer-eyebrow {
     font-family: var(--font-sans);
     font-size: 0.75rem;
@@ -74,22 +74,23 @@ const year = new Date().getUTCFullYear();
     color: var(--ground-muted);
     margin: 0 0 0.6rem;
   }
-  .footer-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-  .footer-cols ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.15rem; }
-  .footer-cols a { display: inline-block; padding: 0.2rem 0; }
-  .footer-sisters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin: 0 0 1.75rem; padding: 0; list-style: none; }
-  .footer-sister { display: flex; gap: 0.7rem; align-items: center; padding: 0.8rem; border: 1px solid var(--ground-rule); border-radius: var(--radius); min-width: 0; }
-  .footer-sister-lead { grid-column: span 3; border-top: 3px solid var(--accent-bright); }
+  .footer-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 1.5rem; }
+  .footer-cols ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.05rem; }
+  .footer-cols a { display: inline-block; padding: 0.15rem 0; }
+  /* Desktop: UK Councils spans two rows at the start, the other six sit beside it in two rows of three. */
+  .footer-sisters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin: 0 0 1.25rem; padding: 0; list-style: none; }
+  .footer-sister { display: flex; gap: 0.7rem; align-items: center; padding: 0.6rem 0.75rem; border: 1px solid var(--ground-rule); border-radius: var(--radius); min-width: 0; }
+  .footer-sister-lead { grid-row: span 2; border-top: 3px solid var(--accent-bright); }
   .footer-sister-mark { flex: none; display: inline-flex; }
   .footer-sister-mark svg { width: 32px; height: 32px; display: block; }
   .footer-sister a { display: block; font-weight: 600; overflow-wrap: anywhere; }
   .footer-sister span { display: block; font-size: 0.85rem; }
   .footer-imprint { max-width: 48rem; margin: 0; line-height: 1.5; }
-  .footer-base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--ground-rule); color: var(--ground-ink); }
-  .footer-name { font-family: var(--font-display); font-weight: 600; }
+  .footer-base { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem 2rem; padding-top: 1rem; border-top: 1px solid var(--ground-rule); }
+  .footer-theme { color: var(--ground-ink); }
   @media (max-width: 760px) {
     .footer-cols { grid-template-columns: 1fr 1fr; }
     .footer-sisters { grid-template-columns: 1fr; }
-    .footer-sister-lead { grid-column: auto; }
+    .footer-sister-lead { grid-row: auto; }
   }
 </style>

@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { councilIndex } from '../src/lib/council-index';
+import { searchControls, searchTrigger } from './helpers/search';
 
 test.beforeEach(async ({ page }) => {
   await page.route('https://static.cloudflareinsights.com/**', route => route.abort());
@@ -15,7 +16,7 @@ for (const [name, href] of [
 ]) {
   test(`${name} leads the council results and is keyboard reachable`, async ({ page }) => {
     await page.goto('/');
-    await page.locator('[data-search-open]').focus(); await page.keyboard.press('Enter');
+    await (await searchTrigger(page)).focus(); await page.keyboard.press('Enter');
     await page.getByLabel('Council, region or topic').fill(name);
     const first = page.locator('[data-council-profile]').first();
     await expect(first).toHaveAttribute('href', href);
@@ -29,7 +30,7 @@ test('the first keystrokes search lazily and expose the held destinations', asyn
   page.on('request', request => requests.push(request.url()));
   await page.goto('/');
   expect(requests.some(url => /\/pagefind\/|\/council-index.json/.test(url))).toBe(false);
-  await page.locator('[data-search-open]').click();
+  await (await searchTrigger(page)).click();
   await page.getByLabel('Council, region or topic').pressSequentially('burn');
   await expect(page.locator('[data-council-profile]').first()).toHaveAttribute('href', '/councils/burnley/');
   const burnley = page.locator('[data-search-council-results] li').filter({ has: page.locator('a[href="/councils/burnley/"]') });
@@ -39,7 +40,7 @@ test('the first keystrokes search lazily and expose the held destinations', asyn
 });
 
 test('county matches show all twelve districts and broad searches can show more', async ({ page }) => {
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   const input = page.getByLabel('Council, region or topic');
   await input.fill('lancashire');
   await expect(page.locator('[data-council-profile]')).toHaveCount(12);
@@ -63,7 +64,7 @@ test('county matches show all twelve districts and broad searches can show more'
 });
 
 test('nations stay labelled and unavailable destinations stay absent', async ({ page }) => {
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   const input = page.getByLabel('Council, region or topic');
   for (const name of ['Glasgow City', 'Cardiff']) {
     await input.fill(name);
@@ -98,7 +99,7 @@ test('the directory picker and name finder use the same exact region rule', asyn
 });
 
 test('full text matches keep excerpts and page type labels', async ({ page }) => {
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   await page.getByLabel('Council, region or topic').fill('Burnley');
   const hit = page.locator('[data-search-results] li').filter({ has: page.locator('a[href="/councils/burnley/"]') });
   await expect(hit.locator('[data-search-type]')).toHaveText('Council');
@@ -111,7 +112,7 @@ test('full text matches keep excerpts and page type labels', async ({ page }) =>
 test('a failed council index keeps page results and retry restores councils', async ({ page }) => {
   let blocked = true;
   await page.route('**/council-index.json', route => blocked ? route.abort() : route.continue());
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   await page.getByLabel('Council, region or topic').fill('Burnley');
   await expect(page.locator('[data-search-results] a[href="/councils/burnley/"]')).toBeVisible();
   await expect(page.locator('[data-search-status]')).toContainText('Council search could not load');
@@ -126,7 +127,7 @@ test('a delayed first response cannot overwrite a newer query', async ({ page })
   const gate = new Promise<void>(resolve => { release = resolve; });
   const arrived = new Promise<void>(resolve => { requested = resolve; });
   await page.route('**/council-index.json', async route => { requested(); await gate; await route.continue(); });
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   const input = page.getByLabel('Council, region or topic');
   await input.fill('Burnley'); await arrived;
   await input.fill('Cardiff'); release();
@@ -141,7 +142,7 @@ for (const theme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: theme });
     await page.goto('/');
     const storage = await page.evaluate(() => [JSON.stringify(localStorage), JSON.stringify(sessionStorage)]);
-    await page.locator('[data-search-open]').click();
+    const { trigger, returnTo } = await searchControls(page); await trigger.click();
     await page.getByLabel('Council, region or topic').fill('lancashire');
     await expect(page.locator('[data-council-profile]')).toHaveCount(12);
     expect(await page.locator('[data-site-search]').evaluate(el => el.scrollWidth <= el.clientWidth)).toBe(true);
@@ -149,7 +150,7 @@ for (const theme of ['light', 'dark'] as const) {
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(axe.violations.map(row => ({ id: row.id, nodes: row.nodes.map(n => n.target) }))).toEqual([]);
     expect(await page.evaluate(() => [JSON.stringify(localStorage), JSON.stringify(sessionStorage)])).toEqual(storage);
-    await page.keyboard.press('Escape'); await expect(page.locator('[data-search-open]')).toBeFocused();
+    await page.keyboard.press('Escape'); await expect(returnTo).toBeFocused();
   });
 }
 
@@ -157,7 +158,7 @@ test('search remains a directory link without scripts', async ({ browser, baseUR
   const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
   try {
     const page = await context.newPage(); await page.goto('/');
-    await page.locator('[data-search-open]').click();
+    await (await searchTrigger(page)).click();
     await expect(page).toHaveURL(/\/councils\/$/);
     await expect(page.getByRole('link', { name: 'Burnley', exact: true }).first()).toBeVisible();
   } finally { await context.close(); }

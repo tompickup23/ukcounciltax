@@ -1,6 +1,7 @@
 import {test,expect} from '@playwright/test';
 import {band} from './helpers/current';
 import AxeBuilder from '@axe-core/playwright';
+import { searchControls, searchTrigger } from './helpers/search';
 
 test.beforeEach(async ({page}) => {
   await page.route('https://static.cloudflareinsights.com/**', route=>route.abort());
@@ -14,13 +15,13 @@ for (const theme of ['light','dark'] as const) {
     await page.emulateMedia({colorScheme:theme});
     await page.goto('/');
     expect(requests.filter(url=>url.includes('/pagefind/'))).toEqual([]);
-    const trigger = page.locator('[data-search-open]'); await trigger.focus(); await page.keyboard.press('Enter');
+    const {trigger, returnTo} = await searchControls(page); await trigger.focus(); await page.keyboard.press('Enter');
     const input = page.getByLabel('Council, region or topic'); await expect(input).toBeFocused();
     await input.fill('Burnley');
     await expect(page.locator('[data-search-results] a[href="/councils/burnley/"]')).toBeVisible();
     const axe = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
     expect(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
-    await page.keyboard.press('Escape'); await expect(trigger).toBeFocused();
+    await page.keyboard.press('Escape'); await expect(returnTo).toBeFocused();
     await page.keyboard.press('/'); await expect(input).toBeFocused();
     await input.fill('zxqvnomatchingplace'); await expect(page.locator('[data-search-status]')).toContainText('No matching pages');
     expect(violations).toEqual([]);
@@ -29,7 +30,7 @@ for (const theme of ['light','dark'] as const) {
 test('search index failures show a browse fallback and retry succeeds', async ({page}) => {
   let blocked = true;
   await page.route('**/pagefind/*.pf_*', route=>blocked?route.abort():route.continue());
-  await page.goto('/'); await page.locator('[data-search-open]').click();
+  await page.goto('/'); await (await searchTrigger(page)).click();
   await page.getByLabel('Council, region or topic').fill('Burnley');
   await expect(page.locator('[data-search-retry]')).toBeVisible({timeout:15000});
   await expect(page.locator('[data-council-profile]').first()).toHaveAttribute('href', '/councils/burnley/');

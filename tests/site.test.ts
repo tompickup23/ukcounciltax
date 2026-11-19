@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { SITE_NAME, SITE_URL, STATIC_PATHS, NAV_GROUPS, NAV_DIRECT, FOOTER_LINKS, pageTitle } from "../src/lib/site";
+import { SITE_NAME, SITE_URL, STATIC_PATHS, NAV_GROUPS, NAV_DIRECT, FOOTER_COLUMNS, DRAWER_CARDS, CHROME_ROUTES_BEFORE_W5, headerHrefs, footerHrefs, pageTitle } from "../src/lib/site";
 
 import { programmaticPaths } from "../src/lib/paths";
 
@@ -221,25 +221,45 @@ describe("house style", () => {
 
 
 describe("navigation", () => {
+  const paths = new Set<string>([...STATIC_PATHS, ...programmaticPaths()]);
+  const route = (href: string) => href.split(/[?#]/)[0];
+
   it("uses known routes and unique item labels", () => {
-    const paths = new Set<string>([...STATIC_PATHS, ...programmaticPaths()]);
-    const items = NAV_GROUPS.flatMap(group => group.items);
+    const items = [...NAV_DIRECT, ...NAV_GROUPS.flatMap(group => group.items)];
     expect(new Set(items.map(item => item.label)).size).toBe(items.length);
-    for (const item of items) expect(paths.has(item.href.split(/[?#]/)[0]), item.href).toBe(true);
+    for (const item of [...items, ...DRAWER_CARDS]) expect(paths.has(route(item.href)), item.href).toBe(true);
   });
 
-  it("links every static route from the header or the footer, each once", () => {
-    const paths = new Set<string>([...STATIC_PATHS, ...programmaticPaths()]);
-    const all = [...NAV_GROUPS.flatMap(group => group.items), NAV_DIRECT, ...FOOTER_LINKS];
-    for (const item of all) expect(paths.has(item.href.split(/[?#]/)[0]), item.href).toBe(true);
-    const hrefs = all.map(item => item.href);
-    expect(new Set(hrefs).size).toBe(hrefs.length);
-    for (const path of STATIC_PATHS) if (path !== "/") expect(hrefs.some(href => href.split(/[?#]/)[0] === path), path).toBe(true);
+  it("links every static route from the header or the footer", () => {
+    const columns = FOOTER_COLUMNS.flatMap(column => column.items);
+    for (const item of columns) expect(paths.has(route(item.href)), item.href).toBe(true);
+    for (const column of FOOTER_COLUMNS) {
+      const hrefs = column.items.map(item => item.href);
+      expect(new Set(hrefs).size, column.label).toBe(hrefs.length);
+    }
+    const linked = [...headerHrefs(), ...footerHrefs()].map(route);
+    for (const path of STATIC_PATHS) expect(linked, path).toContain(path);
   });
 
-  it("keeps the header short: three groups, one direct link, no more than fifteen links", () => {
-    expect(NAV_GROUPS).toHaveLength(3);
-    expect(NAV_GROUPS.flatMap(group => group.items).length + 1).toBeLessThanOrEqual(15);
-    expect(NAV_DIRECT.href).toBe("/tools/budget/");
+  it("keeps D8 option B: three links, one More menu of three columns, fewer than twenty header links", () => {
+    expect(NAV_DIRECT.map(item => [item.label, item.href])).toEqual([["Your bill", "/your-area/"], ["Budget game", "/tools/budget/"], ["Compare", "/compare/"]]);
+    expect(NAV_GROUPS.map(group => group.label)).toEqual(["Your bill", "Budgets", "Compare and explore"]);
+    expect(headerHrefs().length).toBeLessThan(20);
+    expect(FOOTER_COLUMNS.map(column => column.label)).toEqual(["Tools", "Your bill", "About the data", "Site"]);
+  });
+
+  it("drops no route the header or footer held before W5", () => {
+    const now = new Set([...headerHrefs(), ...footerHrefs()]);
+    for (const href of CHROME_ROUTES_BEFORE_W5) expect(now.has(href), href).toBe(true);
+    // Every route that left the header is in the footer, so it stays one tap away on every page.
+    const header = new Set(headerHrefs());
+    const footer = new Set(footerHrefs());
+    for (const href of CHROME_ROUTES_BEFORE_W5) if (!header.has(href)) expect(footer.has(href), href).toBe(true);
+  });
+
+  it("links the hub's Set section, which the hub page still carries", () => {
+    const hub = readFileSync(join(ROOT, "src", "pages", "tools", "budget", "index.astro"), "utf-8");
+    expect(hub).toContain('id="set-the-budget"');
+    expect(DRAWER_CARDS[0].href).toBe("/tools/budget/#set-the-budget");
   });
 });

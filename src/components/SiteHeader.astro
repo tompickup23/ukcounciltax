@@ -1,141 +1,117 @@
 ---
 /**
- * The site header, copied from UK Demographics' SiteHeader.astro: a mega menu
- * built on <details> (native toggle, keyboard and no-JS fallback), one group
- * open at a time, click outside and Escape to close, and a mobile drawer that
- * opens the active group. Colours are tokens only. Search loads its index on demand.
+ * The site header at D8 option B, lean (decided 19 November 2026; the mock is
+ * docs/design/header-round/option-b.html). Three plain links, one "More" menu
+ * in three columns, and Search. At phone width the row carries "Your bill" and
+ * a solid "Game" button named "Budget game", and the drawer holds search, two
+ * cards and flat lists.
+ *
+ * The menu and the drawer are <details> elements, so both open and close with no
+ * JavaScript; the name attribute keeps one of each open. The small script below
+ * only adds Escape and click outside to close. Colours are palette B tokens only.
+ * The bar and the drawer carry data-pagefind-ignore.
  */
 import Search from "./Search.astro";
-import { NAV_DIRECT, NAV_GROUPS, SITE_NAME, SITE_TAGLINE, type NavGroup } from "../lib/site";
+import { DRAWER_CARDS, NAV_DIRECT, NAV_GROUPS, SITE_NAME, type NavGroup } from "../lib/site";
 
 const pathname = Astro.url.pathname;
 
-function isActiveItem(href: string): boolean {
-  if (href === "/") return pathname === "/";
+/** Hash links point at a section of a page that has its own entry, so they never mark a section active. */
+function inSection(href: string): boolean {
+  if (href.includes("#")) return false;
+  if (href === "/" || href === "/tools/") return pathname === href;
   return pathname === href || pathname.startsWith(href);
 }
-function isActiveGroup(group: NavGroup): boolean {
-  return group.items.some((item) => isActiveItem(item.href));
-}
+const isPage = (href: string) => !href.includes("#") && pathname === href;
+const directActive = NAV_DIRECT.some((item) => inSection(item.href));
+const moreActive = !directActive && NAV_GROUPS.some((group: NavGroup) => group.items.some((item) => inSection(item.href)));
+const [yourBill, budgetGame] = NAV_DIRECT;
+const searchIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg>`;
 ---
 
-<div class="site-header-bar">
+<div class="site-header-bar" data-pagefind-ignore>
   <header class="site-header shell">
     <a class="brand" href="/">
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="30" height="30">
+        <svg viewBox="0 0 64 64" width="32" height="32">
           <rect width="64" height="64" rx="12" fill="var(--accent)"></rect>
           <path d="M14 50V28L32 16l18 12v22H38V36H26v14z" fill="var(--accent-wash)"></path>
         </svg>
       </span>
-      <span class="brand-copy">
-        <span class="brand-name">{SITE_NAME}</span>
-        <small>{SITE_TAGLINE}</small>
-      </span>
+      <span class="brand-name">{SITE_NAME}</span>
     </a>
 
-    <div class="site-tools">
-      <nav class="site-nav-mega desktop-nav" aria-label="Primary">
-        {NAV_GROUPS.map((group) => (
-          <details class="mega-group" data-active={isActiveGroup(group) ? "true" : "false"}>
-            <summary class="mega-trigger">
-              <span>{group.label}</span>
-              <span class="mega-caret" aria-hidden="true">
-                <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
-                  <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-              </span>
-            </summary>
-            <div class="mega-panel">
+    <nav class="site-nav" aria-label="Primary">
+      {NAV_DIRECT.map((item) => (
+        <a class="nav-link" href={item.href} data-active={inSection(item.href) ? "true" : undefined} aria-current={isPage(item.href) ? "page" : undefined}>{item.label}</a>
+      ))}
+      <details class="nav-more" name="site-nav-more" data-nav-more data-active={moreActive ? "true" : undefined}>
+        <summary class="nav-link nav-more-trigger">
+          More
+          <span class="nav-caret" aria-hidden="true"><svg viewBox="0 0 10 6" width="10" height="6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+        </summary>
+        <div class="nav-panel">
+          {NAV_GROUPS.map((group) => (
+            <div class="nav-col">
+              <p class="nav-colhead">{group.label}</p>
               {group.items.map((item) => (
-                <a href={item.href} class="mega-item" aria-current={isActiveItem(item.href) ? "page" : undefined}>
-                  <span class="mega-item-label">{item.label}</span>
-                  <span class="mega-item-desc">{item.desc}</span>
+                <a class="nav-item" href={item.href} aria-current={isPage(item.href) ? "page" : undefined}>
+                  <b>{item.label}</b>
+                  <span>{item.desc}</span>
                 </a>
               ))}
             </div>
-          </details>
-        ))}
-        <a class="mega-trigger mega-direct" href={NAV_DIRECT.href} aria-current={isActiveItem(NAV_DIRECT.href) ? "page" : undefined}>{NAV_DIRECT.label}</a>
-      </nav>
-      <Search />
-      <button class="mobile-menu-btn" type="button" data-mobile-menu-toggle aria-label="Open menu" aria-expanded="false">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-      </button>
+          ))}
+        </div>
+      </details>
+    </nav>
+
+    <div class="site-tools">
+      <Search triggerClass="header-search" />
+      <a class="header-pill" href={yourBill.href} aria-current={isPage(yourBill.href) ? "page" : undefined}>{yourBill.label}</a>
+      <a class="header-pill header-pill-solid" href={budgetGame.href} aria-label={budgetGame.label} aria-current={isPage(budgetGame.href) ? "page" : undefined}>Game</a>
+      <details class="drawer" name="site-drawer" data-site-drawer>
+        <summary class="drawer-toggle" aria-label="Menu">
+          <svg class="drawer-open-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          <svg class="drawer-close-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </summary>
+        <nav class="drawer-panel" aria-label="Menu">
+          <a class="drawer-search" href="/councils/" data-search-drawer aria-haspopup="dialog"><Fragment set:html={searchIcon} /> Search councils and pages</a>
+          <div class="drawer-cards">
+            {DRAWER_CARDS.map((card) => (
+              <a class="drawer-card" href={card.href}><b>{card.label}</b><span>{card.desc}</span></a>
+            ))}
+          </div>
+          {NAV_GROUPS.map((group) => (
+            <>
+              <p class="drawer-head">{group.label}</p>
+              <ul class="drawer-list">
+                {group.items.map((item) => (
+                  <li><a href={item.href} aria-current={isPage(item.href) ? "page" : undefined}>{item.label}</a></li>
+                ))}
+              </ul>
+            </>
+          ))}
+        </nav>
+      </details>
     </div>
   </header>
 </div>
 
-<div class="mobile-drawer" data-mobile-drawer hidden>
-  <div class="mobile-drawer-backdrop" data-mobile-drawer-close></div>
-  <nav class="mobile-drawer-panel" aria-label="Mobile navigation">
-    <div class="mobile-drawer-head">
-      <span class="mobile-drawer-title">Menu</span>
-      <button type="button" class="mobile-drawer-close" data-mobile-drawer-close aria-label="Close menu">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </button>
-    </div>
-    <div class="mobile-drawer-body">
-      <a href="/" class:list={["mobile-drawer-home", { active: pathname === "/" }]}>Home</a>
-      {NAV_GROUPS.map((group) => (
-        <details class="mobile-group" open={isActiveGroup(group)}>
-          <summary class="mobile-group-trigger">
-            <span>{group.label}</span>
-            <span class="mobile-group-caret" aria-hidden="true">
-              <svg viewBox="0 0 10 6" width="10" height="6" fill="none">
-                <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </span>
-          </summary>
-          <div class="mobile-group-items">
-            {group.items.map((item) => (
-              <a href={item.href} class="mobile-group-item" aria-current={isActiveItem(item.href) ? "page" : undefined}>
-                <span class="mobile-item-label">{item.label}</span>
-                <span class="mobile-item-desc">{item.desc}</span>
-              </a>
-            ))}
-          </div>
-        </details>
-      ))}
-      <a href={NAV_DIRECT.href} class:list={["mobile-drawer-home", { active: isActiveItem(NAV_DIRECT.href) }]}>{NAV_DIRECT.label}</a>
-    </div>
-  </nav>
-</div>
-
 <script>
-  const groups = Array.from(document.querySelectorAll<HTMLDetailsElement>(".site-nav-mega .mega-group"));
-  for (const group of groups) {
-    group.addEventListener("toggle", () => {
-      if (group.open) for (const other of groups) if (other !== group) other.open = false;
-    });
-  }
+  // Enhancement only: the menus already open and close without this.
+  const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-nav-more], [data-site-drawer]"));
   document.addEventListener("click", (event) => {
     const target = event.target as Node;
-    if (!groups.some((g) => g.contains(target))) for (const g of groups) g.open = false;
+    for (const menu of menus) if (menu.open && !menu.contains(target)) menu.open = false;
   });
-
-  const toggle = document.querySelector<HTMLButtonElement>("[data-mobile-menu-toggle]");
-  const drawer = document.querySelector<HTMLDivElement>("[data-mobile-drawer]");
-  const openDrawer = () => {
-    if (!drawer) return;
-    drawer.removeAttribute("hidden");
-    toggle?.setAttribute("aria-expanded", "true");
-    document.body.style.overflow = "hidden";
-  };
-  const closeDrawer = () => {
-    if (!drawer) return;
-    drawer.setAttribute("hidden", "");
-    toggle?.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "";
-  };
-  toggle?.addEventListener("click", openDrawer);
-  for (const closer of document.querySelectorAll<HTMLElement>("[data-mobile-drawer-close]")) {
-    closer.addEventListener("click", closeDrawer);
-  }
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
-    for (const g of groups) g.open = false;
-    if (drawer && !drawer.hasAttribute("hidden")) closeDrawer();
+    for (const menu of menus) {
+      if (!menu.open) continue;
+      menu.open = false;
+      menu.querySelector<HTMLElement>("summary")?.focus();
+    }
   });
 </script>
 
@@ -146,144 +122,179 @@ function isActiveGroup(group: NavGroup): boolean {
     z-index: 50;
     border-top: 4px solid var(--accent);
     border-bottom: 1px solid var(--border);
-    background: color-mix(in srgb, var(--bg) 94%, transparent);
-    backdrop-filter: blur(6px);
+    background: var(--bg);
   }
-  /* One row at every width: mark, nav (desktop), search, menu (phone). */
+  /* One row at every width: mark, nav (desktop), search and menu. */
   .site-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 0.75rem;
-    min-height: 3.75rem;
+    min-height: 3.5rem;
     flex-wrap: nowrap;
+    position: relative;
   }
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
-    color: var(--text);
-    min-width: 0;
-  }
+  .site-header a { text-decoration: none; }
+  .brand { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--text); flex: none; min-width: 0; }
   .brand-mark { display: inline-flex; flex: none; }
-  .brand-copy { display: flex; flex-direction: column; min-width: 0; }
-  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; line-height: 1.1; }
-  .brand-copy small { font-size: 0.75rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .site-tools { display: flex; align-items: center; gap: 0.5rem; flex-wrap: nowrap; flex: none; }
+  .brand-mark svg { width: 32px; height: 32px; display: block; }
+  .brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.2rem; line-height: 1.1; white-space: nowrap; color: var(--text); }
 
-  .site-nav-mega { display: inline-flex; align-items: center; gap: 0.15rem; }
-  .mega-group { position: relative; }
-  .mega-trigger {
+  /* Desktop navigation */
+  .site-nav { display: flex; align-items: center; gap: 0.15rem; margin-left: 0.75rem; }
+  .nav-link {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
     padding: 0.5rem 0.8rem;
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     font-weight: 600;
     color: var(--text-muted);
     border-radius: var(--radius-sm);
     cursor: pointer;
     list-style: none;
-    user-select: none;
+    white-space: nowrap;
+    position: relative;
   }
-  .mega-trigger::-webkit-details-marker { display: none; }
-  .mega-trigger::marker { content: ""; }
-  .mega-trigger:hover, .mega-group[open] .mega-trigger { color: var(--text); background: var(--bg-subtle); }
-  .mega-group[data-active="true"] .mega-trigger { color: var(--text); }
-  .mega-direct { text-decoration: none; }
-  .mega-direct[aria-current="page"] { color: var(--text); }
-  .mega-group[data-active="true"] .mega-trigger::after {
+  .nav-more-trigger::-webkit-details-marker { display: none; }
+  .nav-more-trigger::marker { content: ""; }
+  .nav-link:hover, .nav-more[open] > .nav-more-trigger { color: var(--text); background: var(--bg-subtle); }
+  .nav-caret { display: inline-flex; opacity: 0.7; transition: transform 180ms; }
+  .nav-more[open] .nav-caret { transform: rotate(180deg); }
+  /* The 3px accent active bar from the design audit, on the section the page belongs to. */
+  .nav-link[data-active="true"], .nav-more[data-active="true"] > .nav-more-trigger { color: var(--text); }
+  .nav-link[data-active="true"]::after, .nav-more[data-active="true"] > .nav-more-trigger::after {
     content: "";
     position: absolute;
-    bottom: -3px;
     left: 0.8rem;
     right: 0.8rem;
-    height: 2px;
+    bottom: -0.55rem;
+    height: 3px;
     background: var(--accent);
+    border-radius: 2px;
   }
-  .mega-caret { display: inline-flex; transition: transform 180ms; opacity: 0.7; }
-  .mega-group[open] .mega-caret { transform: rotate(180deg); }
-  .mega-panel {
+  .nav-panel {
+    /* Placed against the header row, not the trigger, so it never runs off a narrow desktop. */
     position: absolute;
-    top: calc(100% + 10px);
-    left: 0;
-    min-width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 0.5rem;
+    top: calc(100% + 0.5rem);
+    left: 1rem;
+    right: 1rem;
+    max-width: 52rem;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem 1rem;
+    padding: 1rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
-    z-index: 60;
   }
-  .mega-group:last-of-type .mega-panel { left: auto; right: 0; }
-  .mega-item { display: block; padding: 0.65rem 0.8rem; border-radius: var(--radius-sm); text-decoration: none; }
-  .mega-item:hover { background: var(--bg-subtle); }
-  .mega-item[aria-current="page"] { background: var(--accent-wash); }
-  .mega-item-label { display: block; font-weight: 600; color: var(--text); }
-  .mega-item[aria-current="page"] .mega-item-label { color: var(--accent); }
-  .mega-item-desc { display: block; font-size: 0.82rem; color: var(--text-muted); margin-top: 0.15rem; }
+  .nav-colhead { margin: 0.25rem 0.75rem 0.35rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .nav-item { display: block; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); color: var(--text); }
+  .nav-item:hover { background: var(--bg-subtle); }
+  .nav-item[aria-current="page"] { background: var(--accent-wash); }
+  .nav-item b { display: block; font-weight: 600; color: var(--text); }
+  .nav-item span { display: block; font-size: 0.84rem; color: var(--text-muted); margin-top: 0.1rem; line-height: 1.35; }
 
-  .mobile-menu-btn {
-    display: none;
+  /* Tools on the right */
+  .site-tools { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; flex: none; }
+  .site-tools :global(.header-search) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text);
+    background: var(--bg-card);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .header-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    white-space: nowrap;
+    background: var(--bg-card);
+  }
+  .header-pill-solid { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+  /* The phone drawer, also a <details>: no script needed to open or close it. */
+  .drawer { display: none; }
+  .drawer-toggle {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: none;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 0.4rem;
     color: var(--text);
     cursor: pointer;
+    list-style: none;
     border-radius: var(--radius-sm);
   }
-  @media (max-width: 860px) {
-    .desktop-nav { display: none; }
-    .mobile-menu-btn { display: inline-flex; }
-  }
-  @media (max-width: 420px) {
-    .brand-copy small { display: none; }
-  }
-
-  .mobile-drawer { position: fixed; inset: 0; z-index: 1000; }
-  .mobile-drawer[hidden] { display: none; }
-  .mobile-drawer-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--ground) 55%, transparent); }
-  .mobile-drawer-panel {
-    position: absolute;
-    top: 0;
+  .drawer-toggle::-webkit-details-marker { display: none; }
+  .drawer-toggle::marker { content: ""; }
+  .drawer-close-icon { display: none; }
+  .drawer[open] .drawer-open-icon { display: none; }
+  .drawer[open] .drawer-close-icon { display: inline; }
+  .drawer-panel {
+    position: fixed;
+    left: 0;
     right: 0;
-    height: 100%;
-    width: min(92vw, 380px);
-    background: var(--bg-card);
-    border-left: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
+    top: calc(3.5rem + 5px);
+    bottom: 0;
+    z-index: 70;
     overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1rem 2rem;
   }
-  .mobile-drawer-head {
+  .drawer-search {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    color: var(--text-muted);
+    background: var(--bg);
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
-  .mobile-drawer-title { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-  .mobile-drawer-close { display: inline-flex; width: 36px; height: 36px; align-items: center; justify-content: center; border: none; background: none; color: var(--text); cursor: pointer; }
-  .mobile-drawer-body { display: flex; flex-direction: column; }
-  .mobile-drawer-home { padding: 0.85rem 0.25rem; font-weight: 600; color: var(--text); text-decoration: none; border-bottom: 1px solid var(--border); }
-  .mobile-drawer-home.active { color: var(--accent); }
-  .mobile-group { border-bottom: 1px solid var(--border); }
-  .mobile-group-trigger { display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 0.25rem; font-weight: 600; color: var(--text); cursor: pointer; list-style: none; }
-  .mobile-group-trigger::-webkit-details-marker { display: none; }
-  .mobile-group-caret { transition: transform 180ms; opacity: 0.6; }
-  .mobile-group[open] .mobile-group-caret { transform: rotate(180deg); }
-  .mobile-group-items { display: flex; flex-direction: column; gap: 0.15rem; padding-bottom: 0.5rem; }
-  .mobile-group-item { display: block; padding: 0.6rem 0.75rem; border-radius: var(--radius-sm); text-decoration: none; color: var(--text); }
-  .mobile-group-item[aria-current="page"] { background: var(--accent-wash); color: var(--accent); }
-  .mobile-item-label { display: block; font-weight: 600; }
-  .mobile-item-desc { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 0.1rem; }
+  .drawer-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.5rem; }
+  .drawer-card { display: block; padding: 0.85rem; border-radius: var(--radius); background: var(--accent-wash); border-top: 3px solid var(--accent); color: var(--text); min-height: 5.2rem; }
+  .drawer-card b { display: block; font-family: var(--font-display); font-weight: 600; font-size: 1.08rem; line-height: 1.15; color: var(--text); }
+  .drawer-card span { display: block; font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.3; }
+  .drawer-head { margin: 1rem 0.25rem 0.25rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .drawer-list { list-style: none; margin: 0; padding: 0; }
+  .drawer-list a { display: block; padding: 0.7rem 0.25rem; border-bottom: 1px solid var(--border); color: var(--text); font-weight: 600; }
+  .drawer-list a[aria-current="page"] { color: var(--accent); }
+
+  /* Phone and small tablet: the drawer replaces the menu and Search moves into it. */
+  @media (max-width: 960px) {
+    .site-nav, .site-tools :global(.header-search) { display: none; }
+    .drawer { display: block; }
+    :global(body:has([data-site-drawer][open])) { overflow: hidden; }
+  }
+  @media (min-width: 961px) {
+    .header-pill { display: none; }
+  }
+  @media (max-width: 520px) {
+    .site-header { gap: 0.4rem; }
+    .brand { gap: 0.45rem; }
+    .brand-name { font-size: 1.02rem; }
+    .brand-mark svg { width: 28px; height: 28px; }
+    .header-pill { padding: 0.45rem 0.65rem; font-size: 0.92rem; }
+    .site-tools { gap: 0.3rem; }
+  }
 </style>

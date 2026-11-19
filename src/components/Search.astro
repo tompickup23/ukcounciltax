@@ -1,7 +1,13 @@
 ---
-/** Native dialog and lazy Pagefind pattern adapted from UK Elections. */
+/**
+ * Native dialog and lazy Pagefind pattern adapted from UK Elections. The header
+ * styles the trigger through triggerClass; the phone drawer's own search link
+ * ([data-search-drawer]) opens the same dialog. Without JavaScript both go to /councils/.
+ */
+interface Props { triggerClass?: string }
+const { triggerClass } = Astro.props;
 ---
-<a href="/councils/" class="search-trigger button secondary" data-search-open aria-haspopup="dialog">Search</a>
+<a href="/councils/" class:list={["search-trigger", triggerClass ?? "button secondary"]} data-search-open aria-haspopup="dialog"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg> Search</a>
 <dialog class="site-search" aria-labelledby="search-title" data-site-search data-pagefind-ignore>
   <form method="dialog"><button class="button secondary" aria-label="Close search">Close</button></form>
   <h2 id="search-title">Search UK Council Tax</h2>
@@ -141,6 +147,10 @@
   }
   function open() {focusBefore = document.activeElement as HTMLElement; dialog.showModal(); input.focus(); if (input.value) void search();}
   trigger.addEventListener('click', event => {event.preventDefault(); open();});
+  for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-search-drawer]')) link.addEventListener('click', event => {
+    event.preventDefault(); link.closest('details')?.removeAttribute('open'); open();
+    focusBefore = link.closest('details')?.querySelector('summary') ?? focusBefore;
+  });
   dialog.addEventListener('keydown', event => {if (event.key === 'Escape') {event.preventDefault(); event.stopPropagation(); dialog.close();}});
   dialog.addEventListener('close', () => {sequence++; clearTimeout(timer); focusBefore?.focus();});
   input.addEventListener('input', () => {
@@ -163,7 +173,7 @@
   });
 </script>
 <style>
-  .search-trigger { min-height: 2.5rem; padding: 0.45rem 0.65rem; }
+  .search-trigger { min-height: 2.5rem; padding: 0.45rem 0.65rem; display: inline-flex; align-items: center; gap: 0.4rem; }
   .site-search { width: 92vw; max-width: 42rem; max-height: 85dvh; padding: clamp(1rem, 4vw, 2rem); border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--bg); color: var(--text); box-shadow: var(--shadow); }
   .site-search::backdrop { background: color-mix(in srgb, var(--ground) 75%, transparent); }
   .search-councils { list-style: none; padding: 0; margin: 0 0 1rem; }

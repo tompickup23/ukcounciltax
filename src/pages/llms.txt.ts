@@ -5,7 +5,7 @@ import { YEARS, loadYear } from "../lib/council-tax";
 import { devolved } from "../lib/devolved";
 import { localBills } from "../lib/local-bill-data";
 import { loadRegistry } from "../lib/registry";
-import { CONTACT_EMAIL, DEFAULT_DESCRIPTION, FOOTER_LINKS, NAV_DIRECT, NAV_GROUPS, SITE_NAME, absoluteUrl } from "../lib/site";
+import { CONTACT_EMAIL, DEFAULT_DESCRIPTION, FOOTER_COLUMNS, NAV_DIRECT, NAV_GROUPS, SITE_NAME, absoluteUrl } from "../lib/site";
 
 /**
  * /llms.txt, in the llmstxt.org shape: a title, a one paragraph summary, then
@@ -77,9 +77,14 @@ export function llmsText(): string {
     `Canonical site: ${absoluteUrl("/")}. Sitemap: ${absoluteUrl("/sitemap.xml")}. Method: ${absoluteUrl("/methodology/")}.`,
   ];
   if (CONTACT_EMAIL) lines.push("", `Contact and corrections: ${CONTACT_EMAIL} (see ${absoluteUrl("/corrections/")}).`);
-  for (const group of [...NAV_GROUPS, { label: "Tools and reference", items: [NAV_DIRECT, ...FOOTER_LINKS] }]) {
+  // The header's order, then every footer page not already listed, each address once.
+  const listed = new Set<string>();
+  const footerOnly = FOOTER_COLUMNS.flatMap((column) => column.items);
+  for (const group of [{ label: "Start here", items: NAV_DIRECT }, ...NAV_GROUPS, { label: "Tools and reference", items: footerOnly }]) {
+    const items = group.items.filter((item) => !listed.has(item.href));
+    if (!items.length) continue;
     lines.push("", `## ${group.label}`, "");
-    for (const item of group.items) lines.push(`- [${item.label}](${absoluteUrl(item.href)})`);
+    for (const item of items) { listed.add(item.href); lines.push(`- [${item.label}](${absoluteUrl(item.href)})`); }
   }
   lines.push("", "## Sources", "");
   for (const source of sources()) lines.push(`- [${source.title}](${source.url}): ${source.publisher}`);

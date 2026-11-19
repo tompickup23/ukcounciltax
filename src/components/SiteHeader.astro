@@ -68,8 +68,10 @@ const searchIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
 
     <div class="site-tools">
       <Search triggerClass="header-search" />
-      <a class="header-pill" href={yourBill.href} aria-current={isPage(yourBill.href) ? "page" : undefined}>{yourBill.label}</a>
-      <a class="header-pill header-pill-solid" href={budgetGame.href} aria-label={budgetGame.label} aria-current={isPage(budgetGame.href) ? "page" : undefined}>Game</a>
+      <nav class="header-quick" aria-label="Quick links">
+        <a class="header-pill" href={yourBill.href} aria-current={isPage(yourBill.href) ? "page" : undefined}>{yourBill.label}</a>
+        <a class="header-pill header-pill-solid" href={budgetGame.href} aria-label={budgetGame.label} aria-current={isPage(budgetGame.href) ? "page" : undefined}>Game</a>
+      </nav>
       <details class="drawer" name="site-drawer" data-site-drawer>
         <summary class="drawer-toggle" aria-label="Menu">
           <svg class="drawer-open-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -215,6 +217,8 @@ const searchIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
     font-size: 0.95rem;
     text-decoration: none;
   }
+  /* The phone row's two links, a labelled nav of their own. Its minimum width is the Game pill's. */
+  .header-quick { display: flex; align-items: center; gap: 0.5rem; flex: 0 1 auto; }
   .header-pill {
     display: inline-block;
     flex: none;
@@ -291,7 +295,7 @@ const searchIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
     :global(body:has([data-site-drawer][open])) { overflow: hidden; }
   }
   @media (min-width: 961px) {
-    .header-pill { display: none; }
+    .header-quick { display: none; }
   }
   @media (max-width: 520px) {
     .site-header { gap: 0.35rem; }
@@ -300,6 +304,6 @@ const searchIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
     .brand-name { font-size: 1.02rem; }
     .brand-mark svg { width: 28px; height: 28px; }
     .header-pill { padding: 0.45rem 0.6rem; font-size: 0.92rem; }
-    .site-tools { gap: 0.25rem; }
+    .site-tools, .header-quick { gap: 0.25rem; }
   }
 </style>

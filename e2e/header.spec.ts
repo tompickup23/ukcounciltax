@@ -16,7 +16,7 @@ for (const width of [375, 390]) {
       const bar = page.locator(".site-header-bar");
       const box = await bar.boundingBox();
       expect(box!.height, path).toBeLessThan(72);
-      const tops = await page.locator(".site-header > :visible, .site-tools > :visible").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2)));
+      const tops = await page.locator(".site-header > :visible, .site-tools > :visible, .header-quick > :visible").evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2)));
       expect(Math.max(...tops) - Math.min(...tops), `${path} items share one row`).toBeLessThanOrEqual(4);
       await expect(page.getByRole("link", { name: "Your bill", exact: true }).first()).toBeVisible();
       await expect(page.getByRole("link", { name: "Budget game", exact: true })).toBeVisible();

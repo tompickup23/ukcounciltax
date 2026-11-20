@@ -7,32 +7,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import RecordLine from "../components/RecordLine.astro";
 import PageSources from "../components/PageSources.astro";
-import {yearLabel, type Year} from "../lib/council-tax";
 import { DATE_WORD, longDate, releaseItems } from "../lib/releases";
 
 const items = releaseItems();
-// Keep releaseItems (also used by RSS) intact. Each original description is
-// reproduced verbatim in Sources; only its narrative stays beside the update.
-const records = items.filter(item => item.sourceUrl).map(item => ({
-  ...item,
-  publisher: item.dataset.startsWith('levels-') ? 'MHCLG'
-    : item.dataset.startsWith('devolved-wales-') ? 'Welsh Government'
-    : item.dataset.startsWith('devolved-scotland-') ? 'Scottish Government'
-    : item.dataset === 'bandStock' ? item.description.split(', ')[0] : 'MHCLG',
-  narrative: item.dataset.startsWith('findings-') ? item.description.split(' Source: ')[0]
-    : item.dataset.startsWith('levels-') ? 'Band A to H for every billing authority.'
-    : item.dataset === 'parishes' ? item.description.match(/[\d,]+ rows\./)?.[0]
-    : item.dataset.startsWith('devolved-') ? item.description.split('. ').slice(1, -1).join('. ') + '.'
-    : '',
-  short: item.dataset.startsWith('levels-') ? `Council tax levels ${yearLabel(item.dataset.slice(7) as Year)}`
-    : item.dataset.startsWith('devolved-scotland-') ? `Council tax by band, CT by Band, ${yearLabel(item.dataset.slice('devolved-scotland-'.length) as Year)}`
-    : item.dataset.startsWith('devolved-wales-') ? 'Council tax levels, Table 1'
-    : item.dataset === 'components' ? 'Band D precepts, Table 10'
-    : item.dataset === 'bandStock' ? 'Council Tax stock of properties, CTSOP1.1'
-    : item.dataset === 'history' ? 'Band D history, Area_CT, exc_PP and inc_PP'
-    : item.dataset === 'findings-history' ? 'Band D history, Area_CT'
-    : 'Town and parish precepts',
-}));
+// Each item with a source carries its own record line (publisher, short title
+// and the sentence kept on the card), set in src/lib/releases.ts. The original
+// description is reproduced word for word in Sources.
+const records = items.filter(item => item.sourceUrl).map(item => {
+  if (!item.record) throw new Error(`Release item ${item.id} has a source but no record line`);
+  return {...item, ...item.record};
+});
 const recordFor = new Map(records.map(item => [item.id, item]));
 ---
 <BaseLayout

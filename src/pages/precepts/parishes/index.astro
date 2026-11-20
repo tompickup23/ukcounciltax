@@ -1,11 +1,13 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
-import SourceLine from '../../../components/SourceLine.astro';
+import RecordLine from '../../../components/RecordLine.astro';
+import PageSources from '../../../components/PageSources.astro';
 import {loadYear, yearLabel} from '../../../lib/council-tax';
 import {national, parishesFor, PARISH_YEAR} from '../../../lib/national-data';
 import {parishPages, parishPath, REGIONS} from '../../../lib/paths';
 import {parishSummary, parishAmountWords, parishSource} from '../../../lib/parish-pages';
+const parishRecord = {...parishSource, short: 'Town and parish council tax statistics, Parish_Level_Data'};
 const pages = parishPages();
 // On the parish return's year, which can lag the levels tables.
 const year = yearLabel(PARISH_YEAR), tax = loadYear(PARISH_YEAR);
@@ -14,7 +16,7 @@ const description = `${national.parishes.length.toLocaleString('en-GB')} local p
 ---
 <BaseLayout title={title} description={description} path="/precepts/parishes/">
   <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts'}]} />
-  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length-pages.length} councils have no local precepting authority in this return.</p><SourceLine source={parishSource} /></div></header>
+  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{description} {Object.keys(tax.authorities).length-pages.length} councils have no local precepting authority in this return.</p><RecordLine entry="parishes" sources={[parishRecord]} /></div></header>
   <p>Choose a council to see its parish and local body records. A parish Band D precept applies only within its charging area and is not a full council tax bill. These records are listed in council name order. To compare whole bills, see <a href="/council-tax/towns/">full Band D for every parish and unparished area</a>, which adds the council, county, police, fire and combined authority charges to each parish, lowest to highest across England and by region, county and constituency.</p>
   <div class="parish-filters" data-parish-filters hidden>
     <div class="picker-chips" role="group" aria-label="Region">
@@ -27,7 +29,8 @@ const description = `${national.parishes.length.toLocaleString('en-GB')} local p
     <caption>Local precepting authority records by council, {year}</caption>
     <thead><tr><th scope="col" data-parish-key="name" aria-sort="ascending"><span data-sort-label>Council</span><button type="button" class="sort-button" data-parish-sort="name" aria-label="Sort by council" hidden>Council</button></th><th scope="col" data-parish-key="region"><span data-sort-label>Region</span><button type="button" class="sort-button" data-parish-sort="region" aria-label="Sort by region" hidden>Region</button></th><th scope="col" class="num">Records</th><th scope="col" class="num">Records with a non zero {year} Band D</th><th scope="col" class="num">Lowest non zero Band D</th><th scope="col" class="num">Highest non zero Band D</th></tr></thead>
     <tbody>{pages.map(council => {const summary = parishSummary(parishesFor(council.gss)); return <tr data-region={council.region} data-name={tax.authorities[council.gss].name}><th scope="row"><a href={parishPath(council)}>{tax.authorities[council.gss].name}</a></th><td>{council.region}</td><td class="num" data-figure>{summary.records}</td><td class="num" data-figure>{summary.nonZero}</td><td class="num" data-figure>{summary.min === null ? 'No non zero precept' : parishAmountWords(summary.min)}</td><td class="num" data-figure>{summary.max === null ? 'No non zero precept' : parishAmountWords(summary.max)}</td></tr>;})}</tbody>
-  </table></div><SourceLine source={parishSource} /></div>
+  </table></div><RecordLine entry="parishes" sources={[parishRecord]} /></div>
+<PageSources entries={[{key: 'parishes', label: 'Parish and local precepts', sources: [parishSource]}]} />
 </BaseLayout>
 
 <script>

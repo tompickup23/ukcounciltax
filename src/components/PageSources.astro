@@ -3,6 +3,8 @@
  * The page's one Sources block (F1, plan section 11.5). Every record line on the
  * page links to one of these entries, which carries the method in full and each
  * source's publisher, full title, table, publication and retrieval dates.
+ * An optional slot named for an entry key preserves bespoke legacy citations
+ * verbatim. Without a slot, existing callers render the same reference markup.
  */
 import { longDate, sourceEntryId, type SourceRef } from "../lib/sources";
 
@@ -33,7 +35,7 @@ const tail = (s: SourceRef) => {
     {entries.map((e) => (
       <li id={sourceEntryId(e.key)}>
         <p><strong>{e.label}.</strong>{e.method && ` ${e.method}.`}</p>
-        <p>{e.sources.map((s, i) => <>{i > 0 && "; "}<a href={s.url}>{s.publisher}, {s.title}</a>{tail(s)}</>)}.{e.note && ` ${e.note}`}</p>
+        <slot name={e.key}><p>{e.sources.map((s, i) => <>{i > 0 && "; "}<a href={s.url}>{s.publisher}, {s.title}</a>{tail(s)}</>)}.{e.note && ` ${e.note}`}</p></slot>
       </li>
     ))}
   </ol>

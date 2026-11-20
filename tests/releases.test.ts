@@ -203,3 +203,28 @@ describe("the sitemap", () => {
     expect(sitemapPaths()).toContain("/changes/");
   });
 });
+
+describe("record lines on /changes/", () => {
+  it("gives every item with a source its own publisher, short title and card sentence", () => {
+    const publishers = new Set(["MHCLG", "Welsh Government", "Scottish Government", "HM Revenue & Customs"]);
+    const withSource = releaseItems().filter((item) => item.sourceUrl);
+    expect(withSource.length).toBeGreaterThan(0);
+    for (const item of withSource) {
+      expect(item.record, item.id).toBeDefined();
+      expect(publishers.has(item.record!.publisher), `${item.id}: ${item.record!.publisher}`).toBe(true);
+      expect(item.record!.short.length, item.id).toBeGreaterThan(0);
+      // The card sentence is taken from the description, never written apart from it.
+      expect(item.description, item.id).toContain(item.record!.narrative);
+      // The publisher on the record line is the one the description names.
+      const named = item.record!.publisher === "MHCLG" ? /MHCLG|Ministry of Housing, Communities and Local Government/ : new RegExp(item.record!.publisher);
+      expect(item.description, item.id).toMatch(named);
+    }
+    for (const item of releaseItems().filter((entry) => !entry.sourceUrl)) expect(item.record, item.id).toBeUndefined();
+  });
+
+  it("has no fallback publisher in the page", () => {
+    const page = readFileSync(join(process.cwd(), "src/pages/changes.astro"), "utf8");
+    expect(page).not.toMatch(/startsWith\(|: 'MHCLG'/);
+    expect(page).toContain("has a source but no record line");
+  });
+});

@@ -205,8 +205,12 @@ for (const path of files(DIST)) {
   if (/^\/precepts\/parishes\/[^/]+\/index\.html$/.test(rel(path))) {
     parishPagesChecked++;
     parishSource ??= JSON.parse(readFileSync('data/national/england.json', 'utf8')).sources.parishes;
-    const lines = [...text.matchAll(/<p\b[^>]*class="source-line"[^>]*>[\s\S]*?<\/p>/g)].filter(match => match[0].includes(parishSource.fileUrl));
-    if (lines.length !== 2) failures.push(`parish source must appear twice on ${rel(path)}, found ${lines.length}`);
+    const lines = [...text.matchAll(/<p\b[^>]*class="source-line record-line"[^>]*>[\s\S]*?<\/p>/g)]
+      .filter(match => match[0].includes(parishSource.fileUrl) && match[0].includes('href="#source-parishes"'));
+    const entry = /<li id="source-parishes">([\s\S]*?)<\/li>/.exec(text)?.[1] ?? '';
+    if (lines.length !== 2 || !entry.includes(parishSource.fileUrl) || !entry.includes(parishSource.title) || !entry.includes('Parish_Level_Data and Notes')) {
+      failures.push(`parish source requires two record lines and its full Sources entry on ${rel(path)}`);
+    }
   }
   const devolvedPage = /^\/(scotland|wales)\/([^/]+)\/index\.html$/.exec(rel(path));
   if (devolvedPage) {

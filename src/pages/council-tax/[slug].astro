@@ -12,6 +12,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { hubCardPath } from "../../lib/og";
 import SourceLine from "../../components/SourceLine.astro";
+import PageSources from "../../components/PageSources.astro";
 import BandNeighbours from "../../components/BandNeighbours.astro";
 import { BAND_PROPORTIONS, LAST_REVIEWED, fullBandEdition, neighbourBands, proportionText } from "../../lib/band-neighbours";
 import {
@@ -34,7 +35,7 @@ import {
   slugify,
   type Region,
 } from "../../lib/paths";
-import { councilTaxSource, longDate } from "../../lib/sources";
+import { changeSource, councilTaxSource, longDate, tableName } from "../../lib/sources";
 
 type PageProps = { kind: "band"; band: Band } | { kind: "region"; region: Region };
 
@@ -51,6 +52,8 @@ const year = yearLabel(CURRENT_YEAR);
 const previous = yearLabel(PREVIOUS_YEAR);
 const pages = councilPages();
 const bandSource = councilTaxSource(CURRENT_YEAR, data.source.bandTable);
+const bandRecord = {...bandSource, short: `Council tax levels ${year}, ${tableName(data.source.bandTable)}`};
+const changeRecord = {...changeSource(PREVIOUS_YEAR, CURRENT_YEAR), short: `Council tax levels ${year}, ${tableName(data.source.bandTable)}, and ${previous}, ${tableName(loadYear(PREVIOUS_YEAR).source.bandTable)}`};
 const inRegion = (region: string) => pages.filter((p) => p.tax.region === region);
 
 const sides = props.kind === "band" ? neighbourBands(props.band) : null;
@@ -119,10 +122,10 @@ if (props.kind === "band") {
       {REGIONS.map((region) => (
         <section class="section" id={slugify(region)} aria-labelledby={`${slugify(region)}-heading`}>
           <h2 id={`${slugify(region)}-heading`}>How much is Band {props.band} in {region}?</h2>
-          <TaxTable id={`table-${slugify(region)}`} region={region} band={props.band} caption={region} controlsId="band-table-controls" />
+          <TaxTable id={`table-${slugify(region)}`} region={region} band={props.band} caption={region} controlsId="band-table-controls" record={{entry: "bands", source: bandRecord}} changeRecord={{entry: "change", source: changeRecord}} />
           <details class="neighbour-details">
             <summary>{neighbourSummary} in {region}</summary>
-            <BandNeighbours band={props.band} region={region} />
+            <BandNeighbours band={props.band} region={region} record={{entry: "bands", source: bandRecord}} />
           </details>
         </section>
       ))}
@@ -206,4 +209,8 @@ if (props.kind === "band") {
       <li><a href="/council-tax/ranked/">Rankings by council type</a></li>
     </ul>
   </nav>
+{props.kind === "band" && <PageSources entries={[
+    {key: 'bands', label: 'Published band charges', sources: [bandSource]},
+    {key: 'change', label: 'Annual changes', method: changeRecord.method, sources: [changeRecord]},
+  ]} />}
 </BaseLayout>

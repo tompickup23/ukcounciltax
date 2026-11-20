@@ -39,6 +39,13 @@ export interface ReleaseItem {
   description: string;
   path: string;
   sourceUrl?: string;
+  /**
+   * The short record line /changes/ prints beside an item that has a source:
+   * the publisher, a short title with its table, and the sentence kept on the
+   * card. Set where the item is made, so a new kind of item cannot inherit
+   * another publisher. A test holds every item with a source to it.
+   */
+  record?: { publisher: string; short: string; narrative: string };
 }
 
 const LONG = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
@@ -347,6 +354,7 @@ export function findingsItems(): ReleaseItem[] {
       description: `Of ${parish.compared.toLocaleString("en-GB")} local precepting authorities compared, the Band D precept rose for ${parish.rose.toLocaleString("en-GB")}, fell for ${parish.fell.toLocaleString("en-GB")} and did not change for ${(parish.unchangedNonZero + parish.zeroBoth).toLocaleString("en-GB")}. Source: MHCLG, ${p.title}, accessed ${longDate(p.retrieved)}.`,
       path: "/findings/#parish-precepts",
       sourceUrl: p.url,
+      record: { publisher: "MHCLG", short: "Town and parish precepts", narrative: `Of ${parish.compared.toLocaleString("en-GB")} local precepting authorities compared, the Band D precept rose for ${parish.rose.toLocaleString("en-GB")}, fell for ${parish.fell.toLocaleString("en-GB")} and did not change for ${(parish.unchangedNonZero + parish.zeroBoth).toLocaleString("en-GB")}.` },
     },
     {
       id: "findings-band-d-history",
@@ -357,6 +365,7 @@ export function findingsItems(): ReleaseItem[] {
       description: `${history.withFirst} of ${history.councils} current councils have a whole area Band D figure for ${yearLabel(history.firstYear)}; of those also published for ${yearLabel(history.latestYear)}, ${history.higherLatestThanFirst} are higher in ${yearLabel(history.latestYear)}. Source: MHCLG, ${h.title}, Area_CT, accessed ${longDate(h.retrieved)}.`,
       path: "/findings/#band-d-history",
       sourceUrl: h.url,
+      record: { publisher: "MHCLG", short: "Band D history, Area_CT", narrative: `${history.withFirst} of ${history.councils} current councils have a whole area Band D figure for ${yearLabel(history.firstYear)}; of those also published for ${yearLabel(history.latestYear)}, ${history.higherLatestThanFirst} are higher in ${yearLabel(history.latestYear)}.` },
     },
   ];
 }
@@ -383,6 +392,7 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
       description: `${source.title}, published by ${source.publisher}. Band A to H for every billing authority.${updated}`,
       path: "/council-tax/",
       sourceUrl: source.url,
+      record: { publisher: "MHCLG", short: `Council tax levels ${yearLabel(year)}`, narrative: "Band A to H for every billing authority." },
     });
   }
 
@@ -397,6 +407,7 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
     description: `MHCLG, ${components.title}. Accessed ${longDate(components.retrieved)}; the publication date is not recorded in the source manifest.`,
     path: "/precepts/",
     sourceUrl: components.url,
+    record: { publisher: "MHCLG", short: "Band D precepts, Table 10", narrative: "" },
   });
   items.push({
     id: "ukcounciltax-national-parishes",
@@ -407,6 +418,7 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
     description: `MHCLG, ${s.parishes.title}, ${national.parishes.length.toLocaleString("en-GB")} rows. Accessed ${longDate(s.parishes.retrieved)}; the publication date is not recorded in the source manifest.`,
     path: "/precepts/",
     sourceUrl: s.parishes.url,
+    record: { publisher: "MHCLG", short: "Town and parish precepts", narrative: `${national.parishes.length.toLocaleString("en-GB")} rows.` },
   });
   items.push({
     id: "ukcounciltax-national-history",
@@ -417,6 +429,7 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
     description: `MHCLG, ${s.history.title}, tables Area_CT, exc_PP and inc_PP. Accessed ${longDate(s.history.retrieved)}; the publication date is not recorded in the source manifest.`,
     path: "/councils/",
     sourceUrl: s.history.url,
+    record: { publisher: "MHCLG", short: "Band D history, Area_CT, exc_PP and inc_PP", narrative: "" },
   });
 
   const stock = readJson<Record<string, BandStockSource>>("data/national/sources.json").bandStock;
@@ -430,12 +443,15 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
       description: `${stock.publisher}, ${stock.title}, table CTSOP1.1, published ${longDate(stock.published)}, accessed ${longDate(stock.retrieved)}.`,
       path: "/councils/",
       sourceUrl: stock.url,
+      record: { publisher: stock.publisher, short: "Council Tax stock of properties, CTSOP1.1", narrative: "" },
     });
   }
 
   const devolved = readJson<DevolvedFile>("data/devolved/council-tax.json");
   for (const edition of devolved.editions) {
     const nation = edition.nation.toLowerCase();
+    // Only Wales and Scotland have an edition here; another nation must be given its own publisher and table.
+    if (edition.nation !== "Wales" && edition.nation !== "Scotland") throw new Error(`No publisher is recorded for a ${edition.nation} edition`);
     items.push({
       id: `ukcounciltax-${nation}-${edition.year}`,
       dataset: `devolved-${nation}-${edition.year}`,
@@ -445,6 +461,9 @@ export function datasetItems(years: readonly string[] = YEARS): ReleaseItem[] {
       description: `${edition.nation === "Wales" ? "Welsh Government" : "Scottish Government"}, ${cleanTitle(edition.source.title)}, ${edition.table}. ${edition.basis}. Accessed ${longDate(devolved.retrieved)}; the publication date is not recorded in the source manifest.`,
       path: `/${nation}/`,
       sourceUrl: edition.source.url,
+      record: edition.nation === "Wales"
+        ? { publisher: "Welsh Government", short: "Council tax levels, Table 1", narrative: `${edition.basis}.` }
+        : { publisher: "Scottish Government", short: `Council tax by band, CT by Band, ${yearLabel(edition.year)}`, narrative: `${edition.basis}.` },
     });
   }
 

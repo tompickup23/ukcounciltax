@@ -7,8 +7,10 @@ import {bodyRole,BODY_ROLES_SOURCE} from '../lib/body-roles';
 import {moneyPence} from '../lib/tax-view';
 import {yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
-interface Props {bill:LocalBill}
-const {bill}=Astro.props;
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
+interface Props {bill:LocalBill; roleRecord?: {entry: string; sources: SourceRef[]}; changeRecord?: {entry: string; sources: SourceRef[]}}
+const {bill, roleRecord, changeRecord}=Astro.props;
 const changes=billChanges.find(c=>c.gss===bill.gss&&c.currentYear===bill.year);
 const signed=(p:number)=>p===0?'no change':`${p>0?'up':'down'} ${moneyPence(Math.abs(p))}`;
 const pct=(n:number)=>`${n>0?'up ':n<0?'down ':''}${Math.abs(n).toFixed(2)}%`;
@@ -23,7 +25,7 @@ const curYear=yearLabel(bill.year);
   {bill.components.map(c=><><dt>{c.name}</dt><dd>{bodyRole(c.kind)}</dd></>)}
   <dt>Your parish or town council, if you have one</dt><dd>{bodyRole('parish')}</dd>
  </dl>
- <p class="source-line">Source for the council services: <a href={BODY_ROLES_SOURCE.url}>{BODY_ROLES_SOURCE.publisher}, {BODY_ROLES_SOURCE.title}</a>, updated {longDate(BODY_ROLES_SOURCE.updated)}. Police and fire are the bodies named on <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>.</p>
+ {roleRecord ? <RecordLine entry={roleRecord.entry} sources={roleRecord.sources} /> : <p class="source-line">Source for the council services: <a href={BODY_ROLES_SOURCE.url}>{BODY_ROLES_SOURCE.publisher}, {BODY_ROLES_SOURCE.title}</a>, updated {longDate(BODY_ROLES_SOURCE.updated)}. Police and fire are the bodies named on <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>.</p>}
 </section>
 {changes&&unparished&&<section class="section" aria-labelledby="what-changed">
  <h2 id="what-changed">What changed since {prevYear}</h2>
@@ -39,6 +41,6 @@ const curYear=yearLabel(bill.year);
   <tbody>{changes.parishes.map(p=>{const c=change(p);return <tr><th scope="row">{p.name}</th><td class="num">{moneyPence(p.previousPence)}</td><td class="num">{moneyPence(p.currentPence)}</td><td class="num">{signed(c.pence)}</td><td class="num">{pct(c.percent)}</td></tr>;})}</tbody>
  </table></div>
  <p class="caveat">Band D figures only. Every other band is a fixed fraction of Band D, so each part changed by close to the same percentage in your band; the pounds differ. A parish's charge depends on its own precept and its number of homes, so a small parish can move by a large percentage on a small sum.</p>
- <p class="source-line">Sources: {prevYear} bodies from <a href={changes.sources.previousBodies.url}>{changes.sources.previousBodies.publisher}, {changes.sources.previousBodies.title}</a>; {curYear} bodies from <a href={changes.sources.currentBodies.url}>{changes.sources.currentBodies.publisher}, {changes.sources.currentBodies.title}</a>; parishes from <a href={changes.sources.parishes.url}>{changes.sources.parishes.publisher}, {changes.sources.parishes.title}</a>. Change is {curYear} less {prevYear}; per cent is the change divided by the {prevYear} figure, to two decimal places.</p>
+ {changeRecord ? <RecordLine entry={changeRecord.entry} sources={changeRecord.sources} /> : <p class="source-line">Sources: {prevYear} bodies from <a href={changes.sources.previousBodies.url}>{changes.sources.previousBodies.publisher}, {changes.sources.previousBodies.title}</a>; {curYear} bodies from <a href={changes.sources.currentBodies.url}>{changes.sources.currentBodies.publisher}, {changes.sources.currentBodies.title}</a>; parishes from <a href={changes.sources.parishes.url}>{changes.sources.parishes.publisher}, {changes.sources.parishes.title}</a>. Change is {curYear} less {prevYear}; per cent is the change divided by the {prevYear} figure, to two decimal places.</p>}
 </section>}
 <style>.body-roles{display:grid;grid-template-columns:minmax(10rem,16rem) 1fr;gap:.5rem 1.25rem;margin:1rem 0;} .body-roles dt{font-weight:600;} .body-roles dd{margin:0;} @media (max-width:40rem){.body-roles{grid-template-columns:1fr;} .body-roles dd{margin-bottom:.5rem;}}</style>

@@ -1,13 +1,15 @@
 ---
 import SourceLine from './SourceLine.astro';
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
 import TaxTableControls from './TaxTableControls.astro';
 import {CURRENT_YEAR, PREVIOUS_YEAR, BANDS, yearLabel} from '../lib/council-tax';
 import {taxRows, taxSources} from '../lib/tax-view-data';
 import {completeClass, moneyPence, monthlyPence, type TaxBand} from '../lib/tax-view';
 import {changeSource} from '../lib/sources';
 import {jsonLd} from '../lib/site';
-interface Props { id: string; region?: string; band?: TaxBand; caption: string; controlsId?: string }
-const {id, region, band = 'D', caption, controlsId} = Astro.props;
+interface Props { id: string; region?: string; band?: TaxBand; caption: string; controlsId?: string; record?: {entry: string; source: SourceRef}; changeRecord?: {entry: string; source: SourceRef} }
+const {id, region, band = 'D', caption, controlsId, record, changeRecord} = Astro.props;
 const all = taxRows();
 const rows = all.filter(row => !region || row.region === region);
 const classes = [...new Map(rows.map(row => [row.classCode, row.classLabel])).entries()];
@@ -39,8 +41,8 @@ function change(current: number | undefined, previous: number | undefined) {
         })}</tbody>
       </table>
     </div>
-    <SourceLine source={source} />
-    <SourceLine source={changeSource(PREVIOUS_YEAR, CURRENT_YEAR)} />
+    {record ? <RecordLine entry={record.entry} sources={[record.source]} /> : <SourceLine source={source} />}
+    {changeRecord ? <RecordLine entry={changeRecord.entry} method={changeRecord.source.method} sources={[changeRecord.source]} /> : <SourceLine source={changeSource(PREVIOUS_YEAR, CURRENT_YEAR)} />}
     <p class="caveat">Whole-area charges include average parish precepts. Your bill and discounts can differ. Monthly equivalents divide the annual charge by ten and round to pennies.</p>
   </div>
   <script type="application/json" data-table-data set:html={jsonLd({rows, complete, caption})} />

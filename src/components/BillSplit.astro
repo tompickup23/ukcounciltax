@@ -17,8 +17,10 @@ import {moneyPence} from '../lib/tax-view';
 import {yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
 
-interface Props {bill: LocalBill; localityId: string; heading?: 'h2' | 'h3'; compact?: boolean; idPrefix?: string; chart?: keyof typeof KIT_CHARTS}
-const {bill, localityId, heading = 'h2', compact = false, idPrefix = 'split', chart} = Astro.props;
+import RecordLine from './RecordLine.astro';
+import type {SourceRef} from '../lib/sources';
+interface Props {record?: {source: SourceRef; sharesEntry: string; weeklyEntry: string}; bill: LocalBill; localityId: string; heading?: 'h2' | 'h3'; compact?: boolean; idPrefix?: string; chart?: keyof typeof KIT_CHARTS}
+const {bill, localityId, heading = 'h2', compact = false, idPrefix = 'split', chart, record} = Astro.props;
 const chartOptions = chart ? KIT_CHARTS[chart].options() : null;
 const chartRounding = chartOptions ? billShareRounding(chartOptions) : null;
 const Heading = heading;
@@ -50,7 +52,7 @@ const parishCaveat = locality.parishPence
       ))}
     </ul>
     <p class="small muted">{ROUNDING_NOTE}</p>
-    <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}.</p>
+    {record ? <RecordLine entry={record.sharesEntry} sources={[record.source]} /> : <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}.</p>}
     <p class="caveat">{parishCaveat}</p>
   </section>
   <section aria-labelledby={`${idPrefix}-weekly`}>
@@ -63,7 +65,7 @@ const parishCaveat = locality.parishPence
         <tbody>{weekly.map((w) => <tr><th scope="row">{w.band}</th><td class="num">{moneyPence(w.annualPence)}</td><td class="num">{moneyPence(w.weeklyPence)}</td></tr>)}</tbody>
       </table>
     </div>
-    <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}. Weekly column calculated from it.</p>
+    {record ? <RecordLine entry={record.weeklyEntry} sources={[record.source]} /> : <p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}. Weekly column calculated from it.</p>}
     <p class="caveat">{parishCaveat}</p>
   </section>
 </div>

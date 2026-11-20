@@ -5,9 +5,35 @@
  */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
+import RecordLine from "../components/RecordLine.astro";
+import PageSources from "../components/PageSources.astro";
+import {yearLabel, type Year} from "../lib/council-tax";
 import { DATE_WORD, longDate, releaseItems } from "../lib/releases";
 
 const items = releaseItems();
+// Keep releaseItems (also used by RSS) intact. Each original description is
+// reproduced verbatim in Sources; only its narrative stays beside the update.
+const records = items.filter(item => item.sourceUrl).map(item => ({
+  ...item,
+  publisher: item.dataset.startsWith('levels-') ? 'MHCLG'
+    : item.dataset.startsWith('devolved-wales-') ? 'Welsh Government'
+    : item.dataset.startsWith('devolved-scotland-') ? 'Scottish Government'
+    : item.dataset === 'bandStock' ? item.description.split(', ')[0] : 'MHCLG',
+  narrative: item.dataset.startsWith('findings-') ? item.description.split(' Source: ')[0]
+    : item.dataset.startsWith('levels-') ? 'Band A to H for every billing authority.'
+    : item.dataset === 'parishes' ? item.description.match(/[\d,]+ rows\./)?.[0]
+    : item.dataset.startsWith('devolved-') ? item.description.split('. ').slice(1, -1).join('. ') + '.'
+    : '',
+  short: item.dataset.startsWith('levels-') ? `Council tax levels ${yearLabel(item.dataset.slice(7) as Year)}`
+    : item.dataset.startsWith('devolved-scotland-') ? `Council tax by band, CT by Band, ${yearLabel(item.dataset.slice('devolved-scotland-'.length) as Year)}`
+    : item.dataset.startsWith('devolved-wales-') ? 'Council tax levels, Table 1'
+    : item.dataset === 'components' ? 'Band D precepts, Table 10'
+    : item.dataset === 'bandStock' ? 'Council Tax stock of properties, CTSOP1.1'
+    : item.dataset === 'history' ? 'Band D history, Area_CT, exc_PP and inc_PP'
+    : item.dataset === 'findings-history' ? 'Band D history, Area_CT'
+    : 'Town and parish precepts',
+}));
+const recordFor = new Map(records.map(item => [item.id, item]));
 ---
 <BaseLayout
   title="What changed: council tax data updates"
@@ -25,12 +51,20 @@ const items = releaseItems();
       <li class="card">
         <p class="small muted"><time datetime={item.date}>{DATE_WORD[item.dateKind]} {longDate(item.date)}</time></p>
         <h2><a href={item.path}>{item.title}</a></h2>
-        <p>{item.description}</p>
-        {item.sourceUrl && <p class="source-line"><a href={item.sourceUrl}>Official source page</a></p>}
+        {item.sourceUrl ? (() => {const record = recordFor.get(item.id)!; return <>
+          {record.narrative && <p>{record.narrative}</p>}
+          <RecordLine entry={item.id} sources={[{publisher: record.publisher, title: item.title, short: record.short, url: item.sourceUrl}]} />
+        </>;})() : <p>{item.description}</p>}
       </li>
     ))}
   </ol>
   <p class="small">Findings notes are on <a href="/findings/">Findings</a>. Every table is listed on <a href="/sources/">Sources</a>.</p>
+<PageSources entries={records.map(item => ({key: item.id, label: item.title, sources: []}))}>
+    {records.map(item => <Fragment slot={item.id}>
+      <p>{DATE_WORD[item.dateKind]} {longDate(item.date)}.</p>
+      <p>{item.description} <a href={item.sourceUrl}>Official source page</a></p>
+    </Fragment>)}
+  </PageSources>
 </BaseLayout>
 
 <style>

@@ -3,6 +3,8 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Fact from '../../../components/Fact.astro';
 import SourceLine from '../../../components/SourceLine.astro';
+import RecordLine from '../../../components/RecordLine.astro';
+import PageSources from '../../../components/PageSources.astro';
 import {loadYear, pounds, precedingYear, yearLabel} from '../../../lib/council-tax';
 import {parishPages, parishPath, councilPath} from '../../../lib/paths';
 import {parishesFor, parishChange, PARISH_YEAR, type ParishYear} from '../../../lib/national-data';
@@ -14,6 +16,7 @@ import {countyPathOf, tidy, money as townMoney, noFigure, placeName, townAnchor,
 export function getStaticPaths() { return parishPages().map(council => ({params:{slug:council.slug},props:{council}})); }
 const {council} = Astro.props;
 const gss = council.gss;
+const parishRecord = {...parishSource, short: 'Town and parish council tax statistics, Parish_Level_Data'};
 // The whole page is on the parish return's year, which can lag the levels tables.
 const CURRENT_YEAR = PARISH_YEAR;
 const tax = loadYear(CURRENT_YEAR).authorities[gss];
@@ -34,7 +37,7 @@ const fullCell = (code: string) => townByCode.get(code) ?? null;
 ---
 <BaseLayout title={title} description={description} path={parishPath(council)}>
   <Breadcrumbs items={[{label:'Your bill and precepts',href:'/precepts/'},{label:'Parish precepts',href:'/precepts/parishes/'},{label:name}]} />
-  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{parishRange(name,parishes)}</p><SourceLine source={parishSource} /></div></header>
+  <header class="page-head"><h1>{title}</h1><div class="fact" data-fact><p class="lede">{parishRange(name,parishes)}</p><RecordLine entry="parishes" sources={[parishRecord]} /></div></header>
   <Fact label={`${name} council's own Band D, excluding parish precepts, ${yearLabel(year)}`} figure={pounds(tax.own!.bandD)} source={councilTaxSource(CURRENT_YEAR,tax.own!.table)} />
   <p>In a parish, the parish's own Band D precept is charged in addition to this and to the county, police and fire charges. The area average Band D on the <a href={councilPath(council)}>{name} council page</a> already includes parish precepts as an average, so do not add a parish figure to it.</p>
   <section class="section" data-parish-table aria-labelledby="parish-table-heading">
@@ -48,7 +51,7 @@ const fullCell = (code: string) => townByCode.get(code) ?? null;
       <thead><tr><th scope="col">Parish or local body</th><th scope="col" class="num">{yearLabel(earlier)}</th><th scope="col" class="num">{yearLabel(year)}</th><th scope="col" class="num">Change</th>{showFull && <th scope="col" class="num">Full Band D {yearLabel(year)}</th>}</tr></thead>
       <tbody>{parishes.map(p=>{const change=parishChange(p);return <tr data-parish-name={p.name.toLowerCase()}><th scope="row">{p.name}<span class="parish-kind">{p.type}</span>{p.notes.length>0&&<span class="parish-kind">Source notes: {p.notes.map(n=>n.id).join(', ')}</span>}</th><td class="num" data-figure>{parishMoney(p.years[earlier])}</td><td class="num" data-figure>{parishMoney(p.years[year])}</td><td class="num" data-figure>{change===null?'Not comparable':`${change>0?'+':''}${money(change)}`}</td>{showFull && (()=>{const t=fullCell(p.code);return <td class="num" data-figure>{t===null?'Not published':hasFigure(t)?<a href={townAnchor(countyPathOf(t),t)}>{townMoney(t.fullBandDPence)}</a>:noFigure(t)}</td>;})()}</tr>;})}</tbody>
     </table></div>
-    <SourceLine source={parishSource} />
+    <RecordLine entry="parishes" sources={[parishRecord]} />
     {showFull && <>
       {unparishedTowns.map(t => <p>{placeName(t)}, full Band D {yearLabel(year)}: <span data-figure>{hasFigure(t) ? townMoney(t.fullBandDPence) : noFigure(t)}</span>.</p>)}
       <SourceLine source={{...townSources.components, url: townSources.componentsPage, method: 'Full Band D adds the parish Band D above to the council\'s Band D excluding local precepts and the major precepts, our calculation from published figures, or the council\'s own published figure where it publishes one'}} />
@@ -60,6 +63,7 @@ const fullCell = (code: string) => townByCode.get(code) ?? null;
   </section>
   {countyHref && <p>Full Band D for every parish and unparished area in {tidy(councilTowns[0].county)}, lowest to highest: <a href={countyHref}>{tidy(councilTowns[0].county)} by parish and unparished area</a>.</p>}
   <p><a href={councilPath(council)}>{name} council tax</a> · <a href="/precepts/parishes/">Parish precepts by council</a> · <a href="/precepts/">Your bill and precepts</a></p>
+<PageSources entries={[{key: 'parishes', label: 'Parish and local precepts', sources: [parishSource]}]} />
 </BaseLayout>
 <script>
 for(const section of document.querySelectorAll<HTMLElement>('[data-parish-table]')) {

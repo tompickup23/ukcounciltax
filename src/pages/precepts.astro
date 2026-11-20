@@ -10,12 +10,26 @@ import {CURRENT_YEAR,yearLabel} from '../lib/council-tax';
 import {longDate} from '../lib/sources';
 import {burnleyBill} from '../lib/figures';
 import BillChanges from '../components/BillChanges.astro';
+import RecordLine from '../components/RecordLine.astro';
+import PageSources from '../components/PageSources.astro';
+import {billChanges} from '../lib/local-bill-changes-data';
+import {BODY_ROLES_SOURCE} from '../lib/body-roles';
 // The bar under "Where your council tax goes" is the homepage's Burnley drawing, so the page shows that schedule:
 // Burnley's for CURRENT_YEAR, or its latest earlier one with its own year until the new one is imported (C6).
 const bill=burnleyBill();
 const year=yearLabel(CURRENT_YEAR);
 const billYear=yearLabel(bill.year);
 const retrieved=longDate(bill.source.retrieved);
+const billRecord = {...bill.source, short: `Council tax charge schedule, ${billYear}`};
+const changes=billChanges.find(c=>c.gss===bill.gss&&c.currentYear===bill.year);
+const prevYear=changes?yearLabel(changes.previousYear):'';
+const curYear=billYear;
+const changeRecords=changes ? [
+  {...changes.sources.previousBodies, short: `Council tax bodies, ${prevYear}${changes.sources.previousBodies.title.includes('Table 10') ? ', Table 10' : ''}`},
+  {...changes.sources.currentBodies, short: `Council tax bodies, ${curYear}`},
+  {...changes.sources.parishes, short: 'Parish precepts'},
+] : [];
+const roleRecords=[{...BODY_ROLES_SOURCE, short: 'Council services'}, billRecord];
 const parishYears=[...new Set(national.parishes.flatMap(p=>Object.keys(p.years)))].sort();
 const parishFirst=yearLabel(parishYears[0]);
 const parishLast=yearLabel(parishYears[parishYears.length-1]);
@@ -27,8 +41,21 @@ const parishLast=yearLabel(parishYears[parishYears.length-1]);
 <h2 id="find-your-bill">Find your own bill: exact local charges</h2>
 <div class="editorial-callout"><strong>Complete all-band local schedule: {bill.name}, {billYear}</strong><p>All eight parishes and the unparished area, bands A to H. Elsewhere, the postcode tool directs you to available area figures and clearly marks missing local detail. National postcode-level precept coverage is not yet complete.</p></div>
 <LocalBillTool />
-<section class="section"><h2>{bill.name} local charges at a glance</h2><p>These are published locality totals, not the borough-wide average. Before discounts and premiums.</p><div class="table-wrap" tabindex="0" role="region" aria-label={`${bill.name} locality totals`}><table class="data"><caption>{billYear} published annual charges by locality</caption><thead><tr><th scope="col">Locality</th>{'ABCDEFGH'.split('').map(b=><th scope="col" class="num">{b}</th>)}</tr></thead><tbody>{bill.localities.map(l=><tr><th scope="row">{l.name}</th>{Object.values(l.totalsPence).map(p=><td class="num">{moneyPence(p)}</td>)}</tr>)}</tbody></table></div><p class="source-line">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>{retrieved ? `. Retrieved ${retrieved}` : ''}.</p><p class="caveat">Each locality total includes that parish's precept; the unparished area has none.</p></section>
-<BillChanges bill={bill} />
-<section class="section" aria-labelledby="where-it-goes"><h2 id="where-it-goes">Where your council tax goes: {bill.name}, {billYear}</h2><p>For the published {bill.name} schedule, the split of each 100 pounds by charging body and a weekly figure for each band. Both are calculations of the published figures, with the calculation shown. Other councils' bills split differently.</p><BillSplit bill={bill} localityId="unparished" heading="h3" idPrefix="precepts-split" chart="home-bill" /></section>
+<section class="section"><h2>{bill.name} local charges at a glance</h2><p>These are published locality totals, not the borough-wide average. Before discounts and premiums.</p><div class="table-wrap" tabindex="0" role="region" aria-label={`${bill.name} locality totals`}><table class="data"><caption>{billYear} published annual charges by locality</caption><thead><tr><th scope="col">Locality</th>{'ABCDEFGH'.split('').map(b=><th scope="col" class="num">{b}</th>)}</tr></thead><tbody>{bill.localities.map(l=><tr><th scope="row">{l.name}</th>{Object.values(l.totalsPence).map(p=><td class="num">{moneyPence(p)}</td>)}</tr>)}</tbody></table></div><RecordLine entry="local-charges" sources={[billRecord]} /><p class="caveat">Each locality total includes that parish's precept; the unparished area has none.</p></section>
+<BillChanges bill={bill} roleRecord={{entry: "roles", sources: roleRecords}} changeRecord={{entry: "bill-change", sources: changeRecords}} />
+<section class="section" aria-labelledby="where-it-goes"><h2 id="where-it-goes">Where your council tax goes: {bill.name}, {billYear}</h2><p>For the published {bill.name} schedule, the split of each 100 pounds by charging body and a weekly figure for each band. Both are calculations of the published figures, with the calculation shown. Other councils' bills split differently.</p><BillSplit bill={bill} localityId="unparished" heading="h3" idPrefix="precepts-split" chart="home-bill" record={{source: billRecord, sharesEntry: "split", weeklyEntry: "weekly"}} /></section>
 <div class="prose"><h2>What counts as a precept?</h2><p>A precept is an amount another body asks the billing council to collect. Depending on the area, a bill can include a county, police, fire, mayoral or combined-authority, and parish or town council element. The site records each published charging body and its area of application.</p><h2>Bundled charges must only count once</h2><p>Some mayoral charges include police or fire services. For example, London's GLA precept supports several services, including policing and fire. Its police element does not apply in the City of London. Our model supports bundled components so the same service cannot be added again as a separate charge. <a href="https://www.london.gov.uk/who-we-are/governance-and-spending/spending-money-wisely/mayors-budget">Source: Greater London Authority budget</a>.</p><h2>Why confirm a parish?</h2><p>A postcode is a group of addresses, not a unique property. <a href="https://www.ons.gov.uk/methodology/geography/geographicalproducts/postcodeproducts">ONS explains that postcodes can straddle boundaries</a>. The lookup provides a suggested locality, and you confirm it against the property before we show a local charge. We do not save the postcode.</p><h2>How local schedules are admitted</h2><p>We need an adopted year-specific charge schedule, published bands for each component, a verified charging area, and a total that reconciles to the council's published bill. A missing component is marked unavailable. We do not manufacture it by subtracting unrelated national averages or infer a parish from a council name.</p></div>
+<PageSources entries={[
+  {key: 'local-charges', label: 'Published local charges', sources: []},
+  {key: 'split', label: 'Published charge schedule', sources: []},
+  {key: 'weekly', label: 'Weekly calculation', sources: []},
+  {key: 'roles', label: 'What each part pays for', sources: []},
+  ...(changes ? [{key: 'bill-change', label: 'Changes by body and parish', sources: []}] : [])
+]}>
+<p slot="local-charges">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>{retrieved ? `. Retrieved ${retrieved}` : ''}.</p>
+<p slot="split">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}.</p>
+<p slot="weekly">Source: <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>, published charge schedule{retrieved ? `, retrieved ${retrieved}` : ''}. Weekly column calculated from it.</p>
+<p slot="roles">Source for the council services: <a href={BODY_ROLES_SOURCE.url}>{BODY_ROLES_SOURCE.publisher}, {BODY_ROLES_SOURCE.title}</a>, updated {longDate(BODY_ROLES_SOURCE.updated)}. Police and fire are the bodies named on <a href={bill.source.url}>{bill.source.publisher}, {bill.source.title}</a>.</p>
+{changes && <p slot="bill-change">Sources: {prevYear} bodies from <a href={changes.sources.previousBodies.url}>{changes.sources.previousBodies.publisher}, {changes.sources.previousBodies.title}</a>; {curYear} bodies from <a href={changes.sources.currentBodies.url}>{changes.sources.currentBodies.publisher}, {changes.sources.currentBodies.title}</a>; parishes from <a href={changes.sources.parishes.url}>{changes.sources.parishes.publisher}, {changes.sources.parishes.title}</a>. Change is {curYear} less {prevYear}; per cent is the change divided by the {prevYear} figure, to two decimal places.</p>}
+</PageSources>
 </BaseLayout>

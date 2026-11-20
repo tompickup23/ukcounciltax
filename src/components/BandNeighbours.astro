@@ -12,6 +12,8 @@
  * an average Band D only, so Wales has no lines.
  */
 import SourceLine from "./SourceLine.astro";
+import RecordLine from "./RecordLine.astro";
+import type {SourceRef} from "../lib/sources";
 import { CURRENT_YEAR, loadYear, pounds, yearLabel, type Band } from "../lib/council-tax";
 import { councilPages, councilPath, slugify } from "../lib/paths";
 import { councilTaxSource, longDate } from "../lib/sources";
@@ -20,12 +22,13 @@ import { fullBandEdition, neighbourBands, neighbourLines, positionLabel } from "
 
 interface Props {
   band: Band;
+  record?: {entry: string; source: SourceRef};
   /** An English region, for England; omit with nation "Scotland". */
   region?: string;
   nation?: "England" | "Scotland";
 }
 
-const { band, region, nation = "England" } = Astro.props;
+const { band, region, nation = "England", record } = Astro.props;
 const year = yearLabel(CURRENT_YEAR);
 const { lower, higher } = neighbourBands(band);
 
@@ -84,7 +87,7 @@ const id = `neighbours-${slugify(place ?? nation)}`;
     </div>
     {nation === "England" ? (
       <>
-        <SourceLine source={englandSource} />
+        {record ? <RecordLine entry={record.entry} sources={[record.source]} /> : <SourceLine source={englandSource} />}
         <p class="caveat">
           Each figure is the published area charge for that band, with parish precepts as an average. A home in a
           parish with its own precept pays a different amount. No figure here is worked out from the band proportions.

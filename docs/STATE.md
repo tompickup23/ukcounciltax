@@ -1,20 +1,20 @@
-# State | UK Council Tax | 19 November 2026
+# State | UK Council Tax | 20 November 2026
 
-- **Live:** main `dcb7b7b` (PR 108, the header and marks round with the decisions of 19 November; the last page change is PR 112). Palette B (Estate Kit 0.6.5) on every page since PR 104.
-- **Open:** PR 113, W5: the header, phone drawer and footer at D8 option B, lean (Your bill, Budget game, Compare, More), with D7's footer links. Navigation is outside the fast track: it merges only on Tom's yes in words.
-- **What PR 113 changes:** every page's header and footer. Three links, one More menu in three columns, Search; at phone width "Your bill" and a solid "Game" button (named "Budget game") in the row, a drawer of search, two cards and flat lists. The footer has four columns, then sister sites from one link table (`src/lib/sister-sites.ts`, UK Councils first as a card), then the imprint and theme. UK Places and UK Food Hygiene home pages were checked live (200) on 19 November and are in; council deep links to UK Food Hygiene stay held. AI DOGE keeps its existing footer link, as in the decided mock; Tom may say otherwise.
-- **New gates in PR 113:** `scripts/lib/chrome-nav.mjs` (one header and footer per page, the same as the homepage's, fewer than 20 header destinations, every pre-W5 route kept, sister links equal to the table) and `scripts/lib/link-graph.mjs` (no indexable page without an inbound link; `node scripts/lib/link-graph.mjs before-dist dist` compares two builds). The c1b fixture lost its two footer numbers because the footer is now stripped as chrome, like the header.
-- **Plan:** `docs/PLAN-CURRENT.md`, one page, replaced not appended, revised 18 November; the W5 row now names PR 113.
-- **Next, page lane:** after PR 113 merges, the Tier 2 sweep (brief written from W9's diff) and M1 (marks, pair 2; PR 113 leaves the marks and favicon alone). Tom judges the look of the hub, compare and the league tables on the live site first.
-- **Estate Kit:** `v0.6.5` tagged. PRs 27 and 28 open. The header part PR 113 could offer kit PR 27 is described in PR 113's Handoff comment; no kit PR was opened.
-- **UK Councils:** main `cbc3833`. Next there: the North Yorkshire audit row (H2, decided: show it). PSAA on hold at Tom's word.
-- **Held data:** all 14 registry reorganisation objects unchanged and not rendered. Seats by party stay held on UK Council Tax.
-- **Decisions:** taken on 19 November in `docs/DECISIONS-2026-11-19.md`. Still open: R1 only, which needs Tom's yes in words.
-- **Merge trap:** every page pull request removes its own row in `scripts/lib/foundation.mjs`, so the second to merge conflicts there. Merge main in (never rebase, no force push without asking), keep every removal, and wait for fresh hosted checks.
-- **Fast track:** granted 16 November in the narrow scope of `docs/DECISIONS-2026-11-16.md`. Tokens, data, navigation and held fields stay outside it.
-- **Binding dates:** links rerun 1 to 5 December; dossier mid January 2027; restyle must list by end of February; freeze 20 March; levels day late March; reversal May to June 2027.
-- **Working rules (plan section 7):** the eight page reference sheet in every page PR, dark first; gates once on the final head; no colour value in a page PR; `npm run check:pr-body` before a description is opened or edited; documents ride with the work they describe.
-- **Local traps:** copy all of `data/raw/` from the main checkout into a fresh worktree before building or testing; take the build lock (`mkdir /Users/tompickup/wt/.uct-build.lock`) for a full build; start `npx astro preview` yourself on a free port and run Playwright with `E2E_BASE_URL`, then stop it. A stale `dist/` fails the towns, rankings and c1b tests in `npm test`: build first. Rerun `npm test` with `--maxWorkers=2` before believing a timeout.
-- **Header trap (W5):** the drawer panel is `position: fixed` inside the sticky bar, so the bar must not take `backdrop-filter`, `transform` or `filter`, which would make it the panel's containing block.
-- **Game page traps:** the c1b fixture (`tests/fixtures/c1b-static-numbers.json`) holds every number on the static Burnley, Birmingham and Coventry pages in order, header and footer excluded.
-- **Design reference:** `docs/DESIGN-AUDIT-2026-11-15.md`; the decided header mock `docs/design/header-round/option-b.html`. Session detail belongs in PR bodies.
+- Main is `a8cf6ee`, PR 113, W5, merged and live on 19 November 2026.
+- W5 delivers D8 option B: Your bill, Budget game, Compare and More, with D7 footer links.
+- Open: this pull request, PR 114, Tier 2 sweep part one, on `feat/tier2-sweep-a`.
+- No other pull request was open when this session checked GitHub.
+- Part one covers citations on band pages, changes, precepts and parish precepts pages.
+- Repeated full citations become short record lines linked to one Sources block per page.
+- Every old citation detail stays in the full references; published figures stay unchanged.
+- The band and changes repeat allowances are removed; the default cap is three.
+- Shared components opt in; other pages retain their previous rendering.
+- Part two follows: national council tax, increases, Wales, 2027/28 and your area.
+- Plan: `docs/PLAN-CURRENT.md`; this pull request updates only the W5 and Tier 2 rows.
+- Held: the registry reorganisation field remains unchanged and unrendered.
+- No data, registry, route, token, colour, typeface or navigation changes are included.
+- Local gates run on the final head; browser and actual CSP suites run on the host.
+- A clean main build supplies the number and distinct figure comparisons.
+- Progress, defaults, check results and the final head are recorded in PR comments.
+- Ready status requires passing hosted checks and current main merged in if it moves.
+- Tom gives the yes to merge; this session does not merge, tag or deploy.
